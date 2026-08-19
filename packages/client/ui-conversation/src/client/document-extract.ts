@@ -14,17 +14,8 @@
  * The pure helpers (`documentKind`, `fileExtension`, `xmlTextRuns`,
  * `truncateText`) carry no browser or library coupling and are unit-tested
  * directly; the `extract*` wrappers own the library integration.
- *
- * The parsers are imported statically (not through `import()`): NEO's client
- * plugin loader registers each plugin as a single self-contained module and
- * cannot resolve the sibling chunks that dynamic imports would emit, so the
- * libraries are bundled into this plugin's one client artifact.
  * @module
  */
-import * as pdfjs from 'pdfjs-dist'
-import mammoth from 'mammoth'
-import * as XLSX from 'xlsx'
-import { unzipSync } from 'fflate'
 
 /** Upper bound on extracted text per document, in characters (~30k tokens). */
 export const MAX_DOCUMENT_TEXT_CHARS = 120_000
@@ -171,6 +162,7 @@ async function extractText(file: File): Promise<string> {
  * runs on the main thread (robust across the tsdown→vite two-stage bundle).
  */
 async function extractPdfText(file: File): Promise<{ text: string; pageCount: number; doc: unknown }> {
+  const pdfjs = await import('pdfjs-dist')
   // Main-thread parsing: avoids shipping/serving a separate worker asset.
   ;(pdfjs as { GlobalWorkerOptions?: { workerSrc: string } }).GlobalWorkerOptions!.workerSrc = ''
   const data = new Uint8Array(await file.arrayBuffer())
@@ -224,6 +216,7 @@ async function renderPdfPages(doc: PdfDocument): Promise<ExtractedImage[]> {
 
 /** Extract a DOCX file's text via `mammoth`. */
 async function extractDocx(file: File): Promise<string> {
+  const mammoth = await import('mammoth')
   const arrayBuffer = await file.arrayBuffer()
   const result = await (mammoth as {
     extractRawText: (input: { arrayBuffer: ArrayBuffer }) => Promise<{ value: string }>
@@ -233,6 +226,7 @@ async function extractDocx(file: File): Promise<string> {
 
 /** Extract an XLSX workbook as one CSV block per sheet, via `xlsx` (SheetJS). */
 async function extractXlsx(file: File): Promise<string> {
+  const XLSX = await import('xlsx')
   const data = new Uint8Array(await file.arrayBuffer())
   const workbook = (XLSX as {
     read: (data: Uint8Array, opts: { type: 'array' }) => { SheetNames: string[]; Sheets: Record<string, unknown> }
@@ -248,6 +242,7 @@ async function extractXlsx(file: File): Promise<string> {
 
 /** Extract a PPTX file's slide text via `fflate` unzip + OOXML `a:t` runs. */
 async function extractPptx(file: File): Promise<string> {
+  const { unzipSync } = await import('fflate')
   const decoder = new TextDecoder()
   const zip = unzipSync(new Uint8Array(await file.arrayBuffer()))
   const slidePaths = Object.keys(zip)
