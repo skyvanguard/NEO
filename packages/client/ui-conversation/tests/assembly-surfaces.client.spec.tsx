@@ -53,7 +53,7 @@ async function bench(opts?: { blank?: boolean }) {
   runtime.provide('connection', { api: { settings: {} }, isLoopback: false })
   // The plugin injects both; these specs exercise no settings path.
   runtime.provide('remote', { $on: () => () => {} })
-  runtime.provide('remote.documentExtract', {})
+  runtime.provide('remote.documentAttach', {})
   runtime.provide('settingsScope', { bind: () => stubSettingsScope().scope } as never)
   runtime.provide('layout', { openDetails: vi.fn(), closeDetails: vi.fn() })
   const locale = new LocaleRuntime(runtime.ctx)
@@ -82,7 +82,7 @@ describe('resident composer', () => {
     runtime.provide('connection', { api: { settings: {} }, isLoopback: false })
     // The plugin injects both; these specs exercise no settings path.
     runtime.provide('remote', { $on: () => () => {} })
-    runtime.provide('remote.documentExtract', {})
+    runtime.provide('remote.documentAttach', {})
     runtime.provide('settingsScope', { bind: () => stubSettingsScope().scope } as never)
     runtime.provide('layout', { openDetails: vi.fn(), closeDetails: vi.fn() })
     const locale = new LocaleRuntime(runtime.ctx)
@@ -113,7 +113,7 @@ describe('resident composer', () => {
     runtime.provide('connection', { api: { settings: {} }, isLoopback: false })
     // The plugin injects both; these specs exercise no settings path.
     runtime.provide('remote', { $on: () => () => {} })
-    runtime.provide('remote.documentExtract', {})
+    runtime.provide('remote.documentAttach', {})
     runtime.provide('settingsScope', { bind: () => stubSettingsScope().scope } as never)
     runtime.provide('layout', { openDetails: vi.fn(), closeDetails: vi.fn() })
     const locale = new LocaleRuntime(runtime.ctx)
@@ -183,7 +183,7 @@ describe('prompt rejection through the assembled composer', () => {
     runtime.provide('connection', { api: { settings: {} }, isLoopback: false })
     // The plugin injects both; these specs exercise no settings path.
     runtime.provide('remote', { $on: () => () => {} })
-    runtime.provide('remote.documentExtract', {})
+    runtime.provide('remote.documentAttach', {})
     runtime.provide('settingsScope', { bind: () => stubSettingsScope().scope } as never)
     runtime.provide('layout', { openDetails: vi.fn(), closeDetails: vi.fn() })
     const locale = new LocaleRuntime(runtime.ctx)

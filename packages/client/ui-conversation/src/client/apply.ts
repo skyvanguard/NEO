@@ -53,7 +53,7 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
 
 /** Services required by the conversation plugin. */
 export const inject = [
-  'slots', 'layout', 'sessions', 'workspaces', 'locale', 'connection', 'remote', 'remote.documentExtract',
+  'slots', 'layout', 'sessions', 'workspaces', 'locale', 'connection', 'remote', 'remote.documentAttach',
   'settingsScope', 'conversationEvents', 'conversationViews',
 ]
 
@@ -442,13 +442,13 @@ export function apply(ctx: Context): void {
   ctx.plugin(ConversationController, {
     input: inputHub,
     blocks: composerBlocks,
-    // Bind the host document extractor to the ROOT Remote proxy here: the
-    // send path runs on a scope-addressed context where `ctx.remote`'s
-    // namespaces do not resolve, so it must not read the Remote itself.
-    extractDocument: async (fileName: string, dataBase64: string) => {
-      const carried = await ctx.remote.documentExtract.extract({ fileName, dataBase64 })
+    // Bind the host document saver to the ROOT Remote proxy here: the send path
+    // runs on a scope-addressed context where `ctx.remote`'s namespaces do not
+    // resolve, so it must not read the Remote itself.
+    saveDocument: async (fileName: string, dataBase64: string, workspaceRoot: string) => {
+      const carried = await ctx.remote.documentAttach.save({ fileName, dataBase64, workspaceRoot })
       if (!carried.ok) {
-        throw new Error(`document extraction failed (${carried.error.code}): ${carried.error.message}`)
+        throw new Error(`document save failed (${carried.error.code}): ${carried.error.message}`)
       }
       return carried.value
     },

@@ -116,6 +116,9 @@ const PRIVILEGED_METHODS = new Set([
   'credentials.set',
   'credentials.unset',
   'llm.discoverModels',
+  // documentAttach.save writes an uploaded file into the session workspace on
+  // the host, so it stays loopback/same-origin even on a trustedHosts bind.
+  'documentAttach.save',
 ])
 
 /**

@@ -127,23 +127,22 @@ export class UnsupportedImageMediaTypeError extends Error {
   }
 }
 
-/** Extracted document content, as the host `documentExtract` Remote returns it. */
-export interface ExtractedDocumentContent {
-  readonly name: string
-  readonly kind: string
-  readonly text: string
-  readonly images: readonly { readonly mediaType: 'image/png'; readonly data: string }[]
-  readonly truncated: boolean
+/** Where a saved document landed, as the host `documentAttach` Remote returns it. */
+export interface SavedDocument {
+  readonly relativePath: string
+  readonly absolutePath: string
+  readonly bytes: number
 }
 
 /**
- * Upload a document's bytes to the host extractor and resolve its content.
- * Built by the plugin apply from the root-context Remote proxy, so the send
- * path never reads `ctx.remote` from a scope-addressed context (where the
- * namespace does not resolve). Rejects on carrier failure.
+ * Upload a document's bytes to the host, which saves it into the session
+ * workspace and resolves its path. Built by the plugin apply from the
+ * root-context Remote proxy, so the send path never reads `ctx.remote` from a
+ * scope-addressed context (where the namespace does not resolve). Rejects on
+ * carrier failure.
  */
-export type DocumentExtractor =
-  (fileName: string, dataBase64: string) => Promise<ExtractedDocumentContent>
+export type DocumentSaver =
+  (fileName: string, dataBase64: string, workspaceRoot: string) => Promise<SavedDocument>
 
 /** Scope-addressed conversation service (root singleton, provided as `conversation`). */
 export class ConversationController extends Service implements IConversation {
@@ -151,8 +150,8 @@ export class ConversationController extends Service implements IConversation {
   readonly input: SessionInputResolver
   /** The per-session composer-block registry. */
   readonly blocks: ComposerBlocks
-  /** Host-backed document extractor (bound to the root Remote proxy in apply). */
-  private readonly extractDocument: DocumentExtractor
+  /** Host-backed document saver (bound to the root Remote proxy in apply). */
+  private readonly saveDocument: DocumentSaver
   private readonly draftAttachments = new Map<DraftAttachmentId, ComposerAttachment>()
   private readonly imageUrls = new Map<string, ImageUrlEntry>()
   private readonly imageGenerations = new Map<SessionId, number>()
@@ -168,12 +167,12 @@ export class ConversationController extends Service implements IConversation {
    */
   constructor(
     ctx: Context,
-    config: { input: SessionInputResolver; blocks: ComposerBlocks; extractDocument: DocumentExtractor },
+    config: { input: SessionInputResolver; blocks: ComposerBlocks; saveDocument: DocumentSaver },
   ) {
     super(ctx, 'conversation')
     this.input = config.input
     this.blocks = config.blocks
-    this.extractDocument = config.extractDocument
+    this.saveDocument = config.saveDocument
     ctx.effect(() => () => {
       this.disposed = true
       for (const url of this.createdImageUrls) revokePreview(url)
@@ -213,7 +212,8 @@ export class ConversationController extends Service implements IConversation {
     if (attachments.length !== imageIds.length) {
       throw new Error('conversation.sendSession: one or more draft images are no longer available')
     }
-    const uploaded = await this.serializeAttachments(attachments)
+    const workspaceRoot = this.requireSessions().list.getSnapshot().byId[session.sessionId]?.cwd ?? ''
+    const uploaded = await this.serializeAttachments(attachments, workspaceRoot)
     const content = [...uploaded, ...(text === '' ? [] : [{ type: 'text' as const, text }])]
     const result = await session.prompt(content, mode)
     if (!result.ok) throw new Error(`conversation.send failed: ${result.error.code}: ${result.error.message}`)
@@ -379,6 +379,7 @@ export class ConversationController extends Service implements IConversation {
   /** Convert browser files to canonical base64 prompt parts. */
   private async serializeAttachments(
     attachments: readonly ComposerAttachment[],
+    workspaceRoot: string,
   ): Promise<Parameters<SessionFace['prompt']>[0]> {
     const parts: Parameters<SessionFace['prompt']>[0][number][] = []
     for (const attachment of attachments) {
@@ -392,32 +393,32 @@ export class ConversationController extends Service implements IConversation {
         })
         continue
       }
-      for (const part of await this.serializeDocument(file)) parts.push(part)
+      parts.push(await this.serializeDocument(file, workspaceRoot))
     }
     return parts
   }
 
   /**
-   * Extract one document host-side (Typert Remote `documentExtract.extract`) and
-   * render it as prompt content parts. The heavy PDF/Office parsers run in Node,
-   * so the browser only uploads bytes and receives text.
+   * Save one document host-side (Typert Remote `documentAttach.save`) into the
+   * session workspace and return a short text reference — NOT the document's
+   * contents. The agent reads or processes the file on demand with its own
+   * tools, so a large document never floods the model context.
    * @param file - the attached document.
-   * @returns labelled text parts (and any image parts from a scanned PDF).
+   * @param workspaceRoot - the session's workspace root (save target).
+   * @returns one text part pointing the agent at the saved file.
    */
-  private async serializeDocument(file: File): Promise<Parameters<SessionFace['prompt']>[0][number][]> {
+  private async serializeDocument(
+    file: File,
+    workspaceRoot: string,
+  ): Promise<Parameters<SessionFace['prompt']>[0][number]> {
     const dataBase64 = bytesToBase64(new Uint8Array(await file.arrayBuffer()))
-    const doc = await this.extractDocument(file.name, dataBase64)
-    const parts: Parameters<SessionFace['prompt']>[0][number][] = []
-    const header = `Attached document "${doc.name}":`
-    if (doc.text.trim() !== '') {
-      const suffix = doc.truncated ? '\n\n[document truncated at the extraction limit]' : ''
-      parts.push({ type: 'text', text: `${header}\n\n${doc.text}${suffix}` })
-    }
-    for (const image of doc.images) {
-      parts.push({ type: 'image', mediaType: image.mediaType, data: image.data, name: doc.name })
-    }
-    if (parts.length === 0) parts.push({ type: 'text', text: `${header}\n\n[no extractable text content]` })
-    return parts
+    const saved = await this.saveDocument(file.name, dataBase64, workspaceRoot)
+    const kb = Math.max(1, Math.round(saved.bytes / 1024))
+    const path = saved.relativePath
+    const text = `[Attached file "${file.name}" (${kb} KB) saved in the workspace at \`${path}\`. `
+      + `It is NOT loaded into context — read or process it with your tools as needed `
+      + `(e.g. \`pdftotext "${path}" -\`, \`grep\`, \`unzip\`).]`
+    return { type: 'text', text }
   }
 }
 

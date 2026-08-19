@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-document-extract",
-  "description": "Host-side document extraction (PDF, Office, text/code) to plain text for the model, exposed over Typert Remote",
+  "name": "@deepseek-ai/dsh-document-attach",
+  "description": "Host-side document attachment: saves an uploaded document into the session workspace for the agent to process, exposed over Typert Remote",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
@@ -44,10 +44,6 @@
   },
   "dependencies": {
     "@deepseek-ai/schemastery": "workspace:^",
-    "fflate": "^0.8.2",
-    "mammoth": "^1.8.0",
-    "pdfjs-dist": "^4.7.76",
-    "xlsx": "^0.18.5",
     "zod": "^4.4.3"
   },
   "devDependencies": {

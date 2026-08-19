@@ -66,11 +66,12 @@
       config:
         maxNoteBytes: 8192
 
-    # Host-side document extraction (PDF/Office/text -> plain text), reached from
-    # the composer over Typert Remote (documentExtract.extract). The parsers are
-    # Node-only, so they live here rather than in the browser client plugin.
-    - id: document-extract
-      name: '@deepseek-ai/dsh-document-extract'
+    # Host-side document attachment: saves an uploaded document into the session
+    # workspace so the agent can process it with its own tools, reached from the
+    # composer over Typert Remote (documentAttach.save). Kept host-side because
+    # it writes host files; loopback-gated via PRIVILEGED_METHODS.
+    - id: document-attach
+      name: '@deepseek-ai/dsh-document-attach'
 
     # Browser Session export: `/export` command plus the shared download dialog.
     - id: session-log-download

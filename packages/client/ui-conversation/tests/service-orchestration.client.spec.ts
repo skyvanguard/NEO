@@ -30,7 +30,7 @@ async function bench(readAttachment?: SessionFace['readAttachment']) {
   const fiber = runtime.ctx.plugin(ConversationController, {
     input: hub,
     blocks: new ComposerBlockRegistry(),
-    extractDocument: async () => ({ name: '', kind: 'text', text: '', images: [], truncated: false }),
+    saveDocument: async () => ({ relativePath: '.neo-attachments/x', absolutePath: '/w/.neo-attachments/x', bytes: 1 }),
   })
   await fiber.await()
   const root = runtime.ctx.get('conversation') as ConversationController
@@ -145,7 +145,7 @@ describe('ConversationController', () => {
     await bare.plugin(ConversationController, {
       input: new InputHub(bare, makeTranslate(zh, {})),
       blocks: new ComposerBlockRegistry(),
-      extractDocument: async () => ({ name: '', kind: 'text', text: '', images: [], truncated: false }),
+      saveDocument: async () => ({ relativePath: '.neo-attachments/x', absolutePath: '/w/.neo-attachments/x', bytes: 1 }),
     }).await()
     const orphan = bare.get('conversation') as ConversationController
     await expect(orphan.send('x')).rejects.toThrow(/sessions service unavailable/)

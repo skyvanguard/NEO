@@ -34,7 +34,7 @@
       "path": "../../feedback/message-feedback"
     },
     {
-      "path": "../../document/document-extract"
+      "path": "../../document/document-attach"
     },
     {
       "path": "../../host/plugin-inventory"
