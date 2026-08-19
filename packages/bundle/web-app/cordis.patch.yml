@@ -66,6 +66,12 @@
       config:
         maxNoteBytes: 8192
 
+    # Host-side document extraction (PDF/Office/text -> plain text), reached from
+    # the composer over Typert Remote (documentExtract.extract). The parsers are
+    # Node-only, so they live here rather than in the browser client plugin.
+    - id: document-extract
+      name: '@deepseek-ai/dsh-document-extract'
+
     # Browser Session export: `/export` command plus the shared download dialog.
     - id: session-log-download
       name: '@deepseek-ai/dsh-session-log-export'

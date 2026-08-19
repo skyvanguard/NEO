@@ -19,6 +19,7 @@ import type {
 import type { InputNotice } from './input/contract.ts'
 import { createChatStore } from './stores.ts'
 import { ConversationController, UnsupportedImageMediaTypeError } from './service.ts'
+import { UnsupportedDocumentTypeError } from './document-classify.ts'
 import type { IConversation } from './service.ts'
 import { ComposerBlockRegistry } from './input/blocks.ts'
 import type { ComposerBlock } from './input/blocks.ts'
@@ -313,8 +314,11 @@ export function apply(ctx: Context): void {
             }
             return null
           } catch (error: unknown) {
-            if (error instanceof UnsupportedImageMediaTypeError) {
-              // Positive copy: the supported list is fixed in imageMediaType,
+            if (
+              error instanceof UnsupportedImageMediaTypeError
+              || error instanceof UnsupportedDocumentTypeError
+            ) {
+              // Positive copy: the supported set is fixed (images + documents),
               // and naming it beats echoing the rejected MIME type back.
               return t('image.unsupportedType')
             }

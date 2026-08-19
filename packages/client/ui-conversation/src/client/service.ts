@@ -19,6 +19,10 @@ import type { QueueAction, QueueItemId } from './contract/queue.ts'
 import type { ComposerBlocks } from './input/blocks.ts'
 import type { DraftAttachmentId, SessionInputResolver } from './input/contract.ts'
 import type { InputSubmitMode } from './contract/composer-submission.ts'
+import { documentKind, fileExtension, UnsupportedDocumentTypeError } from './document-classify.ts'
+// Type-only: pulls the `ctx.remote` Context augmentation and the documentExtract
+// namespace so the host document extractor is a typed client Remote call.
+import type {} from '@deepseek-ai/dsh-api-remotes/client'
 
 /**
  * The outward conversation face (`ctx.conversation`): the scope-addressed
@@ -58,13 +62,52 @@ export interface IConversation {
   loadOlder(): Promise<void>
 }
 
+/**
+ * Classify an attached file as an image (vision path) or a document (extracted
+ * host-side to text on send).
+ * @throws {UnsupportedDocumentTypeError} when it is neither.
+ */
+function classifyAttachment(file: File): 'image' | 'document' {
+  try {
+    imageMediaType(file.type)
+    return 'image'
+  } catch {
+    // Not a supported raster image — fall through to document classification.
+  }
+  if (documentKind(file) !== null) return 'document'
+  throw new UnsupportedDocumentTypeError(file.type, file.name)
+}
+
+/**
+ * A small Matrix-green document tile as an inline SVG data URL, so a document
+ * draft renders through the same image rail as a picture with no rail changes.
+ * @param ext - the file extension, badged on the tile.
+ * @returns a `data:image/svg+xml` URL.
+ */
+function documentPreviewDataUrl(ext: string): string {
+  const label = (ext || 'DOC').slice(0, 4).toUpperCase()
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">'
+    + '<rect width="96" height="96" rx="10" fill="#0b120d"/>'
+    + '<path d="M28 18h28l12 12v48a4 4 0 0 1-4 4H28a4 4 0 0 1-4-4V22a4 4 0 0 1 4-4z" fill="#0f1a12" stroke="#00c060" stroke-width="2"/>'
+    + '<path d="M56 18v12h12" fill="none" stroke="#00c060" stroke-width="2"/>'
+    + `<text x="48" y="64" font-family="monospace" font-size="15" font-weight="bold" fill="#00ff88" text-anchor="middle">${label}</text>`
+    + '</svg>'
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+}
+
 /** Create one browser-only draft descriptor; only its id enters input state. */
 function browserDraftAttachment(file: File): ComposerAttachment {
+  const id = crypto.randomUUID() as DraftAttachmentId
+  if (classifyAttachment(file) === 'image') {
+    return { kind: 'image', id, previewUrl: URL.createObjectURL(file), file }
+  }
+  const kind = documentKind(file)
   return {
-    kind: 'image',
-    id: crypto.randomUUID() as DraftAttachmentId,
-    previewUrl: URL.createObjectURL(file),
+    kind: 'document',
+    id,
+    previewUrl: documentPreviewDataUrl(fileExtension(file.name)),
     file,
+    ...(kind !== null ? { documentKind: kind } : {}),
   }
 }
 
@@ -149,7 +192,7 @@ export class ConversationController extends Service implements IConversation {
     if (attachments.length !== imageIds.length) {
       throw new Error('conversation.sendSession: one or more draft images are no longer available')
     }
-    const uploaded = await this.serializeImages(attachments.map(attachment => attachment.file))
+    const uploaded = await this.serializeAttachments(attachments)
     const content = [...uploaded, ...(text === '' ? [] : [{ type: 'text' as const, text }])]
     const result = await session.prompt(content, mode)
     if (!result.ok) throw new Error(`conversation.send failed: ${result.error.code}: ${result.error.message}`)
@@ -162,7 +205,7 @@ export class ConversationController extends Service implements IConversation {
    * @returns ordered draft descriptors.
    */
   createDraftImages(files: readonly File[]): readonly ComposerAttachment[] {
-    for (const file of files) imageMediaType(file.type)
+    for (const file of files) classifyAttachment(file)
     return files.map((file) => {
       const attachment = browserDraftAttachment(file)
       this.draftAttachments.set(attachment.id, attachment)
@@ -313,13 +356,51 @@ export class ConversationController extends Service implements IConversation {
   }
 
   /** Convert browser files to canonical base64 prompt parts. */
-  private serializeImages(images: readonly File[]): Promise<Parameters<SessionFace['prompt']>[0]> {
-    return Promise.all(images.map(async file => ({
-      type: 'image' as const,
-      mediaType: imageMediaType(file.type),
-      data: bytesToBase64(new Uint8Array(await file.arrayBuffer())),
-      ...(file.name === '' ? {} : { name: file.name }),
-    })))
+  private async serializeAttachments(
+    attachments: readonly ComposerAttachment[],
+  ): Promise<Parameters<SessionFace['prompt']>[0]> {
+    const parts: Parameters<SessionFace['prompt']>[0][number][] = []
+    for (const attachment of attachments) {
+      const file = attachment.file
+      if (attachment.kind === 'image') {
+        parts.push({
+          type: 'image',
+          mediaType: imageMediaType(file.type),
+          data: bytesToBase64(new Uint8Array(await file.arrayBuffer())),
+          ...(file.name === '' ? {} : { name: file.name }),
+        })
+        continue
+      }
+      for (const part of await this.serializeDocument(file)) parts.push(part)
+    }
+    return parts
+  }
+
+  /**
+   * Extract one document host-side (Typert Remote `documentExtract.extract`) and
+   * render it as prompt content parts. The heavy PDF/Office parsers run in Node,
+   * so the browser only uploads bytes and receives text.
+   * @param file - the attached document.
+   * @returns labelled text parts (and any image parts from a scanned PDF).
+   */
+  private async serializeDocument(file: File): Promise<Parameters<SessionFace['prompt']>[0][number][]> {
+    const dataBase64 = bytesToBase64(new Uint8Array(await file.arrayBuffer()))
+    const carried = await this.ctx.remote.documentExtract.extract({ fileName: file.name, dataBase64 })
+    if (!carried.ok) {
+      throw new Error(`conversation.send: document extraction failed (${carried.error.code}): ${carried.error.message}`)
+    }
+    const doc = carried.value
+    const parts: Parameters<SessionFace['prompt']>[0][number][] = []
+    const header = `Attached document "${doc.name}":`
+    if (doc.text.trim() !== '') {
+      const suffix = doc.truncated ? '\n\n[document truncated at the extraction limit]' : ''
+      parts.push({ type: 'text', text: `${header}\n\n${doc.text}${suffix}` })
+    }
+    for (const image of doc.images) {
+      parts.push({ type: 'image', mediaType: image.mediaType, data: image.data, name: doc.name })
+    }
+    if (parts.length === 0) parts.push({ type: 'text', text: `${header}\n\n[no extractable text content]` })
+    return parts
   }
 }
 
