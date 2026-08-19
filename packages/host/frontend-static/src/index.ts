@@ -45,6 +45,21 @@ const MIME: Record<string, string> = {
 }
 
 /**
+ * Cache-Control for one static asset. Vite's content-hashed bundles
+ * (`/assets/name-<hash>.ext`) are immutable and cached for a year; everything
+ * else revalidates (`no-cache`) so a redeploy is picked up on the next request
+ * instead of serving a stale reference. index.html is handled separately (also
+ * no-cache) so its freshly injected asset URLs always win over a cached copy.
+ * @param pathname - decoded URL pathname of the request.
+ * @returns the Cache-Control header value.
+ */
+function cacheControlFor(pathname: string): string {
+  return /^\/assets\/.+-[\w-]{8,}\.\w+$/.test(pathname)
+    ? 'public, max-age=31536000, immutable'
+    : 'no-cache'
+}
+
+/**
  * Serve one GET/HEAD static request from the dist root.
  * @param pathname - decoded URL pathname of the request.
  * @param res - the node:http response to write.
@@ -68,7 +83,7 @@ export async function serveStatic(
   }
   const serveIndex = async (): Promise<void> => {
     const body = await renderIndex()
-    res.writeHead(200, { 'content-type': MIME['.html'] })
+    res.writeHead(200, { 'content-type': MIME['.html'], 'cache-control': 'no-cache' })
     res.end(body)
   }
   if (target === distRoot || target === distIndex) {
@@ -77,7 +92,10 @@ export async function serveStatic(
   }
   try {
     const body = await readFile(target)
-    res.writeHead(200, { 'content-type': MIME[extname(target)] ?? 'application/octet-stream' })
+    res.writeHead(200, {
+      'content-type': MIME[extname(target)] ?? 'application/octet-stream',
+      'cache-control': cacheControlFor(pathname),
+    })
     res.end(body)
   } catch {
     // Miss (ENOENT/EISDIR) falls back to index.html with 200 (SPA routing).
