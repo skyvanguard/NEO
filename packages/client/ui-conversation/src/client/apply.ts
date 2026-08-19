@@ -10,6 +10,9 @@ import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
 import type {} from '@deepseek-ai/dsh-client-locale/client'
+// Type-only: pulls the `ctx.remote` Context augmentation and the documentExtract
+// namespace, so the composer's document extractor is a typed root Remote call.
+import type {} from '@deepseek-ai/dsh-api-remotes/client'
 import type { ViewTab } from './contract/views.ts'
 import type {
   ApprovalWait, ChatNodeTurnDataInjected, ChatScrollPosition, ChatViewInjected, ComposerBarInjected,
@@ -50,8 +53,8 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
 
 /** Services required by the conversation plugin. */
 export const inject = [
-  'slots', 'layout', 'sessions', 'workspaces', 'locale', 'connection', 'remote', 'settingsScope',
-  'conversationEvents', 'conversationViews',
+  'slots', 'layout', 'sessions', 'workspaces', 'locale', 'connection', 'remote', 'remote.documentExtract',
+  'settingsScope', 'conversationEvents', 'conversationViews',
 ]
 
 // Static no-session sources for the composer-bar hooks compartment: module
@@ -436,7 +439,20 @@ export function apply(ctx: Context): void {
   // registers itself as `conversation` and lives on its own child fiber.
   // Presentation registrants depend directly on their slot declarations;
   // this service remains only where conversation actions are required.
-  ctx.plugin(ConversationController, { input: inputHub, blocks: composerBlocks })
+  ctx.plugin(ConversationController, {
+    input: inputHub,
+    blocks: composerBlocks,
+    // Bind the host document extractor to the ROOT Remote proxy here: the
+    // send path runs on a scope-addressed context where `ctx.remote`'s
+    // namespaces do not resolve, so it must not read the Remote itself.
+    extractDocument: async (fileName: string, dataBase64: string) => {
+      const carried = await ctx.remote.documentExtract.extract({ fileName, dataBase64 })
+      if (!carried.ok) {
+        throw new Error(`document extraction failed (${carried.error.code}): ${carried.error.message}`)
+      }
+      return carried.value
+    },
+  })
 
   // The plan strip rides the input dock above the queue rows (same posture).
   ctx.plugin(todoDockEntry)

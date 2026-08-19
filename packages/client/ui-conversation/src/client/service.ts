@@ -20,9 +20,6 @@ import type { ComposerBlocks } from './input/blocks.ts'
 import type { DraftAttachmentId, SessionInputResolver } from './input/contract.ts'
 import type { InputSubmitMode } from './contract/composer-submission.ts'
 import { documentKind, fileExtension, UnsupportedDocumentTypeError } from './document-classify.ts'
-// Type-only: pulls the `ctx.remote` Context augmentation and the documentExtract
-// namespace so the host document extractor is a typed client Remote call.
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
 
 /**
  * The outward conversation face (`ctx.conversation`): the scope-addressed
@@ -130,12 +127,32 @@ export class UnsupportedImageMediaTypeError extends Error {
   }
 }
 
+/** Extracted document content, as the host `documentExtract` Remote returns it. */
+export interface ExtractedDocumentContent {
+  readonly name: string
+  readonly kind: string
+  readonly text: string
+  readonly images: readonly { readonly mediaType: 'image/png'; readonly data: string }[]
+  readonly truncated: boolean
+}
+
+/**
+ * Upload a document's bytes to the host extractor and resolve its content.
+ * Built by the plugin apply from the root-context Remote proxy, so the send
+ * path never reads `ctx.remote` from a scope-addressed context (where the
+ * namespace does not resolve). Rejects on carrier failure.
+ */
+export type DocumentExtractor =
+  (fileName: string, dataBase64: string) => Promise<ExtractedDocumentContent>
+
 /** Scope-addressed conversation service (root singleton, provided as `conversation`). */
 export class ConversationController extends Service implements IConversation {
   /** The per-session input machine registry (SessionInputResolver face). */
   readonly input: SessionInputResolver
   /** The per-session composer-block registry. */
   readonly blocks: ComposerBlocks
+  /** Host-backed document extractor (bound to the root Remote proxy in apply). */
+  private readonly extractDocument: DocumentExtractor
   private readonly draftAttachments = new Map<DraftAttachmentId, ComposerAttachment>()
   private readonly imageUrls = new Map<string, ImageUrlEntry>()
   private readonly imageGenerations = new Map<SessionId, number>()
@@ -149,10 +166,14 @@ export class ConversationController extends Service implements IConversation {
    * constructed by the plugin apply (the same instances the slot inject
    * factories close over).
    */
-  constructor(ctx: Context, config: { input: SessionInputResolver; blocks: ComposerBlocks }) {
+  constructor(
+    ctx: Context,
+    config: { input: SessionInputResolver; blocks: ComposerBlocks; extractDocument: DocumentExtractor },
+  ) {
     super(ctx, 'conversation')
     this.input = config.input
     this.blocks = config.blocks
+    this.extractDocument = config.extractDocument
     ctx.effect(() => () => {
       this.disposed = true
       for (const url of this.createdImageUrls) revokePreview(url)
@@ -385,11 +406,7 @@ export class ConversationController extends Service implements IConversation {
    */
   private async serializeDocument(file: File): Promise<Parameters<SessionFace['prompt']>[0][number][]> {
     const dataBase64 = bytesToBase64(new Uint8Array(await file.arrayBuffer()))
-    const carried = await this.ctx.remote.documentExtract.extract({ fileName: file.name, dataBase64 })
-    if (!carried.ok) {
-      throw new Error(`conversation.send: document extraction failed (${carried.error.code}): ${carried.error.message}`)
-    }
-    const doc = carried.value
+    const doc = await this.extractDocument(file.name, dataBase64)
     const parts: Parameters<SessionFace['prompt']>[0][number][] = []
     const header = `Attached document "${doc.name}":`
     if (doc.text.trim() !== '') {
