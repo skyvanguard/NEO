@@ -19,10 +19,6 @@ import type { QueueAction, QueueItemId } from './contract/queue.ts'
 import type { ComposerBlocks } from './input/blocks.ts'
 import type { DraftAttachmentId, SessionInputResolver } from './input/contract.ts'
 import type { InputSubmitMode } from './contract/composer-submission.ts'
-import {
-  documentKind, extractDocument, fileExtension, MAX_DOCUMENT_TEXT_CHARS,
-  UnsupportedDocumentTypeError, type ExtractedDocument,
-} from './document-extract.ts'
 
 /**
  * The outward conversation face (`ctx.conversation`): the scope-addressed
@@ -62,73 +58,14 @@ export interface IConversation {
   loadOlder(): Promise<void>
 }
 
-/**
- * Classify an attached file as an image (vision path) or a document (extracted
- * to text on send). Images win when the browser MIME is a supported raster
- * type; otherwise a recognised document extension/MIME makes it a document.
- * @throws {UnsupportedDocumentTypeError} when it is neither.
- */
-function classifyAttachment(file: File): 'image' | 'document' {
-  try {
-    imageMediaType(file.type)
-    return 'image'
-  } catch {
-    // Not a supported raster image — fall through to document classification.
-  }
-  if (documentKind(file) !== null) return 'document'
-  throw new UnsupportedDocumentTypeError(file.type, file.name)
-}
-
-/**
- * A small Matrix-green document tile as an inline SVG data URL, so a document
- * draft renders through the same image rail as a picture with no rail changes.
- * @param ext - the file extension, badged on the tile.
- * @returns a `data:image/svg+xml` URL.
- */
-function documentPreviewDataUrl(ext: string): string {
-  const label = (ext || 'DOC').slice(0, 4).toUpperCase()
-  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">'
-    + '<rect width="96" height="96" rx="10" fill="#0b120d"/>'
-    + '<path d="M28 18h28l12 12v48a4 4 0 0 1-4 4H28a4 4 0 0 1-4-4V22a4 4 0 0 1 4-4z" fill="#0f1a12" stroke="#00c060" stroke-width="2"/>'
-    + '<path d="M56 18v12h12" fill="none" stroke="#00c060" stroke-width="2"/>'
-    + `<text x="48" y="64" font-family="monospace" font-size="15" font-weight="bold" fill="#00ff88" text-anchor="middle">${label}</text>`
-    + '</svg>'
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
-}
-
 /** Create one browser-only draft descriptor; only its id enters input state. */
 function browserDraftAttachment(file: File): ComposerAttachment {
-  const id = crypto.randomUUID() as DraftAttachmentId
-  if (classifyAttachment(file) === 'image') {
-    return { kind: 'image', id, previewUrl: URL.createObjectURL(file), file }
-  }
-  const kind = documentKind(file)
   return {
-    kind: 'document',
-    id,
-    previewUrl: documentPreviewDataUrl(fileExtension(file.name)),
+    kind: 'image',
+    id: crypto.randomUUID() as DraftAttachmentId,
+    previewUrl: URL.createObjectURL(file),
     file,
-    ...(kind !== null ? { documentKind: kind } : {}),
   }
-}
-
-/**
- * Render an extracted document as ordered prompt content parts: a labelled
- * text block for its text, image parts for a scanned PDF's rendered pages, and
- * a placeholder note when nothing could be extracted.
- */
-function documentToContentParts(doc: ExtractedDocument): Parameters<SessionFace['prompt']>[0][number][] {
-  const parts: Parameters<SessionFace['prompt']>[0][number][] = []
-  const header = `Attached document "${doc.name}":`
-  if (doc.text.trim() !== '') {
-    const suffix = doc.truncated ? `\n\n[document truncated at ${MAX_DOCUMENT_TEXT_CHARS} characters]` : ''
-    parts.push({ type: 'text', text: `${header}\n\n${doc.text}${suffix}` })
-  }
-  for (const image of doc.images) {
-    parts.push({ type: 'image', mediaType: image.mediaType, data: image.data, name: doc.name })
-  }
-  if (parts.length === 0) parts.push({ type: 'text', text: `${header}\n\n[no extractable text content]` })
-  return parts
 }
 
 interface ImageUrlEntry {
@@ -212,7 +149,7 @@ export class ConversationController extends Service implements IConversation {
     if (attachments.length !== imageIds.length) {
       throw new Error('conversation.sendSession: one or more draft images are no longer available')
     }
-    const uploaded = await this.serializeAttachments(attachments)
+    const uploaded = await this.serializeImages(attachments.map(attachment => attachment.file))
     const content = [...uploaded, ...(text === '' ? [] : [{ type: 'text' as const, text }])]
     const result = await session.prompt(content, mode)
     if (!result.ok) throw new Error(`conversation.send failed: ${result.error.code}: ${result.error.message}`)
@@ -225,7 +162,7 @@ export class ConversationController extends Service implements IConversation {
    * @returns ordered draft descriptors.
    */
   createDraftImages(files: readonly File[]): readonly ComposerAttachment[] {
-    for (const file of files) classifyAttachment(file)
+    for (const file of files) imageMediaType(file.type)
     return files.map((file) => {
       const attachment = browserDraftAttachment(file)
       this.draftAttachments.set(attachment.id, attachment)
@@ -375,33 +312,14 @@ export class ConversationController extends Service implements IConversation {
     return sessions
   }
 
-  /**
-   * Convert draft attachments to canonical prompt content parts: images as
-   * base64 image parts (vision), documents extracted to text (and, for scanned
-   * PDFs, rendered image parts). Extraction runs sequentially so a large
-   * document never floods memory with parallel parses.
-   * @param attachments - ordered draft descriptors.
-   * @returns the ordered content parts to prepend before the message text.
-   */
-  private async serializeAttachments(
-    attachments: readonly ComposerAttachment[],
-  ): Promise<Parameters<SessionFace['prompt']>[0]> {
-    const parts: Parameters<SessionFace['prompt']>[0][number][] = []
-    for (const attachment of attachments) {
-      if (attachment.kind === 'image') {
-        const file = attachment.file
-        parts.push({
-          type: 'image',
-          mediaType: imageMediaType(file.type),
-          data: bytesToBase64(new Uint8Array(await file.arrayBuffer())),
-          ...(file.name === '' ? {} : { name: file.name }),
-        })
-        continue
-      }
-      const doc = await extractDocument(attachment.file)
-      for (const part of documentToContentParts(doc)) parts.push(part)
-    }
-    return parts
+  /** Convert browser files to canonical base64 prompt parts. */
+  private serializeImages(images: readonly File[]): Promise<Parameters<SessionFace['prompt']>[0]> {
+    return Promise.all(images.map(async file => ({
+      type: 'image' as const,
+      mediaType: imageMediaType(file.type),
+      data: bytesToBase64(new Uint8Array(await file.arrayBuffer())),
+      ...(file.name === '' ? {} : { name: file.name }),
+    })))
   }
 }
 

@@ -13,7 +13,6 @@ import type {
 import type { MarkdownFileMentions } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { MessageId } from '@deepseek-ai/dsh-client-connection/client'
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
-import type { DocumentKind } from '../document-extract.ts'
 import type { ComposerBlock } from '../input/blocks.ts'
 import type {
   ComposerKeyboard, DraftAttachmentId, EditSelection, InputActions, InputNotice, InputState,
@@ -23,16 +22,12 @@ import type { ComposerSubmitGesture, InputSubmitMode } from './composer-submissi
 import type { ChatNode, ChatNodeKind } from './chat-nodes.ts'
 import type { CallId, SelectionTarget, ViewTab } from './views.ts'
 
-/** Browser-owned draft attachment that has not crossed the durable host boundary. */
+/** Browser-owned image that has not crossed the durable host boundary. */
 export interface ComposerAttachment {
-  /** `image` rides the vision path; `document` is extracted to text/images on send. */
-  kind: 'image' | 'document'
+  kind: 'image'
   id: DraftAttachmentId
   file: File
-  /** Object URL (image) or a generated icon data URL (document) for the rail thumbnail. */
   previewUrl: string
-  /** Present for `document` attachments: the extractor family that will read it. */
-  documentKind?: DocumentKind
 }
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {

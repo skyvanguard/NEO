@@ -10,8 +10,7 @@ import { makeTranslate, SlotTestRuntime } from '@deepseek-ai/dsh-client-test-run
 import type { QueuedMessage, SessionFace } from '@deepseek-ai/dsh-client-runtime/client'
 import { ComposerBlockRegistry } from '../src/client/input/blocks.ts'
 import { InputHub } from '../src/client/input/hub.ts'
-import { ConversationController } from '../src/client/service.ts'
-import { UnsupportedDocumentTypeError } from '../src/client/document-extract.ts'
+import { ConversationController, UnsupportedImageMediaTypeError } from '../src/client/service.ts'
 import { zh } from '../src/client/locales.ts'
 
 async function bench(readAttachment?: SessionFace['readAttachment']) {
@@ -104,16 +103,13 @@ describe('ConversationController', () => {
     await b.runtime.dispose()
   })
 
-  it('validates every attachment before allocating previews', async () => {
+  it('validates every MIME type before allocating previews', async () => {
     const b = await bench()
     const created = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:preview')
-    // A batch that mixes a valid image with an unsupported binary is rejected
-    // whole before any preview URL is allocated (documents are accepted, but a
-    // non-image, non-document binary is not).
     expect(() => b.root.createDraftImages([
       new File([Uint8Array.of(1)], 'valid.png', { type: 'image/png' }),
-      new File([Uint8Array.of(2)], 'malware.bin', { type: 'application/octet-stream' }),
-    ])).toThrow(UnsupportedDocumentTypeError)
+      new File([Uint8Array.of(2)], 'invalid.svg', { type: 'image/svg+xml' }),
+    ])).toThrow(UnsupportedImageMediaTypeError)
     expect(created).not.toHaveBeenCalled()
     created.mockRestore()
     await b.runtime.dispose()

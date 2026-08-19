@@ -50,10 +50,6 @@
   "dependencies": {
     "@deepseek-ai/dsh-settings": "workspace:^",
     "clsx": "^2.0.0",
-    "fflate": "^0.8.2",
-    "mammoth": "^1.8.0",
-    "pdfjs-dist": "^4.7.76",
-    "xlsx": "^0.18.5",
     "@deepseek-ai/schemastery": "workspace:^"
   },
   "peerDependencies": {
