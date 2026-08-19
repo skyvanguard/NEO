@@ -57,22 +57,20 @@ Examples:
 
 /**
  * Parse and provide the Web invocation as an ordinary Cordis service. The
- * command's action publishes the flags this invocation named; a non-numeric
- * `--port` is a usage error, so on rejection (and on `--help`) nothing is
- * provided.
- *
- * All-interfaces binds (`--host 0.0.0.0`) are permitted in this private fork:
- * the harness runs on a single-operator, trusted LAN where reaching the UI
- * from another machine is intentional. Upstream blocks this because the UI
- * grants remote code execution and ships no authentication of its own — keep
- * exposure limited to networks you fully control, and prefer an SSH tunnel or
- * an authenticating reverse proxy on anything shared.
+ * command's action publishes the flags this invocation named; `--host 0.0.0.0`
+ * or a non-numeric `--port` is a usage error, so on rejection (and on `--help`)
+ * nothing is provided. The all-interfaces guard is deliberate: the UI grants
+ * remote code execution and ships no authentication — reach it over an SSH
+ * tunnel to loopback, never a raw network bind.
  * @param ctx - plugin context carrying the command line.
  */
 export function apply(ctx: Context): void {
   const program = webCommand()
   program.action(() => {
     const options = program.opts<WebOptions>()
+    if (options.host === '0.0.0.0') {
+      program.error('error: --host 0.0.0.0 is intentionally not supported yet for safety: it would expose remote code execution to the network; use 127.0.0.1 instead')
+    }
     if (options.port !== undefined && !/^\d+$/.test(options.port)) {
       program.error(`error: --port must be a number, got ${JSON.stringify(options.port)}`)
     }

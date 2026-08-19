@@ -91,6 +91,9 @@ export class SearxngSearchProvider implements WebSearchProvider {
     endpoint.searchParams.set('format', 'json')
 
     // Compose caller cancellation with a wall-clock timeout on one controller.
+    // The controller, timer, and listener stay live through the body read
+    // (`response.json`), so a slow/hung body or a mid-read cancel is bounded
+    // rather than an indefinite hang — the cleanup runs only in the outer finally.
     const controller = new AbortController()
     const onAbort = (): void => { controller.abort() }
     if (signal !== undefined) {
@@ -99,34 +102,36 @@ export class SearxngSearchProvider implements WebSearchProvider {
     }
     const timer = setTimeout(() => { controller.abort() }, this.options.timeoutMs)
 
-    let response: Response
     try {
-      response = await fetch(endpoint, {
-        redirect: 'error',
-        headers: { accept: 'application/json' },
-        signal: controller.signal,
-      })
-    } catch (error: unknown) {
-      if (signal?.aborted === true) throw searchAborted(signal, error)
-      throw new WebError(`SearXNG search request failed: ${String(error)}`, 'WEB_PROVIDER_ERROR', { cause: error })
+      let response: Response
+      try {
+        response = await fetch(endpoint, {
+          redirect: 'error',
+          headers: { accept: 'application/json' },
+          signal: controller.signal,
+        })
+      } catch (error: unknown) {
+        if (signal?.aborted === true) throw searchAborted(signal, error)
+        throw new WebError(`SearXNG search request failed: ${String(error)}`, 'WEB_PROVIDER_ERROR', { cause: error })
+      }
+
+      if (!response.ok) {
+        throw new WebError(`SearXNG returned HTTP ${response.status}`, 'WEB_PROVIDER_ERROR')
+      }
+      try {
+        const payload = await response.json() as SearxngResponse
+        return mapSearxngResponse(payload, limit)
+      } catch (error: unknown) {
+        if (signal?.aborted === true) throw searchAborted(signal, error)
+        throw new WebError(
+          'SearXNG returned a non-JSON body; enable the `json` format in the instance settings.yml (search.formats)',
+          'WEB_PROVIDER_ERROR',
+          { cause: error },
+        )
+      }
     } finally {
       clearTimeout(timer)
       if (signal !== undefined) signal.removeEventListener('abort', onAbort)
-    }
-
-    if (!response.ok) {
-      throw new WebError(`SearXNG returned HTTP ${response.status}`, 'WEB_PROVIDER_ERROR')
-    }
-    try {
-      const payload = await response.json() as SearxngResponse
-      return mapSearxngResponse(payload, limit)
-    } catch (error: unknown) {
-      if (signal?.aborted === true) throw searchAborted(signal, error)
-      throw new WebError(
-        'SearXNG returned a non-JSON body; enable the `json` format in the instance settings.yml (search.formats)',
-        'WEB_PROVIDER_ERROR',
-        { cause: error },
-      )
     }
   }
 }

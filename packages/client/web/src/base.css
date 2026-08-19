@@ -36,12 +36,26 @@ textarea {
 }
 
 /* ── NEO — Matrix theme ────────────────────────────────────────────────────
- * Phosphor-green accent layered over the --dsw-* token system. Appended by the
- * NEO rebrand; !important so it wins over the upstream palette regardless of
- * import order. Brand/accent only — text and contrast tokens are left intact. */
-:root,
-:root[data-theme='light'],
-:root[data-theme='dark'] {
+ * Phosphor-green accent layered over the --dsw-* token system. !important so it
+ * wins over the upstream palette regardless of import order. Dark mode is keyed
+ * on `body[data-ds-dark-theme]` (what ui-layout's presenter actually sets), and
+ * light mode uses a DARKER green so brand text/links stay legible on light
+ * surfaces (bright #00ff88 on white fails contrast). */
+:root {
+  /* Light (default, no dark attribute): a darker green readable on light. */
+  --dsw-alias-brand-primary: #00a35c !important;
+  --dsw-alias-brand-primary-invert: #ffffff !important;
+  --dsw-alias-brand-text: #008f4c !important;
+  --dsw-alias-button-primary-fill: #00a35c !important;
+  --dsw-alias-button-primary-hover: #00b866 !important;
+  --dsw-alias-button-primary-dimmed: #007a41 !important;
+  --dsw-alias-interactive-bg-hover-accent: rgba(0, 143, 76, 0.12) !important;
+}
+
+/* Dark: full Matrix phosphor green + near-black ground. Keyed on the body
+ * attribute the theme presenter sets; overriding on <body> wins for all app
+ * content nested inside it. */
+body[data-ds-dark-theme] {
   --dsw-alias-brand-primary: #00ff88 !important;
   --dsw-alias-brand-primary-invert: #001a0e !important;
   --dsw-alias-brand-text: #00ff88 !important;
@@ -49,9 +63,5 @@ textarea {
   --dsw-alias-button-primary-hover: #57ffab !important;
   --dsw-alias-button-primary-dimmed: #00cc6e !important;
   --dsw-alias-interactive-bg-hover-accent: rgba(0, 255, 136, 0.14) !important;
-}
-
-/* Matrix reads darkest in dark mode: near-black ground with a faint green cast. */
-:root[data-theme='dark'] {
   --dsw-alias-bg-base: #050a07 !important;
 }
