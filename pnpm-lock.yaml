@@ -1372,6 +1372,9 @@ importers:
       '@deepseek-ai/dsh-client-ui-trajectory':
         specifier: workspace:^
         version: link:../../client/ui-trajectory
+      '@deepseek-ai/dsh-client-ui-usage':
+        specifier: workspace:^
+        version: link:../../client/ui-usage
       '@deepseek-ai/dsh-client-ui-user-questions':
         specifier: workspace:^
         version: link:../../client/ui-user-questions
