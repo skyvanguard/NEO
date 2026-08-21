@@ -113,7 +113,7 @@ describe('ConversationController', () => {
     // non-document binary is not).
     expect(() => b.root.createDraftImages([
       new File([Uint8Array.of(1)], 'valid.png', { type: 'image/png' }),
-      new File([Uint8Array.of(2)], 'malware.bin', { type: 'application/octet-stream' }),
+      new File([Uint8Array.of(2)], 'mystery.zzz', { type: 'application/octet-stream' }),
     ])).toThrow(UnsupportedDocumentTypeError)
     expect(created).not.toHaveBeenCalled()
     created.mockRestore()

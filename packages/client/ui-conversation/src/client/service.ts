@@ -416,8 +416,8 @@ export class ConversationController extends Service implements IConversation {
     const kb = Math.max(1, Math.round(saved.bytes / 1024))
     const path = saved.relativePath
     const text = `[Attached file "${file.name}" (${kb} KB) saved in the workspace at \`${path}\`. `
-      + `It is NOT loaded into context — read or process it with your tools as needed `
-      + `(e.g. \`pdftotext "${path}" -\`, \`grep\`, \`unzip\`).]`
+      + `It is NOT loaded into context — read or process it with the appropriate tool as needed `
+      + `(e.g. \`pdftotext\`, \`tshark -r\` for a capture, \`openssl\` for a cert, \`grep\`, \`unzip\`).]`
     return { type: 'text', text }
   }
 }
