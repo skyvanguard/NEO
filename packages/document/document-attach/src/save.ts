@@ -14,8 +14,8 @@ import type { DocumentSaveResult } from './types.ts'
 /** Workspace-relative directory that holds attached documents. */
 export const ATTACHMENTS_DIR = '.neo-attachments'
 
-/** Hard cap on a single attachment, matching the RPC body budget headroom. */
-export const MAX_ATTACHMENT_BYTES = 100 * 1024 * 1024
+/** Hard cap on a single attachment (200 MiB), within the RPC body budget. */
+export const MAX_ATTACHMENT_BYTES = 200 * 1024 * 1024
 
 /** Thrown when an attachment cannot be saved (no workspace, too large, bad name). */
 export class InvalidAttachmentError extends Error {
