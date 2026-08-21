@@ -73,6 +73,11 @@
     - id: document-attach
       name: '@deepseek-ai/dsh-document-attach'
 
+    # Cross-session token-usage aggregation (usage.summary), read from the
+    # persisted session logs, for the native cumulative Usage panel.
+    - id: usage-stats
+      name: '@deepseek-ai/dsh-usage-stats'
+
     # Browser Session export: `/export` command plus the shared download dialog.
     - id: session-log-download
       name: '@deepseek-ai/dsh-session-log-export'
@@ -201,6 +206,10 @@
 
     - id: ui-settings-plugin-inventory
       name: '@deepseek-ai/dsh-client-ui-settings-plugin-inventory'
+
+    # Cumulative cross-session token-usage panel (Settings -> Usage).
+    - id: ui-usage
+      name: '@deepseek-ai/dsh-client-ui-usage'
 
     - id: ui-conversation
       name: '@deepseek-ai/dsh-client-ui-conversation'

@@ -37,6 +37,9 @@
       "path": "../../document/document-attach"
     },
     {
+      "path": "../../usage/usage-stats"
+    },
+    {
       "path": "../../host/plugin-inventory"
     },
     {
