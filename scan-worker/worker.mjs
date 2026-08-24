@@ -59,16 +59,28 @@ async function fetchNextJob() {
 }
 
 async function postResult(jobId, payload) {
-  const res = await fetch(`${cfg.apiBase}/api/jobs/${jobId}/result`, {
-    method: "POST",
-    headers: { authorization: `Bearer ${cfg.token}`, "content-type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(`POST result → ${res.status} ${text.slice(0, 200)}`);
+  // Reintenta hasta 3 veces: un 500 transitorio no debe perder el resultado.
+  let lastErr;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    let res;
+    try {
+      res = await fetch(`${cfg.apiBase}/api/jobs/${jobId}/result`, {
+        method: "POST",
+        headers: { authorization: `Bearer ${cfg.token}`, "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch (err) {
+      lastErr = err;
+    }
+    if (res) {
+      if (res.ok) return res.json();
+      const text = await res.text().catch(() => "");
+      lastErr = new Error(`POST result → ${res.status} ${text.slice(0, 200)}`);
+      if (res.status === 409) throw lastErr; // ya no está en running: no reintentar
+    }
+    if (attempt < 3) await new Promise((r) => setTimeout(r, attempt * 3000));
   }
-  return res.json();
+  throw lastErr;
 }
 
 function taskText(domain, locale) {
@@ -168,8 +180,9 @@ async function processJob(job) {
     const stdout = await runNeo(job.domain, job.locale);
     const report = extractReport(stdout);
     if (!report) {
-      await postResult(job.id, { status: "failed", error: "No se pudo extraer el reporte JSON del análisis." });
-      log(`job ${job.id} → failed (sin reporte parseable)`);
+      const tail = stdout.slice(-300).replace(/\s+/g, " ").trim();
+      await postResult(job.id, { status: "failed", error: `Sin JSON parseable. Cola del output: ${tail}` });
+      log(`job ${job.id} → failed (sin reporte parseable). Cola: ${tail}`);
       return;
     }
     const out = await postResult(job.id, { status: "done", report });
