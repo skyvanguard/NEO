@@ -27,6 +27,13 @@
 - id: agent-instructions
   disabled: true
 
+# Full access: the scan runs observe-only recon (dig/curl/openssl/whois) fenced
+# by the persona, and there is no confined workspace to sandbox against. Running
+# unconfined lets every recon command execute. Scope is enforced by the persona.
+- id: sandbox-policy
+  config:
+    mode: danger-full-access
+
 # ── persona ──────────────────────────────────────────────────────────────────
 
 - id: system-prompt
