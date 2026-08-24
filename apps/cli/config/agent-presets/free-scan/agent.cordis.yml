@@ -1,0 +1,164 @@
+# The `free-scan` agent preset: NEO retuned as an autonomous external
+# attack-surface analyst for the free assessment offered on skyvanguard.com.py.
+#
+# It is the `code` preset, trimmed and re-personed for one job: given a single
+# domain, discover its internet-facing surface and return a CEO-readable
+# executive report as a machine-parseable JSON block.
+#
+# Deliberate differences from `code` (and why):
+#   * A lean, mission-and-scope persona. NOT the `pentest` persona — that one's
+#     verbose "recon before exploit, verify every finding" methodology is what
+#     made pentest sessions slow. Here the agent is time-boxed and output-first.
+#   * OBSERVATIONAL scope only (passive OSINT + light active probing). No
+#     exploitation, brute force, or intrusive actions — this is the free tier and
+#     the requester's authorization is a self-declaration, so the scope is fenced
+#     by the persona. Tool-level fencing (a read-only permission preset) is a
+#     future hardening step.
+#   * No delegation / subagents / workflows / ralph. NEO runs on a single model
+#     slot; a fan-out here would only contend with itself and slow the scan.
+#   * No plan mode and no ask-user: this runs headless (one-shot), there is no
+#     human in the loop to answer or to approve a plan.
+#
+# Everything kept (shell, fs, jobs, skills, web-with-fetch, compaction, Code
+# Mode) matches `code` verbatim. See `../code/agent.cordis.yml` for the per-row
+# realm and host-vs-agent-plane rationale.
+
+# ── identity ────────────────────────────────────────────────────────────────
+
+- id: persona
+  name: '@deepseek-ai/dsh-persona'
+  config:
+    text: >-
+      You are NEO, an autonomous external attack-surface analyst powered by the {{model}}
+      model, working in {{cwd}}. You are given ONE domain. Your job: discover what that
+      organization exposes to the internet — the first thing an attacker sees — and hand
+      back a short executive report a CEO can understand.
+
+      SCOPE (hard limits, non-negotiable): observe only. Use passive OSINT (DNS, reverse
+      DNS, certificate-transparency logs, WHOIS, public search, published records) and
+      LIGHT active probing of the public surface (resolving hosts, HTTP/HTTPS requests,
+      response headers, TLS/certificate inspection, service banners, technology
+      fingerprinting). NEVER exploit, brute-force, fuzz aggressively, launch denial of
+      service, log in, submit forms, or take any intrusive or state-changing action. If a
+      step would touch anything beyond publicly observable information, do not do it.
+
+      Work fast and decisively — this is a time-boxed free assessment, not a full pentest;
+      you only need the exposed surface and the handful of risks that matter. Prefer the
+      recon tooling installed on this host (reached through the shell); when a scan is
+      long, run it in the background and keep working on independent steps. Keep brief
+      notes of the hosts and services you find.
+
+      Deliverable: end your final message with ONLY a fenced ```json block matching this
+      shape (no prose after it):
+        {
+          "overall": "green" | "yellow" | "red",
+          "headline": "one business-language sentence",
+          "hostsExposed": <integer count of distinct internet-facing hosts you found>,
+          "findings": [
+            { "title": "short title", "severity": "info|low|medium|high|critical",
+              "impact": "one sentence of business impact" }
+          ],
+          "recommendedPlan": "NEO Start" | "NEO Business" | "NEO Enterprise"
+        }
+      Report at most the 5 most important findings. Write "headline", finding "title" and
+      "impact" in the report language given in the task (Spanish "es" or English "en").
+      Base "recommendedPlan" on the size of the surface: few hosts → NEO Start, a mid-size
+      e-commerce/business footprint → NEO Business, a large one → NEO Enterprise.
+
+# Blank the NEO-development context: this agent works on an external target, not
+# the NEO checkout, so the source-tree and Web-GUI guidance is pure noise.
+- id: prompt-section
+  name: '@deepseek-ai/dsh-prompt-section'
+  config:
+    sections:
+      - name: 'harness:source'
+        order: -99
+        text: ''
+      - name: 'app:web-surface'
+        order: -98
+        text: ''
+
+- id: agent-instructions
+  name: '@deepseek-ai/dsh-agent-instructions'
+  config:
+    maxBytes: 65536
+
+# ── shell ───────────────────────────────────────────────────────────────────
+
+- id: tool-bash
+  name: '@deepseek-ai/dsh-tool-bash'
+  disabled: !!js process.platform === 'win32'
+
+- id: tool-pwsh
+  name: '@deepseek-ai/dsh-tool-pwsh'
+  disabled: !!js process.platform !== 'win32'
+
+# ── filesystem ──────────────────────────────────────────────────────────────
+
+- id: tool-fs
+  name: '@deepseek-ai/dsh-tool-fs'
+
+- id: tool-fs-search
+  name: '@deepseek-ai/dsh-tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+# ── background jobs ────────────────────────────────────────────────────────
+
+- id: tool-jobs
+  name: '@deepseek-ai/dsh-tool-jobs'
+
+# ── skills ──────────────────────────────────────────────────────────────────
+
+- id: skill-filesystem
+  name: '@deepseek-ai/dsh-skill-filesystem'
+
+- id: tool-skill
+  name: '@deepseek-ai/dsh-tool-skill'
+
+# ── goals ───────────────────────────────────────────────────────────────────
+
+- id: tool-goal
+  name: '@deepseek-ai/dsh-tool-goal'
+
+# ── compaction ──────────────────────────────────────────────────────────────
+
+- id: compaction
+  name: cordis:group
+  group: true
+  isolate:
+    compaction: true
+    toolResultPruner: true
+  config:
+    - id: compaction-basic
+      name: '@deepseek-ai/dsh-compaction-basic'
+
+    - id: command-compact
+      name: '@deepseek-ai/dsh-command-compact'
+
+    - id: tool-result-pruner
+      name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+      config:
+        thresholdChars: 8192
+        headChars: 4096
+        tailChars: 1024
+
+# ── remaining model-facing rows ─────────────────────────────────────────────
+
+- id: tool-todo
+  name: '@deepseek-ai/dsh-tool-todo'
+  config:
+    allowParallelInProgress: true
+
+- id: tool-web
+  name: '@deepseek-ai/dsh-tool-web'
+  config:
+    fetch: true
+    searchTimeoutMs: 60000
+
+# ── presentation ────────────────────────────────────────────────────────────
+
+- id: tool-presentation
+  name: '@deepseek-ai/dsh-agent-tool-presentation'
+  config:
+    mode: code

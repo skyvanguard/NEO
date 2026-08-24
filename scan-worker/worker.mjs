@@ -1,0 +1,215 @@
+#!/usr/bin/env node
+/**
+ * NEO free-scan worker (Fase 3).
+ *
+ * Corre en kryon. Loop single-slot:
+ *   1. GET  {SCAN_API_BASE}/api/jobs/next   (Bearer SCAN_WORKER_TOKEN)
+ *   2. Ejecuta NEO en modo headless one-shot sobre el dominio, con el overlay
+ *      free-scan (persona de analista de superficie externa).
+ *   3. Extrae el bloque JSON del informe del stdout del agente.
+ *   4. POST {SCAN_API_BASE}/api/jobs/:id/result  con el reporte (o el fallo).
+ *
+ * Solo hace HTTPS saliente + shell-out a `dsh`. No abre puertos.
+ * Sin dependencias externas (usa fetch global y node:child_process).
+ */
+
+import { spawn } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+
+const cfg = {
+  apiBase: (process.env.SCAN_API_BASE ?? "https://www.skyvanguard.com.py").replace(/\/$/, ""),
+  token: process.env.SCAN_WORKER_TOKEN ?? "",
+  workerId: process.env.SCAN_WORKER_ID ?? "neo-kryon-1",
+  // Comando para invocar el CLI de NEO. Ej.: "dsh", "pnpm dsh",
+  // "node --import tsx/esm apps/cli/src/bin.ts". Se parte por espacios.
+  dshCmd: process.env.DSH_CMD ?? "dsh",
+  patchFile: process.env.FREE_SCAN_PATCH ?? resolve(HERE, "free-scan.headless.patch.yml"),
+  // Directorio de trabajo del agente (workspace del scan, no el checkout de NEO).
+  workspace: process.env.SCAN_WORKSPACE ?? process.cwd(),
+  pollIntervalMs: Number(process.env.SCAN_POLL_INTERVAL_MS ?? "15000"),
+  timeoutMs: Number(process.env.SCAN_TIMEOUT_MS ?? String(75 * 60 * 1000)), // 75 min
+};
+
+const SEVERITIES = new Set(["info", "low", "medium", "high", "critical"]);
+const OVERALL = new Set(["green", "yellow", "red"]);
+
+function log(...args) {
+  console.log(new Date().toISOString(), ...args);
+}
+
+function assertConfig() {
+  if (!cfg.token) {
+    console.error("Falta SCAN_WORKER_TOKEN en el entorno.");
+    process.exit(1);
+  }
+}
+
+async function fetchNextJob() {
+  const res = await fetch(`${cfg.apiBase}/api/jobs/next?worker=${encodeURIComponent(cfg.workerId)}`, {
+    headers: { authorization: `Bearer ${cfg.token}` },
+  });
+  if (res.status === 204) return null;
+  if (res.status === 401) throw new Error("token de worker inválido (401)");
+  if (!res.ok) throw new Error(`GET /api/jobs/next → ${res.status}`);
+  const body = await res.json();
+  return body.job ?? null;
+}
+
+async function postResult(jobId, payload) {
+  const res = await fetch(`${cfg.apiBase}/api/jobs/${jobId}/result`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${cfg.token}`, "content-type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`POST result → ${res.status} ${text.slice(0, 200)}`);
+  }
+  return res.json();
+}
+
+function taskText(domain, locale) {
+  if (locale === "en") {
+    return `Analyze the internet-facing attack surface of the domain "${domain}". Report language: en. Stay strictly within the observational scope defined in your instructions.`;
+  }
+  return `Analizá la superficie de ataque expuesta a internet del dominio "${domain}". Idioma del informe: es. Mantenete estrictamente dentro del alcance observacional definido en tus instrucciones.`;
+}
+
+/** Ejecuta NEO headless y devuelve el stdout capturado (o lanza en fallo/timeout). */
+function runNeo(domain, locale) {
+  const parts = cfg.dshCmd.split(/\s+/).filter(Boolean);
+  const bin = parts[0];
+  const args = [
+    ...parts.slice(1),
+    "--profile", "headless",
+    "--patch", cfg.patchFile,
+    taskText(domain, locale),
+  ];
+
+  return new Promise((resolvePromise, reject) => {
+    const child = spawn(bin, args, {
+      cwd: cfg.workspace,
+      env: process.env,
+      windowsHide: true,
+    });
+
+    let stdout = "";
+    let stderr = "";
+    const timer = setTimeout(() => {
+      child.kill("SIGKILL");
+      reject(new Error(`timeout tras ${Math.round(cfg.timeoutMs / 60000)} min`));
+    }, cfg.timeoutMs);
+
+    child.stdout.on("data", (d) => (stdout += d.toString()));
+    child.stderr.on("data", (d) => (stderr += d.toString()));
+    child.on("error", (err) => {
+      clearTimeout(timer);
+      reject(new Error(`no se pudo ejecutar "${bin}": ${err.message}`));
+    });
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      if (code === 0) return resolvePromise(stdout);
+      reject(new Error(`dsh headless salió con código ${code}: ${stderr.slice(-400)}`));
+    });
+  });
+}
+
+/** Extrae y sanea el reporte JSON del stdout del agente. Devuelve null si no hay. */
+function extractReport(stdout) {
+  let raw = null;
+
+  // Preferir el último bloque ```json ... ```.
+  const fences = [...stdout.matchAll(/```json\s*([\s\S]*?)```/gi)];
+  if (fences.length) {
+    raw = fences[fences.length - 1][1].trim();
+  } else {
+    // Fallback: el último objeto {...} balanceado del texto.
+    const start = stdout.lastIndexOf("{");
+    const end = stdout.lastIndexOf("}");
+    if (start !== -1 && end > start) raw = stdout.slice(start, end + 1);
+  }
+  if (!raw) return null;
+
+  let obj;
+  try {
+    obj = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+
+  const hosts = Number.isFinite(obj.hostsExposed) ? Math.max(0, Math.trunc(obj.hostsExposed)) : 0;
+  const overall = OVERALL.has(obj.overall) ? obj.overall : hosts > 0 ? "yellow" : "green";
+  const findings = Array.isArray(obj.findings)
+    ? obj.findings.slice(0, 20).map((f) => ({
+        title: String(f?.title ?? "").slice(0, 200) || "Hallazgo",
+        severity: SEVERITIES.has(f?.severity) ? f.severity : "info",
+        ...(f?.impact ? { impact: String(f.impact).slice(0, 600) } : {}),
+      }))
+    : [];
+
+  const report = {
+    overall,
+    headline: String(obj.headline ?? "").slice(0, 280) || "Análisis de superficie externa completado.",
+    hostsExposed: hosts,
+    findings,
+  };
+  if (typeof obj.recommendedPlan === "string") {
+    report.recommendedPlan = obj.recommendedPlan.slice(0, 80);
+  }
+  return report;
+}
+
+async function processJob(job) {
+  log(`job ${job.id} → analizando ${job.domain} (${job.locale}, intento ${job.attempts})`);
+  try {
+    const stdout = await runNeo(job.domain, job.locale);
+    const report = extractReport(stdout);
+    if (!report) {
+      await postResult(job.id, { status: "failed", error: "No se pudo extraer el reporte JSON del análisis." });
+      log(`job ${job.id} → failed (sin reporte parseable)`);
+      return;
+    }
+    const out = await postResult(job.id, { status: "done", report });
+    log(`job ${job.id} → ${out.outcome} (${report.hostsExposed} hosts, overall ${report.overall})`);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    try {
+      const out = await postResult(job.id, { status: "failed", error: msg.slice(0, 2000) });
+      log(`job ${job.id} → ${out.outcome} tras error: ${msg}`);
+    } catch (postErr) {
+      log(`job ${job.id} → error y además falló el POST: ${postErr}`);
+    }
+  }
+}
+
+let running = true;
+for (const sig of ["SIGINT", "SIGTERM"]) {
+  process.on(sig, () => {
+    log(`${sig} recibido, cerrando tras el job actual…`);
+    running = false;
+  });
+}
+
+async function main() {
+  assertConfig();
+  log(`worker "${cfg.workerId}" iniciado → ${cfg.apiBase} (poll ${cfg.pollIntervalMs}ms)`);
+  while (running) {
+    let job = null;
+    try {
+      job = await fetchNextJob();
+    } catch (err) {
+      log(`error al reclamar job: ${err instanceof Error ? err.message : err}`);
+    }
+    if (!job) {
+      await new Promise((r) => setTimeout(r, cfg.pollIntervalMs));
+      continue;
+    }
+    await processJob(job);
+  }
+  log("worker detenido.");
+}
+
+main();
