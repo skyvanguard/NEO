@@ -40,31 +40,29 @@
       exploit, brute-force, fuzz aggressively, launch denial of service, log in, submit
       forms, or take any intrusive or state-changing action.
 
-      TOOLING (critical — use the LOCAL shell, nothing else): do ALL recon with the
-      command-line tools on this host, through the shell —
-      • DNS: dig / host / nslookup (A, AAAA, CNAME, MX, NS, TXT) for the apex, www, and a
-      short list of common subdomains (mail, webmail, api, app, admin, login, vpn, dev,
-      staging, portal, erp, facturas).
-      • HTTP/HTTPS: curl -sS (a real GET, and -I when useful) — status, redirects, headers,
-      server/technology.
-      • TLS: openssl s_client -connect HOST:443 -servername HOST (and curl) — certificate
-      subject/SAN, issuer, validity, and whether the cert actually matches the hostname.
-      • whois for registration/ownership when useful.
-      Do NOT use web_search or web_fetch, and do NOT try external services (urlscan.io,
-      shodan, crt.sh, censys, search engines, any third-party site): they do NOT work in
-      this environment and only waste time. Everything you need is reachable from the shell.
+      TOOLING: lead with the LOCAL shell for recon — dig / host / nslookup (A, AAAA, CNAME,
+      MX, NS, TXT) for the apex, www, and a short list of common subdomains (mail, webmail,
+      api, app, admin, login, vpn, dev, staging, portal, erp, facturas); curl -sS (a real
+      GET, and -I when useful) for HTTP/HTTPS status, redirects, headers and technology;
+      openssl s_client -connect HOST:443 -servername HOST for the TLS certificate
+      (subject/SAN, issuer, validity, and whether it matches the hostname); whois for
+      registration. The shell is the fastest and most reliable path, so start there. You
+      ALSO have web tools (web_search, web_fetch) and MAY use them to ENRICH findings —
+      certificate transparency, published records, technology lookups — when they add real
+      value. Keep brief notes; never paste long raw command output.
 
-      ANTI-LOOP (do not get stuck): if a command fails, do not hammer it — retry a shell
-      probe at most twice (adjusting flags), then move on. Never retry a web/external tool;
-      treat its failure as final and continue with the shell. Gather enough from the shell
-      to fill the report, then STOP and emit it.
+      ANTI-LOOP (important): if a command or tool fails, do not hammer it — retry at most
+      twice (adjusting flags or approach), then move on to another method. web_fetch only
+      follows same-origin redirects, so a third-party page that redirects will fail: treat
+      that as final and move on, do not retry it in a loop. Never get stuck: gather enough
+      from what works to fill the report, then STOP and emit it.
 
       EVIDENCE AND GROUNDING (avoid false alarms): never report a host or service as down,
       unreachable, failing, or misconfigured on the strength of a single probe or a
-      transient error. Re-check with the LOCAL shell (repeat the curl/openssl probe once or
-      twice); only report a negative state if it is CONSISTENT across those local probes. A
-      one-off timeout or hiccup is INCONCLUSIVE — leave it out. Report only what you
-      actually observed from the shell, never what you infer might be wrong.
+      transient error. Re-check (repeat the curl/openssl probe once or twice); only report a
+      negative state if it is CONSISTENT. A one-off timeout or hiccup is INCONCLUSIVE —
+      leave it out. Report only what you actually observed, never what you infer might be
+      wrong.
 
       NOISE FILTER (do not report these): public business contact channels — published email
       addresses, phone numbers, WhatsApp, or contact forms on the company's own site — are
