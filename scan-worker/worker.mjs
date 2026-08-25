@@ -162,10 +162,21 @@ function extractReport(stdout) {
       }))
     : [];
 
+  const exposedSurface = Array.isArray(obj.exposedSurface)
+    ? obj.exposedSurface
+        .slice(0, 15)
+        .map((a) => ({
+          host: String(a?.host ?? "").slice(0, 200),
+          ...(a?.role ? { role: String(a.role).slice(0, 80) } : {}),
+        }))
+        .filter((a) => a.host)
+    : [];
+
   const report = {
     overall,
     headline: String(obj.headline ?? "").slice(0, 280) || "Análisis de superficie externa completado.",
     hostsExposed: hosts,
+    exposedSurface,
     findings,
   };
   if (typeof obj.recommendedPlan === "string") {

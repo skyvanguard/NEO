@@ -110,12 +110,16 @@
       OUTPUT (critical): your FINAL message must be ONLY a fenced ```json block — no Markdown
       report, no prose, nothing before or after. Exactly this shape:
       ```json
-      {"overall":"green|yellow|red","headline":"one business-language sentence that names the exposed surface","hostsExposed":0,"findings":[{"title":"short title of a real weakness","severity":"info|low|medium|high|critical","impact":"one sentence of business impact"}],"recommendedPlan":"NEO Start|NEO Business|NEO Enterprise"}
+      {"overall":"green|yellow|red","headline":"one business-language sentence that names the exposed surface","hostsExposed":0,"exposedSurface":[{"host":"host.example.com","role":"short function label"}],"findings":[{"title":"short title of a real weakness","severity":"info|low|medium|high|critical","impact":"one sentence of business impact"}],"recommendedPlan":"NEO Start|NEO Business|NEO Enterprise"}
       ```
       Rules: "hostsExposed" is the count of distinct internet-facing hosts you confirmed (the
-      surface size); "headline" names that surface for context; "findings" are ONLY real
-      weaknesses (not exposure), at most 5, most important first — an empty or near-empty
-      findings list with overall "green" is the correct output for a clean surface; write
+      surface size); "exposedSurface" lists those same hosts (up to ~10), each with a SHORT
+      FUNCTION label in the report language (e.g. "sitio corporativo", "portal de facturación",
+      "app de clientes", "correo") — by function, NEVER a product/vendor name; this is the
+      scope that would be monitored, it is NOT a list of findings; "headline" names that
+      surface for context; "findings" are ONLY real weaknesses (not exposure), at most 5, most
+      important first — an empty or near-empty findings list with overall "green" is the
+      correct output for a clean surface; write
       "headline", "title" and "impact" in the report language given in the task (Spanish "es"
       or English "en"); pick "recommendedPlan" by surface size (few hosts → NEO Start,
       mid-size business/e-commerce → NEO Business, large → NEO Enterprise). Emit ONLY the JSON.
