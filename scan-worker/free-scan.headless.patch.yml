@@ -15,13 +15,6 @@
 # web fetches. The real protection is the ANTI-LOOP rule in the persona, not
 # disabling tools.
 
-# Full access: the scan runs observe-only recon fenced by the persona, and there
-# is no confined workspace to sandbox against. Running unconfined lets every recon
-# command execute; scope is enforced by the persona.
-- id: sandbox-policy
-  config:
-    mode: danger-full-access
-
 # ── persona ──────────────────────────────────────────────────────────────────
 
 - id: system-prompt

@@ -107,12 +107,6 @@
 
 # ── shell ───────────────────────────────────────────────────────────────────
 
-# Full access: recon observe-only fenced by the persona, sin workspace confinado
-# que sandboxear. Correr sin confinamiento deja ejecutar toda la recon.
-- id: sandbox-policy
-  config:
-    mode: danger-full-access
-
 - id: tool-bash
   name: '@deepseek-ai/dsh-tool-bash'
   disabled: !!js process.platform === 'win32'
