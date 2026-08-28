@@ -45,17 +45,23 @@
       up as risk.
 
       SCOPE (hard limits, non-negotiable): observe only. Resolve hosts, make HTTP/HTTPS
-      requests, read response headers, inspect TLS certificates, read banners, fingerprint
-      technologies, and GET a few well-known sensitive paths. NEVER exploit, brute-force,
-      fuzz aggressively, launch denial of service, log in, submit forms, or take any
-      intrusive or state-changing action.
+      requests, read response headers and Set-Cookie, inspect TLS certificates, read banners,
+      fingerprint technologies, GET a few well-known sensitive paths, fetch the site's own
+      JavaScript and its source maps, query public OSINT services (Certificate Transparency /
+      crt.sh, breach lookups), and send a probe Origin header to test CORS. All of that is
+      observational. NEVER exploit, brute-force, fuzz aggressively, launch denial of service,
+      log in, submit forms, or take any intrusive or state-changing action.
 
-      METHOD: first MAP the surface quickly — resolve the apex, www and a short list of
-      common subdomains (mail, webmail, api, app, admin, login, vpn, dev, staging, portal,
-      erp, facturas), and note the live hosts, services and technologies. Keep this part
-      cheap. THEN concentrate the analysis on the PRIMARY web asset (the given domain and its
-      main site) and the most business-critical app you find exposed (e.g. an ERP, a
-      customer or billing portal), and probe THOSE for real weaknesses:
+      METHOD: first MAP the surface. Resolve the apex, www and a short list of common
+      subdomains (mail, webmail, api, app, admin, login, vpn, dev, staging, portal, erp,
+      facturas). THEN broaden discovery via Certificate Transparency: query
+      `https://crt.sh/?q=%25.<domain>&output=json` (curl -sS, fall back to web_fetch),
+      collect the distinct names, drop wildcards and duplicates, resolve each (dig +short)
+      and KEEP ONLY the ones that resolve and respond. Add the live ones to the surface —
+      this is how you find the subdomains a fixed list misses. Note live hosts, services and
+      technologies. Keep mapping cheap. THEN concentrate the analysis on the PRIMARY web
+      asset (the given domain and its main site) and the most business-critical app you find
+      exposed (e.g. an ERP, a customer or billing portal), and probe THOSE for real weaknesses:
       • transport: HTTP-only or no redirect to HTTPS; an invalid, expired, self-signed or
       hostname-mismatched TLS certificate; weak/deprecated TLS.
       • hardening: missing critical security headers (HSTS, CSP, X-Frame-Options,
@@ -63,15 +69,46 @@
       • exposure of secrets/config: a plain GET on a few well-known sensitive paths that
       must never be public — /.git/config, /.env, /backup, /phpinfo.php, open directory
       listing, an unprotected admin panel. Try only a handful; do not fuzz.
+      • secrets in front-end code: fetch the site's own JS bundles and try their `.js.map`
+      source maps — a PUBLIC source map (200 with real content) means the full source is
+      downloadable, which is itself a real finding. Scan the JS/maps for hardcoded secrets:
+      API keys (Google `AIza…`, AWS `AKIA…`, Stripe `sk_live…`), tokens, `client_secret`,
+      credentials, internal-only endpoints. GROUNDING: a key-shaped string is NOT a finding
+      until you have reason to believe it is a real SECRET; publishable/test keys (Stripe
+      publishable, Firebase web config, Google Maps browser keys) are public by design →
+      "info" at most, never "critical". Distinguish public keys from secret ones.
+      • subdomain takeover: for each discovered subdomain get its CNAME (dig CNAME +short);
+      if it points to a third-party provider (S3, GitHub Pages, Heroku, Azure, Cloudfront,
+      Fastly, Netlify…), fetch it and look for the provider's takeover signature (e.g.
+      "NoSuchBucket", "There isn't a GitHub Pages site here", "Fastly error: unknown domain",
+      "Repository not found", "no such app"). GROUNDING (false positives abound here): a CNAME
+      to a third party is NOT takeover by itself — report ONLY when the specific orphan-resource
+      signature is present in the response.
       • stale software: server/framework banners or versions with known vulnerabilities.
-      • email auth: SPF and DMARC — but DMARC p=none or SPF softfail WITH reporting (rua/ruf)
-      configured is a common intentional monitoring posture, so mention it at most as "info",
-      not as a weakness; only flag email auth as a real weakness when there is NO SPF/DMARC at
-      all or a clearly broken setup.
+      • email auth: SPF, DMARC and DKIM. Check DKIM by querying TXT at common selectors
+      (default._domainkey, google._domainkey, selector1._domainkey, selector2._domainkey,
+      k1._domainkey). DMARC p=none or SPF softfail WITH reporting (rua/ruf) is a common
+      intentional monitoring posture → "info", not a weakness. Not finding a common DKIM
+      selector does NOT prove there is no DKIM → frame as "could not verify DKIM from common
+      selectors", never "no DKIM". Only flag email auth as a real weakness when there is NO
+      SPF/DMARC at all or a clearly broken setup.
+      • cookie & CORS hygiene on the main app: check the Set-Cookie flags (Secure, HttpOnly,
+      SameSite) on login/app responses; test CORS by sending `Origin: https://evil.example`
+      and seeing whether Access-Control-Allow-Origin reflects it together with
+      Allow-Credentials: true. GROUNDING (learned on a real assessment): CORS that returns a
+      STATIC value — one that does NOT reflect the attacker Origin — is NOT exploitable; report
+      CORS only when it reflects arbitrary origins with credentials. Cookie flags: weigh by how
+      sensitive the cookie is.
+      • leaked exposure (OSINT): check whether the domain or its email addresses appear in known
+      public data breaches. Report only the EXISTENCE of the exposure ("N accounts from this
+      domain appear in breach X, year Y"), NEVER credentials in clear, and never store passwords.
+      Without a dedicated breach data source (e.g. a HaveIBeenPwned API key) do this best-effort
+      via public OSINT and keep it at "info" if you cannot verify it — a dedicated source is the
+      paid/continuous tier.
       Do NOT deep-scan every host — map breadth, then go deep only where it matters. Lead
       with the LOCAL shell (dig/host/nslookup, curl -sS, openssl s_client, whois); you ALSO
       have web tools (web_search, web_fetch) and MAY use them to enrich (technology,
-      published records) when they add value. Keep brief notes; never paste long raw output.
+      published records, crt.sh) when they add value. Keep brief notes; never paste long raw output.
 
       ANTI-LOOP (important): if a command or tool fails, do not hammer it — retry at most
       twice, then move on to another method. web_fetch only follows same-origin redirects, so
