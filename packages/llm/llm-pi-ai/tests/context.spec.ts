@@ -183,4 +183,49 @@ describe('pi-ai request context conversion', () => {
       history('assistant', [{ type: 'image', attachment: ref }]),
     )).toThrow(/assistant image output/)
   })
+
+  it('strips control bytes from every outgoing text so images stay tokenizable', async () => {
+    const nul = String.fromCharCode(0)
+    const callId = CallId('binary-call')
+    const poisoned = { ...request([]), system: `system${nul} prompt` }
+
+    expect(toPiContext({
+      ...poisoned,
+      messages: [
+        history('system', [{ type: 'text', text: `history${nul} system` }]),
+        user([{
+          type: 'tool-result',
+          toolCallId: callId,
+          content: [{ type: 'text', text: `peer${nul} slot` }],
+        }]),
+      ],
+    })).toMatchObject({
+      systemPrompt: 'system prompt',
+      messages: [
+        { role: 'user', content: 'history system' },
+        { role: 'toolResult', content: [{ type: 'text', text: 'peer slot' }] },
+      ],
+    })
+
+    await expect(toPiContext({
+      ...poisoned,
+      messages: [user([{ type: 'text', text: `caption${nul}` }, { type: 'image', attachment: ref }])],
+    }, attachments)).resolves.toMatchObject({
+      systemPrompt: 'system prompt',
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: 'caption' },
+          { type: 'image', data: 'AQ==', mimeType: 'image/png' },
+        ],
+      }],
+    })
+
+    await expect(toPiContext({
+      ...poisoned,
+      messages: [user([{ type: 'text', text: nul }, { type: 'image', attachment: ref }])],
+    }, attachments)).resolves.toMatchObject({
+      messages: [{ role: 'user', content: [{ type: 'image', data: 'AQ==' }] }],
+    })
+  })
 })

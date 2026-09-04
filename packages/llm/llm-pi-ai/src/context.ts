@@ -9,21 +9,22 @@ import type { ContentBlock, GenerateOptions, Message } from '@deepseek-ai/dsh-ll
 import type { AttachmentStore } from '@deepseek-ai/dsh-attachment'
 import type { Context as PiContext, ImageContent, Message as PiMessage, TextContent, Tool as PiTool } from '@earendil-works/pi-ai'
 import { toPiAssistant } from './replay.ts'
+import { sanitizeText } from './sanitize.ts'
 
 /** Join the text blocks of a harness message. */
 function flattenText(message: Message): string {
-  return message.content
+  return sanitizeText(message.content
     .filter(block => block.type === 'text')
     .map(block => block.text)
-    .join('')
+    .join(''))
 }
 
 
 /** Flatten text recursively inside one tool result. */
 function toolResultText(blocks: readonly ContentBlock[]): string {
-  return blocks.map(block => block.type === 'text'
+  return sanitizeText(blocks.map(block => block.type === 'text'
     ? block.text
-    : block.type === 'tool-result' ? toolResultText(block.content) : '').join('')
+    : block.type === 'tool-result' ? toolResultText(block.content) : '').join(''))
 }
 
 async function userContent(
@@ -33,9 +34,11 @@ async function userContent(
   const content: (TextContent | ImageContent)[] = []
   for (const block of blocks) {
     switch (block.type) {
-      case 'text':
-        if (block.text.length > 0) content.push({ type: 'text', text: block.text })
+      case 'text': {
+        const text = sanitizeText(block.text)
+        if (text.length > 0) content.push({ type: 'text', text })
         break
+      }
       case 'image': {
         const stored = await attachments.readImage(block.attachment)
         content.push({
@@ -78,7 +81,7 @@ function toolsOf(options: GenerateOptions): PiTool[] | undefined {
 function piContext(options: GenerateOptions, messages: PiMessage[]): PiContext {
   const tools = toolsOf(options)
   return {
-    ...options.system !== undefined ? { systemPrompt: options.system } : {},
+    ...options.system !== undefined ? { systemPrompt: sanitizeText(options.system) } : {},
     messages,
     ...tools !== undefined && tools.length > 0 ? { tools } : {},
   }
