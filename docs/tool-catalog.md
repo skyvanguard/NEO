@@ -199,7 +199,7 @@ Execute a bash command (`bash -c`) and return its stdout/stderr. Each call runs 
     },
     "max_output_bytes": {
       "type": "number",
-      "description": "Stdout bytes kept in the result (the tail); the rest spills to a file whose path the result names. Defaults to the executor cap (24 KB). Lower it for chatty commands whose tail is enough; raise it only when the whole output must be read inline."
+      "description": "Stdout bytes kept in the result (the tail); the rest spills to a file whose path the result names. Defaults to the executor cap (24 KB). Lower it for chatty commands whose tail is enough; raise it only when the whole output must be read inline (the executor clamps it to its ceiling, 256 KB by default)."
     },
     "workdir": {
       "type": "string",
