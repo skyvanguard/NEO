@@ -814,4 +814,37 @@ export function applyLiteralEdit(
   return { content: content.split(oldNorm).join(newNorm), replacements }
 }
 
+/**
+ * Apply an ordered sequence of literal edits to one content string. Each edit
+ * matches against the content the previous one produced, so a later edit may
+ * depend on an earlier one; the first failure aborts the whole sequence with
+ * its position in the message, and the caller writes nothing.
+ * @param content - the LF-normalised file content.
+ * @param edits - the edits in application order; at least one.
+ * @param displayPath - the path shown in error messages.
+ * @returns the final content and the total replacement count.
+ */
+export function applyLiteralEdits(
+  content: string,
+  edits: readonly { oldString: string; newString: string; replaceAll: boolean }[],
+  displayPath: string,
+): { content: string; replacements: number } {
+  if (edits.length === 0) throw new FsError('at least one edit is required', 'FS_EDIT_NOT_FOUND')
+  let current = content
+  let replacements = 0
+  for (const [index, edit] of edits.entries()) {
+    try {
+      const applied = applyLiteralEdit(current, edit.oldString, edit.newString, edit.replaceAll, displayPath)
+      current = applied.content
+      replacements += applied.replacements
+    } catch (error: unknown) {
+      if (edits.length > 1 && error instanceof FsError) {
+        throw new FsError(`edit #${index + 1} of ${edits.length}: ${error.message}`, error.code, { cause: error })
+      }
+      throw error
+    }
+  }
+  return { content: current, replacements }
+}
+
 export { normalizeLineEndings, restoreLineEndings }

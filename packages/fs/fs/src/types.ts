@@ -143,7 +143,11 @@ export interface FsWriteOutcome {
   after: string
 }
 
-/** A literal-replacement edit request. */
+/**
+ * A literal-replacement edit request. `editText` also accepts an ordered
+ * sequence of these: each applies to the content the previous one produced,
+ * and a failure anywhere leaves the file untouched.
+ */
 export interface FsEditRequest {
   /** Literal non-empty text to replace. Must match exactly (after line-ending normalization). */
   oldString: string

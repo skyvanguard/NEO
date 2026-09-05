@@ -21,7 +21,7 @@ import type {
   FsWriteOutcome,
 } from '@deepseek-ai/dsh-fs'
 import {
-  applyLiteralEdit,
+  applyLiteralEdits,
   listDirectory,
   normalizeLineEndings,
   probe,
@@ -220,7 +220,7 @@ export class LocalFileSystem extends FileSystem {
 
   override async editText(
     target: FsTarget,
-    edit: FsEditRequest,
+    edit: FsEditRequest | readonly FsEditRequest[],
     expected?: { version: FsVersion },
     signal?: AbortSignal,
   ): Promise<FsEditOutcome> {
@@ -239,7 +239,7 @@ export class LocalFileSystem extends FileSystem {
       }
 
       const original = await readForEdit(target.targetKey, target.displayPath, signal)
-      const edited = applyLiteralEdit(original.content, edit.oldString, edit.newString, edit.replaceAll, target.displayPath)
+      const edited = applyLiteralEdits(original.content, Array.isArray(edit) ? edit : [edit as FsEditRequest], target.displayPath)
       const content = restoreLineEndings(edited.content, original.lineEndings)
       await writeFileAtomic(target.targetKey, content, existing.mode, signal, this.internals)
 

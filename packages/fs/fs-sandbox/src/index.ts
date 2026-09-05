@@ -104,7 +104,7 @@ export class SandboxedFileSystem extends LocalFileSystem {
    */
   override async editText(
     target: FsTarget,
-    edit: FsEditRequest,
+    edit: FsEditRequest | readonly FsEditRequest[],
     expected?: { version: FsVersion },
     signal?: AbortSignal,
     sandboxPolicy?: SandboxExecutionPolicy,

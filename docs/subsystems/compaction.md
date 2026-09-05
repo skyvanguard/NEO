@@ -108,6 +108,19 @@ interface PrunedEntry {
 ```
 
 ```ts type-equiv
+/** Caller-side stop condition for one pruning pass. */
+interface PruneOptions {
+  /**
+   * Consulted after each landed replacement; `true` ends the pass early. Each
+   * replacement rewrites a surface node and so breaks the cached request
+   * prefix from that node on: a pressure-driven caller should not rewrite
+   * more than its budget demands.
+   */
+  readonly relieved?: () => boolean
+}
+```
+
+```ts type-equiv
 /** Aggregate outcome of one stable-surface pruning pass. */
 interface PruneResult {
   /** Replacements in the snapshotted surface order. */

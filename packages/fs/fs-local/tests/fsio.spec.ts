@@ -12,6 +12,7 @@ import { join } from 'node:path'
 import { createServer } from 'node:net'
 import {
   applyLiteralEdit,
+  applyLiteralEdits,
   listDirectory,
   probe,
   probeNoFollow,
@@ -864,6 +865,26 @@ describe('writeFileAtomic — temp-file safety', () => {
     await mkdir(sub)
     await expect(writeFileAtomic(sub, 'hi', undefined, undefined)).rejects.toBeInstanceOf(Error)
     expect((await readdir(dir)).filter(n => n.includes('.tmp'))).toEqual([])
+  })
+})
+
+describe('applyLiteralEdits', () => {
+  it('applies edits in order on the running content and sums the replacements', () => {
+    expect(applyLiteralEdits('a b a', [
+      { oldString: 'a', newString: 'c', replaceAll: true },
+      { oldString: 'c b', newString: 'd', replaceAll: false },
+    ], 'f')).toEqual({ content: 'd c', replacements: 3 })
+  })
+
+  it('names the failing edit and aborts the whole sequence', () => {
+    expect(() => applyLiteralEdits('a b', [
+      { oldString: 'a', newString: 'x', replaceAll: false },
+      { oldString: 'zzz', newString: 'y', replaceAll: false },
+    ], 'f')).toThrow(expect.objectContaining({ code: 'FS_EDIT_NOT_FOUND', message: expect.stringContaining('edit #2 of 2: old_string was not found') as string }))
+    expect(() => applyLiteralEdits('a b', [], 'f')).toThrow(expect.objectContaining({ code: 'FS_EDIT_NOT_FOUND' }))
+    // A single edit keeps its plain message.
+    expect(() => applyLiteralEdits('a b', [{ oldString: 'zzz', newString: 'y', replaceAll: false }], 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
   })
 })
 

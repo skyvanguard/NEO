@@ -24,6 +24,7 @@ import type {
 } from '@deepseek-ai/dsh-fs'
 import * as FsPolicy from '@deepseek-ai/dsh-fs-observation-policy'
 import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
+import { editCallDiffs } from '../src/edit.ts'
 import { STREAM_MIN_SIZE } from '../src/read.ts'
 import { formatReadOutput } from '../src/read-render.ts'
 import type { FileReadOutcome } from '../src/read-render.ts'
@@ -88,11 +89,17 @@ class FakeFs extends FileSystem {
     this.files.set(target.targetKey, content)
     return { operation: before !== null ? 'update' : 'create', version: FsVersion('v2'), before, after: content }
   }
-  override async editText(target: FsTarget, edit: FsEditRequest, expected?: { version: FsVersion }): Promise<FsEditOutcome> {
+  override async editText(
+    target: FsTarget,
+    edit: FsEditRequest | readonly FsEditRequest[],
+    expected?: { version: FsVersion },
+  ): Promise<FsEditOutcome> {
     this.throwIfArmed()
     this.editIntents.push(expected)
     const content = this.files.get(target.targetKey) ?? ''
-    const after = content.split(edit.oldString).join(edit.newString)
+    let after = content
+    const steps: readonly FsEditRequest[] = Array.isArray(edit) ? edit as readonly FsEditRequest[] : [edit as FsEditRequest]
+    for (const step of steps) after = after.split(step.oldString).join(step.newString)
     this.files.set(target.targetKey, after)
     return { version: FsVersion('v3'), before: content, after }
   }
@@ -440,6 +447,37 @@ describe('edit tool', () => {
     expect(text(result)).toBe('The file /abs/a.txt has been updated. All occurrences were successfully replaced.')
   })
 
+  it('applies several edits in one call and reports the count', async () => {
+    const { ctx, fs } = await setup()
+    const session = { header: {} }
+    fs.files.set('key:a.txt', 'one two three')
+    await call(ctx, 'read', { file_path: 'a.txt' }, { session })
+    const result = await call(ctx, 'edit', {
+      file_path: 'a.txt',
+      edits: [
+        { old_string: 'one', new_string: '1' },
+        { old_string: '1 two', new_string: '1 2' },
+        { old_string: 'three', new_string: '3', replace_all: true },
+      ],
+    }, { session })
+    if (result.isError) throw new Error('expected edit success')
+    expect(result.value).toEqual({ path: '/abs/a.txt', before: 'one two three', after: '1 2 3' })
+    expect(text(result)).toBe('The file /abs/a.txt has been updated. All 3 edits were applied.')
+  })
+
+  it.each([
+    [{ file_path: 'a.txt', edits: [] }, /at least one edit/],
+    [{ file_path: 'a.txt', edits: [{ old_string: 'a', new_string: 'b' }], old_string: 'a', new_string: 'b' }, /not both/],
+    [{ file_path: 'a.txt', edits: [{ old_string: 'a', new_string: 'b' }, { old_string: '', new_string: 'b' }] }, /edits\[1\]: old_string must be a non-empty string/],
+    [{ file_path: 'a.txt', edits: [{ old_string: 'a', new_string: 'a' }] }, /edits\[0\]: old_string and new_string must differ/],
+    [{ file_path: 'a.txt' }, /old_string and new_string are required unless edits is given/],
+  ])('rejects malformed multi-edit args %j', async (args, pattern) => {
+    const { ctx } = await setup()
+    const result = await call(ctx, 'edit', args)
+    expect(result.isError).toBe(true)
+    expect(text(result)).toMatch(pattern)
+  })
+
   it('rejects identical old/new strings', async () => {
     const { ctx } = await setup()
     const result = await call(ctx, 'edit', { file_path: 'a.txt', old_string: 'x', new_string: 'x' })
@@ -583,6 +621,24 @@ describe('tool-owned presentation (pure presentCall)', () => {
     expect(await presentCall('read', { file_path: 'a.txt', limit: 10 })).toEqual({
       card: 'generic', title: 'Read a.txt (1 - 10)', kind: 'read', locations: [{ path: 'a.txt', line: 1 }],
     })
+  })
+
+  it('edit: an edits array yields one diff per edit', async () => {
+    expect(await presentCall('edit', {
+      file_path: 'a.txt',
+      edits: [{ old_string: 'one', new_string: '1' }, { old_string: '', new_string: 'x' }],
+    })).toMatchObject({
+      diffs: [
+        { path: 'a.txt', oldText: 'one', newText: '1' },
+        { path: 'a.txt', oldText: null, newText: 'x' },
+      ],
+    })
+    // Replayed args are never trusted: malformed entries render empty rather than throw.
+    expect(editCallDiffs({ file_path: 'a.txt', edits: ['not an object', { old_string: 3 }] })).toEqual([
+      { path: 'a.txt', oldText: null, newText: '' },
+      { path: 'a.txt', oldText: null, newText: '' },
+    ])
+    expect(editCallDiffs({ file_path: 'a.txt' })).toEqual([{ path: 'a.txt', oldText: null, newText: '' }])
   })
 
   it('edit: an empty old_string maps to oldText null (a whole-file replace diff)', async () => {
@@ -778,7 +834,7 @@ describe('sandbox escalation API (write/edit)', () => {
     }
     override async editText(
       target: FsTarget,
-      edit: FsEditRequest,
+      edit: FsEditRequest | readonly FsEditRequest[],
       expected?: { version: FsVersion },
       _signal?: AbortSignal,
       sandboxPolicy?: SandboxExecutionPolicy,

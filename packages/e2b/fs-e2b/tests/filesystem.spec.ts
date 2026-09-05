@@ -716,6 +716,27 @@ describe('E2BFileSystem atomic writes and edits', () => {
     expect(new TextDecoder().decode(remote.nodes.get('/workspace/file.txt')?.data)).toBe('one\r\nTWO\r\nthree\r\n')
   })
 
+  it('applies an ordered edit sequence in one write and names the failing edit', async () => {
+    const remote = new FakeRemote()
+    remote.file('/workspace/file.txt', 'one two three')
+    const { fs } = await setup(remote)
+    const target = await fs.resolve('file.txt')
+    const outcome = await fs.editText(target, [
+      { oldString: 'one', newString: '1', replaceAll: false },
+      { oldString: '1 two', newString: '1 2', replaceAll: false },
+    ])
+    expect(outcome).toMatchObject({ before: 'one two three', after: '1 2 three' })
+
+    const failed = await fs.editText(target, [
+      { oldString: '1', newString: 'uno', replaceAll: false },
+      { oldString: 'zzz', newString: 'x', replaceAll: false },
+    ]).then(() => undefined, (error: unknown) => error as Error & { code: string })
+    expect(failed).toMatchObject({ code: 'FS_EDIT_NOT_FOUND', message: expect.stringContaining('edit #2 of 2') as string })
+    // Nothing was written: the first edit of the failed sequence did not land.
+    expect(new TextDecoder().decode(remote.nodes.get('/workspace/file.txt')?.data)).toBe('1 2 three')
+    await expectCode(fs.editText(target, []), 'FS_EDIT_NOT_FOUND')
+  })
+
   it('reports stale and literal-match failures with stable codes', async () => {
     const remote = new FakeRemote()
     remote.file('/workspace/file.txt', 'a a')
