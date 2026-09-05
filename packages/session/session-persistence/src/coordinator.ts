@@ -1347,6 +1347,12 @@ export class PersistenceCoordinator<TornMarker = unknown> {
       reportBackgroundFailure: (error) => {
         this.ctx.logger.warn(`${this.backend.name}: background write for session "${session.id}" failed (buffered events retained): ${String(error)}`)
       },
+      reportSuspended: (error, droppedEvents) => {
+        this.ctx.logger.error(
+          `${this.backend.name}: durability suspended for session "${session.id}" after repeated write failures; `
+          + `${droppedEvents} event(s) dropped and later events will not be persisted until restart: ${String(error)}`,
+        )
+      },
     })
   }
 

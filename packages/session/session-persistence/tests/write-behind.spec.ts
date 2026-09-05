@@ -24,6 +24,7 @@ describe('SessionWriteBehind', () => {
       maxDelayMs: 200,
       write: async (events) => { batches.push(structuredClone(events) as SessionEvent[]) },
       reportBackgroundFailure: vi.fn(),
+      reportSuspended: vi.fn(),
     })
     const first = event(0)
 
@@ -49,6 +50,7 @@ describe('SessionWriteBehind', () => {
       maxDelayMs: 200,
       write: async (events) => { batches.push(events.map(item => item.seq)) },
       reportBackgroundFailure: vi.fn(),
+      reportSuspended: vi.fn(),
     })
 
     controller.enqueue(event(0))
@@ -74,6 +76,7 @@ describe('SessionWriteBehind', () => {
         if (batches.length === 1) await gate.promise
       },
       reportBackgroundFailure: vi.fn(),
+      reportSuspended: vi.fn(),
     })
 
     controller.enqueue(event(0))
@@ -98,6 +101,7 @@ describe('SessionWriteBehind', () => {
       maxDelayMs: 200,
       write: async (events) => { batches.push(events.map(item => item.seq)) },
       reportBackgroundFailure: vi.fn(),
+      reportSuspended: vi.fn(),
     })
 
     const barrier = controller.flush()
@@ -122,6 +126,7 @@ describe('SessionWriteBehind', () => {
         if (batches.length === 1) await gate.promise
       },
       reportBackgroundFailure: vi.fn(),
+      reportSuspended: vi.fn(),
     })
 
     controller.enqueue(event(0))
@@ -148,6 +153,7 @@ describe('SessionWriteBehind', () => {
         if (batches.length === 1) await gate.promise
       },
       reportBackgroundFailure: vi.fn(),
+      reportSuspended: vi.fn(),
     })
 
     controller.enqueue(event(0))
@@ -178,6 +184,7 @@ describe('SessionWriteBehind', () => {
         if (++attempt === 1) throw failure
       },
       reportBackgroundFailure: report,
+      reportSuspended: vi.fn(),
     })
 
     controller.enqueue(event(0))
@@ -210,6 +217,7 @@ describe('SessionWriteBehind', () => {
         }
       },
       reportBackgroundFailure: report,
+      reportSuspended: vi.fn(),
     })
 
     controller.enqueue(event(0))
@@ -237,6 +245,7 @@ describe('SessionWriteBehind', () => {
         if (++attempt === 1) throw failure
       },
       reportBackgroundFailure: report,
+      reportSuspended: vi.fn(),
     })
 
     controller.enqueue(event(0))
@@ -262,6 +271,7 @@ describe('SessionWriteBehind', () => {
         if (++attempt === 1) throw failure
       },
       reportBackgroundFailure: vi.fn(),
+      reportSuspended: vi.fn(),
     })
 
     for (let seq = 0; seq < batchSize; seq += 1) controller.enqueue(event(seq))
@@ -271,5 +281,64 @@ describe('SessionWriteBehind', () => {
     await controller.flush()
     expect(sizes).toEqual([batchSize, batchSize])
     expect(controller.hasWork).toBe(false)
+  })
+
+  it('suspends persistence after the same batch fails maxWriteAttempts times, keeping the session alive', async () => {
+    const failure = new Error('ENOSPC: no space left on device')
+    const write = vi.fn(async () => { throw failure })
+    const reportSuspended = vi.fn()
+    const controller = new SessionWriteBehind({
+      maxDelayMs: 200,
+      maxWriteAttempts: 3,
+      write,
+      reportBackgroundFailure: vi.fn(),
+      reportSuspended,
+    })
+
+    controller.enqueue(event(0))
+    await expect(controller.flush()).rejects.toBe(failure)
+    await expect(controller.flush()).rejects.toBe(failure)
+    // Third identical failure: the retained batch can never land (later seqs
+    // must stay contiguous), so durability is suspended visibly instead of
+    // failing every later boundary forever.
+    await expect(controller.flush()).resolves.toBeUndefined()
+    expect(write).toHaveBeenCalledTimes(3)
+    expect(reportSuspended).toHaveBeenCalledTimes(1)
+    expect(reportSuspended).toHaveBeenCalledWith(failure, 1)
+    expect(controller.suspended).toBe(true)
+    expect(controller.hasWork).toBe(false)
+
+    // Suspended: later events are dropped rather than retained, and flushes
+    // resolve without touching the backend.
+    controller.enqueue(event(1))
+    await expect(controller.flush()).resolves.toBeUndefined()
+    expect(write).toHaveBeenCalledTimes(3)
+    expect(controller.hasWork).toBe(false)
+  })
+
+  it('resets the attempt count once a batch lands', async () => {
+    let failures = 2
+    const write = vi.fn(async () => {
+      if (failures > 0) { failures -= 1; throw new Error('transient') }
+    })
+    const reportSuspended = vi.fn()
+    const controller = new SessionWriteBehind({
+      maxDelayMs: 200,
+      maxWriteAttempts: 3,
+      write,
+      reportBackgroundFailure: vi.fn(),
+      reportSuspended,
+    })
+    controller.enqueue(event(0))
+    await expect(controller.flush()).rejects.toThrow('transient')
+    await expect(controller.flush()).rejects.toThrow('transient')
+    await expect(controller.flush()).resolves.toBeUndefined()
+    controller.enqueue(event(1))
+    failures = 2
+    await expect(controller.flush()).rejects.toThrow('transient')
+    await expect(controller.flush()).rejects.toThrow('transient')
+    await expect(controller.flush()).resolves.toBeUndefined()
+    expect(reportSuspended).not.toHaveBeenCalled()
+    expect(controller.suspended).toBe(false)
   })
 })

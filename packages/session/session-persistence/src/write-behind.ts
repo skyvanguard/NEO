@@ -13,7 +13,21 @@ export interface SessionWriteBehindOptions {
   readonly write: (events: readonly SessionEvent[]) => Promise<void>
   /** Observe a detached background write failure without rejecting the producer. */
   readonly reportBackgroundFailure: (error: unknown) => void
+  /**
+   * Consecutive failures of one retained batch before durability is suspended
+   * for the session (default {@link DEFAULT_MAX_WRITE_ATTEMPTS}).
+   */
+  readonly maxWriteAttempts?: number
+  /**
+   * Observe the one-time suspension of durability: the retained batch can never
+   * land (later seqs must stay contiguous behind it), so it and every later
+   * event are dropped instead of failing each request boundary forever.
+   */
+  readonly reportSuspended: (error: unknown, droppedEvents: number) => void
 }
+
+/** Identical failures tolerated before a session's durability is suspended. */
+export const DEFAULT_MAX_WRITE_ATTEMPTS = 5
 
 /**
  * Owns one live session's pending events, fixed batching deadline, active write,
@@ -26,6 +40,8 @@ export class SessionWriteBehind {
   private barrier: Promise<void> | undefined
   private deadlineExpired = false
   private automaticPaused = false
+  private attempts = 0
+  private _suspended = false
 
   /**
    * @param options - fixed scheduling policy and durable batch sink.
@@ -37,12 +53,18 @@ export class SessionWriteBehind {
     return this.pending.length > 0 || this.active !== undefined
   }
 
+  /** Whether durability was suspended after a batch failed repeatedly; events are dropped from then on. */
+  get suspended(): boolean {
+    return this._suspended
+  }
+
   /**
    * Copy one event into the persistence-owned queue and start a fixed deadline
    * when the automatic path is idle.
    * @param event - frozen live event to retain independently of its producer.
    */
   enqueue(event: SessionEvent): void {
+    if (this._suspended) return
     const wasEmpty = this.pending.length === 0
     this.pending.push(structuredClone(event))
     if (this.barrier !== undefined) return
@@ -61,6 +83,7 @@ export class SessionWriteBehind {
    * @returns a promise that rejects if the barrier's durable retry fails.
    */
   flush(): Promise<void> {
+    if (this._suspended) return Promise.resolve()
     if (this.barrier !== undefined) return this.barrier
     this.cancelTimer()
     this.deadlineExpired = false
@@ -142,7 +165,13 @@ export class SessionWriteBehind {
     this.deadlineExpired = false
     const operation = Promise.resolve().then(() => this.options.write(batch))
     const active = operation
+      .then(() => { this.attempts = 0 })
       .catch((error: unknown) => {
+        this.attempts += 1
+        if (this.attempts >= (this.options.maxWriteAttempts ?? DEFAULT_MAX_WRITE_ATTEMPTS)) {
+          this.suspend(batch.length + this.pending.length, error)
+          return
+        }
         this.pending = batch.concat(this.pending)
         this.cancelTimer()
         this.deadlineExpired = false
@@ -155,5 +184,15 @@ export class SessionWriteBehind {
       })
     this.active = active
     return active
+  }
+
+  /** Give up on durability for this session: drop retained work and stop admitting events. */
+  private suspend(droppedEvents: number, error: unknown): void {
+    this._suspended = true
+    this.pending = []
+    this.cancelTimer()
+    this.deadlineExpired = false
+    this.automaticPaused = false
+    this.options.reportSuspended(error, droppedEvents)
   }
 }
