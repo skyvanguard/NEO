@@ -1531,6 +1531,42 @@ describe('automatic listener and loader composition', () => {
     expect(warnings).toEqual([
       expect.stringContaining(`no context capacity for ${MODEL}/${MODEL}`),
     ])
+    // The failure happened before any bracket opened, so the process log was
+    // its only trace; it is now recorded once in the session for the UI.
+    const brackets = session.events.filter(event => event.type === 'compaction/start' || event.type === 'compaction/end')
+    expect(brackets).toHaveLength(2)
+    expect(brackets[1]).toMatchObject({
+      type: 'compaction/end',
+      // Enclosed by the open turn the pre-step runs in.
+      data: { turn: 5, error: expect.stringContaining('no context capacity') as string },
+    })
+  })
+
+  it('records a pre-bracket failure once per cause and leaves in-bracket failures to their own bracket', async () => {
+    const ctx = createContext()
+    ctx.logger.warn = (() => undefined) as typeof ctx.logger.warn
+    const meter = ctx.tokenMeter
+    const measure = meter.measure.bind(meter)
+    let failing = true
+    meter.measure = (session) => {
+      if (failing) throw new Error('meter exploded')
+      return measure(session)
+    }
+    const compact = new TestCompactionEngine(ctx, { thresholdRatio: 0.5, retainTokens: 180 })
+    const session = conversation(4)
+
+    await preStep(ctx, agent(session, MODEL))
+    await preStep(ctx, agent(session, MODEL))
+    const recorded = () => session.events.filter(event => event.type === 'compaction/end')
+    expect(recorded()).toHaveLength(1)
+    expect(recorded()[0]).toMatchObject({ data: { error: expect.stringContaining('meter exploded') as string } })
+
+    // An in-bracket failure already closes its own bracket: no duplicate.
+    failing = false
+    compact.error = 'temporary failure'
+    await preStep(ctx, agent(session, MODEL))
+    expect(recorded()).toHaveLength(2)
+    expect(recorded()[1]).toMatchObject({ data: { error: expect.stringContaining('temporary failure') as string } })
   })
 
   it('warns once per routed target when absolute retention exceeds its resolved threshold', async () => {
