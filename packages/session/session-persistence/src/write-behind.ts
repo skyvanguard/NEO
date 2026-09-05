@@ -42,6 +42,7 @@ export class SessionWriteBehind {
   private automaticPaused = false
   private attempts = 0
   private _suspended = false
+  private _suspensionCause: unknown
 
   /**
    * @param options - fixed scheduling policy and durable batch sink.
@@ -56,6 +57,11 @@ export class SessionWriteBehind {
   /** Whether durability was suspended after a batch failed repeatedly; events are dropped from then on. */
   get suspended(): boolean {
     return this._suspended
+  }
+
+  /** The repeated write failure that suspended durability, when it did. */
+  get suspensionCause(): unknown {
+    return this._suspensionCause
   }
 
   /**
@@ -189,6 +195,7 @@ export class SessionWriteBehind {
   /** Give up on durability for this session: drop retained work and stop admitting events. */
   private suspend(droppedEvents: number, error: unknown): void {
     this._suspended = true
+    this._suspensionCause = error
     this.pending = []
     this.cancelTimer()
     this.deadlineExpired = false

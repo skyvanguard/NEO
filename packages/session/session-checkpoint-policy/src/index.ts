@@ -5,6 +5,7 @@
  */
 
 import type { Context } from '@deepseek-ai/cordis'
+import { isDurabilitySuspended } from '@deepseek-ai/dsh-session'
 import type { Session } from '@deepseek-ai/dsh-session'
 import type { StreamChunk } from '@deepseek-ai/dsh-llm'
 import { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecutionResult } from '@deepseek-ai/dsh-tools'
@@ -21,18 +22,18 @@ export const inject = ['llm', 'sessionPersistence', 'sessions', 'tools']
  * Delay construction of the downstream model stream until the complete logged
  * request prefix is durable. A checkpoint rejection prevents adapter dispatch.
  *
- * @param ctx - plugin context that owns the session store.
+ * @param checkpoint - the fail-closed-or-proceed session checkpoint.
  * @param session - live session named by the model request.
  * @param next - downstream `llm/stream` chain.
  * @returns a stream that checkpoints before requesting its first chunk.
  */
 function afterCheckpoint(
-  ctx: Context,
+  checkpoint: (session: Session) => Promise<void>,
   session: Session,
   next: () => AsyncIterable<StreamChunk>,
 ): AsyncIterable<StreamChunk> {
   return (async function* (): AsyncIterable<StreamChunk> {
-    await ctx.sessions.flush(session)
+    await checkpoint(session)
     yield* next()
   })()
 }
@@ -61,15 +62,17 @@ function abortedBeforeDispatchResult(): ToolExecutionResult {
  * @param ctx - plugin context that owns the listeners.
  */
 export function apply(ctx: Context): void {
+  const checkpoint = (session: Session): Promise<void> => flushOrProceed(ctx, session)
+
   ctx.on('llm/stream', (options, next): AsyncIterable<StreamChunk> => {
     if (options.sessionId === undefined) return next()
     const session = ctx.sessions.get(options.sessionId)
-    return session === undefined ? next() : afterCheckpoint(ctx, session, next)
+    return session === undefined ? next() : afterCheckpoint(checkpoint, session, next)
   })
 
   ctx.on('tools/execute', async (exec, next): Promise<ToolExecutionResult> => {
     if (exec.agent === undefined || exec.parent !== undefined) return next()
-    await ctx.sessions.flush(exec.agent.session)
+    await checkpoint(exec.agent.session)
     if (exec.signal.aborted) return abortedBeforeDispatchResult()
     return next()
   })
@@ -77,7 +80,28 @@ export function apply(ctx: Context): void {
   // Before each request, persist everything committed by the preceding step;
   // the first step's call is an intentional no-op beyond any prompt intake.
   ctx.on('agent/pre-step', async ({ agent }, next): Promise<PreStepDecision> => {
-    await ctx.sessions.flush(agent.session)
+    await checkpoint(agent.session)
     return next()
   })
+}
+
+const warnedSuspended = new WeakSet<Session>()
+
+/**
+ * Checkpoint one session, staying fail-closed on transient failures. A backend
+ * that suspended the session's durability rejects with a typed error: failing
+ * every later boundary would turn one lost batch into a dead session, so the
+ * boundary proceeds non-durably and says so once per session.
+ * @param ctx - plugin context owning the session store.
+ * @param session - the session to checkpoint.
+ */
+async function flushOrProceed(ctx: Context, session: Session): Promise<void> {
+  try {
+    await ctx.sessions.flush(session)
+  } catch (error: unknown) {
+    if (!isDurabilitySuspended(error)) throw error
+    if (warnedSuspended.has(session)) return
+    warnedSuspended.add(session)
+    ctx.logger.warn(`session "${session.id}": durability suspended; continuing without persistence: ${String(error)}`)
+  }
 }

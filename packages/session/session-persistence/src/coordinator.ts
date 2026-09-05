@@ -14,6 +14,7 @@ import {
   SessionPreparation,
   snapshotJsonValue,
   snapshotSessionEvent,
+  DurabilitySuspendedError,
 } from '@deepseek-ai/dsh-session'
 import type { Session, SessionEvent, SessionId, SessionHeader } from '@deepseek-ai/dsh-session'
 import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
@@ -1334,6 +1335,9 @@ export class PersistenceCoordinator<TornMarker = unknown> {
       throw error
     }
     await live.writes.flush()
+    // A suspended controller resolves its own flush (nothing is retained any
+    // more); the caller must still learn that nothing was persisted.
+    if (live.writes.suspended) throw new DurabilitySuspendedError(session.id, live.writes.suspensionCause)
   }
 
   /** Build one package-private write controller around initialization and id serialization. */

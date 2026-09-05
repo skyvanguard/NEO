@@ -3,7 +3,7 @@ import { Context } from '@deepseek-ai/cordis'
 import Loader from '@deepseek-ai/cordis-plugin-loader'
 import { agentEvents, type Agent } from '@deepseek-ai/dsh-agent'
 import LlmRuntime, { CallId, type GenerateOptions, LlmAdapter, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
+import SessionStore, { DurabilitySuspendedError, SessionId } from '@deepseek-ai/dsh-session'
 import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
 import SessionPersistence from '@deepseek-ai/dsh-session-persistence'
 import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
@@ -113,6 +113,26 @@ describe('session-checkpoint-policy request boundary', () => {
       provider: 'mock', model: 'mock', messages: [], sessionId: session.id,
     }))).rejects.toThrow('disk unavailable')
     expect(order).toEqual([])
+  })
+})
+
+describe('session-checkpoint-policy after durability suspension', () => {
+  it('proceeds non-durably, warning once per session, when the backend suspended persistence', async () => {
+    // Fail-closed is for transient failures. A backend that gave up on the
+    // session says so with a typed rejection; failing every later boundary
+    // would only turn one lost batch into a dead session.
+    const ctx = await setup()
+    const warnings: string[] = []
+    ctx.logger.warn = ((message: string) => void warnings.push(message)) as typeof ctx.logger.warn
+    const session = ctx.sessions.create(SessionId('suspended'))
+    const order: string[] = []
+    ctx.on('session/flush', () => Promise.reject(new DurabilitySuspendedError('suspended')))
+    ctx.llm.registerAdapter(['mock'], new RecordingAdapter(order))
+
+    await drain(ctx.llm.stream({ provider: 'mock', model: 'mock', messages: [], sessionId: session.id }))
+    await drain(ctx.llm.stream({ provider: 'mock', model: 'mock', messages: [], sessionId: session.id }))
+    expect(order).toEqual(['adapter', 'adapter'])
+    expect(warnings.filter(message => message.includes('durability suspended'))).toHaveLength(1)
   })
 })
 

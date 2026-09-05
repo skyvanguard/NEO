@@ -27,6 +27,7 @@ export type { AssistantMessage, ToolResultMessage, UserMessage } from '@deepseek
 export { isJsonValue, snapshotJsonValue } from './json.ts'
 export type { JsonValue } from './json.ts'
 export { interruptedTurnClosers, TOOL_NOT_STARTED, TOOL_OUTCOME_UNKNOWN } from './repair.ts'
+export { DURABILITY_SUSPENDED, DurabilitySuspendedError, isDurabilitySuspended } from './durability.ts'
 export { decodeStorageRecord, packChunkRuns } from './chunk-rows.ts'
 export type { ChunkRow, StorageRecord } from './chunk-rows.ts'
 export type { SessionSurface, SurfaceFoldReplacement, SurfaceFoldResult } from './surface.ts'
@@ -1017,7 +1018,10 @@ export class SessionStore extends Service {
    * @param session - the session whose buffered events must reach durable storage.
    * @returns whether at least one durability listener participated, after every
    *   listener has settled successfully.
-   * @throws the first registered listener failure after every listener settles.
+   * @throws the first registered listener failure after every listener settles;
+   *   a backend that stopped persisting the session rejects with
+   *   {@link DurabilitySuspendedError} rather than resolving, so callers that
+   *   need confirmed durability never mistake dropped events for stored ones.
    */
   async flush(session: Session): Promise<boolean> {
     const { carrier } = this.liveEntryFor(session)
