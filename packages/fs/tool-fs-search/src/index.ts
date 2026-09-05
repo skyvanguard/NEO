@@ -44,6 +44,8 @@ export {
   formatGrepOutput,
   parseGrepArgs,
   parseGrepMatches,
+  formatGrepFiles,
+  GREP_MAX_CONTEXT,
   presentGrepCall,
   presentGrepResult,
 } from './grep.ts'
