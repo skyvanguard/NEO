@@ -221,3 +221,9 @@ Dato corregido durante la fase: la compactación **sí** dispara en producción 
 2. Motor: `--no-context-shift`, `--tensor-split 56,44`, `-ub 2048 -b 4096`, `-t 16`, `--metrics`, `--cache-reuse 256` (ver `docs/auditoria-llama-server-kryon.html`).
 3. `systemctl --user restart neo-web` (mata emuladores y jobs hijos: coordinar).
 4. Después: perfil de CPU del proceso para cerrar la Fase 5.
+
+### Análisis final (cierre)
+
+- Suite completa contra `master`: 88 fallos en la rama, 89 en `master`, **cero nuevos** (el que desaparece es un flaky).
+- `tsc -b` host y client limpios; oxlint limpio en todos los paquetes tocados (los 2 avisos de `ui-conversation/src/client/service.ts` son de `master`).
+- Revisión de la rama entera: todos los hallazgos de las revisiones parciales verificados como resueltos; un hallazgo alto nuevo — el marcador de contexto de `grep` no llegaba a `execute()` ni al schema de salida — corregido en `34975e012b` con test de punta a punta. Catálogo de tools regenerado (`7cda1cd89a`).
