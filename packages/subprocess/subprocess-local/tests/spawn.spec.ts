@@ -453,15 +453,16 @@ describe('OutputCollector', () => {
     expect(out.truncated).toBe(true)
   })
 
-  it('drops control bytes from decoded text while the spill keeps the raw bytes', () => {
-    // `grep -a` over a binary file is enough to put NUL/BEL/ESC into stdout.
-    // They are valid single-byte UTF-8, so toString() passes them through, and
-    // downstream a NUL truncates the prompt the multimodal tokenizer sees.
-    const raw = Buffer.concat([Buffer.from('peer'), Buffer.from([0, 7, 27]), Buffer.from(' slot\tok\r\n')])
+  it('drops NUL from decoded text, keeps ESC for ANSI rendering, and leaves the spill raw', () => {
+    // `grep -a` over a binary file is enough to put NUL into stdout. It is
+    // valid single-byte UTF-8, so toString() passes it through, and downstream
+    // it truncates the prompt the multimodal tokenizer sees. ESC stays: the
+    // client renders ANSI colour from this text.
+    const raw = Buffer.concat([Buffer.from('peer'), Buffer.from([0]), Buffer.from(' slot\tok\r\n'), Buffer.from([27]), Buffer.from('[0m')])
     const collector = new OutputCollector(100, 100, 'binary', spillDir)
     collector.push(raw)
-    expect(collector.readFrom(0).text).toBe('peer slot\tok\r\n')
-    expect(collector.finalize().text).toBe('peer slot\tok\r\n')
+    expect(collector.readFrom(0).text).toBe('peer slot\tok\r\n\u001b[0m')
+    expect(collector.finalize().text).toBe('peer slot\tok\r\n\u001b[0m')
 
     const spilling = new OutputCollector(4, 100, 'binary-spill', spillDir)
     spilling.push(raw)

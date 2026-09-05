@@ -92,19 +92,18 @@ function privateSpillDir(): string {
 }
 
 
-/** Tab, line feed and carriage return: the C0 bytes that are legitimate text. */
-const TEXT_CONTROL_BYTES = new Set([0x09, 0x0A, 0x0D])
-
 /**
- * Decode captured bytes as UTF-8 without the C0 control bytes other than
- * tab/LF/CR. `Buffer.toString` repairs invalid UTF-8 but passes NUL, BEL or
- * ESC through as valid single-byte code points; once in a tool result they
- * reach the session log and the model prompt, and a NUL truncates the prompt
- * a multimodal tokenizer sees. Multibyte UTF-8 never uses bytes below 0x80,
- * so dropping single bytes here cannot split a character. The spill file
- * keeps the raw bytes for consumers that want them.
+ * Decode captured bytes as UTF-8 without NUL. `Buffer.toString` repairs
+ * invalid UTF-8 but passes NUL through as a valid single-byte code point;
+ * once in a tool result it reaches the session log and the model prompt,
+ * where a C-string boundary in the multimodal tokenizer truncates everything
+ * after it. Only NUL is dropped here: ESC must survive because the client
+ * renders ANSI sequences from this very text, and the remaining C0 bytes are
+ * stripped at the provider boundary (`sanitizeText`) without touching the
+ * durable log. Multibyte UTF-8 never uses bytes below 0x80, so dropping a
+ * single byte cannot split a character. The spill file keeps the raw bytes.
  * @param bytes - captured output, whole or a window of it.
- * @returns the decoded text with prompt-breaking control bytes removed.
+ * @returns the decoded text with NUL bytes removed.
  */
 export function decodeOutput(bytes: Buffer): string {
   let clean = 0
@@ -120,9 +119,9 @@ export function decodeOutput(bytes: Buffer): string {
   return kept.toString('utf8', 0, length)
 }
 
-/** Whether one byte is a C0 control that must not reach decoded text. */
+/** Whether one byte must not reach decoded text. */
 function isControlByte(byte: number): boolean {
-  return byte < 0x20 && !TEXT_CONTROL_BYTES.has(byte)
+  return byte === 0x00
 }
 /**
  * Collects one stream with a bounded in-memory tail. With a spill cap, on
