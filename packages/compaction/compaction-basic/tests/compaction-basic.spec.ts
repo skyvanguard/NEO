@@ -1562,6 +1562,21 @@ describe('automatic listener and loader composition', () => {
     })
   })
 
+  it('never opens a failure bracket on top of an unmatched compaction/start', async () => {
+    // An orphan start is the intentional busy signal of a compaction that
+    // died mid-flight; a synthetic bracket on top would either trip the
+    // compaction invariant or hide the orphan from the next entry check.
+    const ctx = createContext()
+    ctx.logger.warn = (() => undefined) as typeof ctx.logger.warn
+    void new TestCompactionEngine(ctx, { thresholdRatio: 0.5, retainTokens: 180 })
+    const session = conversation(4)
+    session.append('compaction/start', { compactionId: CompactionId('orphan'), turn: null })
+
+    await expect(preStep(ctx, agent(session, MODEL))).resolves.toEqual({ kind: 'enter', messages: [] })
+    const brackets = session.events.filter(event => event.type === 'compaction/start' || event.type === 'compaction/end')
+    expect(brackets.map(event => event.type)).toEqual(['compaction/start'])
+  })
+
   it('records a pre-bracket failure once per cause and leaves in-bracket failures to their own bracket', async () => {
     const ctx = createContext()
     ctx.logger.warn = (() => undefined) as typeof ctx.logger.warn

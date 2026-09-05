@@ -273,10 +273,16 @@ export class BasicCompactionEngine extends CompactionEngine {
       this.recordedSilentFailures.set(session, recorded)
     }
     if (recorded.has(message)) return
+    // An unmatched compaction/start is the intentional busy signal of a
+    // compaction that died mid-flight (it is also what raised this failure):
+    // a bracket on top would trip the compaction invariant or hide the orphan
+    // from the next entry check. Leave it as the visible trace it already is.
+    const entryState = inspectCompactionEntryState(session.events)
+    if (entryState.unmatchedCompactionStart !== undefined) return
     recorded.add(message)
     const lifecycle = {
       compactionId: CompactionId(randomUUID()),
-      turn: inspectCompactionEntryState(session.events).openTurn,
+      turn: entryState.openTurn,
     }
     session.append('compaction/start', lifecycle)
     session.append('compaction/end', { ...lifecycle, error: errorChain(error) })
