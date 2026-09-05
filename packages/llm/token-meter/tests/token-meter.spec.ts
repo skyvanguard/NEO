@@ -284,6 +284,31 @@ describe('replay anchors and surface folds', () => {
     }).toThrow(TypeError)
   })
 
+  it('keeps the provider usage anchor when an image priced by its grid sits in the surface', () => {
+    // The image price is calibrated to the local vision projector; a provider
+    // that reports fewer prompt tokens than that heuristic would drop back to
+    // the estimate, so this pins the shape production relies on: real usage
+    // at or above the heuristic keeps anchoring.
+    const service = meter()
+    const session = Session.create(SessionId('image-anchor'))
+    session.append('user/message', createUserMessage({
+      content: [{
+        type: 'image',
+        attachment: { attachmentId: `sha256:${'a'.repeat(64)}`, mediaType: 'image/png', bytes: 1, width: 2340, height: 1080 },
+      } as unknown as ContentBlock],
+      source: { kind: 'user' },
+    }), { surfaceOp: 'append' })
+    const estimated = service.measure(session).totalTokens
+    expect(estimated).toBeGreaterThan(74 * 34)
+    appendSuccessfulCall(session, header('deepseek-v4-flash'), {
+      providerText: 'short',
+      usage: { inputTokens: estimated + 100, outputTokens: 2 },
+    })
+    const anchored = service.measure(session)
+    expect(anchored.baseline.kind).toBe('usage')
+    expect(anchored.totalTokens).toBeGreaterThanOrEqual(estimated + 100)
+  })
+
   it('selects a heuristic anchor when provider usage would undercut its scale', () => {
     const service = meter()
     const session = Session.create(SessionId('low-usage-anchor'))

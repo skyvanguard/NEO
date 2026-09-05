@@ -243,6 +243,10 @@ export class TokenMeter extends Service {
           surfaceTokens: anchorSurfaceTokens,
           // Signed heuristic deltas remain conservative only from an anchor
           // that is at least as large as the matching full heuristic price.
+          // The image price in estimate.ts is calibrated to the local vision
+          // projector; a provider that charges markedly less per image can
+          // fail this comparison on image-bearing steps and fall back to the
+          // (higher) estimate, which errs early rather than late.
           baseline: providerTokens >= estimatedAnchorTokens
             ? { kind: 'usage', tokens: providerTokens, usage: event.data.usage }
             : { kind: 'estimated', tokens: estimatedAnchorTokens },
