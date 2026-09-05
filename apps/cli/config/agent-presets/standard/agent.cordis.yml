@@ -177,11 +177,17 @@
   isolate:
     workflowEngine: true
   config:
+    # Disabled together with the one-shot subagent defaults: send_message,
+    # interrupt_agent and list_agents only act on continuable children, and a
+    # composition without a continuable provider would pay their tool schemas
+    # on every request for nothing. Re-enable them with a continuable row.
     - id: tool-subagent-control
       name: '@deepseek-ai/dsh-tool-subagent-control'
+      disabled: true
 
     - id: tool-subagent-list-agents
       name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+      disabled: true
 
     - id: tool-subagent
       name: '@deepseek-ai/dsh-tool-subagent'
