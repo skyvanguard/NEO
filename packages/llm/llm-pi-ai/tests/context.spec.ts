@@ -157,6 +157,8 @@ describe('pi-ai request context conversion', () => {
       messages: [
         { role: 'user', content: '' },
         { role: 'assistant' },
+        // 'other-call' never got a result: closed with a synthetic error result.
+        { role: 'toolResult', toolCallId: 'other-call', toolName: 'lookup', isError: true },
         { role: 'toolResult', toolName: 'unknown' },
       ],
     })
@@ -182,6 +184,21 @@ describe('pi-ai request context conversion', () => {
     expect(() => toPiAssistant(
       history('assistant', [{ type: 'image', attachment: ref }]),
     )).toThrow(/assistant image output/)
+  })
+
+  it('closes tool calls that never received a result on both conversion paths', async () => {
+    const callId = CallId('orphan')
+    const messages = [
+      history('assistant', [{ type: 'tool-call', id: callId, name: 'lookup', arguments: '{}' }]),
+      user([{ type: 'text', text: 'continue' }]),
+    ]
+    const expected = [
+      { role: 'assistant' },
+      { role: 'toolResult', toolCallId: 'orphan', toolName: 'lookup', isError: true },
+      { role: 'user', content: 'continue' },
+    ]
+    expect(toPiContext(request(messages))).toMatchObject({ messages: expected })
+    await expect(toPiContext(request(messages), attachments)).resolves.toMatchObject({ messages: expected })
   })
 
   it('strips control bytes from every outgoing text so images stay tokenizable', async () => {

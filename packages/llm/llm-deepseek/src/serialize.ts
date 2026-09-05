@@ -7,7 +7,7 @@
  * @module dsh-llm-deepseek/serialize
  */
 
-import { contentHasImage, LlmError } from '@deepseek-ai/dsh-llm'
+import { closeDanglingToolCalls, contentHasImage, LlmError } from '@deepseek-ai/dsh-llm'
 import type { ContentBlock, GenerateOptions, Message } from '@deepseek-ai/dsh-llm'
 import type { WireMessage, WireRequest, WireTool } from './types.ts'
 
@@ -109,9 +109,9 @@ function serializeAssistant(message: Message): WireMessage {
  * @param messages - the harness conversation, in order.
  * @returns the wire messages; order preserved, each tool result expanded into its own entry.
  */
-export function serializeMessages(messages: Message[]): WireMessage[] {
+export function serializeMessages(messages: readonly Message[]): WireMessage[] {
   const wire: WireMessage[] = []
-  for (const message of messages) {
+  for (const message of closeDanglingToolCalls(messages)) {
     assertTextOnly(message.content)
     if (message.role === 'system') {
       wire.push({ role: 'system', content: flattenText(message.content) })

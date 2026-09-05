@@ -4,7 +4,7 @@
  * @module dsh-llm-pi-ai/context
  */
 
-import { CallId, contentHasImage, LlmError } from '@deepseek-ai/dsh-llm'
+import { CallId, closeDanglingToolCalls, contentHasImage, LlmError } from '@deepseek-ai/dsh-llm'
 import type { ContentBlock, GenerateOptions, Message } from '@deepseek-ai/dsh-llm'
 import type { AttachmentStore } from '@deepseek-ai/dsh-attachment'
 import type { Context as PiContext, ImageContent, Message as PiMessage, TextContent, Tool as PiTool } from '@earendil-works/pi-ai'
@@ -90,7 +90,7 @@ function piContext(options: GenerateOptions, messages: PiMessage[]): PiContext {
 function textOnlyContext(options: GenerateOptions): PiContext {
   const toolNames = new Map<CallId, string>()
   const messages: PiMessage[] = []
-  for (const message of options.messages) {
+  for (const message of closeDanglingToolCalls(options.messages)) {
     if (contentHasImage(message.content)) {
       throw new LlmError('pi-ai image conversion requires the durable attachment service', 'UNSUPPORTED_CONTENT')
     }
@@ -147,7 +147,7 @@ async function toPiContextWithImages(options: GenerateOptions, attachments: Atta
   const toolNames = new Map<CallId, string>()
   const messages: PiMessage[] = []
 
-  for (const message of options.messages) {
+  for (const message of closeDanglingToolCalls(options.messages)) {
     if (message.role === 'system') {
       if (contentHasImage(message.content)) {
         throw new LlmError('pi-ai cannot represent an image in an in-history system message', 'UNSUPPORTED_CONTENT')

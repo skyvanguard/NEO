@@ -9,7 +9,7 @@ import { createUserMessage, CallId, StreamChunk  } from '@deepseek-ai/dsh-llm'
 import SessionStore, { SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
 import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
 import LlmRuntime from '@deepseek-ai/dsh-llm'
-import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, type PostToolDecision, type PreToolDecision } from '@deepseek-ai/dsh-tools'
+import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, TOOL_SCHEDULER_FAILED, type PostToolDecision, type PreToolDecision } from '@deepseek-ai/dsh-tools'
 import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
 import AgentLoop, { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from '@deepseek-ai/dsh-agent-loop'
 import { MockAdapter, textResponse } from './mock-adapter.ts'
@@ -687,6 +687,14 @@ describe('tool-call scheduler: failure quiescence', () => {
     expect(events(agent).findLast(event => event.type === 'turn/end')).toMatchObject({
       data: { reason: { kind: 'error', error: { message: schedulerError.message, code: 'UNKNOWN' } } },
     })
+    // Every model-ordered call keeps a durable result: a dangling tool call
+    // would make every later request provider-invalid for the session's life.
+    const results = events(agent).filter(event => event.type === 'tool/result')
+    expect(results.map(event => event.data.message.source.callId)).toEqual(['c1', 'c2', 'c3'])
+    for (const result of results) {
+      expect(result.data.error).toMatchObject({ code: TOOL_SCHEDULER_FAILED })
+      expect(result.data.message.content[0]).toMatchObject({ type: 'tool-result', isError: true })
+    }
   })
 })
 

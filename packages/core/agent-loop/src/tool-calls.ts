@@ -14,7 +14,7 @@
 import type { Context } from '@deepseek-ai/cordis'
 import { assertNever, createToolResultMessage, type ToolCallBlock } from '@deepseek-ai/dsh-llm'
 import type { Session, UserMessage } from '@deepseek-ai/dsh-session'
-import { TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, type ToolExecutionInput, type ToolExecutionMode, type ToolExecutionResult, type ToolRunContext } from '@deepseek-ai/dsh-tools'
+import { TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, TOOL_SCHEDULER_FAILED, type ToolExecutionInput, type ToolExecutionMode, type ToolExecutionResult, type ToolRunContext } from '@deepseek-ai/dsh-tools'
 
 /** One tool call after argument parsing, ready to schedule. */
 interface PlannedCall {
@@ -231,6 +231,23 @@ async function runGroup(
   } catch (error: unknown) {
     schedulerFailure ??= { error }
     await Promise.allSettled(inFlight.values())
+    // The assistant message with these calls is already durable. Every call
+    // without a committed result gets a synthetic one before the failure
+    // reaches the turn boundary: a dangling tool call would otherwise make
+    // every later request for this session provider-invalid.
+    const message = schedulerFailure.error instanceof Error ? schedulerFailure.error.message : String(schedulerFailure.error)
+    for (let index = committed; index < group.length; index++) {
+      // oxlint-disable-next-line typescript/no-non-null-assertion -- bounded index
+      const block = group[index]!.block
+      // Started slots recorded their `tool/call` seq; the rest are recorded now.
+      // oxlint-disable-next-line typescript/no-non-null-assertion -- bounded index
+      const callSeq = index < nextToStart ? callSeqs[index]! : appendToolCall(session, turn, step, block)
+      appendToolResult(session, turn, step, block, {
+        content: [{ type: 'text', text: `Error: tool call could not complete: ${message}` }],
+        isError: true,
+        error: { message, info: { name: 'ToolSchedulerError', code: TOOL_SCHEDULER_FAILED } },
+      }, callSeq)
+    }
     throw schedulerFailure.error
   }
 

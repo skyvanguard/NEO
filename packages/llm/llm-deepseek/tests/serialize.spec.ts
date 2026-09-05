@@ -29,6 +29,19 @@ describe('serializeMessages', () => {
     expect(wire).toEqual([{ role: 'system', content: 'be brief' }])
   })
 
+  it('closes an assistant tool call that never received a result', () => {
+    const wire = serializeMessages([
+      createMessage({
+        role: 'assistant',
+        content: [{ type: 'tool-call', id: CallId('orphan'), name: 'f', arguments: '{}' }],
+        source: { kind: 'plugin', plugin: 'test' },
+      }),
+      createUserMessage({ content: [{ type: 'text', text: 'continue' }], source: { kind: 'plugin', plugin: 'test' } }),
+    ])
+    expect(wire.map(message => message.role)).toEqual(['assistant', 'tool', 'user'])
+    expect(wire[1]).toMatchObject({ role: 'tool', tool_call_id: 'orphan', content: expect.stringContaining('No result was recorded') as string })
+  })
+
   it('maps plain assistant text without reasoning_content', () => {
     const wire = serializeMessages([
       createMessage({
@@ -55,14 +68,16 @@ describe('serializeMessages', () => {
         source: { kind: 'plugin', plugin: 'test' },
       }),
     ])
-    expect(wire).toEqual([{
+    expect(wire[0]).toEqual({
       role: 'assistant',
       // "" (not null) on tool-call turns — mirrors the official samples'
       // verbatim message replay; some gateways reject null.
       content: '',
       reasoning_content: 'I should check the weather.',
       tool_calls: [{ id: 'call-1', type: 'function', function: { name: 'get_weather', arguments: '{"city":"Paris"}' } }],
-    }])
+    })
+    // The unanswered call is closed with a synthetic result (see the dedicated test).
+    expect(wire[1]).toMatchObject({ role: 'tool', tool_call_id: 'call-1' })
   })
 
   it('serializes parallel tool calls in order', () => {
