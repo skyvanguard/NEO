@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auditoría del harness NEO</title>
+<style>
+  :root{
+    --bg:#0d1014; --panel:#141a21; --panel-2:#1a222b; --line:#25303c;
+    --ink:#e6edf3; --ink-2:#9fb0c0; --ink-3:#6b7d8d;
+    --ok:#3fb950; --warn:#d29922; --crit:#f85149; --acc:#58a6ff; --viol:#bc8cff;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.62;
+       background-image:radial-gradient(circle at 12% -8%,#1a1526 0%,transparent 55%)}
+  .wrap{max-width:1100px;margin:0 auto;padding:48px 24px 110px}
+  header{border-bottom:1px solid var(--line);padding-bottom:30px;margin-bottom:16px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--viol)}
+  h1{font-size:clamp(29px,4.2vw,46px);line-height:1.08;margin:.3em 0 .25em;letter-spacing:-.023em}
+  .sub{color:var(--ink-2);max-width:74ch;margin:0}
+  h2{font-size:23px;margin:60px 0 6px;letter-spacing:-.012em}
+  h2 .n{font-family:var(--mono);color:var(--ink-3);font-size:15px;margin-right:10px}
+  h3{font-size:16px;margin:26px 0 6px}
+  .lede{color:var(--ink-2);margin:.2em 0 18px;max-width:78ch}
+  p{margin:.5em 0}
+  code{font-family:var(--mono);font-size:.88em;background:var(--panel-2);border:1px solid var(--line);
+       border-radius:5px;padding:1px 6px;color:#a8d8ff;white-space:nowrap}
+  pre{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:8px;
+      padding:15px 17px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+  pre code{background:none;border:0;padding:0;white-space:pre;color:inherit}
+  .grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin:24px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:15px 17px}
+  .stat .v{font-family:var(--mono);font-size:25px;letter-spacing:-.02em}
+  .stat .v.bad{color:var(--crit)} .stat .v.mid{color:var(--warn)} .stat .v.good{color:var(--ok)}
+  .stat .l{font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.09em;margin-top:3px}
+  .f{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:17px 20px;margin:15px 0}
+  .f.crit{border-left:3px solid var(--crit)} .f.warn{border-left:3px solid var(--warn)}
+  .f.ok{border-left:3px solid var(--ok)} .f.info{border-left:3px solid var(--acc)}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+       padding:2px 8px;border-radius:20px;border:1px solid currentColor;margin-right:9px;vertical-align:2px}
+  .tag.crit{color:var(--crit)} .tag.warn{color:var(--warn)} .tag.ok{color:var(--ok)}
+  .tag.info{color:var(--acc)} .tag.viol{color:var(--viol)}
+  .f h3{margin:0 0 7px;display:flex;align-items:baseline;flex-wrap:wrap;gap:3px;font-size:16.5px}
+  .where{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin:8px 0 4px}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+  .bar{height:6px;background:var(--panel-2);border-radius:3px;overflow:hidden;min-width:60px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#1f6feb,#58a6ff)}
+  .bar i.hot{background:linear-gradient(90deg,#a83232,#f85149)}
+  .scroll{overflow-x:auto}
+  .note{color:var(--ink-3);font-size:13px;font-style:italic}
+  ul{margin:.4em 0 .4em 1.15em;padding:0} li{margin:.32em 0}
+  footer{margin-top:76px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">harness NEO · 2026-09-05</div>
+  <h1>Auditoría profunda del harness</h1>
+  <p class="sub">Seis frentes en paralelo sobre ~200.000 líneas de <code>src</code>, cruzados contra cuatro días de operación real del motor. Análisis de solo lectura: no se tocó el servicio ni la sesión que estaba corriendo. Cada cifra citada fue medida o leída en el código; lo estimado está marcado como tal.</p>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="v bad">3</div><div class="l">fallos que matan la sesión</div></div>
+  <div class="stat"><div class="v mid">83 %</div><div class="l">del prefill es evitable</div></div>
+  <div class="stat"><div class="v mid">~7.200</div><div class="l">tokens fijos por request</div></div>
+  <div class="stat"><div class="v bad">215K</div><div class="l">contexto real vs techo 262K</div></div>
+  <div class="stat"><div class="v good">0</div><div class="l">secretos hardcodeados</div></div>
+</div>
+
+<h2><span class="n">01</span>Lo urgente: la sesión de hoy va camino al techo</h2>
+<div class="f crit"><h3><span class="tag crit">urgente</span>El harness no sabe cuánto contexto está usando de verdad</h3>
+<p class="where">packages/llm/token-meter/src/estimate.ts:13 · :45 — packages/llm/llm-pi-ai/src/config.ts:38</p>
+<p>La compactación automática dispara cuando el medidor de tokens supera el 80% de la ventana. La ventana está bien resuelta (<code>DEFAULT_CONTEXT_WINDOW = 262_144</code>, que coincide con el <code>-c</code> del motor), pero <strong>el medidor es una heurística de <code>CHARS_PER_TOKEN = 4</code></strong>, y sobre todo: los bloques de imagen no tienen caso propio en <code>estimateContent</code>, así que caen en el <code>default</code> y se cotizan como <code>JSON.stringify(block).length / 4</code> — es decir, <strong>unas decenas de tokens por la referencia del adjunto, cuando una captura real cuesta miles</strong>. La sesión activa lleva 219 imágenes.</p>
+<p>El resultado se ve en producción: el motor ya registró un contexto de <strong>215K tokens</strong> y en seis horas de log del harness <strong>no hay una sola mención de compactación</strong>. El harness se cree por debajo del umbral mientras el prompt real sube hacia los 262K. Cuando llegue, como al motor le falta <code>--no-context-shift</code>, va a desplazar la ventana y descartar el principio del prompt —incluido el system prompt— en silencio.</p>
+<p><strong>Qué hacer, en este orden:</strong> (1) añadir <code>--no-context-shift</code> al motor para que falle explícito en vez de degradar mudo; (2) darle a los bloques de imagen un precio propio en <code>estimateContent</code> acorde al proyector visual; (3) mejor aún, corregir el medidor con el <code>usage</code> real que el proveedor ya devuelve en cada respuesta, en vez de confiar en la heurística.</p></div>
+
+<h2><span class="n">02</span>Tres formas de matar una sesión para siempre</h2>
+<p class="lede">Las tres producen el mismo síntoma que ya viviste: un error idéntico en cada turno, que nada aísla ni marca como permanente. Las tres están confirmadas leyendo el código y ninguna depende de configuración inactiva.</p>
+
+<div class="f crit"><h3><span class="tag crit">crítico</span>C2 · Un corte por <code>max-tokens</code> a mitad de un tool call envenena el historial</h3>
+<p class="where">packages/llm/llm/src/assembler.ts:136 · llm-pi-ai/src/stream.ts:190 · replay.ts:164 · agent-loop/src/agent.ts:378</p>
+<p>Cuando el modelo empieza un tool call y el servidor corta por tope de output, el ensamblador descarta ese bloque, pero el <code>replayState</code> se persiste con el bloque incluido. En cada turno posterior, <code>replayedAssistant</code> compara los conteos, no coinciden, y lanza <code>INVALID_REPLAY_STATE</code> — un código que no está en los reintentables. El mensaje envenenado vive en el historial derivado, así que el fallo es idéntico y permanente.</p>
+<p><strong>Y tu régimen lo vuelve probable, no raro:</strong> con prompts de 210K sobre un techo de 262K, el presupuesto de output que queda es chico, así que truncar en medio de un tool call pasa a ser común. <strong>Es el candidato más probable a repetir el incidente.</strong> El parche mínimo son 2 líneas: omitir <code>replayState</code> cuando el corte fue por <code>max-tokens</code>. La defensa en profundidad es 1 línea más: que <code>replay.ts:164</code> degrade a <code>foreignAssistant</code> en vez de abortar.</p></div>
+
+<div class="f crit"><h3><span class="tag crit">crítico</span>C3 · Un batch de escritura que falla se reintenta para siempre y hace fallar cada turno</h3>
+<p class="where">packages/session/session-persistence/src/write-behind.ts:146 · session-checkpoint-policy/src/index.ts:79</p>
+<p>Si una escritura de sesión falla, el batch se retiene entero (<code>this.pending = batch.concat(this.pending)</code>) sin tope de reintentos, sin backoff y sin cuarentena. El siguiente <code>agent/pre-step</code> hace <code>await flush()</code> <strong>sin <code>catch</code></strong>, así que el mismo batch vuelve a fallar y el rechazo mata el turno. Cada turno nuevo repite el ciclo mientras <code>pending</code> acumula un clon completo de cada evento, hasta agotar la memoria.</p>
+<p>El disparador realista no es exótico: <strong>disco lleno o un error de I/O persistente</strong>. Y tu perfil lo favorece — un agente escribiendo días sin supervisión, con sesiones que ya pesan 73 MB comprimidos.</p></div>
+
+<div class="f crit"><h3><span class="tag crit">crítico</span>C1 · Un tool call sin resultado deja el historial permanentemente inválido</h3>
+<p class="where">packages/core/agent-loop/src/tool-calls.ts:231 · core/session/src/repair.ts:48 · core/session/src/invariant.ts:107</p>
+<p>Si el scheduler falla después de que el mensaje del asistente ya se persistió, quedan <code>tool/call</code> sin su <code>tool/result</code>. Los <code>finally</code> cierran el step y el turno con normalidad, y a partir de ahí cada request lleva un <code>tool_call_id</code> sin respuesta: 400 del proveedor, en todos los turnos, sobreviviendo al reinicio. Ni el invariante lo atrapa (hace <code>clear()</code> en <code>step/end</code> sin verificar que el set esté vacío) ni la reparación en frío lo cura (limpia igual, y el log queda "balanceado").</p>
+<p><strong>La línea más rentable de toda la auditoría está acá:</strong> quitar ese <code>clear()</code> de <code>repair.ts:48</code> es lo único que <em>cura sesiones ya rotas en disco</em>, en vez de solo prevenir nuevas. Ojo: hay un test (<code>repair.spec.ts:119</code>) que hoy codifica el comportamiento roto como esperado y habría que actualizarlo.</p></div>
+
+<h2><span class="n">03</span>El bug del NUL: el arreglo quedó un piso más arriba de donde debía</h2>
+<div class="f warn"><h3><span class="tag warn">alto</span>El veneno se sigue persistiendo; solo se limpia al salir</h3>
+<p class="where">packages/subprocess/subprocess-local/src/spawn.ts:213 · :246 — llm-deepseek/src/serialize.ts</p>
+<p>La sanitización que apliqué actúa al armar el request para el proveedor: protege la llamada, pero el texto con bytes de control <strong>se sigue guardando crudo en la sesión</strong>, así que la UI, <code>session-query</code> y los exportadores lo siguen viendo, y las sesiones ya corrompidas siguen corrompidas. El embudo real por donde entra todo es <code>Buffer.toString('utf8')</code> en el lector de subprocess: reemplaza UTF-8 inválido, pero NUL, BEL y ESC son bytes válidos de un byte y pasan intactos.</p>
+<p>Además <code>sanitizeText</code> vive solo en <code>llm-pi-ai</code>: <code>llm-deepseek</code> no tiene nada equivalente. Corresponde sanear en la ingesta y mover la función al paquete base <code>dsh-llm</code>, para que ningún adaptador futuro se lo olvide.</p></div>
+
+<h2><span class="n">04</span>Dónde se van 13 de las 16 horas de prefill</h2>
+<p class="lede">La hipótesis de partida era que algo volátil cerca del inicio del prompt invalidaba la caché. Es falsa, y conviene decirlo: el historial es append-only, y los sospechosos habituales fueron descartados uno por uno — no hay fecha ni hora en el prompt, no hay contador de contexto, el orden de las tools es lexicográfico estable y los timestamps que van al proveedor son <code>0</code> fijos. <strong>Lo que pasa es que otro prompt le roba el único slot.</strong></p>
+
+<div class="scroll">
+<table>
+  <thead><tr><th>Evidencia medida en 4 días de motor</th><th>Valor</th><th></th></tr></thead>
+  <tbody>
+    <tr><td>Veces que el contexto del slot cayó a menos de la mitad tras superar 50K</td><td class="num">138</td><td><div class="bar"><i class="hot" style="width:70%"></i></div></td></tr>
+    <tr><td>Recomputos de más de 50K con similitud &lt; 0,9 (el slot no tenía el prefijo)</td><td class="num">213 / 307</td><td><div class="bar"><i class="hot" style="width:69%"></i></div></td></tr>
+    <tr><td>Recomputos grandes que fueron crecimiento legítimo</td><td class="num">12</td><td><div class="bar"><i style="width:4%"></i></div></td></tr>
+    <tr><td>Tiempo perdido en esos recomputos</td><td class="num">804 min</td><td><div class="bar"><i class="hot" style="width:83%"></i></div></td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="f warn"><h3><span class="tag warn">alto</span>Los subagentes corren en background por defecto, contra un motor de un slot</h3>
+<p class="where">packages/bundle/base/cordis.patch.yml (row tool-subagent) · tool-subagent/src/index.ts:263</p>
+<p><code>backgroundMode: continuable</code> hace que <code>run_in_background</code> sea verdadero por defecto, y el propio system prompt empuja a "arrancar delegaciones independientes juntas y seguir trabajando mientras corren". Sobre un slot único eso es A→B→A→C→A, con recomputo completo del padre en cada vuelta.</p></div>
+
+<div class="f warn"><h3><span class="tag warn">alto</span><code>subagent_fork</code> está mal configurado en los cuatro presets, y eso anula su razón de ser</h3>
+<p class="where">apps/cli/config/agent-presets/{pentest,standard,code,cordis}/agent.cordis.yml</p>
+<p>El bundle base documenta textualmente <em>"Fork stays one-shot… keeping the parent's request prefix"</em>. Los presets le ponen <code>backgroundMode: continuable</code>, así que el hijo instala su tool <code>report</code> y su sección de prompt <strong>antes</strong> del historial heredado — rompiendo justo el prefijo que el fork existe para conservar. Hoy <code>subagent</code> y <code>subagent_fork</code> son casi indistinguibles, para el modelo y para la caché.</p></div>
+
+<div class="f warn"><h3><span class="tag warn">medio</span><code>workflow</code> puede encolar 16 agentes concurrentes</h3>
+<p class="where">packages/workflow/workflow-worker-thread/src/index.ts:117 · :151</p>
+<p><code>maxConcurrentAgents</code> por defecto es <code>0</code>, que se traduce en <code>Math.min(16, availableParallelism() - 2)</code>. Kryon tiene 80 CPUs. Ningún YAML lo sobreescribe, y la descripción del tool promociona el fan-out.</p></div>
+
+<div class="f info"><h3><span class="tag info">nota</span>Dos causas menores, reales pero secundarias</h3>
+<p>El <strong>pruner de tool-results</strong> reescribe resultados en cualquier posición de la superficie, incluida la cola que la compactación va a retener: rompe el prefijo a media altura, y bastaría acotarlo al rango que se va a compactar. Y el <strong>scan-worker</strong> es un segundo proceso <code>dsh</code> contra el mismo endpoint, con persona propia y scans de hasta 75 minutos.</p>
+<p class="note">Sobre subir el motor a dos slots: <code>-c</code> se reparte entre slots, así que <code>-np 2</code> dejaría 131K por slot y la sesión de hoy ya va en 215K. No entra sin bajar a Q6_K primero. La palanca barata está del lado del harness.</p></div>
+
+<h2><span class="n">05</span>Contexto que se quema sin necesidad</h2>
+<p class="lede">Costo fijo medido de descripciones y schemas: <strong>~26.100 caracteres, unos 7.200 tokens en cada request</strong>. Sobre lo que el agente realmente ve, es lo primero que conviene recortar.</p>
+<div class="scroll">
+<table>
+  <thead><tr><th>Hallazgo</th><th>Medido</th><th>Arreglo</th></tr></thead>
+  <tbody>
+    <tr><td><code>glob</code> fuerza <code>--no-ignore --hidden</code> y solo excluye directorios VCS; <code>grep</code> no pasa esos flags y sí respeta <code>.gitignore</code>. Semánticas opuestas, ninguna documentada.</td><td class="num">18.480<br>vs 3.708</td><td>Añadir <code>exclude</code>, excluir <code>node_modules</code>, documentar el ignore de <code>grep</code></td></tr>
+    <tr><td><code>bash</code> captura 64 KB por stream, dos streams. La capacidad de limitarlo ya existe pero está deliberadamente oculta al modelo (<code>shell/src/types.ts:44</code>).</td><td class="num">~32k tok<br>en un paso</td><td>Exponer <code>max_output_bytes</code> (3 líneas) y bajar el default</td></tr>
+    <tr><td><code>grep</code> no tiene <code>output_mode</code>, contexto ni <code>head_limit</code>. Una búsqueda de símbolo devuelve todo inline.</td><td class="num">34 KB<br>vs 2,9 KB</td><td>Añadir los tres parámetros</td></tr>
+    <tr><td>La entrega por defecto del subagente reenvía el <em>reasoning</em> del hijo sin filtrar ni truncar, y no pasa por <code>spill-policy</code>.</td><td class="num">sin tope</td><td>Filtrar a <code>text</code> y acotar</td></tr>
+    <tr><td><code>workflow</code> y <code>ralph</code> ocupan ~3.900 caracteres residentes para herramientas que por política casi no se usan; la prosa de escalación de sandbox son 1.011 caracteres duplicados entre <code>bash</code> y <code>pwsh</code>.</td><td class="num">~1.200 tok</td><td>Mover el contrato a una skill bajo demanda</td></tr>
+    <tr><td>No existe edición múltiple ni forma de listar un directorio: <code>glob("packages/fs/*")</code> devuelve <strong>1 sola ruta</strong> porque nunca enumera directorios.</td><td class="num">N viajes<br>→ 1</td><td>Añadir <code>edits[]</code> y una primitiva de listado</td></tr>
+    <tr><td><code>edit</code> falla con <code>old_string was not found</code> y cero diagnóstico — el bucle de error más común de un agente autónomo.</td><td class="num">—</td><td>Detectar near-miss por whitespace o por el prefijo <code>N: </code> que puso <code>read</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="n">06</span>Seguridad</h2>
+<div class="f warn"><h3><span class="tag warn">alto</span>free-scan: la única defensa contra prompt injection es el propio prompt</h3>
+<p>El worker público toma un dominio de cualquier visitante y lanza un agente headless, sin humano en el loop, sobre contenido 100% controlado por terceros. El sandbox confina <strong>escrituras</strong>, pero las lecturas del filesystem y la salida de red no están restringidas. Si una inyección prospera, el camino "leer credenciales → exfiltrar por red" está abierto.</p>
+<p><strong>Matiz importante que verifiqué en el server</strong>, y que corrige el informe original: bwrap y el perfil AppArmor <em>ya están aplicados</em>, y dentro del namespace los grupos <code>sudo</code>/<code>docker</code> se mapean a <code>nogroup</code>. El vector está bastante más cerrado de lo que parecía. Lo que sigue pendiente es el paso 2 de tu propio runbook: el worker corre como <code>skyvanguard</code> y puede leer las credenciales de ese usuario. Una allow-list de destinos de red para este preset sería la defensa en profundidad que falta.</p></div>
+
+<div class="f warn"><h3><span class="tag warn">medio</span>El filtro de <code>/api</code> no es autenticación, y el código lo dice</h3>
+<p>El fence de <code>Host</code>/<code>Origin</code> protege contra DNS-rebinding y CSRF desde un navegador, no contra un cliente HTTP que fija el header a mano. Hoy es razonable porque el binding es loopback y el acceso va por túnel. Pero si algún día se pone <code>0.0.0.0</code> o se puebla <code>trustedHosts</code>, cualquiera que alcance el puerto obtiene control completo del agente sin credencial. Merece quedar escrito en el runbook, no solo en un comentario del código.</p></div>
+
+<div class="f ok"><h3><span class="tag ok">bien</span>Lo que está sólido y no hay que tocar</h3>
+<p>Sin secretos hardcodeados. Las variables de entorno sensibles se escrubean antes de pasar a procesos hijos. <code>.credentials.yaml</code> se crea en 0600 y el provider rechaza modos permisivos. La escalada de sandbox falla cerrada sin aprobador, con auditoría completa y validación de "estrictamente más amplio". El transcript del hijo nunca cruza al padre en ninguna de las tres rutas. El catálogo de skills se publica una vez y solo se republica si cambia su digest. <code>spill-policy</code> es un backstop bien diseñado y su spill es legible.</p></div>
+
+<h2><span class="n">07</span>Rendimiento, y una corrección</h2>
+<div class="f info"><h3><span class="tag info">corrección</span>El invariante O(n²) no corre en producción</h3>
+<p>El primer análisis señaló <code>agent-loop/src/invariant.ts:40</code> —dos <code>JSON.stringify</code> del historial completo en cada llamada al LLM— como causa del consumo de CPU, y yo lo di por activo. <strong>Es incorrecto:</strong> <code>dsh-invariants</code> figura solo en <code>peerDependencies</code> y <code>devDependencies</code> de <code>bundle/web-app</code>, y ningún YAML del repo monta el registro. El código está y el defecto es real si algún día se monta, pero hoy no se ejecuta.</p></div>
+
+<div class="f warn"><h3><span class="tag warn">medio</span>Lo que sí está medido: 34% de un core, sostenido</h3>
+<p>320 minutos de CPU en 15,7 horas de vida del proceso, para un harness que mayormente espera al modelo. El RSS va en 1,19 GB tras 15,7 horas, contra los 9,79 GB que llevaba el proceso anterior tras seis días: crece con el tiempo.</p>
+<p>El mecanismo confirmado es el pipeline por token: <code>agent.ts:349</code> appendea <strong>un evento de sesión por cada delta del stream</strong>, y cada append hace <code>structuredClone</code> más <code>deepFreeze</code>, más otro <code>structuredClone</code> en el write-behind, más la invalidación del snapshot cacheado de eventos — que el siguiente lector reconstruye entero con <code>Object.freeze([...log])</code>. Con 5,4 millones de tokens generados en cuatro días, son millones de ciclos.</p>
+<p class="note">No cierro la atribución del 34% por lectura de código: para eso hace falta un perfilado real con <code>node --inspect</code> sobre el proceso, que no corrí para no tocar la sesión en curso. Queda como el siguiente paso natural.</p></div>
+
+<div class="f info"><h3><span class="tag info">medido</span>El cliente re-ordena todo el historial en cada actualización</h3>
+<p><code>chat-snapshot-builder.ts</code> recalcula un sort completo sobre todos los nodos acumulados de la sesión cada vez que alguno cambia de posición o estado — y eso ocurre en prácticamente cada evento. Corre en el hilo principal del navegador, así que la UI se pone lenta a medida que la conversación crece, con independencia del servidor.</p></div>
+
+<h2><span class="n">08</span>Plan priorizado</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>#</th><th>Acción</th><th>Tamaño</th><th>Qué compra</th></tr></thead>
+  <tbody>
+    <tr><td class="num">1</td><td><code>--no-context-shift</code> en el motor</td><td>1 flag</td><td>Evita que la sesión de hoy pierda el system prompt en silencio al tocar el techo</td></tr>
+    <tr><td class="num">2</td><td>Omitir <code>replayState</code> en cortes por <code>max-tokens</code> (C2)</td><td>2 líneas</td><td>Cierra la causa más probable de sesiones muertas</td></tr>
+    <tr><td class="num">3</td><td>Quitar el <code>clear()</code> de <code>repair.ts:48</code> (C1)</td><td>1 línea + 1 test</td><td>Lo único que cura sesiones ya rotas en disco</td></tr>
+    <tr><td class="num">4</td><td><code>catch</code> en el flush de <code>pre-step</code> + cuarentena de batch (C3)</td><td>~40 líneas</td><td>Que un disco lleno no mate la sesión ni la memoria</td></tr>
+    <tr><td class="num">5</td><td><code>subagent</code> y <code>subagent_fork</code> a <code>one-shot</code>; <code>maxConcurrentAgents: 1</code></td><td>3 líneas</td><td>Ataca el grueso del 83% de prefill perdido</td></tr>
+    <tr><td class="num">6</td><td>Precio real de las imágenes en el token-meter</td><td>~10 líneas</td><td>Que la compactación vuelva a dispararse cuando toca</td></tr>
+    <tr><td class="num">7</td><td>Sanear en la ingesta (<code>spawn.ts</code>) y mover <code>sanitizeText</code> a <code>dsh-llm</code></td><td>~20 líneas</td><td>Cierra el bug del NUL en origen, para todo proveedor</td></tr>
+    <tr><td class="num">8</td><td><code>exclude</code> en <code>glob</code>, <code>output_mode</code> en <code>grep</code>, tope en <code>bash</code>, <code>edits[]</code> en <code>edit</code></td><td>~150 líneas</td><td>Menos contexto quemado y menos viajes por tarea</td></tr>
+    <tr><td class="num">9</td><td>Paso 2 del runbook de free-scan + allow-list de red del preset</td><td>operativo</td><td>Cierra la cadena de exfiltración ante una inyección exitosa</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">Los puntos 1 a 4 son contención: evitan pérdidas. El 5 y el 6 son los de mayor retorno en velocidad percibida. El resto es mejora sostenida.</p>
+
+<h2><span class="n">09</span>Lo que quedó sin cerrar</h2>
+<ul>
+  <li><strong>Atribución del 34% de CPU:</strong> pide un perfilado con <code>node --inspect</code> sobre el proceso real. Hipótesis principal: el pipeline de un evento por token.</li>
+  <li><strong>El pico de 9,79 GB de RSS:</strong> un heap snapshot lo confirmaría o lo descartaría. Sospechoso adicional: el coordinador retiene hasta 5 sesiones preparadas simultáneamente.</li>
+  <li><strong>La alternancia 215K ↔ 165K observada en vivo</strong> con una sola sesión y un solo proceso: no identifiqué qué emite el segundo prompt. Vale instrumentarlo, porque es exactamente el patrón que cuesta caro.</li>
+  <li><strong>Riesgo de reordenamiento del system prompt por empates de <code>order</code></strong> (106, 115, 190) combinados con recarga en caliente: hipótesis no confirmada, arreglo trivial si se decide cubrirla.</li>
+</ul>
+
+<footer>
+  Seis auditorías paralelas —estabilidad de caché, corrección del agent-loop, fallos silenciosos, capa de herramientas, seguridad y rendimiento— con verificación cruzada de cada hallazgo citable contra el código y contra el log del motor. Ninguna afirmación de este informe proviene solo del reporte de un agente: las que se citan fueron comprobadas de nuevo, y las que no se sostuvieron están señaladas como tales.
+</footer>
+
+</div>
+</body>
+</html>
