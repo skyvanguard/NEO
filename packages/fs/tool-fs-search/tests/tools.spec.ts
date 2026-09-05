@@ -25,6 +25,7 @@ import type { SaveTextSpill, SpillRef } from '@deepseek-ai/dsh-spill'
 import * as ToolFsSearch from '@deepseek-ai/dsh-tool-fs-search'
 import {
   buildGlobCommand,
+  parseGlobArgs,
   buildGrepCommand,
   formatGrepMatches,
   parseGrepMatches,
@@ -339,6 +340,21 @@ describe('command construction (plain argv)', () => {
       '--glob=!**/.bzr', '--glob=!**/.bzr/**',
       '--glob=!**/.jj', '--glob=!**/.jj/**',
       '--glob=!**/.sl', '--glob=!**/.sl/**',
+      '--glob=!**/node_modules', '--glob=!**/node_modules/**',
+    ])
+  })
+
+  it('glob: parseGlobArgs carries exclude through unchanged and omits it when absent', () => {
+    expect(parseGlobArgs({ pattern: '*', exclude: ['dist'] })).toEqual({ pattern: '*', exclude: ['dist'] })
+    expect(parseGlobArgs({ pattern: '*' })).toEqual({ pattern: '*' })
+  })
+
+  it('glob: exclude replaces the default dependency-store exclusion, bare names paired and globs verbatim', () => {
+    const tail = (input: Parameters<typeof buildGlobCommand>[0]) => buildGlobCommand(input).filter(part => !part.includes('/.') && part.startsWith('--glob=!'))
+    expect(tail({ pattern: '*', exclude: [] })).toEqual([])
+    expect(tail({ pattern: '*', exclude: ['dist', 'build/**/*.map'] })).toEqual([
+      '--glob=!**/dist', '--glob=!**/dist/**',
+      '--glob=!build/**/*.map',
     ])
   })
 
@@ -350,6 +366,7 @@ describe('command construction (plain argv)', () => {
       '--glob=!**/.bzr', '--glob=!**/.bzr/**',
       '--glob=!**/.jj', '--glob=!**/.jj/**',
       '--glob=!**/.sl', '--glob=!**/.sl/**',
+      '--glob=!**/node_modules', '--glob=!**/node_modules/**',
       '--', 'docs dir'])
   })
 
@@ -741,6 +758,7 @@ describe('glob results', () => {
     const { ctx } = await setup()
     expect(text(await call(ctx, 'glob', { pattern: '  ' }))).toContain('pattern must be a non-empty string')
     expect(text(await call(ctx, 'glob', { pattern: '*', path: ' ' }))).toContain('path must be a non-empty string')
+    expect(text(await call(ctx, 'glob', { pattern: '*', exclude: ['dist', ' '] }))).toContain('exclude entries must be non-empty strings')
   })
 
   it('threads a valid path through to the spawn as the plain search root element', async () => {
@@ -755,6 +773,7 @@ describe('glob results', () => {
       '--glob=!**/.bzr', '--glob=!**/.bzr/**',
       '--glob=!**/.jj', '--glob=!**/.jj/**',
       '--glob=!**/.sl', '--glob=!**/.sl/**',
+      '--glob=!**/node_modules', '--glob=!**/node_modules/**',
       '--', 'sub'])
   })
 
