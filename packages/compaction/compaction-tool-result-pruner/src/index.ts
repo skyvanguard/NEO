@@ -16,6 +16,7 @@ import type {} from '@deepseek-ai/dsh-token-meter'
 import { codePointLength, DEFAULTS, PRUNE_MARKER, resolveConfig } from './config.ts'
 import type {
   PrunedEntry,
+  PruneOptions,
   PruneResult,
   ResolvedConfig,
   ToolResultPruneConfig,
@@ -24,6 +25,7 @@ import type {
 export { codePointLength, DEFAULTS, PRUNE_MARKER, resolveConfig } from './config.ts'
 export type {
   PrunedEntry,
+  PruneOptions,
   PruneResult,
   ResolvedConfig,
   ToolResultPruneConfig,
@@ -129,11 +131,13 @@ export class ToolResultPruner extends Service {
    * shadowed node through the injected token meter, so pure consumers can
    * subtract it without per-node state.
    * @param session - session whose current surface is rewritten.
+   * @param options - optional `relieved` check consulted after each landed
+   *   replacement; the pass stops at the first `true`.
    * @returns landed replacements and aggregate Unicode-code-point savings.
    * @throws when the session rejects a replacement; replacements committed
    * earlier in the pass remain durable.
    */
-  pruneSession(session: Session): PruneResult {
+  pruneSession(session: Session, options: PruneOptions = {}): PruneResult {
     const candidates: SnapshotCandidate[] = []
     for (const seq of [...session.surface.nodes]) {
       const event = session.events[seq]
@@ -179,6 +183,7 @@ export class ToolResultPruner extends Service {
         charsAfter,
       })
       charsRemoved += charsBefore - charsAfter
+      if (options.relieved?.() === true) break
     }
     return { pruned, charsRemoved }
   }

@@ -803,6 +803,26 @@ describe('optional model-free tool-result pruning', () => {
     expect(session.surface.replaceGeneration).toBe(1)
   })
 
+  it('stops pruning as soon as the surface is back under the threshold', async () => {
+    // Every replacement breaks the cached request prefix from that node on;
+    // with three oversized results and a budget one prune satisfies, the
+    // other two stay intact (one replacement = one surface generation).
+    const ctx = createContext(12_000)
+    void new ToolResultPruner(ctx, pruneConfig)
+    const compact = new TestCompactionEngine(ctx, {
+      auto: false,
+      thresholdRatio: 0.5,
+      retainTokens: 50,
+    })
+    const session = toolConversation()
+    expect(ctx.tokenMeter.measure(session).totalTokens).toBeGreaterThanOrEqual(6_000)
+
+    expect(await compactIfNeeded(compact, session)).toBeNull()
+    expect(compact.calls).toHaveLength(0)
+    expect(ctx.tokenMeter.measure(session).totalTokens).toBeLessThan(6_000)
+    expect(session.surface.replaceGeneration).toBe(1)
+  })
+
   it('summarizes the pruned surface when pruning is insufficient', async () => {
     const ctx = createContext(2_000)
     void new ToolResultPruner(ctx, pruneConfig)
