@@ -25,6 +25,7 @@ import type {
 import * as FsPolicy from '@deepseek-ai/dsh-fs-observation-policy'
 import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
 import { editCallDiffs } from '../src/edit.ts'
+import { formatListDirOutput, LIST_DIR_MAX_ENTRIES, projectEntries } from '../src/list-dir.ts'
 import { STREAM_MIN_SIZE } from '../src/read.ts'
 import { formatReadOutput } from '../src/read-render.ts'
 import type { FileReadOutcome } from '../src/read-render.ts'
@@ -79,8 +80,10 @@ class FakeFs extends FileSystem {
     }
     return bytes
   }
-  override async listDir(_target: FsTarget): Promise<FsDirEntry[]> {
-    return []
+  dirEntries = new Map<string, FsDirEntry[]>()
+  override async listDir(target: FsTarget): Promise<FsDirEntry[]> {
+    this.throwIfArmed()
+    return this.dirEntries.get(target.targetKey) ?? []
   }
   override async writeText(target: FsTarget, content: string, expected?: FsWriteIntent): Promise<FsWriteOutcome> {
     this.throwIfArmed()
@@ -160,7 +163,7 @@ describe('session cwd resolution', () => {
 describe('registration', () => {
   it('registers read, write, and edit', async () => {
     const { ctx } = await setup()
-    expect(ctx.tools.schemas().map(s => s.name).sort()).toEqual(['edit', 'read', 'write'])
+    expect(ctx.tools.schemas().map(s => s.name).sort()).toEqual(['edit', 'list_dir', 'read', 'write'])
   })
 
   it('declares read parallel-safe while write/edit remain exclusive', async () => {
@@ -198,9 +201,9 @@ describe('registration', () => {
     const fiber = await ctx.plugin(ToolFs)
     // Each tool contributes BOTH a schema and a prompt section; disposal must
     // withdraw both, not just the schemas.
-    expect(ctx.tools.schemas()).toHaveLength(3)
+    expect(ctx.tools.schemas()).toHaveLength(4)
     const sectionNames = (a: { sections: { name: string }[] }) => a.sections.map(s => s.name).sort()
-    expect(sectionNames(await ctx.systemPrompt.assemble())).toEqual(['deployment:persona', 'harness:identity', 'tool:edit', 'tool:read', 'tool:write'])
+    expect(sectionNames(await ctx.systemPrompt.assemble())).toEqual(['deployment:persona', 'harness:identity', 'tool:edit', 'tool:list_dir', 'tool:read', 'tool:write'])
     await fiber.dispose()
     expect(ctx.tools.schemas()).toHaveLength(0)
     // Only the system-prompt plugin's own built-in sections remain.
@@ -426,6 +429,62 @@ describe('write tool', () => {
   })
 })
 
+describe('list_dir tool', () => {
+  const entry = (name: string, type: FsDirEntry['type'], size?: number): FsDirEntry => ({
+    name,
+    type,
+    target: { targetKey: `key:${name}`, displayPath: `/abs/${name}` } as unknown as FsTarget,
+    ...size !== undefined ? { size } : {},
+  })
+
+  it('lists directories first, then files with sizes, hiding dot entries by default', async () => {
+    const { ctx, fs } = await setup()
+    fs.dirEntries.set('key:src', [
+      entry('zeta.ts', 'file', 2048),
+      entry('.hidden', 'file', 1),
+      entry('lib', 'directory'),
+      entry('alpha.ts', 'file', 10),
+      entry('socket', 'other'),
+    ])
+    const result = await call(ctx, 'list_dir', { path: 'src' })
+    if (result.isError) throw new Error('expected list_dir success')
+    expect(result.value).toEqual({
+      path: '/abs/src',
+      entries: [
+        { name: 'lib', type: 'directory' },
+        { name: 'alpha.ts', type: 'file', size: 10 },
+        { name: 'zeta.ts', type: 'file', size: 2048 },
+        { name: 'socket', type: 'other' },
+      ],
+      omitted: 0,
+    })
+    expect(text(result)).toBe('/abs/src\nlib/\nalpha.ts  (10 B)\nzeta.ts  (2.0 KB)\nsocket  (other)')
+
+    const hidden = await call(ctx, 'list_dir', { path: 'src', include_hidden: true })
+    if (hidden.isError) throw new Error('expected list_dir success')
+    expect((hidden.value as { entries: { name: string }[] }).entries.map(item => item.name)).toContain('.hidden')
+  })
+
+  it('defaults to the workspace, reports an empty directory, and rejects a blank path', async () => {
+    const { ctx } = await setup()
+    const empty = await call(ctx, 'list_dir', {})
+    if (empty.isError) throw new Error('expected list_dir success')
+    expect(text(empty)).toBe('/abs/. is empty')
+    const blank = await call(ctx, 'list_dir', { path: '  ' })
+    expect(blank.isError).toBe(true)
+    expect(text(blank)).toContain('path must be a non-empty string')
+  })
+
+  it('caps the inline listing and says how many entries were left out', () => {
+    const many = Array.from({ length: LIST_DIR_MAX_ENTRIES + 2 }, (_, index) => entry(`f${String(index).padStart(4, '0')}`, 'file', 1024 * 1024 * 3))
+    const listing = projectEntries(many, false)
+    expect(listing.entries).toHaveLength(LIST_DIR_MAX_ENTRIES)
+    expect(listing.omitted).toBe(2)
+    expect(formatListDirOutput('/abs/big', listing)).toMatch(/f0000  \(3\.0 MB\)[\s\S]*… and 2 more entries; narrow the path or use glob\.$/)
+    expect(formatListDirOutput('/abs/one', { entries: [{ name: 'a', type: 'file' }], omitted: 1 })).toContain('… and 1 more entry;')
+  })
+})
+
 describe('edit tool', () => {
   it('formats a single-replacement success after a read', async () => {
     const { ctx, fs } = await setup()
@@ -621,6 +680,11 @@ describe('tool-owned presentation (pure presentCall)', () => {
     expect(await presentCall('read', { file_path: 'a.txt', limit: 10 })).toEqual({
       card: 'generic', title: 'Read a.txt (1 - 10)', kind: 'read', locations: [{ path: 'a.txt', line: 1 }],
     })
+  })
+
+  it('list_dir: presentCall titles the listed path, defaulting to the workspace', async () => {
+    expect(await presentCall('list_dir', { path: 'src' })).toEqual({ card: 'generic', title: 'List src', locations: [] })
+    expect(await presentCall('list_dir', {})).toEqual({ card: 'generic', title: 'List .', locations: [] })
   })
 
   it('edit: an edits array yields one diff per edit', async () => {
