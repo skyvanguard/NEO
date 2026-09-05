@@ -45,7 +45,8 @@ export interface ShellExecRequest {
    * Foreground stdout capture budget in bytes. Absent uses the executor's
    * default output cap. Trusted in-process consumers use this when they must
    * parse complete stdout up to their own bounded limit; the model-facing bash
-   * tool does not expose it as a parameter.
+   * tool exposes it as `max_output_bytes` so a chatty command can be capped
+   * below the default instead of spending the whole budget on its tail.
    */
   stdoutMaxBytes?: number | undefined
   /** Abort signal — implementations kill the command when it fires. */

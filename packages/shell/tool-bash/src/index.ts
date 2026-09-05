@@ -46,6 +46,7 @@ interface BashToolArgs {
   command: string
   description: string
   timeoutMs?: number
+  max_output_bytes?: number
   workdir?: string
   run_in_background?: boolean
   sandbox_permissions?: string
@@ -61,6 +62,9 @@ function validateBashArgs(args: BashToolArgs): void {
   }
   if (args.timeoutMs !== undefined && (!Number.isFinite(args.timeoutMs) || args.timeoutMs <= 0)) {
     throw new Error(`invalid timeoutMs: expected a positive number, got ${JSON.stringify(args.timeoutMs)}`)
+  }
+  if (args.max_output_bytes !== undefined && (!Number.isInteger(args.max_output_bytes) || args.max_output_bytes <= 0)) {
+    throw new Error(`invalid max_output_bytes: expected a positive integer, got ${JSON.stringify(args.max_output_bytes)}`)
   }
   // The escalation pairing (sandbox_permissions ⇔ justification, non-empty) is
   // the shared rule both enforcing families validate identically.
@@ -252,6 +256,11 @@ export function apply(ctx: Context, config: Config = {}): void {
           + '"git status" → "Show working tree status"; "npm install" → "Install package dependencies".',
       },
       timeoutMs: { type: 'number', description: 'Timeout in milliseconds. The executor applies its configured default and cap, and kills the command on expiry.' },
+      max_output_bytes: {
+        type: 'number',
+        description: 'Stdout bytes kept in the result (the tail); the rest spills to a file whose path the result names. '
+          + 'Defaults to the executor cap (24 KB). Lower it for chatty commands whose tail is enough; raise it only when the whole output must be read inline.',
+      },
       workdir: { type: 'string', description: 'Working directory for this command. Defaults to the session workspace; a relative path is resolved against it.' },
       ...backgroundEnabled ? {
         run_in_background: { type: 'boolean' as const, description: 'Run in the background and return a job id immediately (collect with job_output, stop with job_kill). No timeout applies.' },
@@ -343,6 +352,7 @@ export function apply(ctx: Context, config: Config = {}): void {
         command: args.command,
         ...workdir !== undefined ? { workdir } : {},
         ...args.timeoutMs !== undefined ? { timeoutMs: args.timeoutMs } : {},
+        ...args.max_output_bytes !== undefined ? { stdoutMaxBytes: args.max_output_bytes } : {},
         dshEnv,
         ...policy !== undefined ? { sandboxPolicy: policy } : {},
       }
