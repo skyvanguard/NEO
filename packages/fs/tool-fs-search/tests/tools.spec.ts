@@ -359,6 +359,8 @@ describe('command construction (plain argv)', () => {
       '--glob=!**/dist', '--glob=!**/dist/**',
       '--glob=!build/**/*.map',
     ])
+    // A backslash escapes in ripgrep globs: a Windows-style entry means its separator.
+    expect(tail({ pattern: '*', exclude: ['vendor\\lib'] })).toEqual(['--glob=!vendor/lib'])
   })
 
   it('glob: the search root rides behind -- as a plain element', () => {

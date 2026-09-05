@@ -36,6 +36,8 @@ const DEFAULT_GRACE_MS = 3_000
 
 /** Default per-stream spill cap (the `maxSpillBytes` config). */
 const DEFAULT_MAX_SPILL_BYTES = 64 * 1024 * 1024
+/** Ceiling for a per-call stdout budget raised through `stdoutMaxBytes` (the bash tool's `max_output_bytes`). */
+const DEFAULT_MAX_REQUESTED_OUTPUT_BYTES = 256_000
 
 /** Plugin config (all optional — `static Config` supplies the defaults). */
 export interface Config {
@@ -47,6 +49,8 @@ export interface Config {
   maxTimeoutMs?: number
   /** Per-stream in-memory output cap; overflow spills to a temp file. */
   maxOutputBytes?: number
+  /** Ceiling for a per-call stdout budget raised through `stdoutMaxBytes` (the bash tool's `max_output_bytes`). */
+  maxRequestedOutputBytes?: number
   /** Per-stream spill-file cap; larger streams retain only their in-memory tail. */
   maxSpillBytes?: number
   /** Grace period for kill escalation and inherited pipes; at most `MAX_TIMER_DELAY_MS`. */
@@ -85,6 +89,7 @@ export function assertServiceableBashConfig(config: Config): void {
   assertPositiveFinite('timeoutMs', resolved.timeoutMs)
   assertPositiveFinite('maxTimeoutMs', resolved.maxTimeoutMs)
   assertPositiveFinite('maxOutputBytes', resolved.maxOutputBytes)
+  assertPositiveFinite('maxRequestedOutputBytes', resolved.maxRequestedOutputBytes)
   assertPositiveFinite('maxSpillBytes', resolved.maxSpillBytes)
   assertPositiveFinite('graceMs', resolved.graceMs)
   if (resolved.graceMs > MAX_TIMER_DELAY_MS) {
@@ -107,6 +112,7 @@ export class LocalBashExecutor extends ShellExecutor {
     timeoutMs: z.number().default(120_000),
     maxTimeoutMs: z.number().default(600_000),
     maxOutputBytes: z.number().default(24_000),
+    maxRequestedOutputBytes: z.number().default(DEFAULT_MAX_REQUESTED_OUTPUT_BYTES),
     maxSpillBytes: z.number().default(DEFAULT_MAX_SPILL_BYTES),
     graceMs: z.number().default(DEFAULT_GRACE_MS),
   })
@@ -150,8 +156,12 @@ export class LocalBashExecutor extends ShellExecutor {
       this.config.maxTimeoutMs,
       'bash-local: request.timeoutMs',
     )
-    const stdoutMaxBytes = request.stdoutMaxBytes ?? this.config.maxOutputBytes
-    assertPositiveFinite('request.stdoutMaxBytes', stdoutMaxBytes)
+    const requestedStdout = request.stdoutMaxBytes ?? this.config.maxOutputBytes
+    assertPositiveFinite('request.stdoutMaxBytes', requestedStdout)
+    // A caller may lower its stdout budget freely but raise it only up to the
+    // configured ceiling: an unbounded request would hand a whole stream back
+    // inline, untruncated and unannounced, which is what the cap exists to stop.
+    const stdoutMaxBytes = Math.min(requestedStdout, this.config.maxRequestedOutputBytes)
     return {
       command: request.command,
       workdir: request.workdir ?? this.config.cwd ?? process.cwd(),

@@ -103,9 +103,12 @@ export function parseGlobArgs(args: { pattern: string; path?: string; exclude?: 
  * @returns the argv elements excluding it.
  */
 function excludeGlobs(entry: string): string[] {
-  return /[/\\*?[\]{}]/.test(entry)
-    ? [`--glob=!${entry}`]
-    : [`--glob=!**/${entry}`, `--glob=!**/${entry}/**`]
+  // A backslash is an escape in ripgrep globs, so a Windows-style path would
+  // exclude the wrong thing silently; treat it as the separator it was meant as.
+  const normalised = entry.replaceAll('\\', '/')
+  return /[/*?[\]{}]/.test(normalised)
+    ? [`--glob=!${normalised}`]
+    : [`--glob=!**/${normalised}`, `--glob=!**/${normalised}/**`]
 }
 
 /**

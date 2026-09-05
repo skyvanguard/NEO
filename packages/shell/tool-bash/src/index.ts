@@ -259,7 +259,7 @@ export function apply(ctx: Context, config: Config = {}): void {
       max_output_bytes: {
         type: 'number',
         description: 'Stdout bytes kept in the result (the tail); the rest spills to a file whose path the result names. '
-          + 'Defaults to the executor cap (24 KB). Lower it for chatty commands whose tail is enough; raise it only when the whole output must be read inline.',
+          + 'Defaults to the executor cap (24 KB). Lower it for chatty commands whose tail is enough; raise it only when the whole output must be read inline (the executor clamps it to its ceiling, 256 KB by default).',
       },
       workdir: { type: 'string', description: 'Working directory for this command. Defaults to the session workspace; a relative path is resolved against it.' },
       ...backgroundEnabled ? {

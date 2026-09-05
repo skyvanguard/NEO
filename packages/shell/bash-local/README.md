@@ -16,6 +16,7 @@ The package root exports the default and named `LocalBashExecutor` plugin plus i
     timeoutMs: 120000          # default foreground timeout
     maxTimeoutMs: 600000       # cap for per-call overrides
     maxOutputBytes: 24000      # per-stream in-memory cap; overflow spills to disk
+    maxRequestedOutputBytes: 256000  # ceiling for a per-call stdout budget raised via stdoutMaxBytes
     maxSpillBytes: 67108864    # per-stream full-output spill cap
     graceMs: 3000              # kill escalation and post-exit pipe-drain grace
 ```
