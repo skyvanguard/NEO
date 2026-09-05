@@ -7,7 +7,7 @@
  * @module dsh-llm-deepseek/serialize
  */
 
-import { closeDanglingToolCalls, contentHasImage, LlmError } from '@deepseek-ai/dsh-llm'
+import { closeDanglingToolCalls, contentHasImage, LlmError, sanitizeText } from '@deepseek-ai/dsh-llm'
 import type { ContentBlock, GenerateOptions, Message } from '@deepseek-ai/dsh-llm'
 import type { WireMessage, WireRequest, WireTool } from './types.ts'
 
@@ -54,10 +54,10 @@ function resolveThinking(options: GenerateOptions, defaults: RequestDefaults): R
 
 /** Join the text blocks of a message (used for user/tool-result content). */
 function flattenText(blocks: ContentBlock[]): string {
-  return blocks
+  return sanitizeText(blocks
     .filter(block => block.type === 'text')
     .map(block => block.text)
-    .join('')
+    .join(''))
 }
 
 /** Reject core image content before any text-flattening path can silently erase it. */
@@ -154,7 +154,7 @@ export function serializeRequest(
 ): WireRequest {
   const messages: WireMessage[] = []
   if (options.system !== undefined) {
-    messages.push({ role: 'system', content: options.system })
+    messages.push({ role: 'system', content: sanitizeText(options.system) })
   }
   messages.push(...serializeMessages(options.messages))
 

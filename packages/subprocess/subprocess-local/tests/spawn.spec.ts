@@ -453,6 +453,23 @@ describe('OutputCollector', () => {
     expect(out.truncated).toBe(true)
   })
 
+  it('drops control bytes from decoded text while the spill keeps the raw bytes', () => {
+    // `grep -a` over a binary file is enough to put NUL/BEL/ESC into stdout.
+    // They are valid single-byte UTF-8, so toString() passes them through, and
+    // downstream a NUL truncates the prompt the multimodal tokenizer sees.
+    const raw = Buffer.concat([Buffer.from('peer'), Buffer.from([0, 7, 27]), Buffer.from(' slot\tok\r\n')])
+    const collector = new OutputCollector(100, 100, 'binary', spillDir)
+    collector.push(raw)
+    expect(collector.readFrom(0).text).toBe('peer slot\tok\r\n')
+    expect(collector.finalize().text).toBe('peer slot\tok\r\n')
+
+    const spilling = new OutputCollector(4, 100, 'binary-spill', spillDir)
+    spilling.push(raw)
+    const out = spilling.finalize()
+    expect(out.truncated).toBe(true)
+    expect(readFileSync(out.spillPath!)).toEqual(raw)
+  })
+
   it('readFrom returns increments and flags lossy reads', () => {
     const collector = new OutputCollector(10, 100, 'test', spillDir)
     collector.push(Buffer.from('aaaaa'))

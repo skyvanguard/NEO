@@ -4,12 +4,11 @@
  * @module dsh-llm-pi-ai/context
  */
 
-import { CallId, closeDanglingToolCalls, contentHasImage, LlmError } from '@deepseek-ai/dsh-llm'
+import { CallId, closeDanglingToolCalls, contentHasImage, LlmError, sanitizeText } from '@deepseek-ai/dsh-llm'
 import type { ContentBlock, GenerateOptions, Message } from '@deepseek-ai/dsh-llm'
 import type { AttachmentStore } from '@deepseek-ai/dsh-attachment'
 import type { Context as PiContext, ImageContent, Message as PiMessage, TextContent, Tool as PiTool } from '@earendil-works/pi-ai'
 import { toPiAssistant } from './replay.ts'
-import { sanitizeText } from './sanitize.ts'
 
 /** Join the text blocks of a harness message. */
 function flattenText(message: Message): string {

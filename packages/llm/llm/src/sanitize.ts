@@ -1,5 +1,5 @@
 /**
- * Outgoing-text hygiene for pi-ai requests.
+ * Outgoing-text hygiene shared by every provider adapter.
  *
  * llama.cpp hands the rendered prompt to `mtmd_tokenize` as a C string on its
  * multimodal path: an embedded NUL truncates it, every media marker past the
@@ -9,10 +9,11 @@
  * every later request that carries an image.
  *
  * Tool output is the usual source — `grep -a` over a binary file is enough.
- * Sanitising at this boundary covers every producer (shell, file reads, web
- * fetches) instead of one tool at a time.
+ * The subprocess capture drops these bytes at ingestion; this boundary is the
+ * second line, covering every other producer (file reads, web fetches, plugin
+ * messages) for every adapter instead of one tool at a time.
  *
- * @module dsh-llm-pi-ai/sanitize
+ * @module @deepseek-ai/dsh-llm/sanitize
  */
 
 // C0 controls except tab, line feed and carriage return, which are legitimate

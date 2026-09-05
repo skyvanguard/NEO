@@ -29,6 +29,20 @@ describe('serializeMessages', () => {
     expect(wire).toEqual([{ role: 'system', content: 'be brief' }])
   })
 
+  it('strips control bytes from every outgoing text', () => {
+    const nul = String.fromCharCode(0)
+    const wire = serializeRequest(request({
+      system: `be${nul} brief`,
+      messages: [
+        createUserMessage({ content: [{ type: 'text', text: `peer${nul} slot` }], source: { kind: 'plugin', plugin: 'test' } }),
+      ],
+    }))
+    expect(wire.messages).toEqual([
+      { role: 'system', content: 'be brief' },
+      { role: 'user', content: 'peer slot' },
+    ])
+  })
+
   it('closes an assistant tool call that never received a result', () => {
     const wire = serializeMessages([
       createMessage({
