@@ -1008,6 +1008,20 @@ describe('grep results', () => {
     ] })
   })
 
+  it('context rows reach the model marked and uncounted through the whole tool', async () => {
+    const { ctx, subprocess } = await setup()
+    const contextLine = JSON.stringify({ type: 'context', data: { path: { text: 'a.ts' }, lines: { text: 'before\n' }, line_number: 1, absolute_offset: 0, submatches: [] } })
+    subprocess.handler = () => runResult(`${contextLine}\n${matchLine('a.ts', 2, 'hit\n')}\n`)
+    const result = await call(ctx, 'grep', { pattern: 'hit', context: 1 })
+    if (result.isError) throw new Error('expected grep success')
+    expect(result.value).toEqual({ matches: [
+      { path: 'a.ts', lineNumber: 1, line: 'before', context: true },
+      { path: 'a.ts', lineNumber: 2, line: 'hit' },
+    ] })
+    expect(text(result)).toBe('Found 1 match\n\na.ts\nLine 1- before\nLine 2: hit')
+    expect(subprocess.spawns.at(-1)?.argv).toContain('--context=1')
+  })
+
   it('reports a single match in the singular', async () => {
     const { ctx, subprocess } = await setup()
     subprocess.handler = () => runResult(`${matchLine('a.ts', 1, 'hit')}\n`)

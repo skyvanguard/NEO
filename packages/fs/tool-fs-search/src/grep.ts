@@ -187,7 +187,7 @@ function parseRecord(line: string, includeContext: boolean): GrepMatch | undefin
   if (typeof data.line_number !== 'number') throw malformedRecord('a match record has no line number')
   if (typeof data.lines !== 'object' || data.lines === null) throw malformedRecord('a match record has no line content')
   const lines = data.lines as { text?: unknown; bytes?: unknown }
-  const contextRow = record.type === 'context' ? { context: true as const } : {}
+  const contextRow = record.type === 'context' ? { context: true } : {}
   if (typeof lines.text === 'string') {
     return { path: pathText, lineNumber: data.line_number, line: lines.text.replace(/\r?\n$/, ''), ...contextRow }
   }
@@ -368,6 +368,7 @@ export function applyGrepTool(ctx: Context, caps: GrepToolCaps): void {
                 path: { type: 'string', required: true },
                 lineNumber: { type: 'integer', required: true },
                 line: { type: 'string', required: true },
+                context: { type: 'boolean' },
               },
             },
           },
@@ -393,6 +394,7 @@ export function applyGrepTool(ctx: Context, caps: GrepToolCaps): void {
           path: toWorkdirRelative(raw.path, run.workdir),
           lineNumber: raw.lineNumber,
           line: raw.line,
+          ...raw.context === true ? { context: true } : {},
         }
         all.push(match)
       }
