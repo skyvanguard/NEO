@@ -166,3 +166,58 @@ No se escribe código de esta fase sin el perfil. Es la única fase donde la lec
 Fase 1 completa (commits 1–5) → Fase 2 (6–7) → Fase 3 (8–9) → Fase 4 en el orden de la tabla → Fase 5 solo con perfil.
 
 Las fases 1 a 3 suman unas 300 líneas de cambio y cierran todo lo que hoy puede dejar una sesión muerta o reprocesando 200K tokens. La fase 4 es mejora sostenida y se puede intercalar.
+
+---
+
+## Seguimiento de ejecución (2026-09-05, rama `fix/harness-auditoria`, 26 commits)
+
+Cada fase se cerró con la suite completa comparada contra `master` en la misma máquina y una revisión de código independiente; los hallazgos de cada revisión se corrigieron dentro de la fase antes de pasar a la siguiente.
+
+### Línea base preexistente (no atribuible a la rama)
+
+- **89 tests fallan en `master` en esta máquina Windows** y los mismos 89 en la rama: rebranding a "NEO" en el system prompt (los tests esperan "DeepSeek Harness"), `symlink` sin privilegios, `DSH_TELEMETRY_MODE`, especificaciones de CI en `scripts/`. Dos tests son flaky (`settings-file/concurrency`, `oxlint-contract`) y alternan entre corridas.
+- **Snapshots ACP (`test:snapshot`) rojos en `master`** por el rebranding; además ahora incluyen el bracket `compaction/start`+`end` de fallo de presión (esperado). Re-grabar tras corregir el rebranding; requiere clave.
+- **Tres generadores no corren en `master`** por servicios del fork sin documentar: `gen-cordis-catalog` (`documentAttach`, `usageStats` sin `SERVICE_PAGE`), `gen-config-catalog` (`prompt-section` `Config.sections` sin JSDoc). `PruneOptions` quedó clasificado para cuando se reparen. El catálogo de tools sí se regeneró.
+- Los tests de `subprocess-local`, `bash-local` y `tool-bash` están excluidos en Windows por configuración; los cambios ahí se verificaron con `tsx` directo y se corren en Linux al hacer el pull.
+
+### Fase 1 — contención
+
+| Commit | Qué | Desvío respecto al plan |
+|---|---|---|
+| `fc259c4d42` | replayState alineado en `max-tokens`; desajuste degrada a foráneo | — |
+| `f021621b91` | resultados sintéticos del scheduler + `closeDanglingToolCalls` en ambos adaptadores | **No se endureció el invariante de `step/end`** ni se tocó `repair.ts`: si el registro de invariantes se montara, las sesiones ya rotas pasarían de mudas a incargables. La cura de sesiones viejas es en la conversión al proveedor. |
+| `694ed493d5` | suspensión de durabilidad tras 5 fallos idénticos del mismo batch | **No se descartan batches sueltos**: los `seq` en disco son contiguos y todo lo posterior quedaría rechazado. Se suspende la sesión de forma visible. |
+| `fe11ecbcaa` | saneo en la captura del subprocess; `sanitizeText` en `dsh-llm` para ambos adaptadores | — |
+| `079371767d` | fallo de compactación previo al bracket registrado en la sesión | — |
+| Revisión | `0ca17536e7` resultados reales detrás de un fallo del scheduler; `340e9d4850` sin bracket sobre un start huérfano; `95ebc0ab74` `DurabilitySuspendedError` (la política de checkpoint sigue con persistencia, el resto recibe el fallo); `acac710dc2` la captura descarta solo NUL (ESC alimenta el render ANSI); `e1d76cb530` docs | |
+
+### Fase 2 — token-meter
+
+| `3c816548ed` | precio de imágenes por cuadrícula (ceil(w/32)·ceil(h/32), 64–16.384) | El commit 7 del plan (calibrar con `usage` real) **no se hizo**: el meter ya ancla en el `usage` del proveedor cuando supera la heurística; el hueco era el delta intra-paso con imágenes. |
+| `af495d1401` | test de regresión: el ancla sobrevive a una imagen | |
+
+Dato corregido durante la fase: la compactación **sí** dispara en producción (la serie de `usage` muestra caídas 208K→77K y 243K→93K); lo que hacía era llegar dos pasos tarde, hasta 243K sobre 262K.
+
+### Fase 3 — slot único
+
+| `1656d4032a` | `subagent` y `subagent_fork` en one-shot en base y presets; `maxConcurrentAgents: 1` | — |
+| `616c6f9076` | la poda por presión se detiene al bajar del umbral | **No se acotó al rango sombreado**: podar la cola rompe el prefijo solo desde ese nodo y a veces evita una compactación completa. |
+| `b00a220677` | `send_message`/`interrupt_agent`/`list_agents` deshabilitadas junto con one-shot | hallazgo de revisión |
+
+### Fase 4 — herramientas
+
+`ebf1ea8a5a` `max_output_bytes` (default 24 KB) · `a50a717bab` `glob exclude` sin `node_modules` · `14ce8bb578` `grep output_mode/context/head_limit` · `66a998f0bc` near-miss en `edit` · `f66016fc49` entrega del subagente sin reasoning y con tope · `618854c507` `edits[]` atómico en el seam `fs` · `4a5dbe3b1a` `list_dir` · `718d42cdb0` catálogo de tools. Revisión: `330c207b64` (`\` en exclude; techo `maxRequestedOutputBytes` 256 KB) y `b4f02970ad` (contexto de grep marcado `Line N-` y no contado; prefijo `N: ` solo si consecutivo en todas las líneas; escaneo acotado).
+
+### Fase 5 — rendimiento (con medición)
+
+- `session.append` cuesta 4–5 µs por token y **no crece** con el log (`packages/core/session/tests/bench-append.mts`).
+- El seguidor del token-meter leía `session.events` en cada evento y el getter reconstruye el snapshot completo tras cada append: 70→169 µs por token creciendo con el log. `d3a283895b` añade `Session.eventAt(seq)` (O(1)) y el meter lo usa: 6–8 µs, plano (`packages/llm/token-meter/tests/bench-follow.mts`).
+- `b1b8a7ce2c`: el builder del chat extiende el orden cuando el lote solo añade nodos al final, en vez de re-ordenar todo el store por evento; test de equivalencia contra un rebuild completo.
+- **Sin cerrar**: la atribución completa del 34 % de CPU del proceso en kryon exige un perfil real (`node --cpu-prof` sobre el servicio); el mecanismo del meter era el único lector del snapshot completo por evento que se encontró estáticamente.
+
+### Para el pull en kryon (cuando avises)
+
+1. En kryon: `cd ~/NEO && git stash` (tiene cambios sin commitear en `free-scan`, `api/remotes`, `client/*` y los cuatro archivos del fix del NUL copiados a mano) → `git fetch && git checkout fix/harness-auditoria` → `pnpm install` → `pnpm vitest run packages/subprocess packages/shell` (los excluidos en Windows).
+2. Motor: `--no-context-shift`, `--tensor-split 56,44`, `-ub 2048 -b 4096`, `-t 16`, `--metrics`, `--cache-reuse 256` (ver `docs/auditoria-llama-server-kryon.html`).
+3. `systemctl --user restart neo-web` (mata emuladores y jobs hijos: coordinar).
+4. Después: perfil de CPU del proceso para cerrar la Fase 5.
