@@ -568,6 +568,19 @@ export class Session {
   }
 
   /**
+   * One durable event by sequence number, without materialising the whole
+   * snapshot. `events` rebuilds a frozen copy of the entire log after every
+   * append, so a consumer that follows the log incrementally — one that runs
+   * on each `session/event` — must read through here, or it pays a full copy
+   * per event and the cost grows with the session.
+   * @param seq - the event's sequence number (its index in the log).
+   * @returns the deep-frozen event, or undefined past the end of the log.
+   */
+  eventAt(seq: number): SessionEvent | undefined {
+    return this.log[seq]
+  }
+
+  /**
    * Append one typed event to the log and synchronously notify observers via
    * the store-owned, module-private publication hooks. The hot path never blocks
    * on I/O — persistence plugins buffer asynchronously. Once the event enters

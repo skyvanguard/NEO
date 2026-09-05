@@ -11,6 +11,20 @@ import SessionStore, {
 } from '@deepseek-ai/dsh-session'
 import type { CreateSessionOptions, SessionEventType, SessionHeader, SessionSurface, TodoItem } from '@deepseek-ai/dsh-session'
 
+describe('Session.eventAt', () => {
+  it('reads one event by seq without rebuilding the events snapshot', () => {
+    const session = Session.create(SessionId('event-at'))
+    session.append('turn/start', { turn: 1 })
+    const snapshot = session.events
+    session.append('turn/end', { turn: 1, reason: { kind: 'completed' } })
+    expect(session.eventAt(1)).toMatchObject({ type: 'turn/end', seq: 1 })
+    expect(session.eventAt(2)).toBeUndefined()
+    // The earlier snapshot is unchanged and eventAt did not force a new one.
+    expect(snapshot).toHaveLength(1)
+    expect(Object.isFrozen(session.eventAt(0))).toBe(true)
+  })
+})
+
 describe('Session', () => {
   it('exposes one stable readonly surface view', () => {
     const session = Session.create(SessionId('surface-view'))

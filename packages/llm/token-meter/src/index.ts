@@ -171,9 +171,11 @@ export class TokenMeter extends Service {
       this.states.set(session, state)
     }
 
-    while (state.consumedEvents < session.events.length) {
+    // Incremental follow through eventAt: this runs on every session/event,
+    // and `session.events` would rebuild the whole frozen snapshot each time.
+    while (state.consumedEvents < session.seq) {
       // oxlint-disable-next-line typescript/no-non-null-assertion -- contiguous session seqs index the durable log
-      const event = session.events[state.consumedEvents]!
+      const event = session.eventAt(state.consumedEvents)!
       this._foldEvent(session, state, event)
       state.consumedEvents += 1
     }
