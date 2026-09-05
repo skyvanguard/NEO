@@ -648,8 +648,11 @@ function restoreLineEndings(content: string, lineEndings: LineEndings): string {
   return lineEndings === 'LF' ? content : normalizeLineEndings(content).split('\n').join('\r\n')
 }
 
-/** The `N: ` prefix `read` puts in front of every line it renders. */
-const READ_LINE_PREFIX = /^\s*\d+: ?/
+/** The `N: ` prefix `read` puts in front of every line it renders; captures the number. */
+const READ_LINE_PREFIX = /^\s*(\d+): ?/
+
+/** Line-by-window products past this size skip the whitespace diagnosis rather than stall the failure path. */
+const NEAR_MISS_SCAN_BUDGET = 2_000_000
 
 /** Collapse runs of whitespace so indentation and spacing differences do not matter. */
 function collapseWhitespace(text: string): string {
@@ -666,16 +669,29 @@ function collapseWhitespace(text: string): string {
  * @returns the diagnosis to append to the error, or undefined when nothing nearly matches.
  */
 function describeNearMiss(content: string, oldNorm: string): string | undefined {
-  const withoutPrefixes = oldNorm.split('\n').map(line => line.replace(READ_LINE_PREFIX, '')).join('\n')
-  if (withoutPrefixes !== oldNorm && content.includes(withoutPrefixes)) {
-    return 'old_string carries the "N: " line-number prefixes that read adds; pass the text without them'
+  const requested = oldNorm.split('\n')
+  // A `read` result prefixes EVERY line with its number, and the numbers run
+  // consecutively; one numeric key inside real content does not qualify.
+  const numbers = requested.map(line => READ_LINE_PREFIX.exec(line)?.[1])
+  const looksPrefixed = requested.length > 0
+    && numbers.every((value, index) => value !== undefined && (index === 0 || Number(value) === Number(numbers[index - 1]) + 1))
+  if (looksPrefixed) {
+    const withoutPrefixes = requested.map(line => line.replace(READ_LINE_PREFIX, '')).join('\n')
+    if (content.includes(withoutPrefixes)) {
+      return 'old_string carries the "N: " line-number prefixes that read adds; pass the text without them'
+    }
   }
-  const wanted = collapseWhitespace(withoutPrefixes)
+  const wanted = collapseWhitespace(oldNorm)
   if (wanted.length === 0) return undefined
   const lines = content.split('\n')
-  const wantedLines = withoutPrefixes.split('\n').length
+  // Bounded: the diagnosis is a courtesy on the failure path, not a search
+  // engine. A sliding window over a huge file with a long old_string would
+  // cost seconds; past the budget the plain message is the honest answer.
+  const wantedLines = requested.length
+  if (lines.length * wantedLines > NEAR_MISS_SCAN_BUDGET) return undefined
+  const collapsed = lines.map(collapseWhitespace)
   for (let start = 0; start + wantedLines <= lines.length; start += 1) {
-    const window = collapseWhitespace(lines.slice(start, start + wantedLines).join('\n'))
+    const window = collapsed.slice(start, start + wantedLines).join(' ').replaceAll(/ +/g, ' ').trim()
     if (window === wanted) {
       return `a match that differs only in whitespace or indentation starts at line ${start + 1}; copy it exactly`
     }

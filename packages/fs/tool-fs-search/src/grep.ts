@@ -187,11 +187,12 @@ function parseRecord(line: string, includeContext: boolean): GrepMatch | undefin
   if (typeof data.line_number !== 'number') throw malformedRecord('a match record has no line number')
   if (typeof data.lines !== 'object' || data.lines === null) throw malformedRecord('a match record has no line content')
   const lines = data.lines as { text?: unknown; bytes?: unknown }
+  const contextRow = record.type === 'context' ? { context: true as const } : {}
   if (typeof lines.text === 'string') {
-    return { path: pathText, lineNumber: data.line_number, line: lines.text.replace(/\r?\n$/, '') }
+    return { path: pathText, lineNumber: data.line_number, line: lines.text.replace(/\r?\n$/, ''), ...contextRow }
   }
   if (typeof lines.bytes === 'string') {
-    return { path: pathText, lineNumber: data.line_number, line: '(line is not valid UTF-8)' }
+    return { path: pathText, lineNumber: data.line_number, line: '(line is not valid UTF-8)', ...contextRow }
   }
   throw malformedRecord('a match record has neither line text nor bytes')
 }
@@ -247,7 +248,9 @@ export function formatGrepMatches(matches: GrepMatch[]): string {
   }
   const sections: string[] = []
   for (const [path, group] of byFile) {
-    sections.push(`${path}\n${group.map(m => `Line ${m.lineNumber}: ${m.line}`).join('\n')}`)
+    // A context row reads `Line N- text`, a match `Line N: text` — the same
+    // `:` versus `-` distinction ripgrep itself prints.
+    sections.push(`${path}\n${group.map(m => `Line ${m.lineNumber}${m.context === true ? '-' : ':'} ${m.line}`).join('\n')}`)
   }
   return sections.join('\n\n')
 }
@@ -263,9 +266,12 @@ export function formatGrepMatches(matches: GrepMatch[]): string {
  * @returns the model-facing text.
  */
 export function formatGrepOutput(retained: RetainedItems<GrepMatch>, spillRef: SpillRef | undefined): string {
+  // Only real matches count; context rows are shown but never counted.
+  const kept = retained.items.filter(item => item.context !== true).length
+  const seen = kept + (retained.seen - retained.kept)
   const header = retained.truncated
-    ? `Found ${retained.kept} of ${retained.seen} matches`
-    : `Found ${retained.seen} ${matchNoun(retained.seen)}`
+    ? `Found ${kept} of ${seen} matches`
+    : `Found ${kept} ${matchNoun(kept)}`
   const body = formatGrepMatches(retained.items)
   if (!retained.truncated) return `${header}\n\n${body}`
   const recovery = spillRef !== undefined

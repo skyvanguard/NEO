@@ -905,9 +905,20 @@ describe('applyLiteralEdit', () => {
       .toThrow(/starts at line 2/)
   })
 
-  it('points out copied read line-number prefixes', () => {
+  it('points out copied read line-number prefixes only when every line carries a consecutive one', () => {
     expect(() => applyLiteralEdit('alpha\nbeta\n', '1: alpha\n2: beta', 'X', false, 'f'))
       .toThrow(/"N: " line-number prefixes/)
+    // Numeric keys that are real content: no prefix diagnosis, no false advice.
+    const content = 'const m = {\n  1: one,\n  2: two,\n}\nlist = [one, two]\n'
+    expect(() => applyLiteralEdit(content, '1: one,\n7: two,', 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
+  })
+
+  it('skips the whitespace diagnosis past the scan budget instead of stalling', () => {
+    const content = 'line\n'.repeat(200_000)
+    const wanted = Array.from({ length: 20 }, () => '  line').join('\n')
+    expect(() => applyLiteralEdit(content, wanted, 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
   })
 
   it('gives no diagnosis when nothing nearly matches', () => {

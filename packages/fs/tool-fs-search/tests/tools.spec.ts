@@ -23,6 +23,7 @@ import { rgPath } from '@vscode/ripgrep'
 import { SpillLocator, SpillStore } from '@deepseek-ai/dsh-spill'
 import type { SaveTextSpill, SpillRef } from '@deepseek-ai/dsh-spill'
 import * as ToolFsSearch from '@deepseek-ai/dsh-tool-fs-search'
+import { retainGrepMatches } from '../src/search-core.ts'
 import {
   buildGlobCommand,
   parseGlobArgs,
@@ -31,6 +32,7 @@ import {
   GREP_MAX_CONTEXT,
   parseGrepArgs,
   formatGrepMatches,
+  formatGrepOutput,
   parseGrepMatches,
   presentGlobCall,
   presentGlobResult,
@@ -403,7 +405,11 @@ describe('command construction (plain argv)', () => {
     const contextLine = JSON.stringify({ type: 'context', data: { path: { text: 'a.txt' }, lines: { text: 'before\n' }, line_number: 1, absolute_offset: 0, submatches: [] } })
     const stdout = `${contextLine}\n${matchLine('a.txt', 2, 'hit\n')}\n${matchLine('b.txt', 9, 'hit\n')}\n`
     expect(parseGrepMatches(stdout).map(match => match.lineNumber)).toEqual([2, 9])
-    expect(parseGrepMatches(stdout, true).map(match => `${match.path}:${match.lineNumber}`)).toEqual(['a.txt:1', 'a.txt:2', 'b.txt:9'])
+    expect(parseGrepMatches(stdout, true).map(match => `${match.path}:${match.lineNumber}${match.context === true ? '-' : ''}`))
+      .toEqual(['a.txt:1-', 'a.txt:2', 'b.txt:9'])
+    // Context rows render as `Line N-` and never count as matches.
+    expect(formatGrepMatches(parseGrepMatches(stdout, true))).toBe('a.txt\nLine 1- before\nLine 2: hit\n\nb.txt\nLine 9: hit')
+    expect(formatGrepOutput(retainGrepMatches(parseGrepMatches(stdout, true), 250, 2000), undefined)).toMatch(/^Found 2 matches/)
     expect(formatGrepFiles(parseGrepMatches(stdout))).toBe('Found 2 files with matches\n\na.txt\nb.txt')
     expect(formatGrepFiles([])).toBe('No matches found')
     expect(formatGrepFiles([{ path: 'a.txt', lineNumber: 1, line: '' }])).toBe('Found 1 file with matches\n\na.txt')
