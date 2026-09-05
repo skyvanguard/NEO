@@ -658,11 +658,12 @@ describe('tool-call scheduler: failure quiescence', () => {
       return prepared
     }
     const schedulerError = new Error('scheduler exploded')
-    const drainedError = new Error('sibling failed while draining')
     let rejectFirst: ((error: Error) => void) | undefined
+    // c1 never resolves until rejected; c2 completes for real behind it; c3 is
+    // still in prepare when the failure lands.
     scheduler.dispatch = exec => exec.callId === CallId('c1')
       ? new Promise((_resolve, reject) => { rejectFirst = reject })
-      : dispatch(exec).then(() => { throw drainedError })
+      : dispatch(exec)
     const agent = ctx.agentLoop.create(SessionId('scheduler-failure'), { provider: 'mock', model: 'mock' })
     let idle = false
     const idlePromise = waitForIdle(ctx, agent).then(() => { idle = true })
@@ -689,12 +690,81 @@ describe('tool-call scheduler: failure quiescence', () => {
     })
     // Every model-ordered call keeps a durable result: a dangling tool call
     // would make every later request provider-invalid for the session's life.
+    // A body that completed behind the failure keeps its real result — a
+    // synthetic failure there could make the model redo a non-idempotent
+    // operation that already took effect.
     const results = events(agent).filter(event => event.type === 'tool/result')
     expect(results.map(event => event.data.message.source.callId)).toEqual(['c1', 'c2', 'c3'])
-    for (const result of results) {
-      expect(result.data.error).toMatchObject({ code: TOOL_SCHEDULER_FAILED })
-      expect(result.data.message.content[0]).toMatchObject({ type: 'tool-result', isError: true })
+    expect(results[0]?.data.error).toMatchObject({ code: TOOL_SCHEDULER_FAILED })
+    expect(results[1]?.data.error).toBeUndefined()
+    expect(results[1]?.data.message.content[0]).toMatchObject({ type: 'tool-result', isError: false })
+    expect(results[2]?.data.error).toMatchObject({ code: TOOL_SCHEDULER_FAILED })
+  })
+
+  it('falls back to a synthetic result when post-execute of a completed body rejects during failure drain', async () => {
+    const adapter = new MockAdapter([
+      multiCall([
+        { id: 'c1', name: 'p', args: { id: '1' } },
+        { id: 'c2', name: 'p', args: { id: '2' } },
+      ]),
+    ])
+    const ctx = await harness(adapter, 2)
+    const gated = gatedParallelTool('p')
+    ctx.tools.register(gated.tool)
+    const scheduler = ctx.tools[TOOL_RUNTIME_SCHEDULER]
+    const dispatch = scheduler.dispatch.bind(scheduler)
+    let rejectFirst: ((error: Error) => void) | undefined
+    scheduler.dispatch = exec => exec.callId === CallId('c1')
+      ? new Promise((_resolve, reject) => { rejectFirst = reject })
+      : dispatch(exec)
+    scheduler.finalize = () => Promise.reject(new Error('post-execute exploded'))
+    const agent = ctx.agentLoop.create(SessionId('scheduler-failure-post'), { provider: 'mock', model: 'mock' })
+    const idlePromise = waitForIdle(ctx, agent)
+
+    agent.followup(createUserMessage({ content: [{ type: 'text', text: 'go' }], source: { kind: 'user' } }))
+    await until(() => gated.started.includes('2') && rejectFirst !== undefined)
+    gated.release('2')
+    await until(() => gated.pending().length === 0)
+    rejectFirst?.('scheduler exploded' as unknown as Error)
+    await idlePromise
+
+    const results = events(agent).filter(event => event.type === 'tool/result')
+    expect(results.map(event => event.data.message.source.callId)).toEqual(['c1', 'c2'])
+    expect(results[1]?.data.error).toMatchObject({ code: TOOL_SCHEDULER_FAILED })
+    expect(results[1]?.data.message.content[0]).toMatchObject({ isError: true, content: [{ type: 'text', text: 'Error: tool call could not complete: scheduler exploded' }] })
+  })
+
+  it('keeps a prepare-time final result that was waiting behind a scheduler failure', async () => {
+    const adapter = new MockAdapter([
+      multiCall([
+        { id: 'c1', name: 'p', args: { id: '1' } },
+        { id: 'c2', name: 'p', args: { id: '2' } },
+      ]),
+    ])
+    const ctx = await harness(adapter, 2)
+    const gated = gatedParallelTool('p')
+    ctx.tools.register(gated.tool)
+    const scheduler = ctx.tools[TOOL_RUNTIME_SCHEDULER]
+    const prepare = scheduler.prepare.bind(scheduler)
+    let rejectFirst: ((error: Error) => void) | undefined
+    scheduler.dispatch = () => new Promise((_resolve, reject) => { rejectFirst = reject })
+    scheduler.prepare = async (exec) => {
+      const prepared = await prepare(exec)
+      return exec.callId === CallId('c2')
+        ? { kind: 'final-result', exec: prepared.exec, result: { content: [{ type: 'text', text: 'settled early' }], isError: false, value: 'settled early' } }
+        : prepared
     }
+    const agent = ctx.agentLoop.create(SessionId('scheduler-failure-final'), { provider: 'mock', model: 'mock' })
+    const idlePromise = waitForIdle(ctx, agent)
+
+    agent.followup(createUserMessage({ content: [{ type: 'text', text: 'go' }], source: { kind: 'user' } }))
+    await until(() => rejectFirst !== undefined)
+    rejectFirst?.(new Error('scheduler exploded'))
+    await idlePromise
+
+    const results = events(agent).filter(event => event.type === 'tool/result')
+    expect(results.map(event => event.data.message.source.callId)).toEqual(['c1', 'c2'])
+    expect(results[1]?.data.message.content[0]).toMatchObject({ content: [{ type: 'text', text: 'settled early' }], isError: false })
   })
 })
 
