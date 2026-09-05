@@ -441,9 +441,11 @@ describe('toPiContext', () => {
     }
   })
 
-  it('rejects replay metadata whose blocks do not match the durable content', () => {
+  it('falls back to a foreign assistant when replay blocks do not match the durable content', () => {
+    // Durable content is the source of truth: a desynced replay state costs
+    // signature fidelity, never the session.
     const state = toPiReplayState(assistant({ content: [{ type: 'text', text: 'done' }] }))
-    expect(() => toPiContext({
+    expect(toPiContext({
       provider: 'deepseek',
       model: 'm',
       messages: [createMessage({
@@ -454,12 +456,16 @@ describe('toPiContext', () => {
           ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState: state },
         },
       })],
-    })).toThrow(/block 0 does not match assistant content/)
+    }).messages[0]).toMatchObject({
+      role: 'assistant',
+      api: 'dsh-foreign',
+      content: [{ type: 'thinking', thinking: 'done' }],
+    })
   })
 
-  it('rejects replay metadata whose block count differs from durable content', () => {
+  it('falls back to a foreign assistant when the replay block count differs from durable content', () => {
     const state = toPiReplayState(assistant())
-    expect(() => toPiContext({
+    expect(toPiContext({
       provider: 'deepseek',
       model: 'm',
       messages: [createMessage({
@@ -470,7 +476,13 @@ describe('toPiContext', () => {
           ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState: state },
         },
       })],
-    })).toThrow(/block count does not match assistant content/)
+    }).messages[0]).toMatchObject({
+      role: 'assistant',
+      api: 'dsh-foreign',
+      provider: 'deepseek',
+      model: 'deepseek-v4-flash',
+      content: [{ type: 'text', text: 'done' }],
+    })
   })
 
   const validReplay = {
@@ -486,26 +498,25 @@ describe('toPiContext', () => {
   it.each([
     ['provider', { ...validReplay, provider: 'openai' }],
     ['model', { ...validReplay, model: 'deepseek-v4-pro' }],
-  ])('rejects replay metadata whose %s differs from assistant source', (field, replayState) => {
-    try {
-      toPiContext({
-        provider: 'deepseek',
-        model: 'next-model',
-        messages: [createMessage({
-          role: 'assistant',
-          content: [{ type: 'text', text: 'done' }],
-          source: {
-            kind: 'model',
-            ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState },
-          },
-        })],
-      })
-      expect.fail('expected invalid replay state')
-    } catch (error: unknown) {
-      expect(error).toBeInstanceOf(LlmError)
-      expect((error as LlmError).code).toBe('INVALID_REPLAY_STATE')
-      expect((error as Error).message).toContain(`${field} does not match assistant source`)
-    }
+  ])('falls back to a foreign assistant when the replay %s differs from assistant source', (_field, replayState) => {
+    expect(toPiContext({
+      provider: 'deepseek',
+      model: 'next-model',
+      messages: [createMessage({
+        role: 'assistant',
+        content: [{ type: 'text', text: 'done' }],
+        source: {
+          kind: 'model',
+          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState },
+        },
+      })],
+    }).messages[0]).toMatchObject({
+      role: 'assistant',
+      api: 'dsh-foreign',
+      provider: 'deepseek',
+      model: 'deepseek-v4-flash',
+      content: [{ type: 'text', text: 'done' }],
+    })
   })
 
   it.each([
@@ -624,6 +635,26 @@ describe('toStreamChunks', () => {
         },
       },
     ])
+  })
+
+  it('drops tool calls from the replay state when max-tokens truncates the response', async () => {
+    // The BlockAssembler discards tool calls on max-tokens; the replay state
+    // must describe the same blocks or every later replay fails to recombine.
+    const truncated = assistant({
+      content: [{ type: 'text', text: 'partial' }, ...partialWithToolCall.content],
+      stopReason: 'length',
+    })
+    const chunks = await collect(toStreamChunks(feed(
+      { type: 'text_start', contentIndex: 0, partial: assistant() },
+      { type: 'text_end', contentIndex: 0, content: 'partial', partial: assistant() },
+      { type: 'toolcall_start', contentIndex: 1, partial: partialWithToolCall },
+      { type: 'done', reason: 'length', message: truncated },
+    )))
+    expect(chunks.at(-1)).toMatchObject({
+      type: 'finish',
+      reason: { kind: 'max-tokens' },
+      replayState: { stopReason: 'length', blocks: [{ type: 'text' }] },
+    })
   })
 
   it('tolerates toolcall_start with a missing partial entry', async () => {
