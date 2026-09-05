@@ -145,6 +145,25 @@ describe('TokenMeter pricing', () => {
     expect(service.estimateMessage(textMessage('abcd'))).toBe(9)
   })
 
+  it('prices image blocks by their pixel grid, not by the size of their reference', () => {
+    // A vision projector spends one token per merged patch; the attachment
+    // reference is ~200 characters regardless of the image, so the generic
+    // JSON price undercounts a screenshot by two orders of magnitude.
+    const service = meter()
+    const image = (width: number, height: number): ContentBlock => ({
+      type: 'image',
+      attachment: { attachmentId: `sha256:${'a'.repeat(64)}`, mediaType: 'image/png', bytes: 1, width, height },
+    } as unknown as ContentBlock)
+    const price = (block: ContentBlock): number => service.estimateMessage(createUserMessage({
+      content: [block], source: { kind: 'plugin', plugin: 'test' },
+    }))
+    const framing = price({ type: 'text', text: '' })
+    expect(price(image(640, 320)) - framing).toBe(200)
+    expect(price(image(2340, 1080)) - framing).toBe(74 * 34)
+    expect(price(image(1, 1)) - framing).toBe(64)
+    expect(price(image(20_000, 20_000)) - framing).toBe(16_384)
+  })
+
   it('returns a detached deeply immutable empty measurement', () => {
     const service = meter()
     const session = Session.create(SessionId('empty'))

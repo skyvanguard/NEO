@@ -12,6 +12,32 @@ import type { EpochHeader } from '@deepseek-ai/dsh-session'
 /** Fixed text-density estimate used until exact tokenization is needed. */
 const CHARS_PER_TOKEN = 4
 
+/**
+ * Pixels per image token along each axis: a 16 px vision patch merged 2×2 by
+ * the projector (Qwen-VL family). One token per merged patch is the shape the
+ * local multimodal stack prices, and a close enough fixed estimate for the
+ * others: what matters is the order of magnitude, since the attachment
+ * reference alone would price a screenshot like a short sentence.
+ */
+const IMAGE_PATCH_PX = 32
+
+/** Floor for a degenerate image: special tokens and the smallest grid still cost something. */
+const MIN_IMAGE_TOKENS = 64
+
+/** Ceiling matching the projector's maximum pixel budget; larger images are downscaled. */
+const MAX_IMAGE_TOKENS = 16_384
+
+/**
+ * Price one image by its merged-patch grid.
+ * @param width - intrinsic width in pixels.
+ * @param height - intrinsic height in pixels.
+ * @returns the estimated vision tokens, clamped to the projector's floor and ceiling.
+ */
+function estimateImageTokens(width: number, height: number): number {
+  const grid = Math.ceil(width / IMAGE_PATCH_PX) * Math.ceil(height / IMAGE_PATCH_PX)
+  return Math.min(MAX_IMAGE_TOKENS, Math.max(MIN_IMAGE_TOKENS, grid))
+}
+
 /** Per-block structural overhead for JSON framing and type tags. */
 const BLOCK_OVERHEAD = 4
 
@@ -38,6 +64,9 @@ export function estimateContent(blocks: readonly ContentBlock[]): number {
         break
       case 'tool-result':
         tokens += estimateContent(block.content) + BLOCK_OVERHEAD
+        break
+      case 'image':
+        tokens += estimateImageTokens(block.attachment.width, block.attachment.height) + BLOCK_OVERHEAD
         break
       default:
         // ContentBlockMap is merge-extensible; unknown blocks retain a
