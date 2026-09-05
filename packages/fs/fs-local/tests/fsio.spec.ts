@@ -876,6 +876,26 @@ describe('applyLiteralEdit', () => {
     expect(() => applyLiteralEdit('a b c', 'z', 'X', false, 'f')).toThrow(expect.objectContaining({ code: 'FS_EDIT_NOT_FOUND' }))
   })
 
+  it('names the line that differs only in whitespace when nothing matches literally', () => {
+    const content = 'function a() {\n    return 1\n}\n'
+    expect(() => applyLiteralEdit(content, 'function a() {\n  return 1\n}', 'X', false, 'f'))
+      .toThrow(/differs only in whitespace or indentation starts at line 1/)
+    expect(() => applyLiteralEdit(content, '\treturn  1', 'X', false, 'f'))
+      .toThrow(/starts at line 2/)
+  })
+
+  it('points out copied read line-number prefixes', () => {
+    expect(() => applyLiteralEdit('alpha\nbeta\n', '1: alpha\n2: beta', 'X', false, 'f'))
+      .toThrow(/"N: " line-number prefixes/)
+  })
+
+  it('gives no diagnosis when nothing nearly matches', () => {
+    expect(() => applyLiteralEdit('a b c', 'zzz', 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
+    expect(() => applyLiteralEdit('a b c', '   ', 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
+  })
+
   it('rejects an empty oldString without scanning forever', () => {
     expect(() => applyLiteralEdit('a b c', '', 'X', false, 'f')).toThrow(expect.objectContaining({ code: 'FS_EDIT_NOT_FOUND' }))
   })

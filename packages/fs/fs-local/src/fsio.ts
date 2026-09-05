@@ -648,6 +648,41 @@ function restoreLineEndings(content: string, lineEndings: LineEndings): string {
   return lineEndings === 'LF' ? content : normalizeLineEndings(content).split('\n').join('\r\n')
 }
 
+/** The `N: ` prefix `read` puts in front of every line it renders. */
+const READ_LINE_PREFIX = /^\s*\d+: ?/
+
+/** Collapse runs of whitespace so indentation and spacing differences do not matter. */
+function collapseWhitespace(text: string): string {
+  return text.replaceAll(/\s+/g, ' ').trim()
+}
+
+/**
+ * Explain the two ways an agent most often mistypes `old_string`: it copied the
+ * `N: ` line-number prefixes from a `read` result, or it got the indentation or
+ * spacing wrong. A `not found` with no diagnosis is the most common retry loop
+ * an autonomous agent falls into; naming the line that nearly matched breaks it.
+ * @param content - the file content, line endings normalised.
+ * @param oldNorm - the requested `old_string`, line endings normalised.
+ * @returns the diagnosis to append to the error, or undefined when nothing nearly matches.
+ */
+function describeNearMiss(content: string, oldNorm: string): string | undefined {
+  const withoutPrefixes = oldNorm.split('\n').map(line => line.replace(READ_LINE_PREFIX, '')).join('\n')
+  if (withoutPrefixes !== oldNorm && content.includes(withoutPrefixes)) {
+    return 'old_string carries the "N: " line-number prefixes that read adds; pass the text without them'
+  }
+  const wanted = collapseWhitespace(withoutPrefixes)
+  if (wanted.length === 0) return undefined
+  const lines = content.split('\n')
+  const wantedLines = withoutPrefixes.split('\n').length
+  for (let start = 0; start + wantedLines <= lines.length; start += 1) {
+    const window = collapseWhitespace(lines.slice(start, start + wantedLines).join('\n'))
+    if (window === wanted) {
+      return `a match that differs only in whitespace or indentation starts at line ${start + 1}; copy it exactly`
+    }
+  }
+  return undefined
+}
+
 function countOccurrences(content: string, needle: string): number {
   let count = 0
   let index = 0
@@ -770,7 +805,8 @@ export function applyLiteralEdit(
   const newNorm = normalizeLineEndings(newString)
   const replacements = countOccurrences(content, oldNorm)
   if (replacements === 0) {
-    throw new FsError(`old_string was not found in "${displayPath}"`, 'FS_EDIT_NOT_FOUND')
+    const hint = describeNearMiss(content, oldNorm)
+    throw new FsError(`old_string was not found in "${displayPath}"${hint === undefined ? '' : `; ${hint}`}`, 'FS_EDIT_NOT_FOUND')
   }
   if (!replaceAll && replacements > 1) {
     throw new FsError(`old_string matched ${replacements} times in "${displayPath}"; provide a more specific old_string or set replace_all to true`, 'FS_AMBIGUOUS_EDIT')
