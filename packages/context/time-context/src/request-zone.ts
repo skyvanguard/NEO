@@ -22,20 +22,19 @@ function browserTimeZone(message: UserMessage): string | undefined {
     ? source.clientTimeZone
     : undefined
   if (value === undefined) return undefined
-  if (value !== 'UTC' && !IANA_TIME_ZONE.test(value)) {
-    throw new TypeError(
-      `browser time zone must be canonical UTC or IANA Area/Location: ${JSON.stringify(value)}`,
-    )
-  }
+  // The zone is untrusted client input. A malformed, unsupported, or
+  // non-canonical value degrades to undefined (this message contributes no
+  // zone, folding into 'missing'/'mixed') rather than throwing: throwing here
+  // would fail the whole live turn over one nonconforming client, and break
+  // loading a session whose persisted zone this runtime's Intl no longer knows.
+  if (value !== 'UTC' && !IANA_TIME_ZONE.test(value)) return undefined
   let canonical: string
   try {
     canonical = new Intl.DateTimeFormat('en-US', { timeZone: value }).resolvedOptions().timeZone
-  } catch (error: unknown) {
-    throw new TypeError(`browser time zone is unsupported: ${JSON.stringify(value)}`, { cause: error })
+  } catch {
+    return undefined
   }
-  if (canonical !== value) {
-    throw new TypeError(`browser time zone must be canonical: ${JSON.stringify(value)}`)
-  }
+  if (canonical !== value) return undefined
   return value
 }
 
@@ -43,7 +42,8 @@ function browserTimeZone(message: UserMessage): string | undefined {
  * Derive the unique, mixed, or missing browser zone for one open turn.
  * @param messages - Entered and proposed user messages belonging to the turn.
  * @returns Sorted, duplicate-free browser-zone facts.
- * @throws TypeError when a user-rpc source carries an invalid or noncanonical zone.
+ * A user-rpc source carrying an invalid or noncanonical zone contributes nothing
+ * (it degrades to 'missing'/'mixed'), never throwing.
  */
 export function deriveBrowserTimeZoneContext(
   messages: readonly UserMessage[],

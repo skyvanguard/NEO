@@ -162,7 +162,7 @@ describe('time-context invariants', () => {
         `2026-07-14T00:00:00+00:00[${timeZone}]`,
         policy,
       )))
-    }).toThrow(/browser time zone is unsupported/)
+    }).toThrow(/browser-zone text does not match/)
   })
 
   it('rejects one corrupt zone even when another zone would classify the turn as mixed', async () => {
@@ -185,7 +185,7 @@ describe('time-context invariants', () => {
         'Browser time zone for this request: mixed ["Asia/Shanghai","Not/A_Real_Zone"]. '
         + 'Ask the user to clarify otherwise-unqualified dates and times.',
       )))
-    }).toThrow(/browser time zone is unsupported/)
+    }).toThrow(/browser-zone text does not match/)
   })
 
   it('validates each existing reading against its preceding durable prefix', async () => {

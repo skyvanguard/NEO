@@ -33,17 +33,25 @@ describe('browser request-zone context', () => {
     })
   })
 
-  it('validates every browser zone before classifying a mixed turn', () => {
-    expect(() => deriveBrowserTimeZoneContext([
-      browserMessage('+08:00'),
-    ])).toThrow(/canonical UTC or IANA Area\/Location/)
-    expect(() => deriveBrowserTimeZoneContext([
+  it('degrades a malformed, unsupported, or non-canonical zone to no contribution instead of throwing', () => {
+    // A lone nonconforming zone folds into 'missing' — never throws (the live
+    // turn must not fail over one nonconforming client message).
+    expect(deriveBrowserTimeZoneContext([browserMessage('+08:00')])).toEqual({ kind: 'missing' })
+    expect(deriveBrowserTimeZoneContext([browserMessage('Not/A_Real_Zone')])).toEqual({ kind: 'missing' })
+    expect(deriveBrowserTimeZoneContext([browserMessage('Etc/UTC')])).toEqual({ kind: 'missing' })
+  })
+
+  it('keeps the valid zones of a turn when another message carries a nonconforming zone', () => {
+    // One bad message must not corrupt or drop the turn's real zone.
+    expect(deriveBrowserTimeZoneContext([
       browserMessage('Asia/Shanghai'),
       browserMessage('Not/A_Real_Zone'),
-    ])).toThrow(/browser time zone is unsupported/)
-    expect(() => deriveBrowserTimeZoneContext([
-      browserMessage('Etc/UTC'),
-    ])).toThrow(/browser time zone must be canonical/)
+    ])).toEqual({ kind: 'resolved', timeZone: 'Asia/Shanghai' })
+    expect(deriveBrowserTimeZoneContext([
+      browserMessage('Asia/Shanghai'),
+      browserMessage('+08:00'),
+      browserMessage('America/New_York'),
+    ])).toEqual({ kind: 'mixed', timeZones: ['America/New_York', 'Asia/Shanghai'] })
   })
 
   it('renders one explicit model policy for every context', () => {
