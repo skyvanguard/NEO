@@ -167,6 +167,9 @@ describe('tool-call timeout returns TOOL_TIMEOUT (deadline wins over a slow fetc
       timeoutMs: 50,
       maxRedirects: 5,
       userAgent: 'integration-test',
+      // The backstop test targets a loopback server, so opt out of the
+      // private-address guard as the provider's own suite does.
+      allowPrivateAddresses: true,
     })
     const err = await direct.fetch({ url: slowBase }).then(
       () => undefined,
