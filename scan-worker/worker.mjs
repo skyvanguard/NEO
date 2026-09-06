@@ -35,6 +35,10 @@ const cfg = {
   // hijo; sin este, un socket colgado hacia el API bloquea el slot unico para
   // siempre (Restart=always no rescata un loop vivo pero atascado).
   httpTimeoutMs: Number(process.env.SCAN_HTTP_TIMEOUT_MS ?? String(30_000)),
+  // Cota del stdout capturado del hijo. El reporte JSON esta al final, asi que
+  // se conserva la COLA; sin esto una sesion verbosa de hasta 75 min podia
+  // acumular cientos de MB y tumbar el worker (OOM).
+  stdoutMaxChars: Number(process.env.SCAN_STDOUT_MAX_CHARS ?? String(8_000_000)),
 };
 
 const SEVERITIES = new Set(["info", "low", "medium", "high", "critical"]);
@@ -139,8 +143,17 @@ function runNeo(domain, locale) {
       reject(new Error(`timeout tras ${Math.round(cfg.timeoutMs / 60000)} min`));
     }, cfg.timeoutMs);
 
-    child.stdout.on("data", (d) => (stdout += d.toString()));
-    child.stderr.on("data", (d) => (stderr += d.toString()));
+    // Conservar solo la cola: recortar cuando supera 2x el maximo mantiene el
+    // costo amortizado O(1) por byte (no O(n^2) recortando en cada chunk).
+    const stdoutMax = cfg.stdoutMaxChars;
+    child.stdout.on("data", (d) => {
+      stdout += d.toString();
+      if (stdout.length > stdoutMax * 2) stdout = stdout.slice(-stdoutMax);
+    });
+    child.stderr.on("data", (d) => {
+      stderr += d.toString();
+      if (stderr.length > 131072) stderr = stderr.slice(-65536);
+    });
     child.on("error", (err) => {
       clearTimeout(timer);
       reject(new Error(`no se pudo ejecutar "${bin}": ${err.message}`));

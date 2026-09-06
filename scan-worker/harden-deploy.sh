@@ -107,6 +107,24 @@ ReadWritePaths=${WORKSPACE}
 ProtectControlGroups=true
 ProtectKernelModules=true
 RestrictSUIDSGID=true
+# Endurecimiento adicional de bajo costo (subset SEGURO para el sandbox bwrap).
+ProtectKernelTunables=true
+ProtectClock=true
+ProtectHostname=true
+ProtectProc=invisible
+LockPersonality=true
+CapabilityBoundingSet=
+UMask=077
+SystemCallArchitectures=native
+# Cotas de recursos: acotan un scan descontrolado para que no tumbe otros
+# servicios. Generosas por defecto (un scan real cabe); ajustables por entorno.
+TasksMax=${SCAN_TASKS_MAX:-4096}
+MemoryMax=${SCAN_MEMORY_MAX:-6G}
+# NO agregar RestrictNamespaces=, SystemCallFilter= ni PrivateDevices=: bubblewrap
+# necesita unshare/clone + user namespaces (el paso 1 del sandbox) y monta su
+# propio /dev; esas tres romperian el sandbox. Tampoco WatchdogSec= sin que el
+# worker haga sd_notify (lo mataria). Al aplicar este unit, VERIFICAR que un scan
+# de prueba corre (bwrap + dsh) antes de darlo por bueno.
 # Egress filtering: cierra el SSRF del free-scan a nivel de kernel. El scanner
 # necesita alcanzar IPs publicas arbitrarias (cualquier dominio de cliente),
 # pero NUNCA la red interna. Un dominio del atacante cuyo DNS/CT resuelva a
