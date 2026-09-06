@@ -31,6 +31,14 @@ import { SessionQueueMirror } from './queue-mirror.ts'
 /** Messages requested per history page. */
 export const PAGE_MESSAGES = 50
 
+/**
+ * Default cap on raw events retained in the live window. A session running
+ * thousands of steps would otherwise grow this.events/this.views and the
+ * assembler's indices without bound; past this the oldest events are evicted
+ * and re-fetched on demand. High enough that ordinary sessions never evict.
+ */
+export const MAX_WINDOW_EVENTS = 4000
+
 /** Manager-owned observers of a Session object's local state edges. */
 export interface SessionOptions {
   /** Catalog-discovered address selecting non-activating subagent transport. */
@@ -54,6 +62,12 @@ export interface SessionOptions {
   projections?: ProjectionValueStore
   /** Runtime registries used by this Session-owned Conversation assembler. */
   conversation?: ConversationRuntime
+  /**
+   * High-watermark of raw events kept in the live window. Past it, the
+   * re-hydratable prefix is evicted (the tail stays; scroll-up refetches).
+   * Defaults to {@link MAX_WINDOW_EVENTS}; tests set it low to force eviction.
+   */
+  maxWindowEvents?: number
 }
 
 /**
@@ -69,6 +83,8 @@ export class Session implements SessionFace {
    *  Kept parallel rather than merged so `events` stays the raw log slice (model-visible ⟺ logged). */
   private views: (ToolEventView | undefined)[] = []
   private baseSeq = 0
+  /** Live-window high-watermark; see {@link MAX_WINDOW_EVENTS}. */
+  private readonly maxWindowEvents: number
   private hasMore = false
   private openState: OpenState = 'cold'
   private openError: RpcError | null = null
@@ -146,6 +162,7 @@ export class Session implements SessionFace {
     private readonly options: SessionOptions = {},
   ) {
     this.projections = options.projections ?? new ProjectionValueStore()
+    this.maxWindowEvents = options.maxWindowEvents ?? MAX_WINDOW_EVENTS
     this.address = options.address
     this.parentAvailable = options.parentAvailable ?? false
     this.conversation = options.conversation === undefined
@@ -699,6 +716,30 @@ export class Session implements SessionFace {
       return
     }
     this.scheduleConversation(this.appendLive(event, view))
+    this.evictWindowIfLarge()
+  }
+
+  /**
+   * Bound the live window: past the high-watermark, drop the re-hydratable
+   * prefix and keep the most recent half. Reuses installWindow (as open/repair
+   * do) so the assembler rebuilds cleanly from the tail — a context or
+   * compaction summary that began in the dropped prefix is treated exactly as
+   * on an initial tail-page open (orphan matches collected, resolved when
+   * loadOlder/prepend backfills). hasMore=true routes scroll-up there. Evicting
+   * to half the cap gives hysteresis so this does not fire on every later event.
+   */
+  private evictWindowIfLarge(): void {
+    if (this.events.length <= this.maxWindowEvents) return
+    const keep = Math.max(PAGE_MESSAGES, Math.floor(this.maxWindowEvents / 2))
+    const start = this.events.length - keep
+    // Nothing to drop if the keep-floor already covers the whole window: never
+    // reinstall the same events with a false hasMore.
+    if (start <= 0) return
+    const tail: HistoryEntry[] = this.events.slice(start).map((event, index) => {
+      const view = this.views[start + index]
+      return view === undefined ? { event } : { event, view }
+    })
+    this.installWindow(tail, true)
   }
 
   /** Route assembler cadence into the Session's existing microtask/RAF notifier. */

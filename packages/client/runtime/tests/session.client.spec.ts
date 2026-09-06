@@ -265,6 +265,58 @@ describe('live event path', () => {
     expect(session.getSnapshot().nodes).toEqual(before.nodes)
   })
 
+  it('evicts the re-hydratable prefix past the window cap and reloads it on demand', async () => {
+    const api = new FakeApiClient()
+    api.onHistory = () => histResponse([])
+    // Low cap so a modest stream forces eviction (keep floor is PAGE_MESSAGES=50).
+    const session = new Session(SID, api, fakeRemote(), { conversation: TEST_CONVERSATION, maxWindowEvents: 100 })
+    await session.open()
+    const feed = (event: SessionEvent, view?: unknown): void => {
+      session.handleMuxEnvelope('r' as never, { type: 'session/event', sessionId: SID, event, ...view === undefined ? {} : { view } } as never)
+    }
+
+    const total = 130
+    // One event in the kept tail carries a view, so eviction rebuilds a windowed
+    // entry WITH its view (not just the bare-event path).
+    for (let seq = 0; seq < total; seq++) {
+      feed(ev.user(seq, `m${seq}`), seq === 60 ? { for: 'call', view: { card: 'generic', title: 'v' } } : undefined)
+    }
+    await Promise.resolve()
+
+    const afterEvict = session.getSnapshot()
+    const seqs = chatSeqs(afterEvict)
+    // The window is bounded (well under the total), the tail is kept, the oldest
+    // events were evicted, and hasMore now routes scroll-up to a refetch.
+    expect(seqs.length).toBeLessThan(total)
+    expect(seqs).toContain(total - 1)
+    expect(seqs).not.toContain(0)
+    expect(afterEvict.hasMore).toBe(true)
+
+    // loadOlder re-hydrates the evicted prefix through the existing prepend path.
+    const oldest = seqs[0]!
+    api.onHistory = () => histResponse(Array.from({ length: oldest }, (_v, seq) => ev.user(seq, `m${seq}`)), false)
+    await session.loadOlder()
+    await Promise.resolve()
+    expect(chatSeqs(session.getSnapshot())).toContain(0)
+  })
+
+  it('does not evict when the window cap is below the keep floor', async () => {
+    const api = new FakeApiClient()
+    api.onHistory = () => histResponse([])
+    // cap 20 < keep floor (PAGE_MESSAGES 50): exceeding the cap still leaves
+    // nothing to drop, so the window is kept intact and hasMore stays false.
+    const session = new Session(SID, api, fakeRemote(), { conversation: TEST_CONVERSATION, maxWindowEvents: 20 })
+    await session.open()
+    for (let seq = 0; seq < 30; seq++) {
+      session.handleMuxEnvelope('r' as never, { type: 'session/event', sessionId: SID, event: ev.user(seq, `m${seq}`) })
+    }
+    await Promise.resolve()
+    const snapshot = session.getSnapshot()
+    expect(chatSeqs(snapshot)).toContain(0)
+    expect(chatSeqs(snapshot).length).toBe(30)
+    expect(snapshot.hasMore).toBe(false)
+  })
+
   it('does not record a window event when the assembler throws mid-append, so a later gap repair recovers it', async () => {
     // appendLive must be atomic: if conversation.append throws (a malformed /
     // duplicate / out-of-order Match), this.events must NOT already carry the
