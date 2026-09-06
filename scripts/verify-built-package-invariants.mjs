@@ -37,10 +37,14 @@ for (const manifestPath of manifests) {
     continue
   }
   const invariantExport = manifest.exports?.['./invariant']
+  // Not every package ships an invariant companion (leaf packages with no event
+  // sequence or mutable relation legitimately have none); skip those. Only a
+  // present-but-malformed ./invariant export is a failure.
+  if (invariantExport === undefined) continue
   if (typeof invariantExport !== 'object'
     || invariantExport.default !== './lib/invariant.js'
     || !manifest.files?.includes('lib/invariant.js')) {
-    failures.push(`${packageName}: manifest does not publish ./lib/invariant.js as ./invariant`)
+    failures.push(`${packageName}: exports ./invariant but does not publish ./lib/invariant.js`)
     continue
   }
 
@@ -68,6 +72,46 @@ for (const manifestPath of manifests) {
     if (typeof unwrapped.apply !== 'function') throw new Error('companion apply is missing')
   } catch (error) {
     failures.push(`${packageName}: ${error instanceof Error ? error.message : String(error)}`)
+  } finally {
+    rmSync(stagedPackageDir, { recursive: true, force: true })
+  }
+}
+
+
+// Built typert/remote artifacts are emitted by codegen and import bare npm deps
+// (e.g. `zod`) that the package's src never imports. Importing them under plain
+// Node with only the manifest-declared files surfaces an undeclared runtime
+// dependency HERE (CI) instead of at plugin load on the server — the exact class
+// of failure that broke a deploy.
+for (const manifestPath of manifests) {
+  const packageDir = dirname(resolve(packagesRoot, manifestPath))
+  const manifest = JSON.parse(readFileSync(resolve(packagesRoot, manifestPath), 'utf8'))
+  const packageName = manifest.name
+  if (typeof packageName !== 'string' || packageName.length === 0) continue
+  const artifactSubpaths = ['./typert', './remote'].filter((subpath) => {
+    const entry = manifest.exports?.[subpath]
+    return typeof entry === 'object' && typeof entry.default === 'string'
+  })
+  if (artifactSubpaths.length === 0) continue
+  const stagedPackageDir = mkdtempSync(resolve(packageDir, '.dsh-built-artifact-'))
+  try {
+    copyFileSync(resolve(packageDir, 'package.json'), resolve(stagedPackageDir, 'package.json'))
+    copyDeclaredLibFiles(packageDir, stagedPackageDir, manifest.files)
+    for (const subpath of artifactSubpaths) {
+      const libFile = manifest.exports[subpath].default.replace(/^\.\//, '')
+      if (!manifest.files?.includes(libFile)) {
+        failures.push(`${packageName}: exports ${subpath} but does not publish ${libFile}`)
+        continue
+      }
+      const importSpecifier = `${packageName}${subpath.slice(1)}`
+      try {
+        const artifactProbe = resolve(stagedPackageDir, `probe${subpath.slice(1).replace(/[^a-z]/gi, '-')}.mjs`)
+        writeFileSync(artifactProbe, `import ${JSON.stringify(importSpecifier)}\n`)
+        await import(pathToFileURL(artifactProbe).href)
+      } catch (error) {
+        failures.push(`${packageName}: importing built artifact ${importSpecifier} failed: ${error instanceof Error ? error.message : String(error)}`)
+      }
+    }
   } finally {
     rmSync(stagedPackageDir, { recursive: true, force: true })
   }
