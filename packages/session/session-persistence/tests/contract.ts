@@ -356,6 +356,29 @@ export function runPersistenceContract(name: string, make: () => Promise<Contrac
       }
     })
 
+    it('remove deletes a stored session and is idempotent for absent ids', async () => {
+      const { persistence, dispose } = await make()
+      try {
+        const m = meta('s-remove', '/work')
+        await persistence.create(m)
+        await persistence.append(m.id, oneTurnLog())
+        expect((await persistence.list()).map(x => x.id)).toContain(m.id)
+
+        await persistence.remove(m.id)
+        expect((await persistence.list()).map(x => x.id)).not.toContain(m.id)
+        expect((await persistence.listSnapshots()).map(snapshot => snapshot.header.id))
+          .not.toContain(m.id)
+        await expect(persistence.load(m.id)).rejects.toThrow('not found')
+
+        // Idempotent: a second remove of the same id and a remove of an id the
+        // backend never held both resolve without effect.
+        await persistence.remove(m.id)
+        await persistence.remove(SessionId('never-was-stored'))
+      } finally {
+        await dispose()
+      }
+    })
+
     it('append rejects a batch whose first seq does not match the stored next-seq', async () => {
       const { persistence, dispose } = await make()
       try {

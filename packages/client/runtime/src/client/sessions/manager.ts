@@ -603,6 +603,23 @@ export class SessionManager {
   }
 
   /**
+   * Contract session.delete: permanently remove one session on the Host
+   * (live agent disposed, persisted log removed, registry references
+   * forgotten). The attached case converges through the host disposal edge;
+   * the unattached case has no edge, so the caller refreshes the baseline.
+   * @param sessionId - the session to delete.
+   * @returns the delete result.
+   */
+  async deleteSession(sessionId: SessionId): Promise<RpcResult<{ deleted: true }>> {
+    try {
+      const { result } = await this.api.sessions.delete({ sessionId })
+      return result
+    } catch (error) {
+      return transportError(error)
+    }
+  }
+
+  /**
    * Insert-or-enrich a locally synthesized summary: a new id prepends; an
    * existing entry only gains fields it lacks (the session-added frame and the
    * create() echo race — whichever lands second must fill the placeholder's

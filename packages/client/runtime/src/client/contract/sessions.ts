@@ -96,6 +96,15 @@ export interface ISessions {
    */
   fork(opts: { sessionId: SessionId; atSeq?: number; increaseTitle?: boolean }): Promise<SessionId>
   /**
+   * Permanently delete one session on the Host: the live agent (if attached)
+   * is disposed, the persisted log is removed, and the workspace registry
+   * forgets the id. On resolution the list is refreshed so unattached rows
+   * converge without a host disposal edge.
+   * @param id - the session to delete.
+   * @throws when the Host rejects the deletion.
+   */
+  deleteSession(id: SessionId): Promise<void>
+  /**
    * Register a per-session standard-props provider (hooks become `use<Name>`
    * selector hooks on the render side; props spread verbatim).
    * @param descriptor - static member roster plus per-session resolver.

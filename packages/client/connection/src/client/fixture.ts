@@ -2506,6 +2506,38 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
         }
         return ok(request, { accepted: true as const })
       },
+      delete: (request) => {
+        const { sessionId } = request.payload
+        if (summaryOf(sessionId) === undefined) {
+          return err(request, {
+            code: 'session-not-found',
+            message: `no session ${sessionId}`,
+            details: { sessionId },
+          })
+        }
+        const replay = replays.get(sessionId)
+        if (replay !== undefined) {
+          clearTimeout(replay.timer)
+          replay.finish(true)
+        }
+        logs.delete(sessionId)
+        const index = sessions.findIndex(s => s.sessionId === sessionId)
+        if (index !== -1) sessions.splice(index, 1)
+        // A deleted id must not linger in the registry-global archive set.
+        const archivedIndex = archivedSessionIds.indexOf(sessionId)
+        if (archivedIndex !== -1) {
+          archivedSessionIds.splice(archivedIndex, 1)
+          emitHost({ type: 'host/archived-sessions-changed', archivedSessionIds: [...archivedSessionIds] })
+        }
+        for (const workspace of workspaces) {
+          if (!workspace.sessionIds.includes(sessionId)) continue
+          workspace.sessionIds = workspace.sessionIds.filter(id => id !== sessionId)
+          workspace.updatedAt = new Date().toISOString()
+          emitHost({ type: 'host/workspace-changed', workspace: { ...workspace } })
+        }
+        emitHost({ type: 'host/session-removed', sessionId })
+        return ok(request, { deleted: true as const })
+      },
     },
     subagents: {
       list: request => ok(request, { entries: [], parentAvailable: true }),
@@ -3089,6 +3121,7 @@ export class FixtureApiClient extends AbstractApiClient {
       case 'session.attachment': return this.api.sessions.attachment(request)
       case 'session.updateQueue': return this.api.sessions.updateQueue(request)
       case 'session.cancel': return this.api.sessions.cancel(request)
+      case 'session.delete': return this.api.sessions.delete(request)
       case 'subagent.list': return this.api.subagents.list(request)
       case 'subagent.history': return this.api.subagents.history(request)
       case 'subagent.prompt': return this.api.subagents.prompt(request, signal)

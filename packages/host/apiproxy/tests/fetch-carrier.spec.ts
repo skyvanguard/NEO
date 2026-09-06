@@ -108,6 +108,9 @@ function fakeApi(overrides: Partial<{ muxFrames: MuxFrame[]; hostFrames: HostFra
       async cancel(request) {
         return { rpcId: request.rpcId, result: { ok: true, value: { accepted: true as const } } }
       },
+      async delete(request) {
+        return { rpcId: request.rpcId, result: { ok: true, value: { deleted: true as const } } }
+      },
     },
     subagents: {
       async list(request) {
@@ -620,6 +623,17 @@ describe('handler carrier-layer statuses', () => {
     const parsed = await response.json() as { result: { error?: { code: string; details: { issues: unknown[] } } } }
     expect(parsed.result.error?.code).toBe('bad-request')
     expect(parsed.result.error?.details.issues.length).toBeGreaterThan(0)
+  })
+
+  it('round-trips session.delete through the handler and the client face', async () => {
+    const body = JSON.stringify({ type: 'client-request', rpcId: 'r-del', method: 'session.delete', payload: { sessionId: 's1' } })
+    const response = await handler.fetch(new Request('http://x/api/session.delete', { method: 'POST', headers: { 'content-type': 'application/json' }, body }))
+    const parsed = await response.json() as { result: { ok: boolean; value?: { deleted: boolean } } }
+    expect(parsed.result.ok).toBe(true)
+    expect(parsed.result.value).toEqual({ deleted: true })
+
+    const viaClient = await client().sessions.delete({ sessionId: 's1' as never })
+    expect(viaClient.result).toEqual({ ok: true, value: { deleted: true } })
   })
 
   it('500s when the impl itself throws', async () => {

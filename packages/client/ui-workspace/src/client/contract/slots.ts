@@ -117,6 +117,13 @@ export type WorkspaceBrowserInjected = DirectoryPickingInjected & {
   /** Delete only a Host Workspace registration; directory and Session logs remain. */
   deleteWorkspace: (workspaceId: WorkspaceId) => Promise<void>
   /**
+   * Permanently delete one Session: live agent disposed, persisted log
+   * removed, workspace references forgotten. The working directory and user
+   * files remain. Deleting the current session leaves its grayed conversation
+   * (the standard removed-session state); the row vanishes from the list.
+   */
+  deleteSession: (sessionId: SessionId) => Promise<void>
+  /**
    * Reorder a Workspace in the durable registry display order.
    * Omitted anchor appends to the end.
    */

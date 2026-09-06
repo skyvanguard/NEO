@@ -594,6 +594,49 @@ describe('fork', () => {
   })
 })
 
+describe('deleteSession', () => {
+  it('removes the row once the refreshed baseline no longer holds the id', async () => {
+    const b = bench()
+    await feedList(b, [{ id: 's1', cwd: '/work' }, { id: 's2', cwd: '/work' }])
+    expect(b.svc.list.getSnapshot().ids).toEqual(['s1', 's2'])
+
+    // The delete response lands before the re-pull; the baseline (not the
+    // response) is what removes the row.
+    b.api.onList = () => Promise.resolve(ok({
+      items: [{ sessionId: sid('s2'), updatedAt: 1, running: false, blank: false, cwd: '/work' }],
+    }) as never)
+    await b.svc.deleteSession(sid('s1'))
+    await Promise.resolve() // manager notifier flush
+    await Promise.resolve()
+
+    expect(b.api.callsOf('session.delete')).toEqual([{ sessionId: 's1' }])
+    expect(b.svc.list.getSnapshot().ids).toEqual(['s2'])
+    expect(b.svc.scope(sid('s1'))).toBeUndefined()
+  })
+
+  it('throws the wire error and keeps the row when the Host rejects', async () => {
+    const b = bench()
+    await feedList(b, [{ id: 's1', cwd: '/work' }])
+    b.api.onDelete = () => Promise.resolve(err({
+      code: 'agent-busy', message: 'owned by subagent routing',
+      details: { reason: 'use subagent delivery for this child session' },
+    }))
+
+    await expect(b.svc.deleteSession(sid('s1')))
+      .rejects.toThrow('session delete failed: agent-busy: owned by subagent routing')
+    expect(b.svc.list.getSnapshot().ids).toEqual(['s1'])
+  })
+
+  it('survives a transport failure as a failed delete with the row kept', async () => {
+    const b = bench()
+    await feedList(b, [{ id: 's1', cwd: '/work' }])
+    b.api.onDelete = () => Promise.reject(new Error('connection dropped'))
+
+    await expect(b.svc.deleteSession(sid('s1'))).rejects.toThrow('session delete failed')
+    expect(b.svc.list.getSnapshot().ids).toEqual(['s1'])
+  })
+})
+
 describe('scope lifecycle rides the list mirror (entity parity: no client-side pre-birth)', () => {
   it('a session-added frame births the row (blank) and makes the scope resolvable; removal prunes it', async () => {
     const b = bench()

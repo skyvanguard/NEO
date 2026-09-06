@@ -74,6 +74,10 @@ A `turn/end` whose reason is `max-tokens` projects one `turn-max-tokens` node at
 
 `ISessions.fork({sessionId, atSeq?, increaseTitle?})` resolves only after the child summary is locally addressable, carrying source lineage and cwd with `blank: false`; callers choose whether to open it. With `increaseTitle: true`, the client renames the child from the source session's persisted title: a trailing `(N)` or `（N）` is incremented without changing bracket style, while any other title gets ` (1)` appended; the rename is skipped when the source has no persisted title, and a rename failure rejects the promise but leaves the created child in place. This option is not sent in the Host fork request. A `workspace-attach-failed` response still identifies a child already published by the Host, so `SessionManager` reconciles that partial success before `SessionForkError` reaches the caller instead of making a retry create a duplicate child.
 
+## Session deletion
+
+`ISessions.deleteSession(sessionId)` sends the `session.delete` unary and, on a wire error, rejects with `session delete failed: <code>: <message>` without touching local state. On success it re-pulls the list baseline rather than dropping the row itself: an attached session's removal converges through the host `session-removed` edge, while an unattached session leaves no edge behind, so the re-pulled baseline is what removes the row (and prunes its scope) in both cases. A failed delete keeps the row addressable.
+
 ## Session model selection
 
 Each resident `Session` owns a `modelSelection` snapshot containing the current `ModelSelection`, provider-grouped directory, provider-local failures, and the `idle`/`loading`/`ready`/`selecting`/`error` state. History establishes or refreshes the current selection, opening a selector refreshes the directory, and selection failures preserve the last selection and usable groups. Directory and selection operations share a monotonically increasing generation so an older response cannot overwrite a newer selection. A reconnect rebuild restores the selection reported by the Host without replacing unchanged selection substructure.

@@ -8,7 +8,7 @@ import { mkdir, stat } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import type { Context } from '@deepseek-ai/cordis'
 import { installModelSelection } from '@deepseek-ai/dsh-agent'
-import type { Agent, ModelSelection, ModelSelectionRef, AgentOptions, AgentStatus } from '@deepseek-ai/dsh-agent'
+import type { Agent, AgentHandle, ModelSelection, ModelSelectionRef, AgentOptions, AgentStatus } from '@deepseek-ai/dsh-agent'
 import type {} from '@deepseek-ai/dsh-agent-presets/types'
 import { AttachmentError } from '@deepseek-ai/dsh-attachment'
 import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
@@ -1125,6 +1125,17 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
   const presetSwitches = new Map<SessionId, Promise<unknown>>()
   /** Client-chosen identity creation/resume, deduplicated across concurrent retries. */
   const sessionCreations = new Map<SessionId, Promise<Agent>>()
+  /**
+   * The owned handle behind every session this proxy created or resumed.
+   * The handle is the only capability that disposes an attached agent in
+   * order (loop drain, store removal, scope unwind); every creation path
+   * registers its handle here so `session.delete` can tear the session down
+   * instead of orphaning a live agent. Disposed sessions leave the table
+   * through the paired disposal edge.
+   */
+  const sessionHandles = new Map<SessionId, AgentHandle>()
+  const trackSessionHandle = (handle: AgentHandle): void => { sessionHandles.set(handle.agent.id, handle) }
+  ctx.effect(() => ctx.on('session/disposed', (session) => { sessionHandles.delete(session.id) }), 'apiProxy.sessionHandles')
   /** Serializes path ownership and explicit title checks with Workspace mutations. */
   let workspaceCreationChain = Promise.resolve()
   const pendingQuestions = new Map<RpcId, PendingQuestion>()
@@ -1268,6 +1279,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
     agentOptions,
     setup: async ({ meta, events }) =>
       (await composeAgent(resolveSessionPreset({ header: meta, events }))).setup,
+    onHandle: trackSessionHandle,
   })
 
   /** Send one transient frame to every connected mux consumer. */
@@ -1654,11 +1666,13 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
           // session's history was produced under that composition, and
           // rebuilding it differently would replay tool calls the model can no
           // longer make.
-          return (await ctx.agents.resume({
+          const handle = await ctx.agents.resume({
             resumeSessionId: sessionId,
             agentOptions: agentOptions(),
             setup: (await composeAgent(storedPreset)).setup,
-          })).agent
+          })
+          trackSessionHandle(handle)
+          return handle.agent
         }
 
         try {
@@ -1667,7 +1681,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
           throw new Error(`failed to ensure project directory "${cwd}": ${String(error)}`, { cause: error })
         }
         const composition = await composeAgent(presetId)
-        return (await ctx.agents.create({
+        const handle = await ctx.agents.create({
           sessionId,
           agentOptions: agentOptions(),
           meta: {
@@ -1675,7 +1689,9 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
             ...composition.agentPreset === undefined ? {} : { agentPreset: composition.agentPreset },
           },
           setup: composition.setup,
-        })).agent
+        })
+        trackSessionHandle(handle)
+        return handle.agent
       })().catch((error: unknown) => {
         // Another Host entry path may have published the same identity while
         // this operation crossed an asynchronous persistence/filesystem step.
@@ -2420,7 +2436,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
         // plane, composing nothing would leave the child with no tools at all.
         const forkComposition = await composeAgent(resolveSessionPreset(source))
         try {
-          await ctx.agents.create({
+          const childHandle = await ctx.agents.create({
             sessionId: childId,
             seed: events.slice(0, cut),
             meta: {
@@ -2434,6 +2450,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
             agentOptions: agentOptions(),
             setup: forkComposition.setup,
           })
+          trackSessionHandle(childHandle)
         } catch (error: unknown) {
           return err(request, {
             code: 'internal',
@@ -2630,6 +2647,52 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
         }
         agent.cancel({ kind: 'user' }, { keepInbox: true })
         return Promise.resolve(ok(request, { accepted: true as const }))
+      },
+
+      async delete(request) {
+        const { sessionId } = request.payload
+        const attached = ctx.sessions.get(sessionId)
+        const live = ctx.agents.get(sessionId)
+        if (live !== undefined && hasSubagentOwner(live.session, live)) {
+          return err(request, subagentOwnershipError(sessionId))
+        }
+        if (attached !== undefined && hasSubagentOwner(attached, live)) {
+          return err(request, subagentOwnershipError(sessionId))
+        }
+        const persistence = ctx.get('sessionPersistence')
+        const stored = persistence === undefined
+          ? undefined
+          : (await persistence.list()).find(header => header.id === sessionId)
+        if (attached === undefined && stored === undefined) {
+          return err(request, {
+            code: 'session-not-found',
+            message: `session "${sessionId}" not found (neither live nor persisted)`,
+            details: { sessionId },
+          })
+        }
+        const handle = sessionHandles.get(sessionId)
+        if (live !== undefined && handle === undefined) {
+          return err(request, {
+            code: 'internal',
+            message: `cannot delete session "${sessionId}": its live agent has no owned handle to dispose`,
+            details: {},
+          })
+        }
+        try {
+          // Dispose the live agent first: its drain commits the final events
+          // to persistence before the log disappears, and the paired disposal
+          // edge tells every connected client the session is gone.
+          if (handle !== undefined) await handle.dispose()
+          if (persistence !== undefined) await persistence.remove(sessionId)
+          await ctx.workspaceRegistry.forgetSession(sessionId)
+        } catch (error: unknown) {
+          return err(request, {
+            code: 'internal',
+            message: `failed to delete session "${sessionId}": ${String(error)}`,
+            details: {},
+          })
+        }
+        return ok(request, { deleted: true as const })
       },
     },
 

@@ -238,6 +238,25 @@ export abstract class SessionPersistence extends Service {
    * @returns one header and opaque revision per materialized session without loading full logs.
    */
   abstract listSnapshots(signal?: AbortSignal): Promise<SessionPersistenceSnapshot[]>
+
+  /**
+   * Durably remove a stored session: after resolution the backend no longer
+   * reports it from {@link list} / {@link listSnapshots}, and a later
+   * {@link load} or {@link inspect} of the id fails as absent. Idempotent for
+   * an id the backend does not hold (a remove of an already-removed or
+   * never-materialized session resolves without effect). Callers dispose the
+   * session's live owner before calling: retirement drains pending writes
+   * first, so a live write-behind cannot re-materialize the id behind the
+   * removal.
+   * @param _id - persisted session to remove (unused by the default: the
+   *   base rejection is per backend, not per session).
+   * @param signal - optional cancellation for backend removal work.
+   * @returns resolution after durability.
+   */
+  remove(_id: SessionId, signal?: AbortSignal): Promise<void> {
+    signal?.throwIfAborted()
+    return Promise.reject(new Error('this session persistence backend does not support remove'))
+  }
 }
 
 export default SessionPersistence

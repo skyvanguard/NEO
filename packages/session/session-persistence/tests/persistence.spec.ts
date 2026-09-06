@@ -173,6 +173,11 @@ class MemoryPersistence extends SessionPersistence implements PersistenceBackend
       revision: memoryRevision(entry),
     }))
   }
+
+  override async remove(id: SessionId, signal?: AbortSignal): Promise<void> {
+    signal?.throwIfAborted()
+    this.store.delete(id)
+  }
 }
 
 /** Controllable storage primitive for serialization and retirement failure tests. */
@@ -230,6 +235,12 @@ class ControlledBackend implements PersistenceBackend<never> {
 
   async list(): Promise<SessionHeader[]> {
     return [...this.store.values()].map(entry => structuredClone(entry.meta))
+  }
+
+  async remove(id: SessionId, signal?: AbortSignal): Promise<void> {
+    signal?.throwIfAborted()
+    this.lifecycle.push(`remove:${id}`)
+    this.store.delete(id)
   }
 
   async close(): Promise<void> {

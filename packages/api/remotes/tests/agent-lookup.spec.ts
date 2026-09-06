@@ -111,6 +111,37 @@ describe('API Remote Agent resolver races', () => {
     }
   })
 
+  it('hands each minted cold-resume handle to the owning Host through onHandle', async () => {
+    const ctx = await createContext()
+    const sessionId = sid('handle-handoff')
+    const meta = header(sessionId)
+    let published: Session | undefined
+    provideSession(ctx, meta, () => {
+      published = ctx.sessions.create(sessionId, { meta: { cwd: '/proj' } })
+      return Promise.resolve({ meta, events: [] })
+    })
+    const handle = {
+      agent: undefined as unknown as Agent,
+      dispose: () => Promise.resolve(),
+    }
+    const resume = vi.spyOn(ctx.agents, 'resume').mockImplementation(async () => {
+      if (published === undefined) throw new Error('Session was not published')
+      handle.agent = stubAgent(ctx, published)
+      return handle
+    })
+    const onHandle = vi.fn()
+
+    const result = await createApiRemoteAgentResolver(ctx, { onHandle })(sessionId)
+
+    expect(result).toMatchObject({ agent: { id: sessionId } })
+    expect(resume).toHaveBeenCalledOnce()
+    // The owning Host keeps the handle so a later operation can dispose the
+    // exact agent (the .agent read alone would drop it).
+    expect(onHandle).toHaveBeenCalledOnce()
+    expect(onHandle).toHaveBeenCalledWith(handle)
+    await ctx.fiber.dispose()
+  })
+
   it('uses the shared cold-resume policy for the Agent Host Context', async () => {
     const ctx = await createContext()
     const sessionId = sid('context-cold-resume')

@@ -370,4 +370,18 @@ export interface SessionsApi {
    */
   cancel(request: RpcRequest<{ sessionId: SessionId }>): Promise<RpcResponse<{ accepted: true }>>
 
+  /**
+   * Permanently deletes one ordinary session: its live agent (if attached)
+   * is disposed first so its final events land, then its persisted log is
+   * removed and the workspace registry forgets every reference to the id
+   * (session account slot and registry-global archive set). The session's
+   * working directory and user files are untouched. A cold (unattached)
+   * session deletes with log removal alone. Subagent-owned sessions reject
+   * with `agent-busy`, like every other session verb; an id neither live nor
+   * persisted fails with `session-not-found`. A session whose agent is live
+   * but whose owned handle is unavailable (a creation path this proxy does
+   * not own) fails with `internal` rather than orphaning a live session.
+   */
+  delete(request: RpcRequest<{ sessionId: SessionId }>): Promise<RpcResponse<{ deleted: true }>>
+
 }

@@ -207,6 +207,15 @@ export interface PersistenceBackend<TornMarker = unknown> {
   locate?(meta: SessionHeader): SessionLocation | undefined
 
   /**
+   * Durably remove one stored session's complete artifact (rows or file).
+   * Idempotent for an absent id: a backend that finds nothing resolves
+   * without effect.
+   * @param id - persisted session id to remove.
+   * @param signal - optional cancellation for backend removal work.
+   */
+  remove(id: SessionId, signal?: AbortSignal): Promise<void>
+
+  /**
    * Optional lifecycle teardown (e.g. close a database handle). Awaited by the
    * coordinator's dispose effect AFTER the quiescence drain. A stateless file
    * backend omits it.
@@ -836,6 +845,22 @@ export class PersistenceCoordinator<TornMarker = unknown> {
     const retired = Promise.resolve(this.retirements.get(id))
     const waited = signal === undefined ? retired : observeQueuedAbort(retired, signal, () => false)
     return waited.then(() => this.serialize(id, () => this.readFromCore(id, fromSeq, signal), signal))
+  }
+
+  /**
+   * Durably remove a stored session (the service's `remove`). Joins the per-id
+   * write chain like every other mutation and, like `readFrom`, first waits
+   * for a retirement in flight: the retired session's final drain must commit
+   * (or fail) before the artifact disappears, so a late write-behind cannot
+   * re-materialize the id behind the removal.
+   * @param id - persisted session to remove.
+   * @param signal - optional cancellation for queued and backend removal work.
+   * @returns resolution after the removal is durable.
+   */
+  remove(id: SessionId, signal?: AbortSignal): Promise<void> {
+    const retired = Promise.resolve(this.retirements.get(id))
+    const waited = signal === undefined ? retired : observeQueuedAbort(retired, signal, () => false)
+    return waited.then(() => this.serialize(id, () => this.backend.remove(id, signal), signal))
   }
 
   private async readFromCore(

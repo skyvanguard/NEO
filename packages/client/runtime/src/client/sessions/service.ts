@@ -532,6 +532,22 @@ export class SessionRuntime implements ISessions {
   }
 
   /**
+   * Permanently delete one session on the Host: the live agent (if attached)
+   * is disposed first, then the persisted log is removed and the workspace
+   * registry forgets the id. The attached case converges through the host
+   * disposal edge; this method refreshes the baseline either way, because an
+   * unattached session leaves no edge behind.
+   * @param id - the session to delete.
+   * @throws when the Host rejects the deletion (unknown session, a
+   *   subagent-owned session, or a live agent without an owned handle).
+   */
+  async deleteSession(id: SessionId): Promise<void> {
+    const result = await this.manager.deleteSession(id)
+    if (!result.ok) throw new Error(`session delete failed: ${result.error.code}: ${result.error.message}`)
+    void this.refresh()
+  }
+
+  /**
    * Resolve an Agent-scoped context view (use-and-discard).
    * @param id - session id (the agent identity — 1:1 same axis).
    * @returns scoped ctx, or undefined for a session neither listed nor already scoped.

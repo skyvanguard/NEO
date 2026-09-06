@@ -942,3 +942,48 @@ describe('registry-global session archive', () => {
     expect(upgraded.registry.archivedSessionIds).toEqual([])
   })
 })
+
+describe('registry forgetSession (deletion cleanup)', () => {
+  it('removes the id from the bootstrapped account and the registry-global archive set', async () => {
+    const dir = await makeDir('forget-home')
+    const result = await harness({ sessions: [header('gone', dir, 100), header('kept', dir, 200)] })
+    const workspace = result.registry.list()[0]!
+    expect(workspace.sessionIds).toEqual(['kept', 'gone'])
+    await result.registry.archiveSession(SessionId('gone'))
+    expect(result.registry.archivedSessionIds).toEqual(['gone'])
+    expect(storedState(result.pool).archivedSessionIds).toEqual(['gone'])
+
+    await result.registry.forgetSession(SessionId('gone'))
+    expect(result.registry.archivedSessionIds).toEqual([])
+    expect(storedState(result.pool).archivedSessionIds).toEqual([])
+    expect(workspace.sessionIds).toEqual(['kept'])
+    expect(storedRecord(result.pool, workspace.id).sessionIds).toEqual(['kept'])
+  })
+
+  it('is a write-free no-op for an id no account holds and the archive set lacks', async () => {
+    const dir = await makeDir('forget-noop')
+    const result = await harness({ sessions: [header('kept', dir, 100)] })
+    const workspace = result.registry.list()[0]!
+    expect(workspace.sessionIds).toEqual(['kept'])
+    const written = result.changes.length
+
+    await result.registry.forgetSession(SessionId('ghost'))
+    expect(result.changes).toHaveLength(written)
+    expect(workspace.sessionIds).toEqual(['kept'])
+    expect(storedRecord(result.pool, workspace.id).sessionIds).toEqual(['kept'])
+  })
+
+  it('prunes the archive set for an id that no workspace accounts', async () => {
+    const live = await makeDir('forget-stray')
+    const result = await harness({ liveSessions: [header('stray', live, 200)] })
+    expect(result.registry.list()).toEqual([])
+    await result.registry.archiveSession(SessionId('stray'))
+    const written = result.changes.length
+
+    await result.registry.forgetSession(SessionId('stray'))
+    expect(result.registry.archivedSessionIds).toEqual([])
+    expect(storedState(result.pool).archivedSessionIds).toEqual([])
+    // Only the archive-set prune writes; the account pass touches no record.
+    expect(result.changes.filter(change => change.table === '').length).toBe(written + 1)
+  })
+})

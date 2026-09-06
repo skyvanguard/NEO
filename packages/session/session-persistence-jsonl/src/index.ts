@@ -199,6 +199,28 @@ export class JsonlSessionPersistence extends SessionPersistence implements Persi
     return this.coordinator.readFrom(id, fromSeq, signal)
   }
 
+  /**
+   * Durably remove a session's artifact: the whole session directory, which is
+   * owned by exactly this session and reserved for session-local artifacts.
+   * An absent id resolves without effect; a directory that disappears between
+   * the probe and the rm is the same absence.
+   */
+  override async remove(id: SessionId, signal?: AbortSignal): Promise<void> {
+    signal?.throwIfAborted()
+    await this.ensureRootEncoding()
+    signal?.throwIfAborted()
+    const path = await this.findLog(id, signal)
+    if (path === undefined) return
+    try {
+      await rm(dirname(path), { recursive: true, force: true })
+    } catch (error: unknown) {
+      signal?.throwIfAborted()
+      if (isENOENT(error)) return
+      throw error
+    }
+    signal?.throwIfAborted()
+  }
+
   // One method serves both public `list` and the backend hook; delegating it to
   // the coordinator would call this hook recursively.
 
