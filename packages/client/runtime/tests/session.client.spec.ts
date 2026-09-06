@@ -265,6 +265,58 @@ describe('live event path', () => {
     expect(session.getSnapshot().nodes).toEqual(before.nodes)
   })
 
+  it('does not record a window event when the assembler throws mid-append, so a later gap repair recovers it', async () => {
+    // appendLive must be atomic: if conversation.append throws (a malformed /
+    // duplicate / out-of-order Match), this.events must NOT already carry the
+    // event. Otherwise the window's tail advances past a seq the conversation
+    // never assembled, the next event looks contiguous instead of gapped, no
+    // repair fires, and that event is lost for good. Here the guarantee is
+    // observed through the window tail: with the event kept out of the window,
+    // the following seq is correctly seen as a gap and repaired.
+    let poisonArmed = true
+    const poisonDefinition = {
+      ...TEST_EVENT_DEFINITION,
+      match: (event: SessionEvent) => {
+        if (poisonArmed && event.seq === 1) {
+          poisonArmed = false
+          throw new Error('assembler boom')
+        }
+        return { id: String(event.seq), role: 'start' as const }
+      },
+    }
+    const conversation: ConversationRuntime = {
+      events: {
+        entries: () => [poisonDefinition],
+        fallbackEntry: () => undefined,
+      } as unknown as ConversationRuntime['events'],
+      views: {
+        entries: () => [testViewDefinition()],
+      } as unknown as ConversationRuntime['views'],
+    }
+    const api = new FakeApiClient()
+    api.onHistory = () => histResponse([])
+    const session = new Session(SID, api, fakeRemote(), { conversation })
+    await session.open()
+    const feed = (event: SessionEvent): void => {
+      session.handleMuxEnvelope('r' as never, { type: 'session/event', sessionId: SID, event })
+    }
+
+    feed(ev.user(0, 'first'))
+    // The poison append throws; with the fix the window tail stays at seq 0.
+    expect(() => { feed(ev.user(1, 'boom')) }).toThrow(/assembler boom/)
+    await Promise.resolve()
+
+    // The next event (seq 2) is now a gap over the true tail (0), so the repair
+    // refetches the full page and recovers seq 1. A polluted window (tail 1)
+    // would treat seq 2 as contiguous, fire no repair, and lose seq 1.
+    api.onHistory = () => histResponse([ev.user(0, 'first'), ev.user(1, 'recovered'), ev.user(2, 'third')])
+    feed(ev.user(2, 'third'))
+    await vi.waitFor(() => { expect(api.callsOf('session.history').length).toBe(2) })
+    await Promise.resolve()
+
+    expect(chatSeqs(session.getSnapshot())).toContain(1)
+  })
+
   it('keeps the authoritative host blank bit across unrelated log events', async () => {
     const { session } = await opened([])
     session.handleBlank(true)

@@ -668,11 +668,16 @@ export class Session implements SessionFace {
   private appendLive(event: SessionEvent, view?: ToolEventView): ConversationPublication {
     const tailSeq = this.windowTailSeq()
     if (tailSeq !== null && event.seq <= tailSeq) return 'none' // replay overlap, drop
+    // Fold into the assembler FIRST: it is the only step here that can throw (a
+    // malformed / duplicate / out-of-order Match). Mutating the window arrays and
+    // queue mirror only after it succeeds keeps appendLive atomic — a throw must
+    // not leave this.events recording a seq the conversation never assembled, or a
+    // retransmit of that seq would be dropped as a replay overlap and lost.
+    const publication = this.conversation.append({ event, view })
     this.events.push(event)
     this.views.push(view)
     if (event.type === 'turn/start') this.firstPromptPendingTurn = false
     const queueChanged = this.queueMirror.acceptDurable(event)
-    const publication = this.conversation.append({ event, view })
     return queueChanged ? 'immediate' : publication
   }
 
