@@ -648,6 +648,57 @@ function restoreLineEndings(content: string, lineEndings: LineEndings): string {
   return lineEndings === 'LF' ? content : normalizeLineEndings(content).split('\n').join('\r\n')
 }
 
+/** The `N: ` prefix `read` puts in front of every line it renders; captures the number. */
+const READ_LINE_PREFIX = /^\s*(\d+): ?/
+
+/** Line-by-window products past this size skip the whitespace diagnosis rather than stall the failure path. */
+const NEAR_MISS_SCAN_BUDGET = 2_000_000
+
+/** Collapse runs of whitespace so indentation and spacing differences do not matter. */
+function collapseWhitespace(text: string): string {
+  return text.replaceAll(/\s+/g, ' ').trim()
+}
+
+/**
+ * Explain the two ways an agent most often mistypes `old_string`: it copied the
+ * `N: ` line-number prefixes from a `read` result, or it got the indentation or
+ * spacing wrong. A `not found` with no diagnosis is the most common retry loop
+ * an autonomous agent falls into; naming the line that nearly matched breaks it.
+ * @param content - the file content, line endings normalised.
+ * @param oldNorm - the requested `old_string`, line endings normalised.
+ * @returns the diagnosis to append to the error, or undefined when nothing nearly matches.
+ */
+function describeNearMiss(content: string, oldNorm: string): string | undefined {
+  const requested = oldNorm.split('\n')
+  // A `read` result prefixes EVERY line with its number, and the numbers run
+  // consecutively; one numeric key inside real content does not qualify.
+  const numbers = requested.map(line => READ_LINE_PREFIX.exec(line)?.[1])
+  const looksPrefixed = requested.length > 0
+    && numbers.every((value, index) => value !== undefined && (index === 0 || Number(value) === Number(numbers[index - 1]) + 1))
+  if (looksPrefixed) {
+    const withoutPrefixes = requested.map(line => line.replace(READ_LINE_PREFIX, '')).join('\n')
+    if (content.includes(withoutPrefixes)) {
+      return 'old_string carries the "N: " line-number prefixes that read adds; pass the text without them'
+    }
+  }
+  const wanted = collapseWhitespace(oldNorm)
+  if (wanted.length === 0) return undefined
+  const lines = content.split('\n')
+  // Bounded: the diagnosis is a courtesy on the failure path, not a search
+  // engine. A sliding window over a huge file with a long old_string would
+  // cost seconds; past the budget the plain message is the honest answer.
+  const wantedLines = requested.length
+  if (lines.length * wantedLines > NEAR_MISS_SCAN_BUDGET) return undefined
+  const collapsed = lines.map(collapseWhitespace)
+  for (let start = 0; start + wantedLines <= lines.length; start += 1) {
+    const window = collapsed.slice(start, start + wantedLines).join(' ').replaceAll(/ +/g, ' ').trim()
+    if (window === wanted) {
+      return `a match that differs only in whitespace or indentation starts at line ${start + 1}; copy it exactly`
+    }
+  }
+  return undefined
+}
+
 function countOccurrences(content: string, needle: string): number {
   let count = 0
   let index = 0
@@ -770,12 +821,46 @@ export function applyLiteralEdit(
   const newNorm = normalizeLineEndings(newString)
   const replacements = countOccurrences(content, oldNorm)
   if (replacements === 0) {
-    throw new FsError(`old_string was not found in "${displayPath}"`, 'FS_EDIT_NOT_FOUND')
+    const hint = describeNearMiss(content, oldNorm)
+    throw new FsError(`old_string was not found in "${displayPath}"${hint === undefined ? '' : `; ${hint}`}`, 'FS_EDIT_NOT_FOUND')
   }
   if (!replaceAll && replacements > 1) {
     throw new FsError(`old_string matched ${replacements} times in "${displayPath}"; provide a more specific old_string or set replace_all to true`, 'FS_AMBIGUOUS_EDIT')
   }
   return { content: content.split(oldNorm).join(newNorm), replacements }
+}
+
+/**
+ * Apply an ordered sequence of literal edits to one content string. Each edit
+ * matches against the content the previous one produced, so a later edit may
+ * depend on an earlier one; the first failure aborts the whole sequence with
+ * its position in the message, and the caller writes nothing.
+ * @param content - the LF-normalised file content.
+ * @param edits - the edits in application order; at least one.
+ * @param displayPath - the path shown in error messages.
+ * @returns the final content and the total replacement count.
+ */
+export function applyLiteralEdits(
+  content: string,
+  edits: readonly { oldString: string; newString: string; replaceAll: boolean }[],
+  displayPath: string,
+): { content: string; replacements: number } {
+  if (edits.length === 0) throw new FsError('at least one edit is required', 'FS_EDIT_NOT_FOUND')
+  let current = content
+  let replacements = 0
+  for (const [index, edit] of edits.entries()) {
+    try {
+      const applied = applyLiteralEdit(current, edit.oldString, edit.newString, edit.replaceAll, displayPath)
+      current = applied.content
+      replacements += applied.replacements
+    } catch (error: unknown) {
+      if (edits.length > 1 && error instanceof FsError) {
+        throw new FsError(`edit #${index + 1} of ${edits.length}: ${error.message}`, error.code, { cause: error })
+      }
+      throw error
+    }
+  }
+  return { content: current, replacements }
 }
 
 export { normalizeLineEndings, restoreLineEndings }

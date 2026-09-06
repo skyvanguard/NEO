@@ -803,6 +803,26 @@ describe('optional model-free tool-result pruning', () => {
     expect(session.surface.replaceGeneration).toBe(1)
   })
 
+  it('stops pruning as soon as the surface is back under the threshold', async () => {
+    // Every replacement breaks the cached request prefix from that node on;
+    // with three oversized results and a budget one prune satisfies, the
+    // other two stay intact (one replacement = one surface generation).
+    const ctx = createContext(12_000)
+    void new ToolResultPruner(ctx, pruneConfig)
+    const compact = new TestCompactionEngine(ctx, {
+      auto: false,
+      thresholdRatio: 0.5,
+      retainTokens: 50,
+    })
+    const session = toolConversation()
+    expect(ctx.tokenMeter.measure(session).totalTokens).toBeGreaterThanOrEqual(6_000)
+
+    expect(await compactIfNeeded(compact, session)).toBeNull()
+    expect(compact.calls).toHaveLength(0)
+    expect(ctx.tokenMeter.measure(session).totalTokens).toBeLessThan(6_000)
+    expect(session.surface.replaceGeneration).toBe(1)
+  })
+
   it('summarizes the pruned surface when pruning is insufficient', async () => {
     const ctx = createContext(2_000)
     void new ToolResultPruner(ctx, pruneConfig)
@@ -1531,6 +1551,57 @@ describe('automatic listener and loader composition', () => {
     expect(warnings).toEqual([
       expect.stringContaining(`no context capacity for ${MODEL}/${MODEL}`),
     ])
+    // The failure happened before any bracket opened, so the process log was
+    // its only trace; it is now recorded once in the session for the UI.
+    const brackets = session.events.filter(event => event.type === 'compaction/start' || event.type === 'compaction/end')
+    expect(brackets).toHaveLength(2)
+    expect(brackets[1]).toMatchObject({
+      type: 'compaction/end',
+      // Enclosed by the open turn the pre-step runs in.
+      data: { turn: 5, error: expect.stringContaining('no context capacity') as string },
+    })
+  })
+
+  it('never opens a failure bracket on top of an unmatched compaction/start', async () => {
+    // An orphan start is the intentional busy signal of a compaction that
+    // died mid-flight; a synthetic bracket on top would either trip the
+    // compaction invariant or hide the orphan from the next entry check.
+    const ctx = createContext()
+    ctx.logger.warn = (() => undefined) as typeof ctx.logger.warn
+    void new TestCompactionEngine(ctx, { thresholdRatio: 0.5, retainTokens: 180 })
+    const session = conversation(4)
+    session.append('compaction/start', { compactionId: CompactionId('orphan'), turn: null })
+
+    await expect(preStep(ctx, agent(session, MODEL))).resolves.toEqual({ kind: 'enter', messages: [] })
+    const brackets = session.events.filter(event => event.type === 'compaction/start' || event.type === 'compaction/end')
+    expect(brackets.map(event => event.type)).toEqual(['compaction/start'])
+  })
+
+  it('records a pre-bracket failure once per cause and leaves in-bracket failures to their own bracket', async () => {
+    const ctx = createContext()
+    ctx.logger.warn = (() => undefined) as typeof ctx.logger.warn
+    const meter = ctx.tokenMeter
+    const measure = meter.measure.bind(meter)
+    let failing = true
+    meter.measure = (session) => {
+      if (failing) throw new Error('meter exploded')
+      return measure(session)
+    }
+    const compact = new TestCompactionEngine(ctx, { thresholdRatio: 0.5, retainTokens: 180 })
+    const session = conversation(4)
+
+    await preStep(ctx, agent(session, MODEL))
+    await preStep(ctx, agent(session, MODEL))
+    const recorded = () => session.events.filter(event => event.type === 'compaction/end')
+    expect(recorded()).toHaveLength(1)
+    expect(recorded()[0]).toMatchObject({ data: { error: expect.stringContaining('meter exploded') as string } })
+
+    // An in-bracket failure already closes its own bracket: no duplicate.
+    failing = false
+    compact.error = 'temporary failure'
+    await preStep(ctx, agent(session, MODEL))
+    expect(recorded()).toHaveLength(2)
+    expect(recorded()[1]).toMatchObject({ data: { error: expect.stringContaining('temporary failure') as string } })
   })
 
   it('warns once per routed target when absolute retention exceeds its resolved threshold', async () => {

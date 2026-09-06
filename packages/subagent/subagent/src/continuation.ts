@@ -340,6 +340,25 @@ class ChildLock {
   }
 }
 
+/** Characters of a child's closing message delivered to its parent before the tail is cut. */
+export const SETTLEMENT_OUTPUT_MAX_CHARS = 8_000
+
+/**
+ * The part of a child's closing message that belongs in the parent's context:
+ * its text, never its reasoning, and never more than the parent would get
+ * from any other tool result. This delivery bypasses `tools/post-execute`,
+ * so the spill policy cannot cap it; every other consumer of a child's
+ * output already filters to text.
+ * @param output - the child's final assistant content.
+ * @returns the text to deliver, or undefined when there is none.
+ */
+export function settlementOutputText(output: readonly ContentBlock[]): string | undefined {
+  const text = output.flatMap(block => block.type === 'text' ? [block.text] : []).join('')
+  if (text.length === 0) return undefined
+  if (text.length <= SETTLEMENT_OUTPUT_MAX_CHARS) return text
+  return `${text.slice(0, SETTLEMENT_OUTPUT_MAX_CHARS)}\n[closing message was cut to ${SETTLEMENT_OUTPUT_MAX_CHARS} characters of ${text.length}]`
+}
+
 /**
  * The continuable-subagent orchestration service behind `ctx.subagents`. Tool
  * schema and host adapters are consumers of this one contract; foreground
@@ -1403,12 +1422,13 @@ export class SubagentContinuationManager {
       const parent = this.ctx.agents.get(activation.parentSession)
       if (parent === undefined) return
       const summary = settlementSummary(activation.childId, terminal.stopReason)
+      const closing = terminal.output === undefined ? undefined : settlementOutputText(terminal.output)
       const message = createUserMessage({
         content: [
           { type: 'text' as const, text: summary },
-          ...terminal.output === undefined
+          ...closing === undefined
             ? [{ type: 'text' as const, text: 'It left no closing message.' }]
-            : [{ type: 'text' as const, text: 'Its closing message:' }, ...terminal.output],
+            : [{ type: 'text' as const, text: `Its closing message:\n${closing}` }],
         ],
         source: {
           kind: 'subagent-settled' as const,

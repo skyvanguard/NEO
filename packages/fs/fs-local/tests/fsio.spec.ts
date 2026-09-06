@@ -12,6 +12,7 @@ import { join } from 'node:path'
 import { createServer } from 'node:net'
 import {
   applyLiteralEdit,
+  applyLiteralEdits,
   listDirectory,
   probe,
   probeNoFollow,
@@ -867,6 +868,26 @@ describe('writeFileAtomic — temp-file safety', () => {
   })
 })
 
+describe('applyLiteralEdits', () => {
+  it('applies edits in order on the running content and sums the replacements', () => {
+    expect(applyLiteralEdits('a b a', [
+      { oldString: 'a', newString: 'c', replaceAll: true },
+      { oldString: 'c b', newString: 'd', replaceAll: false },
+    ], 'f')).toEqual({ content: 'd c', replacements: 3 })
+  })
+
+  it('names the failing edit and aborts the whole sequence', () => {
+    expect(() => applyLiteralEdits('a b', [
+      { oldString: 'a', newString: 'x', replaceAll: false },
+      { oldString: 'zzz', newString: 'y', replaceAll: false },
+    ], 'f')).toThrow(expect.objectContaining({ code: 'FS_EDIT_NOT_FOUND', message: expect.stringContaining('edit #2 of 2: old_string was not found') as string }))
+    expect(() => applyLiteralEdits('a b', [], 'f')).toThrow(expect.objectContaining({ code: 'FS_EDIT_NOT_FOUND' }))
+    // A single edit keeps its plain message.
+    expect(() => applyLiteralEdits('a b', [{ oldString: 'zzz', newString: 'y', replaceAll: false }], 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
+  })
+})
+
 describe('applyLiteralEdit', () => {
   it('replaces a unique match', () => {
     expect(applyLiteralEdit('a b c', 'b', 'X', false, 'f')).toEqual({ content: 'a X c', replacements: 1 })
@@ -874,6 +895,37 @@ describe('applyLiteralEdit', () => {
 
   it('rejects zero matches', () => {
     expect(() => applyLiteralEdit('a b c', 'z', 'X', false, 'f')).toThrow(expect.objectContaining({ code: 'FS_EDIT_NOT_FOUND' }))
+  })
+
+  it('names the line that differs only in whitespace when nothing matches literally', () => {
+    const content = 'function a() {\n    return 1\n}\n'
+    expect(() => applyLiteralEdit(content, 'function a() {\n  return 1\n}', 'X', false, 'f'))
+      .toThrow(/differs only in whitespace or indentation starts at line 1/)
+    expect(() => applyLiteralEdit(content, '\treturn  1', 'X', false, 'f'))
+      .toThrow(/starts at line 2/)
+  })
+
+  it('points out copied read line-number prefixes only when every line carries a consecutive one', () => {
+    expect(() => applyLiteralEdit('alpha\nbeta\n', '1: alpha\n2: beta', 'X', false, 'f'))
+      .toThrow(/"N: " line-number prefixes/)
+    // Numeric keys that are real content: no prefix diagnosis, no false advice.
+    const content = 'const m = {\n  1: one,\n  2: two,\n}\nlist = [one, two]\n'
+    expect(() => applyLiteralEdit(content, '1: one,\n7: two,', 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
+  })
+
+  it('skips the whitespace diagnosis past the scan budget instead of stalling', () => {
+    const content = 'line\n'.repeat(200_000)
+    const wanted = Array.from({ length: 20 }, () => '  line').join('\n')
+    expect(() => applyLiteralEdit(content, wanted, 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
+  })
+
+  it('gives no diagnosis when nothing nearly matches', () => {
+    expect(() => applyLiteralEdit('a b c', 'zzz', 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
+    expect(() => applyLiteralEdit('a b c', '   ', 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
   })
 
   it('rejects an empty oldString without scanning forever', () => {

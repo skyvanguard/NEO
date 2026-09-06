@@ -453,6 +453,24 @@ describe('OutputCollector', () => {
     expect(out.truncated).toBe(true)
   })
 
+  it('drops NUL from decoded text, keeps ESC for ANSI rendering, and leaves the spill raw', () => {
+    // `grep -a` over a binary file is enough to put NUL into stdout. It is
+    // valid single-byte UTF-8, so toString() passes it through, and downstream
+    // it truncates the prompt the multimodal tokenizer sees. ESC stays: the
+    // client renders ANSI colour from this text.
+    const raw = Buffer.concat([Buffer.from('peer'), Buffer.from([0]), Buffer.from(' slot\tok\r\n'), Buffer.from([27]), Buffer.from('[0m')])
+    const collector = new OutputCollector(100, 100, 'binary', spillDir)
+    collector.push(raw)
+    expect(collector.readFrom(0).text).toBe('peer slot\tok\r\n\u001b[0m')
+    expect(collector.finalize().text).toBe('peer slot\tok\r\n\u001b[0m')
+
+    const spilling = new OutputCollector(4, 100, 'binary-spill', spillDir)
+    spilling.push(raw)
+    const out = spilling.finalize()
+    expect(out.truncated).toBe(true)
+    expect(readFileSync(out.spillPath!)).toEqual(raw)
+  })
+
   it('readFrom returns increments and flags lossy reads', () => {
     const collector = new OutputCollector(10, 100, 'test', spillDir)
     collector.push(Buffer.from('aaaaa'))

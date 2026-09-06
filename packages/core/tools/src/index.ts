@@ -471,6 +471,9 @@ export const TOOL_ABORTED = 'ABORTED'
 /** Canonical error code for cancellation before a tool body was invoked. */
 export const TOOL_ABORTED_BEFORE_DISPATCH = 'ABORTED_BEFORE_DISPATCH'
 
+/** Canonical error code for a model-ordered call the scheduler could not carry to a result. */
+export const TOOL_SCHEDULER_FAILED = 'SCHEDULER_FAILED'
+
 /** Structured error metadata for a failed tool call (alongside the model-facing text). */
 export interface ToolErrorInfo {
   name: string

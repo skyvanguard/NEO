@@ -58,7 +58,19 @@ export interface GrepInput {
   pattern: string
   path?: string
   include?: string
+  /** `content` (default) returns matching lines; `files_with_matches` returns one row per file. */
+  outputMode?: GrepOutputMode
+  /** Lines of surrounding context per match (`rg -C`); context rows come back as ordinary rows. */
+  context?: number
+  /** Cap on rows returned, applied before the retention budget. */
+  headLimit?: number
 }
+
+/** The two shapes a grep result can take. */
+export type GrepOutputMode = 'content' | 'files_with_matches'
+
+/** Upper bound on `context` lines: past this the model should read the file instead. */
+export const GREP_MAX_CONTEXT = 20
 
 /**
  * Reject an `include` that is not ONE positive glob filter: blank strings,
@@ -87,14 +99,33 @@ function validateInclude(include: string): void {
  * @param args - the schema-validated `grep` arguments.
  * @returns the accepted input, unchanged.
  */
-export function parseGrepArgs(args: { pattern: string; path?: string; include?: string }): GrepInput {
+export function parseGrepArgs(args: {
+  pattern: string
+  path?: string
+  include?: string
+  output_mode?: string
+  context?: number
+  head_limit?: number
+}): GrepInput {
   if (args.pattern.length === 0) throw new Error('pattern must be a non-empty string')
   if (args.path !== undefined && args.path.trim().length === 0) throw new Error('path must be a non-empty string when given')
   if (args.include !== undefined) validateInclude(args.include)
+  if (args.output_mode !== undefined && args.output_mode !== 'content' && args.output_mode !== 'files_with_matches') {
+    throw new Error('output_mode must be "content" or "files_with_matches"')
+  }
+  if (args.context !== undefined && (!Number.isInteger(args.context) || args.context < 0 || args.context > GREP_MAX_CONTEXT)) {
+    throw new Error(`context must be an integer between 0 and ${GREP_MAX_CONTEXT}`)
+  }
+  if (args.head_limit !== undefined && (!Number.isInteger(args.head_limit) || args.head_limit < 1)) {
+    throw new Error('head_limit must be a positive integer')
+  }
   return {
     pattern: args.pattern,
     ...args.path !== undefined ? { path: args.path } : {},
     ...args.include !== undefined ? { include: args.include } : {},
+    ...args.output_mode !== undefined ? { outputMode: args.output_mode } : {},
+    ...args.context !== undefined && args.context > 0 ? { context: args.context } : {},
+    ...args.head_limit !== undefined ? { headLimit: args.head_limit } : {},
   }
 }
 
@@ -112,6 +143,10 @@ export function parseGrepArgs(args: { pattern: string; path?: string; include?: 
 export function buildGrepCommand(input: GrepInput): string[] {
   const parts = ['--json', `--regexp=${input.pattern}`]
   if (input.include !== undefined) parts.push(`--glob=${input.include}`)
+  // One match per file is all a file listing needs; ripgrep stops scanning
+  // each file at its first hit.
+  if (input.outputMode === 'files_with_matches') parts.push('--max-count=1')
+  if (input.context !== undefined) parts.push(`--context=${input.context}`)
   if (input.path !== undefined) parts.push('--', input.path)
   return parts
 }
@@ -132,7 +167,7 @@ function malformedRecord(detail: string, cause?: unknown): SearchError {
  * UTF-8 (ripgrep sends base64 `bytes` instead of `text`) yields a placeholder
  * preview rather than failing the whole search.
  */
-function parseRecord(line: string): GrepMatch | undefined {
+function parseRecord(line: string, includeContext: boolean): GrepMatch | undefined {
   let parsed: unknown
   try {
     parsed = JSON.parse(line)
@@ -142,8 +177,9 @@ function parseRecord(line: string): GrepMatch | undefined {
   if (typeof parsed !== 'object' || parsed === null) throw malformedRecord('a record is not an object')
   const record = parsed as { type?: unknown; data?: unknown }
   // Non-match record types (begin/end/context/summary — and any future type)
-  // are transport framing, not results: skipped, not malformed.
-  if (record.type !== 'match') return undefined
+  // are transport framing, not results: skipped, not malformed. A `context`
+  // record is a result only when the caller asked for context lines.
+  if (record.type !== 'match' && !(includeContext && record.type === 'context')) return undefined
   if (typeof record.data !== 'object' || record.data === null) throw malformedRecord('a match record has no data')
   const data = record.data as { path?: unknown; line_number?: unknown; lines?: unknown }
   const pathText = typeof data.path === 'object' && data.path !== null ? (data.path as { text?: unknown }).text : undefined
@@ -151,30 +187,44 @@ function parseRecord(line: string): GrepMatch | undefined {
   if (typeof data.line_number !== 'number') throw malformedRecord('a match record has no line number')
   if (typeof data.lines !== 'object' || data.lines === null) throw malformedRecord('a match record has no line content')
   const lines = data.lines as { text?: unknown; bytes?: unknown }
+  const contextRow = record.type === 'context' ? { context: true } : {}
   if (typeof lines.text === 'string') {
-    return { path: pathText, lineNumber: data.line_number, line: lines.text.replace(/\r?\n$/, '') }
+    return { path: pathText, lineNumber: data.line_number, line: lines.text.replace(/\r?\n$/, ''), ...contextRow }
   }
   if (typeof lines.bytes === 'string') {
-    return { path: pathText, lineNumber: data.line_number, line: '(line is not valid UTF-8)' }
+    return { path: pathText, lineNumber: data.line_number, line: '(line is not valid UTF-8)', ...contextRow }
   }
   throw malformedRecord('a match record has neither line text nor bytes')
 }
 
 /**
  * Parse complete `rg --json` stdout into flat matches, in output order (ripgrep
- * emits one file's matches contiguously). Only `match` records are consumed.
+ * emits one file's matches contiguously). Only `match` records are consumed,
+ * plus `context` records when `includeContext` is set.
  *
  * @param stdout - the complete raw `rg --json` stdout.
+ * @param includeContext - whether `context` records count as rows (a `-C` search).
  * @returns the flat matches; empty for output with no match records.
  */
-export function parseGrepMatches(stdout: string): GrepMatch[] {
+export function parseGrepMatches(stdout: string, includeContext = false): GrepMatch[] {
   const matches: GrepMatch[] = []
   for (const line of stdout.split('\n')) {
     if (line.length === 0) continue
-    const match = parseRecord(line)
+    const match = parseRecord(line, includeContext)
     if (match !== undefined) matches.push(match)
   }
   return matches
+}
+
+/**
+ * Format a `files_with_matches` result: one path per line, in output order.
+ * @param matches - one row per file (the first match of each).
+ * @returns the model-facing listing.
+ */
+export function formatGrepFiles(matches: readonly GrepMatch[]): string {
+  const paths = [...new Set(matches.map(match => match.path))]
+  if (paths.length === 0) return 'No matches found'
+  return `Found ${paths.length} ${paths.length === 1 ? 'file' : 'files'} with matches\n\n${paths.join('\n')}`
 }
 
 /** `match` / `matches` for a count. */
@@ -198,7 +248,9 @@ export function formatGrepMatches(matches: GrepMatch[]): string {
   }
   const sections: string[] = []
   for (const [path, group] of byFile) {
-    sections.push(`${path}\n${group.map(m => `Line ${m.lineNumber}: ${m.line}`).join('\n')}`)
+    // A context row reads `Line N- text`, a match `Line N: text` — the same
+    // `:` versus `-` distinction ripgrep itself prints.
+    sections.push(`${path}\n${group.map(m => `Line ${m.lineNumber}${m.context === true ? '-' : ':'} ${m.line}`).join('\n')}`)
   }
   return sections.join('\n\n')
 }
@@ -214,9 +266,12 @@ export function formatGrepMatches(matches: GrepMatch[]): string {
  * @returns the model-facing text.
  */
 export function formatGrepOutput(retained: RetainedItems<GrepMatch>, spillRef: SpillRef | undefined): string {
+  // Only real matches count; context rows are shown but never counted.
+  const kept = retained.items.filter(item => item.context !== true).length
+  const seen = kept + (retained.seen - retained.kept)
   const header = retained.truncated
-    ? `Found ${retained.kept} of ${retained.seen} matches`
-    : `Found ${retained.seen} ${matchNoun(retained.seen)}`
+    ? `Found ${kept} of ${seen} matches`
+    : `Found ${kept} ${matchNoun(kept)}`
   const body = formatGrepMatches(retained.items)
   if (!retained.truncated) return `${header}\n\n${body}`
   const recovery = spillRef !== undefined
@@ -283,11 +338,19 @@ export function applyGrepTool(ctx: Context, caps: GrepToolCaps): void {
     name: 'grep',
     description: 'Search file contents with a ripgrep regular expression. Returns matching lines with line numbers, grouped by file. '
       + `Returns the first ${caps.maxMatches} matches inline; a capped result reports where the complete match list was saved. `
-      + 'Use read on a matched file for surrounding context.',
+      + 'Unlike glob, this search honours .gitignore and skips hidden files: no match in an ignored file is not proof the text is absent. '
+      + 'Prefer output_mode "files_with_matches" to locate where a symbol lives, context to see surrounding lines, and read for the full file.',
     parameters: {
       pattern: { type: 'string', required: true, description: 'Regular expression to search for (ripgrep syntax).' },
       path: { type: 'string', description: 'File or directory to search. Defaults to the session workspace; a relative path resolves against it.' },
       include: { type: 'string', description: 'One glob filter for which files to search (e.g. "*.ts", "*.{js,jsx}"). Not a list; negation is not supported.' },
+      output_mode: {
+        type: 'string',
+        enum: ['content', 'files_with_matches'],
+        description: '"content" (default) returns matching lines; "files_with_matches" returns only the paths that match, one per line — an order of magnitude smaller for symbol searches.',
+      },
+      context: { type: 'integer', description: `Lines of context before and after each match (0-${GREP_MAX_CONTEXT}). Context lines come back as ordinary numbered lines.` },
+      head_limit: { type: 'integer', description: 'Return at most this many rows (before the retention budget). Use it when the first few hits are enough.' },
     },
     timeoutMs: caps.timeoutMs,
     output: {
@@ -305,14 +368,17 @@ export function applyGrepTool(ctx: Context, caps: GrepToolCaps): void {
                 path: { type: 'string', required: true },
                 lineNumber: { type: 'integer', required: true },
                 line: { type: 'string', required: true },
+                context: { type: 'boolean' },
               },
             },
           },
         },
       },
-      render: (_args, value) => [{
+      render: (args, value) => [{
         type: 'text',
-        text: formatRetainedGrep(retainGrepMatches(value.matches, caps.maxMatches, caps.maxLineBytes)),
+        text: args.output_mode === 'files_with_matches'
+          ? formatGrepFiles(value.matches)
+          : formatRetainedGrep(retainGrepMatches(value.matches, caps.maxMatches, caps.maxLineBytes)),
       }],
       presentationMeta: (_args, value) =>
         grepSearchMeta(retainGrepMatches(value.matches, caps.maxMatches, caps.maxLineBytes), caps.maxMetaBytes),
@@ -323,15 +389,16 @@ export function applyGrepTool(ctx: Context, caps: GrepToolCaps): void {
       if (run.noMatches) return { matches: [] }
 
       const all: GrepMatch[] = []
-      for (const raw of parseGrepMatches(run.stdout)) {
+      for (const raw of parseGrepMatches(run.stdout, input.context !== undefined)) {
         const match: GrepMatch = {
           path: toWorkdirRelative(raw.path, run.workdir),
           lineNumber: raw.lineNumber,
           line: raw.line,
+          ...raw.context === true ? { context: true } : {},
         }
         all.push(match)
       }
-      return { matches: all }
+      return { matches: input.headLimit === undefined ? all : all.slice(0, input.headLimit) }
     },
     presentCall: presentGrepCall,
     presentResult: presentGrepResult,

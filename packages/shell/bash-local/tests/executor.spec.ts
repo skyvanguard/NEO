@@ -81,6 +81,13 @@ describe('LocalBashExecutor.run', () => {
     expect(() => bash.resolve({ command: 'true', stdoutMaxBytes: -1 })).toThrow(/request\.stdoutMaxBytes/)
   })
 
+  it('clamps a raised stdoutMaxBytes to maxRequestedOutputBytes', async () => {
+    const { bash } = await setup({ maxOutputBytes: 100, maxRequestedOutputBytes: 300 })
+    expect(bash.resolve({ command: 'true', stdoutMaxBytes: 200 }).stdoutMaxBytes).toBe(200)
+    expect(bash.resolve({ command: 'true', stdoutMaxBytes: 5_000_000 }).stdoutMaxBytes).toBe(300)
+    await expect(setup({ maxRequestedOutputBytes: 0 })).rejects.toThrow(/maxRequestedOutputBytes/)
+  })
+
   it('defaults stdoutMaxBytes to maxOutputBytes and lets foreground callers raise stdout only', async () => {
     const { bash } = await setup({ maxOutputBytes: 100 })
     expect(bash.resolve({ command: 'true' }).stdoutMaxBytes).toBe(100)

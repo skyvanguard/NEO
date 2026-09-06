@@ -23,10 +23,16 @@ import { rgPath } from '@vscode/ripgrep'
 import { SpillLocator, SpillStore } from '@deepseek-ai/dsh-spill'
 import type { SaveTextSpill, SpillRef } from '@deepseek-ai/dsh-spill'
 import * as ToolFsSearch from '@deepseek-ai/dsh-tool-fs-search'
+import { retainGrepMatches } from '../src/search-core.ts'
 import {
   buildGlobCommand,
+  parseGlobArgs,
   buildGrepCommand,
+  formatGrepFiles,
+  GREP_MAX_CONTEXT,
+  parseGrepArgs,
   formatGrepMatches,
+  formatGrepOutput,
   parseGrepMatches,
   presentGlobCall,
   presentGlobResult,
@@ -339,7 +345,24 @@ describe('command construction (plain argv)', () => {
       '--glob=!**/.bzr', '--glob=!**/.bzr/**',
       '--glob=!**/.jj', '--glob=!**/.jj/**',
       '--glob=!**/.sl', '--glob=!**/.sl/**',
+      '--glob=!**/node_modules', '--glob=!**/node_modules/**',
     ])
+  })
+
+  it('glob: parseGlobArgs carries exclude through unchanged and omits it when absent', () => {
+    expect(parseGlobArgs({ pattern: '*', exclude: ['dist'] })).toEqual({ pattern: '*', exclude: ['dist'] })
+    expect(parseGlobArgs({ pattern: '*' })).toEqual({ pattern: '*' })
+  })
+
+  it('glob: exclude replaces the default dependency-store exclusion, bare names paired and globs verbatim', () => {
+    const tail = (input: Parameters<typeof buildGlobCommand>[0]) => buildGlobCommand(input).filter(part => !part.includes('/.') && part.startsWith('--glob=!'))
+    expect(tail({ pattern: '*', exclude: [] })).toEqual([])
+    expect(tail({ pattern: '*', exclude: ['dist', 'build/**/*.map'] })).toEqual([
+      '--glob=!**/dist', '--glob=!**/dist/**',
+      '--glob=!build/**/*.map',
+    ])
+    // A backslash escapes in ripgrep globs: a Windows-style entry means its separator.
+    expect(tail({ pattern: '*', exclude: ['vendor\\lib'] })).toEqual(['--glob=!vendor/lib'])
   })
 
   it('glob: the search root rides behind -- as a plain element', () => {
@@ -350,6 +373,7 @@ describe('command construction (plain argv)', () => {
       '--glob=!**/.bzr', '--glob=!**/.bzr/**',
       '--glob=!**/.jj', '--glob=!**/.jj/**',
       '--glob=!**/.sl', '--glob=!**/.sl/**',
+      '--glob=!**/node_modules', '--glob=!**/node_modules/**',
       '--', 'docs dir'])
   })
 
@@ -360,6 +384,35 @@ describe('command construction (plain argv)', () => {
   it('grep: include in --glob= form, path behind --, both plain elements', () => {
     expect(buildGrepCommand({ pattern: 'x', path: '-leading-dash', include: '*.{ts,tsx}' }))
       .toEqual(['--json', '--regexp=x', '--glob=*.{ts,tsx}', '--', '-leading-dash'])
+  })
+
+  it('grep: files_with_matches stops at the first hit per file and context maps to --context', () => {
+    expect(buildGrepCommand({ pattern: 'x', outputMode: 'files_with_matches' })).toEqual(['--json', '--regexp=x', '--max-count=1'])
+    expect(buildGrepCommand({ pattern: 'x', context: 3, path: 'src' })).toEqual(['--json', '--regexp=x', '--context=3', '--', 'src'])
+  })
+
+  it('grep: parseGrepArgs validates output_mode, context and head_limit and drops a zero context', () => {
+    expect(parseGrepArgs({ pattern: 'x', output_mode: 'files_with_matches', context: 0, head_limit: 5 }))
+      .toEqual({ pattern: 'x', outputMode: 'files_with_matches', headLimit: 5 })
+    expect(parseGrepArgs({ pattern: 'x', context: 2 })).toEqual({ pattern: 'x', context: 2 })
+    expect(() => parseGrepArgs({ pattern: 'x', output_mode: 'count' })).toThrow(/output_mode must be/)
+    expect(() => parseGrepArgs({ pattern: 'x', context: GREP_MAX_CONTEXT + 1 })).toThrow(/context must be an integer/)
+    expect(() => parseGrepArgs({ pattern: 'x', context: 1.5 })).toThrow(/context must be an integer/)
+    expect(() => parseGrepArgs({ pattern: 'x', head_limit: 0 })).toThrow(/head_limit must be a positive integer/)
+  })
+
+  it('grep: context records are rows only when asked for, and files mode lists unique paths', () => {
+    const contextLine = JSON.stringify({ type: 'context', data: { path: { text: 'a.txt' }, lines: { text: 'before\n' }, line_number: 1, absolute_offset: 0, submatches: [] } })
+    const stdout = `${contextLine}\n${matchLine('a.txt', 2, 'hit\n')}\n${matchLine('b.txt', 9, 'hit\n')}\n`
+    expect(parseGrepMatches(stdout).map(match => match.lineNumber)).toEqual([2, 9])
+    expect(parseGrepMatches(stdout, true).map(match => `${match.path}:${match.lineNumber}${match.context === true ? '-' : ''}`))
+      .toEqual(['a.txt:1-', 'a.txt:2', 'b.txt:9'])
+    // Context rows render as `Line N-` and never count as matches.
+    expect(formatGrepMatches(parseGrepMatches(stdout, true))).toBe('a.txt\nLine 1- before\nLine 2: hit\n\nb.txt\nLine 9: hit')
+    expect(formatGrepOutput(retainGrepMatches(parseGrepMatches(stdout, true), 250, 2000), undefined)).toMatch(/^Found 2 matches/)
+    expect(formatGrepFiles(parseGrepMatches(stdout))).toBe('Found 2 files with matches\n\na.txt\nb.txt')
+    expect(formatGrepFiles([])).toBe('No matches found')
+    expect(formatGrepFiles([{ path: 'a.txt', lineNumber: 1, line: '' }])).toBe('Found 1 file with matches\n\na.txt')
   })
 
   it.each([
@@ -741,6 +794,7 @@ describe('glob results', () => {
     const { ctx } = await setup()
     expect(text(await call(ctx, 'glob', { pattern: '  ' }))).toContain('pattern must be a non-empty string')
     expect(text(await call(ctx, 'glob', { pattern: '*', path: ' ' }))).toContain('path must be a non-empty string')
+    expect(text(await call(ctx, 'glob', { pattern: '*', exclude: ['dist', ' '] }))).toContain('exclude entries must be non-empty strings')
   })
 
   it('threads a valid path through to the spawn as the plain search root element', async () => {
@@ -755,6 +809,7 @@ describe('glob results', () => {
       '--glob=!**/.bzr', '--glob=!**/.bzr/**',
       '--glob=!**/.jj', '--glob=!**/.jj/**',
       '--glob=!**/.sl', '--glob=!**/.sl/**',
+      '--glob=!**/node_modules', '--glob=!**/node_modules/**',
       '--', 'sub'])
   })
 
@@ -931,6 +986,40 @@ describe('grep results', () => {
       ],
     })
     expect(text(result)).toBe('Found 3 matches\n\na.ts\nLine 3: const x = 1\nLine 9: const y = 2\n\nb.ts\nLine 1: const z = 3')
+  })
+
+  it('files_with_matches renders paths only and head_limit caps the rows', async () => {
+    const { ctx, subprocess } = await setup()
+    subprocess.handler = () => runResult([
+      matchLine('a.ts', 3, 'const x = 1\n'),
+      matchLine('b.ts', 1, 'const z = 3\n'),
+      matchLine('c.ts', 7, 'const w = 4\n'),
+      '',
+    ].join('\n'))
+    const files = await call(ctx, 'grep', { pattern: 'const', output_mode: 'files_with_matches' })
+    expect(text(files)).toBe('Found 3 files with matches\n\na.ts\nb.ts\nc.ts')
+    expect(subprocess.spawns.at(-1)?.argv).toContain('--max-count=1')
+
+    const capped = await call(ctx, 'grep', { pattern: 'const', head_limit: 2 })
+    if (capped.isError) throw new Error('expected grep success')
+    expect(capped.value).toEqual({ matches: [
+      { path: 'a.ts', lineNumber: 3, line: 'const x = 1' },
+      { path: 'b.ts', lineNumber: 1, line: 'const z = 3' },
+    ] })
+  })
+
+  it('context rows reach the model marked and uncounted through the whole tool', async () => {
+    const { ctx, subprocess } = await setup()
+    const contextLine = JSON.stringify({ type: 'context', data: { path: { text: 'a.ts' }, lines: { text: 'before\n' }, line_number: 1, absolute_offset: 0, submatches: [] } })
+    subprocess.handler = () => runResult(`${contextLine}\n${matchLine('a.ts', 2, 'hit\n')}\n`)
+    const result = await call(ctx, 'grep', { pattern: 'hit', context: 1 })
+    if (result.isError) throw new Error('expected grep success')
+    expect(result.value).toEqual({ matches: [
+      { path: 'a.ts', lineNumber: 1, line: 'before', context: true },
+      { path: 'a.ts', lineNumber: 2, line: 'hit' },
+    ] })
+    expect(text(result)).toBe('Found 1 match\n\na.ts\nLine 1- before\nLine 2: hit')
+    expect(subprocess.spawns.at(-1)?.argv).toContain('--context=1')
   })
 
   it('reports a single match in the singular', async () => {

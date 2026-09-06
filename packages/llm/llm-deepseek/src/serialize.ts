@@ -7,7 +7,7 @@
  * @module dsh-llm-deepseek/serialize
  */
 
-import { contentHasImage, LlmError } from '@deepseek-ai/dsh-llm'
+import { closeDanglingToolCalls, contentHasImage, LlmError, sanitizeText } from '@deepseek-ai/dsh-llm'
 import type { ContentBlock, GenerateOptions, Message } from '@deepseek-ai/dsh-llm'
 import type { WireMessage, WireRequest, WireTool } from './types.ts'
 
@@ -54,10 +54,10 @@ function resolveThinking(options: GenerateOptions, defaults: RequestDefaults): R
 
 /** Join the text blocks of a message (used for user/tool-result content). */
 function flattenText(blocks: ContentBlock[]): string {
-  return blocks
+  return sanitizeText(blocks
     .filter(block => block.type === 'text')
     .map(block => block.text)
-    .join('')
+    .join(''))
 }
 
 /** Reject core image content before any text-flattening path can silently erase it. */
@@ -109,9 +109,9 @@ function serializeAssistant(message: Message): WireMessage {
  * @param messages - the harness conversation, in order.
  * @returns the wire messages; order preserved, each tool result expanded into its own entry.
  */
-export function serializeMessages(messages: Message[]): WireMessage[] {
+export function serializeMessages(messages: readonly Message[]): WireMessage[] {
   const wire: WireMessage[] = []
-  for (const message of messages) {
+  for (const message of closeDanglingToolCalls(messages)) {
     assertTextOnly(message.content)
     if (message.role === 'system') {
       wire.push({ role: 'system', content: flattenText(message.content) })
@@ -154,7 +154,7 @@ export function serializeRequest(
 ): WireRequest {
   const messages: WireMessage[] = []
   if (options.system !== undefined) {
-    messages.push({ role: 'system', content: options.system })
+    messages.push({ role: 'system', content: sanitizeText(options.system) })
   }
   messages.push(...serializeMessages(options.messages))
 

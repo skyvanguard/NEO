@@ -6,15 +6,17 @@
  * and drains started calls.
  *
  * Abort records synthetic error results for skipped calls so replay stays
- * valid. A terminal scheduler failure preserves already-recorded `tool/call`
- * events without fabricating results.
+ * valid. A terminal scheduler failure drains started bodies, commits the
+ * results that completed behind it, and records a synthetic error result for
+ * every other model-ordered call, so the durable transcript never carries a
+ * tool call without a result.
  * @module dsh-agent-loop/tool-calls
  */
 
 import type { Context } from '@deepseek-ai/cordis'
 import { assertNever, createToolResultMessage, type ToolCallBlock } from '@deepseek-ai/dsh-llm'
 import type { Session, UserMessage } from '@deepseek-ai/dsh-session'
-import { TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, type ToolExecutionInput, type ToolExecutionMode, type ToolExecutionResult, type ToolRunContext } from '@deepseek-ai/dsh-tools'
+import { TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, TOOL_SCHEDULER_FAILED, type ToolExecutionInput, type ToolExecutionMode, type ToolExecutionResult, type ToolRunContext } from '@deepseek-ai/dsh-tools'
 
 /** One tool call after argument parsing, ready to schedule. */
 interface PlannedCall {
@@ -115,8 +117,9 @@ function parseArguments(raw: string): unknown {
  * drain and remains for the caller's next barrier. Results and contexts commit
  * in model order. Abort stops starts, drains and commits started calls, accepts
  * their contexts into the owning batch, records results for skipped calls, and
- * returns an aborted outcome. Scheduler failure drains dispatches without
- * committing synthetic recovery results.
+ * returns an aborted outcome. Scheduler failure drains dispatches, keeps every
+ * result that completed, and closes the remaining calls with synthetic error
+ * results before the failure reaches the turn boundary.
  */
 async function runGroup(
   ctx: Context,
@@ -231,6 +234,26 @@ async function runGroup(
   } catch (error: unknown) {
     schedulerFailure ??= { error }
     await Promise.allSettled(inFlight.values())
+    // The assistant message with these calls is already durable. Every call
+    // without a committed result gets a synthetic one before the failure
+    // reaches the turn boundary: a dangling tool call would otherwise make
+    // every later request for this session provider-invalid.
+    const message = schedulerFailure.error instanceof Error ? schedulerFailure.error.message : String(schedulerFailure.error)
+    for (let index = committed; index < group.length; index++) {
+      // oxlint-disable-next-line typescript/no-non-null-assertion -- bounded index
+      const block = group[index]!.block
+      // Started slots recorded their `tool/call` seq; the rest are recorded now.
+      // oxlint-disable-next-line typescript/no-non-null-assertion -- bounded index
+      const callSeq = index < nextToStart ? callSeqs[index]! : appendToolCall(session, turn, step, block)
+      // A body that completed behind the failing slot keeps its real outcome:
+      // a synthetic failure would invite the model to redo work that took effect.
+      const settled = await settledResult(ctx, slots[index])
+      appendToolResult(session, turn, step, block, settled ?? {
+        content: [{ type: 'text', text: `Error: tool call could not complete: ${message}` }],
+        isError: true,
+        error: { message, info: { name: 'ToolSchedulerError', code: TOOL_SCHEDULER_FAILED } },
+      }, callSeq)
+    }
     throw schedulerFailure.error
   }
 
@@ -256,6 +279,25 @@ function appendSkippedToolCall(session: Session, turn: number, step: number, blo
       info: { name: 'AbortError', code: TOOL_ABORTED_BEFORE_DISPATCH },
     },
   }, callSeq)
+}
+
+/**
+ * Finish a slot whose body completed but never committed because an earlier
+ * model-ordered sibling failed. Post-execute may itself reject; that counts as
+ * no usable result rather than a second failure to surface.
+ * @param ctx - plugin context owning the tool scheduler.
+ * @param slot - the settled slot, or undefined when the body never completed.
+ * @returns the committed-shape result, or undefined when there is none.
+ */
+async function settledResult(ctx: Context, slot: Slot | undefined): Promise<ToolExecutionResult | undefined> {
+  if (slot === undefined) return undefined
+  try {
+    return slot.needsPost
+      ? await ctx.tools[TOOL_RUNTIME_SCHEDULER].finalize(slot.exec, slot.result)
+      : ctx.tools[TOOL_RUNTIME_SCHEDULER].finish(slot.exec, slot.result)
+  } catch {
+    return undefined
+  }
 }
 
 /** Append a started call and return the event seq that its result must cite. */

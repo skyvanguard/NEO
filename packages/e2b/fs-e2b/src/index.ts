@@ -146,6 +146,30 @@ function mapError(error: unknown, operation: string, displayPath: string, signal
   return new FsError(`cannot ${operation} "${displayPath}": ${String(error)}`, 'FS_IO_ERROR', { cause: error })
 }
 
+/**
+ * Apply an ordered sequence of literal edits on the running content; a failure
+ * anywhere aborts with its position and nothing is written.
+ * @param content - LF-normalised content.
+ * @param requests - the edits in application order.
+ * @param displayPath - the path shown in error messages.
+ * @returns the final content.
+ */
+function literalEdits(content: string, requests: readonly FsEditRequest[], displayPath: string): string {
+  if (requests.length === 0) throw new FsError(`cannot edit "${displayPath}": at least one edit is required`, 'FS_EDIT_NOT_FOUND')
+  let current = content
+  for (const [index, request] of requests.entries()) {
+    try {
+      current = literalEdit(current, request, displayPath)
+    } catch (error: unknown) {
+      if (requests.length > 1 && error instanceof FsError) {
+        throw new FsError(`edit #${index + 1} of ${requests.length}: ${error.message}`, error.code, { cause: error })
+      }
+      throw error
+    }
+  }
+  return current
+}
+
 function literalEdit(content: string, request: FsEditRequest, displayPath: string): string {
   const oldString = normalizeLineEndings(request.oldString)
   const newString = normalizeLineEndings(request.newString)
@@ -404,7 +428,7 @@ export class E2BFileSystem extends FileSystem {
 
   override async editText(
     target: FsTarget,
-    edit: FsEditRequest,
+    edit: FsEditRequest | readonly FsEditRequest[],
     expected?: { version: ReturnType<typeof FsVersion> },
     signal?: AbortSignal,
   ): Promise<FsEditOutcome> {
@@ -421,7 +445,7 @@ export class E2BFileSystem extends FileSystem {
       }
       const raw = await this.readForEdit(target, signal)
       const before = normalizeLineEndings(raw)
-      const after = literalEdit(before, edit, target.displayPath)
+      const after = literalEdits(before, Array.isArray(edit) ? edit : [edit as FsEditRequest], target.displayPath)
       const storage = restoreLineEndings(after, detectsCrlf(raw))
       const version = await this.writeAtomic(target, storage, existing, false, signal)
       return { version, before, after }

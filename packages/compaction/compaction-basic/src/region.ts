@@ -513,8 +513,12 @@ function buildSummarizationInput(
   }
 }
 
-/** Inspect open-turn, unmatched-compaction, and latest seed-boundary state independently. */
-function inspectCompactionEntryState(events: readonly SessionEvent[]): CompactionEntryState {
+/**
+ * Inspect open-turn, unmatched-compaction, and latest seed-boundary state independently.
+ * @param events - the session log to scan.
+ * @returns the entry state a compaction attempt or failure record must respect.
+ */
+export function inspectCompactionEntryState(events: readonly SessionEvent[]): CompactionEntryState {
   let openTurn: number | null = null
   let openTurnStateKnown = false
   let unmatchedCompactionStart: SessionEvent<'compaction/start'> | undefined

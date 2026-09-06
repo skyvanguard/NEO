@@ -37,6 +37,16 @@ export const GLOB_MAX_RESULTS = 100
  */
 export const GLOB_VCS_EXCLUDES: readonly string[] = ['.git', '.svn', '.hg', '.bzr', '.jj', '.sl']
 
+/**
+ * Directory names excluded unless the caller passes its own `exclude`.
+ * `--no-ignore` makes every dependency store visible, and in a Node
+ * workspace that is most of the tree: measured on this repository,
+ * a recursive TypeScript glob returned 18,480 paths with `node_modules` and 3,708
+ * without, so the modification-time head the model receives was almost
+ * entirely freshly installed dependencies. Passing `exclude: []` opts back in.
+ */
+export const GLOB_DEFAULT_EXCLUDES: readonly string[] = ['node_modules']
+
 /** Resolved glob-tool caps — plugin config after defaulting (see `Config` in index.ts). */
 export interface GlobToolCaps {
   /** Whether over-cap pages are sampled across top-level entries instead of taking the modification-time head. */
@@ -59,6 +69,8 @@ export interface GlobToolCaps {
 export interface GlobInput {
   pattern: string
   path?: string
+  /** Directory names or globs to exclude; absent means {@link GLOB_DEFAULT_EXCLUDES}. */
+  exclude?: readonly string[]
 }
 
 /**
@@ -69,10 +81,34 @@ export interface GlobInput {
  * @param args - the schema-validated `glob` arguments.
  * @returns the accepted input, unchanged.
  */
-export function parseGlobArgs(args: { pattern: string; path?: string }): GlobInput {
+export function parseGlobArgs(args: { pattern: string; path?: string; exclude?: string[] }): GlobInput {
   if (args.pattern.trim().length === 0) throw new Error('pattern must be a non-empty string')
   if (args.path !== undefined && args.path.trim().length === 0) throw new Error('path must be a non-empty string when given')
-  return { pattern: args.pattern, ...args.path !== undefined ? { path: args.path } : {} }
+  if (args.exclude !== undefined && args.exclude.some(entry => entry.trim().length === 0)) {
+    throw new Error('exclude entries must be non-empty strings')
+  }
+  return {
+    pattern: args.pattern,
+    ...args.path !== undefined ? { path: args.path } : {},
+    ...args.exclude !== undefined ? { exclude: args.exclude } : {},
+  }
+}
+
+/**
+ * Negated `--glob`s excluding one entry. A bare directory name gets the paired
+ * form (prune during traversal, plus contents when the root is inside it);
+ * anything with a separator or glob metacharacter is taken as the caller's
+ * own glob.
+ * @param entry - directory name or glob to exclude.
+ * @returns the argv elements excluding it.
+ */
+function excludeGlobs(entry: string): string[] {
+  // A backslash is an escape in ripgrep globs, so a Windows-style path would
+  // exclude the wrong thing silently; treat it as the separator it was meant as.
+  const normalised = entry.replaceAll('\\', '/')
+  return /[/*?[\]{}]/.test(normalised)
+    ? [`--glob=!${normalised}`]
+    : [`--glob=!**/${normalised}`, `--glob=!**/${normalised}/**`]
 }
 
 /**
@@ -102,6 +138,7 @@ export function buildGlobCommand(input: GlobInput): string[] {
       `--glob=!**/${name}`,
       `--glob=!**/${name}/**`,
     ]),
+    ...(input.exclude ?? GLOB_DEFAULT_EXCLUDES).flatMap(excludeGlobs),
   ]
   if (input.path !== undefined) parts.push('--', input.path)
   return parts
@@ -311,7 +348,7 @@ export function applyGlobTool(ctx: Context, caps: GlobToolCaps): void {
   const tool = defineTool({
     name: 'glob',
     description: 'Find files whose paths match a glob pattern. Returns matching file paths — never directories — '
-      + 'including hidden and ignored files (VCS metadata directories are excluded). '
+      + 'including hidden and ignored files (VCS metadata directories are always excluded; `node_modules` is excluded unless `exclude` says otherwise). '
       + `Up to ${caps.maxResults} paths come back in modification-time order; ${overCapDescription}, `
       + 'says so, and reports where the complete sorted list was saved. This tool does not enumerate directory entries.',
     parameters: {
@@ -322,6 +359,12 @@ export function applyGlobTool(ctx: Context, caps: GlobToolCaps): void {
           + 'A pattern with no "/" matches the basename at any depth, so "*" and "*.ts" both search the whole tree; include a separator to anchor the depth.',
       },
       path: { type: 'string', description: 'Directory to search in. Defaults to the session workspace; a relative path resolves against it.' },
+      exclude: {
+        type: 'array',
+        items: { type: 'string' },
+        description: 'Directory names or globs to leave out (default ["node_modules"]). A bare name prunes that directory at any depth; '
+          + 'an entry with a separator or glob characters is used as-is. Pass [] to search inside node_modules.',
+      },
     },
     timeoutMs: caps.timeoutMs,
     output: {

@@ -243,6 +243,23 @@ describe('ToolResultPruner session transaction', () => {
     expect(second).toEqual({ pruned: [], charsRemoved: 0 })
   })
 
+  it('stops pruning once the caller reports the pressure is relieved', () => {
+    // Every replacement rewrites a surface node, which breaks the cached
+    // request prefix from that node on: once the budget is met, further
+    // rewrites only cost cache and information.
+    const session = Session.create(SessionId('budget'))
+    appendToolStep(session, 1, 'a', [{ type: 'text', text: 'A'.repeat(100) }])
+    appendToolStep(session, 2, 'b', [{ type: 'text', text: 'B'.repeat(100) }])
+    appendToolStep(session, 3, 'c', [{ type: 'text', text: 'C'.repeat(100) }])
+    session.append('turn/start', {
+      turn: 4,
+    })
+    let checks = 0
+    const result = service().pruneSession(session, { relieved: () => { checks += 1; return checks >= 2 } })
+    expect(result.pruned.map(entry => entry.callId)).toEqual([CallId('a'), CallId('b')])
+    expect(checks).toBe(2)
+  })
+
   it('replays to the identical pruned model messages', () => {
     const session = Session.create(SessionId('replay'))
     appendToolStep(session, 1, 'a', [{ type: 'text', text: 'A'.repeat(100) }])

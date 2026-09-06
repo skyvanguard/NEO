@@ -171,9 +171,11 @@ export class TokenMeter extends Service {
       this.states.set(session, state)
     }
 
-    while (state.consumedEvents < session.events.length) {
+    // Incremental follow through eventAt: this runs on every session/event,
+    // and `session.events` would rebuild the whole frozen snapshot each time.
+    while (state.consumedEvents < session.seq) {
       // oxlint-disable-next-line typescript/no-non-null-assertion -- contiguous session seqs index the durable log
-      const event = session.events[state.consumedEvents]!
+      const event = session.eventAt(state.consumedEvents)!
       this._foldEvent(session, state, event)
       state.consumedEvents += 1
     }
@@ -243,6 +245,10 @@ export class TokenMeter extends Service {
           surfaceTokens: anchorSurfaceTokens,
           // Signed heuristic deltas remain conservative only from an anchor
           // that is at least as large as the matching full heuristic price.
+          // The image price in estimate.ts is calibrated to the local vision
+          // projector; a provider that charges markedly less per image can
+          // fail this comparison on image-bearing steps and fall back to the
+          // (higher) estimate, which errs early rather than late.
           baseline: providerTokens >= estimatedAnchorTokens
             ? { kind: 'usage', tokens: providerTokens, usage: event.data.usage }
             : { kind: 'estimated', tokens: estimatedAnchorTokens },

@@ -84,6 +84,37 @@ class MutableChatLocationIndex implements ChatLocationNodeIndex {
     this.steps = updateIndex(this.steps, steps)
   }
 
+  /**
+   * Extend the index with keys that sort after everything already indexed —
+   * the common case of a live conversation growing at its tail. Only the
+   * touched turn/step groups get a new array reference, so readers of other
+   * groups keep their identity, exactly as `rebuild` preserves it.
+   */
+  append(keys: readonly string[], store: ChatNodeStore): void {
+    const turns = new Map(this.turns)
+    const steps = new Map(this.steps)
+    const grownTurns = new Set<number>()
+    const grownSteps = new Set<string>()
+    for (const key of keys) {
+      const location = store.get(key)?.location
+      if (location === undefined) continue
+      const coordinates = locationCoordinates(location)
+      if (coordinates.turn === undefined) continue
+      const turnKeys = grownTurns.has(coordinates.turn) ? turns.get(coordinates.turn) as string[] : [...turns.get(coordinates.turn) ?? []]
+      turnKeys.push(key)
+      turns.set(coordinates.turn, turnKeys)
+      grownTurns.add(coordinates.turn)
+      if (coordinates.step === undefined) continue
+      const step = stepKey(coordinates.turn, coordinates.step)
+      const stepKeys = grownSteps.has(step) ? steps.get(step) as string[] : [...steps.get(step) ?? []]
+      stepKeys.push(key)
+      steps.set(step, stepKeys)
+      grownSteps.add(step)
+    }
+    this.turns = turns
+    this.steps = steps
+  }
+
   /** Invalidate aggregate readers when member data changes without moving. */
   touch(nodes: readonly ChatConversationViewNode[]): void {
     const turns = new Set<number>()
@@ -406,6 +437,13 @@ export class ChatSnapshotBuilder implements ConversationViewBuilder<ChatConversa
     readonly timeline: ConversationTimelineSnapshot
   }): ChatSnapshot {
     let structural = false
+    // A batch whose only structural change is brand-new nodes that sort after
+    // the current tail can extend the order instead of re-sorting the whole
+    // store: that is nearly every batch of a live conversation, and the full
+    // sort otherwise runs on the main thread for every event of a long one.
+    let appendOnly = true
+    const appended: ChatConversationViewNode[] = []
+    const lastAnchor = this.tailAnchor()
     const contentOnly: ChatConversationViewNode[] = []
     for (const node of input.upserts) {
       const previous = this.store.get(node.key)
@@ -414,16 +452,39 @@ export class ChatSnapshotBuilder implements ConversationViewBuilder<ChatConversa
         || previous.visibility !== node.visibility
         || locationIdentity(previous.location) !== locationIdentity(node.location)
       structural ||= nodeStructural
-      if (!nodeStructural) contentOnly.push(node)
+      if (!nodeStructural) {
+        contentOnly.push(node)
+        continue
+      }
+      if (previous !== undefined) appendOnly = false
+      else if (node.visibility === 'visible') {
+        // Strictly after the tail: an equal anchor breaks ties by key and could
+        // belong before the current last node.
+        if (node.anchorSeq <= lastAnchor) appendOnly = false
+        appended.push(node)
+      }
     }
     this.store.upsert(input.upserts)
-    if (structural) {
+    if (structural && appendOnly) {
+      const keys = orderedVisible(appended).map(node => node.key)
+      if (keys.length > 0) {
+        this.order = [...this.order, ...keys]
+        this.locations.append(keys, this.store)
+      }
+    } else if (structural) {
       const next = orderedVisible(this.store.values()).map(node => node.key)
       this.order = sameReferences(this.order, next) ? this.order : next
       this.locations.rebuild(this.order, this.store)
     }
     this.locations.touch(contentOnly)
     return this.snapshot(input.timeline, this.legacy.apply(input.upserts, input.timeline))
+  }
+
+  /** The anchor of the last ordered node; -Infinity for an empty order. */
+  private tailAnchor(): number {
+    const key = this.order.at(-1)
+    if (key === undefined) return Number.NEGATIVE_INFINITY
+    return this.store.get(key)?.anchorSeq ?? Number.NEGATIVE_INFINITY
   }
 
   private snapshot(

@@ -112,6 +112,17 @@ export function mapStopReason(message: AssistantMessage, contextWindow?: number)
   }
 }
 
+
+/**
+ * The blocks the harness will persist for a finished response. The
+ * BlockAssembler drops tool calls a max-tokens cut left unexecutable; the
+ * replay state must describe that same filtered content, otherwise every
+ * later request fails to recombine the durable message with its metadata.
+ */
+function replayableMessage(message: AssistantMessage, reason: FinishReason): AssistantMessage {
+  if (reason.kind !== 'max-tokens') return message
+  return { ...message, content: message.content.filter(block => block.type !== 'toolCall') }
+}
 /**
  * Translate the pi-ai event stream into StreamChunks. pi-ai never throws
  * mid-stream — failures arrive as `error` events, which become error/aborted
@@ -185,14 +196,16 @@ export async function* toStreamChunks(
           },
         }
         break
-      case 'done':
+      case 'done': {
+        const reason = mapStopReason(event.message, contextWindow)
         yield { type: 'usage', usage: mapUsage(event.message.usage) }
         yield {
           type: 'finish',
-          reason: mapStopReason(event.message, contextWindow),
-          replayState: toPiReplayState(event.message),
+          reason,
+          replayState: toPiReplayState(replayableMessage(event.message, reason)),
         }
         return
+      }
       case 'error':
         // In-stream error delivery (pi-ai's style) → error finish chunk
         // (the harness's other sanctioned error path besides throwing).

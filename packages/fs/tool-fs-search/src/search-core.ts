@@ -299,6 +299,8 @@ export interface GrepMatch {
   path: string
   lineNumber: number
   line: string
+  /** `true` on a surrounding-context row of a `context` search; absent on a real match. */
+  context?: boolean
 }
 
 /**

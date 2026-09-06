@@ -23,7 +23,7 @@ This table connects model-visible tool names to the plugin package and service s
 | `@deepseek-ai/dsh-tool-cordis` | `cordis_define`, `cordis_inspect_list`, `cordis_inspect_query`, `cordis_inspect_self`, `cordis_run`, `cordis_stop`, `cordis_undefine` | `ctx.tools`, `ctx.dynamicCordisRunner` | `tool/call`, `tool/result`, `process-local dynamic package lifecycle` | - | Not in any shipped tree (a deliberate opt-in — dynamic package code reaches the real runtime, see .agents/notes/implemented/feature/2026-07-08-self-referential-cordis-toolset.md). The toolset injects `ctx.dynamicCordisRunner` from `@deepseek-ai/dsh-cordis-host-runner`, which owns the definition registry and the vm sandbox; a composition missing it never activates the tools. A running package may register ADDITIONAL model-visible tools until it is stopped, undefined, or DSH restarts; a full changed request header logs those tool-set changes. |
 | `@deepseek-ai/dsh-tool-bash-persistent` | `bash` | `ctx.tools`, `ctx.terminals`, `an owning Agent at execution time` | `tool/call`, `PTY shell state`, `tool/result` | - | One owner-isolated persistent bash tool; deployment composition supplies the PTY backend and may override the model-facing environment description. |
 | `@deepseek-ai/dsh-tool-str-replace-editor` | `str_replace_editor` | `ctx.tools`, `ctx.fs` | `tool/call`, `fs/observed after view presence/absence, edit absence, or successful mutation`, `tool/result` | - | Standalone view/create/unique literal replace/line insert tool over the filesystem seam; it composes with any shell or terminal API. |
-| `@deepseek-ai/dsh-tool-fs` | `edit`, `read`, `read_image`, `write` | `ctx.tools`, `ctx.fs`, `ctx.systemPrompt`, `ctx.attachments (read_image registration)`, `ctx.llm + an image-capable route (read_image execution)` | `tool/call`, `fs/write-intent or fs/edit-intent for mutations`, `fs/observed after read presence/absence or successful file operation`, `durable attachment (read_image)`, `tool/result` | - | The read-before-write/edit policy is added by `@deepseek-ai/dsh-fs-observation-policy` (an `fs/*` event-gate plugin, no schema change); a deployment that loads these tools is expected to also load it. `read_image` is not registered without `ctx.attachments`; its schema is route-independent, and execution refuses unless the exact routed model declares image input. |
+| `@deepseek-ai/dsh-tool-fs` | `edit`, `list_dir`, `read`, `read_image`, `write` | `ctx.tools`, `ctx.fs`, `ctx.systemPrompt`, `ctx.attachments (read_image registration)`, `ctx.llm + an image-capable route (read_image execution)` | `tool/call`, `fs/write-intent or fs/edit-intent for mutations`, `fs/observed after read presence/absence or successful file operation`, `durable attachment (read_image)`, `tool/result` | - | The read-before-write/edit policy is added by `@deepseek-ai/dsh-fs-observation-policy` (an `fs/*` event-gate plugin, no schema change); a deployment that loads these tools is expected to also load it. `read_image` is not registered without `ctx.attachments`; its schema is route-independent, and execution refuses unless the exact routed model declares image input. |
 | `@deepseek-ai/dsh-tool-fs-search` | `glob`, `grep` | `ctx.tools`, `ctx.subprocess`, `ctx.systemPrompt` | `tool/call`, `tool/result` | - | glob and grep are unconditional discovery tools that spawn the packaged ripgrep binary (`@vscode/ripgrep`) through ctx.subprocess as ordinary foreground calls (never background jobs) — no host `rg` install and no shell layer. The catalog uses `sampleOverCapGlobResults: true`; deployments must choose that behavior explicitly. Capped results save the complete formatted list through the optional ctx.spillStore backend; returned locators are follow-up-readable/searchable when the backend exposes local paths in co-located deployments. |
 | `@deepseek-ai/dsh-tool-terminal` | `terminal_close`, `terminal_list`, `terminal_open`, `terminal_read`, `terminal_send`, `terminal_signal` | `ctx.tools`, `ctx.terminals`, `ctx.systemPrompt`, `ctx.jobs at call time for run_in_background` | `tool/call`, `tool/result` | - | The six terminal tools are opt-in and complement one-shot shell/filesystem tools. `terminal_send(run_in_background: true)` registers with `ctx.jobs`; TUI, named key sequences, BEL, resize, auto-start, and cross-agent sharing are absent from the schema. |
 | `@deepseek-ai/dsh-tool-goal` | `create_goal`, `get_goal`, `update_goal` | `ctx.tools`, `ctx.agents`, `ctx.goals`, `ctx.systemPrompt`, `a calling Agent in an authorized open turn` | `tool/call`, `goal/change for mutations`, `tool/result` | - | create, edit, pause, and resume require direct-human root authority; complete and blocked also accept the exact current goal round. The default blocked lower bound is three admitted rounds. |
@@ -196,6 +196,10 @@ Execute a bash command (`bash -c`) and return its stdout/stderr. Each call runs 
     "timeoutMs": {
       "type": "number",
       "description": "Timeout in milliseconds. The executor applies its configured default and cap, and kills the command on expiry."
+    },
+    "max_output_bytes": {
+      "type": "number",
+      "description": "Stdout bytes kept in the result (the tail); the rest spills to a file whose path the result names. Defaults to the executor cap (24 KB). Lower it for chatty commands whose tail is enough; raise it only when the whole output must be read inline (the executor clamps it to its ceiling, 256 KB by default)."
     },
     "workdir": {
       "type": "string",
@@ -614,22 +618,68 @@ Edit an existing UTF-8 text file by replacing literal text.
     },
     "old_string": {
       "type": "string",
-      "description": "Literal text to replace. Must match exactly."
+      "description": "Literal text to replace. Must match exactly. Required unless edits is given."
     },
     "new_string": {
       "type": "string",
-      "description": "Literal replacement text. Use an empty string to delete the match."
+      "description": "Literal replacement text. Use an empty string to delete the match. Required unless edits is given."
     },
     "replace_all": {
       "type": "boolean",
       "description": "Replace all matches. Defaults to false; when false, old_string must appear exactly once."
+    },
+    "edits": {
+      "type": "array",
+      "description": "Several literal edits to this file in one atomic call, applied in order (each matches the text the previous one produced). Use instead of old_string/new_string, not with them.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "old_string": {
+            "type": "string",
+            "description": "Literal text to replace. Must match exactly."
+          },
+          "new_string": {
+            "type": "string",
+            "description": "Literal replacement text."
+          },
+          "replace_all": {
+            "type": "boolean",
+            "description": "Replace all matches of this edit. Defaults to false."
+          }
+        },
+        "required": [
+          "old_string",
+          "new_string"
+        ]
+      }
     }
   },
   "required": [
-    "file_path",
-    "old_string",
-    "new_string"
+    "file_path"
   ]
+}
+```
+
+Source: [`packages/fs/tool-fs/src/index.ts`](../packages/fs/tool-fs/src/index.ts)
+
+### `list_dir`
+
+List the direct children of a directory: subdirectories first, then files with their sizes. Hidden entries are omitted unless asked for; at most 500 entries come back inline.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Directory to list. Defaults to the session workspace; a relative path resolves against it."
+    },
+    "include_hidden": {
+      "type": "boolean",
+      "description": "Include dot-prefixed entries. Defaults to false."
+    }
+  }
 }
 ```
 
@@ -719,7 +769,7 @@ The read-before-write/edit policy is added by `@deepseek-ai/dsh-fs-observation-p
 
 ### `glob`
 
-Find files whose paths match a glob pattern. Returns matching file paths — never directories — including hidden and ignored files (VCS metadata directories are excluded). Up to 100 paths come back in modification-time order; a larger result instead returns 100 paths sampled across top-level entries, says so, and reports where the complete sorted list was saved. This tool does not enumerate directory entries.
+Find files whose paths match a glob pattern. Returns matching file paths — never directories — including hidden and ignored files (VCS metadata directories are always excluded; `node_modules` is excluded unless `exclude` says otherwise). Up to 100 paths come back in modification-time order; a larger result instead returns 100 paths sampled across top-level entries, says so, and reports where the complete sorted list was saved. This tool does not enumerate directory entries.
 
 ```json
 {
@@ -732,6 +782,13 @@ Find files whose paths match a glob pattern. Returns matching file paths — nev
     "path": {
       "type": "string",
       "description": "Directory to search in. Defaults to the session workspace; a relative path resolves against it."
+    },
+    "exclude": {
+      "type": "array",
+      "description": "Directory names or globs to leave out (default [\"node_modules\"]). A bare name prunes that directory at any depth; an entry with a separator or glob characters is used as-is. Pass [] to search inside node_modules.",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": [
@@ -744,7 +801,7 @@ Source: [`packages/fs/tool-fs-search/src/index.ts`](../packages/fs/tool-fs-searc
 
 ### `grep`
 
-Search file contents with a ripgrep regular expression. Returns matching lines with line numbers, grouped by file. Returns the first 250 matches inline; a capped result reports where the complete match list was saved. Use read on a matched file for surrounding context.
+Search file contents with a ripgrep regular expression. Returns matching lines with line numbers, grouped by file. Returns the first 250 matches inline; a capped result reports where the complete match list was saved. Unlike glob, this search honours .gitignore and skips hidden files: no match in an ignored file is not proof the text is absent. Prefer output_mode "files_with_matches" to locate where a symbol lives, context to see surrounding lines, and read for the full file.
 
 ```json
 {
@@ -761,6 +818,22 @@ Search file contents with a ripgrep regular expression. Returns matching lines w
     "include": {
       "type": "string",
       "description": "One glob filter for which files to search (e.g. \"*.ts\", \"*.{js,jsx}\"). Not a list; negation is not supported."
+    },
+    "output_mode": {
+      "type": "string",
+      "description": "\"content\" (default) returns matching lines; \"files_with_matches\" returns only the paths that match, one per line — an order of magnitude smaller for symbol searches.",
+      "enum": [
+        "content",
+        "files_with_matches"
+      ]
+    },
+    "context": {
+      "type": "integer",
+      "description": "Lines of context before and after each match (0-20). Context lines come back as ordinary numbered lines."
+    },
+    "head_limit": {
+      "type": "integer",
+      "description": "Return at most this many rows (before the retention budget). Use it when the first few hits are enough."
     }
   },
   "required": [

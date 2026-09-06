@@ -10,6 +10,7 @@ import { SessionId } from '@deepseek-ai/dsh-session'
 import type { SessionEvent } from '@deepseek-ai/dsh-session'
 import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
 import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
+import { SETTLEMENT_OUTPUT_MAX_CHARS } from '../src/continuation.ts'
 import * as SubagentFork from '@deepseek-ai/dsh-subagent-fork-in-process'
 import type { GenerateOptions, MessageId, StreamChunk } from '@deepseek-ai/dsh-llm'
 import { CallId, createUserMessage, LlmAdapter } from '@deepseek-ai/dsh-llm'
@@ -1525,6 +1526,36 @@ function settlementNotices(agent: Agent): { sender: string; text: string; summar
 }
 
 describe('continuable settlement delivery', () => {
+  it('delivers only the text of the closing message, capped, never the reasoning', async () => {
+    // The default delivery route is the one path that did not filter block
+    // types: a child's whole chain of thought landed in the parent's context,
+    // untruncated and outside spill-policy. Reasoning stays with the child.
+    const reasoning: StreamChunk[] = [
+      { type: 'block-start', index: 0, blockType: 'reasoning' },
+      { type: 'reasoning-delta', index: 0, text: 'private chain of thought' },
+      { type: 'block-end', index: 0, block: { type: 'reasoning', text: 'private chain of thought' } },
+    ]
+    const long = 'x'.repeat(SETTLEMENT_OUTPUT_MAX_CHARS + 500)
+    const closing: StreamChunk[] = [
+      ...reasoning,
+      { type: 'block-start', index: 1, blockType: 'text' },
+      { type: 'text-delta', index: 1, text: long },
+      { type: 'block-end', index: 1, block: { type: 'text', text: long } },
+      { type: 'usage', usage: { inputTokens: 10, outputTokens: 5 } },
+      { type: 'finish', reason: { kind: 'stop' } },
+    ]
+    const { ctx, parent } = await setup([closing, textResponse('parent ack')])
+    const started = await ctx.subagents.startContinuable(startSpec(parent))
+    await waitNoActivation(ctx, started.childId)
+
+    await vi.waitFor(() => { expect(settlementNotices(parent)).toHaveLength(1) })
+    const notice = settlementNotices(parent)[0]!
+    expect(notice.text).not.toContain('private chain of thought')
+    expect(notice.text).toContain('x'.repeat(100))
+    expect(notice.text.length).toBeLessThan(SETTLEMENT_OUTPUT_MAX_CHARS + 400)
+    expect(notice.text).toMatch(/closing message was cut to \d+ characters/)
+  })
+
   it('tells the parent what the child finished with, without being asked', async () => {
     const { ctx, parent } = await setup([textResponse('the answer'), textResponse('parent ack')])
     const started = await ctx.subagents.startContinuable(startSpec(parent))

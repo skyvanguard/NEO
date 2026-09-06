@@ -156,15 +156,27 @@ function foreignAssistant(message: Message): AssistantMessage {
   }
 }
 
+/**
+ * Whether replay metadata describes exactly the durable content it rides on.
+ * Durable content is the source of truth; a desynced state (a different
+ * model, or blocks the assembler dropped after the state was taken) must cost
+ * signature fidelity, never the session — replaying it would fail identically
+ * on every later request.
+ */
+function describesContent(state: PiAiReplayState, message: Message, source: ModelMessageSource): boolean {
+  return state.provider === source.provider
+    && state.model === source.model
+    && state.blocks.length === message.content.length
+    && state.blocks.every((replay, index) => replay.type === message.content[index]?.type)
+}
+
 /** Recombine durable Harness content with validated pi-ai replay metadata. */
 function replayedAssistant(message: Message, source: ModelMessageSource, rawState: unknown): AssistantMessage {
   const state = readReplayState(rawState)
-  if (state.provider !== source.provider) return invalidReplay('provider does not match assistant source')
-  if (state.model !== source.model) return invalidReplay('model does not match assistant source')
-  if (state.blocks.length !== message.content.length) return invalidReplay('block count does not match assistant content')
+  if (!describesContent(state, message, source)) return foreignAssistant(message)
   const content: AssistantMessage['content'] = message.content.map((block, index) => {
-    const replay = state.blocks[index]
-    if (replay === undefined || replay.type !== block.type) return invalidReplay(`block ${index} does not match assistant content`)
+    // describesContent guarantees one replay entry per durable block.
+    const replay = state.blocks[index] as PiAiReplayBlock
     switch (block.type) {
       case 'text': return {
         type: 'text',

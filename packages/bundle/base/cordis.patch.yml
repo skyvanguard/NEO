@@ -306,18 +306,28 @@
 
     # Continuable background children are selected per delegation tool. The
     # separately loaded follow-up tool registers the one global `send_message`.
+    # Disabled together with the one-shot subagent defaults: send_message,
+    # interrupt_agent and list_agents only act on continuable children, and a
+    # composition without a continuable provider would pay their tool schemas
+    # on every request for nothing. Re-enable them with a continuable row.
     - id: tool-subagent-control
       name: '@deepseek-ai/dsh-tool-subagent-control'
+      disabled: true
 
     - id: tool-subagent-list-agents
       name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+      disabled: true
 
     - id: tool-subagent
       name: '@deepseek-ai/dsh-tool-subagent'
       config:
         provider: spawn
         toolName: subagent
-        backgroundMode: continuable
+        # One-shot by default: a background child on a single-slot engine
+        # evicts the parent's cached prefix, and every return trip recomputes
+        # it in full. Leaves that run against a multi-slot provider can opt
+        # back into `continuable`.
+        backgroundMode: one-shot
 
     # Fork stays one-shot: a continuable child's `report` tool and prompt
     # section precede the inherited history a fork exists to reuse; one-shot
@@ -338,6 +348,9 @@
       name: '@deepseek-ai/dsh-workflow-worker-thread'
       config:
         provider: spawn
+        # One agent at a time: the default fans out to min(16, cores - 2)
+        # workers, which on a single-slot engine only queues them.
+        maxConcurrentAgents: 1
 
     - id: tool-workflow
       name: '@deepseek-ai/dsh-tool-workflow'

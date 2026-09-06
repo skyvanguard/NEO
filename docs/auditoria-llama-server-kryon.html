@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auditoría del motor de inferencia — kryon</title>
+<style>
+  :root{
+    --bg:#0d1014; --panel:#141a21; --panel-2:#1a222b; --line:#25303c;
+    --ink:#e6edf3; --ink-2:#9fb0c0; --ink-3:#6b7d8d;
+    --ok:#3fb950; --warn:#d29922; --crit:#f85149; --acc:#58a6ff;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
+       background-image:radial-gradient(circle at 15% -10%,#16222e 0%,transparent 55%)}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 24px 96px}
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:40px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+  h1{font-size:clamp(28px,4vw,44px);line-height:1.1;margin:.3em 0 .2em;letter-spacing:-.02em}
+  .sub{color:var(--ink-2);max-width:70ch;margin:0}
+  h2{font-size:22px;margin:56px 0 4px;letter-spacing:-.01em}
+  h2 .n{font-family:var(--mono);color:var(--ink-3);font-size:15px;margin-right:10px}
+  h3{font-size:16px;margin:28px 0 6px}
+  p{margin:.5em 0}
+  .lede{color:var(--ink-2);margin-bottom:20px}
+  code,kbd{font-family:var(--mono);font-size:.9em;background:var(--panel-2);border:1px solid var(--line);
+       border-radius:5px;padding:1px 6px;color:#a8d8ff;white-space:nowrap}
+  pre{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:8px;
+      padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+  pre code{background:none;border:0;padding:0;white-space:pre}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin:24px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .stat .v{font-family:var(--mono);font-size:26px;color:var(--ink);letter-spacing:-.02em}
+  .stat .v.bad{color:var(--crit)} .stat .v.mid{color:var(--warn)} .stat .v.good{color:var(--ok)}
+  .stat .l{font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.09em;margin-top:2px}
+  .find{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+  .find.crit{border-left:3px solid var(--crit)} .find.warn{border-left:3px solid var(--warn)}
+  .find.ok{border-left:3px solid var(--ok)}
+  .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+       padding:2px 8px;border-radius:20px;border:1px solid currentColor;vertical-align:2px;margin-right:10px}
+  .tag.crit{color:var(--crit)} .tag.warn{color:var(--warn)} .tag.ok{color:var(--ok)} .tag.info{color:var(--acc)}
+  .find h3{margin:0 0 6px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+  .bar{height:6px;background:var(--panel-2);border-radius:3px;overflow:hidden;min-width:70px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#1f6feb,#58a6ff)}
+  .bar i.hot{background:linear-gradient(90deg,#a83232,#f85149)}
+  .scroll{overflow-x:auto}
+  .note{color:var(--ink-3);font-size:13px;font-style:italic}
+  ul{margin:.4em 0 .4em 1.1em;padding:0} li{margin:.3em 0}
+  footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
+  .split{display:grid;gap:24px;grid-template-columns:1fr}
+  @media(min-width:820px){.split{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">kryon · llama-server · 2026-09-04</div>
+  <h1>Auditoría del motor de inferencia</h1>
+  <p class="sub">Qwen3.8-27B-Uncensored (OrcaRouter) Q8_0 sobre 2× RTX 3090. Análisis de solo lectura sobre 4 días de operación real: 4.662 requests, 30,1 M tokens de prompt y 5,4 M de generación. El servicio no fue tocado.</p>
+</header>
+
+<h2><span class="n">01</span>Estado medido</h2>
+<div class="grid">
+  <div class="stat"><div class="v good">34,8</div><div class="l">tok/s generación</div></div>
+  <div class="stat"><div class="v mid">16,1 h</div><div class="l">prefill en 4 días</div></div>
+  <div class="stat"><div class="v">43,3 h</div><div class="l">generación en 4 días</div></div>
+  <div class="stat"><div class="v bad">23,9/24</div><div class="l">GB en GPU1</div></div>
+  <div class="stat"><div class="v good">83 %</div><div class="l">requests con caché ≥0,99</div></div>
+  <div class="stat"><div class="v">209.399</div><div class="l">prompt más largo (tokens)</div></div>
+</div>
+
+<h3>Dónde se va el tiempo de espera</h3>
+<div class="scroll">
+<table>
+  <thead><tr><th>Tamaño del prefill</th><th>Requests</th><th>Tiempo</th><th>% del prefill</th><th></th></tr></thead>
+  <tbody>
+    <tr><td>&lt; 1K tokens</td><td class="num">3.643</td><td class="num">75,9 min</td><td class="num">9 %</td><td><div class="bar"><i style="width:9%"></i></div></td></tr>
+    <tr><td>1–5K</td><td class="num">615</td><td class="num">47,4 min</td><td class="num">6 %</td><td><div class="bar"><i style="width:6%"></i></div></td></tr>
+    <tr><td>5–20K</td><td class="num">83</td><td class="num">20,4 min</td><td class="num">2 %</td><td><div class="bar"><i style="width:2%"></i></div></td></tr>
+    <tr><td>20–50K</td><td class="num">14</td><td class="num">19,9 min</td><td class="num">2 %</td><td><div class="bar"><i style="width:2%"></i></div></td></tr>
+    <tr><td><strong>&gt; 50K</strong></td><td class="num"><strong>307</strong></td><td class="num"><strong>804,4 min</strong></td><td class="num"><strong>83 %</strong></td><td><div class="bar"><i class="hot" style="width:83%"></i></div></td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">El 6,6 % de los requests consume el 83 % del tiempo de prefill: 2,6 minutos de espera promedio cada uno. Ahí está la latencia que se siente.</p>
+
+<h2><span class="n">02</span>Lo que está bien</h2>
+
+<div class="find ok"><h3><span class="tag ok">correcto</span>El contexto de 262.144 no es exagerado — y es barato</h3>
+<p>Es el <code>context_length</code> nativo del modelo, así que no hay rope scaling degradando calidad. La arquitectura es híbrida: 65 capas con <code>full_attention_interval = 4</code>, es decir ~16 capas de atención real y ~49 capas SSM (estado recurrente de tamaño fijo). El KV solo lo pagan las capas de atención: 4 KV-heads × 512 (K+V) × 16 capas ≈ <strong>34 KB por token</strong> en q8_0, o sea <strong>~9 GB para los 262K completos</strong>. Un modelo denso equivalente pediría ~35 GB. Y el contexto se usa: el prompt más largo medido fue de 209.399 tokens.</p></div>
+
+<div class="find ok"><h3><span class="tag ok">correcto</span>El sampling coincide con lo que recomienda el propio modelo</h3>
+<p><code>--temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.0</code> es exactamente lo que el GGUF trae embebido (<code>general.sampling.temp = 1.0</code>, <code>top_p = 0.95</code>, <code>top_k = 20</code>). No es el 0.6 del Qwen3 clásico, pero acá manda el modelo. No tocar.</p></div>
+
+<div class="find ok"><h3><span class="tag ok">correcto</span>La especulación MTP está rindiendo</h3>
+<p>Aceptación del draft entre 0,39 y 0,68 (media ~0,50) con longitud media aceptada de 2,2–3,0 tokens. Con <code>--spec-draft-n-max 3</code> el draft de 3 GB se paga solo.</p></div>
+
+<div class="find ok"><h3><span class="tag ok">correcto</span>La caché de prompt funciona</h3>
+<p>3.703 de 4.441 requests (83 %) reutilizaron el slot con similitud ≥ 0,99, y 3.643 prefills fueron de menos de 1K tokens. El harness y el motor cooperan bien en el caso normal.</p></div>
+
+<div class="find ok"><h3><span class="tag ok">correcto</span>34,8 tok/s está cerca del techo físico</h3>
+<p>Con 29 GB de pesos Q8_0 y 936 GB/s de ancho de banda por 3090, el techo teórico ronda los 32 tok/s; la especulación lo empuja a 34,8. En layer-split las GPUs no suman ancho de banda, así que <strong>para subir de acá hay que bajar el quant o cambiar el modo de split</strong> — no hay flag mágico.</p></div>
+
+<h2><span class="n">03</span>Lo que falta o está mal</h2>
+
+<div class="find crit"><h3><span class="tag crit">crítico</span>Arrancó sin pipeline parallelism por falta de VRAM</h3>
+<p>En el log de arranque:</p>
+<pre><code>E ggml_gallocr_reserve_n_impl: failed to allocate CUDA1 buffer of size 1285620224
+E graph_reserve: failed to allocate compute buffers
+W sched_reserve: compute buffer allocation failed, retrying without pipeline parallelism</code></pre>
+<p>No pudo reservar 1,28 GB en GPU1 y siguió sin solapar trabajo entre GPUs. Es coherente con lo que se ve en vivo: GPU0 al 0 % mientras GPU1 está al 100 %. Afecta directamente al prefill, que es donde más duele.</p></div>
+
+<div class="find crit"><h3><span class="tag crit">crítico</span>VRAM desbalanceada: 21,3 GB vs 23,9 GB</h3>
+<p><code>--tensor-split 50,50</code> reparte las capas, pero la capa de salida y el KV pesan más en GPU1, que queda a 130 MB del límite. Además de bloquear el punto anterior, deja al servidor a un pelo del OOM: un screenshot grande entrando por el mmproj puede tumbarlo. Ya hay 3 fallos de reserva de buffers en el log.</p>
+<p><strong>Arreglo:</strong> <code>--tensor-split 56,44</code> (mueve ~1,3 GB a GPU0). Cuesta un reinicio y nada más.</p></div>
+
+<div class="find warn"><h3><span class="tag warn">alto</span>ubatch en 512 — el freno principal del TTFT</h3>
+<p>No hay <code>-b</code> ni <code>-ub</code> en la línea de comandos, así que corre con los defaults (batch 2048, ubatch 512). Para prompts de 50–200K tokens el ubatch es lo que gobierna el throughput de prefill, que hoy cae de 1.651 tok/s (prompt corto) a ~710 tok/s (prompt de 158K). Subirlo es la palanca más directa sobre esos 2,6 minutos de espera.</p>
+<p><strong>Arreglo:</strong> <code>-ub 2048 -b 4096</code>, después de liberar VRAM con el rebalanceo. Cuesta más compute buffer, así que va en ese orden y se mide.</p></div>
+
+<div class="find warn"><h3><span class="tag warn">medio</span>40 hilos de CPU en una máquina de dos sockets</h3>
+<p><code>-t 40</code> sobre un dual Xeon E5-2673 v4 (2 nodos NUMA, 80 hilos) con <code>-ngl 99</code>: el trabajo real está en GPU y esos hilos solo agregan sincronización cruzando el interconector entre sockets. Peor aún, <code>nvidia-smi topo</code> confirma que GPU0 vive en NUMA 0 y GPU1 en NUMA 1, así que no hay un socket "bueno" para las dos.</p>
+<p><strong>Arreglo:</strong> <code>-t 16</code> y probar <code>--numa numactl</code>. Impacto moderado, riesgo nulo.</p></div>
+
+<div class="find warn"><h3><span class="tag warn">medio</span>Sin <code>--no-context-shift</code>: riesgo de truncado silencioso</h3>
+<p>Con prompts que ya llegaron a 209K sobre un límite de 262K, si alguno se pasa el motor desplaza la ventana y descarta el principio del prompt — incluido el system prompt — sin avisar. Hasta ahora no pasó (<code>truncated = 0</code> en los 4.688 casos), pero el harness ya hace su propia compactación: es mejor que falle explícito a que degrade en silencio.</p></div>
+
+<div class="find warn"><h3><span class="tag warn">medio</span>Sin <code>--metrics</code> y sin <code>--cache-reuse</code></h3>
+<p><code>/metrics</code> responde 501: no hay observabilidad histórica, todo esto salió de parsear logs. Y <code>--cache-reuse</code> (disponible en esta build) permitiría recuperar bloques de KV tras un cambio en medio del prompt; hoy 339 requests entraron con similitud &lt; 0,9 y pagaron recomputo. Vale probarlo con <code>--cache-reuse 256</code> y medir.</p></div>
+
+<h2><span class="n">04</span>Dos experimentos que pueden mover la aguja</h2>
+<div class="split">
+  <div class="find"><h3><span class="tag info">medir</span><code>-sm tensor</code></h3>
+  <p>Esta build ofrece <code>--split-mode {none,layer,row,tensor}</code>; <code>tensor</code> reparte pesos <em>y</em> KV entre las dos GPUs en paralelo. En el mejor caso sube la generación por encima del techo de una sola tarjeta y equilibra la VRAM sola.</p>
+  <p class="note">Advertencia honesta: acá no hay NVLink, el bus es PCIe gen 3 y las GPUs están en nodos NUMA distintos. La sincronización por capa puede comerse la ganancia entera. Hay que medirlo, no asumirlo.</p></div>
+
+  <div class="find"><h3><span class="tag info">medir</span>Q6_K en lugar de Q8_0</h3>
+  <p>Los pesos pasarían de 29 GB a ~22 GB. Como la generación está limitada por ancho de banda, eso se traduce en aproximadamente <strong>+25–30 % de tok/s</strong>, y de paso libera ~7 GB de VRAM: pipeline parallelism, ubatch alto y margen de sobra, todo junto.</p>
+  <p class="note">La pérdida de calidad de Q8_0 a Q6_K es pequeña pero real, y más aún requantizando desde el Q8 en vez del original. Conviene comparar en tareas reales antes de adoptarlo.</p></div>
+</div>
+
+<h2><span class="n">05</span>Plan de acción</h2>
+<p class="lede">En orden. Todo requiere reiniciar el contenedor <code>llm-server</code>, así que conviene esperar a que el agente termine.</p>
+<div class="scroll">
+<table>
+  <thead><tr><th>#</th><th>Cambio</th><th>Efecto esperado</th><th>Riesgo</th></tr></thead>
+  <tbody>
+    <tr><td class="num">1</td><td><code>--tensor-split 56,44</code></td><td>Recupera pipeline parallelism y saca a GPU1 del borde del OOM</td><td>Nulo</td></tr>
+    <tr><td class="num">2</td><td><code>-ub 2048 -b 4096</code></td><td>El golpe fuerte al TTFT de los prefills grandes</td><td>Bajo — vigilar VRAM</td></tr>
+    <tr><td class="num">3</td><td><code>-t 16</code></td><td>Menos contención entre sockets</td><td>Nulo</td></tr>
+    <tr><td class="num">4</td><td><code>--metrics --no-context-shift</code></td><td>Observabilidad y fallo explícito en vez de truncado mudo</td><td>Nulo</td></tr>
+    <tr><td class="num">5</td><td><code>--cache-reuse 256</code></td><td>Menos recomputo cuando cambia el medio del prompt</td><td>Bajo — medir</td></tr>
+    <tr><td class="num">6</td><td><code>-sm tensor</code></td><td>Posible salto en generación; puede empeorar por PCIe 3</td><td>Medio — experimento</td></tr>
+    <tr><td class="num">7</td><td>Q6_K</td><td>+25–30 % generación y ~7 GB libres</td><td>Medio — verificar calidad</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Línea de comandos con los puntos 1 a 5 aplicados</h3>
+<pre><code>/app/llama-server \
+  -m /models/Qwen3.8-27B-Uncensored/Qwen3.8-27B-Uncensored-OrcaRouter-Q8_0.gguf \
+  -ngl 99 --tensor-split 56,44 -c 262144 --parallel 1 \
+  -fa on -ctk q8_0 -ctv q8_0 \
+  -ub 2048 -b 4096 -t 16 \
+  --cache-reuse 256 --no-context-shift --metrics \
+  --temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.0 --presence-penalty 0.0 \
+  --jinja --reasoning-format deepseek -a qwen-unc -n 32000 \
+  --chat-template-kwargs '{"enable_thinking": true}' \
+  --mmproj /models/Qwen3.8-27B/mmproj-F16.gguf \
+  --spec-type draft-mtp \
+  --model-draft /models/Qwen3.8-27B-Uncensored/MTP/Qwen3.8-27B-Uncensored-OrcaRouter-MTP-Q8_0.gguf \
+  --spec-draft-n-max 3 --host 0.0.0.0 --port 8080</code></pre>
+<p class="note">Al reiniciar, lo primero que hay que mirar en el log es que ya no aparezca <code>retrying without pipeline parallelism</code>. Si aparece, subir el reparto a 58,42 y repetir.</p>
+
+<h2><span class="n">06</span>Nota al margen</h2>
+<div class="find"><h3><span class="tag info">confirmado</span>El motor registró el bug de ayer con todas las letras</h3>
+<pre><code>E mtmd_tokenize: error: number of media markers in text (0) does not match number of bitmaps (1)
+E mtmd_tokenize: error: number of media markers in text (3) does not match number of bitmaps (4)</code></pre>
+<p>Es exactamente el fallo del byte NUL truncando el prompt antes de los marcadores de imagen. El fix ya está aplicado del lado del harness.</p></div>
+
+<footer>
+  Elaborado el 2026-09-04 con inspección de solo lectura sobre kryon: <code>nvidia-smi</code>, <code>/proc</code>, <code>docker inspect</code>, endpoints <code>/props</code> y <code>/slots</code>, metadatos GGUF y 111.660 líneas de log del contenedor.
+  Ninguna cifra de este informe es estimada salvo las marcadas como tales.
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,12 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@deepseek-ai/cordis'
-import SessionStore, { Session, SessionId, isJsonValue } from '@deepseek-ai/dsh-session'
+import SessionStore, { DurabilitySuspendedError, isDurabilitySuspended, Session, SessionId, isJsonValue } from '@deepseek-ai/dsh-session'
 import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
 import {
   DEFAULT_PREPARED_SESSION_CACHE_SIZE, DEFAULT_WRITE_BATCH_MAX_DELAY_MS, MAX_WRITE_BATCH_DELAY_MS,
   SessionPersistence, SessionPersistenceRevision, PersistenceCoordinator,
   type PersistenceBackend, type SessionPersistenceSnapshot, type StoredPrefix, type StoredSuffix,
 } from '../src/index.ts'
+import { DEFAULT_MAX_WRITE_ATTEMPTS } from '../src/write-behind.ts'
 import { runPersistenceContract, meta, oneTurnLog } from './contract.ts'
 import { runCoordinatorContract, type CoordinatorFixture } from './coordinator-contract.ts'
 
@@ -1672,6 +1673,46 @@ describe('PersistenceCoordinator retirement', () => {
       expect(backend.store.get(SessionId('retry-retirement'))?.events.map(event => event.seq)).toEqual([0, 1])
       expect(backend.lifecycle.at(-2)).toBe('append-committed')
       expect(backend.lifecycle.at(-1)).toBe('close')
+    } finally {
+      await backendFiber.dispose()
+      await ctx.fiber.dispose()
+    }
+  })
+
+  it('rejects flush with DurabilitySuspendedError once a batch failed maxWriteAttempts times', async () => {
+    const ctx = new Context()
+    await ctx.plugin(SessionStore)
+    const errors: string[] = []
+    ctx.logger.error = ((message: string) => void errors.push(message)) as typeof ctx.logger.error
+    const backend = new ControlledBackend()
+    let coordinator!: PersistenceCoordinator<never>
+    const backendFiber = await ctx.plugin(Object.assign((inner: Context) => {
+      coordinator = new PersistenceCoordinator(inner, backend)
+    }, { inject: ['sessions'] }))
+    const internals = coordinator as unknown as CoordinatorInternals
+    backend.beforeAppend = async () => { throw new Error('ENOSPC: no space left on device') }
+
+    try {
+      let session!: Session
+      await ctx.plugin(Object.assign((inner: Context) => {
+        session = inner.sessions.create(SessionId('suspended'))
+      }, { inject: ['sessions'] }))
+      session.append('turn/start', { turn: 1 })
+      for (let attempt = 0; attempt < DEFAULT_MAX_WRITE_ATTEMPTS - 1; attempt += 1) {
+        await expect(ctx.sessions.flush(session)).rejects.toThrow('ENOSPC')
+      }
+      // The attempt that trips the limit suspends durability: the caller learns
+      // it through a typed rejection instead of a false "durable" resolution.
+      const suspended = await ctx.sessions.flush(session).then(() => undefined, (error: unknown) => error)
+      expect(suspended).toBeInstanceOf(DurabilitySuspendedError)
+      expect(isDurabilitySuspended(suspended)).toBe(true)
+      expect((suspended as Error).cause).toMatchObject({ message: expect.stringContaining('ENOSPC') as string })
+      expect(errors.some(message => message.includes('durability suspended'))).toBe(true)
+
+      // Later events are dropped, not retained, and every flush keeps saying so.
+      session.append('turn/end', { turn: 1, reason: { kind: 'completed' } })
+      await expect(ctx.sessions.flush(session)).rejects.toBeInstanceOf(DurabilitySuspendedError)
+      expect([...internals.live.values()][0]?.writes.pending).toEqual([])
     } finally {
       await backendFiber.dispose()
       await ctx.fiber.dispose()

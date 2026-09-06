@@ -4,13 +4,14 @@
  * @module @deepseek-ai/dsh-compaction-basic
  */
 
+import { randomUUID } from 'node:crypto'
 import { Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
-import { CompactionEngine, ManualCompactionError } from '@deepseek-ai/dsh-compaction'
+import { CompactionEngine, CompactionId, ManualCompactionError } from '@deepseek-ai/dsh-compaction'
 import type { CompactionResult, CompactionTrigger } from '@deepseek-ai/dsh-compaction'
 import type { TokenMeter } from '@deepseek-ai/dsh-token-meter'
 import type { Session } from '@deepseek-ai/dsh-session'
-import { CONTEXT_WINDOW_EXCEEDED_CODE, assertNever } from '@deepseek-ai/dsh-llm'
+import { CONTEXT_WINDOW_EXCEEDED_CODE, assertNever, errorChain } from '@deepseek-ai/dsh-llm'
 import type { LlmCallConfig } from '@deepseek-ai/dsh-llm'
 import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
 import type { CommandId } from '@deepseek-ai/dsh-commands/brand'
@@ -25,6 +26,7 @@ import {
 import {
   assertNoActiveCompaction,
   compactSurfaceRegion,
+  inspectCompactionEntryState,
   selectCompactableRange,
 } from './region.ts'
 import { summarizeWithLlm } from './summarizer.ts'
@@ -120,6 +122,7 @@ export class BasicCompactionEngine extends CompactionEngine {
   readonly config: ResolvedConfig
 
   private readonly warnedPressureConfigTargets = new Set<string>()
+  private readonly recordedSilentFailures = new WeakMap<Session, Set<string>>()
   private readonly overflowRetries = new WeakMap<Agent, number>()
   private readonly overflowAgents = new WeakMap<Session, Agent>()
 
@@ -149,6 +152,7 @@ export class BasicCompactionEngine extends CompactionEngine {
       next,
     ): Promise<PreStepDecision> => {
       if (!signal.aborted) {
+        const seqBefore = agent.session.seq
         try {
           const result = await this.compactIfNeeded(agent, 'pressure', signal)
           if (result !== null) logResult(result, 'step pressure')
@@ -159,6 +163,7 @@ export class BasicCompactionEngine extends CompactionEngine {
           }
           const message = error instanceof Error ? error.message : String(error)
           ctx.logger.warn(`step compaction failed: ${message}; continuing the turn`)
+          this.recordSilentFailure(agent.session, seqBefore, error, message, signal)
         }
       }
       return next()
@@ -246,6 +251,44 @@ export class BasicCompactionEngine extends CompactionEngine {
   }
 
   /**
+   * Make a pre-bracket pressure failure visible in the session. A failure
+   * inside {@link compactRegion} already closes its own bracket with the
+   * error; one raised before the bracket opened (no context capacity, model
+   * resolution, metering) used to reach only the process log, so a session
+   * whose compaction kept failing grew silently until the provider rejected
+   * it. Recorded once per session and cause; skipped when the attempt itself
+   * already appended events.
+   * @param session - the session whose pre-step compaction failed.
+   * @param seqBefore - the session seq observed before the attempt.
+   * @param error - the failure.
+   * @param message - its normalised message, used as the dedupe key.
+   * @param signal - the step signal; an aborted attempt is not a failure worth recording.
+   */
+  private recordSilentFailure(session: Session, seqBefore: number, error: unknown, message: string, signal: AbortSignal): void {
+    // Re-read after the await: the step may have been aborted mid-attempt.
+    if (signal.aborted || session.seq !== seqBefore) return
+    let recorded = this.recordedSilentFailures.get(session)
+    if (recorded === undefined) {
+      recorded = new Set()
+      this.recordedSilentFailures.set(session, recorded)
+    }
+    if (recorded.has(message)) return
+    // An unmatched compaction/start is the intentional busy signal of a
+    // compaction that died mid-flight (it is also what raised this failure):
+    // a bracket on top would trip the compaction invariant or hide the orphan
+    // from the next entry check. Leave it as the visible trace it already is.
+    const entryState = inspectCompactionEntryState(session.events)
+    if (entryState.unmatchedCompactionStart !== undefined) return
+    recorded.add(message)
+    const lifecycle = {
+      compactionId: CompactionId(randomUUID()),
+      turn: entryState.openTurn,
+    }
+    session.append('compaction/start', lifecycle)
+    session.append('compaction/end', { ...lifecycle, error: errorChain(error) })
+  }
+
+  /**
    * Compact for replayed step-boundary pressure or one provider-confirmed context
    * overflow. Both triggers price the latest durable routed request envelope;
    * overflow bypasses the normal threshold and retained-tail policy so it can
@@ -304,9 +347,14 @@ export class BasicCompactionEngine extends CompactionEngine {
     if (measurement.totalTokens < spec.thresholdTokens) return null
 
     // Once pressure qualifies, land the model-free pass before choosing a
-    // summary range, then remeasure through the singleton replay fold.
+    // summary range, then remeasure through the singleton replay fold. The
+    // pass stops as soon as the remeasured surface is back under the
+    // threshold: every extra replacement breaks the cached request prefix
+    // from that node on for no pressure gain.
     if (prune !== undefined) {
-      prune.pruneSession(agent.session)
+      prune.pruneSession(agent.session, {
+        relieved: () => meter.measure(agent.session).totalTokens < spec.thresholdTokens,
+      })
       measurement = meter.measure(agent.session)
     }
     if (measurement.totalTokens < spec.thresholdTokens) return null

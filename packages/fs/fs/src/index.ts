@@ -238,11 +238,13 @@ export abstract class FileSystem extends Service {
    * @param sandboxPolicy - the per-call mode and workspace root this edit runs
    *   under; a sandboxing backend fences the edit by it, the bare backend
    *   ignores it. Omit to leave the backend its own default.
-   * @returns the outcome, including the version the edit produced.
+   * @returns the outcome, including the version the edit produced. A sequence
+   *   of edits applies in order on the running content inside the same
+   *   critical section: one write, and nothing written if any edit fails.
    */
   abstract editText(
     target: FsTarget,
-    edit: FsEditRequest,
+    edit: FsEditRequest | readonly FsEditRequest[],
     expected?: { version: FsVersion },
     signal?: AbortSignal,
     sandboxPolicy?: SandboxExecutionPolicy,

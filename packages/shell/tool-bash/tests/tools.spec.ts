@@ -345,11 +345,27 @@ describe('bash tool', () => {
     [{ command: '  ', description: 'd' }, /invalid command/],
     [{ command: 'x', description: '   ' }, /invalid description/],
     [{ command: 'x', description: 'd', timeoutMs: -1 }, /invalid timeoutMs/],
+    [{ command: 'x', description: 'd', max_output_bytes: 0 }, /invalid max_output_bytes/],
+    [{ command: 'x', description: 'd', max_output_bytes: 1.5 }, /invalid max_output_bytes/],
   ])('rejects value-invalid args %j', async (args, pattern) => {
     const ctx = await setup()
     const result = await call(ctx, 'bash', args)
     expect(result.isError).toBe(true)
     expect(text(result)).toMatch(pattern)
+  })
+
+  it('forwards max_output_bytes as the foreground stdout capture budget', async () => {
+    const ctx = await setup()
+    const executor = ctx.shell as RecordingSandboxExecutor
+    const resolve = executor.resolve.bind(executor)
+    const budgets: Array<number | undefined> = []
+    executor.resolve = (request) => {
+      budgets.push(request.stdoutMaxBytes)
+      return resolve(request)
+    }
+    await call(ctx, 'bash', { command: 'echo hi', description: 'd', max_output_bytes: 2_048 })
+    await call(ctx, 'bash', { command: 'echo hi', description: 'd' })
+    expect(budgets).toEqual([2_048, undefined])
   })
 
   it('rejects a non-JSON numeric argument before tool-specific validation', async () => {
@@ -552,7 +568,7 @@ describe('background execution through the job runtime', () => {
 
     const schema = ctx.tools.schemas().find(s => s.name === 'bash')!
     expect(Object.keys(schema.parameters.properties as Record<string, unknown>))
-      .toEqual(['command', 'description', 'timeoutMs', 'workdir'])
+      .toEqual(['command', 'description', 'timeoutMs', 'max_output_bytes', 'workdir'])
     expect(schema.description).toContain('Background execution is not available')
     expect(schema.description).not.toContain('run_in_background')
     // The registry-held definition agrees (schema and capability never disagree).

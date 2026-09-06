@@ -91,6 +91,38 @@ function privateSpillDir(): string {
   return defaultSpillDir
 }
 
+
+/**
+ * Decode captured bytes as UTF-8 without NUL. `Buffer.toString` repairs
+ * invalid UTF-8 but passes NUL through as a valid single-byte code point;
+ * once in a tool result it reaches the session log and the model prompt,
+ * where a C-string boundary in the multimodal tokenizer truncates everything
+ * after it. Only NUL is dropped here: ESC must survive because the client
+ * renders ANSI sequences from this very text, and the remaining C0 bytes are
+ * stripped at the provider boundary (`sanitizeText`) without touching the
+ * durable log. Multibyte UTF-8 never uses bytes below 0x80, so dropping a
+ * single byte cannot split a character. The spill file keeps the raw bytes.
+ * @param bytes - captured output, whole or a window of it.
+ * @returns the decoded text with NUL bytes removed.
+ */
+export function decodeOutput(bytes: Buffer): string {
+  let clean = 0
+  while (clean < bytes.length && !isControlByte(bytes[clean] as number)) clean += 1
+  if (clean === bytes.length) return bytes.toString('utf8')
+  const kept = Buffer.allocUnsafe(bytes.length)
+  bytes.copy(kept, 0, 0, clean)
+  let length = clean
+  for (let index = clean; index < bytes.length; index += 1) {
+    const byte = bytes[index] as number
+    if (!isControlByte(byte)) kept[length++] = byte
+  }
+  return kept.toString('utf8', 0, length)
+}
+
+/** Whether one byte must not reach decoded text. */
+function isControlByte(byte: number): boolean {
+  return byte === 0x00
+}
 /**
  * Collects one stream with a bounded in-memory tail. With a spill cap, on
  * first overflow a spill file is created and every chunk (including those
@@ -210,7 +242,7 @@ export class OutputCollector {
     const lossy = fromByte < windowStart
     const slice = lossy ? buffer : buffer.subarray(fromByte - windowStart)
     return {
-      text: slice.toString('utf8'),
+      text: decodeOutput(slice),
       nextOffset: this.total,
       lossy,
       ...this.spillFile !== undefined ? { spillPath: this.spillFile } : {},
@@ -243,7 +275,7 @@ export class OutputCollector {
   finalize(): CollectedOutput {
     this.seal()
     return {
-      text: Buffer.concat(this.chunks).toString('utf8'),
+      text: decodeOutput(Buffer.concat(this.chunks)),
       truncated: this.dropped,
       ...this.spillFile !== undefined ? { spillPath: this.spillFile } : {},
     }

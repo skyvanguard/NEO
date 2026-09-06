@@ -14,6 +14,7 @@ import {
   SessionPreparation,
   snapshotJsonValue,
   snapshotSessionEvent,
+  DurabilitySuspendedError,
 } from '@deepseek-ai/dsh-session'
 import type { Session, SessionEvent, SessionId, SessionHeader } from '@deepseek-ai/dsh-session'
 import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
@@ -1359,6 +1360,9 @@ export class PersistenceCoordinator<TornMarker = unknown> {
       throw error
     }
     await live.writes.flush()
+    // A suspended controller resolves its own flush (nothing is retained any
+    // more); the caller must still learn that nothing was persisted.
+    if (live.writes.suspended) throw new DurabilitySuspendedError(session.id, live.writes.suspensionCause)
   }
 
   /** Build one package-private write controller around initialization and id serialization. */
@@ -1371,6 +1375,12 @@ export class PersistenceCoordinator<TornMarker = unknown> {
       },
       reportBackgroundFailure: (error) => {
         this.ctx.logger.warn(`${this.backend.name}: background write for session "${session.id}" failed (buffered events retained): ${String(error)}`)
+      },
+      reportSuspended: (error, droppedEvents) => {
+        this.ctx.logger.error(
+          `${this.backend.name}: durability suspended for session "${session.id}" after repeated write failures; `
+          + `${droppedEvents} event(s) dropped and later events will not be persisted until restart: ${String(error)}`,
+        )
       },
     })
   }
