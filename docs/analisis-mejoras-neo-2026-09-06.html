@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis de mejoras — Harness NEO</title>
+<style>
+  :root{
+    --bg:#f7f7f5; --panel:#ffffff; --ink:#1a1a1a; --muted:#5f5f5f; --line:#e3e3df;
+    --accent:#2f5fd6; --code:#f0f0ec;
+    --crit:#b3261e; --alto:#c8541b; --medio:#b8860b; --bajo:#4a7a4a; --ok:#2f7d5f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#16171a; --panel:#1e2024; --ink:#e6e6e3; --muted:#a2a2a0; --line:#2f3339;
+      --accent:#7aa2ff; --code:#24272c;
+      --crit:#ff6b61; --alto:#ff9a52; --medio:#e8c15a; --bajo:#8fce8f; --ok:#6fd6ac;
+    }
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;line-height:1.2;margin:0 0 6px}
+  h2{font-size:22px;margin:44px 0 4px;padding-top:18px;border-top:2px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 6px}
+  .sub{color:var(--muted);margin:0 0 4px}
+  p{margin:8px 0}
+  code{background:var(--code);padding:1px 5px;border-radius:4px;font:13px/1.4 "SF Mono",Menlo,Consolas,monospace;word-break:break-word}
+  a{color:var(--accent)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em}
+  .badge{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:20px;color:#fff;white-space:nowrap}
+  .b-alto{background:var(--alto)} .b-medio{background:var(--medio)} .b-bajo{background:var(--bajo)} .b-ok{background:var(--ok)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+  .card h3{margin-top:0}
+  .meta{color:var(--muted);font-size:13px;margin:2px 0 10px}
+  .conv{display:inline-block;font-size:11.5px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:20px;padding:1px 8px;margin-left:6px}
+  .lead{font-size:16px;color:var(--ink)}
+  .fix{margin-top:6px}
+  .fix b{color:var(--ok)}
+  .risk{color:var(--muted);font-size:13.5px}
+  ol.attack{counter-reset:step;list-style:none;padding-left:0}
+  ol.attack li{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;margin:8px 0}
+  .tag{font-size:12px;color:var(--muted)}
+  hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+  .footer{color:var(--muted);font-size:13px;margin-top:40px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Análisis de mejoras — Harness NEO</h1>
+<p class="sub">Ronda 3 · 2026-09-06 · posterior al despliegue de las correcciones de la auditoría ronda 2</p>
+<p class="sub">Datos internos de BRITIMP — no distribuir</p>
+
+<p class="lead">No es una auditoría de bugs (rondas 1 y 2 ya cubrieron correctitud y seguridad). Este informe detecta <b>puntos de mejora</b>: rendimiento y escalabilidad, arquitectura y mantenibilidad, fiabilidad y operaciones, y calidad y consistencia de código.</p>
+
+<p><b>Metodología.</b> Cuatro análisis en paralelo, uno por dimensión, cada uno leyendo el código real y citando <code>archivo:línea</code>. Se descartaron los falsos positivos verificando artefactos construidos, CI y seams de Cordis (ver apéndice). No hay hallazgos críticos ni altos de correctitud; todo son mejoras de severidad media/baja o de impacto en escalabilidad. Donde dos dimensiones convergen en el mismo punto se marca <span class="conv">convergencia</span>.</p>
+
+<h2>Prioridades — mayor retorno (valor / esfuerzo)</h2>
+<p>Ordenadas para atacar primero. Las dos primeras son de bajo esfuerzo y cierran riesgos ya materializados (un deploy roto, un atasco de producción).</p>
+<table>
+<thead><tr><th>#</th><th>Mejora</th><th>Dim.</th><th>Sev.</th><th>Impacto / Esfuerzo</th><th>Archivo clave</th></tr></thead>
+<tbody>
+<tr><td>P1</td><td>Extender el probe de invariantes de build al export <code>./typert</code> (cierra la clase del bug de zod)<span class="conv">arq + ops</span></td><td>Ops/Arq</td><td><span class="badge b-alto">alto</span></td><td>Alto / Bajo</td><td><code>scripts/verify-built-package-invariants.mjs:47</code></td></tr>
+<tr><td>P2</td><td>Timeout en las 3 llamadas <code>fetch()</code> del scan-worker (riesgo vivo: slot único colgado)</td><td>Ops</td><td><span class="badge b-alto">alto</span></td><td>Alto / Bajo</td><td><code>scan-worker/worker.mjs</code></td></tr>
+<tr><td>P3</td><td>Restaurar un CI Linux real (hoy ningún gate corre solo; multiplica todo lo demás)</td><td>Ops</td><td><span class="badge b-alto">alto</span></td><td>Alto / Medio</td><td><code>.github/workflows/ci.yml</code> (ausente)</td></tr>
+<tr><td>P4</td><td>Paginación de historial: recorrer con <code>eventAt()</code> en vez de copiar+filtrar el log completo por página</td><td>Perf</td><td><span class="badge b-alto">alto</span></td><td>Alto / Bajo</td><td><code>host/apiproxy/src/api-proxy.ts:292,1583</code></td></tr>
+<tr><td>P5</td><td><code>sessions.list</code> vía registro de proyecciones incremental en vez de refoldar cada sesión</td><td>Perf</td><td><span class="badge b-medio">medio</span></td><td>Medio / Bajo</td><td><code>host/apiproxy/src/api-proxy.ts:523</code></td></tr>
+<tr><td>P6</td><td>Caché de lectura del backend JSONL (relee+redecodifica todo el archivo por <code>readFrom</code>)</td><td>Perf</td><td><span class="badge b-alto">alto</span></td><td>Alto / Medio</td><td><code>session-persistence-jsonl/src/index.ts:337,374</code></td></tr>
+<tr><td>P7</td><td>Desplegar el hardening + egress del worker (hoy corre en unit <code>--user</code> sin filtrado de IP)</td><td>Ops</td><td><span class="badge b-alto">alto</span></td><td>Alto / Medio (root)</td><td><code>scan-worker/harden-deploy.sh</code></td></tr>
+<tr><td>P8</td><td>Ventaneo de la ventana del cliente + índices del assembler (memoria sin cota en sesiones largas)</td><td>Perf/Arq</td><td><span class="badge b-medio">medio</span></td><td>Alto / Alto</td><td><code>client/runtime/.../session.ts</code>, <code>conversation-assembler.ts</code></td></tr>
+</tbody>
+</table>
+
+<!-- ================= RENDIMIENTO ================= -->
+<h2>1 · Rendimiento y escalabilidad</h2>
+
+<div class="card">
+<h3>1.1 Paginación de historial copia y filtra el log COMPLETO por página <span class="badge b-alto">alto</span></h3>
+<p class="meta">Impacto/Esfuerzo: Alto / Bajo · <code>host/apiproxy/src/api-proxy.ts:292-312, 1575-1585, 2758</code></p>
+<p>Para servir una página de 50 mensajes (<code>loadOlder()</code>), el host hace 2-3 pasadas O(n) sobre el log entero: <code>[...source.session.events]</code> (línea 1583) más dos <code>.filter()</code> en <code>paginate</code> (297, 311), y de nuevo en la rama de subagentes (2758). El propio <code>Session</code> del core advierte que <code>get events()</code> ya reconstruye <code>Object.freeze([...this.log])</code> por append y que un consumidor incremental debe usar <code>eventAt()</code> o paga la copia completa. Paginar hacia atrás en una sesión de 2000+ pasos es O(n²/pageSize).</p>
+<p class="fix"><b>Mejora:</b> en <code>paginate</code>, cuando hay <code>beforeSeq</code>, recorrer con <code>session.eventAt(seq)</code> y cortar una sola vez con <code>slice</code>; eliminar la copia redundante de <code>historyCutOf</code>. <span class="risk">Riesgo: bajo (cambio local, no toca el contrato RPC).</span></p>
+</div>
+
+<div class="card">
+<h3>1.2 El backend JSONL relee y redecodifica todo el archivo en cada <code>readFrom</code> <span class="badge b-alto">alto</span></h3>
+<p class="meta">Impacto/Esfuerzo: Alto / Medio · <code>session-persistence-jsonl/src/index.ts:337,374</code> · <code>session-persistence/src/coordinator.ts:895</code></p>
+<p>Cada <code>readFrom(id, fromSeq)</code> lee el archivo entero, descomprime TODOS los frames zstd y parsea todo el JSONL, sin caché ni seek, sin importar el rango pedido. Anula la optimización de <code>session-projection-cache</code> (que pide solo la cola desde <code>floor</code>). El backend SQLite sí evita esto con <code>loadStoredFrom</code> (<code>WHERE seq&gt;=?</code>), pero el formato en uso real es JSONL+zstd.</p>
+<p class="fix"><b>Mejora:</b> (a) caché en memoria por sesión del resultado decodificado + revisión (<code>readStoredRevision</code>/mtime), invalidando por stat; (b) a mediano plazo, índice de offsets de frame (seq→byte) construido incrementalmente en cada append para saltar al frame que contiene <code>fromSeq</code>. <span class="risk">Riesgo: medio; (a) es más seguro (no cambia el formato en disco).</span></p>
+</div>
+
+<div class="card">
+<h3>1.3 El fold de "surface" del token-meter es O(n) por evento → O(S²) en la sesión <span class="badge b-medio">medio-alto</span></h3>
+<p class="meta">Impacto/Esfuerzo: Medio-Alto / Medio · <code>llm/token-meter/src/surface-fold.ts:42-65</code>, <code>src/index.ts:220</code></p>
+<p><code>foldSurfaceTokens</code> copia el array completo de nodos en cada mensaje (<code>[...nodes, x]</code>); la rama <code>replace</code> hace <code>findIndex</code> doble + <code>slice().reduce()</code> + <code>splice()</code>. Corre por <code>session/event</code> una vez activo el estado (y <code>compaction-basic</code> lo activa temprano). <code>measure()</code> además hace <code>structuredClone</code> del surface completo por llamada. No afecta a las proyecciones de usage (que son O(1) vía shadow-price); es la réplica interna posicional de <code>TokenMeter</code>.</p>
+<p class="fix"><b>Mejora:</b> estado interno mutable append-friendly (<code>push</code>) con vista <code>readonly</code> congelada solo al exponer, patrón que el core ya usa en <code>Session.log</code>. <span class="risk">Riesgo: medio; documentar la excepción al principio de inmutabilidad.</span></p>
+</div>
+
+<div class="card">
+<h3>1.4 <code>sessions.list</code> refolda cada sesión completa en cada refresco <span class="badge b-medio">medio</span></h3>
+<p class="meta">Impacto/Esfuerzo: Medio / Bajo · <code>host/apiproxy/src/api-proxy.ts:511-561</code></p>
+<p><code>sessionListMetadata</code> pliega O(n) desde cero por cada sesión viva en cada <code>sessions.list</code>, más <code>resolveSessionPreset({header,events})</code> (otro escaneo). El reducer <code>applySessionListMetadata</code> ya tiene la forma de una <code>ProjectionDefinition</code>, pero no se registra en <code>ctx.sessionProjections</code> (que cachea por sesión con marca de agua). Con W sesiones vivas de largo L, cada refresco cuesta O(W·L).</p>
+<p class="fix"><b>Mejora:</b> registrar <code>applySessionListMetadata</code> como <code>ProjectionDefinition</code> (igual que el token-meter) y leer el snapshot cacheado. <span class="risk">Riesgo: bajo (patrón ya probado).</span></p>
+</div>
+
+<div class="card">
+<h3>1.5 <code>ConversationLocationIndex.appendBoundary</code> copia el Map de turnos por límite <span class="badge b-bajo">bajo-medio</span></h3>
+<p class="meta">Impacto/Esfuerzo: Bajo-Medio / Bajo · <code>client/runtime/.../conversation-location-index.ts:415</code></p>
+<p><code>new Map(this.timeline.turns)</code> en cada <code>turn/step</code> boundary: O(turnos), barato en sesiones agénticas (un turno, muchos pasos) pero cuadrático en chat multi-turno largo. <b>Mejora:</b> mutar in place, congelar copia solo al publicar snapshot. <span class="risk">Riesgo: bajo.</span></p>
+</div>
+
+<div class="card">
+<h3>1.6 Los tres puntos ya conocidos (ronda 2), con evidencia adicional <span class="badge b-medio">medio</span></h3>
+<p class="meta"><code>client/runtime/.../session.ts</code>, <code>conversation-assembler.ts</code>, <code>ui-conversation/.../chat-snapshot-builder.ts:322</code>, <code>core/session/src/index.ts:552</code></p>
+<ul>
+<li><b>Ventana del cliente sin cota:</b> además de <code>events</code>/<code>views</code>, el assembler mantiene 4 índices que también crecen sin eviction (<code>contexts</code>, <code>contextsByKind</code>, <code>contextsBySeq</code>, <code>inputs</code>). Cualquier virtualización futura debe podar los cuatro o el ahorro será parcial.</li>
+<li><b><code>rebuildFinalized</code> O(n²):</b> se dispara ~una vez por paso del agente (al finalizar assistant-step/tool-call), no solo en cambios masivos. El <code>store</code>/<code>order</code> de la misma clase ya tiene camino rápido append-only; la porción legacy nunca lo recibió.</li>
+<li><b>Costo por-token del append:</b> el mecanismo es <code>get events()</code> invalidando <code>Object.freeze([...this.log])</code>. El problema real hoy no es por-chunk de streaming (los consumidores incrementales ya usan <code>eventAt()</code>) sino por-mensaje/por-página en 1.1 y 1.3.</li>
+</ul>
+<p class="risk">Es el <b>MEDIUM #3</b> de la ronda 2, correctamente diferido: refactor de perf en el hot-path del render, requiere benchmarks y toca la contigüidad que usan los checkpoints de compactación.</p>
+</div>
+
+<!-- ================= ARQUITECTURA ================= -->
+<h2>2 · Arquitectura y mantenibilidad</h2>
+<p>La deuda no son ciclos (las herramientas de grafo del repo los controlan) sino <b>concentración</b>: ~20 archivos de producto &gt;800 líneas frente a ~1180 pequeños. Los god-modules son excepciones identificables, no la norma.</p>
+
+<div class="card">
+<h3>2.1 <code>api-proxy.ts</code> es un god-object: el contrato está partido, la implementación no <span class="badge b-alto">alto</span></h3>
+<p class="meta">Impacto/Esfuerzo: Alto / Medio-Alto · <code>host/apiproxy/src/api-proxy.ts:1106,3817</code> (~2700 líneas en una factory)</p>
+<p>El contrato ya está modularizado (<code>api/sessions.ts</code>, <code>api/workspace.ts</code>… con la regla "un dominio nuevo = un par de archivos + una fila"), pero la implementación de los 12 dominios vive en un solo módulo que crece monótonamente con cada feature.</p>
+<p class="fix"><b>Mejora:</b> una implementación por dominio (<code>impl/sessions.ts</code>…) reflejando el split de <code>api/</code>, cada una cerrando sobre un objeto de dependencias compartidas explícito; <code>createApiProxy</code> queda como ensamblador delgado. <span class="risk">Riesgo: medio; primero extraer el estado compartido del cierre (<code>sessionHandles</code>, <code>broadcast</code>, <code>composeAgent</code>) a un contexto explícito. Verificable con los snapshots existentes.</span></p>
+</div>
+
+<div class="card">
+<h3>2.2 Dependencia de runtime oculta en artefactos generados (la trampa de zod) <span class="badge b-alto">alto</span> <span class="conv">convergencia con Ops 3.1</span></h3>
+<p class="meta">Impacto/Esfuerzo: Alto / Bajo (gate) · <code>typert/generator/src/emitter.ts:194,254</code></p>
+<p>El emisor de typert escribe literalmente <code>import { z } from 'zod'</code> en los <code>.host.js</code> generados, aunque el <code>src</code> use <code>@deepseek-ai/schemastery</code> y no importe zod. Por eso un paquete puede tener el <code>src</code> limpio y producir un artefacto que rompe el boot si no declara zod — el fallo ya materializado en el deploy. Coexisten dos libs de schema (<code>schemastery</code> para <code>Config</code>, <code>zod</code> para wire/typert): la separación es deliberada; el problema es que la dependencia no es visible.</p>
+<p class="fix"><b>Mejora:</b> gate que escanee los <code>lib/**/*.js</code> construidos, extraiga los especificadores bare npm y los cruce contra <code>dependencies</code>/<code>peerDependencies</code>. NO unificar las dos libs. <span class="risk">Riesgo: bajo (gate nuevo, falla ruidoso en CI).</span> Ver la implementación concreta en <b>P1</b> / 3.1 (el probe ya existe, solo prueba el export equivocado).</p>
+</div>
+
+<div class="card">
+<h3>2.3 Patrón sistémico: <code>index.ts</code> como god-module (barrel + implementación) <span class="badge b-medio">medio-alto</span></h3>
+<p class="meta">Impacto/Esfuerzo: Alto / Medio (repetido)</p>
+<p>Paquetes core meten casi toda la implementación en el barrel público: <code>core/tools:1949</code>, <code>cordis-host-runner:1274</code>, <code>core/session:1174</code>, <code>session-query-sqlite:1103</code>, <code>session-persistence-jsonl:1002</code>, <code>skill-filesystem:1041</code>, <code>settings:899</code>. Contrasta con los bien factorizados (<code>llm/llm</code>, <code>fs/tool-fs</code>, <code>ui-conversation</code>). Mezclar entrada pública e implementación obliga a leer 1000+ líneas para tocar un detalle.</p>
+<p class="fix"><b>Mejora:</b> extraer implementación a módulos por responsabilidad, <code>index.ts</code> como re-export. Empezar por <code>core/tools</code> y <code>core/session</code> (máximo apalancamiento). <span class="risk">Riesgo: bajo-medio; cuidar imports relativos <code>.ts</code> del contrato source-launch tsx.</span></p>
+</div>
+
+<div class="card">
+<h3>2.4 Acoplamiento aferente máximo sobre <code>apiproxy</code> + seam implícito <code>ctx.get</code> <span class="badge b-medio">medio</span></h3>
+<p class="meta"><code>host/apiproxy/package.json:47-76</code> (25 deps workspace) · <code>api-proxy.ts</code> (40 usos de <code>ctx.get</code>, 9 augmentations <code>import type {}</code>)</p>
+<p>Las augmentations <code>import type {}</code> crean dependencias de runtime que el type-system exige pero las herramientas de grafo no ven (son type-only): la superficie real de acoplamiento es mayor que la declarada. <b>Mejora:</b> combinar con 2.1 — al partir por dominio, cada impl declara solo lo que consume; documentar seams opcionales como ya hace <code>core/tools:18</code>. <span class="risk">Riesgo: medio, ligado a 2.1.</span></p>
+</div>
+
+<div class="card">
+<h3>2.5 Otros god-modules y duplicación estructural <span class="badge b-medio">medio</span></h3>
+<ul>
+<li><b>Contrato TS vs schema wire duplicados a mano:</b> ~12 pares <code>api/*.ts</code> + <code>api/*.schema.ts</code> sincronizados manualmente; typert ya sabe generar zod desde tipos. Evaluar generar los <code>*.schema.ts</code> (riesgo medio-alto: brand casts y passthrough del envelope). <span class="tag">Hacer después de 2.1.</span></li>
+<li><code>subagent/continuation.ts:1503</code> (7 responsabilidades en una clase); <code>session-persistence/coordinator.ts:1404</code> (orquestador monolítico con piezas ya extraídas al lado); <code>ui-trajectory/layout.ts:1126</code> y <code>ui-slots/index.ts:1192</code> (outliers en un grupo cliente por lo demás bien partido).</li>
+<li><code>typert/generator/analyzer.ts:3113</code>: walker de AST, complejidad esencial alta, punto único del que dependen todos los artefactos generados. Partir por fase del pipeline. <span class="risk">Riesgo alto; requiere fixtures type-model/remote-model.</span></li>
+<li>Carga cognitiva de ~30 pares <code>gen-*</code>/<code>verify-*</code>: un índice generador→artefacto→gate ayudaría al onboarding. <span class="risk">Riesgo nulo (doc).</span></li>
+</ul>
+</div>
+
+<!-- ================= FIABILIDAD / OPS ================= -->
+<h2>3 · Fiabilidad, operaciones y DX</h2>
+<p><b>Hallazgo transversal (multiplicador):</b> <b>no hay CI corriendo tests/lint/typecheck.</b> <code>.gitlab-ci.yml</code> solo dispara con tags <code>python-v*</code>; <code>.github/workflows/ci.yml</code> NO existe (el fork lo removió) pero quedó <code>scripts/ci-workflow.spec.ts</code> que lo valida. <code>lefthook.yml</code> pre-push solo corre <code>pnpm run typecheck</code>. Todos los gates ricos (hygiene, coverage, matriz Windows/Linux) solo corren a mano.</p>
+
+<div class="card">
+<h3>3.1 El probe de invariantes de build prueba el export equivocado <span class="badge b-alto">alto</span> <span class="conv">= P1</span></h3>
+<p class="meta">Impacto/Esfuerzo: Alto / Bajo · <code>scripts/verify-built-package-invariants.mjs:47-59</code></p>
+<p>La salvaguarda correcta YA existe: monta cada paquete solo con sus <code>files</code> declarados y lo importa bajo Node plano ("so a companion that imports an undeclared runtime chunk fails here"). Pero solo importa <code>./invariant</code>, no <code>./typert</code> (<code>lib/typert.host.js</code>) — el artefacto que importa zod y que Cordis carga en runtime. Un <code>typert.host.js</code> con dep no declarada pasa el probe y revienta en el deploy (como pasó).</p>
+<p class="fix"><b>Mejora:</b> extender el loop para que, en cada paquete con <code>exports['./typert']</code>, importe también <code>${pkg}/typert</code> (y <code>./remote</code> donde exista) bajo Node plano. Añadirlo a <code>pnpm run hygiene</code> y a un CI real. <span class="risk">Riesgo: bajo. Es la implementación concreta de 2.2. Verificado: <code>interaction/commands</code> ya declara zod post-incidente; nada verifica hoy que el <code>host.js</code> no importe algo sin declarar.</span></p>
+</div>
+
+<div class="card">
+<h3>3.2 Las tres llamadas <code>fetch()</code> del worker no tienen timeout — riesgo vivo <span class="badge b-alto">alto</span> <span class="conv">= P2</span></h3>
+<p class="meta">Impacto/Esfuerzo: Alto / Bajo · <code>scan-worker/worker.mjs</code> (<code>fetchNextJob</code>, <code>postHeartbeat</code>, <code>postResult</code>)</p>
+<p>Sin <code>AbortSignal</code>/timeout. El <code>setTimeout(cfg.timeoutMs)</code> de <code>runNeo</code> solo mata al hijo, no las llamadas HTTP. Un socket colgado hacia Vercel bloquea el slot único indefinidamente; <code>Restart=always</code> solo cubre salida del proceso, no un loop vivo pero atascado.</p>
+<p class="fix"><b>Mejora:</b> <code>fetch(url, { signal: AbortSignal.timeout(30_000) })</code> en las tres, más <code>WatchdogSec=</code> + <code>sd_notify</code> (o archivo de latido vigilado por un timer) para reiniciar ante deadlock. <span class="risk">Riesgo: bajo.</span></p>
+</div>
+
+<div class="card">
+<h3>3.3 CI ausente y tests que no corren en ningún lado <span class="badge b-alto">alto</span> <span class="conv">= P3</span></h3>
+<p class="meta">Impacto/Esfuerzo: Alto / Medio · <code>vitest.config.ts:21-46</code>, <code>.gitlab-ci.yml</code></p>
+<p>Las suites de <code>hooks</code>, <code>bash-*</code>, <code>tool-bash</code>, <code>terminal-bash</code>, <code>sandbox-local</code> y varias de <code>subprocess-local</code> se excluyen en Windows (máquina de dev) y, sin CI Linux, no corren en ningún lado. Una regresión en un tool crítico pasa sin gate. Además no hay <b>smoke test de boot</b>: un <code>dsh --profile headless --dump-config</code> con los <code>lib/*.host.js</code> construidos habría atrapado el fallo de zod (es un fallo de carga de plugin, invisible a <code>tsc</code>/vitest unitario). <code>apps/cli/src/bin.ts</code> tampoco tiene <code>process.on('unhandledRejection')</code>.</p>
+<p class="fix"><b>Mejora:</b> restaurar <code>.github/workflows/ci.yml</code> (o job GitLab en push/MR) con lane Linux que corra las suites excluidas + <code>hygiene</code> + el probe extendido (3.1) + un smoke de boot headless. <span class="risk">Riesgo: bajo; es infraestructura.</span></p>
+</div>
+
+<div class="card">
+<h3>3.4 Endurecimiento systemd pendiente + defensas de bajo costo omitidas <span class="badge b-alto">alto</span> <span class="conv">= P7</span></h3>
+<p class="meta"><code>scan-worker/harden-deploy.sh</code></p>
+<p>Todo el hardening (<code>NoNewPrivileges</code>, <code>ProtectSystem=strict</code>, egress <code>IPAddressDeny</code>, usuario <code>neo-scan</code> sin docker) vive en un script que requiere root y migra a un unit de sistema aún no desplegado. Hoy el worker corre como <code>skyvanguard</code> (grupo docker = vía a root) en un unit <code>--user</code> sin filtrado de IP. Incluso el unit endurecido omite <code>ProtectKernelTunables</code>, <code>ProtectClock</code>, <code>ProtectProc=invisible</code>, <code>PrivateDevices</code>, <code>LockPersonality</code>, <code>CapabilityBoundingSet=</code> (vaciar), <code>UMask=077</code>, <code>SystemCallArchitectures=native</code>, y límites <code>MemoryMax</code>/<code>TasksMax</code>/<code>WatchdogSec</code>.</p>
+<p class="fix"><b>Mejora:</b> desplegar el hardening (paso root) y agregar el subset seguro de directivas. <span class="risk">Riesgo: <b>advertencia verificada</b> — NO agregar <code>RestrictNamespaces</code> ni <code>SystemCallFilter=@system-service</code> sin excepciones: bubblewrap necesita <code>unshare/clone</code> y user namespaces; <code>PrivateDevices</code> puede chocar con <code>--dev</code> de bwrap. Dejar namespaces/seccomp fuera o con allowlist explícita.</span> Nota: con el pin de undici ya desplegado, la defensa SSRF de la app es autoritativa; el egress es defensa en profundidad.</p>
+</div>
+
+<div class="card">
+<h3>3.5 Observabilidad: sin correlación job↔sesión, stdout sin cota <span class="badge b-medio">medio</span></h3>
+<p class="meta"><code>scan-worker/worker.mjs</code></p>
+<ul>
+<li><b>Bueno (verificado):</b> 0 <code>catch {}</code> vacíos en <code>packages/*/*/src</code>; la ronda anterior ya convirtió fallos mudos en eventos de sesión visibles (<code>compaction/failed</code>, warns, cuarentena de batches).</li>
+<li>El worker solo loguea la cola de ~300-400 chars del stdout en un scan fallido y <b>no registra qué ruta de sesión corresponde al <code>job.id</code></b> → diagnóstico ciego. Propagar un correlation id y persistir el stdout completo por job cuando <code>status=failed</code>.</li>
+<li><code>runNeo</code> acumula <code>stdout</code> en memoria hasta 75 min sin cota → riesgo OOM. Cota con spill/truncado (el harness ya tiene <code>stdoutMaxBytes</code> en <code>subprocess-local</code>).</li>
+<li><code>postHeartbeat</code> traga el error a propósito y late contra un health externo que no reinicia el proceso local; sin lazo de recuperación local.</li>
+</ul>
+</div>
+
+<!-- ================= CALIDAD ================= -->
+<h2>4 · Calidad y consistencia de código</h2>
+<p>El repo es maduro (knip + oxlint + invariantes por paquete, supresiones <code>jscpd</code> deliberadas). No hay críticos/altos; todo es medio/bajo, con foco en consistencia entre paquetes hermanos.</p>
+
+<div class="card">
+<h3>4.1 Familia <code>web-search-*</code>: validación y clasificación de errores divergentes <span class="badge b-medio">medio</span></h3>
+<ul>
+<li><b>Perplexity acepta <code>url</code> sin el guard que SearXNG sí aplica</b> (<code>web-search-perplexity/src/provider.ts:56-77</code> vs <code>web-search-searxng:64</code>). Replicar el guard por-campo. Riesgo nulo.</li>
+<li><b>Los 4 proveedores clasifican abort/timeout con 3 criterios distintos</b> (deepseek:239, exa:119/134/145, perplexity:122/137/149, searxng:113/125). El hermano <code>web-fetch-http:349</code> ya centraliza en <code>translateAbortOrNetwork</code>. Extraerlo a <code>@deepseek-ai/dsh-web</code> y usarlo en los cuatro.</li>
+<li><b>SearXNG etiqueta su timeout interno como <code>WEB_PROVIDER_ERROR</code></b> (:103/:113) en vez de un <code>WEB_FETCH_TIMEOUT</code> como el hermano.</li>
+<li><b>Helpers puros duplicados</b> (<code>isPositiveInteger</code>, <code>isAbortError</code>, <code>searchAborted</code>) en los 4; supresión jscpd inconsistente. Mover a <code>@deepseek-ai/dsh-web/internal</code> (no API pública).</li>
+</ul>
+<p class="risk">Riesgo: bajo (funciones puras / solo descarta basura o mejora diagnóstico).</p>
+</div>
+
+<div class="card">
+<h3>4.2 Validación numérica de <code>Config</code>: 4 estilos + helper duplicado en 5 paquetes <span class="badge b-medio">medio</span></h3>
+<p class="meta"><code>tool-fs:48</code>, <code>tool-fs-search:115</code>, <code>tool-lsp:232</code>, <code>tool-web:65</code>, <code>tool-skill:404</code></p>
+<p>Estilo dominante declarativo <code>z.number().step(1).min()</code> (goal, terminal, ralph, subagent) vs helper imperativo <code>assertPositiveInteger</code> duplicado casi verbatim en 5 paquetes (uno con drift), inline en <code>tool-bash-persistent:435</code>, y <code>tool-jobs:49</code> con <code>.min(1)</code> <b>sin <code>.step(1)</code></b> (acepta <code>1.5</code> en silencio). <b>Mejora:</b> adoptar el estilo declarativo y borrar las 5 copias. <span class="risk">Riesgo: bajo (verificar que <code>.step(1)</code> de la schemastery vendorizada rechaza no-enteros).</span></p>
+</div>
+
+<div class="card">
+<h3>4.3 Duplicación real: andamiaje FFI Win32/koffi <span class="badge b-medio">medio</span></h3>
+<p class="meta"><code>fs/fs-local/src/win32.ts:60,72</code> ≡ <code>session-persistence-jsonl/src/win32.ts:53,72</code> (0 marcadores jscpd)</p>
+<p>Mismo mapeo Win32→errno, misma fábrica <code>Win32ErrnoException</code>, mismo loader perezoso de koffi (la variante JSONL es superset). <b>Mejora:</b> util compartido (<code>packages/util/win32-ffi</code>) con la tabla errno; cada archivo conserva solo sus bindings. <span class="risk">Riesgo: bajo-medio; centralizar la tabla reduce el drift (no unificar los prototipos <code>koffi.func</code>, que difieren legítimamente).</span></p>
+</div>
+
+<div class="card">
+<h3>4.4 Consistencia menor y casts en boundaries <span class="badge b-bajo">bajo</span></h3>
+<ul>
+<li><code>apiproxy:777</code> usa <code>console.error</code> en una ruta de degradación teniendo <code>ctx.logger</code> en scope (el mismo archivo usa <code>ctx.logger.warn</code> en :598/:864/:896) → escapa al pipeline de logging. Cambiar a <code>ctx.logger.warn</code>.</li>
+<li><code>tool-pwsh/src/index.ts:202</code> lanza un error que nombra "the mounted bash executor" (copy-paste de <code>tool-bash:200</code>) → desorienta el diagnóstico en PowerShell.</li>
+<li>Familia <code>await response.json() as T</code> sin schema en boundaries de red (web-search, llm-deepseek, boot/profile, hmr): el try/catch atrapa JSON malformado, no estructura válida-pero-inesperada. Unificar el idiom "cast + re-guard por campo" o schemas passthrough.</li>
+<li>Errores de tools tipados con <code>code</code> (<code>FsError</code>, <code>SearchError</code>) vs <code>throw new Error</code> plano (<code>tool-fs/read-image.ts</code>, <code>tool-cordis</code>) — usar error tipado donde retry/permission/UI deban distinguir.</li>
+<li><b>Dead code (conservador):</b> <code>scripts/check-expected-filenames.sh</code> es un guard huérfano (no lo invoca ningún gate) — cablearlo o borrarlo.</li>
+</ul>
+</div>
+
+<!-- ================= FALSOS POSITIVOS ================= -->
+<h2>Apéndice — Falsos positivos verificados (NO tocar)</h2>
+<p>Verificados contra artefactos construidos, CI y seams de Cordis:</p>
+<ul>
+<li><b>deps <code>zod</code>/<code>schemastery</code> "sin usar":</b> las usa el typert construido en runtime — es el precedente que ya rompió el boot. Mantenerlas declaradas en cada hoja.</li>
+<li><b>~224 <code>src/invariant.ts</code>:</b> boilerplate intencional por paquete (<code>jscpd:ignore</code>).</li>
+<li><b><code>scripts/build-exe-for-python-sdk.ts</code>:</b> lo usa <code>.gitlab-ci.yml</code> (ciego típico de knip).</li>
+<li><b><code>bash-sandbox/helpers.ts</code> ≡ <code>pwsh-sandbox/helpers.ts</code>:</b> mirror deliberado y documentado (evolucionan por separado).</li>
+<li><b>Invariantes de tolerancia histórica y el envelope <code>ToolResult</code>:</b> intencionales / consistentes.</li>
+<li><b>Dependencias circulares:</b> no se encontraron; las herramientas de grafo del repo las controlan.</li>
+</ul>
+
+<!-- ================= ORDEN ================= -->
+<h2>Orden de ataque sugerido</h2>
+<ol class="attack">
+<li><b>Fase A — cierres baratos de riesgo ya materializado.</b> P1 (probe <code>./typert</code>) + P2 (timeouts del worker) + P3 (CI Linux + smoke de boot). Bajo esfuerzo, evitan otro deploy roto y un atasco de producción. <span class="tag">Fundamento para todo lo demás.</span></li>
+<li><b>Fase B — wins de rendimiento de bajo esfuerzo.</b> P4 (paginación con <code>eventAt</code>) + P5 (<code>sessions.list</code> vía proyección) + 1.5. Alto/medio impacto, riesgo bajo, patrones ya probados.</li>
+<li><b>Fase C — hardening operativo (paso root en kryon).</b> P7 (desplegar hardening + egress + directivas systemd seguras + límites de recursos) + observabilidad 3.5.</li>
+<li><b>Fase D — rendimiento de esfuerzo medio.</b> P6 (caché JSONL) + 1.3 (surface-fold del token-meter). Requieren tests dirigidos de persistencia/medición.</li>
+<li><b>Fase E — refactors estructurales (de a uno, con su red de tests).</b> 2.1+2.4 (partir apiproxy) → 2.3 (index.ts de core/tools y core/session) → 4.1/4.2/4.3 (consistencia web-search, Config, win32) → 2.5 (continuation, coordinator, analyzer).</li>
+<li><b>Fase F — el grande de perf (proyecto propio con benchmarks).</b> P8 / MEDIUM #3: ventaneo de la ventana del cliente + los 4 índices del assembler + <code>rebuildFinalized</code> incremental. Toca el hot-path del render y la contigüidad de compactación.</li>
+</ol>
+
+<p class="footer">Generado a partir de cuatro análisis en paralelo (rendimiento, arquitectura, fiabilidad/ops, calidad), cada hallazgo verificado leyendo el código. Cada <code>archivo:línea</code> es un punto de entrada para la corrección. Ninguna afirmación proviene de un solo agente sin relectura del código para los puntos de mayor valor.</p>
+
+</div>
+</body>
+</html>
