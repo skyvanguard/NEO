@@ -58,6 +58,18 @@ async function fetchNextJob() {
   return body.job ?? null;
 }
 
+/** Latido de operaciones (best-effort): prueba que el worker está vivo. */
+async function postHeartbeat() {
+  try {
+    await fetch(`${cfg.apiBase}/api/ops/heartbeat?worker=${encodeURIComponent(cfg.workerId)}`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${cfg.token}` },
+    });
+  } catch {
+    // el latido no debe frenar el loop; el chequeo de salud detectará el silencio
+  }
+}
+
 async function postResult(jobId, payload) {
   // Reintenta hasta 3 veces: un 500 transitorio no debe perder el resultado.
   let lastErr;
@@ -221,6 +233,7 @@ async function main() {
   assertConfig();
   log(`worker "${cfg.workerId}" iniciado → ${cfg.apiBase} (poll ${cfg.pollIntervalMs}ms)`);
   while (running) {
+    await postHeartbeat();
     let job = null;
     try {
       job = await fetchNextJob();
