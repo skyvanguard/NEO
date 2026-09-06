@@ -18,6 +18,13 @@ const statRace = vi.hoisted(() => ({
   reads: 0,
 }))
 
+// One-shot, path-targeted readdir fault used to simulate a transient (non-ENOENT)
+// I/O error while the backend scans its root for the encoding guard.
+const readdirFault = vi.hoisted(() => ({
+  path: undefined as string | undefined,
+  armed: false,
+}))
+
 vi.mock('node:fs/promises', async (importOriginal) => {
   const actual = await importOriginal<typeof import('node:fs/promises')>()
   return {
@@ -29,6 +36,13 @@ vi.mock('node:fs/promises', async (importOriginal) => {
       if (statRace.reads !== 2) return identity
       return { ...identity, mtimeNs: identity.mtimeNs + 1n }
     }) as typeof actual.stat,
+    readdir: (async (...args: Parameters<typeof actual.readdir>) => {
+      if (readdirFault.armed && String(args[0]) === readdirFault.path) {
+        readdirFault.armed = false
+        throw Object.assign(new Error('simulated transient readdir failure'), { code: 'EIO' })
+      }
+      return actual.readdir(...args)
+    }) as typeof actual.readdir,
   }
 })
 
@@ -86,6 +100,8 @@ function rawLogPath(root: string, cwd: string | undefined, id: SessionId): strin
 afterEach(async () => {
   statRace.path = undefined
   statRace.reads = 0
+  readdirFault.path = undefined
+  readdirFault.armed = false
   vi.restoreAllMocks()
   for (const d of dirs.splice(0)) await rm(d, { recursive: true, force: true })
 })
@@ -267,6 +283,17 @@ describe('JsonlSessionPersistence: durability and crash semantics', () => {
     await ctx.plugin(JsonlSessionPersistence, { root, compression: 'none' })
   })
   afterEach(async () => { await ctx.fiber.dispose() })
+
+  it('does not cache a transient root-scan failure: a later call retries and recovers', async () => {
+    // A transient (non-ENOENT) I/O fault while scanning the root must not be
+    // memoized — otherwise every later append/load/remove would reuse the cached
+    // rejection and the backend would be permanently, silently disabled.
+    readdirFault.path = root
+    readdirFault.armed = true
+    await expect(ctx.sessionPersistence.list()).rejects.toThrow(/transient readdir failure/)
+    // Fault spent: the guard re-runs instead of serving the cached rejection.
+    expect(await ctx.sessionPersistence.list()).toEqual([])
+  })
 
   it('lazy materialization: create() writes no file until the first append', async () => {
     const m = meta('lazy', '/work')

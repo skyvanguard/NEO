@@ -901,7 +901,15 @@ export class JsonlSessionPersistence extends SessionPersistence implements Persi
 
   /** Reject a root that already belongs to the other physical encoding. */
   private ensureRootEncoding(): Promise<void> {
-    this.rootEncodingCheck ??= this.checkRootEncoding()
+    this.rootEncodingCheck ??= this.checkRootEncoding().catch((error: unknown) => {
+      // Never cache a failure. A transient I/O fault while scanning the root
+      // (EIO/EACCES/EBUSY) would otherwise be memoized and disable the backend
+      // permanently, since every append/load/remove reruns this guard — silent
+      // durability loss. Clearing lets the next call retry; a real, persistent
+      // encoding mismatch simply fails again, cheaply.
+      this.rootEncodingCheck = undefined
+      throw error
+    })
     return this.rootEncodingCheck
   }
 
