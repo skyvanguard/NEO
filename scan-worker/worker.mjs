@@ -31,6 +31,10 @@ const cfg = {
   workspace: process.env.SCAN_WORKSPACE ?? process.cwd(),
   pollIntervalMs: Number(process.env.SCAN_POLL_INTERVAL_MS ?? "15000"),
   timeoutMs: Number(process.env.SCAN_TIMEOUT_MS ?? String(75 * 60 * 1000)), // 75 min
+  // Timeout por llamada HTTP al API. El timeoutMs del scan solo mata al proceso
+  // hijo; sin este, un socket colgado hacia el API bloquea el slot unico para
+  // siempre (Restart=always no rescata un loop vivo pero atascado).
+  httpTimeoutMs: Number(process.env.SCAN_HTTP_TIMEOUT_MS ?? String(30_000)),
 };
 
 const SEVERITIES = new Set(["info", "low", "medium", "high", "critical"]);
@@ -50,6 +54,7 @@ function assertConfig() {
 async function fetchNextJob() {
   const res = await fetch(`${cfg.apiBase}/api/jobs/next?worker=${encodeURIComponent(cfg.workerId)}`, {
     headers: { authorization: `Bearer ${cfg.token}` },
+    signal: AbortSignal.timeout(cfg.httpTimeoutMs),
   });
   if (res.status === 204) return null;
   if (res.status === 401) throw new Error("token de worker inválido (401)");
@@ -64,6 +69,7 @@ async function postHeartbeat() {
     await fetch(`${cfg.apiBase}/api/ops/heartbeat?worker=${encodeURIComponent(cfg.workerId)}`, {
       method: "POST",
       headers: { authorization: `Bearer ${cfg.token}` },
+      signal: AbortSignal.timeout(cfg.httpTimeoutMs),
     });
   } catch {
     // el latido no debe frenar el loop; el chequeo de salud detectará el silencio
@@ -80,6 +86,7 @@ async function postResult(jobId, payload) {
         method: "POST",
         headers: { authorization: `Bearer ${cfg.token}`, "content-type": "application/json" },
         body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(cfg.httpTimeoutMs),
       });
     } catch (err) {
       lastErr = err;
