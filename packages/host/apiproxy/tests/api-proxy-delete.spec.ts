@@ -75,6 +75,8 @@ interface DeleteHarness {
   disposals: SessionId[]
   /** Programmable per-hook failures (set by a case before the call under test). */
   failures: { remove?: (id: SessionId) => Error | undefined }
+  /** When set, the factory awaits this before building an agent (holds a creation in flight). */
+  hold: { create?: Promise<void> }
 }
 
 /**
@@ -127,10 +129,12 @@ async function harness(
     },
   } as never)
   const failures: DeleteHarness['failures'] = {}
+  const hold: DeleteHarness['hold'] = {}
   await ctx.plugin(WorkspaceRegistry)
 
   const factory: AgentFactory = {
     async createAgent(_ownerCtx, options) {
+      if (hold.create !== undefined) await hold.create
       const session = ctx.sessions.prepare(options.sessionId, {
         ...options.meta === undefined ? {} : { meta: options.meta },
         ...options.seed === undefined ? {} : { seed: options.seed },
@@ -180,7 +184,7 @@ async function harness(
     defaultModelSelection: () => ({ provider: 'test', model: 'test-model' }),
     cwd: root,
   })
-  return { api, ctx, root, persisted, removed, disposals, failures }
+  return { api, ctx, root, persisted, removed, disposals, failures, hold }
 }
 
 function stageDir(root: string, name: string): string {
@@ -340,6 +344,10 @@ describe('session.delete', () => {
     const h = await harness([
       { meta: { version: 0, id: sessionId, createdAt: 1000, cwd: dir }, events: [] },
     ])
+    // Group + archive so there is a registry reference that forgetSession prunes.
+    expectOk(await h.api.workspace.list(request({})))
+    expect(expectOk(await h.api.workspace.archiveSession(request({ sessionId }))).archivedSessionIds)
+      .toEqual([sessionId])
     h.failures.remove = () => new Error('disk full')
 
     const response = await h.api.sessions.delete(request({ sessionId }))
@@ -348,6 +356,53 @@ describe('session.delete', () => {
     expect(response.result.error.code).toBe('internal')
     expect(response.result.error.message).toContain('disk full')
     expect(h.removed).toEqual([sessionId])
+    expect(h.disposals).toEqual([])
+    // forgetSession ran BEFORE the failed removal: the registry no longer
+    // references the id, so a surviving log re-indexes cleanly on restart and a
+    // retry completes the delete instead of stranding a dangling reference.
+    expect(expectOk(await h.api.workspace.list(request({}))).archivedSessionIds).not.toContain(sessionId)
+  })
+
+  it('a delete racing an in-flight creation disposes the built agent instead of orphaning it', async () => {
+    const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'dsh-apiproxy-delete-race-')))
+    const dir = stageDir(root, 'race')
+    const sessionId = sid('session-create-delete-race')
+    const h = await harness()
+    const workspace = expectOk(await h.api.workspace.create(request({ path: dir }))).workspace
+
+    // Hold the factory so the creation is still in flight when the delete arrives.
+    let release = (): void => {}
+    h.hold.create = new Promise<void>((resolve) => { release = resolve })
+    const creating = h.api.sessions.create(request({ workspaceId: workspace.workspaceId, sessionId }))
+    const deleting = h.api.sessions.delete(request({ sessionId }))
+    // The delete must not resolve before the creation it is waiting on.
+    release()
+
+    expectOk(await creating)
+    expect(expectOk(await deleting).deleted).toBe(true)
+    // The fully-built agent was disposed, not left live with its log removed.
+    expect(h.disposals).toEqual([sessionId])
+    expect(h.removed).toEqual([sessionId])
+    expect(h.ctx.agents.get(sessionId)).toBeUndefined()
+  })
+
+  it('a delete waiting on a creation that fails still settles cleanly as not-found', async () => {
+    const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'dsh-apiproxy-delete-race-fail-')))
+    const dir = stageDir(root, 'race-fail')
+    const sessionId = sid('session-create-fails-race')
+    const h = await harness()
+    const workspace = expectOk(await h.api.workspace.create(request({ path: dir }))).workspace
+
+    // The held creation will reject; the delete waits for it to settle, then
+    // proceeds over the real (empty) state instead of hanging or crashing.
+    let fail = (): void => {}
+    h.hold.create = new Promise<void>((_resolve, reject) => { fail = () => { reject(new Error('create boom')) } })
+    const creating = h.api.sessions.create(request({ workspaceId: workspace.workspaceId, sessionId }))
+    const deleting = h.api.sessions.delete(request({ sessionId }))
+    fail()
+
+    expect((await creating).result.ok).toBe(false)
+    expect((await deleting).result).toMatchObject({ ok: false, error: { code: 'session-not-found' } })
     expect(h.disposals).toEqual([])
   })
 

@@ -2651,6 +2651,11 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
 
       async delete(request) {
         const { sessionId } = request.payload
+        // Drain any in-flight creation/resume for this id first, so a delete
+        // racing a create disposes the fully-built agent instead of tearing a
+        // half-created one into an orphan (live agent whose log was removed).
+        // One-directional wait — creation never awaits deletion — so no deadlock.
+        await sessionCreations.get(sessionId)?.catch(() => undefined)
         const attached = ctx.sessions.get(sessionId)
         const live = ctx.agents.get(sessionId)
         if (live !== undefined && hasSubagentOwner(live.session, live)) {
@@ -2683,8 +2688,13 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
           // to persistence before the log disappears, and the paired disposal
           // edge tells every connected client the session is gone.
           if (handle !== undefined) await handle.dispose()
-          if (persistence !== undefined) await persistence.remove(sessionId)
+          // Forget the workspace references BEFORE removing the log. If the log
+          // removal then fails, the registry already dropped the id and the
+          // surviving log re-indexes cleanly on the next startup (or a retry
+          // completes the delete); the reverse order would strand a registry
+          // reference to a log that no longer exists.
           await ctx.workspaceRegistry.forgetSession(sessionId)
+          if (persistence !== undefined) await persistence.remove(sessionId)
         } catch (error: unknown) {
           return err(request, {
             code: 'internal',
