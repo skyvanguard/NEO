@@ -186,7 +186,15 @@ export function apply(ctx: Context, config: Config = {}): void {
     const lookup = { cwd: agent.session.header.cwd, signal, scope: agent }
     const injections: UserMessage[] = []
     for (const name of names) {
-      const skill = await ctx.skills.get(name, lookup)
+      // A failed lookup (a provider I/O fault, a malformed skill definition)
+      // must not abort the whole turn: degrade this one gesture to plain prose,
+      // exactly like an unknown or user-disabled skill. Cancellation still
+      // propagates — throwIfAborted rethrows before we swallow anything.
+      const skill = await ctx.skills.get(name, lookup).catch((error: unknown) => {
+        signal.throwIfAborted()
+        ctx.logger.warn(`user-invoked skill "${name}" could not be loaded: ${String(error)}`)
+        return undefined
+      })
       signal.throwIfAborted()
       // Unknown names and user-disabled skills stay plain prose: the
       // gesture was never a claim this boundary recognizes. The check sits

@@ -1005,6 +1005,37 @@ describe('user-explicit invocation injection', () => {
       && (message.source as { name?: string }).name === 'shared-skill')).toBe(true)
   })
 
+  it('keeps the turn alive when one invoked skill fails to load, still injecting the others', async () => {
+    const { ctx, agent } = await invokeHarness()
+    // A provider that lists a user-invocable skill but throws when its body is
+    // loaded (a real I/O fault or a malformed definition). A single failing
+    // lookup must degrade to plain prose, not reject the whole pre-step.
+    ctx.skills.registerProvider(() => ({
+      name: 'boom-provider',
+      async list() {
+        return [{
+          name: 'boom-skill',
+          description: 'Explodes on load',
+          invocation: { modelInvocable: true, userInvocable: true },
+          source: 'runtime',
+          provider: 'boom-provider',
+          rank: 0,
+          locator: null,
+        }]
+      },
+      async get() {
+        throw new Error('cannot read skill body: EIO')
+      },
+    }))
+    const decision = await proposeStep(ctx, agent, [gesture('/boom-skill then /shared-skill go')])
+    if (decision.kind !== 'enter') throw new Error('expected enter')
+    const invoked = decision.messages
+      .filter(message => (message.source as { kind?: string }).kind === 'skill-invocation')
+      .map(message => (message.source as { name?: string }).name)
+    expect(invoked).toContain('shared-skill') // the healthy skill still injects
+    expect(invoked).not.toContain('boom-skill') // the failing one is skipped, not fatal
+  })
+
   it('recognizes a mid-sentence gesture but not paths, fractions, or broken boundaries', async () => {
     const { ctx, agent } = await invokeHarness()
     const decision = await proposeStep(ctx, agent, [
