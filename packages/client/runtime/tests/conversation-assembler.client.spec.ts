@@ -296,6 +296,36 @@ describe('ConversationNodeAssembler', () => {
       .toEqual({ settled: true })
   })
 
+  it('rolls back a failed append so the same event can be retried instead of being dropped', () => {
+    let armed = true
+    const definition: ConversationNodeDefinition<number> = {
+      kind: 'poison',
+      target: 'chat',
+      match: (event) => {
+        if (armed && event.seq === 2) {
+          armed = false
+          throw new Error('assembler boom')
+        }
+        return { id: String(event.seq), role: 'start' }
+      },
+      start: (_context, match) => match.event.seq,
+      update: context => context.state,
+      buildViewNode: context => node(context, context.state),
+    }
+    const assembler = new ConversationNodeAssembler(
+      new TestEventDefinitions([definition]),
+      new TestViewDefinitions([testView()]),
+    )
+    assembler.append(input(at(1, 'poison/event', {})))
+    // The poison match throws mid-append; the assembler must not retain the seq.
+    expect(() => assembler.append(input(at(2, 'poison/event', {})))).toThrow('assembler boom')
+    // Retry (poison spent): a stale inputs entry would drop this as a replay.
+    assembler.append(input(at(2, 'poison/event', {})))
+    assembler.flush()
+    const snapshot = chatSnapshot(assembler)
+    expect([...snapshot?.nodes.values() ?? []].map(value => value.data).sort()).toEqual([1, 2])
+  })
+
   it('rejects a Definition whose declared start follows an update in log order', () => {
     const definition: ConversationNodeDefinition<null> = {
       kind: 'invalid-lifecycle',

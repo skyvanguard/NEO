@@ -195,23 +195,35 @@ export class ConversationNodeAssembler implements ConversationViewSnapshotStore 
     if (this.inputs.has(input.event.seq)) return 'none'
     this.revised.clear()
     this.inputs.set(input.event.seq, input)
-    let publication: ConversationPublication = 'none'
-    if (isLocationBoundary(input.event.type)) {
-      const previousTimeline = this.locationIndex.snapshot()
-      const changed = this.locationIndex.appendBoundary(input.event)
-      if (this.locationIndex.snapshot() !== previousTimeline) {
-        this.timelineDirty = true
-        publication = 'immediate'
+    try {
+      let publication: ConversationPublication = 'none'
+      if (isLocationBoundary(input.event.type)) {
+        const previousTimeline = this.locationIndex.snapshot()
+        const changed = this.locationIndex.appendBoundary(input.event)
+        if (this.locationIndex.snapshot() !== previousTimeline) {
+          this.timelineDirty = true
+          publication = 'immediate'
+        }
+        this.replayContexts(this.refreshMatchLocations(changed))
+        if (changed.size > 0) publication = 'immediate'
+      } else {
+        this.locationIndex.appendNonBoundary(input.event)
       }
-      this.replayContexts(this.refreshMatchLocations(changed))
-      if (changed.size > 0) publication = 'immediate'
-    } else {
-      this.locationIndex.appendNonBoundary(input.event)
+      publication = maximumPublication(publication, this.matchInput(input))
+      if (this.replayRevisedDependents()) publication = 'immediate'
+      this.revised.clear()
+      return publication
+    } catch (error) {
+      // A malformed / duplicate / out-of-order Match can throw after inputs,
+      // the location index, and some contexts were already mutated. Drop the
+      // failed input and rebuild from the survivors so state stays coherent and
+      // the event can be retried — a stale inputs entry would make the retry
+      // return 'none' (dropped as a replay) and lose the event for good. The
+      // append still failed, so rethrow after restoring.
+      this.inputs.delete(input.event.seq)
+      this.replaceWindow(this.sortedInputs(), this.hasMore)
+      throw error
     }
-    publication = maximumPublication(publication, this.matchInput(input))
-    if (this.replayRevisedDependents()) publication = 'immediate'
-    this.revised.clear()
-    return publication
   }
 
   /**
