@@ -10,10 +10,12 @@ import type { Context } from '@deepseek-ai/cordis'
 import { dshHomePath } from '@deepseek-ai/dsh-home-paths'
 import { TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
 import { aggregateUsage } from './aggregate.ts'
+import type { UsageCache } from './aggregate.ts'
 import type { UsageSummary, UsageSummaryRequest } from './types.ts'
 
 export type * from './types.ts'
 export { aggregateUsage, foldSessionUsage, readSessionEvents, workspaceLabel } from './aggregate.ts'
+export type { UsageCache } from './aggregate.ts'
 
 declare module '@deepseek-ai/cordis' {
   interface Context {
@@ -23,6 +25,14 @@ declare module '@deepseek-ai/cordis' {
 
 /** Cordis Service exposing one Remote method: `usage.summary`. */
 export class UsageStatsService extends TypertRemoteService {
+  /**
+   * Per-session fold cache, persisted across `summary` calls so each request
+   * re-reads only the logs that changed since the last one — the usage view's
+   * recurring open cost drops from "decompress the whole history" to
+   * "re-fold the active session(s)".
+   */
+  private readonly usageCache: UsageCache = new Map()
+
   constructor(ctx: Context) {
     super(ctx, 'usage')
   }
@@ -34,7 +44,7 @@ export class UsageStatsService extends TypertRemoteService {
    */
   @Remote('summary')
   async summary(request: UsageSummaryRequest): Promise<UsageSummary> {
-    return aggregateUsage(dshHomePath('sessions'), request)
+    return aggregateUsage(dshHomePath('sessions'), request, this.usageCache)
   }
 }
 

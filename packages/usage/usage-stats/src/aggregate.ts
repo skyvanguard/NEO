@@ -7,7 +7,7 @@
  * @module
  */
 
-import { readdir, readFile } from 'node:fs/promises'
+import { readdir, readFile, stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { decompressConcatenatedZstd } from './zstd.ts'
 import type { TokenUsage } from '@deepseek-ai/dsh-llm'
@@ -116,29 +116,57 @@ export function foldSessionUsage(events: readonly SessionEvent[]): {
   return { totals, byDay, lastActive }
 }
 
+/** One session's folded usage plus the file-identity it was folded from. */
+interface CachedSessionUsage {
+  readonly workspace: string
+  readonly sessionId: string
+  readonly totals: UsageTotals
+  readonly byDay: Map<string, UsageTotals>
+  readonly lastActive: number
+  /** File `mtimeMs` + `size` at fold time; a change in either invalidates the entry. */
+  readonly mtimeMs: number
+  readonly size: number
+}
+
+/**
+ * Per-session usage cache, keyed by absolute session-log path. Hand the same
+ * instance to successive {@link aggregateUsage} calls so each request re-reads
+ * and re-folds only the logs whose bytes changed (by `mtimeMs`/`size`) since the
+ * last pass, reusing the folded totals for every unchanged session. A session
+ * log is append-only and every write bumps `mtimeMs`, so a hit is never stale.
+ */
+export type UsageCache = Map<string, CachedSessionUsage>
+
 /**
  * Aggregate cumulative usage across every session under a sessions root.
+ *
+ * Without a `cache`, every call re-reads, decompresses, and re-folds every
+ * session log — O(total bytes) work that grows with history. Passing a
+ * persistent {@link UsageCache} turns steady-state calls into O(number of
+ * sessions) map reads plus a re-fold of only the sessions whose log changed:
+ * the recurring cost the usage view was paying on every open.
  * @param sessionsRoot - the `$DSH_HOME/sessions` directory.
  * @param request - optional filters.
+ * @param cache - optional per-session cache reused across calls; a fresh one is
+ *   used when omitted (same result, no cross-call reuse).
  * @returns the cumulative summary.
  */
 export async function aggregateUsage(
   sessionsRoot: string,
   request: UsageSummaryRequest = {},
+  cache?: UsageCache,
 ): Promise<UsageSummary> {
-  const grand = zero()
-  const byDay = new Map<string, MutableTotals>()
-  const byWorkspace = new Map<string, MutableTotals>()
-  const sessions: UsageSessionRow[] = []
-  let sessionCount = 0
+  const store: UsageCache = cache ?? new Map()
 
   let workspaceDirs: Array<{ name: string; isDirectory(): boolean }>
   try {
     workspaceDirs = await readdir(sessionsRoot, { withFileTypes: true })
   } catch {
-    return { totals: grand, sessionCount: 0, byDay: [], byWorkspace: [], sessions: [], generatedAt: Date.now() }
+    return { totals: zero(), sessionCount: 0, byDay: [], byWorkspace: [], sessions: [], generatedAt: Date.now() }
   }
 
+  // Pass 1 — refresh the cache: stat each log, re-fold only what changed.
+  const seen = new Set<string>()
   for (const wd of workspaceDirs) {
     if (!wd.isDirectory()) continue
     const wsPath = join(sessionsRoot, wd.name)
@@ -147,24 +175,42 @@ export async function aggregateUsage(
     try { sessionDirs = await readdir(wsPath, { withFileTypes: true }) } catch { continue }
     for (const sd of sessionDirs) {
       if (!sd.isDirectory()) continue
+      const logPath = join(wsPath, sd.name, SESSION_LOG)
+      let mtimeMs: number
+      let size: number
+      try { ({ mtimeMs, size } = await stat(logPath)) } catch { continue }
+      seen.add(logPath)
+      const hit = store.get(logPath)
+      if (hit !== undefined && hit.mtimeMs === mtimeMs && hit.size === size) continue
       let events: SessionEvent[]
-      try { events = await readSessionEvents(join(wsPath, sd.name, SESSION_LOG)) } catch { continue }
-      if (events.length === 0) continue
-      const { totals, byDay: sessionByDay, lastActive } = foldSessionUsage(events)
-      if (totals.requests === 0) continue
-      if (request.sinceMs !== undefined && lastActive < request.sinceMs) continue
-      sessionCount += 1
-      addTotals(grand, totals)
-      let ws = byWorkspace.get(wsLabel)
-      if (ws === undefined) { ws = zero(); byWorkspace.set(wsLabel, ws) }
-      addTotals(ws, totals)
-      for (const [day, dayTotals] of sessionByDay) {
-        let d = byDay.get(day)
-        if (d === undefined) { d = zero(); byDay.set(day, d) }
-        addTotals(d, dayTotals)
-      }
-      sessions.push({ sessionId: sd.name, workspace: wsLabel, lastActive, totals })
+      try { events = await readSessionEvents(logPath) } catch { store.delete(logPath); continue }
+      const { totals, byDay, lastActive } = foldSessionUsage(events)
+      store.set(logPath, { workspace: wsLabel, sessionId: sd.name, totals, byDay, lastActive, mtimeMs, size })
     }
+  }
+  // Drop entries for sessions that vanished so the cache stays bounded to what exists.
+  for (const key of store.keys()) if (!seen.has(key)) store.delete(key)
+
+  // Pass 2 — recompose the summary from the cached per-session folds (cheap).
+  const grand = zero()
+  const byDay = new Map<string, MutableTotals>()
+  const byWorkspace = new Map<string, MutableTotals>()
+  const sessions: UsageSessionRow[] = []
+  let sessionCount = 0
+  for (const entry of store.values()) {
+    if (entry.totals.requests === 0) continue
+    if (request.sinceMs !== undefined && entry.lastActive < request.sinceMs) continue
+    sessionCount += 1
+    addTotals(grand, entry.totals)
+    let ws = byWorkspace.get(entry.workspace)
+    if (ws === undefined) { ws = zero(); byWorkspace.set(entry.workspace, ws) }
+    addTotals(ws, entry.totals)
+    for (const [day, dayTotals] of entry.byDay) {
+      let d = byDay.get(day)
+      if (d === undefined) { d = zero(); byDay.set(day, d) }
+      addTotals(d, dayTotals)
+    }
+    sessions.push({ sessionId: entry.sessionId, workspace: entry.workspace, lastActive: entry.lastActive, totals: entry.totals })
   }
 
   sessions.sort((a, b) => b.lastActive - a.lastActive)
