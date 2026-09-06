@@ -33,19 +33,24 @@ describe('CI workflow', () => {
 
   it('runs the Linux gate job on ubuntu with an isolated pnpm setup', () => {
     const jobs = workflow.jobs
-    if (!isRecord(jobs) || !isRecord(jobs.linux) || !Array.isArray(jobs.linux.steps)) {
+    if (!isRecord(jobs)) throw new TypeError('workflow must define jobs')
+    const linux = jobs.linux
+    if (!isRecord(linux) || !Array.isArray(linux.steps)) {
       throw new TypeError('workflow must define a linux job with steps')
     }
-    expect(jobs.linux['runs-on']).toBe('ubuntu-latest')
-    const pnpmSetup = jobs.linux.steps.find((step): step is Record<string, unknown> =>
+    expect(linux['runs-on']).toBe('ubuntu-latest')
+    const pnpmSetup = linux.steps.find((step): step is Record<string, unknown> =>
       isRecord(step) && typeof step.uses === 'string' && step.uses.startsWith('pnpm/action-setup@'))
     expect(pnpmSetup, 'linux job must set up pnpm').toBeDefined()
     expect(pnpmSetup).toMatchObject({ with: { dest: '${{ runner.temp }}/setup-pnpm' } })
   })
 
   it('keeps the gate steps that guard against regressions', () => {
-    const jobs = workflow.jobs as Record<string, Record<string, unknown>>
-    const runs = (jobs.linux.steps as unknown[])
+    const jobs = workflow.jobs
+    if (!isRecord(jobs)) throw new TypeError('workflow must define jobs')
+    const linux = jobs.linux
+    if (!isRecord(linux) || !Array.isArray(linux.steps)) throw new TypeError('workflow must define a linux job with steps')
+    const runs = linux.steps
       .filter((step): step is Record<string, unknown> & { run: string } =>
         isRecord(step) && typeof step.run === 'string')
       .map(step => step.run)
