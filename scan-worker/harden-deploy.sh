@@ -114,8 +114,11 @@ RestrictSUIDSGID=true
 # curl/openssl del bash del agente y web_fetch.
 # Si el API de resultados (SCAN_API_BASE) vive en una IP privada, agregala como
 # IPAddressAllow=<ip> ANTES del deny (la regla mas especifica gana).
+# El deny cubre los MISMOS rangos que isBlockedAddress en web-fetch-http/policy.ts;
+# mantener ambas listas en paralelo (privados, loopback, link-local, CGNAT, 0/8,
+# reservados, y las formas IPv6 con IPv4 embebida: mapped/NAT64/6to4).
 IPAddressAllow=any
-IPAddressDeny=localhost link-local multicast 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8 ::1/128 fc00::/7 fe80::/10
+IPAddressDeny=localhost link-local multicast 0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.0.0.0/24 192.168.0.0/16 198.18.0.0/15 ::1/128 fc00::/7 fe80::/10 ::ffff:0:0/96 64:ff9b::/96 2002::/16
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 
 [Install]

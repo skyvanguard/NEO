@@ -194,6 +194,9 @@ function isBlockedIpv6(bytes: number[]): boolean {
   if (bytes.slice(0, 10).every(byte => byte === 0) && bytes.at(10) === 0xff && bytes.at(11) === 0xff) {
     return isBlockedIpv4(embeddedIpv4(bytes, 12)) // ::ffff:0:0/96 IPv4-mapped
   }
+  if (bytes.slice(0, 12).every(byte => byte === 0)) {
+    return isBlockedIpv4(embeddedIpv4(bytes, 12)) // ::a.b.c.d deprecated IPv4-compatible (::/96)
+  }
   if (byte0 === 0x00 && byte1 === 0x64 && bytes.at(2) === 0xff && bytes.at(3) === 0x9b && bytes.slice(4, 12).every(byte => byte === 0)) {
     return isBlockedIpv4(embeddedIpv4(bytes, 12)) // 64:ff9b::/96 NAT64
   }

@@ -416,10 +416,13 @@
     # DeepSeek route gets 60s while the provider-neutral tool default remains 30s.
     #
     # Fetch is enabled with the anonymous HTTP provider so the model can retrieve a
-    # concrete URL during reconnaissance. web-fetch-http defers SSRF / private-
-    # network blocking: the model may fetch internal and metadata addresses, which
-    # is intended for authorized security engagements — keep fetch disabled for any
-    # deployment where the model must not choose an internal request target.
+    # concrete URL during reconnaissance. web-fetch-http blocks private / loopback /
+    # link-local / reserved targets by default (allowPrivateAddresses defaults to
+    # false); the model cannot fetch internal or cloud-metadata addresses through it.
+    # This is a best-effort application-layer guard with a DNS-rebinding window — the
+    # authoritative control is the worker's kernel egress filter (scan-worker/
+    # harden-deploy.sh). Set allowPrivateAddresses: true ONLY for a deployment
+    # explicitly authorized to target internal infrastructure.
     - id: web
       name: '@deepseek-ai/dsh-web'
       config:

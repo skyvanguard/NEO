@@ -100,7 +100,7 @@ describe('policy helpers', () => {
   it('flags internal IPv6 literals including embedded IPv4', () => {
     for (const blocked of [
       '::', '::1', 'fe80::1', 'fc00::1', 'fd12:3456::1', 'ff02::1',
-      '::ffff:127.0.0.1', '::ffff:10.0.0.1', '64:ff9b::7f00:1', '64:ff9b::127.0.0.1',
+      '::ffff:127.0.0.1', '::ffff:10.0.0.1', '64:ff9b::7f00:1', '64:ff9b::127.0.0.1', '::7f00:1',
       '2002:7f00:0001::1', '2002:c0a8:0101::1', '0:0:0:0:0:0:0:1',
       'fe80::1%eth0',
     ]) expect(isBlockedAddress(blocked), blocked).toBe(true)
@@ -110,6 +110,7 @@ describe('policy helpers', () => {
     expect(isBlockedAddress('2606:4700:4700::1111')).toBe(false)
     expect(isBlockedAddress('::ffff:8.8.8.8')).toBe(false)
     expect(isBlockedAddress('2002:0808:0808::1')).toBe(false)
+    expect(isBlockedAddress('::808:808')).toBe(false)
     expect(isBlockedAddress('example.com')).toBe(false)
     expect(isBlockedAddress('not-an-ip')).toBe(false)
     expect(isBlockedAddress('256.256.256.256')).toBe(false)

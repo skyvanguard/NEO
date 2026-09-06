@@ -111,10 +111,15 @@ export class HttpFetchProvider implements WebFetchProvider {
 
   /**
    * Refuse a target that points at an internal/reserved address. A literal-IP
-   * host is classified directly (no DNS, no race); a hostname is resolved and
-   * every answer classified — best-effort, since the connection re-resolves
-   * (DNS rebinding), so this layers on top of the kernel egress filter rather
-   * than replacing it. Opted out by `allowPrivateAddresses`.
+   * host is classified directly, with no race. A hostname is resolved here and
+   * every answer classified, but this is best-effort only: `fetch` (undici)
+   * re-resolves the name independently when it opens the socket, so an attacker
+   * controlling the domain's DNS can answer a public IP here and an internal one
+   * to the connect (DNS rebinding) on every request. Closing that window would
+   * need the resolved IP pinned into the connection (a custom undici dispatcher
+   * or an http.request lookup), which this provider does not do; the AUTHORITATIVE
+   * control is the worker's kernel egress filter (scan-worker/harden-deploy.sh),
+   * whose deny-list mirrors isBlockedAddress. Opted out by `allowPrivateAddresses`.
    */
   private async assertHostAllowed(url: URL, signal: AbortSignal): Promise<void> {
     if (this.limits.allowPrivateAddresses) return
