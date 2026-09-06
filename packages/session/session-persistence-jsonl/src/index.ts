@@ -144,6 +144,15 @@ export class JsonlSessionPersistence extends SessionPersistence implements Persi
   private compression: JsonlCompression
   private coordinator: PersistenceCoordinator<JsonlTornMarker>
   private rootEncodingCheck: Promise<void> | undefined
+  /**
+   * Bounded per-file cache of decoded prefixes keyed by log path. A read serves
+   * the cached prefix only when a cheap stat shows the source-qualified revision
+   * (dev:ino:size:mtimeNs:ctimeNs) is unchanged, so any append/replace/remove
+   * misses and re-reads. Avoids re-reading + zstd-decoding + parsing the whole
+   * log on every readFrom (cold pagination, the projection cache's tail read).
+   */
+  private readonly prefixCache = new Map<string, StoredPrefix<JsonlTornMarker>>()
+  private static readonly PREFIX_CACHE_MAX = 8
 
   constructor(ctx: Context, public config: Config) {
     super(ctx)
@@ -216,6 +225,7 @@ export class JsonlSessionPersistence extends SessionPersistence implements Persi
     signal?.throwIfAborted()
     const path = await this.findLog(id, signal)
     if (path === undefined) return
+    this.prefixCache.delete(path)
     try {
       await rm(dirname(path), { recursive: true, force: true })
     } catch (error: unknown) {
@@ -334,11 +344,37 @@ export class JsonlSessionPersistence extends SessionPersistence implements Persi
    * Read a stored prefix and convert torn-tail state to the opaque marker the
    * coordinator can round-trip without knowing the physical encoding.
    */
+  /**
+   * Read a path's source-qualified revision without loading its bytes. Only
+   * called for a path readPrefix is already reading, so absence would surface
+   * the same way a byte read does; no ENOENT special-casing here.
+   */
+  private async statRevision(path: string, signal?: AbortSignal): Promise<PersistenceRevision> {
+    const identity = await stat(path, { bigint: true })
+    signal?.throwIfAborted()
+    return fileRevision(identity)
+  }
+
   private async readPrefix(
     path: string,
     expectedId?: SessionId,
     signal?: AbortSignal,
   ): Promise<StoredPrefix<JsonlTornMarker>> {
+    const cached = this.prefixCache.get(path)
+    if (cached !== undefined) {
+      const current = await this.statRevision(path, signal)
+      // Revision is a string (dev:ino:size:mtimeNs:ctimeNs); === is the whole check.
+      if (current === cached.revision) {
+        signal?.throwIfAborted()
+        // Identity is re-checked (cheap) so a cache hit upholds the same
+        // requested-id / canonical-path guard as a fresh read.
+        await this.assertStoredIdentity(path, cached.meta, expectedId, signal)
+        // Refresh recency (LRU).
+        this.prefixCache.delete(path)
+        this.prefixCache.set(path, cached)
+        return cached
+      }
+    }
     const { buffer, revision } = await this.readStableFile(path, signal)
     let prefix: Omit<StoredPrefix<JsonlTornMarker>, 'revision'>
     try {
@@ -368,7 +404,18 @@ export class JsonlSessionPersistence extends SessionPersistence implements Persi
     signal?.throwIfAborted()
     await this.assertStoredIdentity(path, prefix.meta, expectedId, signal)
     signal?.throwIfAborted()
-    return { ...prefix, revision }
+    const result = { ...prefix, revision }
+    // A later append/repair/remove changes the revision, so the next read misses
+    // and re-reads — caching a (possibly torn) prefix here is always revision-safe.
+    this.prefixCache.set(path, result)
+    if (this.prefixCache.size > JsonlSessionPersistence.PREFIX_CACHE_MAX) {
+      // Evict the least-recently-used entry (Map preserves insertion/refresh order).
+      for (const oldest of this.prefixCache.keys()) {
+        this.prefixCache.delete(oldest)
+        break
+      }
+    }
+    return result
   }
 
   /** Decode complete frames and retain complete JSONL records from a torn final frame. */

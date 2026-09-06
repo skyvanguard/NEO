@@ -284,6 +284,44 @@ describe('JsonlSessionPersistence: durability and crash semantics', () => {
   })
   afterEach(async () => { await ctx.fiber.dispose() })
 
+  it('serves a repeated read from cache, re-reads after a write, and re-reads after eviction', async () => {
+    const m = meta('read-cache', '/work')
+    await ctx.sessionPersistence.create(m)
+    const turn1 = oneTurnLog()
+    await ctx.sessionPersistence.append(m.id, turn1)
+
+    // Two consecutive reads with no write between: the second is a cache hit.
+    const first = await ctx.sessionPersistence.load(m.id)
+    const second = await ctx.sessionPersistence.load(m.id)
+    expect(second.events).toEqual(first.events)
+    expect(second.events).toEqual(turn1)
+
+    // A write must invalidate the cache: append a second turn (shifted seqs) and
+    // confirm the next read reflects it rather than serving the stale prefix.
+    const base = turn1.length
+    const turn2: SessionEvent[] = turn1.map((event, i) => {
+      const shifted = { ...event, seq: base + i, time: 100 + i }
+      const data = (shifted as { data?: { turn?: number } }).data
+      if (data !== undefined && typeof data.turn === 'number') {
+        (shifted as { data: { turn: number } }).data = { ...data, turn: 2 }
+      }
+      return shifted
+    })
+    await ctx.sessionPersistence.append(m.id, turn2)
+    const afterWrite = await ctx.sessionPersistence.load(m.id)
+    expect(afterWrite.events).toEqual([...turn1, ...turn2])
+
+    // Fill past the cache bound (8) so m's entry is evicted, then re-read it.
+    for (let i = 0; i < 10; i++) {
+      const extra = meta(`read-cache-evict-${i}`, '/work')
+      await ctx.sessionPersistence.create(extra)
+      await ctx.sessionPersistence.append(extra.id, oneTurnLog())
+      await ctx.sessionPersistence.load(extra.id)
+    }
+    const reread = await ctx.sessionPersistence.load(m.id)
+    expect(reread.events).toEqual([...turn1, ...turn2])
+  })
+
   it('does not cache a transient root-scan failure: a later call retries and recovers', async () => {
     // A transient (non-ENOENT) I/O fault while scanning the root must not be
     // memoized — otherwise every later append/load/remove would reuse the cached
