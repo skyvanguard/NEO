@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-goal",
+  "name": "@neo/dsh-goal",
   "description": "Event-sourced same-session goal state and lifecycle service for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -53,30 +53,30 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-session-projection": "workspace:^",
+    "@neo/dsh-brand": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-scope": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@neo/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-loader-smoke": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-session-projection": "workspace:^",
+    "@neo/dsh-brand": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-loader-smoke": "workspace:^",
+    "@neo/dsh-scope": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

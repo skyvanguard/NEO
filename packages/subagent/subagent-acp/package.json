@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-subagent-acp",
+  "name": "@neo/dsh-subagent-acp",
   "description": "Out-of-process ACP subagent backend: drives a child agent in a spawned subprocess over the Agent Client Protocol",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,30 +32,30 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-subagent": "workspace:^",
+    "@neo/dsh-subprocess": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "0.25.1",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-loader-smoke": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-loader-smoke": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-subagent": "workspace:^",
+    "@neo/dsh-subprocess": "workspace:^",
+    "@neo/dsh-subprocess-local": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-gateway",
+  "name": "@neo/dsh-api-gateway",
   "description": "Typert Remote Host dispatcher and Client API endpoint",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,8 +36,8 @@
   "dsh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-typert-registry",
-        "@deepseek-ai/dsh-client-connection"
+        "@neo/dsh-typert-registry",
+        "@neo/dsh-client-connection"
       ],
       "platform": "web",
       "immediately": true
@@ -56,20 +56,20 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^"
+    "@neo/dsh-typert-protocol": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-client-connection": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@neo/dsh-client-connection": "workspace:^",
+    "@neo/dsh-host-webserver": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/cordis": "workspace:^",
     "zod": "^4.4.3"
   }
 }

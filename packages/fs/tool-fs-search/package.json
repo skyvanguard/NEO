@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-tool-fs-search",
+  "name": "@neo/dsh-tool-fs-search",
   "description": "Model-facing filesystem discovery tools (glob, grep) backed by the packaged ripgrep binary (@vscode/ripgrep)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -33,32 +33,32 @@
   "license": "MIT",
   "dependencies": {
     "@vscode/ripgrep": "^1.18.0",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@neo/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-output-retention": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-spill": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-output-retention": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-spill": "workspace:^",
+    "@neo/dsh-subprocess": "workspace:^",
+    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/dsh-tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-output-retention": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-spill": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-subprocess": "workspace:^",
+    "@neo/dsh-subprocess-local": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-output-retention": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-spill": "workspace:^",
+    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/dsh-tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

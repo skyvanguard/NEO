@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-hooks-claude-code",
+  "name": "@neo/dsh-hooks-claude-code",
   "description": "Bridge plugin: run a Claude Code hooks.json / settings hook config on the DeepSeek Harness interception seams",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,34 +32,34 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@neo/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-hook-protocol": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-hook-protocol": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-session-persistence": "workspace:^",
+    "@neo/dsh-subagent": "workspace:^",
+    "@neo/dsh-tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-bash-local": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-hook-protocol": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-agent-loop": "workspace:^",
+    "@neo/dsh-agent-loop-testkit": "workspace:^",
+    "@neo/dsh-shell": "workspace:^",
+    "@neo/dsh-bash-local": "workspace:^",
+    "@neo/dsh-subprocess-local": "workspace:^",
+    "@neo/dsh-hook-protocol": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-session-persistence": "workspace:^",
+    "@neo/dsh-session-persistence-jsonl": "workspace:^",
+    "@neo/dsh-subagent": "workspace:^",
+    "@neo/dsh-tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

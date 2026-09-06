@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { isAppendSurfaceEvent } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import { isAppendSurfaceEvent } from '@neo/dsh-session'
+import type { SessionEvent } from '@neo/dsh-session'
 import { MESSAGE_TYPES, paginate } from '../src/paginate.ts'
 
 /**

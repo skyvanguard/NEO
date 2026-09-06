@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-subagent-spawn-in-process",
+  "name": "@neo/dsh-subagent-spawn-in-process",
   "description": "In-process spawn subagent backend: runs a fresh child agent on ctx.agents",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,29 +32,29 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-subagent-in-process-driver": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-subagent": "workspace:^",
+    "@neo/dsh-subagent-in-process-driver": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-bash-local": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-subagent-in-process-driver": "workspace:^",
-    "@deepseek-ai/dsh-tool-bash": "workspace:^",
-    "@deepseek-ai/dsh-tool-subagent": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-agent-loop": "workspace:^",
+    "@neo/dsh-agent-loop-testkit": "workspace:^",
+    "@neo/dsh-bash-local": "workspace:^",
+    "@neo/dsh-subprocess-local": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-llm-deepseek": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-subagent": "workspace:^",
+    "@neo/dsh-subagent-in-process-driver": "workspace:^",
+    "@neo/dsh-tool-bash": "workspace:^",
+    "@neo/dsh-tool-subagent": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

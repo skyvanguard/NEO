@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-compaction-basic",
+  "name": "@neo/dsh-compaction-basic",
   "description": "Token-meter-driven compaction policy and LLM summarization backend for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,39 +32,39 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-token-meter": "workspace:^",
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-compaction": "workspace:^",
+    "@neo/dsh-commands": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-token-meter": "workspace:^",
+    "@neo/dsh-compaction-tool-result-pruner": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": {
+    "@neo/dsh-compaction-tool-result-pruner": {
       "optional": true
     }
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-retry": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-token-meter": "workspace:^",
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-agent-loop": "workspace:^",
+    "@neo/dsh-agent-loop-testkit": "workspace:^",
+    "@neo/dsh-compaction": "workspace:^",
+    "@neo/dsh-commands": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-llm-retry": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-token-meter": "workspace:^",
+    "@neo/dsh-compaction-tool-result-pruner": "workspace:^",
+    "@neo/dsh-tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

@@ -2,10 +2,10 @@
 // session/event follower as the log grows.
 // Run: npx tsx packages/llm/token-meter/tests/bench-follow.mts [steps] [tokens]
 import { performance } from 'node:perf_hooks'
-import { Context } from '@deepseek-ai/cordis'
-import { createMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
+import { Context } from '@neo/cordis'
+import { createMessage, createUserMessage } from '@neo/dsh-llm'
+import SessionStore, { SessionId } from '@neo/dsh-session'
+import TokenMeter from '@neo/dsh-token-meter'
 
 const STEPS = Number(process.argv[2] ?? 400)
 const TOKENS = Number(process.argv[3] ?? 200)

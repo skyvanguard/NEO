@@ -1,15 +1,15 @@
-/** Package-owned durable clock-context invariants. @module @deepseek-ai/dsh-time-context/invariant */
+/** Package-owned durable clock-context invariants. @module @neo/dsh-time-context/invariant */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { Session, SessionEvent } from '@neo/dsh-session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
 import {
   deriveBrowserTimeZoneContext,
   renderBrowserTimeZoneContext,
 } from './request-zone.ts'
 import { createTimestampFormatter, formatTimestamp } from './timestamp.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-time-context'
+const PACKAGE_NAME = '@neo/dsh-time-context'
 const SOURCE_NAME = 'time-context'
 const READING = new RegExp(
   '^Time sampled while preparing turn (\\d+), step (\\d+): '

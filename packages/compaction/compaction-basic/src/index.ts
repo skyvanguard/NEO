@@ -1,22 +1,22 @@
 /**
  * Basic replay-aware compaction backend.
  *
- * @module @deepseek-ai/dsh-compaction-basic
+ * @module @neo/dsh-compaction-basic
  */
 
 import { randomUUID } from 'node:crypto'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { CompactionEngine, CompactionId, ManualCompactionError } from '@deepseek-ai/dsh-compaction'
-import type { CompactionResult, CompactionTrigger } from '@deepseek-ai/dsh-compaction'
-import type { TokenMeter } from '@deepseek-ai/dsh-token-meter'
-import type { Session } from '@deepseek-ai/dsh-session'
-import { CONTEXT_WINDOW_EXCEEDED_CODE, assertNever, errorChain } from '@deepseek-ai/dsh-llm'
-import type { LlmCallConfig } from '@deepseek-ai/dsh-llm'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import type { CommandId } from '@deepseek-ai/dsh-commands/brand'
+import { Context } from '@neo/cordis'
+import z from '@neo/schemastery'
+import { CompactionEngine, CompactionId, ManualCompactionError } from '@neo/dsh-compaction'
+import type { CompactionResult, CompactionTrigger } from '@neo/dsh-compaction'
+import type { TokenMeter } from '@neo/dsh-token-meter'
+import type { Session } from '@neo/dsh-session'
+import { CONTEXT_WINDOW_EXCEEDED_CODE, assertNever, errorChain } from '@neo/dsh-llm'
+import type { LlmCallConfig } from '@neo/dsh-llm'
+import type { Agent, PreStepDecision } from '@neo/dsh-agent'
+import type { CommandId } from '@neo/dsh-commands/brand'
 // Type-only: makes the optional sibling service available to `ctx.get()`.
-import type {} from '@deepseek-ai/dsh-compaction-tool-result-pruner'
+import type {} from '@neo/dsh-compaction-tool-result-pruner'
 import {
   resolveCompactSpec,
   resolveConfig,

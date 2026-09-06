@@ -1,6 +1,6 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage, CallId, createMessage, createToolResultMessage, MessageId, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
+import { Context } from '@neo/cordis'
+import { createUserMessage, CallId, createMessage, createToolResultMessage, MessageId, ReasoningEffortId } from '@neo/dsh-llm'
 import SessionStore, {
   adoptSessionEvent,
   SESSION_FORMAT_VERSION,
@@ -8,8 +8,8 @@ import SessionStore, {
   SessionEvent,
   SessionId,
   snapshotSessionEvent,
-} from '@deepseek-ai/dsh-session'
-import type { CreateSessionOptions, SessionEventType, SessionHeader, SessionSurface, TodoItem } from '@deepseek-ai/dsh-session'
+} from '@neo/dsh-session'
+import type { CreateSessionOptions, SessionEventType, SessionHeader, SessionSurface, TodoItem } from '@neo/dsh-session'
 
 describe('Session.eventAt', () => {
   it('reads one event by seq without rebuilding the events snapshot', () => {

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-hooks-claude-code`.
- * @module @deepseek-ai/dsh-hooks-claude-code/invariant
+ * Package-owned invariant companion for `@neo/dsh-hooks-claude-code`.
+ * @module @neo/dsh-hooks-claude-code/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-hooks-claude-code'
+const PACKAGE_NAME = '@neo/dsh-hooks-claude-code'
 
 /** Cordis companion plugin name. */
 export const name = 'hooks-claude-code-invariant'

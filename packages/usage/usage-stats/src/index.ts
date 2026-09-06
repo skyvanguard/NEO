@@ -3,12 +3,12 @@
  * Typert Remote. Aggregates provider-reported usage from every persisted
  * session log so the UI can show cumulative consumption (like a usage page),
  * running in Node where it can read and decompress the session store.
- * @module @deepseek-ai/dsh-usage-stats
+ * @module @neo/dsh-usage-stats
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { dshHomePath } from '@deepseek-ai/dsh-home-paths'
-import { TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
+import type { Context } from '@neo/cordis'
+import { dshHomePath } from '@neo/dsh-home-paths'
+import { TypertRemoteService, Remote } from '@neo/dsh-typert-protocol'
 import { aggregateUsage } from './aggregate.ts'
 import type { UsageCache } from './aggregate.ts'
 import type { UsageSummary, UsageSummaryRequest } from './types.ts'
@@ -17,7 +17,7 @@ export type * from './types.ts'
 export { aggregateUsage, foldSessionUsage, readSessionEvents, workspaceLabel } from './aggregate.ts'
 export type { UsageCache } from './aggregate.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@neo/cordis' {
   interface Context {
     usageStats: UsageStatsService
   }

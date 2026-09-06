@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-settings-file",
+  "name": "@neo/dsh-settings-file",
   "description": "File-backed settings provider (settings.yaml) for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,22 +32,22 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-atomic-write": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-atomic-write": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-home-paths": "workspace:^",
+    "@neo/dsh-settings": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "chokidar": "^4.0.3",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@neo/schemastery": "workspace:^",
     "yaml": "^2.9.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-atomic-write": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-atomic-write": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-home-paths": "workspace:^",
+    "@neo/dsh-settings": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

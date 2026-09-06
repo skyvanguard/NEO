@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-llm-retry",
+  "name": "@neo/dsh-llm-retry",
   "description": "Provider-routed LLM request retry policy for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,34 +36,34 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-brand": "workspace:^",
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-llm-mock-server": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-sqlite": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-brand": "workspace:^",
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-agent-loop": "workspace:^",
+    "@neo/dsh-agent-loop-testkit": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-llm-deepseek": "workspace:^",
+    "@neo/dsh-llm-mock-server": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-session-persistence-jsonl": "workspace:^",
+    "@neo/dsh-session-persistence-sqlite": "workspace:^",
+    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/dsh-tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

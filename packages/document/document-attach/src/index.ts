@@ -4,18 +4,18 @@
  * — writes the file into the session workspace and returns its path. The agent
  * then processes it with its own tools (pdftotext, grep, unzip), so a large
  * document never floods the model context.
- * @module @deepseek-ai/dsh-document-attach
+ * @module @neo/dsh-document-attach
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
+import type { Context } from '@neo/cordis'
+import { TypertRemoteService, Remote } from '@neo/dsh-typert-protocol'
 import { saveAttachment } from './save.ts'
 import type { DocumentSaveRequest, DocumentSaveResult } from './types.ts'
 
 export type * from './types.ts'
 export { saveAttachment, safeBaseName, InvalidAttachmentError, ATTACHMENTS_DIR } from './save.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@neo/cordis' {
   interface Context {
     documentAttach: DocumentAttachService
   }

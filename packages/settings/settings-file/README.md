@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-settings-file
+# @neo/dsh-settings-file
 
 English | [中文](README.zh.md)
 

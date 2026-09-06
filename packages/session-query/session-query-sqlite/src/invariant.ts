@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-session-query-sqlite`.
- * @module @deepseek-ai/dsh-session-query-sqlite/invariant
+ * Package-owned invariant companion for `@neo/dsh-session-query-sqlite`.
+ * @module @neo/dsh-session-query-sqlite/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-session-query-sqlite'
+const PACKAGE_NAME = '@neo/dsh-session-query-sqlite'
 
 /** Cordis companion plugin name. */
 export const name = 'session-query-sqlite-invariant'

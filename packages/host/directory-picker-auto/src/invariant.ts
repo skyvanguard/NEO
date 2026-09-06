@@ -1,12 +1,12 @@
 /**
  * Package-owned invariant companion for the adaptive directory-picker chooser.
- * @module @deepseek-ai/dsh-host-directory-picker-auto/invariant
+ * @module @neo/dsh-host-directory-picker-auto/invariant
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-host-directory-picker-auto'
+const PACKAGE_NAME = '@neo/dsh-host-directory-picker-auto'
 
 /** Cordis companion plugin name. */
 export const name = 'host-directory-picker-auto-invariant'

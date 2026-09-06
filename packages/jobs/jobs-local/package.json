@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-jobs-local",
+  "name": "@neo/dsh-jobs-local",
   "description": "Process-local implementation of the DeepSeek Harness background job registry seam",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,26 +32,26 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-scope": "workspace:^",
+    "@neo/dsh-jobs": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-brand": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-scope": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-jobs": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

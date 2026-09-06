@@ -8,12 +8,12 @@
  * a global section it does not want (e.g. `harness:source`, `app:web-surface`)
  * without touching the deployment composition. Scope-only: mounted globally it
  * would collide with a same-named global registration and fail loud.
- * @module @deepseek-ai/dsh-prompt-section
+ * @module @neo/dsh-prompt-section
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@neo/cordis'
+import z from '@neo/schemastery'
+import type {} from '@neo/dsh-system-prompt'
 
 /** Cordis plugin name. */
 export const name = 'prompt-section'

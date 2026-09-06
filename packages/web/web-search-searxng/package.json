@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-web-search-searxng",
+  "name": "@neo/dsh-web-search-searxng",
   "description": "SearXNG-backed local search provider for the DeepSeek Harness web capability seam (ctx.web)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -27,14 +27,14 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-web": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-web": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

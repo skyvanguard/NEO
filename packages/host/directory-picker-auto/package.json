@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-host-directory-picker-auto",
+  "name": "@neo/dsh-host-directory-picker-auto",
   "description": "Adaptive chooser of the directory-picker seam: resolves the host situation at boot and mounts the native or browse backend for the DeepSeek Harness web GUI host",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,25 +32,25 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-directory-picker-browse": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-directory-picker-native": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker-browse": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker-native": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^"
+    "@neo/cordis": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-client-ui-directory-picker-browse": "workspace:^",
+    "@neo/dsh-client-ui-directory-picker-native": "workspace:^",
+    "@neo/dsh-host-directory-picker-browse": "workspace:^",
+    "@neo/dsh-host-directory-picker-native": "workspace:^",
+    "@neo/dsh-host-webserver": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-directory-picker-browse": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-directory-picker-native": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker-browse": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker-native": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^"
+    "@neo/cordis": "workspace:^",
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-client-ui-directory-picker-browse": "workspace:^",
+    "@neo/dsh-client-ui-directory-picker-native": "workspace:^",
+    "@neo/dsh-host-directory-picker": "workspace:^",
+    "@neo/dsh-host-directory-picker-browse": "workspace:^",
+    "@neo/dsh-host-directory-picker-native": "workspace:^",
+    "@neo/dsh-host-webserver": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^"
   }
 }

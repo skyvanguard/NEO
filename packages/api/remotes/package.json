@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-remotes",
+  "name": "@neo/dsh-api-remotes",
   "description": "Remote BFF assembly and Host Agent/Session lookup policy",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,7 +36,7 @@
   "dsh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-gateway"
+        "@neo/dsh-api-gateway"
       ],
       "platform": "web",
       "immediately": true
@@ -55,46 +55,46 @@
     "lib/types/**/*.d.ts"
   ],
   "dependencies": {
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^"
+    "@neo/dsh-typert-protocol": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-api-gateway": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-goal": "workspace:^",
-    "@deepseek-ai/dsh-cordis-host-runner": "workspace:^",
-    "@deepseek-ai/dsh-host-plugin-inventory": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-message-feedback": "workspace:^",
-    "@deepseek-ai/dsh-document-attach": "workspace:^",
-    "@deepseek-ai/dsh-usage-stats": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^"
+    "@neo/cordis": "workspace:^",
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-api-gateway": "workspace:^",
+    "@neo/dsh-commands": "workspace:^",
+    "@neo/dsh-credentials": "workspace:^",
+    "@neo/dsh-goal": "workspace:^",
+    "@neo/dsh-cordis-host-runner": "workspace:^",
+    "@neo/dsh-host-plugin-inventory": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-agent-presets": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-message-feedback": "workspace:^",
+    "@neo/dsh-document-attach": "workspace:^",
+    "@neo/dsh-usage-stats": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-session-persistence": "workspace:^",
+    "@neo/dsh-settings": "workspace:^",
+    "@neo/dsh-typert-registry": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-api-gateway": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-goal": "workspace:^",
-    "@deepseek-ai/dsh-cordis-host-runner": "workspace:^",
-    "@deepseek-ai/dsh-host-plugin-inventory": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-message-feedback": "workspace:^",
-    "@deepseek-ai/dsh-document-attach": "workspace:^",
-    "@deepseek-ai/dsh-usage-stats": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-agent": "workspace:^",
+    "@neo/dsh-api-gateway": "workspace:^",
+    "@neo/dsh-commands": "workspace:^",
+    "@neo/dsh-credentials": "workspace:^",
+    "@neo/dsh-goal": "workspace:^",
+    "@neo/dsh-cordis-host-runner": "workspace:^",
+    "@neo/dsh-host-plugin-inventory": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-agent-presets": "workspace:^",
+    "@neo/dsh-llm": "workspace:^",
+    "@neo/dsh-message-feedback": "workspace:^",
+    "@neo/dsh-document-attach": "workspace:^",
+    "@neo/dsh-usage-stats": "workspace:^",
+    "@neo/dsh-session": "workspace:^",
+    "@neo/dsh-session-persistence": "workspace:^",
+    "@neo/dsh-settings": "workspace:^",
+    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

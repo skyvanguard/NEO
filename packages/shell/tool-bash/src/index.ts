@@ -5,25 +5,25 @@
  *
  * TODO(permissions): deployment policy belongs in `tools/pre-execute` and
  * sandboxing executors; see docs/architecture.md § Where new behavior goes.
- * @module @deepseek-ai/dsh-tool-bash
+ * @module @neo/dsh-tool-bash
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import type { Context } from '@neo/cordis'
+import z from '@neo/schemastery'
 import { isAbsolute, resolve as resolvePath } from 'node:path'
-import { defineTool, TOOL_ABORTED } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView, TerminalCallView, ToolExecution, ToolResult, ToolResultView } from '@deepseek-ai/dsh-tools'
-import { HarnessError } from '@deepseek-ai/dsh-llm'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-system-prompt'
-import type {} from '@deepseek-ai/dsh-jobs'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type {} from '@deepseek-ai/dsh-shell-env'
-import type { SandboxExecutionPolicy, SandboxMode } from '@deepseek-ai/dsh-sandbox'
-import { ESCALATION_TARGETS, approveEscalation, canonicalPath, validateEscalationArgs } from '@deepseek-ai/dsh-sandbox'
-import type { SandboxPolicyService } from '@deepseek-ai/dsh-sandbox-policy'
-import { DSH_ENV_PREFIX } from '@deepseek-ai/dsh-shell'
-import type { ShellRunResult } from '@deepseek-ai/dsh-shell'
+import { defineTool, TOOL_ABORTED } from '@neo/dsh-tools'
+import type { GenericCallView, TerminalCallView, ToolExecution, ToolResult, ToolResultView } from '@neo/dsh-tools'
+import { HarnessError } from '@neo/dsh-llm'
+import type { Agent } from '@neo/dsh-agent'
+import type {} from '@neo/dsh-system-prompt'
+import type {} from '@neo/dsh-jobs'
+import type {} from '@neo/dsh-user-approval'
+import type {} from '@neo/dsh-shell-env'
+import type { SandboxExecutionPolicy, SandboxMode } from '@neo/dsh-sandbox'
+import { ESCALATION_TARGETS, approveEscalation, canonicalPath, validateEscalationArgs } from '@neo/dsh-sandbox'
+import type { SandboxPolicyService } from '@neo/dsh-sandbox-policy'
+import { DSH_ENV_PREFIX } from '@neo/dsh-shell'
+import type { ShellRunResult } from '@neo/dsh-shell'
 import { processOutcome } from './background.ts'
 import { parseExitStatus, renderProcessRead, renderResult } from './render.ts'
 
@@ -363,7 +363,7 @@ export function apply(ctx: Context, config: Config = {}): void {
         }
         const jobs = ctx.get('jobs')
         if (jobs === undefined) {
-          throw new Error('background jobs unavailable: load @deepseek-ai/dsh-jobs and @deepseek-ai/dsh-tool-jobs')
+          throw new Error('background jobs unavailable: load @neo/dsh-jobs and @neo/dsh-tool-jobs')
         }
         // The caller owns cancellation until ctx.jobs commits detached ownership.
         if (exec.signal.aborted) {

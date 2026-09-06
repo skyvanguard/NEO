@@ -2,17 +2,17 @@
  * Agent service: live registry, factory delegation, and process-local
  * initiator scope. Concrete creation and driving belong to the loop.
  *
- * @module @deepseek-ai/dsh-agent
+ * @module @neo/dsh-agent
  */
 
-import { Context, FiberState, getTraceable, Service, symbols } from '@deepseek-ai/cordis'
-import type { Fiber } from '@deepseek-ai/cordis'
+import { Context, FiberState, getTraceable, Service, symbols } from '@neo/cordis'
+import type { Fiber } from '@neo/cordis'
 import { AsyncLocalStorage } from 'node:async_hooks'
 import { isPromise } from 'node:util/types'
-import { scopeTarget } from '@deepseek-ai/dsh-scope'
-import type { Scoped } from '@deepseek-ai/dsh-scope'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
-import type { TypertContext, TypertLookup } from '@deepseek-ai/dsh-typert-protocol'
+import { scopeTarget } from '@neo/dsh-scope'
+import type { Scoped } from '@neo/dsh-scope'
+import type { SessionEvent, SessionId } from '@neo/dsh-session'
+import type { TypertContext, TypertLookup } from '@neo/dsh-typert-protocol'
 import type { Agent, AgentOptions } from './runtime-types.ts'
 
 export * from './runtime-types.ts'
@@ -23,7 +23,7 @@ export * from './model-selection.ts'
 export { agentCarrier, agentEvents, assembleContextFor, emitAgentEvent } from './dispatch.ts'
 export type { AgentEventDispatch, AgentSubjectEvent } from './dispatch.ts'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@neo/dsh-typert-protocol' {
   interface TypertLookupMap {
     agent: TypertLookup<Agent, SessionId>
   }
@@ -33,7 +33,7 @@ declare module '@deepseek-ai/dsh-typert-protocol' {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@neo/cordis' {
   interface Context {
     agents: AgentRegistry
     /**
@@ -245,7 +245,7 @@ interface FactorySlot {
  * Agent service (`ctx.agents`): tracks live agents and carries the initiating
  * Agent through one process-local asynchronous driver chain. Agent *creation*
  * is provided by whichever plugin implements the {@link AgentFactory}
- * (`@deepseek-ai/dsh-agent-loop`), registered via {@link setFactory}.
+ * (`@neo/dsh-agent-loop`), registered via {@link setFactory}.
  *
  * Initiator methods provide same-process causal attribution only. Ambient
  * presence is neither liveness proof nor authorization; subjects and owners
@@ -269,13 +269,13 @@ export class AgentRegistry extends Service {
       typeCtx.typert.lookups.register('agent', {
         parameter: 'agent',
         wire: 'agentId',
-        hostTypeSymbol: '@deepseek-ai/dsh-agent#Agent',
-        wireTypeSymbol: '@deepseek-ai/dsh-session/types#SessionId',
+        hostTypeSymbol: '@neo/dsh-agent#Agent',
+        wireTypeSymbol: '@neo/dsh-session/types#SessionId',
         resolve: sessionId => this.get(sessionId),
       })
       typeCtx.typert.contexts.registerHost('agent', {
         wire: 'agentId',
-        wireTypeSymbol: '@deepseek-ai/dsh-session/types#SessionId',
+        wireTypeSymbol: '@neo/dsh-session/types#SessionId',
         resolve: sessionId => this.get(sessionId)?.ctx,
       })
     })

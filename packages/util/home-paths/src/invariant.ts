@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-home-paths`.
- * @module @deepseek-ai/dsh-home-paths/invariant
+ * Package-owned invariant companion for `@neo/dsh-home-paths`.
+ * @module @neo/dsh-home-paths/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-home-paths'
+const PACKAGE_NAME = '@neo/dsh-home-paths'
 
 /** Cordis companion plugin name. */
 export const name = 'home-paths-invariant'

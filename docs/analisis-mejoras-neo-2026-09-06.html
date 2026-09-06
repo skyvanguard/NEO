@@ -136,7 +136,7 @@
 <div class="card">
 <h3>2.2 Dependencia de runtime oculta en artefactos generados (la trampa de zod) <span class="badge b-alto">alto</span> <span class="conv">convergencia con Ops 3.1</span></h3>
 <p class="meta">Impacto/Esfuerzo: Alto / Bajo (gate) · <code>typert/generator/src/emitter.ts:194,254</code></p>
-<p>El emisor de typert escribe literalmente <code>import { z } from 'zod'</code> en los <code>.host.js</code> generados, aunque el <code>src</code> use <code>@deepseek-ai/schemastery</code> y no importe zod. Por eso un paquete puede tener el <code>src</code> limpio y producir un artefacto que rompe el boot si no declara zod — el fallo ya materializado en el deploy. Coexisten dos libs de schema (<code>schemastery</code> para <code>Config</code>, <code>zod</code> para wire/typert): la separación es deliberada; el problema es que la dependencia no es visible.</p>
+<p>El emisor de typert escribe literalmente <code>import { z } from 'zod'</code> en los <code>.host.js</code> generados, aunque el <code>src</code> use <code>@neo/schemastery</code> y no importe zod. Por eso un paquete puede tener el <code>src</code> limpio y producir un artefacto que rompe el boot si no declara zod — el fallo ya materializado en el deploy. Coexisten dos libs de schema (<code>schemastery</code> para <code>Config</code>, <code>zod</code> para wire/typert): la separación es deliberada; el problema es que la dependencia no es visible.</p>
 <p class="fix"><b>Mejora:</b> gate que escanee los <code>lib/**/*.js</code> construidos, extraiga los especificadores bare npm y los cruce contra <code>dependencies</code>/<code>peerDependencies</code>. NO unificar las dos libs. <span class="risk">Riesgo: bajo (gate nuevo, falla ruidoso en CI).</span> Ver la implementación concreta en <b>P1</b> / 3.1 (el probe ya existe, solo prueba el export equivocado).</p>
 </div>
 
@@ -214,9 +214,9 @@
 <h3>4.1 Familia <code>web-search-*</code>: validación y clasificación de errores divergentes <span class="badge b-medio">medio</span></h3>
 <ul>
 <li><b>Perplexity acepta <code>url</code> sin el guard que SearXNG sí aplica</b> (<code>web-search-perplexity/src/provider.ts:56-77</code> vs <code>web-search-searxng:64</code>). Replicar el guard por-campo. Riesgo nulo.</li>
-<li><b>Los 4 proveedores clasifican abort/timeout con 3 criterios distintos</b> (deepseek:239, exa:119/134/145, perplexity:122/137/149, searxng:113/125). El hermano <code>web-fetch-http:349</code> ya centraliza en <code>translateAbortOrNetwork</code>. Extraerlo a <code>@deepseek-ai/dsh-web</code> y usarlo en los cuatro.</li>
+<li><b>Los 4 proveedores clasifican abort/timeout con 3 criterios distintos</b> (deepseek:239, exa:119/134/145, perplexity:122/137/149, searxng:113/125). El hermano <code>web-fetch-http:349</code> ya centraliza en <code>translateAbortOrNetwork</code>. Extraerlo a <code>@neo/dsh-web</code> y usarlo en los cuatro.</li>
 <li><b>SearXNG etiqueta su timeout interno como <code>WEB_PROVIDER_ERROR</code></b> (:103/:113) en vez de un <code>WEB_FETCH_TIMEOUT</code> como el hermano.</li>
-<li><b>Helpers puros duplicados</b> (<code>isPositiveInteger</code>, <code>isAbortError</code>, <code>searchAborted</code>) en los 4; supresión jscpd inconsistente. Mover a <code>@deepseek-ai/dsh-web/internal</code> (no API pública).</li>
+<li><b>Helpers puros duplicados</b> (<code>isPositiveInteger</code>, <code>isAbortError</code>, <code>searchAborted</code>) en los 4; supresión jscpd inconsistente. Mover a <code>@neo/dsh-web/internal</code> (no API pública).</li>
 </ul>
 <p class="risk">Riesgo: bajo (funciones puras / solo descarta basura o mejora diagnóstico).</p>
 </div>

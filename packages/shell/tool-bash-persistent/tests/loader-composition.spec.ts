@@ -3,22 +3,22 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
-import AgentRegistry, { Inbox } from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import TerminalSessionService from '@deepseek-ai/dsh-terminal'
-import * as TerminalLocal from '@deepseek-ai/dsh-terminal-bash'
-import SandboxProvider from '@deepseek-ai/dsh-sandbox'
-import type { ConfinedArgv, SandboxPolicy } from '@deepseek-ai/dsh-sandbox'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import * as ToolBashPersistent from '@deepseek-ai/dsh-tool-bash-persistent'
+import { Context } from '@neo/cordis'
+import Loader from '@neo/cordis-plugin-loader'
+import Include from '@neo/cordis-plugin-include'
+import { CallId } from '@neo/dsh-llm'
+import { Session, SessionId } from '@neo/dsh-session'
+import AgentRegistry, { Inbox } from '@neo/dsh-agent'
+import type { Agent } from '@neo/dsh-agent'
+import TerminalSessionService from '@neo/dsh-terminal'
+import * as TerminalLocal from '@neo/dsh-terminal-bash'
+import SandboxProvider from '@neo/dsh-sandbox'
+import type { ConfinedArgv, SandboxPolicy } from '@neo/dsh-sandbox'
+import SandboxPolicyService from '@neo/dsh-sandbox-policy'
+import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
+import SystemPrompt from '@neo/dsh-system-prompt'
+import ToolRuntime from '@neo/dsh-tools'
+import * as ToolBashPersistent from '@neo/dsh-tool-bash-persistent'
 
 let root: string | undefined
 let context: Context | undefined
@@ -70,17 +70,17 @@ suite('persistent Bash through a real cordis.yml Loader composition', () => {
     root = await mkdtemp(join(tmpdir(), 'dsh-persistent-bash-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-agent'",
-      "- name: '@deepseek-ai/dsh-system-prompt'",
-      "- name: '@deepseek-ai/dsh-tools'",
-      "- name: '@deepseek-ai/dsh-terminal'",
-      "- name: '@deepseek-ai/dsh-test-sandbox'",
-      "- name: '@deepseek-ai/dsh-sandbox-policy'",
+      "- name: '@neo/dsh-agent'",
+      "- name: '@neo/dsh-system-prompt'",
+      "- name: '@neo/dsh-tools'",
+      "- name: '@neo/dsh-terminal'",
+      "- name: '@neo/dsh-test-sandbox'",
+      "- name: '@neo/dsh-sandbox-policy'",
       '  config:',
       '    mode: danger-full-access',
       `    workspaceRoot: ${JSON.stringify(root)}`,
-      "- name: '@deepseek-ai/dsh-subprocess-local'",
-      "- name: '@deepseek-ai/dsh-terminal-bash'",
+      "- name: '@neo/dsh-subprocess-local'",
+      "- name: '@neo/dsh-terminal-bash'",
       '  config:',
       '    pollIntervalMs: 10',
       '    exactProbeAfterMs: 20',
@@ -89,7 +89,7 @@ suite('persistent Bash through a real cordis.yml Loader composition', () => {
       '    scrollbackLines: 20000',
       '    timeoutMs: 2000',
       '    disposeGraceMs: 500',
-      "- name: '@deepseek-ai/dsh-tool-bash-persistent'",
+      "- name: '@neo/dsh-tool-bash-persistent'",
       '  config:',
       '    timeoutMs: 5000',
       '',
@@ -100,15 +100,15 @@ suite('persistent Bash through a real cordis.yml Loader composition', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@deepseek-ai/dsh-agent', AgentRegistry],
-      ['@deepseek-ai/dsh-system-prompt', SystemPrompt],
-      ['@deepseek-ai/dsh-tools', ToolRuntime],
-      ['@deepseek-ai/dsh-terminal', TerminalSessionService],
-      ['@deepseek-ai/dsh-test-sandbox', PassthroughSandbox],
-      ['@deepseek-ai/dsh-sandbox-policy', SandboxPolicyService],
-      ['@deepseek-ai/dsh-subprocess-local', LocalSubprocessRuntime],
-      ['@deepseek-ai/dsh-terminal-bash', TerminalLocal],
-      ['@deepseek-ai/dsh-tool-bash-persistent', ToolBashPersistent],
+      ['@neo/dsh-agent', AgentRegistry],
+      ['@neo/dsh-system-prompt', SystemPrompt],
+      ['@neo/dsh-tools', ToolRuntime],
+      ['@neo/dsh-terminal', TerminalSessionService],
+      ['@neo/dsh-test-sandbox', PassthroughSandbox],
+      ['@neo/dsh-sandbox-policy', SandboxPolicyService],
+      ['@neo/dsh-subprocess-local', LocalSubprocessRuntime],
+      ['@neo/dsh-terminal-bash', TerminalLocal],
+      ['@neo/dsh-tool-bash-persistent', ToolBashPersistent],
     ])
     context.loader.internal = {
       version: 'v2',

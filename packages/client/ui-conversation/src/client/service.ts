@@ -7,13 +7,13 @@
  * through one property read; assignment through the tracker proxy and `#`
  * private fields bypass that rebinding.
  */
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
+import { Service } from '@neo/cordis'
+import type { Context } from '@neo/cordis'
 // Type-only imports: a plugin-to-plugin value import is a bundle purity
 // error, so scope resolution goes through the sessions service (scopeOf
 // method) instead of the standalone helper.
-import type { ISessions, SessionFace, SessionId } from '@deepseek-ai/dsh-client-runtime/client'
-import type { ImageAttachmentRef, ImageMediaType } from '@deepseek-ai/dsh-attachment'
+import type { ISessions, SessionFace, SessionId } from '@neo/dsh-client-runtime/client'
+import type { ImageAttachmentRef, ImageMediaType } from '@neo/dsh-attachment'
 import type { ComposerAttachment } from './contract/slots.ts'
 import type { QueueAction, QueueItemId } from './contract/queue.ts'
 import type { ComposerBlocks } from './input/blocks.ts'
@@ -416,8 +416,8 @@ export class ConversationController extends Service implements IConversation {
     const kb = Math.max(1, Math.round(saved.bytes / 1024))
     const path = saved.relativePath
     const text = `[Attached file "${file.name}" (${kb} KB) saved in the workspace at \`${path}\`. `
-      + `It is NOT loaded into context — read or process it with the appropriate tool as needed `
-      + `(e.g. \`pdftotext\`, \`tshark -r\` for a capture, \`openssl\` for a cert, \`grep\`, \`unzip\`).]`
+      + 'It is NOT loaded into context — read or process it with the appropriate tool as needed '
+      + '(e.g. `pdftotext`, `tshark -r` for a capture, `openssl` for a cert, `grep`, `unzip`).]'
     return { type: 'text', text }
   }
 }

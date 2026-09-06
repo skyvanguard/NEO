@@ -13,7 +13,7 @@
  * second line, covering every other producer (file reads, web fetches, plugin
  * messages) for every adapter instead of one tool at a time.
  *
- * @module @deepseek-ai/dsh-llm/sanitize
+ * @module @neo/dsh-llm/sanitize
  */
 
 // C0 controls except tab, line feed and carriage return, which are legitimate

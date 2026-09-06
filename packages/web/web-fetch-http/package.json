@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-web-fetch-http",
+  "name": "@neo/dsh-web-fetch-http",
   "description": "Anonymous public HTTP(S) fetch provider for the DeepSeek Harness web capability seam (ctx.web)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,19 +32,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/dsh-web": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@neo/schemastery": "workspace:^",
     "undici": "^7.28.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-timeout": "workspace:^",
+    "@neo/dsh-web": "workspace:^",
+    "@neo/cordis": "workspace:^"
   }
 }

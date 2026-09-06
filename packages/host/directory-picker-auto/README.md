@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-host-directory-picker-auto
+# @neo/dsh-host-directory-picker-auto
 
 English | [中文](README.zh.md)
 

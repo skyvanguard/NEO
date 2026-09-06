@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { Context, Service } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { agentEvents } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
+import { Context, Service } from '@neo/cordis'
+import Loader from '@neo/cordis-plugin-loader'
+import { agentEvents } from '@neo/dsh-agent'
+import AgentLoop from '@neo/dsh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
+import { CallId } from '@neo/dsh-llm'
+import { SessionId } from '@neo/dsh-session'
 import * as toolSchedule from '../src/index.ts'
 
 class PersistenceProbe extends Service {

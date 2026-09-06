@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-document-attach",
+  "name": "@neo/dsh-document-attach",
   "description": "Host-side document attachment: saves an uploaded document into the session workspace for the agent to process, exposed over Typert Remote",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -39,17 +39,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@neo/schemastery": "workspace:^",
     "zod": "^4.4.3"
   }
 }

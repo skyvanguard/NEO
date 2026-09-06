@@ -9,9 +9,9 @@
 // no web card (the tools keep a generic pending view), so a running row is the
 // summary line alone.
 
-import type { Context } from '@deepseek-ai/cordis'
-import { IconBrowseOutline16, IconGlobeOutline14 } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
+import type { Context } from '@neo/cordis'
+import { IconBrowseOutline16, IconGlobeOutline14 } from '@neo/dsh-client-ui-primitives'
+import type { PropsLocale } from '@neo/dsh-client-ui-slots'
 import type { ToolCallViewProps } from '../../contract/slots.ts'
 import { webCardModel } from '../models/web-card-model.ts'
 import { toolRowModel } from '../models/tool-call-model.ts'

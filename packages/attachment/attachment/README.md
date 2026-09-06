@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-attachment
+# @neo/dsh-attachment
 
 English | [中文](README.zh.md)
 

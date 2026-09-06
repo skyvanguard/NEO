@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-session-projection`.
- * @module @deepseek-ai/dsh-session-projection/invariant
+ * Package-owned invariant companion for `@neo/dsh-session-projection`.
+ * @module @neo/dsh-session-projection/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-session-projection'
+const PACKAGE_NAME = '@neo/dsh-session-projection'
 
 /** Cordis companion plugin name. */
 export const name = 'session-projection-invariant'

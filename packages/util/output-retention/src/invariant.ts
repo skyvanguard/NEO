@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-output-retention`.
- * @module @deepseek-ai/dsh-output-retention/invariant
+ * Package-owned invariant companion for `@neo/dsh-output-retention`.
+ * @module @neo/dsh-output-retention/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-output-retention'
+const PACKAGE_NAME = '@neo/dsh-output-retention'
 
 /** Cordis companion plugin name. */
 export const name = 'output-retention-invariant'

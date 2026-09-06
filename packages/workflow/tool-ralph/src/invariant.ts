@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-tool-ralph`.
- * @module @deepseek-ai/dsh-tool-ralph/invariant
+ * Package-owned invariant companion for `@neo/dsh-tool-ralph`.
+ * @module @neo/dsh-tool-ralph/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-tool-ralph'
+const PACKAGE_NAME = '@neo/dsh-tool-ralph'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-ralph-invariant'

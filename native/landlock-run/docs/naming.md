@@ -2,11 +2,11 @@
 
 ## npm packages
 
-The public package family belongs to the `@deepseek-ai` scope and uses the `node-addon-landlock-run` package prefix; platform packages append platform information only:
+The public package family belongs to the `@neo` scope and uses the `node-addon-landlock-run` package prefix; platform packages append platform information only:
 
 ```text
-@deepseek-ai/node-addon-landlock-run
-@deepseek-ai/node-addon-landlock-run-<platform>
+@neo/node-addon-landlock-run
+@neo/node-addon-landlock-run-<platform>
 ```
 
 Platform suffixes carry no libc component (binaries are static musl) and no variant component — variants stay inside `prebuilds.json` and binary filenames.

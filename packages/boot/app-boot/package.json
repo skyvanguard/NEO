@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-app-boot",
+  "name": "@neo/dsh-app-boot",
   "description": "Shared boot glue for the app bins: .env loading, fail-loud Loader guards, snapshot-aware config resolution, and the Loader boot sequence",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -35,32 +35,32 @@
     "js-yaml": "^4.2.0"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis-plugin-group": "workspace:^",
-    "@deepseek-ai/cordis-plugin-hmr": "workspace:^",
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/cordis-plugin-group": "workspace:^",
+    "@neo/cordis-plugin-hmr": "workspace:^",
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/dsh-launch-environment": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-home-paths": "workspace:^",
+    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/cordis-plugin-hmr": {
+    "@neo/cordis-plugin-hmr": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-group": "workspace:^",
-    "@deepseek-ai/cordis-plugin-hmr": "workspace:^",
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/cordis-plugin-timer": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
+    "@neo/cordis-plugin-group": "workspace:^",
+    "@neo/cordis-plugin-hmr": "workspace:^",
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/cordis-plugin-timer": "workspace:^",
+    "@neo/dsh-launch-environment": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/dsh-home-paths": "workspace:^",
+    "@neo/dsh-system-prompt": "workspace:^",
     "@types/js-yaml": "^4.0.9",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@neo/cordis": "workspace:^"
   }
 }

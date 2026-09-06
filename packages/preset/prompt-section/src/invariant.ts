@@ -1,10 +1,10 @@
-/** Package-owned invariant companion. @module @deepseek-ai/dsh-prompt-section/invariant */
+/** Package-owned invariant companion. @module @neo/dsh-prompt-section/invariant */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-prompt-section'
+const PACKAGE_NAME = '@neo/dsh-prompt-section'
 
 /** Cordis companion plugin name. */
 export const name = 'prompt-section-invariant'

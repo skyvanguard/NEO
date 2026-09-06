@@ -52,16 +52,16 @@ The root entrypoint of each owner remains independent of diagnostics. Loading th
 ## Composition
 
 ```ts
-import type { Context } from '@deepseek-ai/cordis'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
-import * as SessionInvariant from '@deepseek-ai/dsh-session/invariant'
+import type { Context } from '@neo/cordis'
+import InvariantRegistry from '@neo/dsh-invariants'
+import * as SessionInvariant from '@neo/dsh-session/invariant'
 
 declare const ctx: Context
 
 ctx.plugin(InvariantRegistry, {
   enabled: true,
-  package_allowlist: ['^@deepseek-ai/dsh-'],
-  package_blocklist: ['^@deepseek-ai/dsh-agent-loop$'],
+  package_allowlist: ['^@neo/dsh-'],
+  package_blocklist: ['^@neo/dsh-agent-loop$'],
 })
 ctx.plugin(SessionInvariant)
 ```

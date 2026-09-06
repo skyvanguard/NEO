@@ -2,25 +2,25 @@ import { mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { CallId } from '@deepseek-ai/dsh-llm'
-import { ShellExecutor } from '@deepseek-ai/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult } from '@deepseek-ai/dsh-shell'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH } from '@deepseek-ai/dsh-tools'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import * as ToolTasks from '@deepseek-ai/dsh-tool-jobs'
-import ApprovalService from '@deepseek-ai/dsh-user-approval'
-import type { ApprovalOutcome } from '@deepseek-ai/dsh-user-approval'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
+import { Context } from '@neo/cordis'
+import { CallId } from '@neo/dsh-llm'
+import { ShellExecutor } from '@neo/dsh-shell'
+import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult } from '@neo/dsh-shell'
+import SystemPrompt from '@neo/dsh-system-prompt'
+import ToolRuntime, { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH } from '@neo/dsh-tools'
+import AgentRegistry from '@neo/dsh-agent'
+import type { Agent } from '@neo/dsh-agent'
+import SessionStore, { SessionId } from '@neo/dsh-session'
+import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
+import LocalJobRegistry from '@neo/dsh-jobs-local'
+import * as ToolTasks from '@neo/dsh-tool-jobs'
+import ApprovalService from '@neo/dsh-user-approval'
+import type { ApprovalOutcome } from '@neo/dsh-user-approval'
+import { LocalBashExecutor } from '@neo/dsh-bash-local'
+import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
+import SandboxPolicyService from '@neo/dsh-sandbox-policy'
+import * as ToolBash from '@neo/dsh-tool-bash'
+import * as BashEnvPlugin from '@neo/dsh-shell-env'
 import { processOutcome } from '../src/background.ts'
 import { renderProcessRead, renderResult } from '../src/render.ts'
 
@@ -508,7 +508,7 @@ describe('background execution through the job runtime', () => {
     const ctx = await setup() // no LocalJobRegistry / ToolTasks
     const result = await call(ctx, 'bash', { command: 'sleep 60', description: 'test command', run_in_background: true })
     expect(result.isError).toBe(true)
-    expect(text(result)).toContain('background jobs unavailable: load @deepseek-ai/dsh-jobs and @deepseek-ai/dsh-tool-jobs')
+    expect(text(result)).toContain('background jobs unavailable: load @neo/dsh-jobs and @neo/dsh-tool-jobs')
   })
 
   it('a pre-aborted call is skipped before the process starts', async () => {

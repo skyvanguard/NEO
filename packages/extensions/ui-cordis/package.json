@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-cordis",
+  "name": "@neo/dsh-client-ui-cordis",
   "description": "Cordis dynamic-plugin definition card: the keyed cordis_define tool row with its run/stop switch",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,14 +32,14 @@
   "dsh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-cordis-client-runner",
-        "@deepseek-ai/dsh-api-remotes",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-input-trigger",
-        "@deepseek-ai/dsh-client-ui-tool",
-        "@deepseek-ai/dsh-client-ui-sidebar"
+        "@neo/dsh-client-runtime",
+        "@neo/dsh-client-connection",
+        "@neo/dsh-cordis-client-runner",
+        "@neo/dsh-api-remotes",
+        "@neo/dsh-client-locale",
+        "@neo/dsh-client-ui-input-trigger",
+        "@neo/dsh-client-ui-tool",
+        "@neo/dsh-client-ui-sidebar"
       ],
       "platform": "web"
     }
@@ -50,34 +50,34 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-cordis-client-runner": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-sidebar": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-input-trigger": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-tool": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@neo/dsh-api-remotes": "workspace:^",
+    "@neo/dsh-client-connection": "workspace:^",
+    "@neo/dsh-cordis-client-runner": "workspace:^",
+    "@neo/dsh-client-locale": "workspace:^",
+    "@neo/dsh-client-runtime": "workspace:^",
+    "@neo/dsh-client-ui-primitives": "workspace:^",
+    "@neo/dsh-client-ui-sidebar": "workspace:^",
+    "@neo/dsh-client-ui-input-trigger": "workspace:^",
+    "@neo/dsh-client-ui-slots": "workspace:^",
+    "@neo/dsh-client-ui-tool": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
+    "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-cordis-client-runner": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-sidebar": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-input-trigger": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-tool": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@neo/dsh-api-remotes": "workspace:^",
+    "@neo/dsh-client-connection": "workspace:^",
+    "@neo/dsh-cordis-client-runner": "workspace:^",
+    "@neo/dsh-client-locale": "workspace:^",
+    "@neo/dsh-client-runtime": "workspace:^",
+    "@neo/dsh-client-ui-primitives": "workspace:^",
+    "@neo/dsh-client-ui-sidebar": "workspace:^",
+    "@neo/dsh-client-ui-input-trigger": "workspace:^",
+    "@neo/dsh-client-ui-slots": "workspace:^",
+    "@neo/dsh-client-ui-tool": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
     "@types/react": "~18.3.1",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "files": [

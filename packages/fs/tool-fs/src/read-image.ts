@@ -8,18 +8,18 @@
  * tool result enters durable session history, so emitting an image on a route
  * that cannot carry it would break that route's continuation. Unknown
  * capability therefore refuses instead of relying on the adapter guard.
- * @module @deepseek-ai/dsh-tool-fs/src/read-image
+ * @module @neo/dsh-tool-fs/src/read-image
  */
 
 import { basename, extname } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import { AttachmentError, AttachmentId } from '@deepseek-ai/dsh-attachment'
-import type { ImageAttachmentRef, ImageMediaType } from '@deepseek-ai/dsh-attachment'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView, ToolExecution } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-fs'
+import type { Context } from '@neo/cordis'
+import { AttachmentError, AttachmentId } from '@neo/dsh-attachment'
+import type { ImageAttachmentRef, ImageMediaType } from '@neo/dsh-attachment'
+import { createUserMessage } from '@neo/dsh-llm'
+import type { ContentBlock } from '@neo/dsh-llm'
+import { defineTool } from '@neo/dsh-tools'
+import type { GenericCallView, ToolExecution } from '@neo/dsh-tools'
+import type {} from '@neo/dsh-fs'
 import { resolveRegularReadTarget } from './read-target.ts'
 
 /** Extensions `read_image` accepts; magic-byte validation at the attachment service stays authoritative. */

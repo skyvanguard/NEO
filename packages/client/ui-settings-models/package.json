@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-settings-models",
+  "name": "@neo/dsh-client-ui-settings-models",
   "description": "Models settings and shared product-onboarding dialogs over existing settings and credential joins",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,10 +32,10 @@
   "dsh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-settings",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-api-remotes"
+        "@neo/dsh-client-runtime",
+        "@neo/dsh-client-ui-settings",
+        "@neo/dsh-client-locale",
+        "@neo/dsh-api-remotes"
       ],
       "platform": "web"
     }
@@ -46,31 +46,31 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-client-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-schema-form": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-client-web-react": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@neo/cordis": "workspace:^",
+    "@neo/dsh-api-remotes": "workspace:^",
+    "@neo/dsh-client-connection": "workspace:^",
+    "@neo/dsh-client-runtime": "workspace:^",
+    "@neo/dsh-client-schema-form": "workspace:^",
+    "@neo/dsh-client-ui-primitives": "workspace:^",
+    "@neo/dsh-client-ui-slots": "workspace:^",
+    "@neo/dsh-client-web-react": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-schema-form": "workspace:^",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-settings": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-client-web-react": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@neo/dsh-api-remotes": "workspace:^",
+    "@neo/dsh-client-connection": "workspace:^",
+    "@neo/dsh-client-locale": "workspace:^",
+    "@neo/dsh-client-runtime": "workspace:^",
+    "@neo/dsh-client-schema-form": "workspace:^",
+    "@neo/dsh-client-test-runtime": "workspace:^",
+    "@neo/dsh-client-ui-primitives": "workspace:^",
+    "@neo/dsh-client-ui-settings": "workspace:^",
+    "@neo/dsh-client-ui-slots": "workspace:^",
+    "@neo/dsh-client-web-react": "workspace:^",
+    "@neo/dsh-invariants": "workspace:^",
     "@types/react": "~18.3.1",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "files": [

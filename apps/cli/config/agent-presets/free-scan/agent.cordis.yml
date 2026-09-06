@@ -26,7 +26,7 @@
 # ── identity ────────────────────────────────────────────────────────────────
 
 - id: persona
-  name: '@deepseek-ai/dsh-persona'
+  name: '@neo/dsh-persona'
   config:
     text: >-
       You are NEO, an autonomous external attack-surface analyst powered by the {{model}}
@@ -170,7 +170,7 @@
 # Blank the NEO-development context: this agent works on an external target, not
 # the NEO checkout, so the source-tree and Web-GUI guidance is pure noise.
 - id: prompt-section
-  name: '@deepseek-ai/dsh-prompt-section'
+  name: '@neo/dsh-prompt-section'
   config:
     sections:
       - name: 'harness:source'
@@ -181,47 +181,47 @@
         text: ''
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@neo/dsh-agent-instructions'
   config:
     maxBytes: 65536
 
 # ── shell ───────────────────────────────────────────────────────────────────
 
 - id: tool-bash
-  name: '@deepseek-ai/dsh-tool-bash'
+  name: '@neo/dsh-tool-bash'
   disabled: !!js process.platform === 'win32'
 
 - id: tool-pwsh
-  name: '@deepseek-ai/dsh-tool-pwsh'
+  name: '@neo/dsh-tool-pwsh'
   disabled: !!js process.platform !== 'win32'
 
 # ── filesystem ──────────────────────────────────────────────────────────────
 
 - id: tool-fs
-  name: '@deepseek-ai/dsh-tool-fs'
+  name: '@neo/dsh-tool-fs'
 
 - id: tool-fs-search
-  name: '@deepseek-ai/dsh-tool-fs-search'
+  name: '@neo/dsh-tool-fs-search'
   config:
     sampleOverCapGlobResults: false
 
 # ── background jobs ────────────────────────────────────────────────────────
 
 - id: tool-jobs
-  name: '@deepseek-ai/dsh-tool-jobs'
+  name: '@neo/dsh-tool-jobs'
 
 # ── skills ──────────────────────────────────────────────────────────────────
 
 - id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
+  name: '@neo/dsh-skill-filesystem'
 
 - id: tool-skill
-  name: '@deepseek-ai/dsh-tool-skill'
+  name: '@neo/dsh-tool-skill'
 
 # ── goals ───────────────────────────────────────────────────────────────────
 
 - id: tool-goal
-  name: '@deepseek-ai/dsh-tool-goal'
+  name: '@neo/dsh-tool-goal'
 
 # ── compaction ──────────────────────────────────────────────────────────────
 
@@ -233,13 +233,13 @@
     toolResultPruner: true
   config:
     - id: compaction-basic
-      name: '@deepseek-ai/dsh-compaction-basic'
+      name: '@neo/dsh-compaction-basic'
 
     - id: command-compact
-      name: '@deepseek-ai/dsh-command-compact'
+      name: '@neo/dsh-command-compact'
 
     - id: tool-result-pruner
-      name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+      name: '@neo/dsh-compaction-tool-result-pruner'
       config:
         thresholdChars: 8192
         headChars: 4096
@@ -248,12 +248,12 @@
 # ── remaining model-facing rows ─────────────────────────────────────────────
 
 - id: tool-todo
-  name: '@deepseek-ai/dsh-tool-todo'
+  name: '@neo/dsh-tool-todo'
   config:
     allowParallelInProgress: true
 
 - id: tool-web
-  name: '@deepseek-ai/dsh-tool-web'
+  name: '@neo/dsh-tool-web'
   config:
     fetch: true
     searchTimeoutMs: 60000
@@ -261,6 +261,6 @@
 # ── presentation ────────────────────────────────────────────────────────────
 
 - id: tool-presentation
-  name: '@deepseek-ai/dsh-agent-tool-presentation'
+  name: '@neo/dsh-agent-tool-presentation'
   config:
     mode: code

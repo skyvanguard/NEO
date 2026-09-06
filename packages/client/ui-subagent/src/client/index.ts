@@ -13,17 +13,17 @@
  */
 import type {
   ClientContext, SessionId, SubagentAddress,
-} from '@deepseek-ai/dsh-client-runtime/client'
-import type { ComposerChainProps } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { ClientSessionContext, InputTriggerServiceContract, InputTriggerSource } from '@deepseek-ai/dsh-client-ui-input-trigger/client'
+} from '@neo/dsh-client-runtime/client'
+import type { ComposerChainProps } from '@neo/dsh-client-ui-conversation/client'
+import type { ClientSessionContext, InputTriggerServiceContract, InputTriggerSource } from '@neo/dsh-client-ui-input-trigger/client'
 import { SubagentCatalogAction, type SubagentCatalogInjected } from './SubagentCatalogAction.tsx'
 import {
   SubagentReadOnlyComposer, type SubagentReadOnlyMatch,
 } from './SubagentReadOnlyComposer.tsx'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type {} from '@neo/dsh-client-locale/client'
 import { en, es, NS, zh, type SubagentKey } from './locales.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@neo/dsh-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Subagent catalog and read-only composer copy. */
     'subagent': SubagentKey

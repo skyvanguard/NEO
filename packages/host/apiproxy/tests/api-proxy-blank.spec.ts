@@ -8,20 +8,20 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
-import { CommandId } from '@deepseek-ai/dsh-commands/brand'
+import { Context } from '@neo/cordis'
+import AgentRegistry from '@neo/dsh-agent'
+import type { Agent } from '@neo/dsh-agent'
+import SessionStore from '@neo/dsh-session'
+import type { Session } from '@neo/dsh-session'
+import UserQuestionService from '@neo/dsh-user-questions'
+import { CommandId } from '@neo/dsh-commands/brand'
 // Side-effect type imports: the knob-event SessionEventMap merges.
-import type {} from '@deepseek-ai/dsh-permission-presets'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type { ApiProxy, RpcRequest } from '@deepseek-ai/dsh-host-apiproxy/api'
-import { RpcId } from '@deepseek-ai/dsh-host-apiproxy/api/rpc'
-import { createApiProxy } from '@deepseek-ai/dsh-host-apiproxy'
+import type {} from '@neo/dsh-permission-presets'
+import type {} from '@neo/dsh-sandbox-policy'
+import type {} from '@neo/dsh-user-approval'
+import type { ApiProxy, RpcRequest } from '@neo/dsh-host-apiproxy/api'
+import { RpcId } from '@neo/dsh-host-apiproxy/api/rpc'
+import { createApiProxy } from '@neo/dsh-host-apiproxy'
 
 let nextRpc = 1
 function request<P>(payload: P): RpcRequest<P> {

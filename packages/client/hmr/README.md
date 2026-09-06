@@ -1,4 +1,4 @@
-# @deepseek-ai/dsh-client-hmr
+# @neo/dsh-client-hmr
 
 English | [中文](README.zh.md)
 

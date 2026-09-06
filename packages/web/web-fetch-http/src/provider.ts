@@ -1,7 +1,7 @@
 /**
  * Safe HTTP(S) retrieval for `ctx.web`: validates URLs, follows only same-origin redirects,
  * enforces time and size limits, classifies and decodes text, and leaves presentation to
- * `@deepseek-ai/dsh-tool-web`. Requests carry no browser cookies or ambient credentials.
+ * `@neo/dsh-tool-web`. Requests carry no browser cookies or ambient credentials.
  *
  * SSRF protection: every hop's target is checked against a deny-list of private /
  * loopback / link-local / reserved ranges (see isBlockedAddress). A literal-IP host is
@@ -10,12 +10,12 @@
  * DNS-rebinding window. The worker's kernel egress filter (scan-worker/harden-deploy.sh),
  * whose deny-list mirrors isBlockedAddress, remains the last line of defense.
  * Set allowPrivateAddresses to opt out (e.g. a loopback test server).
- * @module @deepseek-ai/dsh-web-fetch-http/provider
+ * @module @neo/dsh-web-fetch-http/provider
  */
 
-import { WebError } from '@deepseek-ai/dsh-web'
-import type { WebFetchBody, WebFetchProvider, WebFetchRequest, WebFetchResult } from '@deepseek-ai/dsh-web'
-import { deadline, timeoutOf } from '@deepseek-ai/dsh-timeout'
+import { WebError } from '@neo/dsh-web'
+import type { WebFetchBody, WebFetchProvider, WebFetchRequest, WebFetchResult } from '@neo/dsh-web'
+import { deadline, timeoutOf } from '@neo/dsh-timeout'
 import net from 'node:net'
 import { lookup } from 'node:dns/promises'
 import { lookup as lookupCb } from 'node:dns'

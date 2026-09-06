@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-session-checkpoint-policy`.
- * @module @deepseek-ai/dsh-session-checkpoint-policy/invariant
+ * Package-owned invariant companion for `@neo/dsh-session-checkpoint-policy`.
+ * @module @neo/dsh-session-checkpoint-policy/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/dsh-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-session-checkpoint-policy'
+const PACKAGE_NAME = '@neo/dsh-session-checkpoint-policy'
 
 /** Cordis companion plugin name. */
 export const name = 'session-checkpoint-policy-invariant'

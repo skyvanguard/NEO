@@ -1,20 +1,20 @@
 /**
  * Model-facing Cordis runtime/package inspection, define, run, stop, and remove tools.
- * @module @deepseek-ai/dsh-tool-cordis
+ * @module @neo/dsh-tool-cordis
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@neo/cordis'
+import type { Agent, PreStepDecision } from '@neo/dsh-agent'
 import {
   CordisDynamicPackageId, CordisDynamicPluginId,
-} from '@deepseek-ai/dsh-cordis-host-runner'
-import type { DynamicCordisReference } from '@deepseek-ai/dsh-cordis-host-runner'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { JsonValue } from '@deepseek-ai/dsh-session'
-import type { UserMessage } from '@deepseek-ai/dsh-session'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { ToolExecution } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+} from '@neo/dsh-cordis-host-runner'
+import type { DynamicCordisReference } from '@neo/dsh-cordis-host-runner'
+import { createUserMessage } from '@neo/dsh-llm'
+import type { JsonValue } from '@neo/dsh-session'
+import type { UserMessage } from '@neo/dsh-session'
+import { defineTool } from '@neo/dsh-tools'
+import type { ToolExecution } from '@neo/dsh-tools'
+import type {} from '@neo/dsh-system-prompt'
 import { missingServices, providedServices } from './inspect.ts'
 import {
   presentDefineCall, presentInspectListCall, presentInspectQueryCall, presentInspectSelfCall, presentRunCall,

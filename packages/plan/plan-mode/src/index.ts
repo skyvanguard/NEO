@@ -20,22 +20,22 @@
  * Agent Note:
  * - .agents/notes/implemented/simplification/2026-07-22-plan-specific-collaboration-state.md
  *
- * @module @deepseek-ai/dsh-plan-mode
+ * @module @neo/dsh-plan-mode
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
+import { Context, Service } from '@neo/cordis'
 import { z as zod } from 'zod'
 import type { ZodType } from 'zod'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { Session, SessionEvent, UserMessage } from '@deepseek-ai/dsh-session'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-system-prompt'
-import { UserQuestionError } from '@deepseek-ai/dsh-user-questions'
+import type { Agent, PreStepDecision } from '@neo/dsh-agent'
+import { createUserMessage } from '@neo/dsh-llm'
+import type { Session, SessionEvent, UserMessage } from '@neo/dsh-session'
+import { defineTool } from '@neo/dsh-tools'
+import type {} from '@neo/dsh-system-prompt'
+import { UserQuestionError } from '@neo/dsh-user-questions'
 // Type-only edge: resolves `ctx.commands` for the optional command child.
-import type {} from '@deepseek-ai/dsh-commands'
+import type {} from '@neo/dsh-commands'
 // Type-only: resolves ctx.sessionProjections for the optional unit child.
-import type {} from '@deepseek-ai/dsh-session-projection'
+import type {} from '@neo/dsh-session-projection'
 import type { PlanProjection } from './types.ts'
 // The `plan` projection-key declaration lives in src/types.ts (its one home);
 // this re-export projects the type face onto the package root AND keeps the
@@ -43,7 +43,7 @@ import type { PlanProjection } from './types.ts'
 // declarations still receive the SessionProjectionMap merge.
 export type * from './types.ts'
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@neo/dsh-session/types' {
   interface SessionEventMap {
     /**
      * Whether plan mode is in force from this point on: log-only, non-surface,
@@ -54,7 +54,7 @@ declare module '@deepseek-ai/dsh-session/types' {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@neo/cordis' {
   interface Context {
     planMode: PlanModeController
   }

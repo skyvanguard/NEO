@@ -6,36 +6,36 @@
 import { randomUUID } from 'node:crypto'
 import { mkdir, stat } from 'node:fs/promises'
 import { dirname } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import { installModelSelection } from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentHandle, ModelSelection, ModelSelectionRef, AgentOptions, AgentStatus } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-presets/types'
-import { AttachmentError } from '@deepseek-ai/dsh-attachment'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import { contentHasImage, createUserMessage, freezeMessage, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import { errorChain } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, MessageSource } from '@deepseek-ai/dsh-llm'
-import { isJsonValue } from '@deepseek-ai/dsh-session'
+import type { Context } from '@neo/cordis'
+import { installModelSelection } from '@neo/dsh-agent'
+import type { Agent, AgentHandle, ModelSelection, ModelSelectionRef, AgentOptions, AgentStatus } from '@neo/dsh-agent'
+import type {} from '@neo/dsh-agent-presets/types'
+import { AttachmentError } from '@neo/dsh-attachment'
+import type { ImageAttachmentRef } from '@neo/dsh-attachment'
+import { contentHasImage, createUserMessage, freezeMessage, ReasoningEffortId } from '@neo/dsh-llm'
+import { errorChain } from '@neo/dsh-llm'
+import type { ContentBlock, MessageSource } from '@neo/dsh-llm'
+import { isJsonValue } from '@neo/dsh-session'
 import { paginate, MESSAGE_TYPES } from './paginate.ts'
-import type { JsonValue, Session, SessionEvent, SessionEventMap, SessionHeader, SessionId, UserMessage } from '@deepseek-ai/dsh-session'
-import type { SessionPersistence } from '@deepseek-ai/dsh-session-persistence'
-import { SessionQueryError, type SessionSearchCursor } from '@deepseek-ai/dsh-session-query'
-import { SubagentError } from '@deepseek-ai/dsh-subagent'
-import type { SubagentListEntry as CatalogSubagentListEntry } from '@deepseek-ai/dsh-subagent'
-import { isUserInvocable } from '@deepseek-ai/dsh-skill'
-import type { Workspace, WorkspaceRecord } from '@deepseek-ai/dsh-workspace'
+import type { JsonValue, Session, SessionEvent, SessionEventMap, SessionHeader, SessionId, UserMessage } from '@neo/dsh-session'
+import type { SessionPersistence } from '@neo/dsh-session-persistence'
+import { SessionQueryError, type SessionSearchCursor } from '@neo/dsh-session-query'
+import { SubagentError } from '@neo/dsh-subagent'
+import type { SubagentListEntry as CatalogSubagentListEntry } from '@neo/dsh-subagent'
+import { isUserInvocable } from '@neo/dsh-skill'
+import type { Workspace, WorkspaceRecord } from '@neo/dsh-workspace'
 import {
   workspaceDomainState, workspaceRecord, WorkspaceId as brandWorkspaceId,
   WorkspaceMoveInvalidError, WorkspaceOrderInvalidError, WorkspaceUnknownSessionError,
-} from '@deepseek-ai/dsh-workspace'
+} from '@neo/dsh-workspace'
 // Type-only: brings the `ctx.tools` Context merge into this program (viewFor reads presenters).
 import {
   InvalidPresetIdError, PresetExistsError, PresetMountError,
   PresetNotWritableError, resolveSessionPreset,
   SETTINGS_NAMESPACE as AGENT_PRESET_SETTINGS_NAMESPACE, UnknownPresetError,
-} from '@deepseek-ai/dsh-agent-presets'
-import type { PresetBearingSession } from '@deepseek-ai/dsh-agent-presets'
-import type {} from '@deepseek-ai/dsh-tools'
+} from '@neo/dsh-agent-presets'
+import type { PresetBearingSession } from '@neo/dsh-agent-presets'
+import type {} from '@neo/dsh-tools'
 import type {
   ApiProxy, ConfigurableProviderView, CredentialView, GoalRef, HistoryEntry, HostFrame,
   ModelCatalogFailure, ModelProviderGroup,
@@ -52,44 +52,44 @@ import {
   type SessionLogExportReady,
   type SessionLogCompressionLevel,
 } from './session-export.ts'
-import type { SessionRawArtifact } from '@deepseek-ai/dsh-session-persistence'
+import type { SessionRawArtifact } from '@neo/dsh-session-persistence'
 import {
   SESSION_SEARCH_RESULT_LIMIT,
   SESSION_SEARCH_SNIPPET_MAX_CODE_POINTS,
   truncateUnicodeCodePoints,
 } from './api/session-search.ts'
 // Type-only: resolves `ctx.get('sessionProjections')` to the projection registry.
-import type {} from '@deepseek-ai/dsh-session-projection'
+import type {} from '@neo/dsh-session-projection'
 // Type-only: resolves `ctx.get('tasks')` to the background job registry.
-import type {} from '@deepseek-ai/dsh-jobs'
-import type { JobSnapshot } from '@deepseek-ai/dsh-jobs'
+import type {} from '@neo/dsh-jobs'
+import type { JobSnapshot } from '@neo/dsh-jobs'
 // Type-only: resolves `ctx.get('sessionProjectionCache')` (the cold listing column).
-import type {} from '@deepseek-ai/dsh-session-projection-cache'
+import type {} from '@neo/dsh-session-projection-cache'
 // GoalError narrows domain rejections to their stable codes at the wire boundary.
-import { GoalError } from '@deepseek-ai/dsh-goal'
-import type { GoalRef as CoreGoalRef } from '@deepseek-ai/dsh-goal'
+import { GoalError } from '@neo/dsh-goal'
+import type { GoalRef as CoreGoalRef } from '@neo/dsh-goal'
 // Type-only edges: resolve the command-change stream and `ctx.get('skills')`.
-import type {} from '@deepseek-ai/dsh-commands'
+import type {} from '@neo/dsh-commands'
 // Type-only: the dynamic-package runner's forwarded-event declarations. Its
 // client-safe `./types` subpath deliberately, not the package root — the root
 // merges `ctx.dynamicCordisRunner`, and a dependency on that package would
 // rebuild the api-remotes cycle this direction exists to avoid.
-import type {} from '@deepseek-ai/dsh-cordis-host-runner/types'
-import type {} from '@deepseek-ai/dsh-skill'
+import type {} from '@neo/dsh-cordis-host-runner/types'
+import type {} from '@neo/dsh-skill'
 // The settings/credentials seams: brand guards run at this wire boundary; the
 // service reads stay optional (`ctx.get`) so a composition without either
 // provider still serves every other domain.
-import { SettingsConflictError, settingsNamespace } from '@deepseek-ai/dsh-settings'
-import type { SettingsDescriptor, SettingsNamespace, SettingsPathOp } from '@deepseek-ai/dsh-settings'
-import { credentialRef } from '@deepseek-ai/dsh-credentials'
+import { SettingsConflictError, settingsNamespace } from '@neo/dsh-settings'
+import type { SettingsDescriptor, SettingsNamespace, SettingsPathOp } from '@neo/dsh-settings'
+import { credentialRef } from '@neo/dsh-credentials'
 // Value edge: the rename impl narrows the title service's validation failure; the import also resolves `ctx.get('sessionTitle')`.
-import { SessionTitleInvalidError } from '@deepseek-ai/dsh-session-title'
-import type { CallId } from '@deepseek-ai/dsh-llm/brand'
-import type { ScopeKey } from '@deepseek-ai/dsh-scope'
-import type { ApprovalOutcome, ApprovalRequestId } from '@deepseek-ai/dsh-user-approval'
+import { SessionTitleInvalidError } from '@neo/dsh-session-title'
+import type { CallId } from '@neo/dsh-llm/brand'
+import type { ScopeKey } from '@neo/dsh-scope'
+import type { ApprovalOutcome, ApprovalRequestId } from '@neo/dsh-user-approval'
 // Side-effect type import: resolves the `approval/request` waterfall and
 // `ctx.get('approval')` without a value dependency on the seam (optional composition).
-import type {} from '@deepseek-ai/dsh-user-approval'
+import type {} from '@neo/dsh-user-approval'
 import { approvalResponsePayloadSchema } from './api/approvals.schema.ts'
 import { imageLimitsProjectionSchema, sessionListMetadataProjectionSchema } from './api/sessions.schema.ts'
 import { questionResponsePayloadSchema } from './api/questions.schema.ts'
@@ -97,9 +97,9 @@ import type { ClientResponse, RpcError, RpcReceipt, RpcRequest, RpcResponse } fr
 import { RpcId } from './api/rpc.ts'
 import type {
   AskUserQuestionAnswer, AskUserQuestionItem, AskUserQuestionRequest,
-} from '@deepseek-ai/dsh-user-questions'
-import { UserQuestionError } from '@deepseek-ai/dsh-user-questions'
-import { DirectoryPickerError } from '@deepseek-ai/dsh-host-directory-picker'
+} from '@neo/dsh-user-questions'
+import { UserQuestionError } from '@neo/dsh-user-questions'
+import { DirectoryPickerError } from '@neo/dsh-host-directory-picker'
 import {
   ApiRemoteSessionNotFound as SessionNotFound,
   ApiRemoteSubagentSessionOwnership as SubagentSessionOwnership,
@@ -108,7 +108,7 @@ import {
   createApiRemoteAgentResolver,
   hasApiRemoteSubagentOwner,
   inspectApiRemoteSession,
-} from '@deepseek-ai/dsh-api-remotes'
+} from '@neo/dsh-api-remotes'
 import { canOpenNativePath, openNativePath, openNativeTextFile } from './native-path-opener.ts'
 
 /** Page size when history is called without maxMessages. */
@@ -928,7 +928,7 @@ function subagentPromptError(
 function projectionsUnavailableError(): RpcError {
   return {
     code: 'internal',
-    message: 'subagent catalog is unavailable: this deployment does not mount the sessionProjections registry (load @deepseek-ai/dsh-session-projection)',
+    message: 'subagent catalog is unavailable: this deployment does not mount the sessionProjections registry (load @neo/dsh-session-projection)',
     details: {},
   }
 }
@@ -1801,7 +1801,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
     const presets = ctx.get('agentPresets')
     const goals = presets?.serviceFor(agent, 'goals') ?? ctx.get('goals')
     if (goals === undefined) {
-      return { error: { code: 'internal', message: 'goal service is absent: neither this session\'s agent preset nor the host composition mounts @deepseek-ai/dsh-goal', details: {} } }
+      return { error: { code: 'internal', message: 'goal service is absent: neither this session\'s agent preset nor the host composition mounts @neo/dsh-goal', details: {} } }
     }
     return goals
   }
@@ -1872,7 +1872,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
 
   /** Missing-service report shared by the settings domain (skills-domain stance). */
   function settingsAbsent(): RpcError {
-    return { code: 'internal', message: 'settings service is absent: this deployment does not mount a settings provider (e.g. @deepseek-ai/dsh-settings-file) in its composition', details: {} }
+    return { code: 'internal', message: 'settings service is absent: this deployment does not mount a settings provider (e.g. @neo/dsh-settings-file) in its composition', details: {} }
   }
 
   /** Open one Host-resolved target and map native failures onto the wire vocabulary. */
@@ -1926,7 +1926,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
 
   /** Missing-service report shared by the credentials domain. */
   function credentialsAbsent(): RpcError {
-    return { code: 'internal', message: 'credentials service is absent: this deployment does not mount a credential provider (e.g. @deepseek-ai/dsh-credentials-local) in its composition', details: {} }
+    return { code: 'internal', message: 'credentials service is absent: this deployment does not mount a credential provider (e.g. @neo/dsh-credentials-local) in its composition', details: {} }
   }
 
   /** Map one redacted settings descriptor to its wire view. */
@@ -2048,7 +2048,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
         if (sessionQuery === undefined) {
           return err(request, {
             code: 'internal',
-            message: 'session search is unavailable: this deployment does not mount @deepseek-ai/dsh-session-query',
+            message: 'session search is unavailable: this deployment does not mount @neo/dsh-session-query',
             details: {},
           })
         }
@@ -3296,7 +3296,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
         // (an undeclared `ctx.skills` property read fails the reflect proxy).
         const skillRegistry = scoped ?? ctx.get('skills')
         if (skillRegistry === undefined) {
-          return err(request, { code: 'internal', message: 'skill registry is absent: neither this session\'s agent preset nor the host composition mounts @deepseek-ai/dsh-skill', details: {} })
+          return err(request, { code: 'internal', message: 'skill registry is absent: neither this session\'s agent preset nor the host composition mounts @neo/dsh-skill', details: {} })
         }
         // The scope presenters resolve in — the live agent, else the recorded
         // preset's standing key, else the global layer — so a cold session's

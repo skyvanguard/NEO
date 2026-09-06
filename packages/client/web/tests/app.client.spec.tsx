@@ -6,10 +6,10 @@
  */
 import { afterEach, describe, expect, it } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
-import { Context } from '@deepseek-ai/cordis'
-import { SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionId } from '@deepseek-ai/dsh-client-runtime/client'
-import { buildRenderApp } from '@deepseek-ai/dsh-client-web/src/app.tsx'
+import { Context } from '@neo/cordis'
+import { SlotTestRuntime } from '@neo/dsh-client-test-runtime'
+import type { SessionId } from '@neo/dsh-client-runtime/client'
+import { buildRenderApp } from '@neo/dsh-client-web/src/app.tsx'
 
 let runtime: SlotTestRuntime | undefined
 
