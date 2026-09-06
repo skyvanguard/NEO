@@ -214,7 +214,7 @@ export interface PersistenceBackend<TornMarker = unknown> {
    * @param id - persisted session id to remove.
    * @param signal - optional cancellation for backend removal work.
    */
-  remove(id: SessionId, signal?: AbortSignal): Promise<void>
+  removeStored(id: SessionId, signal?: AbortSignal): Promise<void>
 
   /**
    * Optional lifecycle teardown (e.g. close a database handle). Awaited by the
@@ -861,7 +861,15 @@ export class PersistenceCoordinator<TornMarker = unknown> {
   remove(id: SessionId, signal?: AbortSignal): Promise<void> {
     const retired = Promise.resolve(this.retirements.get(id))
     const waited = signal === undefined ? retired : observeQueuedAbort(retired, signal, () => false)
-    return waited.then(() => this.serialize(id, () => this.backend.remove(id, signal), signal))
+    return waited.then(() => this.serialize(id, async () => {
+      await this.backend.removeStored(id, signal)
+      // Evacuate the in-memory state so the id is fully free again: a stale
+      // states[id] blocks re-create ("already exists") and would let a later
+      // append target the torn-down artifact; a stale preparation would resume
+      // a session whose artifact is gone.
+      this.states.delete(id)
+      this.preparations.invalidate(id)
+    }, signal))
   }
 
   private async readFromCore(

@@ -205,7 +205,12 @@ export class JsonlSessionPersistence extends SessionPersistence implements Persi
    * An absent id resolves without effect; a directory that disappears between
    * the probe and the rm is the same absence.
    */
-  override async remove(id: SessionId, signal?: AbortSignal): Promise<void> {
+  /** Public service remove: routes through the coordinator so a pending write drains and in-memory state is evacuated. */
+  override remove(id: SessionId, signal?: AbortSignal): Promise<void> {
+    return this.coordinator.remove(id, signal)
+  }
+
+  async removeStored(id: SessionId, signal?: AbortSignal): Promise<void> {
     signal?.throwIfAborted()
     await this.ensureRootEncoding()
     signal?.throwIfAborted()

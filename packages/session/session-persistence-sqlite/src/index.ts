@@ -368,7 +368,12 @@ export class SqliteSessionPersistence extends SessionPersistence implements Pers
    * Durably remove a session's rows in ONE transaction. Unknown ids are a
    * no-op: both DELETEs match nothing and the transaction commits empty.
    */
-  override async remove(id: SessionId, signal?: AbortSignal): Promise<void> {
+  /** Public service remove: routes through the coordinator so a pending write drains and in-memory state is evacuated. */
+  override remove(id: SessionId, signal?: AbortSignal): Promise<void> {
+    return this.coordinator.remove(id, signal)
+  }
+
+  async removeStored(id: SessionId, signal?: AbortSignal): Promise<void> {
     signal?.throwIfAborted()
     await this.ready
     signal?.throwIfAborted()

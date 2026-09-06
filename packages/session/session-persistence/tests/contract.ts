@@ -379,6 +379,26 @@ export function runPersistenceContract(name: string, make: () => Promise<Contrac
       }
     })
 
+    it('frees a removed id: create and append after remove leave no stale state', async () => {
+      const { persistence, dispose } = await make()
+      try {
+        const m = meta('s-reuse', '/work')
+        await persistence.create(m)
+        await persistence.append(m.id, oneTurnLog())
+        await persistence.remove(m.id)
+        // The coordinator's in-memory state for the id must be gone: recreating
+        // and re-appending the same id must not reject as "already exists" nor
+        // write against a torn-down artifact.
+        await persistence.create(m)
+        await persistence.append(m.id, oneTurnLog())
+        expect((await persistence.list()).map(x => x.id)).toContain(m.id)
+        await persistence.remove(m.id)
+        expect((await persistence.list()).map(x => x.id)).not.toContain(m.id)
+      } finally {
+        await dispose()
+      }
+    })
+
     it('append rejects a batch whose first seq does not match the stored next-seq', async () => {
       const { persistence, dispose } = await make()
       try {
