@@ -100,6 +100,13 @@ export function parseClaudeCodeConfig(raw: unknown, vars: SubstitutionVars = {})
           continue
         }
         if (typeof hook.command !== 'string') continue
+        // A non-positive or non-finite timeout must be rejected at load: it would
+        // otherwise reach the runner as setTimeout(<=0), killing the hook on the
+        // first tick with a cryptic truncated-output error instead of a clear
+        // config diagnostic.
+        if (typeof hook.timeout === 'number' && (!Number.isFinite(hook.timeout) || hook.timeout <= 0)) {
+          throw new SyntaxError(`hook timeout must be a positive number of seconds, got ${hook.timeout} on event ${JSON.stringify(event)}`)
+        }
         commands.push({
           command: substituteCommand(hook.command, vars),
           ...typeof hook.timeout === 'number' ? { timeoutSec: hook.timeout } : {},

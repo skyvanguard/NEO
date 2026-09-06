@@ -70,6 +70,17 @@ describe('parseClaudeCodeConfig', () => {
     })).toThrow('invalid claude-code regex matcher "(" on event "PreToolUse"')
   })
 
+  it('rejects a non-positive or non-finite per-hook timeout with its event name', () => {
+    for (const timeout of [0, -5, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(() => parseClaudeCodeConfig({
+        Stop: [{ hooks: [{ type: 'command', command: 's.sh', timeout }] }],
+      })).toThrow(/hook timeout must be a positive number of seconds.*on event "Stop"/)
+    }
+    // A positive timeout still parses.
+    expect(parseClaudeCodeConfig({ Stop: [{ hooks: [{ type: 'command', command: 's.sh', timeout: 5 }] }] }).config.Stop)
+      .toEqual([{ hooks: [{ command: 's.sh', timeoutSec: 5 }] }])
+  })
+
   it('discards matcher fields on events without matcher subjects before validation', () => {
     const { config } = parseClaudeCodeConfig({
       UserPromptSubmit: [{ matcher: '[', hooks: [{ type: 'command', command: 'prompt.sh' }] }],
