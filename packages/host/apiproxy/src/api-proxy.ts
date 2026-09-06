@@ -517,9 +517,28 @@ function sessionListFields(header: SessionHeader, events: readonly SessionEvent[
   }
 }
 
+/**
+ * SessionListMetadata for an attached session: prefer the incrementally-maintained
+ * projection cell over refolding the whole log on every list refresh. The cell is
+ * built once (full fold) and kept fresh by the projection drive; a session with a
+ * long log therefore costs O(1) per refresh here instead of O(log length). Falls
+ * back to a direct fold when the projection registry is not mounted.
+ */
+function liveSessionListMetadata(ctx: Context, session: Session): SessionListMetadata {
+  try {
+    const cached = ctx.get('sessionProjections')?.snapshot(session).values.sessionListMetadata
+    if (cached !== undefined) return cached
+  } catch (error) {
+    // A throwing projection read must never break the listing; fold instead
+    // (same degrade-not-fail contract as the projections column).
+    ctx.logger.warn(`session.list: sessionListMetadata projection read failed, folding instead: ${String(error)}`)
+  }
+  return sessionListMetadata(session.events)
+}
+
 /** SessionSummary projection for attached (in-memory) sessions. */
-function summarize(session: Session, running: boolean): SessionSummary {
-  const metadata = sessionListMetadata(session.events)
+function summarize(ctx: Context, session: Session, running: boolean): SessionSummary {
+  const metadata = liveSessionListMetadata(ctx, session)
   return {
     sessionId: session.id,
     updatedAt: sessionListUpdatedAt(session.header, metadata),
@@ -1713,7 +1732,7 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
       const agent = ctx.agents.get(session.id)
       const projections = listProjectionsFor(ctx, session.header, session)
       return {
-        ...summarize(session, agent?.status === 'running'),
+        ...summarize(ctx, session, agent?.status === 'running'),
         ...projections === undefined ? {} : { projections },
       }
     }
