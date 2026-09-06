@@ -82,12 +82,12 @@ describe('DeepSeekAdapter against a mock server', () => {
     })
     // App attribution and DeepSeek request identity are independent wire facts.
     expect(server.headers[0]?.['user-agent']).toBe(userAgent())
-    expect(server.headers[0]?.['x-deepseek-harness-user-id']).toBe(getOrCreateAnonymousUserId())
-    expect(server.headers[0]).not.toHaveProperty('x-deepseek-harness-session-id')
+    expect(server.headers[0]?.['x-neo-user-id']).toBe(getOrCreateAnonymousUserId())
+    expect(server.headers[0]).not.toHaveProperty('x-neo-session-id')
     expect(server.headers[0]).not.toHaveProperty('http-referer')
     expect(server.headers[0]).not.toHaveProperty('x-openrouter-title')
     expect(server.headers[0]).not.toHaveProperty('x-openrouter-categories')
-    expect(server.headers[0]).not.toHaveProperty('x-deepseek-harness-compact')
+    expect(server.headers[0]).not.toHaveProperty('x-neo-compact')
   })
 
   it('streams raw chunks through ctx.llm.stream', async () => {
@@ -121,8 +121,8 @@ describe('DeepSeekAdapter against a mock server', () => {
       sessionId: SessionId('child-session'),
     })
 
-    expect(server.headers[0]?.['x-deepseek-harness-session-id']).toBe('child-session')
-    expect(server.headers[0]?.['x-deepseek-harness-user-id']).toBe(getOrCreateAnonymousUserId())
+    expect(server.headers[0]?.['x-neo-session-id']).toBe('child-session')
+    expect(server.headers[0]?.['x-neo-user-id']).toBe(getOrCreateAnonymousUserId())
   })
 
   it('marks the auxiliary compaction call on the wire', async () => {
@@ -138,7 +138,7 @@ describe('DeepSeekAdapter against a mock server', () => {
       purpose: 'compaction',
     })
 
-    expect(server.headers[0]?.['x-deepseek-harness-compact']).toBe('1')
+    expect(server.headers[0]?.['x-neo-compact']).toBe('1')
   })
 
   it('switches dynamically from the configured high default through off to max', async () => {

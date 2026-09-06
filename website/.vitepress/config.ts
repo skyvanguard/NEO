@@ -247,7 +247,7 @@ function siteTitle(previewTag: string): string {
 }
 
 export default withMermaid({
-  title: 'DeepSeek Harness',
+  title: 'NEO',
   description: '用于构建 Agent Harness 的插件化 SDK',
   base,
   head: [
