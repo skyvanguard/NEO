@@ -397,6 +397,10 @@ describe('session.delete', () => {
     // proceeds over the real (empty) state instead of hanging or crashing.
     let fail = (): void => {}
     h.hold.create = new Promise<void>((_resolve, reject) => { fail = () => { reject(new Error('create boom')) } })
+    // Keep the rejection handled regardless of when the factory attaches its
+    // await, so rejecting before that point does not surface as an unhandled
+    // rejection (the factory's await consumes it too; a second handler is inert).
+    h.hold.create.catch(() => {})
     const creating = h.api.sessions.create(request({ workspaceId: workspace.workspaceId, sessionId }))
     const deleting = h.api.sessions.delete(request({ sessionId }))
     fail()
