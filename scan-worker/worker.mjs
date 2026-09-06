@@ -114,9 +114,14 @@ function runNeo(domain, locale) {
   ];
 
   return new Promise((resolvePromise, reject) => {
+    // Scrub the worker's own credential from the child environment: NEO never
+    // needs SCAN_WORKER_TOKEN, and the child spawns further subprocesses (the
+    // agent's bash), so the token has no business crossing this boundary.
+    const { SCAN_WORKER_TOKEN, ...childEnv } = process.env;
+    void SCAN_WORKER_TOKEN;
     const child = spawn(bin, args, {
       cwd: cfg.workspace,
-      env: process.env,
+      env: childEnv,
       windowsHide: true,
     });
 
@@ -197,7 +202,21 @@ function extractReport(stdout) {
   return report;
 }
 
+// A single DNS hostname: 1-253 chars, dot-separated labels of letters/digits/
+// hyphens (no leading/trailing hyphen), at least two labels. Rejects URLs,
+// paths, IPs, spaces, and anything that is not a plain domain to scan.
+const HOSTNAME_RE = /^(?=.{1,253}$)(?!-)[A-Za-z0-9-]{1,63}(?<!-)(?:\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))+$/;
+
 async function processJob(job) {
+  if (typeof job.domain !== "string" || !HOSTNAME_RE.test(job.domain)) {
+    log(`job ${job.id} → dominio invalido: ${JSON.stringify(job.domain)}`);
+    try {
+      await postResult(job.id, { status: "failed", error: `Dominio invalido: ${String(job.domain)}` });
+    } catch (postErr) {
+      log(`job ${job.id} → dominio invalido y ademas fallo el POST: ${postErr}`);
+    }
+    return;
+  }
   log(`job ${job.id} → analizando ${job.domain} (${job.locale}, intento ${job.attempts})`);
   try {
     const stdout = await runNeo(job.domain, job.locale);

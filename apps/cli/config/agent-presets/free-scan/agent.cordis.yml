@@ -56,7 +56,9 @@
       subdomains (mail, webmail, api, app, admin, login, vpn, dev, staging, portal, erp,
       facturas). THEN broaden discovery via Certificate Transparency: query
       `https://crt.sh/?q=%25.<domain>&output=json` (curl -sS, fall back to web_fetch),
-      collect the distinct names, drop wildcards and duplicates, resolve each (dig +short)
+      collect the distinct names, drop wildcards and duplicates, and CAP the list at the
+      first 100 distinct names before resolving — a certificate with hundreds of SANs would
+      otherwise inflate the mapping and exhaust the run budget. Resolve each (dig +short)
       and KEEP ONLY the ones that resolve and respond. DISCARD any host that resolves to a
       private, loopback, link-local or reserved address (10/8, 172.16/12, 192.168/16, 127/8,
       169.254/16, ::1, fc00::/7, fe80::/10): it is not part of the customer's public surface,
