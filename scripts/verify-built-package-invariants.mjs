@@ -103,6 +103,11 @@ for (const manifestPath of manifests) {
         failures.push(`${packageName}: exports ${subpath} but does not publish ${libFile}`)
         continue
       }
+      // Skip an artifact whose built file is absent: a partial build (e.g. the
+      // host-only build in pre-push does not emit the client remote artifact)
+      // must not false-fail here. The gate catches undeclared runtime deps in
+      // artifacts that WERE built; a full CI build probes them all.
+      if (!existsSync(resolve(packageDir, libFile))) continue
       const importSpecifier = `${packageName}${subpath.slice(1)}`
       try {
         const artifactProbe = resolve(stagedPackageDir, `probe${subpath.slice(1).replace(/[^a-z]/gi, '-')}.mjs`)

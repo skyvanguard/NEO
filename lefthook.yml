@@ -50,6 +50,12 @@ pre-merge-commit:
       run: node_modules/.bin/tsx scripts/verify-archived-agent-notes.ts
 
 pre-push:
+  # Sequential + fail-fast: typecheck builds the host lib (incl. the typert
+  # artifacts) that the built-package-invariants probe then imports under plain
+  # Node to catch an undeclared runtime dep (e.g. zod) before it reaches deploy.
+  piped: true
   jobs:
     - name: typecheck
       run: pnpm run typecheck
+    - name: built-package-invariants
+      run: pnpm run verify-built-package-invariants
