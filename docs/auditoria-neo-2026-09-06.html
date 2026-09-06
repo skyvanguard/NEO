@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auditoría NEO · ronda 2</title>
+<style>
+  :root{
+    --bg:#0d1014; --panel:#141a21; --panel-2:#1a222b; --line:#25303c;
+    --ink:#e6edf3; --ink-2:#9fb0c0; --ink-3:#6b7d8d;
+    --ok:#3fb950; --warn:#d29922; --crit:#f85149; --acc:#58a6ff; --viol:#bc8cff;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace; --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.62;
+       background-image:radial-gradient(circle at 12% -8%,#1a1526 0%,transparent 55%)}
+  .wrap{max-width:1120px;margin:0 auto;padding:48px 24px 110px}
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:12px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--viol)}
+  h1{font-size:clamp(28px,4.2vw,44px);line-height:1.08;margin:.3em 0 .25em;letter-spacing:-.022em}
+  .sub{color:var(--ink-2);max-width:76ch;margin:0}
+  h2{font-size:22px;margin:56px 0 6px;letter-spacing:-.012em}
+  h2 .n{font-family:var(--mono);color:var(--ink-3);font-size:15px;margin-right:10px}
+  .lede{color:var(--ink-2);margin:.2em 0 18px;max-width:80ch}
+  p{margin:.5em 0} code{font-family:var(--mono);font-size:.88em;background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:#a8d8ff;white-space:nowrap}
+  .grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:24px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:15px 17px}
+  .stat .v{font-family:var(--mono);font-size:25px;letter-spacing:-.02em} .stat .v.bad{color:var(--crit)} .stat .v.mid{color:var(--warn)} .stat .v.good{color:var(--ok)}
+  .stat .l{font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.09em;margin-top:3px}
+  .f{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:17px 20px;margin:15px 0}
+  .f.crit{border-left:3px solid var(--crit)} .f.warn{border-left:3px solid var(--warn)} .f.ok{border-left:3px solid var(--ok)} .f.info{border-left:3px solid var(--acc)}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:20px;border:1px solid currentColor;margin-right:9px;vertical-align:2px}
+  .tag.crit{color:var(--crit)} .tag.warn{color:var(--warn)} .tag.ok{color:var(--ok)} .tag.info{color:var(--acc)} .tag.viol{color:var(--viol)}
+  .f h3{margin:0 0 7px;display:flex;align-items:baseline;flex-wrap:wrap;gap:3px;font-size:16.5px}
+  .where{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin:8px 0 4px}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px} th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600} td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+  .scroll{overflow-x:auto} .note{color:var(--ink-3);font-size:13px;font-style:italic}
+  ul{margin:.4em 0 .4em 1.15em;padding:0} li{margin:.32em 0}
+  footer{margin-top:76px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">harness NEO · auditoría ronda 2 · 2026-09-06</div>
+  <h1>Segunda auditoría: código nuevo y frentes no cubiertos</h1>
+  <p class="sub">Seis agentes en paralelo sobre <code>master</code> (el código en producción), apuntando a lo que la primera auditoría no tocó: las dos features recién integradas (<strong>borrado de sesiones</strong>, <strong>free-scan</strong>) y los subsistemas, la persistencia, el cliente y la consistencia transversal. Cada hallazgo citable fue reverificado leyendo el código; lo descartado se lista aparte.</p>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="v bad">2</div><div class="l">críticos</div></div>
+  <div class="stat"><div class="v warn">3</div><div class="l">altos</div></div>
+  <div class="stat"><div class="v mid">6</div><div class="l">medios</div></div>
+  <div class="stat"><div class="v">×3</div><div class="l">agentes convergen en el borrado</div></div>
+  <div class="stat"><div class="v good">0</div><div class="l">corrupción silenciosa en camino normal</div></div>
+</div>
+
+<p class="lede">Veredicto de fondo, en las palabras de los agentes: el harness está <strong>excepcionalmente endurecido</strong> — fail-closed en todos lados, cero <code>as any</code> en fuente, decoders de replay estrictos, persistencia sin pérdida silenciosa en los caminos normales. Los problemas reales se concentran en <strong>las dos features nuevas</strong>, que no pasaron por la primera auditoría.</p>
+
+<h2><span class="n">01</span>Críticos</h2>
+
+<div class="f crit"><h3><span class="tag crit">crítico</span>SSRF en free-scan: un tercero anónimo puede alcanzar servicios internos de kryon</h3>
+<p class="where">apps/cli/config/agent-presets/free-scan/agent.cordis.yml:58-60 · packages/sandbox/sandbox-local/src/profiles.ts (sin <code>--unshare-net</code>) · packages/web/web-fetch-http/src/policy.ts (no valida IP resuelta)</p>
+<p>El free-scan es público y opera sobre un dominio <em>autodeclarado</em> (sin verificar propiedad). El commit nuevo le ordena consultar Certificate Transparency (<code>crt.sh</code>), <strong>resolver cada subdominio descubierto con <code>dig</code> y conectar</strong> a los que respondan. Un atacante que controla el DNS de su dominio publica un subdominio (o un cert en CT) que resuelve a <code>127.0.0.1</code>, <code>169.254.169.254</code> o una IP de la red docker de kryon. Nada lo frena: el sandbox bwrap <strong>no aísla la red</strong> (no hay <code>--unshare-net</code>) y <code>web-fetch</code> no valida la IP resuelta (solo tamaño/timeout — su propio README se declara "an SSRF primitive"). Desde ese shell, <code>127.0.0.1</code> del host son el motor LLM, searxng, docker-kryon.</p>
+<p><strong>Verificado</strong> los tres eslabones. La explotación depende de que exista un servicio interno de valor alcanzable — y lo hay. La defensa actual es <em>solo el prompt</em>.</p>
+<p><strong>Propuesta:</strong> (1) resolver cada host y validar la IP contra una deny-list de rangos privados/loopback/link-local <em>en el harness</em> (no en el prompt) antes de tratarlo como vivo; (2) egress filtering a nivel de sistema en el unit de systemd del worker (<code>IPAddressDeny=</code> con allow-list para el target, DNS y crt.sh) — <code>harden-deploy.sh</code> hoy no lo tiene; (3) validar la IP también en <code>web-fetch</code>, incluida la re-validación tras redirecciones (hoy solo compara el hostname literal → vulnerable a DNS rebinding).</p></div>
+
+<div class="f crit"><h3><span class="tag crit">crítico</span>El borrado de sesiones elude el coordinator por completo — tres agentes lo confirmaron por separado</h3>
+<p class="where">packages/session/session-persistence/src/coordinator.ts:861 (código muerto) · session-persistence-jsonl/src/index.ts:208 (<code>rm</code> directo) · sqlite/src/index.ts:371 (<code>DELETE</code> directo) · host/apiproxy/src/api-proxy.ts:2685</p>
+<p><code>PersistenceCoordinator.remove</code> se escribió con la salvaguarda correcta: unirse a la cadena de escritura por-id y <em>esperar el drain del retirement</em> "so a late write-behind cannot re-materialize the id" — y así lo prometen el design note, el JSDoc y el README. Pero <strong>nadie lo llama</strong>: el borrado real es el <code>override remove</code> de cada backend, que hace <code>rm</code>/<code>DELETE</code> directo, saltándose el coordinator. Es una colisión de nombres (la primitiva del backend y el método de servicio se llaman igual, así que delegar causaría recursión). Consecuencias, todas confirmadas:</p>
+<ul>
+  <li><strong>Carrera con el flush final</strong>: <code>api-proxy</code> hace <code>dispose()</code> (retire fire-and-forget) y luego <code>remove()</code> sin esperar el drain. Si el <code>rm</code> gana → borrado silencioso o log huérfano; si pierde → re-materialización del log tras el borrado.</li>
+  <li><strong>Estado en memoria stale</strong>: <code>remove</code> no hace <code>states.delete</code> ni <code>preparations.invalidate</code>. Tras borrar una sesión ya cargada: el id queda <strong>bloqueado para reutilización</strong> el resto de la vida del proceso, un <code>append</code> posterior falla distinto en cada backend (ENOENT en jsonl, FK violation en sqlite), y <code>states</code> <strong>fuga</strong> sin cota al ver+borrar historial repetidamente.</li>
+  <li>El <code>signal</code> nunca llega al backend (se llama sin él); todo el manejo de abort solo lo ejercen los tests.</li>
+</ul>
+<p>Hoy el path end-to-end es seguro <em>por construcción</em> (el <code>dispose()</code> previo cubre la sesión viva), pero la garantía la sostiene el caller por accidente, no el coordinator, y el estado stale sí muerde al borrar sesiones frías. Ningún test cubre el borrado con escritura en vuelo.</p>
+<p><strong>Propuesta (una corrección cubre las tres facetas):</strong> renombrar la primitiva del backend (p.ej. <code>removeStored</code>); que <code>coordinator.remove</code> la invoque, espere el retirement <em>y</em> limpie <code>states</code>/<code>preparations</code>; y que el <code>remove</code> público de cada backend delegue en <code>coordinator.remove</code> — igual que <code>append</code>. Añadir tests de "reuse tras remove", "append tras remove" y "borrar con cola pendiente". Path traversal en el id: <strong>no</strong> explotable (bien resuelto por <code>encodeSegment</code>).</p></div>
+
+<h2><span class="n">02</span>Altos</h2>
+
+<div class="f warn"><h3><span class="tag warn">alto</span>Un pico transitorio de I/O deshabilita la persistencia de por vida → pérdida de datos</h3>
+<p class="where">packages/session/session-persistence-jsonl/src/index.ts:898</p>
+<p><code>ensureRootEncoding</code> memoiza con <code>this.rootEncodingCheck ??= this.checkRootEncoding()</code>, y <code>checkRootEncoding</code> relanza cualquier error no-ENOENT (EIO, EMFILE, EACCES transitorio). Como <code>??=</code> no reasigna una promesa ya rechazada, <strong>un único fallo transitorio de FS queda cacheado para siempre</strong>: todo <code>append</code>/<code>load</code>/<code>remove</code> posterior espera esa promesa rechazada. En una sesión viva, el write-behind falla repetidamente y —vía la suspensión de durabilidad que agregó la ronda 1— tras 5 intentos <strong>descarta eventos</strong>. Un pico de I/O escala a pérdida de datos para el resto del proceso.</p>
+<p><strong>Propuesta:</strong> no memoizar el rechazo — limpiar <code>rootEncodingCheck</code> ante un error transitorio (retry en la próxima llamada) y cachear solo el éxito o un error de configuración determinista (mismatch de compresión / layout legacy).</p></div>
+
+<div class="f warn"><h3><span class="tag warn">alto</span><code>/skill</code> mata el turno de forma repetida si el provider falla al resolver</h3>
+<p class="where">packages/skill/tool-skill/src/index.ts:189 · skill/src/index.ts:507 · skill-badge/src/index.ts:47</p>
+<p><code>ctx.skills.get(name)</code> se llama sin try/catch dentro del listener <code>agent/pre-step</code>. El registry envuelve <code>list()</code> pero <strong>no</strong> <code>get()</code> ni <code>validateDefinition</code>. Y <code>skill-badge</code> —siempre registrado de fábrica— hace <code>readFile</code> sin try/catch. Si un skill fue listado pero al resolverlo falla (permisos cambiados, fs transitorio, definición malformada), el pre-step rechaza → el turno muere → el prompt sigue en el mensaje → reintenta → vuelve a morir: <strong>sesión trabada</strong>, el mismo patrón que la ronda 1 corrigió en otros lados. Los propios autores documentan el riesgo pero solo blindaron el catálogo.</p>
+<p><strong>Propuesta:</strong> contener el fallo en el registry como ya hace <code>list()</code> (try/catch alrededor de <code>provider.get()</code> + <code>validateDefinition</code> → warn + <code>undefined</code>; el contrato ya admite "or undefined if no longer loadable").</p></div>
+
+<div class="f warn"><h3><span class="tag warn">alto</span>Cliente: estado divergente silencioso si el assembler lanza sobre un evento en vivo</h3>
+<p class="where">packages/client/runtime/src/client/sessions/session.ts:668</p>
+<p><code>appendLive</code> hace <code>events.push</code>/<code>views.push</code> <em>antes</em> de <code>conversation.append</code>, que está lleno de invariantes que lanzan. La excepción sube hasta <code>callSink</code>, que la <strong>traga y loguea</strong>, y el pump sigue: <code>events</code>/<code>views</code> quedan con el evento y <code>windowTailSeq</code> avanza, pero el snapshot de conversación no lo refleja y el assembler quedó a medias. La UI muestra una conversación que no corresponde al log, sin error visible, hasta un resync. Requiere que el backend viole el contrato de orden/unicidad — es robustez, no flujo feliz.</p>
+<p><strong>Propuesta:</strong> envolver <code>appendLive</code> en try/catch que no avance <code>events</code>/<code>views</code> ante fallo y marque la sesión para resync; o degradar los invariantes del assembler en la ruta en vivo a "drop + log".</p></div>
+
+<h2><span class="n">03</span>Medios</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>Hallazgo</th><th>Dónde</th><th>Propuesta</th></tr></thead>
+  <tbody>
+    <tr><td>Invariantes de <code>permission-presets</code> y <code>time-context</code> fallan <em>duro</em> ante un preset/zona histórica que el runtime <em>sí</em> tolera → rompen la carga de la sesión al reiniciar.</td><td class="num">permission-presets/src/invariant.ts:15 · time-context/src/request-zone.ts:26</td><td>Tolerar (skip/warn) lo históricamente válido y hoy desconocido; usar <code>fail()</code> en vez de <code>throw</code> crudo.</td></tr>
+    <tr><td><code>time-context</code> lanza <code>TypeError</code> ante un <code>clientTimeZone</code> no canónico → falla el step (asimetría: todo lo demás degrada a no-op).</td><td class="num">time-context/src/request-zone.ts</td><td>Devolver <code>undefined</code> (degradar a 'missing'/'mixed') en vez de lanzar.</td></tr>
+    <tr><td>Cliente: la ventana crece sin cota en sesiones largas (2000+ pasos) — memoria en varias representaciones + <code>rebuildFinalized</code> O(n²·log n) en una slice legacy consumida viva.</td><td class="num">runtime/.../session.ts:671 · ui-conversation/.../chat-snapshot-builder.ts:322</td><td>Virtualizar/ventanear la cola (soltar el prefijo re-hidratable) y rehacer <code>rebuildFinalized</code> incremental.</td></tr>
+    <tr><td>Carreras menores del borrado: sin dedup por-id (<code>delete</code> vs <code>create</code> puede re-crear tras borrar); <code>forgetSession</code> no atómico ante fallo parcial.</td><td class="num">api-proxy.ts (delete) · workspace/workspace/src/index.ts</td><td>Dedup por-id como <code>create</code>; ordenar <code>forgetSession</code> antes de <code>remove</code> o hacerlo tolerante.</td></tr>
+    <tr><td><code>tool-cordis</code> <code>inspectSelfPackage</code> castea salida del runtime vivo con <code>as unknown as</code> sin revalidar, mientras la tool hermana <code>cordis_run</code> sí valida.</td><td class="num">extensions/tool-cordis/src/index.ts:494</td><td>Pasar la salida por el mismo <code>requireJsonObject</code> que usa la hermana.</td></tr>
+    <tr><td>MCP: <code>structuredContent</code> del servidor no se valida contra el <code>outputSchema</code> que el propio servidor anunció (boundary externo real).</td><td class="num">mcp/mcp-client/src/tools.ts:255</td><td>Validar contra el schema anunciado, o marcarlo explícitamente no confiable.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="n">04</span>Bajos e higiene</h2>
+<ul>
+  <li><strong>free-scan</strong>: enumeración CT sin tope (un cert con muchos SANs infla el mapeo → DoS de hasta 75 min del slot único) — poner un tope de nombres; el token del worker se pasa vía <code>process.env</code> completo al hijo (parcialmente mitigado: el bash del agente scrubea <code>/TOKEN/i</code>) — pasar solo las vars necesarias; validar <code>job.domain</code> con regex de hostname en <code>worker.mjs</code>.</li>
+  <li><strong>hooks</strong>: <code>SubagentStop</code> es el único <code>detached.track</code> sin <code>.catch</code>; el <code>timeout</code> por-hook no se valida al cargar (un <code>0</code>/negativo deshabilita el hook con un stderr críptico en vez de rechazarse).</li>
+  <li><strong>cliente</strong>: <code>turnDataStores</code>/<code>stepDataStores</code> y <code>SessionManager.addresses</code> no se podan (leaks acotados al histórico de la sesión); <code>deleteSession</code> puede dejar una fila colgada por single-flight del refresh (registrar mutación optimista).</li>
+  <li><strong>dead code</strong>: <code>scripts/build-exe-for-python-sdk.ts</code> sin uso; deps declaradas sin usar (<code>zod</code>/<code>schemastery</code> en document-attach y usage-stats); varios <code>export</code> sin importadores externos; el <code>postHeartbeat</code> del worker apunta a un endpoint que vive en websky (externo).</li>
+</ul>
+
+<h2><span class="n">05</span>Descartado tras verificar (dónde NO hay problema)</h2>
+<div class="f ok"><h3><span class="tag ok">sano</span>Lo que se revisó y está bien</h3>
+<ul>
+  <li><strong>Type-safety no está erosionada</strong>: 0 <code>as any</code> reales en fuente, solo 4 non-null assertions. Codebase disciplinado.</li>
+  <li><strong>Persistencia sin corrupción silenciosa</strong> en caminos normales: round-trip de compresión lossless, recuperación de cola torn alineada jsonl↔sqlite, frames zstd con checksum y header-first verificado, sqlite atómico (una conexión síncrona), <code>eventAt</code> no filtra referencia mutable.</li>
+  <li><strong>Sanitización consistente</strong>: <code>sanitizeText</code>/<code>closeDanglingToolCalls</code> compartidos por ambos adaptadores; los tres rangos de control-chars distintos sirven propósitos distintos (prompt / ANSI / python), no son "dos formas de lo mismo".</li>
+  <li><strong>Path traversal en el borrado</strong>: no explotable. <strong>Autorización de subagentes</strong> en delete: correcta (<code>agent-busy</code>). <strong>Inyección de comandos</strong> en <code>worker.mjs</code>: descartada (<code>spawn</code> con argv array, sin shell).</li>
+  <li><strong>Subsistemas sólidos</strong>: hook-protocol (merge deny&gt;ask&gt;allow, codec con guard), ACP (correlación por turno, teardown), plan-mode, goal (CAS por revisión), preset (single-flight con stamp), user-approval y commands (fail-closed).</li>
+</ul>
+</div>
+
+<h2><span class="n">06</span>Plan de corrección sugerido</h2>
+<p class="lede">Mismo método que la ronda anterior: test primero, gates por paquete, un commit por hallazgo, verificación cruzada. Orden por riesgo:</p>
+<div class="scroll">
+<table>
+  <thead><tr><th>#</th><th>Corrección</th><th>Por qué primero</th></tr></thead>
+  <tbody>
+    <tr><td class="num">1</td><td>SSRF free-scan: validación de IP en el harness + egress filtering en el unit + IP en web-fetch</td><td>Único explotable remotamente por un tercero anónimo</td></tr>
+    <tr><td class="num">2</td><td>Enrutar el borrado por el coordinator (removeStored + espera de retirement + limpieza de states/preparations)</td><td>Feature destructiva; cubre 3 hallazgos de una vez</td></tr>
+    <tr><td class="num">3</td><td><code>ensureRootEncoding</code>: no cachear el rechazo transitorio</td><td>Escala a pérdida de datos vía la suspensión de durabilidad</td></tr>
+    <tr><td class="num">4</td><td>try/catch en <code>skills.get()</code> del registry</td><td>Sesión trabada; patrón ya conocido</td></tr>
+    <tr><td class="num">5</td><td>try/catch en <code>appendLive</code> + resync</td><td>Estado divergente silencioso en la UI</td></tr>
+    <tr><td class="num">6</td><td>Invariantes que toleren histórico (presets, timezone); resto de medios</td><td>Robustez al reiniciar; menor urgencia</td></tr>
+    <tr><td class="num">7</td><td>Higiene: dead code, deps, leaks acotados, hooks</td><td>Sin urgencia</td></tr>
+  </tbody>
+</table>
+</div>
+
+<footer>
+  Seis auditorías paralelas (borrado de sesiones, seguridad free-scan, subsistemas del harness, persistencia y concurrencia, cliente web, consistencia transversal) sobre <code>master</code> en 747bd10e34, con verificación cruzada de cada hallazgo citable contra el código. Ninguna afirmación proviene solo del reporte de un agente. El borrado de sesiones fue señalado de forma independiente por tres frentes distintos.
+</footer>
+
+</div>
+</body>
+</html>
