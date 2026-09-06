@@ -3,11 +3,12 @@
  * enforces time and size limits, classifies and decodes text, and leaves presentation to
  * `@deepseek-ai/dsh-tool-web`. Requests carry no browser cookies or ambient credentials.
  *
- * SSRF defense-in-depth: before each hop the resolved target is checked against a
- * deny-list of private / loopback / link-local / reserved ranges (see isBlockedAddress).
- * A literal-IP host is checked with no race; a DNS name is resolved and every answer is
- * checked, which is best-effort (a rebinding window remains between this lookup and the
- * socket connect) — the authoritative control is the worker's kernel egress filter.
+ * SSRF protection: every hop's target is checked against a deny-list of private /
+ * loopback / link-local / reserved ranges (see isBlockedAddress). A literal-IP host is
+ * refused up front; a DNS name is pinned at connect time by a dedicated undici dispatcher
+ * (see guardedLookup) that validates the exact address the socket will use, closing the
+ * DNS-rebinding window. The worker's kernel egress filter (scan-worker/harden-deploy.sh),
+ * whose deny-list mirrors isBlockedAddress, remains the last line of defense.
  * Set allowPrivateAddresses to opt out (e.g. a loopback test server).
  * @module @deepseek-ai/dsh-web-fetch-http/provider
  */
@@ -17,6 +18,9 @@ import type { WebFetchBody, WebFetchProvider, WebFetchRequest, WebFetchResult } 
 import { deadline, timeoutOf } from '@deepseek-ai/dsh-timeout'
 import net from 'node:net'
 import { lookup } from 'node:dns/promises'
+import { lookup as lookupCb } from 'node:dns'
+import type { LookupAddress, LookupOptions } from 'node:dns'
+import { Agent } from 'undici'
 import { classifyContentType, decoderForCharset, isBlockedAddress, isSameOrigin, parseCharset, validateFetchUrl } from './policy.ts'
 
 /** Resolved provider limits (the plugin's schemastery Config supplies defaults). */
@@ -44,7 +48,19 @@ export const LOCAL_FETCH_PROVIDER_ID = 'http'
 export class HttpFetchProvider implements WebFetchProvider {
   readonly id = LOCAL_FETCH_PROVIDER_ID
 
-  constructor(private readonly limits: HttpFetchLimits) {}
+  /**
+   * When the private-address guard is active, a dedicated undici dispatcher pins
+   * every connection to a validated resolved IP (see {@link guardedLookup}),
+   * closing the DNS-rebinding window. Left undefined under `allowPrivateAddresses`
+   * so `fetch` uses the default global dispatcher.
+   */
+  private readonly dispatcher: Agent | undefined
+
+  constructor(private readonly limits: HttpFetchLimits) {
+    this.dispatcher = limits.allowPrivateAddresses
+      ? undefined
+      : new Agent({ connect: { lookup: guardedLookup } })
+  }
 
   /** No credentials to check — an anonymous public fetcher is always usable. */
   available(): boolean {
@@ -110,16 +126,14 @@ export class HttpFetchProvider implements WebFetchProvider {
   }
 
   /**
-   * Refuse a target that points at an internal/reserved address. A literal-IP
-   * host is classified directly, with no race. A hostname is resolved here and
-   * every answer classified, but this is best-effort only: `fetch` (undici)
-   * re-resolves the name independently when it opens the socket, so an attacker
-   * controlling the domain's DNS can answer a public IP here and an internal one
-   * to the connect (DNS rebinding) on every request. Closing that window would
-   * need the resolved IP pinned into the connection (a custom undici dispatcher
-   * or an http.request lookup), which this provider does not do; the AUTHORITATIVE
-   * control is the worker's kernel egress filter (scan-worker/harden-deploy.sh),
-   * whose deny-list mirrors isBlockedAddress. Opted out by `allowPrivateAddresses`.
+   * Pre-flight refusal of a target that points at an internal/reserved address:
+   * a literal-IP host is classified directly (no DNS), and a hostname is resolved
+   * and every answer classified, so the common case fails fast with a clear
+   * WEB_BLOCKED_URL before any connection. This is not the race-free layer — the
+   * pinned dispatcher (guardedLookup) validates the exact connect-time address and
+   * closes the rebinding window — but it gives an early, precise error and covers
+   * literal IPs, which the connector's lookup never sees. Opted out by
+   * `allowPrivateAddresses`.
    */
   private async assertHostAllowed(url: URL, signal: AbortSignal): Promise<void> {
     if (this.limits.allowPrivateAddresses) return
@@ -154,8 +168,14 @@ export class HttpFetchProvider implements WebFetchProvider {
         redirect: 'manual',
         headers: { 'user-agent': this.limits.userAgent, 'accept': 'text/html,application/xhtml+xml,text/*;q=0.9,application/json;q=0.8' },
         signal,
+        ...this.dispatcher === undefined ? {} : { dispatcher: this.dispatcher },
       })
     } catch (error: unknown) {
+      // A blocked address rejects the connection with our WebError on the cause
+      // chain (undici wraps the connector's lookup error): surface it verbatim
+      // so the guard reads as WEB_BLOCKED_URL, not a generic network failure.
+      const blocked = webErrorCause(error)
+      if (blocked !== undefined) throw blocked
       throw translateAbortOrNetwork(error, signal)
     }
   }
@@ -252,6 +272,52 @@ export class HttpFetchProvider implements WebFetchProvider {
     }
     return { bytes, truncatedByBytes }
   }
+}
+
+/**
+ * A DNS lookup for the fetch connector that pins the connection to a validated
+ * address: it resolves EVERY answer and refuses (via the callback error) if any
+ * is a private/reserved address (see {@link isBlockedAddress}). Because undici
+ * connects to exactly the address this lookup returns, there is no gap between
+ * validation and connect — this closes the DNS-rebinding window the standalone
+ * pre-flight check cannot. A WebError `WEB_BLOCKED_URL` surfaces on the fetch
+ * rejection's `cause`, recovered by {@link webErrorCause}.
+ *
+ * @param hostname - the host undici is about to connect to.
+ * @param options - node lookup options supplied by the connector.
+ * @param callback - node lookup callback; called with the validated addresses
+ *   or a blocking error.
+ */
+export function guardedLookup(
+  hostname: string,
+  options: LookupOptions,
+  callback: (err: NodeJS.ErrnoException | null, addresses: string | LookupAddress[], family?: number) => void,
+): void {
+  lookupCb(hostname, { ...options, all: true }, (error, addresses) => {
+    if (error !== null) {
+      callback(error, [])
+      return
+    }
+    const blocked = addresses.find(entry => isBlockedAddress(entry.address))
+    if (blocked !== undefined) {
+      callback(
+        new WebError(`host "${hostname}" resolves to a private or reserved address (${blocked.address})`, 'WEB_BLOCKED_URL'),
+        [],
+      )
+      return
+    }
+    callback(null, addresses)
+  })
+}
+
+/** Walk an error's `cause` chain for a WebError (undici wraps a lookup rejection). */
+function webErrorCause(error: unknown): WebError | undefined {
+  let current: unknown = error
+  for (let depth = 0; depth < 5 && current instanceof Error; depth++) {
+    if (current instanceof WebError) return current
+    current = current.cause
+  }
+  return undefined
 }
 
 /** HTTP redirect status codes that carry a `Location`. */

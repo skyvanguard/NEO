@@ -1,7 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { lookup } from 'node:dns/promises'
+import { lookup as lookupCb } from 'node:dns'
+import { guardedLookup } from '../src/provider.ts'
+
+// Typed handle over the mocked node:dns callback lookup (undici's pinned connector uses it).
+type DnsCb = (err: Error | null, addrs: { address: string; family: number }[]) => void
+const dnsCbMock = vi.mocked(lookupCb as unknown as (host: string, opts: object, cb: DnsCb) => void)
 
 vi.mock('node:dns/promises', () => ({ lookup: vi.fn() }))
+vi.mock('node:dns', () => ({ lookup: vi.fn() }))
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { AddressInfo } from 'node:net'
 import { Context } from '@deepseek-ai/cordis'
@@ -452,6 +459,45 @@ describe('HttpFetchProvider SSRF address guard', () => {
     vi.stubGlobal('fetch', vi.fn())
     await expect(guarded().fetch({ url: 'http://nope.invalid/' }))
       .rejects.toThrow(expect.objectContaining({ code: 'WEB_PROVIDER_ERROR' }))
+  })
+
+  it('pins the connection: a host public at pre-flight but private at connect is blocked (rebinding)', async () => {
+    // Pre-flight (dns/promises) sees a public address and passes.
+    lookupMock.mockResolvedValue([{ address: '93.184.216.34', family: 4 }])
+    // The pinned dispatcher's connect-time resolution (node:dns) sees a private
+    // address: the connection must be refused before any socket opens.
+    dnsCbMock.mockImplementation((_host, _opts, cb) => { cb(null, [{ address: '127.0.0.1', family: 4 }]) })
+    await expect(guarded().fetch({ url: 'http://rebind.test/' }))
+      .rejects.toThrow(expect.objectContaining({ code: 'WEB_BLOCKED_URL' }))
+  })
+})
+
+describe('guardedLookup connection pinning', () => {
+  it('passes through addresses that are all public', () => {
+    dnsCbMock.mockImplementation((_host, _opts, cb) => { cb(null, [{ address: '93.184.216.34', family: 4 }]) })
+    let error: unknown = 'unset'
+    let addresses: unknown
+    guardedLookup('example.test', {}, (err, addrs) => { error = err; addresses = addrs })
+    expect(error).toBeNull()
+    expect(addresses).toEqual([{ address: '93.184.216.34', family: 4 }])
+  })
+
+  it('refuses when any resolved address is private or reserved', () => {
+    dnsCbMock.mockImplementation((_host, _opts, cb) => {
+      cb(null, [{ address: '93.184.216.34', family: 4 }, { address: '10.0.0.5', family: 4 }])
+    })
+    let error: unknown
+    guardedLookup('intranet.test', {}, (err) => { error = err })
+    expect(error).toMatchObject({ code: 'WEB_BLOCKED_URL' })
+    expect(String(error)).toContain('10.0.0.5')
+  })
+
+  it('forwards a DNS resolution error unchanged', () => {
+    const dnsError = Object.assign(new Error('ENOTFOUND'), { code: 'ENOTFOUND' })
+    dnsCbMock.mockImplementation((_host, _opts, cb) => { cb(dnsError, []) })
+    let error: unknown
+    guardedLookup('nope.invalid', {}, (err) => { error = err })
+    expect(error).toBe(dnsError)
   })
 })
 

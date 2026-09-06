@@ -419,10 +419,10 @@
     # concrete URL during reconnaissance. web-fetch-http blocks private / loopback /
     # link-local / reserved targets by default (allowPrivateAddresses defaults to
     # false); the model cannot fetch internal or cloud-metadata addresses through it.
-    # This is a best-effort application-layer guard with a DNS-rebinding window — the
-    # authoritative control is the worker's kernel egress filter (scan-worker/
-    # harden-deploy.sh). Set allowPrivateAddresses: true ONLY for a deployment
-    # explicitly authorized to target internal infrastructure.
+    # A pinned undici dispatcher validates the exact connect-time IP, closing the
+    # DNS-rebinding window; the worker's kernel egress filter (scan-worker/
+    # harden-deploy.sh) is the last line of defense. Set allowPrivateAddresses: true
+    # ONLY for a deployment explicitly authorized to target internal infrastructure.
     - id: web
       name: '@deepseek-ai/dsh-web'
       config:
