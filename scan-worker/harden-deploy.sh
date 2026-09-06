@@ -107,6 +107,16 @@ ReadWritePaths=${WORKSPACE}
 ProtectControlGroups=true
 ProtectKernelModules=true
 RestrictSUIDSGID=true
+# Egress filtering: cierra el SSRF del free-scan a nivel de kernel. El scanner
+# necesita alcanzar IPs publicas arbitrarias (cualquier dominio de cliente),
+# pero NUNCA la red interna. Un dominio del atacante cuyo DNS/CT resuelva a
+# loopback o a la red docker de kryon queda bloqueado aca, cubriendo por igual
+# curl/openssl del bash del agente y web_fetch.
+# Si el API de resultados (SCAN_API_BASE) vive en una IP privada, agregala como
+# IPAddressAllow=<ip> ANTES del deny (la regla mas especifica gana).
+IPAddressAllow=any
+IPAddressDeny=localhost link-local multicast 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8 ::1/128 fc00::/7 fe80::/10
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 
 [Install]
 WantedBy=multi-user.target

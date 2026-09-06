@@ -3,15 +3,21 @@
  * enforces time and size limits, classifies and decodes text, and leaves presentation to
  * `@deepseek-ai/dsh-tool-web`. Requests carry no browser cookies or ambient credentials.
  *
- * Private-network and SSRF protection is not implemented; do not enable this provider where
- * it can reach sensitive internal targets.
+ * SSRF defense-in-depth: before each hop the resolved target is checked against a
+ * deny-list of private / loopback / link-local / reserved ranges (see isBlockedAddress).
+ * A literal-IP host is checked with no race; a DNS name is resolved and every answer is
+ * checked, which is best-effort (a rebinding window remains between this lookup and the
+ * socket connect) — the authoritative control is the worker's kernel egress filter.
+ * Set allowPrivateAddresses to opt out (e.g. a loopback test server).
  * @module @deepseek-ai/dsh-web-fetch-http/provider
  */
 
 import { WebError } from '@deepseek-ai/dsh-web'
 import type { WebFetchBody, WebFetchProvider, WebFetchRequest, WebFetchResult } from '@deepseek-ai/dsh-web'
 import { deadline, timeoutOf } from '@deepseek-ai/dsh-timeout'
-import { classifyContentType, decoderForCharset, isSameOrigin, parseCharset, validateFetchUrl } from './policy.ts'
+import net from 'node:net'
+import { lookup } from 'node:dns/promises'
+import { classifyContentType, decoderForCharset, isBlockedAddress, isSameOrigin, parseCharset, validateFetchUrl } from './policy.ts'
 
 /** Resolved provider limits (the plugin's schemastery Config supplies defaults). */
 export interface HttpFetchLimits {
@@ -27,6 +33,8 @@ export interface HttpFetchLimits {
   maxRedirects: number
   /** `User-Agent` header sent on every request. */
   userAgent: string
+  /** When true, skip the private/reserved-address guard (e.g. a loopback test server). */
+  allowPrivateAddresses: boolean
 }
 
 /** Stable id this provider registers under. */
@@ -58,6 +66,7 @@ export class HttpFetchProvider implements WebFetchProvider {
     let redirectsFollowed = 0
 
     for (;;) {
+      await this.assertHostAllowed(currentUrl, signal)
       const response = await this.requestOnce(currentUrl, signal)
 
       if (isRedirectStatus(response.status)) {
@@ -97,6 +106,39 @@ export class HttpFetchProvider implements WebFetchProvider {
       }
 
       return await this.readBody(response, currentUrl, signal)
+    }
+  }
+
+  /**
+   * Refuse a target that points at an internal/reserved address. A literal-IP
+   * host is classified directly (no DNS, no race); a hostname is resolved and
+   * every answer classified — best-effort, since the connection re-resolves
+   * (DNS rebinding), so this layers on top of the kernel egress filter rather
+   * than replacing it. Opted out by `allowPrivateAddresses`.
+   */
+  private async assertHostAllowed(url: URL, signal: AbortSignal): Promise<void> {
+    if (this.limits.allowPrivateAddresses) return
+    // URL hostnames keep IPv6 in brackets; strip them for classification/lookup.
+    const host = url.hostname.startsWith('[') && url.hostname.endsWith(']') ? url.hostname.slice(1, -1) : url.hostname
+    if (net.isIP(host) !== 0) {
+      if (isBlockedAddress(host)) {
+        throw new WebError(`refusing to fetch a private or reserved address: ${host}`, 'WEB_BLOCKED_URL')
+      }
+      return
+    }
+    signal.throwIfAborted()
+    let addresses: { address: string }[]
+    try {
+      addresses = await lookup(host, { all: true })
+    } catch (error: unknown) {
+      /* v8 ignore next -- a lookup rejection racing an already-aborted signal; the resolve-failure path is tested. */
+      if (signal.aborted) throw translateAbortOrNetwork(error, signal)
+      throw new WebError(`could not resolve host "${host}"`, 'WEB_PROVIDER_ERROR', { cause: error })
+    }
+    for (const { address } of addresses) {
+      if (isBlockedAddress(address)) {
+        throw new WebError(`host "${host}" resolves to a private or reserved address (${address})`, 'WEB_BLOCKED_URL')
+      }
     }
   }
 

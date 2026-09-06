@@ -1,4 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { lookup } from 'node:dns/promises'
+
+vi.mock('node:dns/promises', () => ({ lookup: vi.fn() }))
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { AddressInfo } from 'node:net'
 import { Context } from '@deepseek-ai/cordis'
@@ -6,7 +9,7 @@ import WebRuntime from '@deepseek-ai/dsh-web'
 import { HttpFetchProvider, LOCAL_FETCH_PROVIDER_ID } from '@deepseek-ai/dsh-web-fetch-http'
 import type { HttpFetchLimits } from '@deepseek-ai/dsh-web-fetch-http'
 import * as fetchPlugin from '@deepseek-ai/dsh-web-fetch-http'
-import { classifyContentType, decoderForCharset, isSameOrigin, parseCharset, validateFetchUrl } from '../src/policy.ts'
+import { classifyContentType, decoderForCharset, isBlockedAddress, isSameOrigin, parseCharset, validateFetchUrl } from '../src/policy.ts'
 
 const limits: HttpFetchLimits = {
   maxUrlLength: 2048,
@@ -15,6 +18,9 @@ const limits: HttpFetchLimits = {
   timeoutMs: 5_000,
   maxRedirects: 5,
   userAgent: 'test-agent/1.0',
+  // The test server lives on 127.0.0.1; the harness opts in so the guard does
+  // not block it. Production defaults to allowPrivateAddresses:false.
+  allowPrivateAddresses: true,
 }
 
 type Handler = (req: IncomingMessage, res: ServerResponse) => void
@@ -75,6 +81,38 @@ describe('policy helpers', () => {
     expect(decoderForCharset(undefined).encoding).toBe('utf-8')
     expect(decoderForCharset('iso-8859-1').encoding).toBe('windows-1252')
     expect(() => decoderForCharset('not-a-charset')).toThrow(expect.objectContaining({ code: 'WEB_UNSUPPORTED_CONTENT_TYPE' }))
+  })
+
+  it('flags private, loopback, link-local, and reserved IPv4 literals', () => {
+    for (const blocked of [
+      '0.0.0.0', '10.1.2.3', '100.64.0.1', '127.0.0.1', '169.254.169.254',
+      '172.16.0.1', '172.31.255.255', '192.0.0.1', '192.168.1.1', '198.18.0.1',
+      '224.0.0.1', '240.0.0.1', '255.255.255.255',
+    ]) expect(isBlockedAddress(blocked), blocked).toBe(true)
+  })
+
+  it('allows public IPv4 literals', () => {
+    for (const ok of ['8.8.8.8', '1.1.1.1', '172.32.0.1', '192.169.0.1', '199.36.158.100', '223.255.255.255']) {
+      expect(isBlockedAddress(ok), ok).toBe(false)
+    }
+  })
+
+  it('flags internal IPv6 literals including embedded IPv4', () => {
+    for (const blocked of [
+      '::', '::1', 'fe80::1', 'fc00::1', 'fd12:3456::1', 'ff02::1',
+      '::ffff:127.0.0.1', '::ffff:10.0.0.1', '64:ff9b::7f00:1', '64:ff9b::127.0.0.1',
+      '2002:7f00:0001::1', '2002:c0a8:0101::1', '0:0:0:0:0:0:0:1',
+      'fe80::1%eth0',
+    ]) expect(isBlockedAddress(blocked), blocked).toBe(true)
+  })
+
+  it('allows public IPv6 literals and returns false for hostnames', () => {
+    expect(isBlockedAddress('2606:4700:4700::1111')).toBe(false)
+    expect(isBlockedAddress('::ffff:8.8.8.8')).toBe(false)
+    expect(isBlockedAddress('2002:0808:0808::1')).toBe(false)
+    expect(isBlockedAddress('example.com')).toBe(false)
+    expect(isBlockedAddress('not-an-ip')).toBe(false)
+    expect(isBlockedAddress('256.256.256.256')).toBe(false)
   })
 })
 
@@ -367,11 +405,60 @@ describe('HttpFetchProvider body cancellation on error paths', () => {
   })
 })
 
+describe('HttpFetchProvider SSRF address guard', () => {
+  const guarded = () => provider({ allowPrivateAddresses: false })
+  const okResponse = () => new Response('ok', { headers: { 'content-type': 'text/plain' } })
+  const lookupMock = vi.mocked(lookup as unknown as (host: string, opts: { all: true }) => Promise<{ address: string; family: number }[]>)
+
+  it('refuses a literal private/loopback/link-local IPv4 target before any request', async () => {
+    const fetchSpy = vi.fn()
+    vi.stubGlobal('fetch', fetchSpy)
+    for (const url of ['http://127.0.0.1/', 'http://10.0.0.5/', 'http://169.254.169.254/latest/meta-data/']) {
+      await expect(guarded().fetch({ url })).rejects.toThrow(expect.objectContaining({ code: 'WEB_BLOCKED_URL' }))
+    }
+    expect(fetchSpy).not.toHaveBeenCalled()
+  })
+
+  it('refuses a bracketed IPv6 loopback literal', async () => {
+    vi.stubGlobal('fetch', vi.fn())
+    await expect(guarded().fetch({ url: 'http://[::1]/' }))
+      .rejects.toThrow(expect.objectContaining({ code: 'WEB_BLOCKED_URL' }))
+  })
+
+  it('allows a public literal IP and proceeds to fetch', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => okResponse()))
+    const result = await guarded().fetch({ url: 'http://8.8.8.8/' })
+    expect(result.body).toEqual({ kind: 'text', content: 'ok' })
+  })
+
+  it('refuses a hostname that resolves to a private address', async () => {
+    lookupMock.mockResolvedValue([{ address: '10.1.2.3', family: 4 }])
+    vi.stubGlobal('fetch', vi.fn())
+    const error = await guarded().fetch({ url: 'http://intranet.test/' }).catch((reason: unknown) => reason)
+    expect(error).toMatchObject({ code: 'WEB_BLOCKED_URL' })
+    expect(String(error)).toContain('10.1.2.3')
+  })
+
+  it('allows a hostname that resolves only to public addresses', async () => {
+    lookupMock.mockResolvedValue([{ address: '93.184.216.34', family: 4 }])
+    vi.stubGlobal('fetch', vi.fn(async () => okResponse()))
+    const result = await guarded().fetch({ url: 'http://example.test/' })
+    expect(result.body).toEqual({ kind: 'text', content: 'ok' })
+  })
+
+  it('reports an unresolvable host as a provider error', async () => {
+    lookupMock.mockRejectedValue(new Error('ENOTFOUND'))
+    vi.stubGlobal('fetch', vi.fn())
+    await expect(guarded().fetch({ url: 'http://nope.invalid/' }))
+      .rejects.toThrow(expect.objectContaining({ code: 'WEB_PROVIDER_ERROR' }))
+  })
+})
+
 describe('web-fetch-http plugin registration', () => {
   it('registers the provider into ctx.web (HMR-safe)', async () => {
     const ctx = new Context()
     await ctx.plugin(WebRuntime, { fetchProvider: LOCAL_FETCH_PROVIDER_ID })
-    const fiber = await ctx.plugin(fetchPlugin, {})
+    const fiber = await ctx.plugin(fetchPlugin, { allowPrivateAddresses: true })
     await expect(ctx.web.fetch({ url: `${base}/` }))
       .resolves.toMatchObject({ statusCode: 200 })
     await fiber.dispose()
@@ -421,7 +508,7 @@ describe('web-fetch-http plugin registration', () => {
   it('accepts maxRedirects: 0 (follow no redirects) as valid config', async () => {
     const ctx = new Context()
     await ctx.plugin(WebRuntime, { fetchProvider: LOCAL_FETCH_PROVIDER_ID })
-    const fiber = await ctx.plugin(fetchPlugin, { maxRedirects: 0 })
+    const fiber = await ctx.plugin(fetchPlugin, { maxRedirects: 0, allowPrivateAddresses: true })
     await expect(ctx.web.fetch({ url: `${base}/` }))
       .resolves.toMatchObject({ statusCode: 200 })
     await fiber.dispose()

@@ -57,7 +57,11 @@
       facturas). THEN broaden discovery via Certificate Transparency: query
       `https://crt.sh/?q=%25.<domain>&output=json` (curl -sS, fall back to web_fetch),
       collect the distinct names, drop wildcards and duplicates, resolve each (dig +short)
-      and KEEP ONLY the ones that resolve and respond. Add the live ones to the surface —
+      and KEEP ONLY the ones that resolve and respond. DISCARD any host that resolves to a
+      private, loopback, link-local or reserved address (10/8, 172.16/12, 192.168/16, 127/8,
+      169.254/16, ::1, fc00::/7, fe80::/10): it is not part of the customer's public surface,
+      and connecting to it would probe internal infrastructure — never treat it as live.
+      Add the live ones to the surface —
       this is how you find the subdomains a fixed list misses. Note live hosts, services and
       technologies. Keep mapping cheap. THEN concentrate the analysis on the PRIMARY web
       asset (the given domain and its main site) and the most business-critical app you find
