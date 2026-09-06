@@ -407,6 +407,9 @@ export class JsonlSessionPersistence extends SessionPersistence implements Persi
     const result = { ...prefix, revision }
     // A later append/repair/remove changes the revision, so the next read misses
     // and re-reads — caching a (possibly torn) prefix here is always revision-safe.
+    // Delete-before-set so a re-read of an already-cached (now stale) path moves
+    // to the most-recent position too, keeping eviction strictly LRU.
+    this.prefixCache.delete(path)
     this.prefixCache.set(path, result)
     if (this.prefixCache.size > JsonlSessionPersistence.PREFIX_CACHE_MAX) {
       // Evict the least-recently-used entry (Map preserves insertion/refresh order).
