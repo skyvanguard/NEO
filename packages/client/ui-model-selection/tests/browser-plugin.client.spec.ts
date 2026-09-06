@@ -235,6 +235,9 @@ describe('ui-model-selection dual entry', () => {
 
   it('blocks the composer only once the Host reports the route unservable', async () => {
     const b = await bench()
+    // Pin the locale so the block reason is asserted against a known dictionary
+    // rather than the machine's navigator-derived default.
+    b.ctx.locale.setLocale('zh')
     b.mint('s1')
     const face = b.seat().inject!(sid('s1'))
 

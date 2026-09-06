@@ -23,3 +23,12 @@ export const en = {
   'row.instructions': 'Instructions',
   'menu.userOnly': 'user-only',
 } satisfies Record<SkillKey, string>
+
+/** Spanish dictionary, checked complete against the zh key set. */
+export const es = {
+  'row.running': 'Cargando skill',
+  'row.failed': 'Fallo al cargar el skill',
+  'row.stopped': 'Carga del skill detenida',
+  'row.instructions': 'Instrucciones',
+  'menu.userOnly': 'solo usuario',
+} satisfies Record<SkillKey, string>

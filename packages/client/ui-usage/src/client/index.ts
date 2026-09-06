@@ -6,7 +6,7 @@ import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
 // Pulls the `ctx.remote` Context augmentation and the `usage` namespace.
 import type {} from '@deepseek-ai/dsh-api-remotes/client'
 import { UsageSettingsSection, type UsageSectionInjected } from './UsageSettingsSection.tsx'
-import { en, zh, type UsageLocaleKey } from './locales.ts'
+import { en, es, zh, type UsageLocaleKey } from './locales.ts'
 
 export type { UsageSectionInjected, UsageSettingsSectionProps } from './UsageSettingsSection.tsx'
 export type { UsageLocaleKey } from './locales.ts'
@@ -26,7 +26,7 @@ export const inject = ['slots', 'locale', 'remote', 'remote.usage']
 
 /** Contribute the cumulative Usage section to Web Settings. */
 export function apply(ctx: ClientContext): void {
-  ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'ui-usage: dictionaries')
+  ctx.effect(() => ctx.locale.register(NS, { zh, en, es }), 'ui-usage: dictionaries')
 
   const t = ctx.locale.bind(NS)
   const summary: UsageSectionInjected['summary'] = async () => {

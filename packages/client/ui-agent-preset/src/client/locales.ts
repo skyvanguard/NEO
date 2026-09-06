@@ -141,6 +141,72 @@ export const zh: Record<AgentPresetSettingsKey, string> = {
   deleting: '正在删除…',
 }
 
+/** Spanish copy. */
+export const es: Record<AgentPresetSettingsKey, string> = {
+  title: 'Preset de agente',
+  description: 'Se aplica a las sesiones que inicies a partir de ahora. Las sesiones en curso conservan el preset con el que empezaron.',
+  loading: 'Cargando presets…',
+  error: 'No se pudieron cargar los presets de agente.',
+  userTrust: 'Personalizado',
+  seatHint: 'Preset de agente para la sesión que estás a punto de iniciar',
+  headerHint: 'El preset de agente que ejecuta esta sesión, fijado al iniciarse',
+  nav: 'Presets de agente',
+  sectionIntro:
+    'Un preset es la composición de plugins que ejecuta el agente de una sesión: sus herramientas, prompt y capacidades. '
+    + 'Duplica uno existente y hazlo tuyo, o deja que el agente redacte uno por ti en el modo Creator.',
+  builtIn: 'Integrado',
+  setDefault: 'Establecer por defecto',
+  view: 'Ver',
+  presetStandardName: 'Modo estándar',
+  presetStandardDescription:
+    'Agente de programación completo con edición de archivos, shell, búsqueda de archivos y web, skills, planificación, objetivos, subagentes y flujos de trabajo.',
+  presetCodeName: 'Modo código',
+  presetCodeDescription:
+    'Todas las capacidades del modo estándar, con las herramientas expuestas a través del SDK de Code Mode para que el modelo pueda combinar operaciones de varios pasos en un solo programa TypeScript.',
+  presetMinimalName: 'Modo mínimo',
+  presetMinimalDescription:
+    'Agente de programación de dos herramientas con bash persistente y str_replace_editor.',
+  presetCordisName: 'Modo Creator',
+  presetCordisDescription:
+    'Diseñado para crear presets de agente personalizados, con todas las capacidades del modo estándar más inspección en tiempo de ejecución, experimentos con plugins y guía para la autoría de presets.',
+  duplicate: 'Duplicar',
+  duplicateUnavailable: 'Este despliegue no tiene un directorio de presets con permiso de escritura',
+  delete: 'Eliminar',
+  presetId: 'Identificador',
+  presetIdPlaceholder: 'my-agent',
+  displayName: 'Nombre',
+  displayNamePlaceholder: 'Se muestra en el selector; por defecto usa el identificador',
+  inUse: 'En uso',
+  builtInGroup: 'Integrado',
+  customGroup: 'Personalizado',
+  noDescription: 'Sin descripción.',
+  brokenBadge: 'Error al cargar',
+  brokenNoCopy: 'Un preset que no se pudo cargar no puede duplicarse',
+  copyOf: 'Copiado de',
+  composition: 'Composición (agent.cordis.yml)',
+  cancel: 'Cancelar',
+  close: 'Cerrar',
+  retry: 'Reintentar',
+  copyTitle: 'Duplicar preset',
+  copyIntro:
+    'El preset completo se copia en esta máquina. El identificador pasa a ser el nombre de su directorio y no '
+    + 'se puede cambiar después; todo lo demás se edita en los propios archivos del preset.',
+  create: 'Crear',
+  creating: 'Creando…',
+  creatorDraft: 'Redacta un preset personalizado con el modo Creator',
+  openLocation: 'Abrir carpeta',
+  showLocation: 'Mostrar ubicación',
+  revealedPathLabel: 'Archivos del preset:',
+  idRequired: 'Dale un identificador al preset.',
+  idInvalid: 'Usa letras minúsculas, dígitos y guiones, empezando por una letra o un dígito.',
+  idTaken: 'Ya existe un preset con este identificador.',
+  deleteTitle: '¿Eliminar este preset?',
+  deleteDescription:
+    'Se elimina el directorio del preset. Las sesiones que ya se ejecutan sobre él siguen funcionando; las sesiones nuevas no pueden seleccionarlo.',
+  deleteConfirm: 'Eliminar',
+  deleting: 'Eliminando…',
+}
+
 /** Preset roster fields needed to resolve Web display copy. */
 export interface PresetDisplaySource {
   /** Stable preset id. */

@@ -46,15 +46,19 @@ describe('apply', () => {
     expect(inject).toEqual(['sessions', 'locale'])
   })
 
-  it('registers the bilingual menu dictionaries (group titles by source name + the pending row)', async () => {
+  it('registers the trilingual menu dictionaries (group titles by source name + the pending row)', async () => {
     const { ctx, locale } = await bench()
     await ctx.plugin({ inject: [...inject], apply }).await()
     const t = locale.bind('slash.menu')
+    locale.setLocale('zh')
     expect(t('command')).toBe('命令')
     locale.setLocale('en')
     expect(t('skill')).toBe('Skills')
     expect(t('subagent')).toBe('Subagents')
     expect(t('loading')).toBe('Loading…')
+    locale.setLocale('es')
+    expect(t('command')).toBe('Comandos')
+    expect(t('loading')).toBe('Cargando…')
   })
 
   it('mounts ctx.inputTriggers once sessions is up, before any conversation service exists', async () => {

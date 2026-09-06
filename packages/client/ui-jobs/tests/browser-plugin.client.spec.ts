@@ -13,7 +13,7 @@ import { apply as applyLocale, inject as localeInject } from '@deepseek-ai/dsh-c
 import { apply, inject } from '../src/client/index.ts'
 import { apply as applyNode } from '../src/index.ts'
 import * as JobInvariant from '../src/invariant.ts'
-import { en, NS, zh } from '../src/client/locales.ts'
+import { en, es, NS, zh } from '../src/client/locales.ts'
 
 /** Slot ledger reader: entry ids currently registered in the header list. */
 function headerEntryIds(ctx: Context): (string | undefined)[] {
@@ -59,9 +59,14 @@ describe('ui-job browser half', () => {
   it('registers both dictionaries under its own namespace and releases them with the fiber', async () => {
     const { ctx, fiber } = await bench()
     const translate = ctx.locale.bind(NS)
+    // Pin each locale explicitly rather than lean on the machine's
+    // navigator-derived default (which now resolves to the registered `es`).
+    ctx.locale.setLocale('zh')
     expect(translate('list.aria')).toBe(zh['list.aria'])
     ctx.locale.setLocale('en')
     expect(translate('list.aria')).toBe(en['list.aria'])
+    ctx.locale.setLocale('es')
+    expect(translate('list.aria')).toBe(es['list.aria'])
 
     // Withdrawn dictionaries leave the key unresolved rather than translated.
     await fiber.dispose()
@@ -70,6 +75,10 @@ describe('ui-job browser half', () => {
 
   it('keeps the English dictionary key-identical to the Chinese source of truth', () => {
     expect(Object.keys(en).sort()).toEqual(Object.keys(zh).sort())
+  })
+
+  it('keeps the Spanish dictionary key-identical to the Chinese source of truth', () => {
+    expect(Object.keys(es).sort()).toEqual(Object.keys(zh).sort())
   })
 })
 

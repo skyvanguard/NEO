@@ -90,6 +90,8 @@ describe('ui-theme apply', () => {
     const before = await bench()
     declareItems(before.slots)
     await before.ctx.plugin({ inject: [...inject], apply }).await()
+    // Product default is `es`; pin zh to assert the shipped Chinese copy.
+    before.locale.setLocale('zh')
     expect(before.locale.bind(SETTINGS_NS)('appearance.title')).toBe('外观')
     before.locale.setLocale('en')
     expect(before.locale.bind(SETTINGS_NS)('appearance.title')).toBe('Appearance')

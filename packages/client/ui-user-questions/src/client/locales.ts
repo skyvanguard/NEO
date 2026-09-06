@@ -36,3 +36,20 @@ export const en = {
   'plan.decline': 'Refuse',
   'plan.discuss': 'Chat about it',
 } satisfies Record<QuestionKey, string>
+
+/** Spanish dictionary, checked complete against the zh key set. */
+export const es = {
+  'error.incomplete': 'Primero completa esta pregunta.',
+  'error.unanswered': 'Selecciona una opción o escribe una respuesta personalizada.',
+  'nav.prev': 'Pregunta anterior',
+  'nav.next': 'Pregunta siguiente',
+  'nav.cancel': 'Descartar todas las preguntas',
+  'option.recommended': 'Recomendado',
+  'custom.placeholder': 'Escribe tu respuesta',
+  'action.skip': 'Omitir esta pregunta',
+  'action.next': 'Siguiente',
+  'plan.header': 'Plan pendiente de revisión',
+  'plan.approve': 'Aprobar',
+  'plan.decline': 'Rechazar',
+  'plan.discuss': 'Hablarlo en el chat',
+} satisfies Record<QuestionKey, string>

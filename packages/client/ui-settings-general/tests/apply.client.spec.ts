@@ -88,6 +88,9 @@ describe('ui-settings-general apply', () => {
     const entry = generalEntry(before.slots)!
     expect(entry.options).toMatchObject({ id: 'general', order: 0 })
     // The nav label is a locale-following thunk; owners resolve at read time.
+    // The product default is now `es`; pin the active locale to zh (this
+    // node-env spec gets no browser detection) to assert the shipped zh copy.
+    before.locale.setLocale('zh')
     expect(resolveSlotLabel(entry.options.label)).toBe('通用设置')
     expect(before.slots.spec('settings.general.item')).toEqual({ kind: 'list', scope: 'root' })
     expect(before.slots.entries('settings.general.item')).toEqual([])
@@ -122,6 +125,8 @@ describe('ui-settings-general apply', () => {
     declare(b.slots)
     const fiber = b.ctx.plugin({ inject: [...inject], apply })
     await fiber.await()
+    // Product default is `es`; pin zh to assert the shipped Chinese copy.
+    b.locale.setLocale('zh')
     expect(b.locale.bind('settings')('title')).toBe('设置')
     b.locale.setLocale('en')
     expect(b.locale.bind('settings')('close')).toBe('Close')

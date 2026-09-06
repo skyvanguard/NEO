@@ -50,3 +50,27 @@ export const en = {
   'session': 'Session',
   'lastActive': 'Last active',
 } satisfies Record<UsageLocaleKey, string>
+
+/** Spanish dictionary, checked complete against the zh key set. */
+export const es = {
+  'nav': 'Uso',
+  'title': 'Uso acumulado de tokens',
+  'generated': 'A fecha de {when}',
+  'refresh': 'Actualizar',
+  'loading': 'Agregando el uso de todas las sesiones…',
+  'error': 'No se pudo leer el uso',
+  'retry': 'Reintentar',
+  'totalTokens': 'Tokens totales',
+  'input': 'Entrada',
+  'output': 'Salida',
+  'reasoning': 'Razonamiento',
+  'cacheRead': 'Lectura de caché',
+  'requests': 'Solicitudes',
+  'sessions': 'Sesiones',
+  'byDay': 'Por día',
+  'byWorkspace': 'Por espacio de trabajo',
+  'workspace': 'Espacio de trabajo',
+  'recentSessions': 'Sesiones recientes',
+  'session': 'Sesión',
+  'lastActive': 'Última actividad',
+} satisfies Record<UsageLocaleKey, string>

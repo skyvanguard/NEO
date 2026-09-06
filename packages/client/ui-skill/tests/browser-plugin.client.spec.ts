@@ -138,6 +138,13 @@ describe('apply', () => {
           'row.instructions': 'Instructions',
           'menu.userOnly': 'user-only',
         },
+        es: {
+          'row.running': 'Cargando skill',
+          'row.failed': 'Fallo al cargar el skill',
+          'row.stopped': 'Carga del skill detenida',
+          'row.instructions': 'Instrucciones',
+          'menu.userOnly': 'solo usuario',
+        },
       },
     }])
   })

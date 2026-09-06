@@ -21,9 +21,9 @@ import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
 import {
   LOCALE_PREFERENCE_FIELD, LOCALE_SETTINGS_NAMESPACE, type LocaleId, type LocaleSettings,
 } from '../locale-settings.ts'
-import { en, zh, type CommonKey } from '../locales/index.ts'
+import { en, zh, es, type CommonKey } from '../locales/index.ts'
 import {
-  en as settingsEn, zh as settingsZh, type SettingsLocaleKey,
+  en as settingsEn, zh as settingsZh, es as settingsEs, type SettingsLocaleKey,
 } from '../locales/settings.ts'
 import type { LanguageRowInjected } from './LanguageRow.tsx'
 import { LanguageRow } from './LanguageRow.tsx'
@@ -86,8 +86,11 @@ declare module '@deepseek-ai/cordis' {
   }
 }
 
-/** Fallback locale consulted after the active locale misses (also the last-resort initial locale). */
+/** Fallback locale consulted after the active locale misses (missing-key safety net). */
 export const FALLBACK_LOCALE: LocaleId = 'zh'
+
+/** Product default language, used when the browser asks for no shipped locale. */
+export const DEFAULT_LOCALE: LocaleId = 'es'
 
 /** Shared namespace for shell-level texts. */
 export const COMMON_NS = 'common'
@@ -95,8 +98,9 @@ export const COMMON_NS = 'common'
 /** Namespace owning this feature's settings-row copy. */
 export const SETTINGS_NS = 'settings.locale'
 
-/** The two shipped locales. */
+/** The shipped locales, in selector display order (product default first). */
 const LOCALES: readonly LocaleDefinition[] = Object.freeze([
+  { id: 'es', label: 'Español' },
   { id: 'zh', label: '中文' },
   { id: 'en', label: 'English' },
 ])
@@ -313,11 +317,11 @@ export class LocaleRuntime {
 }
 
 /**
- * The browser's own language wins over {@link FALLBACK_LOCALE}; an explicit
+ * The browser's own language wins over {@link DEFAULT_LOCALE}; an explicit
  * Host preference may replace this provisional value after plugin activation.
  */
 function resolveInitialLocale(): LocaleId {
-  return detectBrowserLocale() ?? FALLBACK_LOCALE
+  return detectBrowserLocale() ?? DEFAULT_LOCALE
 }
 
 /**
@@ -355,8 +359,8 @@ export const inject = ['slots', 'connection', 'remote', 'settingsScope']
 export function apply(ctx: ClientContext): void {
   const host = ctx.settingsScope.bind<LocaleSettings>({ namespace: LOCALE_SETTINGS_NAMESPACE })
   const locale = new LocaleRuntime(ctx, host)
-  locale.register(COMMON_NS, { zh, en })
-  locale.register(SETTINGS_NS, { zh: settingsZh, en: settingsEn })
+  locale.register(COMMON_NS, { zh, en, es })
+  locale.register(SETTINGS_NS, { zh: settingsZh, en: settingsEn, es: settingsEs })
   ctx.provide('locale', locale)
   // The service IS the LocaleFace (bind + getSnapshot/subscribe): install it
   // so the render machinery can synthesize the `t` standard seat.

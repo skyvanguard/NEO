@@ -63,8 +63,11 @@ describe('ui-workspace apply', () => {
     await before.ctx.plugin({ inject: [...inject], apply }).await()
     expect(before.slots.entries('sidebar.workspaces')[0]!.component).toBe(WorkspaceBrowser)
     // Copy rides the standard locale seat: the entry declares the namespace
-    // and apply registered both dictionaries.
+    // and apply registered all three dictionaries (zh, en, es). The runtime
+    // opens on the product default (es) here, then follows setLocale.
     expect(before.slots.entries('sidebar.workspaces')[0]!.locale).toBe('workspace')
+    expect(before.locale.bind('workspace')('session.new')).toBe('Nueva sesión')
+    before.locale.setLocale('zh')
     expect(before.locale.bind('workspace')('session.new')).toBe('新会话')
 
     const after = await bench()
