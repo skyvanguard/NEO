@@ -568,7 +568,7 @@ describe('background execution through the job runtime', () => {
 
     const schema = ctx.tools.schemas().find(s => s.name === 'bash')!
     expect(Object.keys(schema.parameters.properties as Record<string, unknown>))
-      .toEqual(['command', 'description', 'timeoutMs', 'workdir'])
+      .toEqual(['command', 'description', 'timeoutMs', 'max_output_bytes', 'workdir'])
     expect(schema.description).toContain('Background execution is not available')
     expect(schema.description).not.toContain('run_in_background')
     // The registry-held definition agrees (schema and capability never disagree).
