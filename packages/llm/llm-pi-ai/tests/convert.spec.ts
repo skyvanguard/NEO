@@ -8,12 +8,13 @@ import { toPiContext } from '../src/context.ts'
 import { toPiReplayState } from '../src/replay.ts'
 import { mapStopReason, mapUsage, toStreamChunks } from '../src/stream.ts'
 
-function usage(input = 0, output = 0, cacheRead = 0, cacheWrite = 0): Usage {
+function usage(input = 0, output = 0, cacheRead = 0, cacheWrite = 0, reasoning?: number): Usage {
   return {
     input,
     output,
     cacheRead,
     cacheWrite,
+    ...reasoning === undefined ? {} : { reasoning },
     totalTokens: input + output + cacheRead + cacheWrite,
     cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
   }
@@ -820,6 +821,13 @@ describe('mapStopReason / mapUsage', () => {
       cacheWriteTokens: 2,
     })
     expect(mapUsage(usage(10, 5))).toEqual({ inputTokens: 10, outputTokens: 5 })
+  })
+
+  it('forwards reasoning tokens as a breakdown when the provider reports them nonzero', () => {
+    expect(mapUsage(usage(10, 5, 0, 0, 3))).toEqual({ inputTokens: 10, outputTokens: 5, reasoningTokens: 3 })
+    // Zero or absent reasoning is omitted (providers with no breakdown leave it undefined).
+    expect(mapUsage(usage(10, 5, 0, 0, 0))).toEqual({ inputTokens: 10, outputTokens: 5 })
+    expect(mapUsage(usage(10, 5))).not.toHaveProperty('reasoningTokens')
   })
 })
 
