@@ -64,31 +64,26 @@
 /* Selection still sets data-selected for details linkage; no outline —
    tool rows match Think chrome (no selected ring). */
 
-/* Turn activity keeps the former loader's one-line footprint. A pale
-   brand-blue band sweeps from left to right; reduced-motion keeps it static. */
+/* Turn activity keeps the former loader's one-line footprint: a small brand
+   spinner (rotating accent ring) sits where the label used to. The active arc
+   is the brand accent; the track is that same accent faded, so it stays
+   theme-aware without a second token. Reduced-motion drops the rotation and
+   shows a steady full ring instead. */
 .turnStatus {
   align-self: flex-start;
   flex: none;
   display: inline-flex;
   align-items: center;
   height: 26px;
-  font: var(--dsw-font-s-strong-14);
-  white-space: nowrap;
-  background: linear-gradient(
-    90deg,
-    var(--dsw-static-deepseek-500) 0%,
-    var(--dsw-static-deepseek-500) 40%,
-    var(--dsw-static-deepseek-200) 50%,
-    var(--dsw-static-deepseek-500) 60%,
-    var(--dsw-static-deepseek-500) 100%
-  );
-  background-position: 100% 0;
-  background-size: 250% 100%;
-  background-clip: text;
-  color: transparent;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: dsh-turn-status-shimmer 1.8s linear infinite;
+}
+
+.turnStatusSpinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--dsw-static-deepseek-500) 22%, transparent);
+  border-top-color: var(--dsw-static-deepseek-500);
+  animation: dsh-turn-status-spin 0.7s linear infinite;
 }
 
 .turnStatusClock {
@@ -100,16 +95,15 @@
   -webkit-text-fill-color: var(--dsw-alias-label-caption);
 }
 
-@keyframes dsh-turn-status-shimmer {
+@keyframes dsh-turn-status-spin {
   to {
-    background-position: 0 0;
+    transform: rotate(360deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .turnStatus {
-    background-position: 0 0;
-    background-size: 100% 100%;
+  .turnStatusSpinner {
+    border-color: var(--dsw-static-deepseek-500);
     animation: none;
   }
 }

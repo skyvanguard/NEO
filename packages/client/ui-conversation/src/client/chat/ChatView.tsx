@@ -128,8 +128,8 @@ function TurnStatus({ startTime, t }: {
   // has clearly been running for a while.
   const showClock = elapsedMs >= 15_000
   return (
-    <div className={css.turnStatus} role="status" aria-live="polite">
-      Deep diving...
+    <div className={css.turnStatus} role="status" aria-live="polite" aria-label="Generando respuesta">
+      <span className={css.turnStatusSpinner} aria-hidden />
       {showClock && (
         <span className={css.turnStatusClock} aria-hidden>
           {formatRunDuration(elapsedMs, t)}
