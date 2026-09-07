@@ -729,6 +729,14 @@ export class Session implements SessionFace {
    * to half the cap gives hysteresis so this does not fire on every later event.
    */
   private evictWindowIfLarge(): void {
+    // Never evict mid-generation: a single streaming turn pushes thousands of
+    // transient `assistant/chunk` deltas into this.events, which would cross the
+    // cap and evict the visible history WHILE the reader watches — surfacing a
+    // spurious "load earlier" and wiping any page they just backfilled. The cap
+    // bounds long CONVERSATIONS (many settled turns), not one turn's deltas, so
+    // defer eviction until the turn settles (`running` is false); the next live
+    // event then trims if the window is genuinely over the watermark.
+    if (this.running) return
     if (this.events.length <= this.maxWindowEvents) return
     const keep = Math.max(PAGE_MESSAGES, Math.floor(this.maxWindowEvents / 2))
     const start = this.events.length - keep

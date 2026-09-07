@@ -300,6 +300,34 @@ describe('live event path', () => {
     expect(chatSeqs(session.getSnapshot())).toContain(0)
   })
 
+  it('does not evict mid-generation; a streaming turn keeps the full window, trimming only after it settles', async () => {
+    const api = new FakeApiClient()
+    api.onHistory = () => histResponse([])
+    const session = new Session(SID, api, fakeRemote(), { conversation: TEST_CONVERSATION, maxWindowEvents: 100 })
+    await session.open()
+    const feed = (event: SessionEvent): void => {
+      session.handleMuxEnvelope('r' as never, { type: 'session/event', sessionId: SID, event } as never)
+    }
+
+    // A single generation streams many events past the cap. While running, the
+    // window must NOT evict — the reader keeps the whole conversation and no
+    // spurious "load earlier" (hasMore) appears.
+    session.handleRunning(true)
+    for (let seq = 0; seq < 130; seq++) feed(ev.user(seq, `m${seq}`))
+    await Promise.resolve()
+    const during = session.getSnapshot()
+    expect(chatSeqs(during)).toContain(0)
+    expect(during.hasMore).toBe(false)
+
+    // The turn settles; the next live event trims the window to the cap.
+    session.handleRunning(false)
+    feed(ev.user(130, 'm130'))
+    await Promise.resolve()
+    const after = session.getSnapshot()
+    expect(chatSeqs(after)).not.toContain(0)
+    expect(after.hasMore).toBe(true)
+  })
+
   it('does not evict when the window cap is below the keep floor', async () => {
     const api = new FakeApiClient()
     api.onHistory = () => histResponse([])
