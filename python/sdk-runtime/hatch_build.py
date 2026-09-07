@@ -43,7 +43,7 @@ def _host_platform_tag() -> str:
     try:
         return _PLATFORMS[key][0]
     except KeyError as exc:
-        raise RuntimeError(f"unsupported deepseek-harness-runtime-bin build platform: {key}") from exc
+        raise RuntimeError(f"unsupported neo-runtime-bin build platform: {key}") from exc
 
 
 class RuntimeBuildHook(BuildHookInterface):
@@ -54,18 +54,18 @@ class RuntimeBuildHook(BuildHookInterface):
             return
         if self.target_name == "sdist":
             raise RuntimeError(
-                "deepseek-harness-runtime-bin is wheel-only; build and publish platform wheels only."
+                "neo-runtime-bin is wheel-only; build and publish platform wheels only."
             )
 
-        platform_tag = os.environ.get("DSH_RUNTIME_PLATFORM_TAG") or _host_platform_tag()
+        platform_tag = os.environ.get("NEO_RUNTIME_PLATFORM_TAG") or _host_platform_tag()
         matches = [value for value in _PLATFORMS.values() if value[0] == platform_tag]
         if len(matches) != 1:
             supported = ", ".join(value[0] for value in _PLATFORMS.values())
             raise RuntimeError(
-                f"unsupported DSH_RUNTIME_PLATFORM_TAG {platform_tag!r}; expected one of {supported}"
+                f"unsupported NEO_RUNTIME_PLATFORM_TAG {platform_tag!r}; expected one of {supported}"
             )
         expected_executable = matches[0][1]
-        runtime_dir = Path(self.root) / "src" / "deepseek_harness_runtime" / "runtime"
+        runtime_dir = Path(self.root) / "src" / "neo_runtime" / "runtime"
         runtime_files = sorted(runtime_dir.glob("dsh-jsonrpc-agent-pkg-*") if runtime_dir.is_dir() else [])
         expected_files = [expected_executable]
         if "-macos-" in expected_executable:

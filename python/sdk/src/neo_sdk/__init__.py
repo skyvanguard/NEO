@@ -1,15 +1,15 @@
-from .api import DeepSeekHarness, DeepSeekHarnessConfig, RunResult, Session
-from .client import HarnessClient, HarnessConfig
+from .api import Neo, NeoConfig, RunResult, Session
+from .client import NeoClient, NeoClientConfig
 from .errors import SdkProtocolError
 from .models import IncomingRequest, InitializeResponse, JsonObject, Notification, ServerInfo
 
 __all__ = [
-    "DeepSeekHarness",
-    "DeepSeekHarnessConfig",
+    "Neo",
+    "NeoConfig",
     "Session",
     "RunResult",
-    "HarnessClient",
-    "HarnessConfig",
+    "NeoClient",
+    "NeoClientConfig",
     "SdkProtocolError",
     "IncomingRequest",
     "InitializeResponse",

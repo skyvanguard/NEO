@@ -49,5 +49,5 @@ switch (invocation.mode) {
   }
   default:
     invocation satisfies never
-    throw new Error(`dsh: unhandled invocation mode ${JSON.stringify(invocation)}`)
+    throw new Error(`neo: unhandled invocation mode ${JSON.stringify(invocation)}`)
 }

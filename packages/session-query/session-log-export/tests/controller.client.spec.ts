@@ -29,7 +29,7 @@ describe('SessionLogDownloadController', () => {
     expect(init.signal).toBeInstanceOf(AbortSignal)
     expect(save).toHaveBeenCalledWith(
       url.toString(),
-      'dsh-session-session-export-controller.zip',
+      'neo-session-session-export-controller.zip',
     )
     expect(controller.store.getSnapshot().bySession[SID]).toEqual({
       open: true, status: 'success', error: null,
@@ -136,7 +136,7 @@ describe('browser download helpers', () => {
   it('sanitizes the archive filename and hands the URL to a download anchor', () => {
     const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
 
-    expect(sessionLogZipFilename('a/b' as SessionId)).toBe('dsh-session-a_b.zip')
+    expect(sessionLogZipFilename('a/b' as SessionId)).toBe('neo-session-a_b.zip')
     downloadUrl('http://host/api/session.export?sessionId=a', 'archive.zip')
     expect(click).toHaveBeenCalledOnce()
     const anchor = click.mock.instances[0] as HTMLAnchorElement

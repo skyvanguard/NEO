@@ -1,4 +1,4 @@
-/** Published dsh web + pnpm dev:web → browser HMR, with no page reload. */
+/** Published neo web + pnpm dev:web → browser HMR, with no page reload. */
 
 import { existsSync } from 'node:fs'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
@@ -99,7 +99,7 @@ it('hot-reloads a real client-plugin source edit without refreshing the page', a
         NEO_HOME: join(world, '.neo'),
       },
     ))
-    const baseUrl = await waitForOutput(host, /dsh web: (http:\/\/[^\s]+)/, 'built dsh web')
+    const baseUrl = await waitForOutput(host, /neo web: (http:\/\/[^\s]+)/, 'built neo web')
     browser = await chromium.launch()
     const page = await browser.newPage()
     const pageErrors: string[] = []

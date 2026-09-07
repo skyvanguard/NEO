@@ -5,14 +5,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 
-from .client import HarnessClient, HarnessConfig
+from .client import NeoClient, NeoClientConfig
 from .errors import SdkProtocolError
 from .models import JsonObject, Notification
 
 
 @dataclass(slots=True)
-class DeepSeekHarnessConfig:
-    """Configuration for launching the local DeepSeek Harness SDK runtime.
+class NeoConfig:
+    """Configuration for launching the local NEO SDK runtime.
 
     The runtime inherits the caller's environment by default, so existing
     DEEPSEEK_API_KEY and DEEPSEEK_BASE_URL settings keep working. Use ``env`` to
@@ -45,34 +45,34 @@ class RunResult:
     session_root: str | None = None
 
 
-class DeepSeekHarness:
-    """Reusable synchronous SDK for running DeepSeek Harness agent turns.
+class Neo:
+    """Reusable synchronous SDK for running NEO agent turns.
 
     The runtime subprocess starts lazily and remains owned by this instance
     across calls to :meth:`run`. Use the instance as a context manager, or call
     :meth:`close` explicitly when finished, so the subprocess is always reaped.
     """
 
-    def __init__(self, config: DeepSeekHarnessConfig | None = None, **kwargs: object) -> None:
+    def __init__(self, config: NeoConfig | None = None, **kwargs: object) -> None:
         if config is not None and kwargs:
-            raise TypeError("pass either DeepSeekHarnessConfig or keyword options, not both")
-        self.config = config or DeepSeekHarnessConfig(**kwargs)
+            raise TypeError("pass either NeoConfig or keyword options, not both")
+        self.config = config or NeoConfig(**kwargs)
         cwd = str(Path(self.config.cwd or Path.cwd()).resolve())
         runtime_cwd = str(Path(self.config.runtime_cwd).resolve()) if self.config.runtime_cwd is not None else cwd
         self._cwd = cwd
         env = dict(self.config.env)
         if self.config.session_root is not None:
-            env["DSH_SESSION_ROOT"] = self.config.session_root
+            env["NEO_SESSION_ROOT"] = self.config.session_root
         if self.config.cordis is not None:
-            env["DSH_CORDIS_CONFIG"] = self.config.cordis
-        env["DSH_CWD"] = cwd
+            env["NEO_CORDIS_CONFIG"] = self.config.cordis
+        env["NEO_CWD"] = cwd
         if self.config.base_url is not None:
             env["DEEPSEEK_BASE_URL"] = self.config.base_url
         if self.config.api_key is not None:
             env["DEEPSEEK_API_KEY"] = self.config.api_key
 
-        self._client = HarnessClient(
-            HarnessConfig(
+        self._client = NeoClient(
+            NeoClientConfig(
                 runtime_bin=self.config.runtime_bin,
                 launch_args_override=self.config.launch_args_override,
                 cwd=runtime_cwd,
@@ -83,7 +83,7 @@ class DeepSeekHarness:
         )
         self._initialized = False
 
-    def __enter__(self) -> "DeepSeekHarness":
+    def __enter__(self) -> "Neo":
         self.start()
         return self
 
@@ -91,7 +91,7 @@ class DeepSeekHarness:
         self.close()
 
     @property
-    def client(self) -> HarnessClient:
+    def client(self) -> NeoClient:
         return self._client
 
     def start(self) -> None:
@@ -125,7 +125,7 @@ class DeepSeekHarness:
 
 
 class Session:
-    def __init__(self, harness: DeepSeekHarness, session_id: str) -> None:
+    def __init__(self, harness: Neo, session_id: str) -> None:
         self.harness = harness
         self.id = session_id
 

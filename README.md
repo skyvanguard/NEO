@@ -48,7 +48,7 @@ From a repository checkout:
 ```sh
 pnpm install
 pnpm run build
-pnpm dsh web
+pnpm neo web
 ```
 
 The Web UI serves at `http://127.0.0.1:3080` (loopback only). Reach it from another machine over an SSH tunnel:

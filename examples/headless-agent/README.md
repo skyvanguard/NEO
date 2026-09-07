@@ -10,7 +10,7 @@ This directory owns the replay and real-model test composition for a headless co
 # repo root .env (gitignored) or exported env:
 #   DEEPSEEK_API_KEY=sk-…
 #   DEEPSEEK_BASE_URL=https://…   # optional; defaults to the public API
-pnpm dsh --profile headless "fix the failing test in this workspace"
+pnpm neo --profile headless "fix the failing test in this workspace"
 ```
 
 The product command is [`dsh --profile headless`](../../apps/cli/README.md): it accepts one nonblank task, creates and persists a fresh session, prints the final assistant text, and exits.

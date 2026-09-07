@@ -82,7 +82,7 @@ pnpm run check:all      # every gate; the ci-* subsets live in the same file
 pnpm run website:build  # VitePress build (doubles as dead-link check)
 pnpm run dev:web        # Web UI with watch rebuild
 pnpm run mock:llm       # keyless LLM mock server; use it instead of a key for local runs
-pnpm dsh --profile headless "task"  # run one task from source (needs DEEPSEEK_API_KEY)
+pnpm neo --profile headless "task"  # run one task from source (needs DEEPSEEK_API_KEY)
 pnpm run demo:cordis    # the agent modifies its own runtime (needs key)
 pnpm run demo:acp       # ACP automation server (needs DEEPSEEK_API_KEY)
 ```

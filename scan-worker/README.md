@@ -41,7 +41,7 @@ node scan-worker/worker.mjs
 ```
 
 Requiere Node 18+ (usa `fetch` global). El `dsh` debe estar construido y
-disponible en kryon (`pnpm run build` en el repo, luego `NEO_CMD="pnpm dsh"`,
+disponible en kryon (`pnpm run build` en el repo, luego `NEO_CMD="pnpm neo"`,
 o el binario instalado con `NEO_CMD="dsh"`).
 
 ## Verificar el overlay antes de correr

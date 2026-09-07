@@ -23,7 +23,7 @@ const cfg = {
   apiBase: (process.env.SCAN_API_BASE ?? "https://www.skyvanguard.com.py").replace(/\/$/, ""),
   token: process.env.SCAN_WORKER_TOKEN ?? "",
   workerId: process.env.SCAN_WORKER_ID ?? "neo-kryon-1",
-  // Comando para invocar el CLI de NEO. Ej.: "dsh", "pnpm dsh",
+  // Comando para invocar el CLI de NEO. Ej.: "dsh", "pnpm neo",
   // "node --import tsx/esm apps/cli/src/bin.ts". Se parte por espacios.
   dshCmd: process.env.NEO_CMD ?? "dsh",
   patchFile: process.env.FREE_SCAN_PATCH ?? resolve(HERE, "free-scan.headless.patch.yml"),

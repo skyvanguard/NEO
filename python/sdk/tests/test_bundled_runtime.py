@@ -10,9 +10,9 @@ from pathlib import Path
 
 import pytest
 
-from deepseek_harness import DeepSeekHarness, HarnessClient, HarnessConfig
-from deepseek_harness.errors import TransportClosedError
-from deepseek_harness_runtime import resolve_bundled_launch_args
+from neo_sdk import Neo, NeoClient, NeoClientConfig
+from neo_sdk.errors import TransportClosedError
+from neo_runtime import resolve_bundled_launch_args
 
 _MODES = ("exe", "node")
 _REPO_ROOT = Path(__file__).parents[3]
@@ -52,15 +52,15 @@ def _launch_args(mode: str) -> tuple[str, ...]:
         pytest.skip(f"bundled {mode}-mode runtime unavailable on this machine: {exc}")
 
 
-def _client(tmp_path: Path, launch_args: tuple[str, ...]) -> HarnessClient:
-    return HarnessClient(
-        HarnessConfig(
+def _client(tmp_path: Path, launch_args: tuple[str, ...]) -> NeoClient:
+    return NeoClient(
+        NeoClientConfig(
             launch_args_override=launch_args,
             cwd=str(tmp_path),
             env={
-                "DSH_CORDIS_CONFIG": "./cordis.yml",
-                "DSH_SESSION_ROOT": str(tmp_path / "sessions"),
-                "DSH_CWD": str(tmp_path),
+                "NEO_CORDIS_CONFIG": "./cordis.yml",
+                "NEO_SESSION_ROOT": str(tmp_path / "sessions"),
+                "NEO_CWD": str(tmp_path),
                 # The lazily mounted adapter requires a key even without a model call.
                 "DEEPSEEK_API_KEY": "sk-dummy-for-boot",
                 "DEEPSEEK_BASE_URL": "http://127.0.0.1:9",
@@ -79,22 +79,22 @@ def test_bundled_runtime_boots_a_cordis_config(tmp_path: Path, mode: str) -> Non
         init = client.initialize(provider="deepseek-official", cwd=str(tmp_path), model="deepseek-v4-pro")
 
     assert init.serverInfo is not None
-    assert init.serverInfo.name == "deepseek-harness-sdk-runtime"
+    assert init.serverInfo.name == "neo-sdk-runtime"
 
 
 @pytest.mark.parametrize("mode", _MODES)
 def test_python_sdk_boots_minimal_jsonrpc_config(tmp_path: Path, mode: str) -> None:
     launch_args = _launch_args(mode)
     model = "minimal-environment-model"
-    harness = DeepSeekHarness(
+    harness = Neo(
         model=model,
         cwd=str(tmp_path),
         session_root=str(tmp_path / "sessions"),
         cordis=str(_MINIMAL_CONFIG),
         env={
-            "DSH_MODEL": model,
-            "DSH_CONTEXT_WINDOW": "1000000",
-            "DSH_SYSTEM_PROMPT": "You are the Python SDK minimal boot test agent.",
+            "NEO_MODEL": model,
+            "NEO_CONTEXT_WINDOW": "1000000",
+            "NEO_SYSTEM_PROMPT": "You are the Python SDK minimal boot test agent.",
         },
         api_key="sk-dummy-for-boot",
         base_url="http://127.0.0.1:9",
@@ -130,13 +130,13 @@ def test_zero_config_run_injects_bundled_default_cordis_config(
     tmp_path: Path, mode: str, ambient_config: str | None, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     _launch_args(mode)  # skip early when this carrier is unavailable
-    monkeypatch.setenv("DSH_RUNTIME_MODE", mode)
+    monkeypatch.setenv("NEO_RUNTIME_MODE", mode)
     if ambient_config is None:
-        monkeypatch.delenv("DSH_CORDIS_CONFIG", raising=False)
+        monkeypatch.delenv("NEO_CORDIS_CONFIG", raising=False)
     else:
-        monkeypatch.setenv("DSH_CORDIS_CONFIG", ambient_config)
+        monkeypatch.setenv("NEO_CORDIS_CONFIG", ambient_config)
 
-    harness = DeepSeekHarness(
+    harness = Neo(
         model="deepseek-v4-pro",
         cwd=str(tmp_path),
         session_root=str(tmp_path / "sessions"),

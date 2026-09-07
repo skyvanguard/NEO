@@ -75,13 +75,13 @@ def test_stage_sdk_keeps_distribution_module_and_runtime_pin_distinct(tmp_path: 
     build_python_release.stage_sdk(destination, "1.2.3")
 
     pyproject = (destination / "pyproject.toml").read_text()
-    assert 'name = "deepseek-harness-sdk"' in pyproject
+    assert 'name = "neo-sdk"' in pyproject
     assert 'version = "1.2.3"' in pyproject
     assert 'license = "MIT"' in pyproject
-    assert '"deepseek-harness-runtime-bin==1.2.3"' in pyproject
+    assert '"neo-runtime-bin==1.2.3"' in pyproject
     assert 'license-files = ["LICENSE"]' in pyproject
     assert (destination / "LICENSE").read_bytes() == (ROOT / "LICENSE").read_bytes()
-    assert (destination / "src" / "deepseek_harness" / "__init__.py").is_file()
+    assert (destination / "src" / "neo_sdk" / "__init__.py").is_file()
 
 
 @pytest.mark.parametrize(("target", "with_helper"), [("linux-x64", False), ("macos-arm64", True)])
@@ -101,7 +101,7 @@ def test_stage_runtime_copies_platform_payload(
 
     build_python_release.stage_runtime(destination, "1.2.3", executable, executable.name)
 
-    runtime_dir = destination / "src" / "deepseek_harness_runtime" / "runtime"
+    runtime_dir = destination / "src" / "neo_runtime" / "runtime"
     assert {path.name: path.read_bytes() for path in runtime_dir.glob("dsh-jsonrpc-agent-pkg-*")} == expected
     pyproject = (destination / "pyproject.toml").read_text()
     assert 'license = "MIT"' in pyproject
