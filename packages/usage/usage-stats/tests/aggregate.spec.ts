@@ -10,7 +10,11 @@ import { zstdCompressSync } from 'node:zlib'
 import { describe, expect, it } from 'vitest'
 import type { SessionEvent } from '@neo/session'
 import type { TokenUsage } from '@neo/llm'
-import { aggregateUsage, foldSessionUsage, workspaceLabel } from '../src/aggregate.ts'
+import { readFileSync } from 'node:fs'
+import {
+  aggregateUsage, deserializeUsageCache, foldSessionUsage, loadUsageCache,
+  saveUsageCache, serializeUsageCache, workspaceLabel,
+} from '../src/aggregate.ts'
 import type { UsageCache } from '../src/aggregate.ts'
 
 const t = (iso: string): number => Date.parse(iso)
@@ -202,5 +206,53 @@ describe('aggregateUsage incremental cache', () => {
       expect(summary.byWorkspace.map(w => w.workspace)).toEqual(['Alpha', 'Beta'])
       expect(summary.sessionCount).toBe(2)
     } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+})
+
+describe('usage cache persistence', () => {
+  const zeros = { cacheReadTokens: 0, cacheWriteTokens: 0, reasoningTokens: 0 }
+
+  function sampleCache(): UsageCache {
+    const totals = { inputTokens: 100, outputTokens: 20, requests: 2, ...zeros }
+    const cache: UsageCache = new Map()
+    cache.set('/root/ws/s1/session.jsonl.zstd', {
+      workspace: 'ws', sessionId: 's1', totals,
+      byDay: new Map([['2026-08-19', totals]]), lastActive: t('2026-08-19T10:00:00Z'), mtimeMs: 111, size: 222,
+    })
+    return cache
+  }
+
+  it('round-trips a cache through serialize/deserialize, preserving the byDay map', () => {
+    const restored = deserializeUsageCache(serializeUsageCache(sampleCache()))
+    const entry = restored.get('/root/ws/s1/session.jsonl.zstd')
+    expect(entry?.totals.inputTokens).toBe(100)
+    expect(entry?.mtimeMs).toBe(111)
+    expect(entry?.byDay.get('2026-08-19')?.requests).toBe(2)
+  })
+
+  it('yields an empty cache for corrupt, non-object, or version-mismatched payloads', () => {
+    expect(deserializeUsageCache('not json {').size).toBe(0)
+    expect(deserializeUsageCache('42').size).toBe(0)
+    expect(deserializeUsageCache(JSON.stringify({ version: 99, entries: [] })).size).toBe(0)
+    // A malformed entry is skipped, valid ones kept.
+    const mixed = JSON.stringify({
+      version: 1,
+      entries: [['bad'], [42, {}], ['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 1, outputTokens: 0, requests: 1, ...zeros }, byDay: [], lastActive: 0, mtimeMs: 1, size: 1 }]],
+    })
+    const out = deserializeUsageCache(mixed)
+    expect(out.size).toBe(1)
+    expect(out.get('/ok')?.workspace).toBe('w')
+  })
+
+  it('saves atomically and loads back; a missing file loads empty', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'usage-persist-'))
+    try {
+      expect((await loadUsageCache(join(dir, 'nope.json'))).size).toBe(0)
+      const file = join(dir, '.usage-cache.json')
+      await saveUsageCache(file, sampleCache())
+      expect(readFileSync(file, 'utf8')).toContain('"version":1')
+      const loaded = await loadUsageCache(file)
+      expect(loaded.get('/root/ws/s1/session.jsonl.zstd')?.totals.requests).toBe(2)
+    } finally { rmSync(dir, { recursive: true, force: true }) }
   })
 })

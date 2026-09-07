@@ -7,7 +7,7 @@
  * @module
  */
 
-import { readdir, readFile, stat } from 'node:fs/promises'
+import { readdir, readFile, rename, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { decompressConcatenatedZstd } from './zstd.ts'
 import type { TokenUsage } from '@neo/llm'
@@ -228,5 +228,92 @@ export async function aggregateUsage(
     byWorkspace: byWorkspaceRows,
     sessions: sessions.slice(0, MAX_SESSION_ROWS),
     generatedAt: Date.now(),
+  }
+}
+
+/** On-disk shape of one cached session fold (byDay Map flattened to entries). */
+interface SerializedEntry {
+  readonly workspace: string
+  readonly sessionId: string
+  readonly totals: UsageTotals
+  readonly byDay: ReadonlyArray<readonly [string, UsageTotals]>
+  readonly lastActive: number
+  readonly mtimeMs: number
+  readonly size: number
+}
+
+/** Current on-disk cache format version; a mismatch is treated as absent. */
+const USAGE_CACHE_VERSION = 1
+
+/**
+ * Serialize a {@link UsageCache} to JSON. The per-session `byDay` Map is
+ * flattened to `[day, totals]` entries so the cache round-trips through a file.
+ * @param cache - the cache to serialize.
+ * @returns the JSON text.
+ */
+export function serializeUsageCache(cache: UsageCache): string {
+  const entries: Array<readonly [string, SerializedEntry]> = [...cache.entries()].map(([path, e]) => [path, {
+    workspace: e.workspace, sessionId: e.sessionId, totals: e.totals,
+    byDay: [...e.byDay.entries()], lastActive: e.lastActive, mtimeMs: e.mtimeMs, size: e.size,
+  }])
+  return JSON.stringify({ version: USAGE_CACHE_VERSION, entries })
+}
+
+/**
+ * Rebuild a {@link UsageCache} from {@link serializeUsageCache} output. A
+ * missing, malformed, or version-mismatched payload yields an empty cache (the
+ * next aggregate simply refolds), so a corrupt file can never crash the read.
+ * @param json - the JSON text.
+ * @returns the reconstructed cache (empty when the payload is unusable).
+ */
+export function deserializeUsageCache(json: string): UsageCache {
+  const cache: UsageCache = new Map()
+  let parsed: unknown
+  try { parsed = JSON.parse(json) } catch { return cache }
+  if (typeof parsed !== 'object' || parsed === null) return cache
+  const record = parsed as { version?: unknown; entries?: unknown }
+  if (record.version !== USAGE_CACHE_VERSION || !Array.isArray(record.entries)) return cache
+  for (const pair of record.entries) {
+    if (!Array.isArray(pair) || pair.length !== 2) continue
+    const [path, raw] = pair as [unknown, unknown]
+    if (typeof path !== 'string' || typeof raw !== 'object' || raw === null) continue
+    const byDay = (raw as { byDay?: unknown }).byDay
+    if (!Array.isArray(byDay)) continue
+    const e = raw as SerializedEntry
+    cache.set(path, {
+      workspace: e.workspace, sessionId: e.sessionId, totals: e.totals,
+      byDay: new Map(byDay), lastActive: e.lastActive, mtimeMs: e.mtimeMs, size: e.size,
+    })
+  }
+  return cache
+}
+
+/**
+ * Load a persisted usage cache from `file`. A missing file (or any read/parse
+ * failure) yields an empty cache — the persisted cache is an optimization, never
+ * a correctness dependency.
+ * @param file - the cache file path.
+ * @returns the loaded cache, or an empty one when the file is absent/unusable.
+ */
+export async function loadUsageCache(file: string): Promise<UsageCache> {
+  let json: string
+  try { json = await readFile(file, 'utf8') } catch { return new Map() }
+  return deserializeUsageCache(json)
+}
+
+/**
+ * Persist a usage cache to `file` atomically (write a sibling temp file, then
+ * rename over the target). A write failure is swallowed: losing the cache only
+ * costs the next call a cold refold, never correctness.
+ * @param file - the cache file path.
+ * @param cache - the cache to persist.
+ */
+export async function saveUsageCache(file: string, cache: UsageCache): Promise<void> {
+  const tmp = `${file}.${process.pid}.tmp`
+  try {
+    await writeFile(tmp, serializeUsageCache(cache), 'utf8')
+    await rename(tmp, file)
+  } catch {
+    /* best-effort: a persistence failure must not break the summary. */
   }
 }
