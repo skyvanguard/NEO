@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { scopeTarget } from '@neo/dsh-scope'
-import { CallId } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
-import type { ToolExecution, ToolExecutionResult, ToolExecutionToken } from '@neo/dsh-tools'
-import * as ToolsInvariant from '@neo/dsh-tools/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import { scopeTarget } from '@neo/scope'
+import { CallId } from '@neo/llm'
+import SessionStore, { Session, SessionId } from '@neo/session'
+import type { ToolExecution, ToolExecutionResult, ToolExecutionToken } from '@neo/tools'
+import * as ToolsInvariant from '@neo/tools/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 const testToolSignal = new AbortController().signal
 

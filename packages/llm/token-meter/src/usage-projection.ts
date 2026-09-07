@@ -3,9 +3,9 @@
  */
 
 import { z } from 'zod'
-import type { TokenUsage } from '@neo/dsh-llm'
-import type { SessionEvent } from '@neo/dsh-session'
-import type { ProjectionDefinition } from '@neo/dsh-session-projection'
+import type { TokenUsage } from '@neo/llm'
+import type { SessionEvent } from '@neo/session'
+import type { ProjectionDefinition } from '@neo/session-projection'
 import type { ContextPressureProjection, TokenUsageProjection } from './projection.ts'
 import { foldSurfaceProjection } from './surface-projection.ts'
 import type { ShadowPriceClaim } from './surface-projection.ts'

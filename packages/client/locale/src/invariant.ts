@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-client-locale`.
- * @module @neo/dsh-client-locale/invariant
+ * Package-owned invariant companion for `@neo/client-locale`.
+ * @module @neo/client-locale/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-client-locale'
+const PACKAGE_NAME = '@neo/client-locale'
 
 /** Cordis companion plugin name. */
 export const name = 'client-locale-invariant'

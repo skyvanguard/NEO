@@ -4,12 +4,12 @@
 # context compaction are absent.
 
 - id: sdk-jsonrpc-server
-  name: '@neo/dsh-sdk-jsonrpc-server'
+  name: '@neo/sdk-jsonrpc-server'
   config:
     maxTokensAsSuccess: false
 
 - id: llm-deepseek
-  name: '@neo/dsh-llm-deepseek'
+  name: '@neo/llm-deepseek'
   config:
     apiKeyEnv: DEEPSEEK_API_KEY
     streamIdleTimeoutMs: 172800000
@@ -18,34 +18,34 @@
         contextWindow: !!js Number(process.env.DSH_CONTEXT_WINDOW ?? 1000000)
 
 - id: sandbox
-  name: '@neo/dsh-sandbox-local'
+  name: '@neo/sandbox-local'
 
 - id: sandbox-policy
-  name: '@neo/dsh-sandbox-policy'
+  name: '@neo/sandbox-policy'
   config:
     mode: danger-full-access
     workspaceRoot: !!js process.env.DSH_CWD ?? process.cwd()
 
 - id: subprocess
-  name: '@neo/dsh-subprocess-local'
+  name: '@neo/subprocess-local'
 
 - id: pty
-  name: '@neo/dsh-terminal'
+  name: '@neo/terminal'
 
 - id: terminal-bash
-  name: '@neo/dsh-terminal-bash'
+  name: '@neo/terminal-bash'
   config:
     timeoutMs: 300000
 
 # The editor uses the bare local filesystem; persistent Bash still consumes the
 # shared danger-full-access sandbox policy above.
 - id: fs-local
-  name: '@neo/dsh-fs-local'
+  name: '@neo/fs-local'
   config:
     cwd: !!js process.env.DSH_CWD ?? process.cwd()
 
 - id: agent-spine
-  name: '@neo/dsh-agent-spine-demo'
+  name: '@neo/agent-spine-demo'
   config:
     includeHarnessIdentity: false
     includeRuntimeContext: false
@@ -57,7 +57,7 @@
     toolJobs: false
 
 - id: persistent-bash
-  name: '@neo/dsh-tool-bash-persistent'
+  name: '@neo/tool-bash-persistent'
   config:
     timeoutMs: 300000
     description: |-
@@ -71,12 +71,12 @@
       * Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.
 
 - id: str-replace-editor
-  name: '@neo/dsh-tool-str-replace-editor'
+  name: '@neo/tool-str-replace-editor'
   config:
     maxOutputChars: 16000
 
 - id: sessions
-  name: '@neo/dsh-session-persistence-jsonl'
+  name: '@neo/session-persistence-jsonl'
   config:
     root: !!js process.env.DSH_SESSION_ROOT ?? './.sessions'
     compression: none

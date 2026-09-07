@@ -7,12 +7,12 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+import { bindSnapshotSelector } from '@neo/client-web-react'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 import type {
   ChatConversationViewNode, ConversationNode,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import type { ChatNodeViewProps } from '../src/client/contract/slots.ts'
 import {
   formatMessageClock, msUntilNextLocalMidnight, startOfLocalDay,
@@ -593,11 +593,11 @@ describe('MessageItem arms', () => {
         content: [{ type: 'text', text: 'Current runtime context.\n\nsandbox\n\nworkspace' }],
         source: {
           kind: 'plugin',
-          plugin: '@neo/dsh-system-prompt',
+          plugin: '@neo/system-prompt',
           form: 'snapshot',
           sections: [{ name: 'sandbox:policy', text: 'workspace-write' }, { name: 'workspace', text: '/repo' }],
         },
-        provenance: { role: 'inject', label: '@neo/dsh-system-prompt' },
+        provenance: { role: 'inject', label: '@neo/system-prompt' },
         form: 'snapshot',
       } as never}
       />,

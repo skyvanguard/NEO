@@ -1,6 +1,6 @@
 /**
  * Ownership of one unpublished Session before registry publication.
- * @module @neo/dsh-session/preparation
+ * @module @neo/session/preparation
  */
 
 import type { Session } from './index.ts'

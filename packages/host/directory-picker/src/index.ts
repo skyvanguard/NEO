@@ -8,7 +8,7 @@
  * can reach). Consumers switch on `capability().kind`; the union is
  * merge-extensible, and the documented default for an unknown kind is to
  * hide the picking affordance rather than fail.
- * @module @neo/dsh-host-directory-picker
+ * @module @neo/host-directory-picker
  */
 
 import { Context, Service } from '@neo/cordis'

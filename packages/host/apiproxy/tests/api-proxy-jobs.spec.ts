@@ -9,16 +9,16 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { Session } from '@neo/dsh-session'
-import UserQuestionService from '@neo/dsh-user-questions'
-import LocalJobRegistry from '@neo/dsh-jobs-local'
-import type { JobOutcome } from '@neo/dsh-jobs'
-import type { MuxFrame, RpcRequest } from '@neo/dsh-host-apiproxy/api'
-import { RpcId } from '@neo/dsh-host-apiproxy/api/rpc'
-import { createApiProxy } from '@neo/dsh-host-apiproxy'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import SessionStore, { SessionId } from '@neo/session'
+import type { Session } from '@neo/session'
+import UserQuestionService from '@neo/user-questions'
+import LocalJobRegistry from '@neo/jobs-local'
+import type { JobOutcome } from '@neo/jobs'
+import type { MuxFrame, RpcRequest } from '@neo/host-apiproxy/api'
+import { RpcId } from '@neo/host-apiproxy/api/rpc'
+import { createApiProxy } from '@neo/host-apiproxy'
 
 type JobFrame = Extract<MuxFrame, { type: 'session/jobs' }>
 

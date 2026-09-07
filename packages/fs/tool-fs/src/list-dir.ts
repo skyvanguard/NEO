@@ -9,10 +9,10 @@
  */
 
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
-import type { GenericCallView } from '@neo/dsh-tools'
-import type { FsDirEntry } from '@neo/dsh-fs'
-import type {} from '@neo/dsh-system-prompt'
+import { defineTool } from '@neo/tools'
+import type { GenericCallView } from '@neo/tools'
+import type { FsDirEntry } from '@neo/fs'
+import type {} from '@neo/system-prompt'
 import { sessionResolveOptions } from './session-cwd.ts'
 
 /** Entries a listing returns inline before it says how many more there were. */

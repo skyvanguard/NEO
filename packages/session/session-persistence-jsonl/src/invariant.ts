@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-session-persistence-jsonl`.
- * @module @neo/dsh-session-persistence-jsonl/invariant
+ * Package-owned invariant companion for `@neo/session-persistence-jsonl`.
+ * @module @neo/session-persistence-jsonl/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-session-persistence-jsonl'
+const PACKAGE_NAME = '@neo/session-persistence-jsonl'
 
 /** Cordis companion plugin name. */
 export const name = 'session-persistence-jsonl-invariant'

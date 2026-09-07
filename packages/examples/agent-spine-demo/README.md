@@ -1,4 +1,4 @@
-# @neo/dsh-agent-spine-demo
+# @neo/agent-spine-demo
 
 English | [中文](README.zh.md)
 
@@ -12,30 +12,30 @@ Read this package for the whole plugin tree and its composition order.
 
 ```
 @neo/cordis-plugin-timer  timer service (writes nothing to stdout)
-@neo/dsh-llm              abstract LLM service + content-block vocabulary
-@neo/dsh-session          event-sourced session log + store
-@neo/dsh-session-title    log-backed title service + deterministic fallback
-@neo/dsh-system-prompt    prompt-section + tool-schema assembly
-@neo/dsh-tools            registry + guarded pre/around/post/final-result pipeline
-@neo/dsh-skill            skill provider registry
-@neo/dsh-skill-filesystem      local filesystem skill provider
-@neo/dsh-agent            agent registry + initiator scope + agent/* events
-@neo/dsh-goal             optional persisted same-session goal domain
-@neo/dsh-tool-goal        optional model-facing goal controls
-@neo/dsh-goal-round-driver     optional same-session goal-round driver
-@neo/dsh-llm-retry        provider-routed request retry policy
-@neo/dsh-jobs-local      generic background-job registry
-@neo/dsh-invariants       configurable invariant registry service
-@neo/dsh-session/invariant
-@neo/dsh-agent/invariant
-@neo/dsh-scope/invariant
-@neo/dsh-agent-loop/invariant
+@neo/llm              abstract LLM service + content-block vocabulary
+@neo/session          event-sourced session log + store
+@neo/session-title    log-backed title service + deterministic fallback
+@neo/system-prompt    prompt-section + tool-schema assembly
+@neo/tools            registry + guarded pre/around/post/final-result pipeline
+@neo/skill            skill provider registry
+@neo/skill-filesystem      local filesystem skill provider
+@neo/agent            agent registry + initiator scope + agent/* events
+@neo/goal             optional persisted same-session goal domain
+@neo/tool-goal        optional model-facing goal controls
+@neo/goal-round-driver     optional same-session goal-round driver
+@neo/llm-retry        provider-routed request retry policy
+@neo/jobs-local      generic background-job registry
+@neo/invariants       configurable invariant registry service
+@neo/session/invariant
+@neo/agent/invariant
+@neo/scope/invariant
+@neo/agent-loop/invariant
                                   package-owned relational checks
-@neo/dsh-tool-bash        the model-facing bash schema (unless toolBash=false)
-@neo/dsh-agent-instructions  AGENTS.md/CLAUDE.md workspace context loader
-@neo/dsh-tool-skill       session-prefix skill catalog + model-facing loader schema
-@neo/dsh-tool-jobs       job_output/job_list/job_kill schemas + completion notices
-@neo/dsh-agent-loop       THE concrete loop (gets the forwarded `agents`)
+@neo/tool-bash        the model-facing bash schema (unless toolBash=false)
+@neo/agent-instructions  AGENTS.md/CLAUDE.md workspace context loader
+@neo/tool-skill       session-prefix skill catalog + model-facing loader schema
+@neo/tool-jobs       job_output/job_list/job_kill schemas + completion notices
+@neo/agent-loop       THE concrete loop (gets the forwarded `agents`)
                                   (dsh-system-prompt gets the forwarded `persona`)
 ```
 
@@ -54,14 +54,14 @@ This applies the [Service Definition / Service Provider / Consumer separation](.
 ## Config
 
 ```ts
-import type { Config } from '@neo/dsh-agent-spine-demo'
+import type { Config } from '@neo/agent-spine-demo'
 // { agents?, maxParallelToolCalls?, includeHarnessIdentity?, includeRuntimeContext?, persona?, toolOrder?, tools?, dshHome?, sessionTitle?, skills?, workspaceContext, toolBash?, jobs?, toolJobs?, goals?, invariants? }
 // workspaceContext requires { maxBytes } or false; the other owner schemas supply defaults.
 ```
 
 The bundle forwards each field to the child that owns it. App packages supply any pre-created agents: headless and JSON-RPC compositions create `main`, while the ACP app creates agents on demand at `session/new`. `includeRuntimeContext: false` is forwarded to `dsh-system-prompt` and suppresses all dynamic context snapshots for fresh sessions without disabling their policy services. Prompt, tool, title, skill, agent-instructions, invariant, goal, and task settings retain the schemas and defaults documented by their owning packages; `jobs.maxConcurrentJobsPerOwner` configures the local provider independently of the model-facing `toolJobs` controls. `pickSpineConfig()` copies only fields owned by this bundle, and conflicting `dshHome` values fail during composition.
 
-For example, `{ invariants: { enabled: true, package_allowlist: ['^@neo/dsh-'], package_blocklist: ['agent-loop$'] } }` keeps the package-owned companions mounted but suppresses the blocked owner. Blocklist matches override allowlist matches; see [`dsh-invariants`](../../runtime-diagnostics/invariants/README.md) for regex and lifecycle rules.
+For example, `{ invariants: { enabled: true, package_allowlist: ['^@neo/'], package_blocklist: ['agent-loop$'] } }` keeps the package-owned companions mounted but suppresses the blocked owner. Blocklist matches override allowlist matches; see [`dsh-invariants`](../../runtime-diagnostics/invariants/README.md) for regex and lifecycle rules.
 
 ## Why a code bundle, not a shared YAML include
 

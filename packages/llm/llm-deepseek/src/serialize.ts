@@ -7,8 +7,8 @@
  * @module dsh-llm-deepseek/serialize
  */
 
-import { closeDanglingToolCalls, contentHasImage, LlmError, sanitizeText } from '@neo/dsh-llm'
-import type { ContentBlock, GenerateOptions, Message } from '@neo/dsh-llm'
+import { closeDanglingToolCalls, contentHasImage, LlmError, sanitizeText } from '@neo/llm'
+import type { ContentBlock, GenerateOptions, Message } from '@neo/llm'
 import type { WireMessage, WireRequest, WireTool } from './types.ts'
 
 /** Adapter-level request defaults (from plugin config). */

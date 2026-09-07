@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-message-feedback",
+  "name": "@neo/message-feedback",
   "description": "Lifecycle-bound per-message rating and note sidecar for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -49,13 +49,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-storage-domain": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/storage-domain": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -65,16 +65,16 @@
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-session-persistence-jsonl": "workspace:^",
-    "@neo/dsh-storage": "workspace:^",
-    "@neo/dsh-storage-domain": "workspace:^",
-    "@neo/dsh-storage-json": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/storage": "workspace:^",
+    "@neo/storage-domain": "workspace:^",
+    "@neo/storage-json": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

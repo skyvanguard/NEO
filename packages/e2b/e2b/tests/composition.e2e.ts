@@ -3,19 +3,19 @@ import { join, posix } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import { Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import { runLoaderSmoke } from '@neo/dsh-loader-smoke'
+import { Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import { runLoaderSmoke } from '@neo/loader-smoke'
 import {
   FileNotFoundError,
   Sandbox,
   SandboxNotFoundError,
-} from '@neo/dsh-e2b'
-import TerminalSessionService, { TerminalSessionId } from '@neo/dsh-terminal'
-import { BashTerminalBackend } from '@neo/dsh-terminal-bash'
-import SandboxPolicyService from '@neo/dsh-sandbox-policy'
-import { Session, SessionId } from '@neo/dsh-session'
-import E2BSubprocessRuntime from '@neo/dsh-subprocess-e2b'
+} from '@neo/e2b'
+import TerminalSessionService, { TerminalSessionId } from '@neo/terminal'
+import { BashTerminalBackend } from '@neo/terminal-bash'
+import SandboxPolicyService from '@neo/sandbox-policy'
+import { Session, SessionId } from '@neo/session'
+import E2BSubprocessRuntime from '@neo/subprocess-e2b'
 
 const fixtureRoot = fileURLToPath(new URL('../../../../examples/headless-agent/tests/fixtures/e2b/e2b/', import.meta.url))
 const binScript = join(fixtureRoot, 'bin.ts')

@@ -6,8 +6,8 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import type { Agent } from '@neo/dsh-agent'
-import CommandRuntime from '@neo/dsh-commands'
+import type { Agent } from '@neo/agent'
+import CommandRuntime from '@neo/commands'
 import {
   CompactionId,
   CompactionEngine,
@@ -15,9 +15,9 @@ import {
   type CompactionResult,
   type CompactionTrigger,
   type ManualCompactAgentContext,
-} from '@neo/dsh-compaction'
-import * as commandCompact from '@neo/dsh-command-compact'
-import { Session, SessionId } from '@neo/dsh-session'
+} from '@neo/compaction'
+import * as commandCompact from '@neo/command-compact'
+import { Session, SessionId } from '@neo/session'
 
 const COMPACTION_ID = CompactionId('loader-command-compact-test')
 
@@ -84,9 +84,9 @@ describe('command-compact real Loader composition', () => {
     root = await mkdtemp(join(tmpdir(), 'dsh-command-compact-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@neo/dsh-commands'",
+      "- name: '@neo/commands'",
       "- name: '@test/compact-backend'",
-      "- name: '@neo/dsh-command-compact'",
+      "- name: '@neo/command-compact'",
       '',
     ].join('\n'))
 
@@ -95,9 +95,9 @@ describe('command-compact real Loader composition', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@neo/dsh-commands', CommandRuntime],
+      ['@neo/commands', CommandRuntime],
       ['@test/compact-backend', LoaderCompactionEngine],
-      ['@neo/dsh-command-compact', commandCompact],
+      ['@neo/command-compact', commandCompact],
     ])
     context.loader.internal = {
       version: 'v2',

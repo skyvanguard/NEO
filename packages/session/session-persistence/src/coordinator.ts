@@ -2,7 +2,7 @@
  * Shared buffering, serialization, adoption, repair, and disposal orchestration
  * for first-party backends. Third-party backends may implement the public
  * persistence seam directly.
- * @module @neo/dsh-session-persistence/coordinator
+ * @module @neo/session-persistence/coordinator
  */
 
 import { Context } from '@neo/cordis'
@@ -15,9 +15,9 @@ import {
   snapshotJsonValue,
   snapshotSessionEvent,
   DurabilitySuspendedError,
-} from '@neo/dsh-session'
-import type { Session, SessionEvent, SessionId, SessionHeader } from '@neo/dsh-session'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+} from '@neo/session'
+import type { Session, SessionEvent, SessionId, SessionHeader } from '@neo/session'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import type { SessionInspection, SessionLocation } from './index.ts'
 import type { SessionPersistenceRevision } from './revision.ts'
 import { observeQueuedAbort, SessionPreparations } from './preparations.ts'

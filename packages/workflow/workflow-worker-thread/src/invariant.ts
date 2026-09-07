@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-workflow-worker-thread`.
- * @module @neo/dsh-workflow-worker-thread/invariant
+ * Package-owned invariant companion for `@neo/workflow-worker-thread`.
+ * @module @neo/workflow-worker-thread/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-workflow-worker-thread'
+const PACKAGE_NAME = '@neo/workflow-worker-thread'
 
 /** Cordis companion plugin name. */
 export const name = 'workflow-worker-thread-invariant'

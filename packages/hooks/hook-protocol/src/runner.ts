@@ -3,10 +3,10 @@
  * process-group cancellation, and timeout machinery. The bridge supplies the
  * trusted stdin payload and dialect environment, then this module decodes the
  * captured outcome.
- * @module @neo/dsh-hook-protocol/runner
+ * @module @neo/hook-protocol/runner
  */
 
-import type { ShellExecutor } from '@neo/dsh-shell'
+import type { ShellExecutor } from '@neo/shell'
 import { parseHookOutput } from './codec.ts'
 import type { CommandHook, HookOutput } from './types.ts'
 

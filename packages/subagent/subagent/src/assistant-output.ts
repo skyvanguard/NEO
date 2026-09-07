@@ -7,11 +7,11 @@
  * select the accumulated assistant text. Selection is independent of the
  * run's stop reason.
  *
- * @module @neo/dsh-subagent/assistant-output
+ * @module @neo/subagent/assistant-output
  */
 
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { ContentBlock } from '@neo/llm'
+import type { SessionEvent } from '@neo/session'
 
 /**
  * Incremental fold of the selection rule, for backends that observe a child's

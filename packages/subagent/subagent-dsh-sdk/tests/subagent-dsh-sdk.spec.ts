@@ -12,8 +12,8 @@ import { existsSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import SubagentRuntime from '@neo/dsh-subagent'
-import type { Agent } from '@neo/dsh-agent'
+import SubagentRuntime from '@neo/subagent'
+import type { Agent } from '@neo/agent'
 import * as sdk from '../src/index.ts'
 import {
   DEFAULT_DISPOSE_EOF_GRACE_MS,

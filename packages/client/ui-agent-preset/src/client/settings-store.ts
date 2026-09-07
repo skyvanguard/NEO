@@ -7,8 +7,8 @@
  * namespace's `default` field, which is what the host resolves at creation.
  */
 
-import type { IApiClient } from '@neo/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@neo/dsh-client-runtime/client'
+import type { IApiClient } from '@neo/api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@neo/client-runtime/client'
 
 /** The agent-preset settings namespace on the host wire. */
 export const AGENT_PRESET_SETTINGS_NS = 'agent-presets'

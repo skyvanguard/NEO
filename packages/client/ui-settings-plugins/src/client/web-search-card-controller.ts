@@ -9,8 +9,8 @@
  * covers everything the card shows.
  */
 
-import type { IApiClient } from '@neo/dsh-client-connection/client'
-import type { SettingsScope, SettingsScopeSnapshot, SnapshotStore } from '@neo/dsh-client-runtime/client'
+import type { IApiClient } from '@neo/client-connection/client'
+import type { SettingsScope, SettingsScopeSnapshot, SnapshotStore } from '@neo/client-runtime/client'
 import {
   CardForm, numberField, textField,
   type CardActions, type CardFieldState, type CardShell,

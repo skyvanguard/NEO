@@ -1,4 +1,4 @@
-# `@neo/dsh-loader-smoke`
+# `@neo/loader-smoke`
 
 English | [中文](README.zh.md)
 

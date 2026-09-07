@@ -3,17 +3,17 @@
  * promises to honor `exec.signal`; this wrapper arms that deadline and maps its
  * own expiry to `TOOL_TIMEOUT` without racing or abandoning the tool promise.
  *
- * FIXME: settle the intended `@neo/dsh-timeout-guard` rename before the
+ * FIXME: settle the intended `@neo/timeout-guard` rename before the
  * first tagged release — suggestion only, aligning the name with its `guard/`
  * home; decide at resolution time
  * ([regrouping Agent Note](../../../../.agents/notes/implemented/architecture/2026-07-29-package-regrouping.md)).
  *
- * @module @neo/dsh-tool-call-timeout-policy
+ * @module @neo/tool-call-timeout-policy
  */
 
 import type { Context } from '@neo/cordis'
-import { deadline, timeoutOf } from '@neo/dsh-timeout'
-import type { ToolExecutionResult } from '@neo/dsh-tools'
+import { deadline, timeoutOf } from '@neo/timeout'
+import type { ToolExecutionResult } from '@neo/tools'
 
 /**
  * The code owned by this plugin, used BOTH as the internal {@link deadline}

@@ -1,17 +1,17 @@
 /** Test-owned sessions face: the SlotRegistry host contract over declarative fixtures. */
 import type { Context } from '@neo/cordis'
-import type { AttachmentIdType } from '@neo/dsh-attachment'
-import { createScope, scopeOf, SessionProvideChannel } from '@neo/dsh-client-runtime/client'
-import { createSnapshotStore } from '@neo/dsh-client-runtime/client'
+import type { AttachmentIdType } from '@neo/attachment'
+import { createScope, scopeOf, SessionProvideChannel } from '@neo/client-runtime/client'
+import { createSnapshotStore } from '@neo/client-runtime/client'
 import type {
   AgentContext, ConversationSnapshot, ISessions, ObservableSnapshot, ProjectionsFace, SessionFace, SessionId,
   SessionListState, SessionProvideDescriptor, SessionSearchResultItem, SessionSummary, SnapshotStore,
   SubagentAddress,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 // The double reports the wire schema's own search bound, like the production
 // service — a transport-varying limit would be a fiction no client can see.
-import { SESSION_SEARCH_RESULT_LIMIT } from '@neo/dsh-host-apiproxy/api'
-import type { HostObservable, SessionMaybeProvideInfo, SessionProvideInfo } from '@neo/dsh-client-ui-slots'
+import { SESSION_SEARCH_RESULT_LIMIT } from '@neo/host-apiproxy/api'
+import type { HostObservable, SessionMaybeProvideInfo, SessionProvideInfo } from '@neo/client-ui-slots'
 import { conversationSnapshot } from './fixtures.ts'
 import type { SessionFixture, Stabilizer } from './fixtures.ts'
 

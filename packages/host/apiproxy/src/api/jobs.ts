@@ -4,7 +4,7 @@
  * per push.
  */
 
-import type { JobId } from '@neo/dsh-jobs/brand'
+import type { JobId } from '@neo/jobs/brand'
 
 /**
  * One background job as the client sees it.

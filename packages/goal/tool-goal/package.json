@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-goal",
+  "name": "@neo/tool-goal",
   "description": "Model-facing same-session goal tools with execution-time authority checks",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,13 +32,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-goal": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/goal": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -46,13 +46,13 @@
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-goal": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/goal": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

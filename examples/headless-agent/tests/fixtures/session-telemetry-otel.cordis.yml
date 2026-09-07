@@ -18,20 +18,20 @@
 
 # Managed child-process groups required by the bash executor.
 - id: subprocess
-  name: '@neo/dsh-subprocess-local'
+  name: '@neo/subprocess-local'
 
 - id: bash
-  name: '@neo/dsh-bash-local'
+  name: '@neo/bash-local'
 
 - id: session-telemetry-otel
-  name: '@neo/dsh-session-telemetry-otel'
+  name: '@neo/session-telemetry-otel'
   config:
     mode: !!js process.env.DSH_TELEMETRY_E2E_MODE || 'FULL'
     exporter:
       url: !!js process.env.DSH_TELEMETRY_E2E_URL
 
 - id: agent-spine
-  name: '@neo/dsh-agent-spine-demo'
+  name: '@neo/agent-spine-demo'
   config:
     agents:
       - id: main
@@ -42,10 +42,10 @@
     workspaceContext: false
 
 - id: persistence
-  name: '@neo/dsh-session-persistence-jsonl'
+  name: '@neo/session-persistence-jsonl'
   config:
     root: './.sessions'
     compression: 'none'
 
 - id: checkpoint-policy
-  name: '@neo/dsh-session-checkpoint-policy'
+  name: '@neo/session-checkpoint-policy'

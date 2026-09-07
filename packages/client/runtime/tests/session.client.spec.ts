@@ -7,9 +7,9 @@
  */
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { SessionEvent } from '@neo/dsh-session/types'
-import type {} from '@neo/dsh-commands/types'
-import type { SessionId } from '@neo/dsh-api-remotes/client'
+import type { SessionEvent } from '@neo/session/types'
+import type {} from '@neo/commands/types'
+import type { SessionId } from '@neo/api-remotes/client'
 import { Session } from '../src/client/sessions/session.ts'
 import type {
   ChatConversationViewNode, ChatLocationNodeIndex, ChatNodeStore, ChatSnapshot,

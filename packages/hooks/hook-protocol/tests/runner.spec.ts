@@ -1,7 +1,7 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
-import type { ShellExecRequest, ShellExecSpec, ShellExecutor, ShellRunResult } from '@neo/dsh-shell'
-import { DEFAULT_HOOK_TIMEOUT_MS, runHook } from '@neo/dsh-hook-protocol'
-import type { RunHookOptions } from '@neo/dsh-hook-protocol'
+import type { ShellExecRequest, ShellExecSpec, ShellExecutor, ShellRunResult } from '@neo/shell'
+import { DEFAULT_HOOK_TIMEOUT_MS, runHook } from '@neo/hook-protocol'
+import type { RunHookOptions } from '@neo/hook-protocol'
 
 /**
  * A minimal stand-in for the bits of {@link ShellExecutor} that {@link runHook}

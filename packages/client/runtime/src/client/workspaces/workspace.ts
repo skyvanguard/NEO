@@ -2,8 +2,8 @@
 
 import type {
   IApiClient, RpcResult, WorkspaceView,
-} from '@neo/dsh-api-remotes/client'
-import { transportError } from '@neo/dsh-host-apiproxy/api'
+} from '@neo/api-remotes/client'
+import { transportError } from '@neo/host-apiproxy/api'
 import type { ObservableSnapshot } from '../contract/store.ts'
 import { Notifier } from '../sessions/notifier.ts'
 

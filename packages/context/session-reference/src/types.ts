@@ -1,7 +1,7 @@
 /** Public session-reference request, candidate, and preparation records. */
 
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { SessionId, UserMessage } from '@neo/dsh-session'
+import type { ContentBlock } from '@neo/llm'
+import type { SessionId, UserMessage } from '@neo/session'
 
 /** Durable source session, cited event seqs, and snapshot facts for prepared cross-session context. */
 export interface SessionReferenceSource {
@@ -23,7 +23,7 @@ export interface SessionReferenceSource {
   }[]
 }
 
-declare module '@neo/dsh-llm' {
+declare module '@neo/llm' {
   interface MessageSourceMap {
     'session-reference': SessionReferenceSource
   }

@@ -12,10 +12,10 @@ vi.mock('node:dns', () => ({ lookup: vi.fn() }))
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { AddressInfo } from 'node:net'
 import { Context } from '@neo/cordis'
-import WebRuntime from '@neo/dsh-web'
-import { HttpFetchProvider, LOCAL_FETCH_PROVIDER_ID } from '@neo/dsh-web-fetch-http'
-import type { HttpFetchLimits } from '@neo/dsh-web-fetch-http'
-import * as fetchPlugin from '@neo/dsh-web-fetch-http'
+import WebRuntime from '@neo/web'
+import { HttpFetchProvider, LOCAL_FETCH_PROVIDER_ID } from '@neo/web-fetch-http'
+import type { HttpFetchLimits } from '@neo/web-fetch-http'
+import * as fetchPlugin from '@neo/web-fetch-http'
 import { classifyContentType, decoderForCharset, isBlockedAddress, isSameOrigin, parseCharset, validateFetchUrl } from '../src/policy.ts'
 
 const limits: HttpFetchLimits = {

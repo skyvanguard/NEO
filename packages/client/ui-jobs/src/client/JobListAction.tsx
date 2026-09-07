@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
-import type { JobView } from '@neo/dsh-client-runtime/client'
-import { IconChevronDownOutline14, StateDot, type StateDotState } from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale, PropsRuntime, TranslateNS } from '@neo/dsh-client-ui-slots'
+import type { JobView } from '@neo/client-runtime/client'
+import { IconChevronDownOutline14, StateDot, type StateDotState } from '@neo/client-ui-primitives'
+import type { PropsLocale, PropsRuntime, TranslateNS } from '@neo/client-ui-slots'
 import { NS } from './locales.ts'
-import type {} from '@neo/dsh-client-ui-conversation/client'
+import type {} from '@neo/client-ui-conversation/client'
 import css from './JobListAction.module.css'
 
 /** Full props for the session-header background-job action. */

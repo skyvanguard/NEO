@@ -10,12 +10,12 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@neo/cordis'
-import { CallId } from '@neo/dsh-llm'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH } from '@neo/dsh-tools'
-import { LocalFileSystem } from '@neo/dsh-fs-local'
-import * as FsPolicy from '@neo/dsh-fs-observation-policy'
-import * as ToolFs from '@neo/dsh-tool-fs'
+import { CallId } from '@neo/llm'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH } from '@neo/tools'
+import { LocalFileSystem } from '@neo/fs-local'
+import * as FsPolicy from '@neo/fs-observation-policy'
+import * as ToolFs from '@neo/tool-fs'
 
 const testToolSignal = new AbortController().signal
 

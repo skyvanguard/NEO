@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context, Service } from '@neo/cordis'
-import SessionStore, { type Session, type SessionEvent } from '@neo/dsh-session'
-import * as PermissionInvariant from '@neo/dsh-permission-presets/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import SessionStore, { type Session, type SessionEvent } from '@neo/session'
+import * as PermissionInvariant from '@neo/permission-presets/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 class PermissionProbe extends Service {
   readonly names = ['safe', 'trusted']

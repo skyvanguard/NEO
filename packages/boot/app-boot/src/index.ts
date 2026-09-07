@@ -3,7 +3,7 @@
  * `.env`, install the fail-loud Loader guards, resolve the config path (snapshot-aware), load the
  * optional user patch layers from the Harness home (`~/.dsh`), expose its path resolver to
  * config expressions, and drive the Cordis Loader against a leaf `cordis.yml` until the tree settles.
- * @module @neo/dsh-app-boot
+ * @module @neo/app-boot
  */
 
 import { pathToFileURL } from 'node:url'
@@ -15,11 +15,11 @@ import { Context, type FiberState } from '@neo/cordis'
 import Loader, { type Entry, type EntryOptions } from '@neo/cordis-plugin-loader'
 import Include, { applyEntryPatches, entryListSchema, type PatchOptions } from '@neo/cordis-plugin-include'
 import Group from '@neo/cordis-plugin-group'
-import { dshHomePath, resolveDshHome } from '@neo/dsh-home-paths'
-import { createLaunchEnvironmentSnapshot, type LaunchEnvironmentSnapshot } from '@neo/dsh-launch-environment'
+import { dshHomePath, resolveDshHome } from '@neo/home-paths'
+import { createLaunchEnvironmentSnapshot, type LaunchEnvironmentSnapshot } from '@neo/launch-environment'
 import type {} from '@neo/cordis-plugin-hmr'
 // Side-effect type import: resolves `ctx.get('systemPrompt')` to the service.
-import type {} from '@neo/dsh-system-prompt'
+import type {} from '@neo/system-prompt'
 
 declare module '@neo/cordis' {
   interface Context {

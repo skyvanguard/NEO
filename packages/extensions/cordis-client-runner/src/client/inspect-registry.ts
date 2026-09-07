@@ -4,8 +4,8 @@ import type { Context } from '@neo/cordis'
 import type {
   CordisInspectProviderManifest, CordisInspectQueryRequest, CordisInspectQueryResolution,
   CordisInspectRequestId, JsonValue,
-} from '@neo/dsh-api-remotes/client'
-import type { SessionId } from '@neo/dsh-client-connection/client'
+} from '@neo/api-remotes/client'
+import type { SessionId } from '@neo/client-connection/client'
 
 /** Context supplied to a Client inspect provider query. */
 export interface ClientCordisInspectQueryContext {

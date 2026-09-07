@@ -4,12 +4,12 @@
  * {@link CompactionEngine}. This interface necessarily depends on session and LLM
  * vocabulary; the rationale is in the
  * [compaction Agent Note](../../../../.agents/notes/implemented/feature/2026-06-18-compaction-capability-seam.md).
- * @module @neo/dsh-compaction
+ * @module @neo/compaction
  */
 
 import { Context, Service } from '@neo/cordis'
-import type { Session } from '@neo/dsh-session'
-import type { CommandId } from '@neo/dsh-commands/brand'
+import type { Session } from '@neo/session'
+import type { CommandId } from '@neo/commands/brand'
 import type { CompactionResult } from './types.ts'
 
 export type { CompactionResult } from './types.ts'

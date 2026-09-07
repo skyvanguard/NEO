@@ -1,4 +1,4 @@
-# @neo/dsh-settings-file
+# @neo/settings-file
 
 English | [中文](README.zh.md)
 

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-home-paths`.
- * @module @neo/dsh-home-paths/invariant
+ * Package-owned invariant companion for `@neo/home-paths`.
+ * @module @neo/home-paths/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-home-paths'
+const PACKAGE_NAME = '@neo/home-paths'
 
 /** Cordis companion plugin name. */
 export const name = 'home-paths-invariant'

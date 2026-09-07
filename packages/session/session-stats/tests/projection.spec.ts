@@ -12,13 +12,13 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createMessage } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import * as SessionStatsPlugin from '@neo/dsh-session-stats'
-import { sessionStatsProjectionDefinition } from '@neo/dsh-session-stats/src/projection.ts'
-import type { SessionStatsProjection } from '@neo/dsh-session-stats/types'
+import { createMessage } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
+import type { Session, SessionEvent } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
+import * as SessionStatsPlugin from '@neo/session-stats'
+import { sessionStatsProjectionDefinition } from '@neo/session-stats/src/projection.ts'
+import type { SessionStatsProjection } from '@neo/session-stats/types'
 
 async function harness(withStatsPlugin: boolean): Promise<{ ctx: Context; session: Session }> {
   const ctx = new Context()

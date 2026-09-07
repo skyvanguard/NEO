@@ -3,7 +3,7 @@
  * and bridges bindings over its message port. This is containment, not a security boundary:
  * model code has bash-equivalent trust despite an empty environment, a heap cap, measured
  * event-loop busy-time and wall-time budgets, and termination that also stops synchronous loops.
- * @module @neo/dsh-code-runtime-worker-thread
+ * @module @neo/code-runtime-worker-thread
  */
 
 import { Worker } from 'node:worker_threads'
@@ -12,10 +12,10 @@ import type { Readable } from 'node:stream'
 import { fileURLToPath } from 'node:url'
 import { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import { CodeRuntime, DUNDER_MEMBER, PORTABLE_RESERVED_WORDS, RESERVED_BINDING_GLOBALS, RESERVED_ERROR_MEMBERS } from '@neo/dsh-code-runtime'
-import type { CodeBindingNamespace, CodeJsonValue, CodeRunFailure, CodeRunRequest, CodeRunResult } from '@neo/dsh-code-runtime'
-import { snapshotJsonValue } from '@neo/dsh-session'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import { CodeRuntime, DUNDER_MEMBER, PORTABLE_RESERVED_WORDS, RESERVED_BINDING_GLOBALS, RESERVED_ERROR_MEMBERS } from '@neo/code-runtime'
+import type { CodeBindingNamespace, CodeJsonValue, CodeRunFailure, CodeRunRequest, CodeRunResult } from '@neo/code-runtime'
+import { snapshotJsonValue } from '@neo/session'
 import type { ReplyMessage, WorkerBootData, WorkerToHost } from './protocol.ts'
 import { jsonStringBytesUpTo, jsonValueBytesUpTo, truncateJsonStringBytes } from './output-json.ts'
 import { decodeWorkerJson, encodeWorkerJson } from './worker-json.ts'

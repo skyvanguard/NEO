@@ -3,12 +3,12 @@ import { chmod, mkdtemp, mkdir, rm, writeFile, realpath } from 'node:fs/promises
 import { tmpdir } from 'node:os'
 import { delimiter, join } from 'node:path'
 import { Context } from '@neo/cordis'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
-import LocalFileSystem from '@neo/dsh-fs-local'
-import Lsp, { type LspQueryRequest } from '@neo/dsh-lsp'
-import * as LspLocal from '@neo/dsh-lsp-stdio'
-import type { Config, LspLocalServerConfig } from '@neo/dsh-lsp-stdio'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
+import LocalFileSystem from '@neo/fs-local'
+import Lsp, { type LspQueryRequest } from '@neo/lsp'
+import * as LspLocal from '@neo/lsp-stdio'
+import type { Config, LspLocalServerConfig } from '@neo/lsp-stdio'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 
 let root: string
 let ws: string

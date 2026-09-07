@@ -21,10 +21,10 @@
 
 import { Zip, ZipDeflate } from 'fflate'
 import type { Context } from '@neo/cordis'
-import type { AttachmentStore, ImageAttachmentRef } from '@neo/dsh-attachment'
-import type { SessionLineageNode, SessionQueryEngine } from '@neo/dsh-session-query'
-import type { SessionId, SessionStore } from '@neo/dsh-session'
-import type { SessionPersistence, SessionRawArtifact } from '@neo/dsh-session-persistence'
+import type { AttachmentStore, ImageAttachmentRef } from '@neo/attachment'
+import type { SessionLineageNode, SessionQueryEngine } from '@neo/session-query'
+import type { SessionId, SessionStore } from '@neo/session'
+import type { SessionPersistence, SessionRawArtifact } from '@neo/session-persistence'
 
 /** Valid fflate DEFLATE levels accepted by session-log export. */
 export type SessionLogCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9

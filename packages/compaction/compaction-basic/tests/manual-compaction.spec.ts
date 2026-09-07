@@ -1,37 +1,37 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
-import InvariantRegistry from '@neo/dsh-invariants'
-import { CommandId } from '@neo/dsh-commands/brand'
-import * as SessionInvariant from '@neo/dsh-session/invariant'
-import * as AgentInvariant from '@neo/dsh-agent/invariant'
-import * as AgentLoopInvariant from '@neo/dsh-agent-loop/invariant'
-import * as CompactionInvariant from '@neo/dsh-compaction/invariant'
-import * as CompactionBasicInvariant from '@neo/dsh-compaction-basic/invariant'
-import { BasicCompactionEngine } from '@neo/dsh-compaction-basic'
-import { CompactionId, isCompactCheckpointSource, ManualCompactionError } from '@neo/dsh-compaction'
-import type { CompactionResult } from '@neo/dsh-compaction'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
+import InvariantRegistry from '@neo/invariants'
+import { CommandId } from '@neo/commands/brand'
+import * as SessionInvariant from '@neo/session/invariant'
+import * as AgentInvariant from '@neo/agent/invariant'
+import * as AgentLoopInvariant from '@neo/agent-loop/invariant'
+import * as CompactionInvariant from '@neo/compaction/invariant'
+import * as CompactionBasicInvariant from '@neo/compaction-basic/invariant'
+import { BasicCompactionEngine } from '@neo/compaction-basic'
+import { CompactionId, isCompactCheckpointSource, ManualCompactionError } from '@neo/compaction'
+import type { CompactionResult } from '@neo/compaction'
 import {
   createAssistantMessage,
   createUserMessage,
   LlmAdapter,
-} from '@neo/dsh-llm'
+} from '@neo/llm'
 import type {
   ContentBlock,
   LlmResolvedModelInfo,
   Message,
   StreamChunk,
   TokenUsage,
-} from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId, type SessionEvent } from '@neo/dsh-session'
-import LlmRuntime from '@neo/dsh-llm'
-import TokenMeter from '@neo/dsh-token-meter'
-import type { Agent } from '@neo/dsh-agent'
+} from '@neo/llm'
+import SessionStore, { Session, SessionId, type SessionEvent } from '@neo/session'
+import LlmRuntime from '@neo/llm'
+import TokenMeter from '@neo/token-meter'
+import type { Agent } from '@neo/agent'
 import type {
   SummarizationInput,
   SummaryResult,
-} from '@neo/dsh-compaction-basic/src/summarizer.ts'
+} from '@neo/compaction-basic/src/summarizer.ts'
 
 const MODEL = 'mock'
 const SIGNAL = new AbortController().signal

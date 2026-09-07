@@ -3,18 +3,18 @@ import { Context } from '@neo/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage, CallId  } from '@neo/dsh-llm'
+import type { Agent } from '@neo/agent'
+import { createUserMessage, CallId  } from '@neo/llm'
 import SessionStore, {
   SESSION_FORMAT_VERSION,
   SessionId,
   type Session,
-} from '@neo/dsh-session'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
-import SqliteSessionQueryEngine from '@neo/dsh-session-query-sqlite'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import * as ToolSessionQuery from '@neo/dsh-tool-session-query'
+} from '@neo/session'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
+import SqliteSessionQueryEngine from '@neo/session-query-sqlite'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import * as ToolSessionQuery from '@neo/tool-session-query'
 
 const temporaryDirectories: string[] = []
 const contexts: Context[] = []

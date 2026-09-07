@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-typert-registry",
+  "name": "@neo/typert-registry",
   "description": "Runtime registry for generated package reflection and Zod schemas",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -53,15 +53,15 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

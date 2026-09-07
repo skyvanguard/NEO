@@ -2,12 +2,12 @@
  * Public request, value, and failure vocabulary for per-message feedback.
  * This module contains types only so generated Remote clients can consume it
  * without importing Host runtime code.
- * @module @neo/dsh-message-feedback/types
+ * @module @neo/message-feedback/types
  */
 
-import type { Branded } from '@neo/dsh-brand'
-import type { MessageId } from '@neo/dsh-llm/brand'
-import type { SessionId } from '@neo/dsh-session/types'
+import type { Branded } from '@neo/brand'
+import type { MessageId } from '@neo/llm/brand'
+import type { SessionId } from '@neo/session/types'
 
 /** Opaque compare-and-set token for one exact feedback item revision. */
 export type MessageFeedbackVersion = Branded<'MessageFeedbackVersion'>

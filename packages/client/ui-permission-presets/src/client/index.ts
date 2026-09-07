@@ -13,18 +13,18 @@
  * The General-settings row separately writes the default preset for sessions
  * created later through the host Settings API.
  */
-import type { ConnectionHandle } from '@neo/dsh-api-remotes/client'
+import type { ConnectionHandle } from '@neo/api-remotes/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@neo/dsh-client-locale/client'
+import type {} from '@neo/client-locale/client'
 // Type-only: the settings slot types (this package registers a General row).
-import type {} from '@neo/dsh-client-ui-settings/client'
+import type {} from '@neo/client-ui-settings/client'
 // Type-only: pulls the ctx.remote merge and the forwarded-event key face
 // (the settings invalidation rides the allowlist) into this program.
-import type {} from '@neo/dsh-api-remotes/client'
-import type { ClientContext, SessionFace } from '@neo/dsh-client-runtime/client'
-import type { CommandUiContract, SelectOption } from '@neo/dsh-client-ui-commands/client'
-import type { ClientSessionContext } from '@neo/dsh-client-ui-input-trigger/client'
-import type { PermissionSelect } from '@neo/dsh-permission-presets/client'
+import type {} from '@neo/api-remotes/client'
+import type { ClientContext, SessionFace } from '@neo/client-runtime/client'
+import type { CommandUiContract, SelectOption } from '@neo/client-ui-commands/client'
+import type { ClientSessionContext } from '@neo/client-ui-input-trigger/client'
+import type { PermissionSelect } from '@neo/permission-presets/client'
 import { PermissionRow } from './PermissionRow.tsx'
 import type { PermissionRowInjected } from './PermissionRow.tsx'
 import {

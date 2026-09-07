@@ -1,4 +1,4 @@
-# @neo/dsh-command-compact
+# @neo/command-compact
 
 English | [中文](README.zh.md)
 
@@ -34,11 +34,11 @@ The producer injects `commands` and `compact`. Mount the command registry, one b
 
 ```yaml
 - id: commands
-  name: '@neo/dsh-commands'
+  name: '@neo/commands'
 - id: compaction-basic
-  name: '@neo/dsh-compaction-basic'
+  name: '@neo/compaction-basic'
 - id: command-compact
-  name: '@neo/dsh-command-compact'
+  name: '@neo/command-compact'
 ```
 
 The shipped `dsh` base mounts it beside `compaction-basic`, and the Web client provides the command adapter. Automation surfaces that compose no command adapter keep automatic compaction only.

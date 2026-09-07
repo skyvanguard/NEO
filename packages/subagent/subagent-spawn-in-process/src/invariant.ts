@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-subagent-spawn-in-process`.
- * @module @neo/dsh-subagent-spawn-in-process/invariant
+ * Package-owned invariant companion for `@neo/subagent-spawn-in-process`.
+ * @module @neo/subagent-spawn-in-process/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-subagent-spawn-in-process'
+const PACKAGE_NAME = '@neo/subagent-spawn-in-process'
 
 /** Cordis companion plugin name. */
 export const name = 'subagent-spawn-in-process-invariant'

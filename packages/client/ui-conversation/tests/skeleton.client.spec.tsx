@@ -4,18 +4,18 @@
 // owned draft, and the hero workspace picker (switching = retargetWorkspace).
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
+import { bindSnapshotSelector } from '@neo/client-web-react'
 import {
   createSnapshotStore, EMPTY_CHAT_SNAPSHOT, EMPTY_CONVERSATION_VIEWS,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import type {
   ConversationSnapshot, SessionId, SessionListState, WorkspaceId, WorkspaceListState, WorkspaceView,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import type { ConversationRootProps } from '../src/client/skeleton/ConversationRoot.tsx'
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { en as commonEn } from '@neo/dsh-client-locale/src/locales/en.ts'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+import type { ClientContext } from '@neo/client-runtime/client'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { en as commonEn } from '@neo/client-locale/src/locales/en.ts'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 import { createChatStore } from '../src/client/stores.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { en, zh } from '../src/client/locales.ts'

@@ -2,12 +2,12 @@
  * The background-job Service Definition (`ctx.jobs`). It owns the contract for
  * job ids, session-scoped access, lifecycle state, completion listeners, and
  * owner cleanup while producers retain their execution resources. The
- * process-local registry lives in `@neo/dsh-jobs-local`.
- * @module @neo/dsh-jobs
+ * process-local registry lives in `@neo/jobs-local`.
+ * @module @neo/jobs
  */
 
 import { Context, Service } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
+import type { Agent } from '@neo/agent'
 import type {
   JobDoneListener, JobId, JobRead, JobSnapshot, JobStart, JobsChangedListener,
 } from './types.ts'
@@ -65,7 +65,7 @@ export abstract class JobRegistry extends Service {
     // would register a ctx.jobs with no method implementations and fail far
     // from the misconfiguration. Fail loud at load instead.
     if (new.target === JobRegistry) {
-      throw new Error('@neo/dsh-jobs is the abstract job registry seam; load an implementation such as @neo/dsh-jobs-local instead')
+      throw new Error('@neo/jobs is the abstract job registry seam; load an implementation such as @neo/jobs-local instead')
     }
     super(ctx, 'jobs')
   }

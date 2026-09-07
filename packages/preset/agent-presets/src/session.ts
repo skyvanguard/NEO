@@ -10,12 +10,12 @@
  * preset decides the tool schemas and prompt sections the model sees.
  *
  * Reconstruction reads {@link resolveSessionPreset}, never the header alone.
- * @module @neo/dsh-agent-presets/session
+ * @module @neo/agent-presets/session
  */
 
-import type { SessionEvent, SessionHeader } from '@neo/dsh-session'
+import type { SessionEvent, SessionHeader } from '@neo/session'
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * The session's agent preset was chosen after creation, while the session

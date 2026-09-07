@@ -1,8 +1,8 @@
 /** Unified JSON-value schema DSL, inference, compilation, and typed tool helper. @module dsh-tools/schema */
 
-import { HarnessError } from '@neo/dsh-llm'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { JsonValue } from '@neo/dsh-session'
+import { HarnessError } from '@neo/llm'
+import type { ContentBlock } from '@neo/llm'
+import type { JsonValue } from '@neo/session'
 import type { ToolDefinition, ToolExecution, ToolExecutionResult, ToolRunContext, ToolResult } from './index.ts'
 import { assertSupportedJsonSchema, isJsonSchemaRecord, isPlainJsonArray, JsonSchemaError, validateJsonSchemaValue } from './json-schema.ts'
 import type { JsonSchemaNode, JsonSchemaScalar, ObjectJsonSchema } from './json-schema.ts'

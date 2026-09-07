@@ -1,4 +1,4 @@
-# @neo/dsh-tool-ask-user
+# @neo/tool-ask-user
 
 English | [中文](README.zh.md)
 

@@ -1,9 +1,9 @@
 /** Current-surface projection and byte-bounded rendering. */
 
-import { isCompactCheckpointSource } from '@neo/dsh-compaction'
-import type { SessionSurfaceSnapshot } from '@neo/dsh-session-query'
-import { assertNever } from '@neo/dsh-llm'
-import { TextRetainer } from '@neo/dsh-output-retention'
+import { isCompactCheckpointSource } from '@neo/compaction'
+import type { SessionSurfaceSnapshot } from '@neo/session-query'
+import { assertNever } from '@neo/llm'
+import { TextRetainer } from '@neo/output-retention'
 import { stringifyTagSafeJson } from './serialization.ts'
 import type { ReferencedConversationItem } from './types.ts'
 

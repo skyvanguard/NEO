@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-workflow",
+  "name": "@neo/workflow",
   "description": "Workflow capability seam: ctx.workflowEngine service, run vocabulary, and workflow/* events",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -37,19 +37,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

@@ -2,7 +2,7 @@
  * Public request/result vocabulary for host-side document attachment. Types
  * only, no Node imports, so the generated Remote client can consume it in the
  * browser.
- * @module @neo/dsh-document-attach/types
+ * @module @neo/document-attach/types
  */
 
 /** A document uploaded to be saved into the session workspace. */

@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-permission-presets
+# @neo/client-ui-permission-presets
 
 English | [中文](README.zh.md)
 

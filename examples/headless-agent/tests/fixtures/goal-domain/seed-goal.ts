@@ -1,7 +1,7 @@
 /** Test-only Loader plugin that creates a goal at the first real step edge. */
 
 import type { Context } from '@neo/cordis'
-import type {} from '@neo/dsh-goal'
+import type {} from '@neo/goal'
 
 export const name = 'seed-goal'
 export const inject = ['goals']

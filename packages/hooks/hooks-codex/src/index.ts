@@ -6,7 +6,7 @@
  * blocking decisions are honored. Shared execution and parsing live in
  * `dsh-hook-protocol`; see the
  * [hook-bridges Agent Note](../../../../.agents/notes/implemented/feature/2026-06-30-hook-bridges.md).
- * @module @neo/dsh-hooks-codex
+ * @module @neo/hooks-codex
  */
 
 // Each dialect bridge keeps its complete dependency list visible at the entry
@@ -15,12 +15,12 @@
 import { readFileSync } from 'node:fs'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { ContentBlock, MessageSource } from '@neo/dsh-llm'
-import type { UserMessage } from '@neo/dsh-session'
-import type {} from '@neo/dsh-session-persistence'
-import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@neo/dsh-tools'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { ContentBlock, MessageSource } from '@neo/llm'
+import type { UserMessage } from '@neo/session'
+import type {} from '@neo/session-persistence'
+import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@neo/tools'
 import {
   appendHookInvoked,
   appendHookResult,
@@ -33,7 +33,7 @@ import {
   type HookOutput,
   type MatcherGroup,
   type MergedHookOutcome,
-} from '@neo/dsh-hook-protocol'
+} from '@neo/hook-protocol'
 import { parseCodexConfig, type CodexHookConfig } from './config.ts'
 /* jscpd:ignore-end */
 

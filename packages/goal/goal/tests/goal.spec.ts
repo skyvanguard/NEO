@@ -1,16 +1,16 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry, { agentEvents, Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage, HarnessError } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId, type UserMessage } from '@neo/dsh-session'
+import AgentRegistry, { agentEvents, Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import { createUserMessage, HarnessError } from '@neo/llm'
+import SessionStore, { Session, SessionId, type UserMessage } from '@neo/session'
 import GoalService, {
   GoalError,
   GoalId,
   decodeGoalChange,
   foldGoal,
-} from '@neo/dsh-goal'
-import type { GoalChangeMeta, GoalRef, GoalSnapshotChangeMeta } from '@neo/dsh-goal'
+} from '@neo/goal'
+import type { GoalChangeMeta, GoalRef, GoalSnapshotChangeMeta } from '@neo/goal'
 
 interface StubAgent {
   agent: Agent
@@ -53,7 +53,7 @@ function stubAgentForSession(session: Session): StubAgent {
 }
 
 /** Build a registry-compatible agent around a fresh session. */
-function stubAgent(rawId: string, seed?: readonly import('@neo/dsh-session').SessionEvent[]): StubAgent {
+function stubAgent(rawId: string, seed?: readonly import('@neo/session').SessionEvent[]): StubAgent {
   return stubAgentForSession(Session.create(SessionId(rawId), seed))
 }
 

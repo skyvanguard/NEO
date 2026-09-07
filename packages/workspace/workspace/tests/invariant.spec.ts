@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import InvariantRegistry from '@neo/dsh-invariants'
-import type { DomainChanged } from '@neo/dsh-storage-domain'
+import InvariantRegistry from '@neo/invariants'
+import type { DomainChanged } from '@neo/storage-domain'
 import * as WorkspaceInvariant from '../src/invariant.ts'
 import { WorkspaceId } from '../src/index.ts'
 

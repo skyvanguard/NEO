@@ -8,16 +8,16 @@ import { mkdtemp, readFile, realpath, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
-import SandboxedFileSystem from '@neo/dsh-fs-sandbox'
-import type { ContentBlock } from '@neo/dsh-llm'
-import SandboxPolicyService, { setSandboxMode } from '@neo/dsh-sandbox-policy'
-import { SessionId, type SessionEvent } from '@neo/dsh-session'
-import * as ToolFs from '@neo/dsh-tool-fs'
-import ApprovalService from '@neo/dsh-user-approval'
-import { snapshotSubagentDescriptor } from '@neo/dsh-subagent'
+import type { Agent } from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
+import SandboxedFileSystem from '@neo/fs-sandbox'
+import type { ContentBlock } from '@neo/llm'
+import SandboxPolicyService, { setSandboxMode } from '@neo/sandbox-policy'
+import { SessionId, type SessionEvent } from '@neo/session'
+import * as ToolFs from '@neo/tool-fs'
+import ApprovalService from '@neo/user-approval'
+import { snapshotSubagentDescriptor } from '@neo/subagent'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import { startInProcessRun } from '../src/index.ts'
 
@@ -114,7 +114,7 @@ describe('in-process policy inheritance', () => {
       const runtimeContext = child.session.events.find(
         (event): event is SessionEvent<'user/message'> => event.type === 'user/message'
           && event.data.source.kind === 'plugin'
-          && event.data.source.plugin === '@neo/dsh-system-prompt',
+          && event.data.source.plugin === '@neo/system-prompt',
       )
       if (request === undefined || runtimeContext === undefined) throw new Error('child request lacks its runtime policy context')
       expect(runtimeContext.seq).toBeLessThan(request.seq)

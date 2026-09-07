@@ -1,4 +1,4 @@
-# @neo/dsh-tool-bash-persistent
+# @neo/tool-bash-persistent
 
 English | [中文](README.zh.md)
 

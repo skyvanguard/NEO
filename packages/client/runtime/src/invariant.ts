@@ -1,6 +1,6 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-client-runtime`.
- * @module @neo/dsh-client-runtime/invariant
+ * Package-owned invariant companion for `@neo/client-runtime`.
+ * @module @neo/client-runtime/invariant
  */
 
 /* jscpd:ignore-start */
@@ -9,10 +9,10 @@
  * in this compilation unit (intersection reads `never`) but consumers merge
  * keys in; the rule fires on the empty-map view, not on real redundancy. */
 import type { Context } from '@neo/cordis'
-import type { SlotMap } from '@neo/dsh-client-ui-slots'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { SlotMap } from '@neo/client-ui-slots'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-client-runtime'
+const PACKAGE_NAME = '@neo/client-runtime'
 
 /** Cordis companion plugin name. */
 export const name = 'client-runtime-invariant'

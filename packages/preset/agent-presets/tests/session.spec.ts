@@ -8,8 +8,8 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { SessionId } from '@neo/dsh-session'
-import type { SessionEvent, SessionHeader } from '@neo/dsh-session'
+import { SessionId } from '@neo/session'
+import type { SessionEvent, SessionHeader } from '@neo/session'
 import { resolveSessionPreset } from '../src/session.ts'
 
 /** A header carrying the creation-time preset, if any. */

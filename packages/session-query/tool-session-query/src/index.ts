@@ -1,14 +1,14 @@
 /**
  * Model-facing, workspace-authorized session-history search and read tools.
  *
- * @module @neo/dsh-tool-session-query
+ * @module @neo/tool-session-query
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import { defineTool } from '@neo/dsh-tools'
-import type {} from '@neo/dsh-system-prompt'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import { defineTool } from '@neo/tools'
+import type {} from '@neo/system-prompt'
 import { toolInput } from './input.ts'
 import { operations } from './operations.ts'
 import { presentation } from './presentation.ts'

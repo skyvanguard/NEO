@@ -1,12 +1,12 @@
 import type { Context } from '@neo/cordis'
 import type {
   ConversationMatch, ConversationNodeContext, ConversationNodeDefinition, TurnErrorNode,
-} from '@neo/dsh-client-runtime/client'
-import { displayFailureMessage } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-llm-retry/types'
+} from '@neo/client-runtime/client'
+import { displayFailureMessage } from '@neo/client-runtime/client'
+import type {} from '@neo/llm-retry/types'
 import { chatNode } from './common.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Terminal turn failure not superseded by retry. */
     'turn-error': TurnErrorNode

@@ -6,8 +6,8 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import TokenMeter from '@neo/dsh-token-meter'
-import ToolResultPruner from '@neo/dsh-compaction-tool-result-pruner'
+import TokenMeter from '@neo/token-meter'
+import ToolResultPruner from '@neo/compaction-tool-result-pruner'
 
 let root: string | undefined
 let context: Context | undefined
@@ -24,8 +24,8 @@ describe('compaction-tool-result-pruner real Loader composition', () => {
     root = await mkdtemp(join(tmpdir(), 'dsh-compact-tool-result-prune-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@neo/dsh-token-meter'",
-      "- name: '@neo/dsh-compaction-tool-result-pruner'",
+      "- name: '@neo/token-meter'",
+      "- name: '@neo/compaction-tool-result-pruner'",
       '  config:',
       '    thresholdChars: 100',
       '    headChars: 20',
@@ -40,8 +40,8 @@ describe('compaction-tool-result-pruner real Loader composition', () => {
     context.loader.internal = {
       version: 'v2',
       async import(specifier: string) {
-        if (specifier === '@neo/dsh-token-meter') return TokenMeter
-        if (specifier === '@neo/dsh-compaction-tool-result-pruner') return ToolResultPruner
+        if (specifier === '@neo/token-meter') return TokenMeter
+        if (specifier === '@neo/compaction-tool-result-pruner') return ToolResultPruner
         throw new Error(`unexpected Loader import: ${specifier}`)
       },
     } as unknown as NonNullable<typeof context.loader.internal>

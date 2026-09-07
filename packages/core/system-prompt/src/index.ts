@@ -1,14 +1,14 @@
 /**
  * Registry for ordered system sections, dynamic context, tool schemas, and prompt variables.
  *
- * @module @neo/dsh-system-prompt
+ * @module @neo/system-prompt
  */
 
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { AnonymousEntries, NamedEntries, ScopedLayers, scopeTarget } from '@neo/dsh-scope'
-import type { ScopeKey, ScopeLayer, Scoped } from '@neo/dsh-scope'
-import type { ContextSnapshotSection, ToolSchema } from '@neo/dsh-llm'
+import { AnonymousEntries, NamedEntries, ScopedLayers, scopeTarget } from '@neo/scope'
+import type { ScopeKey, ScopeLayer, Scoped } from '@neo/scope'
+import type { ContextSnapshotSection, ToolSchema } from '@neo/llm'
 
 declare module '@neo/cordis' {
   interface Context {
@@ -18,7 +18,7 @@ declare module '@neo/cordis' {
   interface Events {
     /**
      * Expert waterfall over the assembled sections, contexts, tools, and variables.
-     * Scope-filtered dispatch (`@neo/dsh-scope`): scoped listeners
+     * Scope-filtered dispatch (`@neo/scope`): scoped listeners
      * receive only that scope's assemblies. The returned value is authoritative.
      * A supplied signal controls only this explicit assembly request and must not
      * be retained to control later turns. A registered complete section is

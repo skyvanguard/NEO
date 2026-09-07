@@ -1,15 +1,15 @@
 /** Read-only Host plugin inventory registered into Web Settings. */
 
-import type {} from '@neo/dsh-client-locale/client'
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-client-ui-settings/client'
+import type {} from '@neo/client-locale/client'
+import type { ClientContext } from '@neo/client-runtime/client'
+import type {} from '@neo/client-ui-settings/client'
 import { PluginInventorySettingsTab, type PluginInventorySettingsTabInjected } from './PluginInventorySettingsTab.tsx'
 import { en, es, zh, type PluginInventoryLocaleKey } from './locales.ts'
 
 export type { PluginInventorySettingsTabInjected, PluginInventorySettingsTabProps } from './PluginInventorySettingsTab.tsx'
 export type { PluginInventoryLocaleKey } from './locales.ts'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Read-only Host plugin inventory copy. */
     'settings.pluginInventory': PluginInventoryLocaleKey

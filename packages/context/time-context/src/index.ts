@@ -2,14 +2,14 @@
  * Opt-in request clock context. Eligible steps add durable,
  * source-attributed time readings to the request history.
  *
- * @module @neo/dsh-time-context
+ * @module @neo/time-context
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { UserMessage } from '@neo/dsh-llm'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { UserMessage } from '@neo/llm'
 import {
   deriveBrowserTimeZoneContext,
   renderBrowserTimeZoneContext,

@@ -11,13 +11,13 @@ import { Service } from '@neo/cordis'
 import type { Context } from '@neo/cordis'
 // Type-only: pulls the ctx.remote merge and the forwarded-event key face
 // (`commands/change` rides the allowlist) into this program.
-import type {} from '@neo/dsh-api-remotes/client'
-import type { CommandResult } from '@neo/dsh-commands/types'
-import type { ClientContext, ISessions, SessionId } from '@neo/dsh-client-runtime/client'
+import type {} from '@neo/api-remotes/client'
+import type { CommandResult } from '@neo/commands/types'
+import type { ClientContext, ISessions, SessionId } from '@neo/client-runtime/client'
 import type {
   CandidateRequest, ClientSessionContext, CommandClaim, PickOutcome, InputTriggerCandidate, InputTriggerPick,
   SubmitOutcome,
-} from '@neo/dsh-client-ui-input-trigger/client'
+} from '@neo/client-ui-input-trigger/client'
 import type { CommandContribution, CommandDecoration, CommandUiContract } from './contract.ts'
 import type { CommandDescriptor } from './directory.ts'
 import { CommandDirectory } from './directory.ts'

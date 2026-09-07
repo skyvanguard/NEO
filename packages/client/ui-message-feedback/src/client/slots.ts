@@ -5,15 +5,15 @@
  * merge lives here. Live per-message state arrives through the `feedback`
  * hook (the framework standard kit binds it into `useFeedback`); inject
  * carries the two mutation verbs plus the lazy loader.
- * @module @neo/dsh-client-ui-message-feedback/client/slots
+ * @module @neo/client-ui-message-feedback/client/slots
  */
 
 import type {
   HostObservable, InjectFace, PropsLocale, PropsRuntime,
-} from '@neo/dsh-client-ui-slots'
-import type {} from '@neo/dsh-client-ui-conversation/client'
-import type { MessageId } from '@neo/dsh-client-connection/client'
-import type { MessageFeedbackRating } from '@neo/dsh-message-feedback/types'
+} from '@neo/client-ui-slots'
+import type {} from '@neo/client-ui-conversation/client'
+import type { MessageId } from '@neo/client-connection/client'
+import type { MessageFeedbackRating } from '@neo/message-feedback/types'
 // Type-only: pulls this package's LocaleNamespaceMap merge (the 'feedback' seat).
 import type {} from './locales.ts'
 import type { MessageFeedbackActionResult, MessageFeedbackView } from './controller.ts'

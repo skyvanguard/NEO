@@ -5,12 +5,12 @@
 // ../contract/slots.ts beside the other input-region slots.
 import type { Context } from '@neo/cordis'
 import { useEffect, useId, useMemo, useState } from 'react'
-import type { PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
+import type { PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
+import type { SessionId } from '@neo/client-runtime/client'
 import {
   IconCheckOutline16, IconChevronDownOutline14, IconChevronUpOutline14, IconCloseOutline16,
   IconEditOutline16, IconQueueOutline14, IconSendOutline14, IconTrashOutline16, Tooltip,
-} from '@neo/dsh-client-ui-primitives'
+} from '@neo/client-ui-primitives'
 import type { QueueAction, QueueItemId } from '../contract/queue.ts'
 import { NS } from '../locales.ts'
 import css from './QueueDock.module.css'

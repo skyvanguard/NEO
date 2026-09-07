@@ -1,6 +1,6 @@
 /**
  * Named backend registry of the storage hub.
- * @module @neo/dsh-storage/src/registry
+ * @module @neo/storage/src/registry
  */
 
 import type { StorageBackend } from './backend.ts'

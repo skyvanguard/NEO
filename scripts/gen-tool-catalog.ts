@@ -9,60 +9,60 @@
 import { globSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 import { Context } from '@neo/cordis'
-import type { ToolSchema } from '@neo/dsh-llm'
-import AgentRegistry from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import { createScope } from '@neo/dsh-scope'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import SqliteSessionQueryEngine from '@neo/dsh-session-query-sqlite'
-import GoalService from '@neo/dsh-goal'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { type Config as ToolsConfig } from '@neo/dsh-tools'
-import LocalBashExecutor from '@neo/dsh-bash-local'
-import * as BashEnvPlugin from '@neo/dsh-shell-env'
-import { PwshLocalExecutor } from '@neo/dsh-pwsh-local'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
-import LocalFileSystem from '@neo/dsh-fs-local'
-import { AttachmentStore } from '@neo/dsh-attachment'
-import type { ImageAttachmentLimits, ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@neo/dsh-attachment'
-import UserQuestionService from '@neo/dsh-user-questions'
-import PlanModeController from '@neo/dsh-plan-mode'
-import WebRuntime from '@neo/dsh-web'
-import * as WebSearchExa from '@neo/dsh-web-search-exa'
-import * as WebFetchLocal from '@neo/dsh-web-fetch-http'
-import SubagentRuntime from '@neo/dsh-subagent'
-import type { SubagentProvider, SubagentReportDelivery } from '@neo/dsh-subagent'
-import * as ToolSubagentControl from '@neo/dsh-tool-subagent-control'
-import * as ToolSubagentListAgents from '@neo/dsh-tool-subagent-control/list-agents'
-import * as ToolSubagentReport from '@neo/dsh-tool-subagent-report'
-import SkillRegistry from '@neo/dsh-skill'
-import * as SkillFileSystem from '@neo/dsh-skill-filesystem'
-import LocalJobRegistry from '@neo/dsh-jobs-local'
-import * as ToolAskUser from '@neo/dsh-tool-ask-user'
-import * as ToolBash from '@neo/dsh-tool-bash'
-import * as ToolPwsh from '@neo/dsh-tool-pwsh'
-import * as ToolBashPersistent from '@neo/dsh-tool-bash-persistent'
-import CordisHostRunner from '@neo/dsh-cordis-host-runner'
-import * as ToolCordis from '@neo/dsh-tool-cordis'
-import * as ToolFs from '@neo/dsh-tool-fs'
-import * as ToolFsSearch from '@neo/dsh-tool-fs-search'
-import * as ToolStrReplaceEditor from '@neo/dsh-tool-str-replace-editor'
-import TerminalSessionService from '@neo/dsh-terminal'
-import * as ToolPty from '@neo/dsh-tool-terminal'
-import * as ToolGoal from '@neo/dsh-tool-goal'
-import * as ToolSchedule from '@neo/dsh-schedule'
-import Lsp from '@neo/dsh-lsp'
-import * as ToolLsp from '@neo/dsh-tool-lsp'
-import * as ToolSkill from '@neo/dsh-tool-skill'
-import * as ToolSessionQuery from '@neo/dsh-tool-session-query'
-import * as ToolTasks from '@neo/dsh-tool-jobs'
-import * as ToolTodo from '@neo/dsh-tool-todo'
-import * as ToolSubagent from '@neo/dsh-tool-subagent'
-import * as ToolWeb from '@neo/dsh-tool-web'
-import VmWorkflowEngine from '@neo/dsh-workflow-worker-thread'
-import * as ToolRalph from '@neo/dsh-tool-ralph'
-import * as ToolWorkflow from '@neo/dsh-tool-workflow'
+import type { ToolSchema } from '@neo/llm'
+import AgentRegistry from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import { createScope } from '@neo/scope'
+import SessionStore, { SessionId } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
+import SqliteSessionQueryEngine from '@neo/session-query-sqlite'
+import GoalService from '@neo/goal'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { type Config as ToolsConfig } from '@neo/tools'
+import LocalBashExecutor from '@neo/bash-local'
+import * as BashEnvPlugin from '@neo/shell-env'
+import { PwshLocalExecutor } from '@neo/pwsh-local'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
+import LocalFileSystem from '@neo/fs-local'
+import { AttachmentStore } from '@neo/attachment'
+import type { ImageAttachmentLimits, ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@neo/attachment'
+import UserQuestionService from '@neo/user-questions'
+import PlanModeController from '@neo/plan-mode'
+import WebRuntime from '@neo/web'
+import * as WebSearchExa from '@neo/web-search-exa'
+import * as WebFetchLocal from '@neo/web-fetch-http'
+import SubagentRuntime from '@neo/subagent'
+import type { SubagentProvider, SubagentReportDelivery } from '@neo/subagent'
+import * as ToolSubagentControl from '@neo/tool-subagent-control'
+import * as ToolSubagentListAgents from '@neo/tool-subagent-control/list-agents'
+import * as ToolSubagentReport from '@neo/tool-subagent-report'
+import SkillRegistry from '@neo/skill'
+import * as SkillFileSystem from '@neo/skill-filesystem'
+import LocalJobRegistry from '@neo/jobs-local'
+import * as ToolAskUser from '@neo/tool-ask-user'
+import * as ToolBash from '@neo/tool-bash'
+import * as ToolPwsh from '@neo/tool-pwsh'
+import * as ToolBashPersistent from '@neo/tool-bash-persistent'
+import CordisHostRunner from '@neo/cordis-host-runner'
+import * as ToolCordis from '@neo/tool-cordis'
+import * as ToolFs from '@neo/tool-fs'
+import * as ToolFsSearch from '@neo/tool-fs-search'
+import * as ToolStrReplaceEditor from '@neo/tool-str-replace-editor'
+import TerminalSessionService from '@neo/terminal'
+import * as ToolPty from '@neo/tool-terminal'
+import * as ToolGoal from '@neo/tool-goal'
+import * as ToolSchedule from '@neo/schedule'
+import Lsp from '@neo/lsp'
+import * as ToolLsp from '@neo/tool-lsp'
+import * as ToolSkill from '@neo/tool-skill'
+import * as ToolSessionQuery from '@neo/tool-session-query'
+import * as ToolTasks from '@neo/tool-jobs'
+import * as ToolTodo from '@neo/tool-todo'
+import * as ToolSubagent from '@neo/tool-subagent'
+import * as ToolWeb from '@neo/tool-web'
+import VmWorkflowEngine from '@neo/workflow-worker-thread'
+import * as ToolRalph from '@neo/tool-ralph'
+import * as ToolWorkflow from '@neo/tool-workflow'
 import { githubSlug } from './verify-md-links.ts'
 
 /** Attachment seam marker that makes the attachments-conditional `read_image` schema harvestable. */
@@ -183,7 +183,7 @@ export interface ToolPackage {
  */
 const TOOL_PACKAGES: ToolPackage[] = [
   {
-    pkg: '@neo/dsh-tool-ask-user',
+    pkg: '@neo/tool-ask-user',
     dir: 'tool-ask-user',
     source: 'packages/interaction/tool-ask-user/src/index.ts',
     requires: ['ctx.tools', 'ctx.userQuestions'],
@@ -196,7 +196,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'ask_user_question pauses the tool call until the active UI provider returns a human answer.',
   },
   {
-    pkg: '@neo/dsh-tools',
+    pkg: '@neo/tools',
     dir: 'tools',
     source: 'packages/core/tools/src/code-mode.ts',
     requires: ['ctx.tools', 'ctx.codeRuntime (execution time)', 'ctx.systemPrompt'],
@@ -210,7 +210,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'Owned by the tool registry as a reserved transport outside filterable capability layers under `mode: code` / `mode: both` (see the Code Mode Agent Note). Under `code` it is the registry\'s only wire contribution; the other visible capabilities are declared in a generated SDK section in the loaded runtime\'s language, and a program calls them through bindings scheduled under the native concurrency contract (submission-ordered starts and policy; concurrency-safe bodies overlap up to `maxParallelSubCalls`) that re-enter the complete guarded tool pipeline and link each nested execution to this outer result.',
   },
   {
-    pkg: '@neo/dsh-plan-mode',
+    pkg: '@neo/plan-mode',
     dir: 'plan-mode',
     source: 'packages/plan/plan-mode/src/index.ts',
     requires: ['ctx.tools', 'ctx.systemPrompt', 'ctx.userQuestions (execution time, opportunistic)'],
@@ -222,7 +222,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'exit_plan_mode stays in the model-facing schema while planning is inactive so transitions add no tool-catalog churn on top of the plan-policy change. Its execute path rejects calls outside plan mode; in plan mode it presents the plan over the user-questions seam (approve / keep planning with feedback), and approval logs plan mode inactive at the step boundary.',
   },
   {
-    pkg: '@neo/dsh-tool-bash',
+    pkg: '@neo/tool-bash',
     dir: 'tool-bash',
     source: 'packages/shell/tool-bash/src/index.ts',
     requires: ['ctx.tools', 'ctx.shell', 'ctx.systemPrompt', 'ctx.shellEnv', 'ctx.jobs at call time for run_in_background'],
@@ -234,10 +234,10 @@ const TOOL_PACKAGES: ToolPackage[] = [
       await ctx.plugin(ToolBash)
     },
     note:
-      'The bash tool is the model-facing consumer of the bash executor seam. A `run_in_background` run registers with the generic `ctx.jobs` runtime and is collected/stopped through the `job_*` tools from `@neo/dsh-tool-jobs`; the `enableRunInBackground` config (default true) removes the parameter entirely when disabled.',
+      'The bash tool is the model-facing consumer of the bash executor seam. A `run_in_background` run registers with the generic `ctx.jobs` runtime and is collected/stopped through the `job_*` tools from `@neo/tool-jobs`; the `enableRunInBackground` config (default true) removes the parameter entirely when disabled.',
   },
   {
-    pkg: '@neo/dsh-tool-pwsh',
+    pkg: '@neo/tool-pwsh',
     dir: 'tool-pwsh',
     source: 'packages/shell/tool-pwsh/src/index.ts',
     requires: ['ctx.tools', 'ctx.shell', 'ctx.systemPrompt', 'ctx.shellEnv', 'ctx.jobs at call time for run_in_background'],
@@ -252,10 +252,10 @@ const TOOL_PACKAGES: ToolPackage[] = [
       await ctx.plugin(ToolPwsh)
     },
     note:
-      'The pwsh tool is the PowerShell-dialect consumer of the bash executor seam for Windows compositions (a PowerShell executor such as `@neo/dsh-pwsh-local` backs `ctx.shell`); it mirrors the bash tool call-for-call minus sandbox controls — `run_in_background` runs register with the generic `ctx.jobs` runtime and are collected/stopped through the `job_*` tools, and the managed `DSH_*` environment comes from `@neo/dsh-shell-env`. Each call runs in a fresh process (no persistent PTY session), with native `C:\\...` paths and `$env:NAME` variables.',
+      'The pwsh tool is the PowerShell-dialect consumer of the bash executor seam for Windows compositions (a PowerShell executor such as `@neo/pwsh-local` backs `ctx.shell`); it mirrors the bash tool call-for-call minus sandbox controls — `run_in_background` runs register with the generic `ctx.jobs` runtime and are collected/stopped through the `job_*` tools, and the managed `DSH_*` environment comes from `@neo/shell-env`. Each call runs in a fresh process (no persistent PTY session), with native `C:\\...` paths and `$env:NAME` variables.',
   },
   {
-    pkg: '@neo/dsh-tool-cordis',
+    pkg: '@neo/tool-cordis',
     dir: 'tool-cordis',
     source: 'packages/extensions/tool-cordis/src/index.ts',
     requires: ['ctx.tools', 'ctx.dynamicCordisRunner'],
@@ -265,10 +265,10 @@ const TOOL_PACKAGES: ToolPackage[] = [
       await ctx.plugin(ToolCordis)
     },
     note:
-      'Not in any shipped tree (a deliberate opt-in — dynamic package code reaches the real runtime, see .agents/notes/implemented/feature/2026-07-08-self-referential-cordis-toolset.md). The toolset injects `ctx.dynamicCordisRunner` from `@neo/dsh-cordis-host-runner`, which owns the definition registry and the vm sandbox; a composition missing it never activates the tools. A running package may register ADDITIONAL model-visible tools until it is stopped, undefined, or DSH restarts; a full changed request header logs those tool-set changes.',
+      'Not in any shipped tree (a deliberate opt-in — dynamic package code reaches the real runtime, see .agents/notes/implemented/feature/2026-07-08-self-referential-cordis-toolset.md). The toolset injects `ctx.dynamicCordisRunner` from `@neo/cordis-host-runner`, which owns the definition registry and the vm sandbox; a composition missing it never activates the tools. A running package may register ADDITIONAL model-visible tools until it is stopped, undefined, or DSH restarts; a full changed request header logs those tool-set changes.',
   },
   {
-    pkg: '@neo/dsh-tool-bash-persistent',
+    pkg: '@neo/tool-bash-persistent',
     dir: 'tool-bash-persistent',
     source: 'packages/shell/tool-bash-persistent/src/index.ts',
     requires: ['ctx.tools', 'ctx.terminals', 'an owning Agent at execution time'],
@@ -281,7 +281,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'One owner-isolated persistent bash tool; deployment composition supplies the PTY backend and may override the model-facing environment description.',
   },
   {
-    pkg: '@neo/dsh-tool-str-replace-editor',
+    pkg: '@neo/tool-str-replace-editor',
     dir: 'tool-str-replace-editor',
     source: 'packages/fs/tool-str-replace-editor/src/index.ts',
     requires: ['ctx.tools', 'ctx.fs'],
@@ -294,7 +294,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'Standalone view/create/unique literal replace/line insert tool over the filesystem seam; it composes with any shell or terminal API.',
   },
   {
-    pkg: '@neo/dsh-tool-fs',
+    pkg: '@neo/tool-fs',
     dir: 'tool-fs',
     source: 'packages/fs/tool-fs/src/index.ts',
     requires: ['ctx.tools', 'ctx.fs', 'ctx.systemPrompt', 'ctx.attachments (read_image registration)', 'ctx.llm + an image-capable route (read_image execution)'],
@@ -308,10 +308,10 @@ const TOOL_PACKAGES: ToolPackage[] = [
       await ctx.plugin(ToolFs)
     },
     note:
-      'The read-before-write/edit policy is added by `@neo/dsh-fs-observation-policy` (an `fs/*` event-gate plugin, no schema change); a deployment that loads these tools is expected to also load it. `read_image` is not registered without `ctx.attachments`; its schema is route-independent, and execution refuses unless the exact routed model declares image input.',
+      'The read-before-write/edit policy is added by `@neo/fs-observation-policy` (an `fs/*` event-gate plugin, no schema change); a deployment that loads these tools is expected to also load it. `read_image` is not registered without `ctx.attachments`; its schema is route-independent, and execution refuses unless the exact routed model declares image input.',
   },
   {
-    pkg: '@neo/dsh-tool-fs-search',
+    pkg: '@neo/tool-fs-search',
     dir: 'tool-fs-search',
     source: 'packages/fs/tool-fs-search/src/index.ts',
     requires: ['ctx.tools', 'ctx.subprocess', 'ctx.systemPrompt'],
@@ -329,7 +329,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'glob and grep are unconditional discovery tools that spawn the packaged ripgrep binary (`@vscode/ripgrep`) through ctx.subprocess as ordinary foreground calls (never background jobs) — no host `rg` install and no shell layer. The catalog uses `sampleOverCapGlobResults: true`; deployments must choose that behavior explicitly. Capped results save the complete formatted list through the optional ctx.spillStore backend; returned locators are follow-up-readable/searchable when the backend exposes local paths in co-located deployments.',
   },
   {
-    pkg: '@neo/dsh-tool-terminal',
+    pkg: '@neo/tool-terminal',
     dir: 'tool-terminal',
     source: 'packages/terminal/tool-terminal/src/index.ts',
     requires: ['ctx.tools', 'ctx.terminals', 'ctx.systemPrompt', 'ctx.jobs at call time for run_in_background'],
@@ -342,7 +342,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'The six terminal tools are opt-in and complement one-shot shell/filesystem tools. `terminal_send(run_in_background: true)` registers with `ctx.jobs`; TUI, named key sequences, BEL, resize, auto-start, and cross-agent sharing are absent from the schema.',
   },
   {
-    pkg: '@neo/dsh-tool-goal',
+    pkg: '@neo/tool-goal',
     dir: 'tool-goal',
     source: 'packages/goal/tool-goal/src/index.ts',
     requires: ['ctx.tools', 'ctx.agents', 'ctx.goals', 'ctx.systemPrompt', 'a calling Agent in an authorized open turn'],
@@ -356,7 +356,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'create, edit, pause, and resume require direct-human root authority; complete and blocked also accept the exact current goal round. The default blocked lower bound is three admitted rounds.',
   },
   {
-    pkg: '@neo/dsh-schedule',
+    pkg: '@neo/schedule',
     dir: 'schedule',
     source: 'packages/schedule/schedule/src/tools.ts',
     requires: ['ctx.tools', 'ctx.sessions', 'Session persistence', 'a future live root Agent'],
@@ -377,7 +377,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       + 'management reads and mutations require the shared Session persistence barrier.',
   },
   {
-    pkg: '@neo/dsh-tool-lsp',
+    pkg: '@neo/tool-lsp',
     dir: 'tool-lsp',
     source: 'packages/lsp/tool-lsp/src/index.ts',
     requires: ['ctx.tools', 'ctx.lsp', 'ctx.systemPrompt'],
@@ -388,10 +388,10 @@ const TOOL_PACKAGES: ToolPackage[] = [
       await ctx.plugin(ToolLsp)
     },
     note:
-      'The lsp tool keeps provider selection and language-server subprocesses behind ctx.lsp, so its model-visible schema stays stable across providers. Requires a registered provider (e.g. `@neo/dsh-lsp-stdio`) at runtime; without one, a query returns the structured `LSP_UNAVAILABLE` error rather than changing the schema.',
+      'The lsp tool keeps provider selection and language-server subprocesses behind ctx.lsp, so its model-visible schema stays stable across providers. Requires a registered provider (e.g. `@neo/lsp-stdio`) at runtime; without one, a query returns the structured `LSP_UNAVAILABLE` error rather than changing the schema.',
   },
   {
-    pkg: '@neo/dsh-tool-ralph',
+    pkg: '@neo/tool-ralph',
     dir: 'tool-ralph',
     source: 'packages/workflow/tool-ralph/src/index.ts',
     requires: ['ctx.tools', 'ctx.workflowEngine', 'ctx.subagents', 'ctx.systemPrompt', 'a calling Agent (exec.agent parents every fresh round)'],
@@ -406,7 +406,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'A fixed foreground workflow starts one fresh structured child per round; the model selects only the immutable objective and an optional round cap.',
   },
   {
-    pkg: '@neo/dsh-tool-skill',
+    pkg: '@neo/tool-skill',
     dir: 'tool-skill',
     source: 'packages/skill/tool-skill/src/index.ts',
     requires: ['ctx.tools', 'ctx.agents', 'ctx.skills'],
@@ -422,7 +422,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
     },
   },
   {
-    pkg: '@neo/dsh-tool-session-query',
+    pkg: '@neo/tool-session-query',
     dir: 'tool-session-query',
     source: 'packages/session-query/tool-session-query/src/index.ts',
     requires: ['ctx.tools', 'ctx.systemPrompt', 'ctx.sessionQuery', 'a calling Agent for workspace authority'],
@@ -436,7 +436,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'The five read-only tools hide provider cursors and authorize every result from the immutable calling agent session. The package is opt-in; compositions that need enforced deadlines or bounded inline output also mount the generic timeout or spill policies.',
   },
   {
-    pkg: '@neo/dsh-tool-subagent',
+    pkg: '@neo/tool-subagent',
     dir: 'tool-subagent',
     source: 'packages/subagent/tool-subagent/src/index.ts',
     requires: ['ctx.tools', 'ctx.subagents', 'ctx.systemPrompt'],
@@ -451,7 +451,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'The registered tool name is the load-time `toolName` config (default `subagent`); the schema above is that default. The shipped compositions load this package once per subagent backend, so the model additionally sees `subagent_fork` bound to the fork backend. Each instance\'s description, `run_in_background` parameter, and system-prompt policy follow its own `backgroundMode` and `enableRunInBackground`, so the two shipped schemas are not identical: `subagent` is `continuable` and defaults omitted calls to background with automatic settlement delivery, while `subagent_fork` stays `one-shot` and defaults them to foreground — see `packages/bundle/base/cordis.patch.yml` and `examples/acp-agent/cordis.yml`.',
   },
   {
-    pkg: '@neo/dsh-tool-subagent-control',
+    pkg: '@neo/tool-subagent-control',
     dir: 'tool-subagent-control',
     source: {
       interrupt_agent: 'packages/subagent/tool-subagent-control/src/index.ts',
@@ -473,7 +473,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'The globally named control tools over continuable background subagents: provider-bound `tool-subagent` instances register distinct delegation tools, while this package registers `send_message` and `interrupt_agent` once, plus `list_agents` from its separately loaded `/list-agents` plugin (whose catalog rows use the sessionProjections and live Agent registries).',
   },
   {
-    pkg: '@neo/dsh-tool-subagent-report',
+    pkg: '@neo/tool-subagent-report',
     dir: 'tool-subagent-report',
     source: 'packages/subagent/tool-subagent-report/src/index.ts',
     requires: ['ctx.subagents', 'ctx.systemPrompt', 'a live continuable in-process child Agent'],
@@ -494,7 +494,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       + '`send_message` tool is installed independently.',
   },
   {
-    pkg: '@neo/dsh-tool-jobs',
+    pkg: '@neo/tool-jobs',
     dir: 'tool-jobs',
     source: 'packages/jobs/tool-jobs/src/index.ts',
     requires: ['ctx.tools', 'ctx.jobs', 'ctx.systemPrompt'],
@@ -507,7 +507,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'The kind-agnostic background-job controller: background bash commands, PTY sends, and subagents are read, listed, and killed through the same three tools. Loading the plugin attaches the controller that arms producers\' `ctx.jobs.start()`.',
   },
   {
-    pkg: '@neo/dsh-tool-todo',
+    pkg: '@neo/tool-todo',
     dir: 'tool-todo',
     source: 'packages/todo/tool-todo/src/index.ts',
     requires: ['ctx.tools', 'owning Agent session'],
@@ -519,7 +519,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'todo_write is session-owned state; UIs render the latest todo/write event as a checklist. `allowParallelInProgress` is required with no default, so the catalog states its choice: `true`, whose description invites several `in_progress` items. A deployment choosing `false` receives the same tool with a description asking for exactly one active task.',
   },
   {
-    pkg: '@neo/dsh-tool-workflow',
+    pkg: '@neo/tool-workflow',
     dir: 'tool-workflow',
     source: 'packages/workflow/tool-workflow/src/index.ts',
     requires: ['ctx.tools', 'ctx.workflowEngine', 'ctx.systemPrompt', 'a calling Agent (exec.agent parents the script children)'],
@@ -535,7 +535,7 @@ const TOOL_PACKAGES: ToolPackage[] = [
     },
   },
   {
-    pkg: '@neo/dsh-tool-web',
+    pkg: '@neo/tool-web',
     dir: 'tool-web',
     source: 'packages/web/tool-web/src/index.ts',
     requires: ['ctx.tools', 'ctx.web', 'ctx.systemPrompt'],

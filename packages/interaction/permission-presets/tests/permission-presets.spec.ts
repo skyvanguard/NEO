@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
-import type { SandboxMode } from '@neo/dsh-sandbox'
-import type { ApprovalPolicy } from '@neo/dsh-user-approval'
+import SessionStore, { Session, SessionId } from '@neo/session'
+import type { SandboxMode } from '@neo/sandbox'
+import type { ApprovalPolicy } from '@neo/user-approval'
 import PermissionPresetService, {
   CUSTOM_PRESET, effectivePermissionPreset, PERMISSION_SETTINGS_NAMESPACE,
-} from '@neo/dsh-permission-presets'
-import type { Config } from '@neo/dsh-permission-presets'
-import { SettingsProvider } from '@neo/dsh-settings'
-import type { SettingsNamespace } from '@neo/dsh-settings'
+} from '@neo/permission-presets'
+import type { Config } from '@neo/permission-presets'
+import { SettingsProvider } from '@neo/settings'
+import type { SettingsNamespace } from '@neo/settings'
 
 /** Writable memory provider for the permission/settings lifecycle specs. */
 class MemorySettings extends SettingsProvider {

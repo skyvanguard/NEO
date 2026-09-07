@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { SessionId, type Session } from '@neo/dsh-session'
-import { createUserMessage, ProviderRequestId } from '@neo/dsh-llm'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import InvariantRegistry from '@neo/dsh-invariants'
-import * as RetryInvariant from '@neo/dsh-llm-retry/invariant'
-import { RetryId } from '@neo/dsh-llm-retry'
+import SessionStore, { SessionId, type Session } from '@neo/session'
+import { createUserMessage, ProviderRequestId } from '@neo/llm'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import InvariantRegistry from '@neo/invariants'
+import * as RetryInvariant from '@neo/llm-retry/invariant'
+import { RetryId } from '@neo/llm-retry'
 import { providerForOpenStep } from '../src/history.ts'
 
 async function setup(): Promise<Context> {

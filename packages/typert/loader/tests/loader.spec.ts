@@ -6,9 +6,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import TypertRegistry from '@neo/dsh-typert-registry'
-import * as typertLoader from '@neo/dsh-typert-loader'
-import { validateTypertManifest } from '@neo/dsh-typert-loader'
+import TypertRegistry from '@neo/typert-registry'
+import * as typertLoader from '@neo/typert-loader'
+import { validateTypertManifest } from '@neo/typert-loader'
 import { z } from 'zod'
 
 let root: string | undefined

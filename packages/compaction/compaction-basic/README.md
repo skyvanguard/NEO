@@ -1,8 +1,8 @@
-# @neo/dsh-compaction-basic
+# @neo/compaction-basic
 
 English | [中文](README.zh.md)
 
-The **basic compaction backend**: a `BasicCompactionEngine` implementing the `@neo/dsh-compaction` Service Definition with reusable `ctx.tokenMeter` pressure, token-budget retention, and summarization as a direct one-shot `ctx.llm.stream()` call that replays the conversation prefix to reuse the provider's KV cache (interceptable at `llm/stream`).
+The **basic compaction backend**: a `BasicCompactionEngine` implementing the `@neo/compaction` Service Definition with reusable `ctx.tokenMeter` pressure, token-budget retention, and summarization as a direct one-shot `ctx.llm.stream()` call that replays the conversation prefix to reuse the provider's KV cache (interceptable at `llm/stream`).
 
 This package owns the Service Provider role of the compaction capability — see the [Service Definition package](../compaction/README.md) for its contract and the [capability-seam Agent Note](../../../.agents/notes/implemented/feature/2026-06-18-compaction-capability-seam.md) for the design.
 
@@ -50,9 +50,9 @@ An adapter may return no capacity for a valid dynamic route, and resolved capaci
 
 ```ts
 import type { Context } from '@neo/cordis'
-import { BasicCompactionEngine } from '@neo/dsh-compaction-basic'
-import SessionStore from '@neo/dsh-session'
-import TokenMeter from '@neo/dsh-token-meter'
+import { BasicCompactionEngine } from '@neo/compaction-basic'
+import SessionStore from '@neo/session'
+import TokenMeter from '@neo/token-meter'
 
 export const name = 'compaction-basic'
 export const inject = ['llm']
@@ -69,7 +69,7 @@ Loading the plugin registers `ctx.compaction`. Add [`dsh-compaction-tool-result-
 For example, the same compact plugin can safely serve models with different capacities and one target-specific policy:
 
 ```yaml
-- name: '@neo/dsh-compaction-basic'
+- name: '@neo/compaction-basic'
   config:
     thresholdRatio: 0.8
     retainRatio: 0.16

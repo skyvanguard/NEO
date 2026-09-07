@@ -3,7 +3,7 @@
  * {@link ../index.ts | CodeRuntime} and what it gets back. Pure types — no
  * runtime code lives here.
  *
- * @module @neo/dsh-code-runtime/src/types
+ * @module @neo/code-runtime/src/types
  */
 
 /**

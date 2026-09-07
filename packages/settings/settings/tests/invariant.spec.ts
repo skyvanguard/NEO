@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import InvariantRegistry from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
 import * as SettingsInvariant from '../src/invariant.ts'
 import { settingsNamespace } from '../src/index.ts'
 import { MemorySettings } from './memory.ts'

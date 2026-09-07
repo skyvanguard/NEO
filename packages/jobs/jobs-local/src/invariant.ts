@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-jobs-local`.
- * @module @neo/dsh-jobs-local/invariant
+ * Package-owned invariant companion for `@neo/jobs-local`.
+ * @module @neo/jobs-local/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-jobs-local'
+const PACKAGE_NAME = '@neo/jobs-local'
 
 /** Cordis companion plugin name. */
 export const name = 'jobs-local-invariant'
@@ -15,7 +15,7 @@ export const name = 'jobs-local-invariant'
 export const inject = ['invariants']
 
 /**
- * No runtime invariant: `@neo/dsh-jobs/invariant` owns per-snapshot identity, status,
+ * No runtime invariant: `@neo/jobs/invariant` owns per-snapshot identity, status,
  * timestamp, and owner checks. This provider's admission decision uses private configuration and
  * must fail before a backend starter runs; `LocalJobRegistry.start()` enforces it synchronously
  * for current producers. Repeating an aggregate after publication would expose private

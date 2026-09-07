@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-tool-bash-persistent`.
- * @module @neo/dsh-tool-bash-persistent/invariant
+ * Package-owned invariant companion for `@neo/tool-bash-persistent`.
+ * @module @neo/tool-bash-persistent/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tool-bash-persistent'
+const PACKAGE_NAME = '@neo/tool-bash-persistent'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-bash-persistent-invariant'

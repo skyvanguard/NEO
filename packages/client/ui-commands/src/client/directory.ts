@@ -5,10 +5,10 @@
  * / epoch-guard behavior of the original global cache; the session-key axis
  * is the only extra dimension.
  */
-import type { CommandDescriptor } from '@neo/dsh-commands/types'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
+import type { CommandDescriptor } from '@neo/commands/types'
+import type { SessionId } from '@neo/client-runtime/client'
 
-export type { CommandDescriptor } from '@neo/dsh-commands/types'
+export type { CommandDescriptor } from '@neo/commands/types'
 
 /**
  * cold = never pulled; pending = pull in flight with nothing servable;

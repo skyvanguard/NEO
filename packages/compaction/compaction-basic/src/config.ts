@@ -1,11 +1,11 @@
 /**
  * Load-time validation and routed-model policy resolution for compaction-basic.
  *
- * @module @neo/dsh-compaction-basic/config
+ * @module @neo/compaction-basic/config
  */
 
-import { deepFreeze } from '@neo/dsh-llm'
-import type { LlmCallConfig } from '@neo/dsh-llm'
+import { deepFreeze } from '@neo/llm'
+import type { LlmCallConfig } from '@neo/llm'
 import type {
   BasicCompactionConfig,
   CompactionPolicyConfig,

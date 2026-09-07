@@ -6,7 +6,7 @@ import { pathToFileURL } from 'node:url'
 import { Context } from '@neo/cordis'
 import Include from '@neo/cordis-plugin-include'
 import Loader from '@neo/cordis-plugin-loader'
-import LocalJobRegistry from '@neo/dsh-jobs-local'
+import LocalJobRegistry from '@neo/jobs-local'
 
 let root: string | undefined
 let context: Context | undefined
@@ -23,7 +23,7 @@ describe('jobs-local through a real Loader composition', () => {
     root = await mkdtemp(join(tmpdir(), 'dsh-jobs-local-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@neo/dsh-jobs-local'",
+      "- name: '@neo/jobs-local'",
       '  config:',
       '    maxConcurrentJobsPerOwner: 1',
       '',
@@ -36,7 +36,7 @@ describe('jobs-local through a real Loader composition', () => {
     context.loader.internal = {
       version: 'v2',
       async import(specifier: string) {
-        if (specifier === '@neo/dsh-jobs-local') return LocalJobRegistry
+        if (specifier === '@neo/jobs-local') return LocalJobRegistry
         throw new Error(`unexpected Loader import: ${specifier}`)
       },
     } as unknown as NonNullable<typeof context.loader.internal>

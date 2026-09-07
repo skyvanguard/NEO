@@ -1,4 +1,4 @@
-# @neo/dsh-session-title-first-prompt-llm
+# @neo/session-title-first-prompt-llm
 
 English | [中文](README.zh.md)
 

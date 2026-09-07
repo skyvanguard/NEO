@@ -14,12 +14,12 @@
  * carry the complete post-change state, never a bare delta — it keeps every
  * unit's transition trivially cheap and every served value self-describing.
  *
- * @module @neo/dsh-session-projection
+ * @module @neo/session-projection
  */
 
 import { Context, Service } from '@neo/cordis'
 import type { ZodType } from 'zod'
-import type { Session, SessionEvent } from '@neo/dsh-session'
+import type { Session, SessionEvent } from '@neo/session'
 
 declare module '@neo/cordis' {
   interface Context {

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-user-questions`.
- * @module @neo/dsh-user-questions/invariant
+ * Package-owned invariant companion for `@neo/user-questions`.
+ * @module @neo/user-questions/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-user-questions'
+const PACKAGE_NAME = '@neo/user-questions'
 
 /** Cordis companion plugin name. */
 export const name = 'user-questions-invariant'

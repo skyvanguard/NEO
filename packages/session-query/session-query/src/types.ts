@@ -2,7 +2,7 @@
  * Public records for exact reads and relationship traces over the
  * live-preferred logical session corpus.
  *
- * @module @neo/dsh-session-query/types
+ * @module @neo/session-query/types
  */
 
 import type {
@@ -11,8 +11,8 @@ import type {
   SessionHeader,
   SessionId,
   SurfaceEvent,
-} from '@neo/dsh-session'
-import type { SessionTitleSnapshot } from '@neo/dsh-session-title'
+} from '@neo/session'
+import type { SessionTitleSnapshot } from '@neo/session-title'
 import type { SessionSearchCursor } from './cursor.ts'
 
 export type { SessionSearchCursor } from './cursor.ts'

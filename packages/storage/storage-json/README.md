@@ -1,4 +1,4 @@
-# @neo/dsh-storage-json
+# @neo/storage-json
 
 English | [中文](README.zh.md)
 

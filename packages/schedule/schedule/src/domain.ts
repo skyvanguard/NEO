@@ -1,9 +1,9 @@
 /**
  * Strict Schedule decoding, replay, time validation, and framing.
- * @module @neo/dsh-schedule
+ * @module @neo/schedule
  */
 
-import type { SessionEvent } from '@neo/dsh-session'
+import type { SessionEvent } from '@neo/session'
 import type {
   AfterScheduleRecord,
   AtInput,

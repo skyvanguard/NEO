@@ -9,9 +9,9 @@
 import { writeFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { once } from 'node:events'
-import { boot, resolveConfigPath } from '@neo/dsh-app-boot'
-import { recordFeedback } from '@neo/dsh-command-feedback'
-import { runFixtureTurn } from '@neo/dsh-loader-smoke'
+import { boot, resolveConfigPath } from '@neo/app-boot'
+import { recordFeedback } from '@neo/command-feedback'
+import { runFixtureTurn } from '@neo/loader-smoke'
 
 const configPath = process.argv[2]
 if (configPath === undefined) throw new Error('session-telemetry-otel driver requires a config path')

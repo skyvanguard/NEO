@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { SessionId } from '@neo/dsh-session'
-import { SessionSearchCursor, type SessionQueryErrorCode } from '@neo/dsh-session-query'
+import { SessionId } from '@neo/session'
+import { SessionSearchCursor, type SessionQueryErrorCode } from '@neo/session-query'
 import {
   buildEventWhere,
   buildSessionWhere,

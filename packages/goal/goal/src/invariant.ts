@@ -1,12 +1,12 @@
-/** Package-owned durable goal-stream invariants. @module @neo/dsh-goal/invariant */
+/** Package-owned durable goal-stream invariants. @module @neo/goal/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
-import type { Session, SessionEvent } from '@neo/dsh-session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
+import type { Session, SessionEvent } from '@neo/session'
 import { applyGoalEvent, emptyGoalFoldState } from './fold.ts'
 import type { GoalFoldState } from './fold.ts'
 
-const PACKAGE_NAME = '@neo/dsh-goal'
+const PACKAGE_NAME = '@neo/goal'
 
 /** Cordis companion plugin name. */
 export const name = 'goal-invariant'

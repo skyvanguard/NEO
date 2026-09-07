@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
-import { Button } from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
-import type { SnapshotSelectorHook } from '@neo/dsh-client-web-react'
+import { Button } from '@neo/client-ui-primitives'
+import type { PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
+import type { SnapshotSelectorHook } from '@neo/client-web-react'
 import type { SettingsDocumentState, SettingsDocumentStore } from './settings-document-store.ts'
 import css from './SettingsDocumentAction.module.css'
 

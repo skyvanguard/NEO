@@ -10,7 +10,7 @@ import { pathToFileURL } from 'node:url'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import { internals, provideCmdline } from '@neo/dsh-cmdline'
+import { internals, provideCmdline } from '@neo/cmdline'
 import { afterEach, describe, expect, it } from 'vitest'
 import { apply, WEB_STARTUP_SERVICE, type WebStartupValues } from '../src/startup.ts'
 

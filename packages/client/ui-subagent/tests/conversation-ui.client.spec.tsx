@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
+import { makeTranslate } from '@neo/client-test-runtime'
 import type {
   SessionId, SessionListState, SessionSummary, SubagentCatalogSnapshot,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import {
   SubagentCatalogAction, type SubagentCatalogActionProps,
 } from '../src/client/SubagentCatalogAction.tsx'

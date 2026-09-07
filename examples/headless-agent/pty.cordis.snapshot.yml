@@ -5,20 +5,20 @@
     path: ./cordis.yml
     patches:
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         disabled: true
       - insert:
           - id: sandbox-policy
-            name: '@neo/dsh-sandbox-policy'
+            name: '@neo/sandbox-policy'
             config:
               mode: danger-full-access
           - id: pty
-            name: '@neo/dsh-terminal'
+            name: '@neo/terminal'
           - id: pty-snapshot-backend
             name: '../acp-agent/pty-snapshot-backend.mjs'
           - id: tool-terminal
-            name: '@neo/dsh-tool-terminal'
+            name: '@neo/tool-terminal'
             config:
               maxResultBytes: 64
           - id: llm-replay
-            name: '@neo/dsh-llm-replay'
+            name: '@neo/llm-replay'

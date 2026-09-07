@@ -1,13 +1,13 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import {
   GoalId,
   type GoalSnapshotChangeMeta,
-} from '@neo/dsh-goal'
-import * as GoalInvariantCompanion from '@neo/dsh-goal/invariant'
-import InvariantRegistry, { InvariantError } from '@neo/dsh-invariants'
-import SessionStore, { SessionId } from '@neo/dsh-session'
+} from '@neo/goal'
+import * as GoalInvariantCompanion from '@neo/goal/invariant'
+import InvariantRegistry, { InvariantError } from '@neo/invariants'
+import SessionStore, { SessionId } from '@neo/session'
 
 const change: GoalSnapshotChangeMeta = {
   kind: 'goal/change',
@@ -54,7 +54,7 @@ describe('goal stream invariants', () => {
       session.append('goal/change', { ...change, extra: true } as never)
     }).toThrow(expect.objectContaining<Partial<InvariantError>>({
       code: 'INVARIANT',
-      packageName: '@neo/dsh-goal',
+      packageName: '@neo/goal',
     }))
     expect(session.seq).toBe(0)
     expect(() => {

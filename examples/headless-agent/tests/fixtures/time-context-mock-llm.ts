@@ -1,5 +1,5 @@
 import type { Context } from '@neo/cordis'
-import { LlmAdapter, type StreamChunk } from '@neo/dsh-llm'
+import { LlmAdapter, type StreamChunk } from '@neo/llm'
 
 /** Deterministic one-step adapter for the time-context Loader fixture. */
 class TimeContextMockAdapter extends LlmAdapter {

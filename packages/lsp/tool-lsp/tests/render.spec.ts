@@ -10,8 +10,8 @@ import {
   parseLspArgs,
   presentLspCall,
   renderUri,
-} from '@neo/dsh-tool-lsp'
-import type { LspLocation } from '@neo/dsh-lsp'
+} from '@neo/tool-lsp'
+import type { LspLocation } from '@neo/lsp'
 
 const WS = resolve('/home/u/proj')
 const WS_URI = pathToFileURL(WS).href

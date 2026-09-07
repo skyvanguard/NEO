@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-spill-policy`.
- * @module @neo/dsh-spill-policy/invariant
+ * Package-owned invariant companion for `@neo/spill-policy`.
+ * @module @neo/spill-policy/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-spill-policy'
+const PACKAGE_NAME = '@neo/spill-policy'
 
 /** Cordis companion plugin name. */
 export const name = 'spill-policy-invariant'

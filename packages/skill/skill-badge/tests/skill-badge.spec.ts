@@ -3,8 +3,8 @@ import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import SkillRegistry from '@neo/dsh-skill'
-import * as SkillBadge from '@neo/dsh-skill-badge'
+import SkillRegistry from '@neo/skill'
+import * as SkillBadge from '@neo/skill-badge'
 
 describe('dsh-skill-badge', () => {
   it('registers and disposes the bundled badge skill', async () => {

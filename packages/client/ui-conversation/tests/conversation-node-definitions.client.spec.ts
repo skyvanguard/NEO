@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import type {
   ChatConversationViewNode, ChatSnapshot, ConversationEventInput,
   ConversationNodeDefinition, ConversationViewDefinition,
-} from '@neo/dsh-client-runtime/client'
-import { ConversationNodeAssembler } from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
+import { ConversationNodeAssembler } from '@neo/client-runtime/client'
 import { assistantDefinition } from '../src/client/conversation-nodes/assistant.ts'
 import { chatViewDefinition } from '../src/client/conversation-nodes/chat-snapshot-builder.ts'
 import { commandDefinition } from '../src/client/conversation-nodes/command.ts'

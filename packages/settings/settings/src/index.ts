@@ -3,7 +3,7 @@
  * per-namespace sections; plugins register a namespace schema and read the
  * resolved value, which layers schema defaults, the registrant's composition
  * `base`, and the user document section, in that order.
- * @module @neo/dsh-settings
+ * @module @neo/settings
  */
 
 import { Context, Service } from '@neo/cordis'

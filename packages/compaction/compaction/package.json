@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-compaction",
+  "name": "@neo/compaction",
   "description": "Abstract compaction service seam (ctx.compaction) for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -41,19 +41,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

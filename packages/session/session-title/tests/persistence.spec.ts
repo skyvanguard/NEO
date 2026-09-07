@@ -1,13 +1,13 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
-import SqliteSessionPersistence from '@neo/dsh-session-persistence-sqlite'
-import SessionTitleService, { foldSessionTitle } from '@neo/dsh-session-title'
+import SessionStore, { SessionId } from '@neo/session'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
+import SqliteSessionPersistence from '@neo/session-persistence-sqlite'
+import SessionTitleService, { foldSessionTitle } from '@neo/session-title'
 
 const CONFIG = {
   fallbackMaxWords: 5,

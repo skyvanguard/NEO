@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-user-questions",
+  "name": "@neo/user-questions",
   "description": "Abstract user-questions seam (ctx.userQuestions) for asking the human during agent runs",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -37,15 +37,15 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

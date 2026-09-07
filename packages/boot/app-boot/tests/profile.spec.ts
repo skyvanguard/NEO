@@ -59,15 +59,15 @@ describe('initProfile', () => {
   it('creates manifest, user patch layer, and pnpm workspace once, never overwriting', () => {
     const home = tmp()
     const dir = resolveProfileDir('tui', home)
-    initProfile(dir, ['@neo/dsh-base'])
+    initProfile(dir, ['@neo/base'])
     const manifest = readProfileManifest('t', dir)
-    expect(manifest.dsh?.profile?.bundles).toEqual(['@neo/dsh-base'])
+    expect(manifest.dsh?.profile?.bundles).toEqual(['@neo/base'])
     expect(readFileSync(join(dir, PROFILE_PATCH_FILENAME), 'utf8')).toContain('[]')
     expect(readFileSync(join(dir, 'pnpm-workspace.yaml'), 'utf8')).toContain('nodeLinker: hoisted')
     // Re-init keeps user edits.
     writeFileSync(join(dir, PROFILE_PATCH_FILENAME), '- id: x\n  config: {}\n')
     initProfile(dir, ['other'])
-    expect(readProfileManifest('t', dir).dsh?.profile?.bundles).toEqual(['@neo/dsh-base'])
+    expect(readProfileManifest('t', dir).dsh?.profile?.bundles).toEqual(['@neo/base'])
     expect(readFileSync(join(dir, PROFILE_PATCH_FILENAME), 'utf8')).toContain('- id: x')
   })
 })
@@ -151,7 +151,7 @@ describe('loadProfile', () => {
     // The web template auto-initializes on first load. Bundle resolution
     // cannot be asserted to fail here: the source-plane test runner resolves
     // @neo/* through tsconfig paths regardless of the staged anchor.
-    expect(PROFILE_TEMPLATES.web).toContain('@neo/dsh-base')
+    expect(PROFILE_TEMPLATES.web).toContain('@neo/base')
     try {
       loadProfile('t', 'web', anchor, home)
     } catch {
@@ -163,28 +163,28 @@ describe('loadProfile', () => {
 
   it('normalizes only the exact installation-owned headless bundle tuple', () => {
     const anchor = stageInstallation({
-      '@neo/dsh-base': { patch: '[]\n' },
-      '@neo/dsh-web-app': { patch: '[]\n' },
-      '@neo/dsh-headless': { patch: '[]\n' },
+      '@neo/base': { patch: '[]\n' },
+      '@neo/web-app': { patch: '[]\n' },
+      '@neo/headless': { patch: '[]\n' },
       'custom-bundle': { patch: '[]\n' },
     })
     const home = tmp()
     const stock = resolveProfileDir('headless', home)
     initProfile(stock, [
-      '@neo/dsh-base', '@neo/dsh-web-app', '@neo/dsh-headless',
+      '@neo/base', '@neo/web-app', '@neo/headless',
     ])
     loadProfile('t', 'headless', anchor, home)
     expect(readProfileManifest('t', stock).dsh?.profile?.bundles)
-      .toEqual(['@neo/dsh-base', '@neo/dsh-headless'])
+      .toEqual(['@neo/base', '@neo/headless'])
 
     const customHome = tmp()
     const custom = resolveProfileDir('headless', customHome)
     initProfile(custom, [
-      '@neo/dsh-base', '@neo/dsh-web-app', '@neo/dsh-headless', 'custom-bundle',
+      '@neo/base', '@neo/web-app', '@neo/headless', 'custom-bundle',
     ])
     loadProfile('t', 'headless', anchor, customHome)
     expect(readProfileManifest('t', custom).dsh?.profile?.bundles).toEqual([
-      '@neo/dsh-base', '@neo/dsh-web-app', '@neo/dsh-headless', 'custom-bundle',
+      '@neo/base', '@neo/web-app', '@neo/headless', 'custom-bundle',
     ])
   })
 

@@ -1,6 +1,6 @@
 import type { Context } from '@neo/cordis'
-import { setSandboxMode } from '@neo/dsh-sandbox-policy'
-import type {} from '@neo/dsh-agent'
+import { setSandboxMode } from '@neo/sandbox-policy'
+import type {} from '@neo/agent'
 
 export const name = 'parent-sandbox-override'
 

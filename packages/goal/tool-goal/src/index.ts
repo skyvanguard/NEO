@@ -1,17 +1,17 @@
 /**
  * Model-facing `get_goal`, `create_goal`, and `update_goal` tools over the
  * persisted same-session goal domain.
- * @module @neo/dsh-tool-goal
+ * @module @neo/tool-goal
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { GoalId } from '@neo/dsh-goal'
-import type { GoalRef, GoalView } from '@neo/dsh-goal'
-import { boundContextSummary, createUserMessage, HarnessError } from '@neo/dsh-llm'
-import { defineTool } from '@neo/dsh-tools'
-import type { GenericCallView } from '@neo/dsh-tools'
-import type {} from '@neo/dsh-system-prompt'
+import { GoalId } from '@neo/goal'
+import type { GoalRef, GoalView } from '@neo/goal'
+import { boundContextSummary, createUserMessage, HarnessError } from '@neo/llm'
+import { defineTool } from '@neo/tools'
+import type { GenericCallView } from '@neo/tools'
+import type {} from '@neo/system-prompt'
 import {
   completionAuthority,
   goalToolExecution,

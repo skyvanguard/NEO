@@ -1,7 +1,7 @@
 /**
  * Host-filesystem implementation of `ctx.fs`. Realpath-derived target identity makes aliases
  * share stale guards, and writes through a symlink update its target without replacing the link.
- * @module @neo/dsh-fs-local
+ * @module @neo/fs-local
  */
 
 import { Context } from '@neo/cordis'
@@ -9,7 +9,7 @@ import { constants as bufferConstants } from 'node:buffer'
 import { isAbsolute, relative, resolve, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import z from '@neo/schemastery'
-import { FileSystem, FsError, FsVersion } from '@neo/dsh-fs'
+import { FileSystem, FsError, FsVersion } from '@neo/fs'
 import type {
   FsDirEntry,
   FsEditOutcome,
@@ -19,7 +19,7 @@ import type {
   FsTarget,
   FsWriteIntent,
   FsWriteOutcome,
-} from '@neo/dsh-fs'
+} from '@neo/fs'
 import {
   applyLiteralEdits,
   listDirectory,

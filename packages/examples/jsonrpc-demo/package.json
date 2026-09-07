@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-sdk-jsonrpc-demo",
+  "name": "@neo/sdk-jsonrpc-demo",
   "description": "Bin that boots an external Cordis config for the stdio JSON-RPC SDK runtime",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -45,14 +45,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@neo/dsh-app-boot": "workspace:^"
+    "@neo/app-boot": "workspace:^"
   },
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

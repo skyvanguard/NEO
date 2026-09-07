@@ -3,14 +3,14 @@
  * appends one authoritative log-only event and does not start model work. The
  * append is eager but unflushed, so acknowledgement reports that the entry is
  * logged, not that it reached disk.
- * @module @neo/dsh-command-feedback
+ * @module @neo/command-feedback
  */
 
 import type { Context } from '@neo/cordis'
-import type { CommandInvocation, CommandResult } from '@neo/dsh-commands'
-import type { SessionTelemetryBackend, SessionTelemetrySharingStatus } from '@neo/dsh-session-telemetry'
-import type { Session } from '@neo/dsh-session'
-import { getOrCreateAnonymousUserId } from '@neo/dsh-anonymous-user-id'
+import type { CommandInvocation, CommandResult } from '@neo/commands'
+import type { SessionTelemetryBackend, SessionTelemetrySharingStatus } from '@neo/session-telemetry'
+import type { Session } from '@neo/session'
+import { getOrCreateAnonymousUserId } from '@neo/anonymous-user-id'
 
 export const name = 'command-feedback'
 export const inject = ['commands']
@@ -53,7 +53,7 @@ function sharingDisclosure(telemetry: SessionTelemetryBackend | undefined): stri
   return sharingSentence(telemetry.sharing)
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * One recorded human remark about this session. Log-only and independent

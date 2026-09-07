@@ -6,9 +6,9 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import type { SessionId } from '@neo/dsh-session'
-import type { ApiProxy, GoalRef, HostFrame, MuxFrame, RpcMessage, RpcRequest, RpcResponse } from '@neo/dsh-host-apiproxy'
-import { InProcessApiClient, RpcId, toFetchHandler } from '@neo/dsh-host-apiproxy'
+import type { SessionId } from '@neo/session'
+import type { ApiProxy, GoalRef, HostFrame, MuxFrame, RpcMessage, RpcRequest, RpcResponse } from '@neo/host-apiproxy'
+import { InProcessApiClient, RpcId, toFetchHandler } from '@neo/host-apiproxy'
 
 const sid = (id: string): SessionId => id as SessionId
 

@@ -3,9 +3,9 @@
 import { useId, useState, type ReactNode } from 'react'
 import {
   CodeBlock, DisclosureRow, IconCodeOutline16, IconInspectOutline12, StateDot,
-} from '@neo/dsh-client-ui-primitives'
-import type { InjectFace, PropsLocale } from '@neo/dsh-client-ui-slots'
-import type { ToolCallViewProps } from '@neo/dsh-client-ui-tool/client'
+} from '@neo/client-ui-primitives'
+import type { InjectFace, PropsLocale } from '@neo/client-ui-slots'
+import type { ToolCallViewProps } from '@neo/client-ui-tool/client'
 import { cordisDefineCard, type CordisToolState } from './card-model.ts'
 import type { CordisCardFace } from './slots.ts'
 import { cordisVisibleStatus, type CordisVisibleStatus } from './status.ts'

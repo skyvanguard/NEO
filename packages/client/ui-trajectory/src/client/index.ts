@@ -3,12 +3,12 @@
  * slot without defining a service.
  */
 import type { Context } from '@neo/cordis'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
+import type { SessionId } from '@neo/client-runtime/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@neo/dsh-client-locale/client'
+import type {} from '@neo/client-locale/client'
 // Type-only: the 'conversation.view' SlotMap row (declared by the slot's
 // owning package) must be in the program for the register calls to type.
-import type {} from '@neo/dsh-client-ui-conversation/client'
+import type {} from '@neo/client-ui-conversation/client'
 import { createTrajectoryDurationStore } from './duration-store.ts'
 import { en, es, NS, zh } from './locales.ts'
 import { registerTrajectoryAssistantDefinition } from './trajectory-assistant-definition.ts'

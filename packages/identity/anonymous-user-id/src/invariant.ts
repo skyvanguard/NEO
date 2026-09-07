@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-anonymous-user-id`.
- * @module @neo/dsh-anonymous-user-id/invariant
+ * Package-owned invariant companion for `@neo/anonymous-user-id`.
+ * @module @neo/anonymous-user-id/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-anonymous-user-id'
+const PACKAGE_NAME = '@neo/anonymous-user-id'
 
 /** Cordis companion plugin name. */
 export const name = 'anonymous-user-id-invariant'

@@ -10,19 +10,19 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import { z } from 'zod'
-import SessionStore from '@neo/dsh-session'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import type { ProjectionDefinition } from '@neo/dsh-session-projection'
+import SessionStore from '@neo/session'
+import type { Session, SessionEvent } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
+import type { ProjectionDefinition } from '@neo/session-projection'
 
-declare module '@neo/dsh-session-projection/types' {
+declare module '@neo/session-projection/types' {
   interface SessionProjectionMap {
     'test/marks': { marks: string[] }
     'test/count': number
   }
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     'test/mark': { marks: string[] }
   }

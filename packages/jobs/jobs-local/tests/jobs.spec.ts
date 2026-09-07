@@ -1,15 +1,15 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { Session, SessionId } from '@neo/dsh-session'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import { bindScopeParent, createScope, scopeOf } from '@neo/dsh-scope'
-import type { ScopeKey } from '@neo/dsh-scope'
-import { JobId } from '@neo/dsh-jobs'
-import type { JobHooks, JobKind, JobOutcome, JobSnapshot, JobStart } from '@neo/dsh-jobs'
-import LocalJobRegistry, { type Config as JobsConfig } from '@neo/dsh-jobs-local'
+import { Session, SessionId } from '@neo/session'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import { bindScopeParent, createScope, scopeOf } from '@neo/scope'
+import type { ScopeKey } from '@neo/scope'
+import { JobId } from '@neo/jobs'
+import type { JobHooks, JobKind, JobOutcome, JobSnapshot, JobStart } from '@neo/jobs'
+import LocalJobRegistry, { type Config as JobsConfig } from '@neo/jobs-local'
 
-declare module '@neo/dsh-jobs' {
+declare module '@neo/jobs' {
   interface JobKindMap {
     workflow: 'workflow'
   }
@@ -119,7 +119,7 @@ describe('LocalJobRegistry.start', () => {
     const ctx = new Context()
     await ctx.plugin(LocalJobRegistry)
     expect(() => ctx.jobs.start(producer().spec))
-      .toThrow('background jobs unavailable: no job controller serves this agent (load @neo/dsh-tool-jobs in its composition)')
+      .toThrow('background jobs unavailable: no job controller serves this agent (load @neo/tool-jobs in its composition)')
   })
 
   it('refuses an owner whose own composition attaches no controller', async () => {

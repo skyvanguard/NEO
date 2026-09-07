@@ -4,19 +4,19 @@
   name: './fixture.ts'
 
 - id: subagent
-  name: '@neo/dsh-subagent'
+  name: '@neo/subagent'
 
 - id: subprocess
-  name: '@neo/dsh-subprocess-local'
+  name: '@neo/subprocess-local'
 
 - id: subagent-codex
-  name: '@neo/dsh-subagent-codex'
+  name: '@neo/subagent-codex'
 
 - id: subagent-claude-code
-  name: '@neo/dsh-subagent-claude-code'
+  name: '@neo/subagent-claude-code'
 
 - id: tool-subagent-codex
-  name: '@neo/dsh-tool-subagent'
+  name: '@neo/tool-subagent'
   config:
     provider: codex
     toolName: subagent_codex
@@ -24,7 +24,7 @@
     maxDepth: 'provider-managed'
 
 - id: tool-subagent-claude-code
-  name: '@neo/dsh-tool-subagent'
+  name: '@neo/tool-subagent'
   config:
     provider: claude-code
     toolName: subagent_claude_code
@@ -32,7 +32,7 @@
     maxDepth: 'provider-managed'
 
 - id: agent-spine
-  name: '@neo/dsh-agent-spine-demo'
+  name: '@neo/agent-spine-demo'
   config:
     agents:
       - id: main
@@ -43,9 +43,9 @@
     workspaceContext: false
 
 - id: persistence
-  name: '@neo/dsh-session-persistence-jsonl'
+  name: '@neo/session-persistence-jsonl'
   config:
     root: './.sessions'
 
 - id: checkpoint-policy
-  name: '@neo/dsh-session-checkpoint-policy'
+  name: '@neo/session-checkpoint-policy'

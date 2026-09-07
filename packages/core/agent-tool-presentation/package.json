@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-agent-tool-presentation",
+  "name": "@neo/agent-tool-presentation",
   "description": "Agent-plane presentation selector: composes one agent's tools as Code Mode, native, or both",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -35,18 +35,18 @@
     "@neo/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-code-runtime": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/code-runtime": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

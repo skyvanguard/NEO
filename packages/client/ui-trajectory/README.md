@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-trajectory
+# @neo/client-ui-trajectory
 
 English | [中文](README.zh.md)
 

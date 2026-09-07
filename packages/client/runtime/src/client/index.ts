@@ -1,12 +1,12 @@
 /** Browser runtime services for slots, sessions, workspaces, and connection-stream delivery. */
 import type { Context } from '@neo/cordis'
-import type { ConnectionHandle, SessionId } from '@neo/dsh-api-remotes/client'
+import type { ConnectionHandle, SessionId } from '@neo/api-remotes/client'
 // Type-only: the ctx.remote merge. Deliberately the gateway's Client half rather
 // than api-remotes': that face imports a Host-tsdown-generated artifact, and this
 // project sits in the Host build graph.
-import type {} from '@neo/dsh-api-remotes/client'
-import type { TypertContext } from '@neo/dsh-typert-protocol'
-import type { MaybeSnapshotSelectorHook, SnapshotSelectorHook } from '@neo/dsh-client-ui-slots'
+import type {} from '@neo/api-remotes/client'
+import type { TypertContext } from '@neo/typert-protocol'
+import type { MaybeSnapshotSelectorHook, SnapshotSelectorHook } from '@neo/client-ui-slots'
 import { SlotRegistry } from './slots.ts'
 import { SessionRuntime } from './sessions/service.ts'
 import type { SessionListState } from './sessions/service.ts'
@@ -16,7 +16,7 @@ import type { UseProjection } from './sessions/projection-store.ts'
 import { ConversationEventRegistry } from './conversation/event-registry.ts'
 import { ConversationViewRegistry } from './conversation/view-registry.ts'
 
-export { isAppendSurfaceEvent, isReplacementSurfaceEvent } from '@neo/dsh-session/surface'
+export { isAppendSurfaceEvent, isReplacementSurfaceEvent } from '@neo/session/surface'
 
 export { SlotRegistry } from './slots.ts'
 export { ConversationEventRegistry } from './conversation/event-registry.ts'
@@ -60,12 +60,12 @@ export type {
   SessionBinding, SessionListState, SessionProvideContribution, SessionProvideDescriptor, SessionSummary,
 } from './sessions/service.ts'
 export type { SessionListPhase, SessionSearchResultItem, SubagentCatalogSnapshot } from './sessions/manager.ts'
-export type { SubagentAddress, JobView } from '@neo/dsh-client-connection/client'
+export type { SubagentAddress, JobView } from '@neo/client-connection/client'
 export type { WorkspaceListPhase } from './workspaces/manager.ts'
 export type { WorkspaceListState } from './workspaces/service.ts'
 export type {
   DirectoryEntry, DirectoryListing, WorkspaceId, WorkspaceView,
-} from '@neo/dsh-client-connection/client'
+} from '@neo/client-connection/client'
 // Runtime owns the snapshot store; web-react only binds it to React.
 export { createSnapshotStore, defineStore, shallowEqual } from './contract/store.ts'
 export type {
@@ -106,12 +106,12 @@ export type {
 export type {
   ProjectionsBaseline, ProjectionValueStore, SessionProjectionMap, UseProjection,
 } from './sessions/projection-store.ts'
-export type { SessionId } from '@neo/dsh-client-connection/client'
+export type { SessionId } from '@neo/client-connection/client'
 
 /** Client-side Cordis context after declaration merging. */
 export type ClientContext = Context
 
-declare module '@neo/dsh-typert-protocol' {
+declare module '@neo/typert-protocol' {
   interface TypertContextMap {
     /** Client Agent scope identity; the agent and session share one wire id. */
     agent: TypertContext<SessionId>
@@ -121,7 +121,7 @@ declare module '@neo/dsh-typert-protocol' {
 /** The conversation-snapshot selector hook supplied to session-scoped UI entries. */
 export type UseConversationSession = SnapshotSelectorHook<ConversationSnapshot>
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   /**
    * Session standard kit, real members (ui-slots declares the empty seat;
    * the runtime — where the subjects live — merges the concrete types):

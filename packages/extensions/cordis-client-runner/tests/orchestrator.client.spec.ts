@@ -11,8 +11,8 @@ import { describe, expect, it, vi } from 'vitest'
 import type {
   ApprovalRequestId, CordisDynamicPackageId, CordisDynamicPluginId, CordisDynamicPluginRunId,
   DynamicCordisClientSource, DynamicCordisHostHalfResult, DynamicCordisResolveAck,
-} from '@neo/dsh-api-remotes/client'
-import type { SessionId } from '@neo/dsh-client-connection/client'
+} from '@neo/api-remotes/client'
+import type { SessionId } from '@neo/client-connection/client'
 import { CordisRunOrchestrator } from '../src/client/orchestrator.ts'
 import type { CordisUserRunRequest } from '../src/client/orchestrator.ts'
 import type { DynamicCordisLoadResult, DynamicCordisPackageRunner } from '../src/client/runtime.ts'

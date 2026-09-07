@@ -1,11 +1,11 @@
 /**
  * Disposable live timer projection for one exact root agent.
- * @module @neo/dsh-schedule
+ * @module @neo/schedule
  */
 
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
+import type { Agent } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
 import type { EveryScheduleRecord, OneShotScheduleRecord } from './types.ts'
 import {
   foldScheduleEvents,

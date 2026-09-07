@@ -1,5 +1,5 @@
 /**
- * Real-process tests for `@neo/dsh-pwsh-local`: the LOCAL subprocess
+ * Real-process tests for `@neo/pwsh-local`: the LOCAL subprocess
  * service plus a REAL pwsh executable, exercised through the executor seam
  * (`resolve` → `run`/`start`). These verify the world — actual PowerShell
  * runs, output capture, truncation and spill, deadlines, kill escalation, and
@@ -15,12 +15,12 @@ import { join } from 'node:path'
 import { spawnSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { PwshLocalExecutor, ENCODING_PREAMBLE, candidatePwshPaths, resolvePwshPath } from '@neo/dsh-pwsh-local'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
-import SubprocessRuntime from '@neo/dsh-subprocess'
-import type { SubprocessHandle, SubprocessOutputReader, SubprocessSpawnSpec } from '@neo/dsh-subprocess'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import type { ShellProcess } from '@neo/dsh-shell'
+import { PwshLocalExecutor, ENCODING_PREAMBLE, candidatePwshPaths, resolvePwshPath } from '@neo/pwsh-local'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
+import SubprocessRuntime from '@neo/subprocess'
+import type { SubprocessHandle, SubprocessOutputReader, SubprocessSpawnSpec } from '@neo/subprocess'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import type { ShellProcess } from '@neo/shell'
 
 const spillDir = mkdtempSync(join(tmpdir(), 'dsh-pwsh-exec-spec-'))
 

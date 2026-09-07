@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent, AgentStatus } from '@neo/dsh-agent'
-import CommandRuntime from '@neo/dsh-commands'
-import SessionStore, { foldSurface, Session, SessionId } from '@neo/dsh-session'
-import { SessionTelemetryBackend, type SessionTelemetrySharingStatus } from '@neo/dsh-session-telemetry'
-import * as commandFeedback from '@neo/dsh-command-feedback'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent, AgentStatus } from '@neo/agent'
+import CommandRuntime from '@neo/commands'
+import SessionStore, { foldSurface, Session, SessionId } from '@neo/session'
+import { SessionTelemetryBackend, type SessionTelemetrySharingStatus } from '@neo/session-telemetry'
+import * as commandFeedback from '@neo/command-feedback'
 
 const { USER_ID, getOrCreateAnonymousUserId } = vi.hoisted(() => {
   const USER_ID = '01234567-89ab-4cde-8f01-23456789abcd'
   return { USER_ID, getOrCreateAnonymousUserId: vi.fn(() => USER_ID) }
 })
 
-vi.mock('@neo/dsh-anonymous-user-id', () => ({
+vi.mock('@neo/anonymous-user-id', () => ({
   getOrCreateAnonymousUserId,
 }))
 
@@ -98,7 +98,7 @@ function feedbackTexts(session: Session): string[] {
     .map(event => event.data.text)
 }
 
-describe('@neo/dsh-command-feedback registration', () => {
+describe('@neo/command-feedback registration', () => {
   it('registers one global command with Loader-safe exports and disposes it', async () => {
     const test = await harness()
     expect(commandFeedback.name).toBe('command-feedback')

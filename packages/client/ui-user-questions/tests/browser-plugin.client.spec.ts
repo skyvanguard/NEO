@@ -8,8 +8,8 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
 import { QuestionComposer } from '../src/client/QuestionComposer.tsx'
 import { apply, inject } from '../src/client/index.ts'
 

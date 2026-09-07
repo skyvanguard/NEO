@@ -9,12 +9,12 @@ import { randomBytes } from 'node:crypto'
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import { unzipSync, strFromU8 } from 'fflate'
-import type { ImageAttachmentRef } from '@neo/dsh-attachment'
-import UserQuestionService from '@neo/dsh-user-questions'
-import type { SessionHeader, SessionId } from '@neo/dsh-session'
-import type { SessionLineageNode } from '@neo/dsh-session-query'
-import type { SessionRawArtifact } from '@neo/dsh-session-persistence'
-import ApiProxyService, { createApiProxy, toFetchHandler } from '@neo/dsh-host-apiproxy'
+import type { ImageAttachmentRef } from '@neo/attachment'
+import UserQuestionService from '@neo/user-questions'
+import type { SessionHeader, SessionId } from '@neo/session'
+import type { SessionLineageNode } from '@neo/session-query'
+import type { SessionRawArtifact } from '@neo/session-persistence'
+import ApiProxyService, { createApiProxy, toFetchHandler } from '@neo/host-apiproxy'
 
 const sid = (id: string): SessionId => id as SessionId
 

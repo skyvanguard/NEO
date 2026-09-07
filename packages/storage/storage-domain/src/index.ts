@@ -4,12 +4,12 @@
  * layer — consumers depend on this package and never touch backends directly.
  * Plugin `Config` is schemastery; record schemas inside domain specs are zod
  * (see `src/spec.ts` for the split rationale).
- * @module @neo/dsh-storage-domain
+ * @module @neo/storage-domain
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { storageBackendServiceKey } from '@neo/dsh-storage'
+import { storageBackendServiceKey } from '@neo/storage'
 import { DomainError } from './error.ts'
 import { descriptorOf } from './spec.ts'
 import type { DomainSpec } from './spec.ts'
@@ -26,7 +26,7 @@ export type {
 export type { DomainChanged } from './events.ts'
 export type { Domain, DomainGlobal, DomainGlobalHandleOf, KvTable } from './domain.ts'
 
-declare module '@neo/dsh-storage' {
+declare module '@neo/storage' {
   interface StorageForms {
     domain: DomainFacility
   }

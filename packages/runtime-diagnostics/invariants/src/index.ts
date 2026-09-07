@@ -3,7 +3,7 @@
  * Every workspace package registers checks from a `./invariant` companion;
  * ordinary package entrypoints stay independent of diagnostics.
  *
- * @module @neo/dsh-invariants
+ * @module @neo/invariants
  */
 
 import { Context, Service } from '@neo/cordis'

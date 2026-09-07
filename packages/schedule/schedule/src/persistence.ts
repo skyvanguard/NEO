@@ -1,7 +1,7 @@
 /** Schedule-owned use of the shared session durability barrier. */
 
 import type { Context } from '@neo/cordis'
-import type { Session } from '@neo/dsh-session'
+import type { Session } from '@neo/session'
 
 /** Failure to prove that the current live prefix reached a persistence listener. */
 export class SchedulePersistenceError extends Error {

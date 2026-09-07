@@ -1,12 +1,12 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-cmdline`.
- * @module @neo/dsh-cmdline/invariant
+ * Package-owned invariant companion for `@neo/cmdline`.
+ * @module @neo/cmdline/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-cmdline'
+const PACKAGE_NAME = '@neo/cmdline'
 
 /** Cordis companion plugin name. */
 export const name = 'cmdline-invariant'

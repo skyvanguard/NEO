@@ -1,6 +1,6 @@
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import type { SessionId } from '@neo/dsh-api-remotes/client'
+import type { SessionId } from '@neo/api-remotes/client'
 import { ConversationEventRegistry } from '../src/client/conversation/event-registry.ts'
 import { ConversationViewRegistry } from '../src/client/conversation/view-registry.ts'
 import type {

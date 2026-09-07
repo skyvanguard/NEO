@@ -8,7 +8,7 @@
  * the snapshot-store machinery lives in the runtime PLUGIN
  * package, and the shell kernel must not value-import any plugin package —
  * the loading page has to work while (and especially when) plugins fail.
- * @module @neo/dsh-client-web/src/loader-status
+ * @module @neo/client-web/src/loader-status
  */
 import type { FiberState } from '@neo/cordis'
 

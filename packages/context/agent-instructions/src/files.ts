@@ -1,15 +1,15 @@
 /**
  * Instruction-file discovery and bounded, abort-aware provider reads.
  *
- * @module @neo/dsh-agent-instructions/files
+ * @module @neo/agent-instructions/files
  */
 
 import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path'
-import type { FileSystem, FsInfo, FsTarget, FsVersion } from '@neo/dsh-fs'
-import { assertNever } from '@neo/dsh-llm'
-import { dshHomeDisplay } from '@neo/dsh-home-paths'
+import type { FileSystem, FsInfo, FsTarget, FsVersion } from '@neo/fs'
+import { assertNever } from '@neo/llm'
+import { dshHomeDisplay } from '@neo/home-paths'
 import { resolveConfig, resolveDiscoveryConfig, type ResolvedConfig } from './config.ts'
 import { trimmedInstructionDigest } from './digest.ts'
 import {

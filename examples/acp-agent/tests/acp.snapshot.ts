@@ -5,9 +5,9 @@ import { mkdir, utimes, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { homedir } from 'node:os'
 import { expect, it } from 'vitest'
-import { defineAcpSnapshotSuite, type Scenario, type SnapshotSuiteOptions } from '@neo/dsh-acp-snapshot'
-import { resolvePwshPath } from '@neo/dsh-pwsh-local'
-import { decodeStorageRecord } from '@neo/dsh-session'
+import { defineAcpSnapshotSuite, type Scenario, type SnapshotSuiteOptions } from '@neo/acp-snapshot'
+import { resolvePwshPath } from '@neo/pwsh-local'
+import { decodeStorageRecord } from '@neo/session'
 
 /**
  * The acp-agent example's snapshot suite: the scenario table for

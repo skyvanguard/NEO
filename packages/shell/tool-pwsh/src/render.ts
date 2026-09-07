@@ -7,12 +7,12 @@
  * infrastructure failures (spawn errors, aborts) surface as isError
  * results.
  *
- * @module @neo/dsh-tool-pwsh/render
+ * @module @neo/tool-pwsh/render
  */
 
-import type { ShellProcessRead, ShellSandboxInfo, CollectedOutput } from '@neo/dsh-shell'
-import type { SandboxMode } from '@neo/dsh-sandbox'
-import { escalationHintMarker, sandboxDenialMarker } from '@neo/dsh-sandbox'
+import type { ShellProcessRead, ShellSandboxInfo, CollectedOutput } from '@neo/shell'
+import type { SandboxMode } from '@neo/sandbox'
+import { escalationHintMarker, sandboxDenialMarker } from '@neo/sandbox'
 
 /* jscpd:ignore-start -- deliberate twin of dsh-tool-bash/render.ts (Agent Note). */
 

@@ -7,9 +7,9 @@
  */
 import type {
   IApiClient, ModelCatalogFailure, ModelProviderGroup, ModelSelection, SessionId, SessionModels,
-} from '@neo/dsh-api-remotes/client'
-import type { SnapshotStore } from '@neo/dsh-client-runtime/client'
-import { createSnapshotStore } from '@neo/dsh-client-runtime/client'
+} from '@neo/api-remotes/client'
+import type { SnapshotStore } from '@neo/client-runtime/client'
+import { createSnapshotStore } from '@neo/client-runtime/client'
 
 /** Directory snapshot both entries render from. */
 export interface ModelDirectoryState {

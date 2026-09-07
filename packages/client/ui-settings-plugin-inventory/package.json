@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-settings-plugin-inventory",
+  "name": "@neo/client-ui-settings-plugin-inventory",
   "description": "Read-only Cordis Loader inventory tab in Web Plugins settings",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,10 +32,10 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-api-remotes",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-settings",
-        "@neo/dsh-client-locale"
+        "@neo/api-remotes",
+        "@neo/client-runtime",
+        "@neo/client-ui-settings",
+        "@neo/client-locale"
       ],
       "platform": "web"
     }
@@ -46,25 +46,25 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-settings": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-settings": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-settings": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-settings": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@testing-library/react": "^16.1.0",
     "@types/react": "~18.3.1",
     "@neo/cordis": "workspace:^",

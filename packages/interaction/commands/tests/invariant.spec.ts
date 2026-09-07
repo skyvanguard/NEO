@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import * as CommandInvariant from '@neo/dsh-commands/invariant'
-import InvariantRegistry, { InvariantError } from '@neo/dsh-invariants'
-import SessionStore, { SessionId, type Session } from '@neo/dsh-session'
-import { CommandId } from '@neo/dsh-commands'
+import * as CommandInvariant from '@neo/commands/invariant'
+import InvariantRegistry, { InvariantError } from '@neo/invariants'
+import SessionStore, { SessionId, type Session } from '@neo/session'
+import { CommandId } from '@neo/commands'
 
 async function mount(installCompanion = true): Promise<{ ctx: Context; session: Session }> {
   const ctx = new Context()
@@ -50,7 +50,7 @@ describe('command lifecycle invariants', () => {
       })
     }).toThrow(expect.objectContaining<Partial<InvariantError>>({
       code: 'INVARIANT',
-      packageName: '@neo/dsh-commands',
+      packageName: '@neo/commands',
     }))
   })
 
@@ -68,7 +68,7 @@ describe('command lifecycle invariants', () => {
       })
     }).toThrow(expect.objectContaining<Partial<InvariantError>>({
       code: 'INVARIANT',
-      packageName: '@neo/dsh-commands',
+      packageName: '@neo/commands',
     }))
   })
 
@@ -83,7 +83,7 @@ describe('command lifecycle invariants', () => {
 
     await expect(ctx.plugin(CommandInvariant)).rejects.toMatchObject({
       code: 'INVARIANT',
-      packageName: '@neo/dsh-commands',
+      packageName: '@neo/commands',
     })
   })
 })

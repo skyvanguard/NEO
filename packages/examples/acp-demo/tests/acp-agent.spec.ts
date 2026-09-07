@@ -5,14 +5,14 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import { agentEvents } from '@neo/dsh-agent'
-import { TOOL_ORDER_REST } from '@neo/dsh-system-prompt'
-import type { Message } from '@neo/dsh-llm'
-import { SessionId } from '@neo/dsh-session'
+import { agentEvents } from '@neo/agent'
+import { TOOL_ORDER_REST } from '@neo/system-prompt'
+import type { Message } from '@neo/llm'
+import { SessionId } from '@neo/session'
 import * as acpAgent from '../src/index.ts'
 
 /**
- * In-process unit coverage for the @neo/dsh-acp-demo composition:
+ * In-process unit coverage for the @neo/acp-demo composition:
  * mounting it brings up the agent-spine-demo spine + JSONL persistence + the ACP
  * bridge in one `ctx.plugin`. It loads no Loader-only plugin (no hmr), so it
  * mounts in a plain Context.

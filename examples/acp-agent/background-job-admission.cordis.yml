@@ -8,7 +8,7 @@
     path: ./cordis.yml
     patches:
       - id: acp-agent
-        name: '@neo/dsh-acp-demo'
+        name: '@neo/acp-demo'
         config:
           provider: deepseek-official
           model: deepseek-v4-flash

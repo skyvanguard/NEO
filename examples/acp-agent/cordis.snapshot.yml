@@ -17,10 +17,10 @@
       # a logger exists. A renamed id leaves a stale adapter entry, but replay still
       # short-circuits through `llm-replay`.
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         disabled: true
       - id: acp-agent
-        name: '@neo/dsh-acp-demo'
+        name: '@neo/acp-demo'
         config:
           provider: deepseek-official
           model: deepseek-v4-flash
@@ -36,7 +36,7 @@
 
             Verify your work by running the code or tests. Keep answers brief and factual.
       - id: sandbox
-        name: '@neo/dsh-sandbox-local'
+        name: '@neo/sandbox-local'
         config:
           runnerCommand:
             - bash
@@ -47,7 +47,7 @@
             - 'passthrough-runner: profile rejected'
       - insert:
           - id: llm-replay
-            name: '@neo/dsh-llm-replay'
+            name: '@neo/llm-replay'
             config:
               providers:
                 - id: deepseek-official

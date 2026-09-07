@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-subagent-codex",
+  "name": "@neo/subagent-codex",
   "description": "One-shot Codex subagent provider over the official app-server protocol",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,13 +32,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-sdk-protocol": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -46,16 +46,16 @@
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-loader-smoke": "workspace:^",
-    "@neo/dsh-sdk-protocol": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-subprocess-local": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/loader-smoke": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@openai/codex": "0.147.0",
     "@neo/cordis": "workspace:^"
   }

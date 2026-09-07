@@ -1,14 +1,14 @@
 /**
  * Default model selection for an Agent without a session-specific selection.
  *
- * @module @neo/dsh-agent-default-model
+ * @module @neo/agent-default-model
  */
 
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { ModelSelection } from '@neo/dsh-agent'
-import { ReasoningEffortId } from '@neo/dsh-llm'
-import { installSettingsSection, settingsNamespace } from '@neo/dsh-settings'
+import type { ModelSelection } from '@neo/agent'
+import { ReasoningEffortId } from '@neo/llm'
+import { installSettingsSection, settingsNamespace } from '@neo/settings'
 
 declare module '@neo/cordis' {
   interface Context {

@@ -1,4 +1,4 @@
-# @neo/dsh-tool-ralph
+# @neo/tool-ralph
 
 English | [中文](README.zh.md)
 

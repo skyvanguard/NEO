@@ -12,14 +12,14 @@
  * history outside the direct-parent continuation path.
  */
 // Type-only: the carrier types, the forwarded Host-event face and the ctx.remote merge.
-import type { ModelSelection, SessionModels } from '@neo/dsh-api-remotes/client'
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
-import type { CommandUiContract, SelectOption } from '@neo/dsh-client-ui-commands/client'
+import type { ModelSelection, SessionModels } from '@neo/api-remotes/client'
+import type { ClientContext } from '@neo/client-runtime/client'
+import type { CommandUiContract, SelectOption } from '@neo/client-ui-commands/client'
 // Type-only: pulls the ui-conversation SlotMap merge (the input.model seat).
-import type {} from '@neo/dsh-client-ui-conversation/client'
+import type {} from '@neo/client-ui-conversation/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@neo/dsh-client-locale/client'
-import type { TranslateNS } from '@neo/dsh-client-ui-slots'
+import type {} from '@neo/client-locale/client'
+import type { TranslateNS } from '@neo/client-ui-slots'
 import type { ModelDirectoryState } from './directory.ts'
 import { ModelDirectoryResolver } from './service.ts'
 import type { ModelSelectInjected } from './slots.ts'
@@ -32,7 +32,7 @@ export { ModelDirectoryResolver } from './service.ts'
 export type { ModelSelectInjected } from './slots.ts'
 export type { ModelKey } from './locales.ts'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** The model selection surfaces' copy (/model popup + composer seat). */
     model: ModelKey

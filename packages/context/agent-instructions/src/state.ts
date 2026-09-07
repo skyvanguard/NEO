@@ -1,14 +1,14 @@
 /**
  * Session-visible workspace instruction state and dynamic reconciliation.
  *
- * @module @neo/dsh-agent-instructions/state
+ * @module @neo/agent-instructions/state
  */
 
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { Message } from '@neo/dsh-llm'
-import type { Session, UserMessage } from '@neo/dsh-session'
-import type { FileSystem, FsVersion } from '@neo/dsh-fs'
+import type { Agent } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { Message } from '@neo/llm'
+import type { Session, UserMessage } from '@neo/session'
+import type { FileSystem, FsVersion } from '@neo/fs'
 import type { ResolvedConfig } from './config.ts'
 import { instructionContentSha1, trimmedInstructionDigest } from './digest.ts'
 import {
@@ -45,7 +45,7 @@ export interface AgentInstructionSource {
   changes: AgentInstructionChange[]
 }
 
-declare module '@neo/dsh-llm' {
+declare module '@neo/llm' {
   interface MessageSourceMap {
     'agent-instructions': AgentInstructionSource
   }

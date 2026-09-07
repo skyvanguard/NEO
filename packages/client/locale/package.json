@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-locale",
+  "name": "@neo/client-locale",
   "description": "Locale plugin: Host-backed zh/en preference, browser-derived fallback, locale snapshots, and typed namespace dictionaries",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,10 +32,10 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-connection",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-settings",
-        "@neo/dsh-api-remotes"
+        "@neo/client-connection",
+        "@neo/client-runtime",
+        "@neo/client-ui-settings",
+        "@neo/api-remotes"
       ],
       "platform": "web",
       "immediately": true
@@ -44,28 +44,28 @@
   "license": "MIT",
   "peerDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-settings": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-settings": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-settings": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-settings": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "react": "^18.2.0"
   },
   "dependencies": {
-    "@neo/dsh-settings": "workspace:^",
+    "@neo/settings": "workspace:^",
     "@neo/schemastery": "workspace:^"
   },
   "files": [

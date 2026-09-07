@@ -9,22 +9,22 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import { z } from 'zod'
-import Storage from '@neo/dsh-storage'
-import { DomainFacility } from '@neo/dsh-storage-domain'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import type { ProjectionDefinition } from '@neo/dsh-session-projection'
+import Storage from '@neo/storage'
+import { DomainFacility } from '@neo/storage-domain'
+import SessionStore, { SessionId } from '@neo/session'
+import type { Session, SessionEvent } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
+import type { ProjectionDefinition } from '@neo/session-projection'
 import { MemoryMediaPool, MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
 import SessionProjectionCache from '../src/index.ts'
 
-declare module '@neo/dsh-session-projection/types' {
+declare module '@neo/session-projection/types' {
   interface SessionProjectionMap {
     'cache-test/marks': { marks: string[] }
   }
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     'cache-test/mark': { marks: string[] }
   }

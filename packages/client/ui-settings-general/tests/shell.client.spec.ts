@@ -1,7 +1,7 @@
 /** Settings shell registration: slot declaration injection, the ledger projections, and HMR recovery. */
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
 import { apply, inject } from '../src/client/index.ts'
 import type { SettingsRootInjected } from '../src/client/shell-contract.ts'
 import { SettingsRoot } from '../src/client/SettingsRoot.tsx'

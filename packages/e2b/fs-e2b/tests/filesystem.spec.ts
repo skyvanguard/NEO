@@ -7,12 +7,12 @@ import {
   FileType,
   type EntryInfo,
   type Sandbox,
-} from '@neo/dsh-e2b'
-import type E2BRuntime from '@neo/dsh-e2b'
-import { FsTargetKey, FsVersion } from '@neo/dsh-fs'
-import E2BFileSystem from '@neo/dsh-fs-e2b'
+} from '@neo/e2b'
+import type E2BRuntime from '@neo/e2b'
+import { FsTargetKey, FsVersion } from '@neo/fs'
+import E2BFileSystem from '@neo/fs-e2b'
 import * as E2BFsInvariant from '../src/invariant.ts'
-import InvariantRegistry from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
 import { describe, expect, it, vi } from 'vitest'
 
 interface RemoteNode {

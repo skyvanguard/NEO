@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-sdk-jsonrpc-server`.
- * @module @neo/dsh-sdk-jsonrpc-server/invariant
+ * Package-owned invariant companion for `@neo/sdk-jsonrpc-server`.
+ * @module @neo/sdk-jsonrpc-server/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-sdk-jsonrpc-server'
+const PACKAGE_NAME = '@neo/sdk-jsonrpc-server'
 
 /** Cordis companion plugin name. */
 export const name = 'sdk-jsonrpc-server-invariant'

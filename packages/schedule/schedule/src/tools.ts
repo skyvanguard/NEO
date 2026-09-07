@@ -1,13 +1,13 @@
 /**
  * Agent-scoped Schedule management tools over the durable session fold.
- * @module @neo/dsh-schedule
+ * @module @neo/schedule
  */
 
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import type { ContentBlock } from '@neo/dsh-llm'
-import { defineTool } from '@neo/dsh-tools'
-import type { GenericCallView } from '@neo/dsh-tools'
+import type { Agent } from '@neo/agent'
+import type { ContentBlock } from '@neo/llm'
+import { defineTool } from '@neo/tools'
+import type { GenericCallView } from '@neo/tools'
 import {
   allocateScheduleId,
   createAfterScheduleRecord,

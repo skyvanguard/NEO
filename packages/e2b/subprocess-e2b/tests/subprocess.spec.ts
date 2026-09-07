@@ -7,14 +7,14 @@ import {
   type CommandHandle,
   type CommandResult,
   type Sandbox,
-} from '@neo/dsh-e2b'
-import type E2BRuntime from '@neo/dsh-e2b'
-import type { SubprocessSpawnSpec } from '@neo/dsh-subprocess'
-import E2BSubprocessRuntime from '@neo/dsh-subprocess-e2b'
+} from '@neo/e2b'
+import type E2BRuntime from '@neo/e2b'
+import type { SubprocessSpawnSpec } from '@neo/subprocess'
+import E2BSubprocessRuntime from '@neo/subprocess-e2b'
 import * as E2BSubprocessInvariant from '../src/invariant.ts'
 import { E2BBase64Decoder, E2B_OUTPUT_COMPLETE_FRAME, E2BOutputReader } from '../src/output.ts'
 import { E2BSubprocessHandle } from '../src/process.ts'
-import InvariantRegistry from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
 import { describe, expect, it, vi } from 'vitest'
 
 function commandError(exitCode: number): CommandExitError {

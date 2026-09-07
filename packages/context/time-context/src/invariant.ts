@@ -1,15 +1,15 @@
-/** Package-owned durable clock-context invariants. @module @neo/dsh-time-context/invariant */
+/** Package-owned durable clock-context invariants. @module @neo/time-context/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import {
   deriveBrowserTimeZoneContext,
   renderBrowserTimeZoneContext,
 } from './request-zone.ts'
 import { createTimestampFormatter, formatTimestamp } from './timestamp.ts'
 
-const PACKAGE_NAME = '@neo/dsh-time-context'
+const PACKAGE_NAME = '@neo/time-context'
 const SOURCE_NAME = 'time-context'
 const READING = new RegExp(
   '^Time sampled while preparing turn (\\d+), step (\\d+): '

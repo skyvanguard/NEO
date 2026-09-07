@@ -5,8 +5,8 @@
  */
 
 import { useEffect, useState } from 'react'
-import type { SnapshotStore } from '@neo/dsh-client-runtime/client'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
+import type { SnapshotStore } from '@neo/client-runtime/client'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
 import type { AgentPresetSettingsState } from './settings-store.ts'
 import { presetDisplayText, type AgentPresetSettingsKey } from './locales.ts'
 import { PresetMenu } from './PresetMenu.tsx'
@@ -81,7 +81,7 @@ export function AgentPresetRow({ load, select, useAgentPreset, t }: AgentPresetR
   )
 }
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Agent-preset row copy. */
     'settings.agentPreset': AgentPresetSettingsKey

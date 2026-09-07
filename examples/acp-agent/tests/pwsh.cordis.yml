@@ -1,21 +1,21 @@
 # Minimal live counterpart for the pwsh-tool-turn snapshot composition.
 - id: llm-deepseek
-  name: '@neo/dsh-llm-deepseek'
+  name: '@neo/llm-deepseek'
   config:
     models:
       - id: deepseek-v4-pro
 
 - id: subprocess
-  name: '@neo/dsh-subprocess-local'
+  name: '@neo/subprocess-local'
 
 - id: bash
-  name: '@neo/dsh-pwsh-local'
+  name: '@neo/pwsh-local'
 
 - id: shell-env
-  name: '@neo/dsh-shell-env'
+  name: '@neo/shell-env'
 
 - id: acp-agent
-  name: '@neo/dsh-acp-demo'
+  name: '@neo/acp-demo'
   config:
     provider: deepseek-official
     model: deepseek-v4-pro
@@ -32,4 +32,4 @@
     persona: You are a concise snapshot agent working in {{cwd}}.
 
 - id: tool-pwsh
-  name: '@neo/dsh-tool-pwsh'
+  name: '@neo/tool-pwsh'

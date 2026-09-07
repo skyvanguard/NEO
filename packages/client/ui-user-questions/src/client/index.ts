@@ -12,10 +12,10 @@
  * separate chain entry per shape would race the same carrier, so the shape
  * choice lives inside this entry — see QuestionComposer.
  */
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
-import type { ComposerChainProps } from '@neo/dsh-client-ui-conversation/client'
+import type { ClientContext } from '@neo/client-runtime/client'
+import type { ComposerChainProps } from '@neo/client-ui-conversation/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@neo/dsh-client-locale/client'
+import type {} from '@neo/client-locale/client'
 import type { QuestionWait } from './contract/slots.ts'
 import { QuestionComposer } from './QuestionComposer.tsx'
 import { en, es, zh, type QuestionKey } from './locales.ts'
@@ -26,7 +26,7 @@ export type {
 } from './contract/slots.ts'
 export type { QuestionKey } from './locales.ts'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** The question composer's copy. */
     question: QuestionKey

@@ -5,9 +5,9 @@ import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { SandboxPolicy } from '@neo/dsh-sandbox'
+import type { SandboxPolicy } from '@neo/sandbox'
 import { launcherPath } from '@neo/node-addon-landlock-run'
-import { LocalSandboxProvider } from '@neo/dsh-sandbox-local'
+import { LocalSandboxProvider } from '@neo/sandbox-local'
 
 /**
  * Keyless backend integration through `confine()` and the workspace `landlock-run` launcher, with

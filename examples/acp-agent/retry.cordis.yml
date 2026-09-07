@@ -11,7 +11,7 @@
     path: ./cordis.yml
     patches:
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         config:
           thinking: enabled
           reasoningEffort: max
@@ -26,7 +26,7 @@
             - id: deepseek-v4-flash
             - id: deepseek-v4-pro
       - id: acp-agent
-        name: '@neo/dsh-acp-demo'
+        name: '@neo/acp-demo'
         config:
           provider: deepseek-official
           model: deepseek-v4-flash

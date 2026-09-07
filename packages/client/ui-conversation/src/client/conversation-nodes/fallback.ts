@@ -1,11 +1,11 @@
 import type { Context } from '@neo/cordis'
 import type {
   ConversationNodeDefinition, UnknownSurfaceNode,
-} from '@neo/dsh-client-runtime/client'
-import { isAppendSurfaceEvent } from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
+import { isAppendSurfaceEvent } from '@neo/client-runtime/client'
 import { chatNode } from './common.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Generic presentation of an unclaimed append-surface event. */
     unknown: UnknownSurfaceNode

@@ -4,7 +4,7 @@
  */
 
 import type { Context } from '@neo/cordis'
-import type {} from '@neo/dsh-agent-loop'
+import type {} from '@neo/agent-loop'
 
 /** Fixture plugin name. */
 export const name = 'subagent-report-fence'

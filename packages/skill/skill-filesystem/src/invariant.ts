@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-skill-filesystem`.
- * @module @neo/dsh-skill-filesystem/invariant
+ * Package-owned invariant companion for `@neo/skill-filesystem`.
+ * @module @neo/skill-filesystem/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-skill-filesystem'
+const PACKAGE_NAME = '@neo/skill-filesystem'
 
 /** Cordis companion plugin name. */
 export const name = 'skill-filesystem-invariant'

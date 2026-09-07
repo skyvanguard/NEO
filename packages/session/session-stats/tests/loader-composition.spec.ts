@@ -13,9 +13,9 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import * as SessionStatsPlugin from '@neo/dsh-session-stats'
+import SessionStore, { SessionId } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
+import * as SessionStatsPlugin from '@neo/session-stats'
 
 let root: string | undefined
 let context: Context | undefined
@@ -37,9 +37,9 @@ async function loadYaml(lines: readonly string[]): Promise<Context> {
   await context.plugin(Loader)
   context.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-session', SessionStore],
-    ['@neo/dsh-session-projection', SessionProjectionRegistry],
-    ['@neo/dsh-session-stats', SessionStatsPlugin],
+    ['@neo/session', SessionStore],
+    ['@neo/session-projection', SessionProjectionRegistry],
+    ['@neo/session-stats', SessionStatsPlugin],
   ])
   context.loader.internal = {
     version: 'v2',
@@ -59,9 +59,9 @@ async function loadYaml(lines: readonly string[]): Promise<Context> {
 describe('real Loader composition', () => {
   it('loads the shipped session-stats YAML shape and serves whole-log counts', async () => {
     const loaded = await loadYaml([
-      "- name: '@neo/dsh-session'",
-      "- name: '@neo/dsh-session-projection'",
-      "- name: '@neo/dsh-session-stats'",
+      "- name: '@neo/session'",
+      "- name: '@neo/session-projection'",
+      "- name: '@neo/session-stats'",
     ])
 
     const unloaded = [...loaded.loader.entries()]

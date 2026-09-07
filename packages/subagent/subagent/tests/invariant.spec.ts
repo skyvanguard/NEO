@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { scopeTarget } from '@neo/dsh-scope'
-import { SessionId } from '@neo/dsh-session'
-import SubagentRuntime, { SubagentRunId } from '@neo/dsh-subagent'
+import { scopeTarget } from '@neo/scope'
+import { SessionId } from '@neo/session'
+import SubagentRuntime, { SubagentRunId } from '@neo/subagent'
 import type {
   SubagentProvider,
   SubagentRunEndInfo,
   SubagentRunInfo,
-} from '@neo/dsh-subagent'
-import * as SubagentInvariant from '@neo/dsh-subagent/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+} from '@neo/subagent'
+import * as SubagentInvariant from '@neo/subagent/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()

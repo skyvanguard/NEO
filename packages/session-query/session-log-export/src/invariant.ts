@@ -1,10 +1,10 @@
-/** Package invariant companion for `@neo/dsh-session-log-export`. */
+/** Package invariant companion for `@neo/session-log-export`. */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-session-log-export'
+const PACKAGE_NAME = '@neo/session-log-export'
 
 export const name = 'session-export-invariant'
 export const inject = ['invariants']

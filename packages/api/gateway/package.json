@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-api-gateway",
+  "name": "@neo/api-gateway",
   "description": "Typert Remote Host dispatcher and Client API endpoint",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,8 +36,8 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-typert-registry",
-        "@neo/dsh-client-connection"
+        "@neo/typert-registry",
+        "@neo/client-connection"
       ],
       "platform": "web",
       "immediately": true
@@ -56,19 +56,19 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@neo/dsh-typert-protocol": "workspace:^"
+    "@neo/typert-protocol": "workspace:^"
   },
   "peerDependencies": {
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/typert-registry": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-host-webserver": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/host-webserver": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/typert-registry": "workspace:^",
     "@neo/cordis": "workspace:^",
     "zod": "^4.4.3"
   }

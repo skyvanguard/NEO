@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-layout",
+  "name": "@neo/client-ui-layout",
   "description": "Shell plugin: three-column AppFrame with drag handles, ctx.layout viewing-state service (navigation + panels)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,8 +32,8 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-theme"
+        "@neo/client-runtime",
+        "@neo/client-ui-theme"
       ],
       "platform": "web"
     }
@@ -44,19 +44,19 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-client-ui-theme": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/client-ui-theme": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-client-ui-theme": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/client-ui-theme": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0"

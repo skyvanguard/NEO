@@ -9,16 +9,16 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore from '@neo/dsh-session'
-import AgentRegistry from '@neo/dsh-agent'
-import type { Agent, AgentHandle, CreateAgentOptions } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import SessionTitleService from '@neo/dsh-session-title'
-import UserQuestionService from '@neo/dsh-user-questions'
-import type { Session, SessionId } from '@neo/dsh-session'
-import type { RpcRequest } from '@neo/dsh-host-apiproxy/api/rpc'
-import { RpcId } from '@neo/dsh-host-apiproxy/api/rpc'
-import { createApiProxy } from '@neo/dsh-host-apiproxy'
+import SessionStore from '@neo/session'
+import AgentRegistry from '@neo/agent'
+import type { Agent, AgentHandle, CreateAgentOptions } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import SessionTitleService from '@neo/session-title'
+import UserQuestionService from '@neo/user-questions'
+import type { Session, SessionId } from '@neo/session'
+import type { RpcRequest } from '@neo/host-apiproxy/api/rpc'
+import { RpcId } from '@neo/host-apiproxy/api/rpc'
+import { createApiProxy } from '@neo/host-apiproxy'
 
 const sid = (id: string): SessionId => id as SessionId
 

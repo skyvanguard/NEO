@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-subprocess-e2b`.
- * @module @neo/dsh-subprocess-e2b/invariant
+ * Package-owned invariant companion for `@neo/subprocess-e2b`.
+ * @module @neo/subprocess-e2b/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-subprocess-e2b'
+const PACKAGE_NAME = '@neo/subprocess-e2b'
 
 /** Cordis companion plugin name. */
 export const name = 'subprocess-e2b-invariant'

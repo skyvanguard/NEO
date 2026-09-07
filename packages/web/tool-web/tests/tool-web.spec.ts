@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import TurndownService from 'turndown'
-import { CallId } from '@neo/dsh-llm'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { type ToolExecutionResult } from '@neo/dsh-tools'
-import WebRuntime from '@neo/dsh-web'
-import type { WebSearchProvider, WebSearchResult } from '@neo/dsh-web'
-import * as ToolWeb from '@neo/dsh-tool-web'
+import { CallId } from '@neo/llm'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { type ToolExecutionResult } from '@neo/tools'
+import WebRuntime from '@neo/web'
+import type { WebSearchProvider, WebSearchResult } from '@neo/web'
+import * as ToolWeb from '@neo/tool-web'
 import {
   formatSearchOutput,
   formatFetchOutput,
@@ -21,9 +21,9 @@ import {
   fetchMetaFromValue,
   fetchMetaFromResult,
   WEB_SEARCH_MAX_RESULTS,
-} from '@neo/dsh-tool-web'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { ToolResult } from '@neo/dsh-tools'
+} from '@neo/tool-web'
+import type { ContentBlock } from '@neo/llm'
+import type { ToolResult } from '@neo/tools'
 
 const testToolSignal = new AbortController().signal
 
@@ -38,7 +38,7 @@ async function mountTools(opts: {
   config?: ToolWeb.Config
   webConfig?: ConstructorParameters<typeof WebRuntime>[1]
   search?: WebSearchProvider
-  fetchProvider?: import('@neo/dsh-web').WebFetchProvider
+  fetchProvider?: import('@neo/web').WebFetchProvider
 } = {}): Promise<{ ctx: Context; fiber: Awaited<ReturnType<Context['plugin']>>; call: (name: string, args: unknown) => Promise<ToolExecutionResult> }> {
   const ctx = new Context()
   await ctx.plugin(SystemPrompt)

@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-slots
+# @neo/client-ui-slots
 
 English | [中文](README.zh.md)
 

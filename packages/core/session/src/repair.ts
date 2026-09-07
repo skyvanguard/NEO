@@ -2,11 +2,11 @@
  * Crash-recovery repair for an interrupted session log. It preserves a fully
  * written final turn and supplies the missing tool, step, and turn boundaries
  * needed to resume with a provider-valid transcript.
- * @module @neo/dsh-session/repair
+ * @module @neo/session/repair
  */
 
-import { MessageId, freezeMessage, type CallId } from '@neo/dsh-llm'
-import type { ToolResultMessage } from '@neo/dsh-llm'
+import { MessageId, freezeMessage, type CallId } from '@neo/llm'
+import type { ToolResultMessage } from '@neo/llm'
 import type { SessionEvent } from './types.ts'
 
 /** Recovery code for an assistant tool request that never reached a recorded call start. */

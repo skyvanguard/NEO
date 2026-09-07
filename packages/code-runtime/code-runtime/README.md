@@ -1,4 +1,4 @@
-# @neo/dsh-code-runtime
+# @neo/code-runtime
 
 English | [中文](README.zh.md)
 

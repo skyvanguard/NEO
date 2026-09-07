@@ -1,10 +1,10 @@
 /**
  * Generic-task adaptation for background bash process handles.
  *
- * @module @neo/dsh-tool-bash/background
+ * @module @neo/tool-bash/background
  */
 
-import type { ShellProcess } from '@neo/dsh-shell'
+import type { ShellProcess } from '@neo/shell'
 
 /**
  * Map a settled background process onto the generic task-outcome vocabulary:

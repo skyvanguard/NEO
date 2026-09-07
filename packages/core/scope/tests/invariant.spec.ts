@@ -1,11 +1,11 @@
-import { freezeMessage, MessageId } from '@neo/dsh-llm'
+import { freezeMessage, MessageId } from '@neo/llm'
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import type { Events } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { scopeTarget } from '@neo/dsh-scope'
-import * as ScopeInvariant from '@neo/dsh-scope/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import type { Agent } from '@neo/agent'
+import { scopeTarget } from '@neo/scope'
+import * as ScopeInvariant from '@neo/scope/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()

@@ -8,11 +8,11 @@
  * invalid or conflicting registration publishes nothing, and its disposer releases every
  * reservation together. Selection routes a query by the file's final extension; it never depends on
  * registration order. The seam exposes exactly the four operations and no JSON-RPC escape hatch.
- * @module @neo/dsh-lsp
+ * @module @neo/lsp
  */
 
 import { Context, Service } from '@neo/cordis'
-import { HarnessError } from '@neo/dsh-llm'
+import { HarnessError } from '@neo/llm'
 import type { LspProviderId } from './brand.ts'
 import type {
   LspProvider,

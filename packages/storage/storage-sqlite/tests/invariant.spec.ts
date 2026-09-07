@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import InvariantRegistry from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
 import * as StorageSqliteInvariant from '../src/invariant.ts'
 
 describe('invariant companion', () => {

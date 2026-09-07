@@ -5,14 +5,14 @@ import { chmodSync, existsSync, mkdtempSync, realpathSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import SubagentRuntime from '@neo/dsh-subagent'
-import type { Agent } from '@neo/dsh-agent'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import type { SubprocessOutcome } from '@neo/dsh-subprocess'
+import SubagentRuntime from '@neo/subagent'
+import type { Agent } from '@neo/agent'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import type { SubprocessOutcome } from '@neo/subprocess'
 import * as acp from '../src/index.ts'
 import { acpStopReason, acpContentText, DEFAULT_DISPOSE_EOF_GRACE_MS, DEFAULT_DISPOSE_GRACE_MS, disposeAcpChild, startAcpRun, toAcpPrompt, type AcpRunSpec } from '../src/run.ts'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
-import { spawnSubprocess } from '@neo/dsh-subprocess-local/src/spawn.ts'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
+import { spawnSubprocess } from '@neo/subprocess-local/src/spawn.ts'
 
 /**
  * Keyless integration tests for the ACP subagent backend. Each spawns a REAL

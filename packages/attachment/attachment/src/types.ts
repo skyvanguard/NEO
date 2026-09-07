@@ -1,4 +1,4 @@
-/** Durable attachment vocabulary. @module @neo/dsh-attachment/types */
+/** Durable attachment vocabulary. @module @neo/attachment/types */
 
 import type { AttachmentId } from './brand.ts'
 

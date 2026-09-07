@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-pwsh-local`.
- * @module @neo/dsh-pwsh-local/invariant
+ * Package-owned invariant companion for `@neo/pwsh-local`.
+ * @module @neo/pwsh-local/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-pwsh-local'
+const PACKAGE_NAME = '@neo/pwsh-local'
 
 /** Cordis companion plugin name. */
 export const name = 'pwsh-local-invariant'

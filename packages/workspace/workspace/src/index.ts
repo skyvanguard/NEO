@@ -2,16 +2,16 @@
  * Workspace entity registry (`ctx.workspaceRegistry`): durable workspace records,
  * stable registry order, and header-validated session membership over the
  * domain data form.
- * @module @neo/dsh-workspace
+ * @module @neo/workspace
  */
 
 import { randomUUID } from 'node:crypto'
 import { stat } from 'node:fs/promises'
 import { basename } from 'node:path'
 import { Context, Service } from '@neo/cordis'
-import type { SessionHeader, SessionId } from '@neo/dsh-session'
-import type {} from '@neo/dsh-session-persistence'
-import type { DomainGlobal, KvTable } from '@neo/dsh-storage-domain'
+import type { SessionHeader, SessionId } from '@neo/session'
+import type {} from '@neo/session-persistence'
+import type { DomainGlobal, KvTable } from '@neo/storage-domain'
 import { WorkspaceEntity } from './entity.ts'
 import type { WorkspaceEntityHost } from './entity.ts'
 

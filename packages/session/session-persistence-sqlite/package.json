@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-persistence-sqlite",
+  "name": "@neo/session-persistence-sqlite",
   "description": "SQLite durable session persistence backend for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,18 +32,18 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

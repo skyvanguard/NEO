@@ -9,11 +9,11 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { createSnapshotStore } from '@neo/dsh-client-runtime/client'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+import { createSnapshotStore } from '@neo/client-runtime/client'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 import { zh } from '../src/client/locales.ts'
-import type { MenuState, TriggerHit } from '@neo/dsh-client-ui-input-trigger/client'
+import type { MenuState, TriggerHit } from '@neo/client-ui-input-trigger/client'
 import { MenuView } from '../src/client/MenuView.tsx'
 
 const hit: TriggerHit = {

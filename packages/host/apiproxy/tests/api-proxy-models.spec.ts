@@ -7,20 +7,20 @@
 
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry, { agentEvents } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import LlmRuntime, { LlmAdapter, ReasoningEffortId } from '@neo/dsh-llm'
+import AgentRegistry, { agentEvents } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import LlmRuntime, { LlmAdapter, ReasoningEffortId } from '@neo/llm'
 import type {
   GenerateOptions, LlmCallConfig, LlmModelInfo, LlmModelReasoningInfo, LlmProviderInfo,
   LlmResolvedModelInfo, StreamChunk,
   UserMessage,
-} from '@neo/dsh-llm'
-import SessionStore from '@neo/dsh-session'
-import type { SessionId } from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import UserQuestionService from '@neo/dsh-user-questions'
-import type { RpcRequest } from '@neo/dsh-host-apiproxy/api/rpc'
-import { RpcId } from '@neo/dsh-host-apiproxy/api/rpc'
+} from '@neo/llm'
+import SessionStore from '@neo/session'
+import type { SessionId } from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import UserQuestionService from '@neo/user-questions'
+import type { RpcRequest } from '@neo/host-apiproxy/api/rpc'
+import { RpcId } from '@neo/host-apiproxy/api/rpc'
 import { createApiProxy } from '../src/api-proxy.ts'
 
 let nextRpc = 1

@@ -6,8 +6,8 @@ import {
   requestMethod,
   supportsOperation,
   supportsTransientOpen,
-} from '@neo/dsh-lsp-stdio'
-import type { WireServerCapabilities } from '@neo/dsh-lsp-stdio/src/protocol.ts'
+} from '@neo/lsp-stdio'
+import type { WireServerCapabilities } from '@neo/lsp-stdio/src/protocol.ts'
 
 const RANGE = { start: { line: 1, character: 2 }, end: { line: 1, character: 5 } }
 

@@ -1,15 +1,15 @@
 /**
- * `@neo/dsh-web-fetch-http`: registers an anonymous public HTTP(S)
+ * `@neo/web-fetch-http`: registers an anonymous public HTTP(S)
  * `WebFetchProvider` with `ctx.web`. A function/namespace plugin (NOT a
  * default-export service): it registers INTO the seam's fetch registry, like the
  * search providers register into the search registry.
  *
- * @module @neo/dsh-web-fetch-http
+ * @module @neo/web-fetch-http
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type {} from '@neo/dsh-web'
+import type {} from '@neo/web'
 import { HttpFetchProvider } from './provider.ts'
 import type { HttpFetchLimits } from './provider.ts'
 

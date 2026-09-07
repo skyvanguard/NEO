@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-sidebar",
+  "name": "@neo/client-ui-sidebar",
   "description": "Sidebar plugin: session multi-level tree, search, grouping, state dots",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,9 +32,9 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-layout",
-        "@neo/dsh-client-locale"
+        "@neo/client-runtime",
+        "@neo/client-ui-layout",
+        "@neo/client-locale"
       ],
       "platform": "web"
     }
@@ -48,22 +48,22 @@
     "clsx": "^2.0.0"
   },
   "peerDependencies": {
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-layout": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-layout": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0"

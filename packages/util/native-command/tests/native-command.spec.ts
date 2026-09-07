@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { runNativeCommand } from '@neo/dsh-native-command'
+import { runNativeCommand } from '@neo/native-command'
 
 const node = process.execPath
 

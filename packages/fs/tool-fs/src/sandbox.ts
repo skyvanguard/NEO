@@ -2,20 +2,20 @@
  * The sandbox-escalation API shared by the `write` and `edit` tools: the
  * per-call policy resolution, the advertised escalation fields, and the denial-marker
  * mapping — all delegating the vocabulary and the fail-closed approval
- * sequence to `@neo/dsh-sandbox` (the same pieces `@neo/dsh-tool-bash`
+ * sequence to `@neo/sandbox` (the same pieces `@neo/tool-bash`
  * uses), so bash and fs escalate identically. Built ONCE per plugin from
  * `ctx.fs.sandboxMode` (the capability fact — is a confining backend mounted?)
  * and shared by both mutating tools.
  *
- * @module @neo/dsh-tool-fs/sandbox
+ * @module @neo/tool-fs/sandbox
  */
 
 import type { Context } from '@neo/cordis'
-import type { ToolExecution } from '@neo/dsh-tools'
-import type { SandboxExecutionPolicy, SandboxMode } from '@neo/dsh-sandbox'
-import { ESCALATION_TARGETS, approveEscalation, escalationHintMarker, sandboxDenialMarker, validateEscalationArgs } from '@neo/dsh-sandbox'
-import type { SandboxPolicyService } from '@neo/dsh-sandbox-policy'
-import { FsError } from '@neo/dsh-fs'
+import type { ToolExecution } from '@neo/tools'
+import type { SandboxExecutionPolicy, SandboxMode } from '@neo/sandbox'
+import { ESCALATION_TARGETS, approveEscalation, escalationHintMarker, sandboxDenialMarker, validateEscalationArgs } from '@neo/sandbox'
+import type { SandboxPolicyService } from '@neo/sandbox-policy'
+import { FsError } from '@neo/fs'
 
 /** The two escalation arguments a mutating tool may carry (advertised only under a confining backend). */
 export interface FsEscalationArgs {

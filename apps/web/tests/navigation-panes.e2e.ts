@@ -13,8 +13,8 @@ import type { Browser, Page, Response } from 'playwright'
 import { chromium } from 'playwright'
 import { strFromU8, unzipSync } from 'fflate'
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, onTestFailed } from 'vitest'
-import { parseSessionLog } from '@neo/dsh-llm-replay'
-import type { SessionEvent } from '@neo/dsh-session'
+import { parseSessionLog } from '@neo/llm-replay'
+import type { SessionEvent } from '@neo/session'
 import {
   assertFixtureInventory, captureStableAria, compareOrRefreshGolden, fixtureUserPrompts,
   launchWebScaffold, recordFixture, seedSession, watchConsole, webSnapshotMode, type WebScaffold,

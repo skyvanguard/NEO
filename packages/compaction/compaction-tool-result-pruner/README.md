@@ -1,4 +1,4 @@
-# @neo/dsh-compaction-tool-result-pruner
+# @neo/compaction-tool-result-pruner
 
 English | [中文](README.zh.md)
 
@@ -32,7 +32,7 @@ All values are integers; the threshold is positive and head/tail are non-negativ
 
 ```ts
 import type { Context } from '@neo/cordis'
-import ToolResultPruner from '@neo/dsh-compaction-tool-result-pruner'
+import ToolResultPruner from '@neo/compaction-tool-result-pruner'
 
 export function apply(ctx: Context): void {
   ctx.plugin(ToolResultPruner)

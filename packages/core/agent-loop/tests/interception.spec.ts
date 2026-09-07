@@ -1,21 +1,21 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import LlmRuntime, { createUserMessage, CallId  } from '@neo/dsh-llm'
+import LlmRuntime, { createUserMessage, CallId  } from '@neo/llm'
 import SessionStore, {
   SessionId,
   type SessionEvent,
   type TurnEndReason,
   type UserMessage,
-} from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture, type PostToolDecision, type PreToolDecision } from '@neo/dsh-tools'
+} from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { defineContentToolFixture, type PostToolDecision, type PreToolDecision } from '@neo/tools'
 import AgentRegistry, {
   type Agent,
   type PreStepDecision,
   type SessionStartSource,
-} from '@neo/dsh-agent'
+} from '@neo/agent'
 
-import AgentLoop from '@neo/dsh-agent-loop'
+import AgentLoop from '@neo/agent-loop'
 import { MockAdapter, textResponse, toolCallResponse } from './mock-adapter.ts'
 
 /**

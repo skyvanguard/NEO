@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-storage-sqlite`.
- * @module @neo/dsh-storage-sqlite/invariant
+ * Package-owned invariant companion for `@neo/storage-sqlite`.
+ * @module @neo/storage-sqlite/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-storage-sqlite'
+const PACKAGE_NAME = '@neo/storage-sqlite'
 
 /** Cordis companion plugin name. */
 export const name = 'storage-sqlite-invariant'

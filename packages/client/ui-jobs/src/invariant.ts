@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-client-ui-jobs`.
- * @module @neo/dsh-client-ui-jobs/invariant
+ * Package-owned invariant companion for `@neo/client-ui-jobs`.
+ * @module @neo/client-ui-jobs/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-client-ui-jobs'
+const PACKAGE_NAME = '@neo/client-ui-jobs'
 
 /** Cordis companion plugin name. */
 export const name = 'client-ui-jobs-invariant'

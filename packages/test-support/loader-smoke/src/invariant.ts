@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-loader-smoke`.
- * @module @neo/dsh-loader-smoke/invariant
+ * Package-owned invariant companion for `@neo/loader-smoke`.
+ * @module @neo/loader-smoke/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-loader-smoke'
+const PACKAGE_NAME = '@neo/loader-smoke'
 
 /** Cordis companion plugin name. */
 export const name = 'loader-smoke-invariant'

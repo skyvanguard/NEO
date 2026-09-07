@@ -4,19 +4,19 @@
  * producers. It also delivers unreported completions to the owning agent:
  * injected into a busy owner's next step, or opening a turn on an idle one
  * under the default `wakeup` delivery, bounded per owner.
- * @module @neo/dsh-tool-jobs
+ * @module @neo/tool-jobs
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { boundContextSummary, createUserMessage, type ContentBlock } from '@neo/dsh-llm'
-import { TextRetainer } from '@neo/dsh-output-retention'
-import { defineTool } from '@neo/dsh-tools'
-import type { GenericCallView, ToolDefinition, ToolExecution } from '@neo/dsh-tools'
-import { JobId } from '@neo/dsh-jobs'
-import type { JobSnapshot } from '@neo/dsh-jobs'
-import type {} from '@neo/dsh-system-prompt'
-import type { Agent } from '@neo/dsh-agent'
+import { boundContextSummary, createUserMessage, type ContentBlock } from '@neo/llm'
+import { TextRetainer } from '@neo/output-retention'
+import { defineTool } from '@neo/tools'
+import type { GenericCallView, ToolDefinition, ToolExecution } from '@neo/tools'
+import { JobId } from '@neo/jobs'
+import type { JobSnapshot } from '@neo/jobs'
+import type {} from '@neo/system-prompt'
+import type { Agent } from '@neo/agent'
 
 export const name = 'tool-jobs'
 export const inject = ['tools', 'jobs', 'systemPrompt']

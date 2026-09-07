@@ -2,8 +2,8 @@
 import { StrictMode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { act, render } from '@testing-library/react'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
-import type { HostObservable as ObservableSnapshot, SnapshotSelectorHook } from '@neo/dsh-client-ui-slots'
+import { bindSnapshotSelector } from '@neo/client-web-react'
+import type { HostObservable as ObservableSnapshot, SnapshotSelectorHook } from '@neo/client-ui-slots'
 
 // Keep equality local: this suite asserts the eq parameter contract without
 // adding a reverse dependency from web-react to runtime.

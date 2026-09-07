@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-sdk-jsonrpc-server",
+  "name": "@neo/sdk-jsonrpc-server",
   "description": "Stdio JSON-RPC server plugin for out-of-process DeepSeek Harness SDK clients",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -35,28 +35,28 @@
     "@neo/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-llm-deepseek": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-sdk-protocol": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/llm-deepseek": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subagent": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-spine-demo": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-llm-deepseek": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-sdk-protocol": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence-jsonl": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-spine-demo": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/llm-deepseek": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/subagent": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

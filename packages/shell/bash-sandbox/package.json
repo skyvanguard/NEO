@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-bash-sandbox",
+  "name": "@neo/bash-sandbox",
   "description": "Sandbox-consuming implementation of the DeepSeek Harness bash executor seam (confines every command via ctx.sandbox, reports denial/enforcement result facts)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,21 +32,21 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-shell": "workspace:^",
-    "@neo/dsh-bash-local": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/bash-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-shell": "workspace:^",
-    "@neo/dsh-bash-local": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subprocess-local": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-local": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/bash-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-local": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
     "@neo/cordis": "workspace:^",
     "@neo/node-addon-landlock-run": "workspace:^"
   }

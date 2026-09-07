@@ -6,13 +6,13 @@
 
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
+import { bindSnapshotSelector } from '@neo/client-web-react'
 import {
   createSnapshotStore, EMPTY_CHAT_SNAPSHOT, EMPTY_CONVERSATION_VIEWS,
-} from '@neo/dsh-client-runtime/client'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
-import type { ClientContext, ConversationSnapshot, SessionId } from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
+import type { ClientContext, ConversationSnapshot, SessionId } from '@neo/client-runtime/client'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import type { ComposerAttachment } from '../src/client/contract/slots.ts'
 import type { DraftAttachmentId } from '../src/client/input/contract.ts'

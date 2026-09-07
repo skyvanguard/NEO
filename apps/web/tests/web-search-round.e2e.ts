@@ -9,9 +9,9 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { credentialRef } from '@neo/dsh-credentials'
-import type { SessionEvent } from '@neo/dsh-session'
-import { WEB_SEARCH_MAX_RESULTS } from '@neo/dsh-tool-web'
+import { credentialRef } from '@neo/credentials'
+import type { SessionEvent } from '@neo/session'
+import { WEB_SEARCH_MAX_RESULTS } from '@neo/tool-web'
 import {
   assertFixtureInventory, captureStableAria, compareOrRefreshGolden, fixtureUserPrompts,
   launchWebScaffold, recordFixture, watchConsole, webSnapshotMode, type WebScaffold,

@@ -6,12 +6,12 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Include from '@neo/cordis-plugin-include'
 import Loader from '@neo/cordis-plugin-loader'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
-import Storage from '@neo/dsh-storage'
-import * as StorageDomain from '@neo/dsh-storage-domain'
-import * as StorageJson from '@neo/dsh-storage-json'
-import { remoteMethods } from '@neo/dsh-typert-protocol'
+import SessionStore, { SessionId } from '@neo/session'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
+import Storage from '@neo/storage'
+import * as StorageDomain from '@neo/storage-domain'
+import * as StorageJson from '@neo/storage-json'
+import { remoteMethods } from '@neo/typert-protocol'
 import MessageFeedbackService from '../src/index.ts'
 import { appendMessageFixture } from './helpers.ts'
 
@@ -30,12 +30,12 @@ async function loadComposition(configPath: string): Promise<Context> {
   await ctx.plugin(Loader)
   ctx.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-session', SessionStore],
-    ['@neo/dsh-session-persistence-jsonl', JsonlSessionPersistence],
-    ['@neo/dsh-storage', Storage],
-    ['@neo/dsh-storage-json', StorageJson],
-    ['@neo/dsh-storage-domain', StorageDomain],
-    ['@neo/dsh-message-feedback', MessageFeedbackService],
+    ['@neo/session', SessionStore],
+    ['@neo/session-persistence-jsonl', JsonlSessionPersistence],
+    ['@neo/storage', Storage],
+    ['@neo/storage-json', StorageJson],
+    ['@neo/storage-domain', StorageDomain],
+    ['@neo/message-feedback', MessageFeedbackService],
   ])
   ctx.loader.internal = {
     version: 'v2',
@@ -61,20 +61,20 @@ describe('message feedback through a real Loader composition', () => {
     root = await mkdtemp(join(tmpdir(), 'dsh-message-feedback-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@neo/dsh-session'",
-      "- name: '@neo/dsh-session-persistence-jsonl'",
+      "- name: '@neo/session'",
+      "- name: '@neo/session-persistence-jsonl'",
       '  config:',
       `    root: ${JSON.stringify(join(root, 'sessions'))}`,
       '    compression: none',
       '    writeBatchMaxDelayMs: 1',
-      "- name: '@neo/dsh-storage'",
-      "- name: '@neo/dsh-storage-json'",
+      "- name: '@neo/storage'",
+      "- name: '@neo/storage-json'",
       '  config:',
       `    root: ${JSON.stringify(join(root, 'storage'))}`,
-      "- name: '@neo/dsh-storage-domain'",
+      "- name: '@neo/storage-domain'",
       '  config:',
       '    backend: json',
-      "- name: '@neo/dsh-message-feedback'",
+      "- name: '@neo/message-feedback'",
       '  config:',
       '    maxNoteBytes: 32',
       '',

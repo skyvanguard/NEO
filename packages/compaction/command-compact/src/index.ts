@@ -1,11 +1,11 @@
 /**
  * Human-facing `/compact` command over the backend-independent compaction seam.
- * @module @neo/dsh-command-compact
+ * @module @neo/command-compact
  */
 
 import type { Context } from '@neo/cordis'
-import { ManualCompactionError } from '@neo/dsh-compaction'
-import type { CommandInvocation, CommandResult } from '@neo/dsh-commands'
+import { ManualCompactionError } from '@neo/compaction'
+import type { CommandInvocation, CommandResult } from '@neo/commands'
 
 export const name = 'command-compact'
 export const inject = ['commands', 'compaction']

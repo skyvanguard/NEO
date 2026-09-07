@@ -5,11 +5,11 @@
  */
 
 import { useEffect, useState } from 'react'
-import type { SnapshotStore } from '@neo/dsh-client-runtime/client'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
+import type { SnapshotStore } from '@neo/client-runtime/client'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
 import {
   IconChevronDownOutline14, Menu, RiskConfirmation,
-} from '@neo/dsh-client-ui-primitives'
+} from '@neo/client-ui-primitives'
 import type { PermissionSettingsState } from './settings-store.ts'
 import type { PermissionSettingsKey } from './locales.ts'
 import { FULL_ACCESS_PRESET } from './presentation.ts'
@@ -125,7 +125,7 @@ export function PermissionRow({ load, select, usePermission, t }: PermissionRowP
   )
 }
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Permission row copy. */
     'settings.permission': PermissionSettingsKey

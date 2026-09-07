@@ -1,9 +1,9 @@
-import type { LlmFailure } from '@neo/dsh-llm/types'
+import type { LlmFailure } from '@neo/llm/types'
 import type { RetryId } from './brand.ts'
 
 export type { RetryId }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /** Durable, non-surface record of one provider-routed retry scheduled after a failed request attempt. */
     'llm/retry': LlmRetryEventData

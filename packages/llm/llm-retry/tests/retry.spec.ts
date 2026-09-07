@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import type { Fiber } from '@neo/cordis'
-import LlmRuntime, { createUserMessage, CallId, EMPTY_RESPONSE_CODE, LlmAdapter, LlmError, resolveRetryPolicy  } from '@neo/dsh-llm'
+import LlmRuntime, { createUserMessage, CallId, EMPTY_RESPONSE_CODE, LlmAdapter, LlmError, resolveRetryPolicy  } from '@neo/llm'
 import type {
   AlwaysRetryPolicyConfig,
   BackoffConfig,
@@ -10,15 +10,15 @@ import type {
   ResolvedRetryPolicy,
   RetryPolicyConfig,
   StreamChunk,
-} from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { SessionEvent, SessionEventMap } from '@neo/dsh-session'
-import type { LlmRetryEventData } from '@neo/dsh-llm-retry/types'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture } from '@neo/dsh-tools'
-import AgentRegistry from '@neo/dsh-agent'
-import type { Agent, RequestErrorAction } from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
+} from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
+import type { SessionEvent, SessionEventMap } from '@neo/session'
+import type { LlmRetryEventData } from '@neo/llm-retry/types'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { defineContentToolFixture } from '@neo/tools'
+import AgentRegistry from '@neo/agent'
+import type { Agent, RequestErrorAction } from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
 import * as retry from '../src/index.ts'
 
 type ScriptEntry = Error | Iterable<StreamChunk> | AsyncIterable<StreamChunk>

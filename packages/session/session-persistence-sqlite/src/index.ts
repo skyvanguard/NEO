@@ -3,7 +3,7 @@
  * event to rows, and delegates write-path orchestration to
  * {@link PersistenceCoordinator}. It has no independent per-session artifact,
  * so its locator returns `undefined`.
- * @module @neo/dsh-session-persistence-sqlite
+ * @module @neo/session-persistence-sqlite
  */
 
 import { Context } from '@neo/cordis'
@@ -19,8 +19,8 @@ import {
   type PersistenceBackend, type SessionLocation, type SessionPersistenceSnapshot,
   type SessionInspection, type SessionPersistenceRevision as PersistenceRevision,
   type StoredPrefix, type StoredSuffix,
-} from '@neo/dsh-session-persistence'
-import type { SessionEvent, SurfaceEventType, SessionId, SessionHeader, SessionPreparation } from '@neo/dsh-session'
+} from '@neo/session-persistence'
+import type { SessionEvent, SurfaceEventType, SessionId, SessionHeader, SessionPreparation } from '@neo/session'
 import {
   type JournalMode, openDatabase, rowToMeta, scanRows, type EventRow, type SessionRow,
 } from './schema.ts'

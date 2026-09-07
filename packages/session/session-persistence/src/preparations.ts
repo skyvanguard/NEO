@@ -1,9 +1,9 @@
 /**
  * Bounded sharing and exclusive reservation of unpublished Sessions.
- * @module @neo/dsh-session-persistence/preparations
+ * @module @neo/session-persistence/preparations
  */
 
-import type { Session, SessionId } from '@neo/dsh-session'
+import type { Session, SessionId } from '@neo/session'
 
 interface PreparedSource {
   readonly session: Session

@@ -3,9 +3,9 @@
 // Run: npx tsx packages/llm/token-meter/tests/bench-follow.mts [steps] [tokens]
 import { performance } from 'node:perf_hooks'
 import { Context } from '@neo/cordis'
-import { createMessage, createUserMessage } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import TokenMeter from '@neo/dsh-token-meter'
+import { createMessage, createUserMessage } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
+import TokenMeter from '@neo/token-meter'
 
 const STEPS = Number(process.argv[2] ?? 400)
 const TOKENS = Number(process.argv[3] ?? 200)

@@ -1,10 +1,10 @@
 /**
  * Typed failures shared by subagent service and provider operations.
  *
- * @module @neo/dsh-subagent
+ * @module @neo/subagent
  */
 
-import { HarnessError } from '@neo/dsh-llm'
+import { HarnessError } from '@neo/llm'
 
 /** Typed failure for the subagent seam. */
 export class SubagentError extends HarnessError {

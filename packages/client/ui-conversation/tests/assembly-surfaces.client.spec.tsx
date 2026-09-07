@@ -3,11 +3,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, waitFor, within } from '@testing-library/react'
 import { useState } from 'react'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import type { ISession, SessionId } from '@neo/dsh-client-runtime/client'
-import type { PropsRenderSlots } from '@neo/dsh-client-ui-slots'
-import { SlotTestRuntime, usePinnedBrowserLanguages, stubSettingsScope } from '@neo/dsh-client-test-runtime'
-import { apply, inject, type EmptyWorkspaceOwnerProps } from '@neo/dsh-client-ui-conversation/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import type { ISession, SessionId } from '@neo/client-runtime/client'
+import type { PropsRenderSlots } from '@neo/client-ui-slots'
+import { SlotTestRuntime, usePinnedBrowserLanguages, stubSettingsScope } from '@neo/client-test-runtime'
+import { apply, inject, type EmptyWorkspaceOwnerProps } from '@neo/client-ui-conversation/client'
 
 usePinnedBrowserLanguages('zh-CN')
 

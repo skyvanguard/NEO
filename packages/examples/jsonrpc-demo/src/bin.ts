@@ -3,7 +3,7 @@
  * Generic JSON-RPC agent bin. External configurations own their bare plugin
  * packages; the packaged runtime uses `packaged-bin.ts` instead.
  *
- * @module @neo/dsh-sdk-jsonrpc-demo/bin
+ * @module @neo/sdk-jsonrpc-demo/bin
  */
 
 import { runJsonrpcAgent } from './runner.ts'

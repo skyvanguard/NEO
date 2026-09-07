@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-log-export",
+  "name": "@neo/session-log-export",
   "description": "Web Session-log export command and shared download dialog",
   "version": "0.1.0-rc.5",
   "publishConfig": { "access": "public" },
@@ -23,39 +23,39 @@
   "license": "MIT",
   "peerDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-commands": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-commands": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
     "@neo/cordis": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-commands": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-commands": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
     "@types/react": "~18.3.1",
     "react": "^18.2.0"
   },
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-locale",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-commands",
-        "@neo/dsh-client-ui-conversation"
+        "@neo/client-locale",
+        "@neo/client-runtime",
+        "@neo/client-ui-commands",
+        "@neo/client-ui-conversation"
       ],
       "platform": "web"
     }

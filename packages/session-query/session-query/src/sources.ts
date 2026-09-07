@@ -1,6 +1,6 @@
 /** Shared immutable-header checks for logical session source observers. */
 
-import type { SessionHeader } from '@neo/dsh-session'
+import type { SessionHeader } from '@neo/session'
 import { SessionQueryError } from './config.ts'
 
 /**

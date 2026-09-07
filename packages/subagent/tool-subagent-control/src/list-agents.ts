@@ -4,15 +4,15 @@
  * `descendants` scope, `ctx.subagents.listDescendants()`. It stays separately
  * loadable from the root `send_message` plugin so a deployment can register
  * continuation delivery without exposing discovery.
- * @module @neo/dsh-tool-subagent-control/list-agents
+ * @module @neo/tool-subagent-control/list-agents
  */
 
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
-import type { Agent } from '@neo/dsh-agent'
-import type { SessionId } from '@neo/dsh-session'
-import { assertNever } from '@neo/dsh-llm'
-import type { SubagentDescendantListEntry, SubagentListEntry } from '@neo/dsh-subagent'
+import { defineTool } from '@neo/tools'
+import type { Agent } from '@neo/agent'
+import type { SessionId } from '@neo/session'
+import { assertNever } from '@neo/llm'
+import type { SubagentDescendantListEntry, SubagentListEntry } from '@neo/subagent'
 
 export const name = 'tool-subagent-list-agents'
 export const inject = ['tools', 'subagents', 'agents']

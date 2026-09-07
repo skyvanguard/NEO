@@ -1,12 +1,12 @@
 import type { Context } from '@neo/cordis'
 import type {
   CompactionSummaryNode, ConversationMatch, ConversationNodeContext, ConversationNodeDefinition,
-} from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-compaction/types'
+} from '@neo/client-runtime/client'
+import type {} from '@neo/compaction/types'
 import { chatNode } from './common.ts'
 import { compactSource, compactSummary, updateCompactionState } from './command.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Automatic compaction checkpoint marker. */
     compaction: CompactionSummaryNode

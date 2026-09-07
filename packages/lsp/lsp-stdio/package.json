@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-lsp-stdio",
+  "name": "@neo/lsp-stdio",
   "description": "Generic stdio language-server provider for the DeepSeek Harness LSP capability seam (ctx.lsp) — spawns configured servers, translates JSON-RPC, and serves transient-open goToDefinition/findReferences/goToImplementation/hover queries in the host filesystem namespace",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,28 +32,28 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-fs": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-lsp": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/fs": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/lsp": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-fs": "workspace:^",
-    "@neo/dsh-fs-local": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-lsp": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-subprocess-local": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/fs": "workspace:^",
+    "@neo/fs-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/lsp": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^",
     "typescript": "^6.0.3",
     "typescript-language-server": "^5.0.0"

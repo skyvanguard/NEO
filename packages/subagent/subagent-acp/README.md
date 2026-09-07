@@ -1,4 +1,4 @@
-# @neo/dsh-subagent-acp
+# @neo/subagent-acp
 
 English | [中文](README.zh.md)
 
@@ -35,7 +35,7 @@ ACP advertises no start-time capabilities because this process cannot enforce th
 
 ```yaml
 - id: subagent-acp
-  name: '@neo/dsh-subagent-acp'
+  name: '@neo/subagent-acp'
   config:
     providerName: acp
     command: node

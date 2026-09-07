@@ -10,16 +10,16 @@
  * disposing the old instance and creating a new one; identical `serverName`
  * reproduces identical public tool names.
  *
- * @module @neo/dsh-mcp-client
+ * @module @neo/mcp-client
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import { RECONNECT_DEFAULTS, resolveReconnectPolicy, startConnection } from './connection.ts'
 import type { ReconnectConfig } from './connection.ts'
 // Side-effect type import: declaration-merges `ctx.tools` onto Context.
-import type {} from '@neo/dsh-tools'
+import type {} from '@neo/tools'
 
 export type { McpResult } from './tools.ts'
 export type { ReconnectConfig, ResolvedReconnectPolicy } from './connection.ts'

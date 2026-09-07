@@ -1,10 +1,10 @@
 import type { Context } from '@neo/cordis'
 import type {
   ConversationMatch, ConversationNodeContext, ConversationNodeDefinition, TurnMaxTokensNode,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import { CHAT_SYNTHETIC_SEQ_OFFSETS, chatNode } from './common.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Turn ended by the per-request output-token cap. */
     'turn-max-tokens': TurnMaxTokensNode

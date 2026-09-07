@@ -1,18 +1,18 @@
 /**
  * Model-facing `str_replace_editor` over the Harness filesystem seam.
- * @module @neo/dsh-tool-str-replace-editor
+ * @module @neo/tool-str-replace-editor
  */
 
 import { isAbsolute } from 'node:path'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { FsError } from '@neo/dsh-fs'
-import type { FsInfo, FsTarget, FsWriteIntent } from '@neo/dsh-fs'
-import { sandboxDenialMarker } from '@neo/dsh-sandbox'
-import type { SandboxExecutionPolicy } from '@neo/dsh-sandbox'
-import type { SandboxPolicyService } from '@neo/dsh-sandbox-policy'
-import { defineTool } from '@neo/dsh-tools'
-import type { ToolCallView, ToolRunContext } from '@neo/dsh-tools'
+import { FsError } from '@neo/fs'
+import type { FsInfo, FsTarget, FsWriteIntent } from '@neo/fs'
+import { sandboxDenialMarker } from '@neo/sandbox'
+import type { SandboxExecutionPolicy } from '@neo/sandbox'
+import type { SandboxPolicyService } from '@neo/sandbox-policy'
+import { defineTool } from '@neo/tools'
+import type { ToolCallView, ToolRunContext } from '@neo/tools'
 
 const TRUNCATED_MESSAGE = '<response clipped><NOTE>To save on context only part of this file has been shown to you. You should retry this tool after you have searched inside the file with `grep -n` in order to find the line numbers of what you are looking for.</NOTE>'
 

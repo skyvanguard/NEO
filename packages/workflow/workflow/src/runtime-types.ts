@@ -3,10 +3,10 @@
  * vocabulary remains in `./types` so Client programs never import Agent or
  * host Cordis context declarations.
  *
- * @module @neo/dsh-workflow
+ * @module @neo/workflow
  */
 
-import type { Agent } from '@neo/dsh-agent'
+import type { Agent } from '@neo/agent'
 import type {
   WorkflowMeta, WorkflowResult, WorkflowRunId,
 } from './types.ts'

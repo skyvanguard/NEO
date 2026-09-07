@@ -13,18 +13,18 @@
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
 import { z as zod } from 'zod'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { SandboxMode } from '@neo/dsh-sandbox'
-import { SANDBOX_MODES, effectiveSandboxMode, setSandboxMode } from '@neo/dsh-sandbox-policy'
+import type { Session, SessionEvent } from '@neo/session'
+import type { SandboxMode } from '@neo/sandbox'
+import { SANDBOX_MODES, effectiveSandboxMode, setSandboxMode } from '@neo/sandbox-policy'
 // Side-effect type import: declaration-merges `ctx.shell` (the capability fact
 // `sandboxMode` this service reads), without a value dependency on the seam.
-import type {} from '@neo/dsh-shell'
-import type { ApprovalPolicy } from '@neo/dsh-user-approval'
-import { APPROVAL_POLICIES, effectiveApprovalPolicy, setApprovalPolicy } from '@neo/dsh-user-approval'
-import { installSettingsSection, settingsNamespace } from '@neo/dsh-settings'
+import type {} from '@neo/shell'
+import type { ApprovalPolicy } from '@neo/user-approval'
+import { APPROVAL_POLICIES, effectiveApprovalPolicy, setApprovalPolicy } from '@neo/user-approval'
+import { installSettingsSection, settingsNamespace } from '@neo/settings'
 // Type-only: resolves ctx.sessionProjections / ctx.commands for the optional children.
-import type {} from '@neo/dsh-session-projection'
-import type {} from '@neo/dsh-commands'
+import type {} from '@neo/session-projection'
+import type {} from '@neo/commands'
 import type { PermissionSelect, PresetOption } from './types.ts'
 
 // The `permissions` projection-key declaration lives in src/types.ts (its one
@@ -39,7 +39,7 @@ declare module '@neo/cordis' {
   }
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * Records the selected preset as durable, log-only user intent. The knob

@@ -1,12 +1,12 @@
 /** Bridges the `conversation` locale namespace to the zero-cordis attachment
- * atoms' label props (`@neo/dsh-client-ui-attachment` reads no
+ * atoms' label props (`@neo/client-ui-attachment` reads no
  * application state; owners resolve every string). */
 
 import type {
   AttachmentRailLabels, DropOverlayLabels, ImageLightboxLabels, MessageImageLabels,
-} from '@neo/dsh-client-ui-attachment'
-import type { ImageAttachmentLimits } from '@neo/dsh-attachment'
-import type { Translate } from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-attachment'
+import type { ImageAttachmentLimits } from '@neo/attachment'
+import type { Translate } from '@neo/client-ui-slots'
 import type { ConversationKey } from './locales.ts'
 
 /**

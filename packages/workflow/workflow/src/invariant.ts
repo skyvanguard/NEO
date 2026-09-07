@@ -1,7 +1,7 @@
-/** Package-owned workflow lifecycle invariants. @module @neo/dsh-workflow/invariant */
+/** Package-owned workflow lifecycle invariants. @module @neo/workflow/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type {
   WorkflowAgentEndInfo,
   WorkflowAgentInfo,
@@ -9,7 +9,7 @@ import type {
   WorkflowRunInfo,
 } from './types.ts'
 
-const PACKAGE_NAME = '@neo/dsh-workflow'
+const PACKAGE_NAME = '@neo/workflow'
 
 /** Cordis companion plugin name. */
 export const name = 'workflow-invariant'

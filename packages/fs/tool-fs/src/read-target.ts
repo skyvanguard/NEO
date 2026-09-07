@@ -1,12 +1,12 @@
 /**
  * Shared path resolution and regular-file validation for model-facing read tools.
- * @module @neo/dsh-tool-fs/src/read-target
+ * @module @neo/tool-fs/src/read-target
  */
 
 import type { Context } from '@neo/cordis'
-import { FsError } from '@neo/dsh-fs'
-import type { FsInfo, FsTarget } from '@neo/dsh-fs'
-import type { ToolExecution } from '@neo/dsh-tools'
+import { FsError } from '@neo/fs'
+import type { FsInfo, FsTarget } from '@neo/fs'
+import type { ToolExecution } from '@neo/tools'
 import { sessionResolveOptions } from './session-cwd.ts'
 
 /**

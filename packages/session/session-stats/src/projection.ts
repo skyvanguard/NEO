@@ -20,12 +20,12 @@
  * time stays uncounted in every time figure — matching the window, which
  * renders it as an untimed interrupted node.
  *
- * @module @neo/dsh-session-stats/projection
+ * @module @neo/session-stats/projection
  */
 
 import { z } from 'zod'
-import { isTokenDelta } from '@neo/dsh-llm/message'
-import type { ProjectionDefinition } from '@neo/dsh-session-projection'
+import { isTokenDelta } from '@neo/llm/message'
+import type { ProjectionDefinition } from '@neo/session-projection'
 
 /** Accumulated whole-log figures (the view is exactly these totals). */
 interface SessionStatsTotals {

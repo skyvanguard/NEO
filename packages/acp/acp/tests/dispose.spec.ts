@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { PROTOCOL_VERSION } from '@agentclientprotocol/sdk'
-import type { Agent } from '@neo/dsh-agent'
-import { SessionId } from '@neo/dsh-session'
+import type { Agent } from '@neo/agent'
+import { SessionId } from '@neo/session'
 import { makeBridgeHarness, type BridgeHarness } from './harness.ts'
 
 describe('ACP connection ownership', () => {

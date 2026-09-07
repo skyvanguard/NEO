@@ -3,8 +3,8 @@ import type { AddressInfo } from 'node:net'
 import { describe, expect, it } from 'vitest'
 import { Context, Service, symbols } from '@neo/cordis'
 import { z } from 'zod'
-import { apply as applyConnection, inject as connectionInject } from '@neo/dsh-client-connection'
-import type { WebServer, WebRoute } from '@neo/dsh-host-webserver'
+import { apply as applyConnection, inject as connectionInject } from '@neo/client-connection'
+import type { WebServer, WebRoute } from '@neo/host-webserver'
 import {
   bindTypertRemote,
   Remote,
@@ -14,9 +14,9 @@ import {
   type TypertContext,
   type TypertLookup,
   type TypertLookupProvider,
-} from '@neo/dsh-typert-protocol'
-import TypertRegistry, { type TypertContribution } from '@neo/dsh-typert-registry'
-import TypertGatewayService, { TypertGatewayError } from '@neo/dsh-api-gateway'
+} from '@neo/typert-protocol'
+import TypertRegistry, { type TypertContribution } from '@neo/typert-registry'
+import TypertGatewayService, { TypertGatewayError } from '@neo/api-gateway'
 
 interface FixtureAgent {
   readonly id: string
@@ -26,7 +26,7 @@ interface MarkedContext extends Context {
   readonly fixtureScope?: string
 }
 
-declare module '@neo/dsh-typert-protocol' {
+declare module '@neo/typert-protocol' {
   interface TypertLookupMap {
     gatewayFixture: TypertLookup<FixtureAgent, string>
     gatewayFixtureAlias: TypertLookup<FixtureAgent, string>

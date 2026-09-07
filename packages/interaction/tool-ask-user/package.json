@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-ask-user",
+  "name": "@neo/tool-ask-user",
   "description": "Model-facing ask_user_question tool over the ctx.userQuestions seam",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,19 +32,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
-    "@neo/dsh-user-questions": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-questions": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
-    "@neo/dsh-user-questions": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-questions": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

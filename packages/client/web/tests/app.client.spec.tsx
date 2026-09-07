@@ -7,9 +7,9 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
 import { Context } from '@neo/cordis'
-import { SlotTestRuntime } from '@neo/dsh-client-test-runtime'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
-import { buildRenderApp } from '@neo/dsh-client-web/src/app.tsx'
+import { SlotTestRuntime } from '@neo/client-test-runtime'
+import type { SessionId } from '@neo/client-runtime/client'
+import { buildRenderApp } from '@neo/client-web/src/app.tsx'
 
 let runtime: SlotTestRuntime | undefined
 

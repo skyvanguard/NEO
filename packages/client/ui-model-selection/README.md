@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-model-selection
+# @neo/client-ui-model-selection
 
 English | [中文](README.zh.md)
 

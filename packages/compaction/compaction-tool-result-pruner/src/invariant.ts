@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-compaction-tool-result-pruner`.
- * @module @neo/dsh-compaction-tool-result-pruner/invariant
+ * Package-owned invariant companion for `@neo/compaction-tool-result-pruner`.
+ * @module @neo/compaction-tool-result-pruner/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-compaction-tool-result-pruner'
+const PACKAGE_NAME = '@neo/compaction-tool-result-pruner'
 
 /** Cordis companion plugin name. */
 export const name = 'compaction-tool-result-pruner-invariant'

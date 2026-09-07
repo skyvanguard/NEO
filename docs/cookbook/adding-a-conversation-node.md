@@ -28,12 +28,12 @@ The example keeps the producer declarations and client contribution in one block
 
 ```ts ignore-check
 import { createElement } from 'react'
-import type { Branded } from '@neo/dsh-brand'
+import type { Branded } from '@neo/brand'
 import type {
   ClientContext, ConversationLocation, ConversationNodeContext,
   ConversationNodeDefinition,
-} from '@neo/dsh-client-runtime/client'
-import type { ChatNodeViewProps } from '@neo/dsh-client-ui-conversation/client'
+} from '@neo/client-runtime/client'
+import type { ChatNodeViewProps } from '@neo/client-ui-conversation/client'
 
 type ReviewId = Branded<'ReviewId'>
 
@@ -58,7 +58,7 @@ interface ReviewEndData {
   readonly summary: string
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * Opens one durable review job.
@@ -88,13 +88,13 @@ interface ReviewChatData {
   readonly summary?: string
 }
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     'review-job': ReviewChatData
   }
 }
 
-declare module '@neo/dsh-client-runtime/client' {
+declare module '@neo/client-runtime/client' {
   interface ConversationStepDataMap {
     'review-job': ReviewChatData
   }

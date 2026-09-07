@@ -4,7 +4,7 @@
 
 import type {
   ClientResponse, MuxFrame, RpcId, RpcReceipt, SessionId,
-} from '@neo/dsh-api-remotes/client'
+} from '@neo/api-remotes/client'
 
 /** Kind-keyed payload map: the requested frame's domain fields (envelope fields stripped). */
 export interface PendingPayloads {

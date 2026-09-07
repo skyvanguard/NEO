@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-acp-demo`.
- * @module @neo/dsh-acp-demo/invariant
+ * Package-owned invariant companion for `@neo/acp-demo`.
+ * @module @neo/acp-demo/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-acp-demo'
+const PACKAGE_NAME = '@neo/acp-demo'
 
 /** Cordis companion plugin name. */
 export const name = 'acp-demo-invariant'

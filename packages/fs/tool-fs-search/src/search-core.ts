@@ -16,17 +16,17 @@
  * artifact is the formatted result saved through `ctx.spillStore.saveText()`
  * ({@link trySaveFormattedResult}).
  *
- * @module @neo/dsh-tool-fs-search/search-core
+ * @module @neo/tool-fs-search/search-core
  */
 
 import { isAbsolute, relative, sep } from 'node:path'
 import type { Context } from '@neo/cordis'
-import { HarnessError } from '@neo/dsh-llm'
-import { ItemRetainer, TextRetainer } from '@neo/dsh-output-retention'
-import type { RetainedItems } from '@neo/dsh-output-retention'
-import type { SubprocessHandle, SubprocessOutcome, SubprocessOutputRead, SubprocessSpawnSpec } from '@neo/dsh-subprocess'
-import type { SaveTextSpill, SpillRef } from '@neo/dsh-spill'
-import type { ToolExecution } from '@neo/dsh-tools'
+import { HarnessError } from '@neo/llm'
+import { ItemRetainer, TextRetainer } from '@neo/output-retention'
+import type { RetainedItems } from '@neo/output-retention'
+import type { SubprocessHandle, SubprocessOutcome, SubprocessOutputRead, SubprocessSpawnSpec } from '@neo/subprocess'
+import type { SaveTextSpill, SpillRef } from '@neo/spill'
+import type { ToolExecution } from '@neo/tools'
 
 /**
  * Default cap on the complete raw `rg` stdout the tools will parse (the
@@ -37,7 +37,7 @@ export const RAW_OUTPUT_MAX_BYTES = 20_000_000
 /**
  * Default cooperative tool-call timeout budget in milliseconds (the `timeoutMs`
  * config), attached to both tool definitions for
- * `@neo/dsh-tool-call-timeout-policy` to enforce through `exec.signal`.
+ * `@neo/tool-call-timeout-policy` to enforce through `exec.signal`.
  */
 export const SEARCH_TIMEOUT_MS = 30_000
 
@@ -178,7 +178,7 @@ export function resolveRgPath(): Promise<string> {
  * complete raw stdout. The working directory is the calling agent's session
  * cwd (`exec.agent.session.header.cwd`) when available, else
  * `process.cwd()`. `exec.signal` is forwarded so the cooperative tool timeout
- * (`@neo/dsh-tool-call-timeout-policy`) and caller cancellation terminate the
+ * (`@neo/tool-call-timeout-policy`) and caller cancellation terminate the
  * process tree.
  *
  * The spawn is unconfined (a plain `ctx.subprocess` call), so `--no-config`
@@ -322,9 +322,9 @@ export function previewLine(line: string, maxBytes: number): string {
 /**
  * Apply the shared inline cap to a canonical `grep` match list: preview each
  * retained line to `maxLineBytes` and keep the first `maxMatches`. The single
- * retention pass both the model-facing render ({@link module:@neo/dsh-tool-fs-search/grep}
+ * retention pass both the model-facing render ({@link module:@neo/tool-fs-search/grep}
  * `formatGrepOutput`) and the search-card projection
- * ({@link module:@neo/dsh-tool-fs-search/presentation} `grepSearchMeta`)
+ * ({@link module:@neo/tool-fs-search/presentation} `grepSearchMeta`)
  * consume, so text and card never disagree about which matches survived.
  *
  * @param matches - every match the search parsed (the canonical value's matches).

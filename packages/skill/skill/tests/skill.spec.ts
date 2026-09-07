@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { bindScopeParent, createScope, scopeOf } from '@neo/dsh-scope'
+import { bindScopeParent, createScope, scopeOf } from '@neo/scope'
 import SkillRegistry, {
   isModelInvocable,
   isUserInvocable,
@@ -11,7 +11,7 @@ import SkillRegistry, {
   type SkillLookupOptions,
   type SkillProvider,
   type SkillProviderObservation,
-} from '@neo/dsh-skill'
+} from '@neo/skill'
 
 function memorySkill(name: string, description: string, rank: number, body = `${name} body.`): SkillCandidate {
   return {

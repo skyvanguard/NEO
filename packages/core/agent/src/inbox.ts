@@ -1,11 +1,11 @@
 /**
  * Incremental projection of durable agent inbox events.
  *
- * @module @neo/dsh-agent/inbox
+ * @module @neo/agent/inbox
  */
 
-import type { MessageId } from '@neo/dsh-llm'
-import type { Session, SessionEventMap, UserMessage } from '@neo/dsh-session'
+import type { MessageId } from '@neo/llm'
+import type { Session, SessionEventMap, UserMessage } from '@neo/session'
 import type { InboxTarget } from './types.ts'
 
 /** Mutable state privately owned by an {@link Inbox}. */

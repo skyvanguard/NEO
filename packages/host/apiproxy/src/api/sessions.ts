@@ -4,18 +4,18 @@
  * else references RequestPayload<'session.*'> / ResponseValue<'session.*'>.
  */
 
-import type { MessageId } from '@neo/dsh-llm/brand'
-import type { AttachmentIdType, ImageAttachmentLimits, ImageAttachmentRef, ImageMediaType } from '@neo/dsh-attachment'
-import type { ContentBlock } from '@neo/dsh-llm/types'
-import type { SessionEvent, SessionId } from '@neo/dsh-session/types'
+import type { MessageId } from '@neo/llm/brand'
+import type { AttachmentIdType, ImageAttachmentLimits, ImageAttachmentRef, ImageMediaType } from '@neo/attachment'
+import type { ContentBlock } from '@neo/llm/types'
+import type { SessionEvent, SessionId } from '@neo/session/types'
 // The pure-type outlet: api/ is browser-importable, and the package root's
 // cordis Context merge (via dsh-agent) must not enter client aggregates.
-import type { SessionProjectionMap } from '@neo/dsh-session-projection/types'
+import type { SessionProjectionMap } from '@neo/session-projection/types'
 import type { RpcId, RpcRequest, RpcResponse } from './rpc.ts'
 import type { ToolEventView } from './events.ts'
 import type { WorkspaceId } from './workspace.ts'
 
-declare module '@neo/dsh-session-projection/types' {
+declare module '@neo/session-projection/types' {
   interface SessionProjectionMap {
     /**
      * Session-list hints persisted by the projection cache. `blank: false`
@@ -43,7 +43,7 @@ export interface SessionListMetadata {
   lastPromptAt: number | null
 }
 
-declare module '@neo/dsh-llm' {
+declare module '@neo/llm' {
   interface MessageSourceMap {
     /**
      * The prompt's rpcId is passed through MessageSource into the `user/message` event

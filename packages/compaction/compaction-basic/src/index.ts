@@ -1,22 +1,22 @@
 /**
  * Basic replay-aware compaction backend.
  *
- * @module @neo/dsh-compaction-basic
+ * @module @neo/compaction-basic
  */
 
 import { randomUUID } from 'node:crypto'
 import { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { CompactionEngine, CompactionId, ManualCompactionError } from '@neo/dsh-compaction'
-import type { CompactionResult, CompactionTrigger } from '@neo/dsh-compaction'
-import type { TokenMeter } from '@neo/dsh-token-meter'
-import type { Session } from '@neo/dsh-session'
-import { CONTEXT_WINDOW_EXCEEDED_CODE, assertNever, errorChain } from '@neo/dsh-llm'
-import type { LlmCallConfig } from '@neo/dsh-llm'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import type { CommandId } from '@neo/dsh-commands/brand'
+import { CompactionEngine, CompactionId, ManualCompactionError } from '@neo/compaction'
+import type { CompactionResult, CompactionTrigger } from '@neo/compaction'
+import type { TokenMeter } from '@neo/token-meter'
+import type { Session } from '@neo/session'
+import { CONTEXT_WINDOW_EXCEEDED_CODE, assertNever, errorChain } from '@neo/llm'
+import type { LlmCallConfig } from '@neo/llm'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import type { CommandId } from '@neo/commands/brand'
 // Type-only: makes the optional sibling service available to `ctx.get()`.
-import type {} from '@neo/dsh-compaction-tool-result-pruner'
+import type {} from '@neo/compaction-tool-result-pruner'
 import {
   resolveCompactSpec,
   resolveConfig,

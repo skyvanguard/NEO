@@ -3,10 +3,10 @@
  * provider — the pure, network-free half. The provider's `fetch()` composes
  * these with transport (redirect following, byte caps, decoding).
  *
- * @module @neo/dsh-web-fetch-http/policy
+ * @module @neo/web-fetch-http/policy
  */
 
-import { WebError } from '@neo/dsh-web'
+import { WebError } from '@neo/web'
 
 /** The body kinds this provider decodes. */
 export type FetchableKind = 'html' | 'text'

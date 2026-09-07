@@ -1,9 +1,9 @@
 /**
  * Bounded per-session write batching for the shared persistence coordinator.
- * @module @neo/dsh-session-persistence/write-behind
+ * @module @neo/session-persistence/write-behind
  */
 
-import type { SessionEvent } from '@neo/dsh-session'
+import type { SessionEvent } from '@neo/session'
 
 /** Dependencies and scheduling policy for one live session's write controller. */
 export interface SessionWriteBehindOptions {

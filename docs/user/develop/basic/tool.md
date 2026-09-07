@@ -10,7 +10,7 @@ Replace `scratch-plugin/src/my-plugin.ts` with:
 
 ```ts
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
+import { defineTool } from '@neo/tools'
 
 export const name = 'greet-tool'
 export const inject = ['tools']

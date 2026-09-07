@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-fs-local`.
- * @module @neo/dsh-fs-local/invariant
+ * Package-owned invariant companion for `@neo/fs-local`.
+ * @module @neo/fs-local/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-fs-local'
+const PACKAGE_NAME = '@neo/fs-local'
 
 /** Cordis companion plugin name. */
 export const name = 'fs-local-invariant'

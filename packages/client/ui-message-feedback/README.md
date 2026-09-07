@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-message-feedback
+# @neo/client-ui-message-feedback
 
 English | [中文](README.zh.md)
 

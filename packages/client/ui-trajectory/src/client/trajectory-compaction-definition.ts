@@ -1,8 +1,8 @@
 import type { Context } from '@neo/cordis'
 import type {
   ConversationMatch, ConversationNodeDefinition, RequestView,
-} from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-compaction/types'
+} from '@neo/client-runtime/client'
+import type {} from '@neo/compaction/types'
 import { trajectoryNode } from './trajectory-definition-common.ts'
 
 interface CompactionState {

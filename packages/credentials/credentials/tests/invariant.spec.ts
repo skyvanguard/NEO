@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import InvariantRegistry from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
 import { credentialRef } from '../src/index.ts'
 import * as CredentialsInvariant from '../src/invariant.ts'
 import { MemoryCredentials } from './memory.ts'
@@ -31,7 +31,7 @@ describe('credentials invariant companion', () => {
     await ctx.plugin(CredentialsInvariant)
 
     expect(() => {
-      ctx.invariants.register('@neo/dsh-credentials', () => {})
+      ctx.invariants.register('@neo/credentials', () => {})
     }).toThrow(/already registered/)
   })
 })

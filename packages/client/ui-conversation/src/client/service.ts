@@ -12,8 +12,8 @@ import type { Context } from '@neo/cordis'
 // Type-only imports: a plugin-to-plugin value import is a bundle purity
 // error, so scope resolution goes through the sessions service (scopeOf
 // method) instead of the standalone helper.
-import type { ISessions, SessionFace, SessionId } from '@neo/dsh-client-runtime/client'
-import type { ImageAttachmentRef, ImageMediaType } from '@neo/dsh-attachment'
+import type { ISessions, SessionFace, SessionId } from '@neo/client-runtime/client'
+import type { ImageAttachmentRef, ImageMediaType } from '@neo/attachment'
 import type { ComposerAttachment } from './contract/slots.ts'
 import type { QueueAction, QueueItemId } from './contract/queue.ts'
 import type { ComposerBlocks } from './input/blocks.ts'

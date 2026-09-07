@@ -8,9 +8,9 @@
  * are derived once.
  * @module
  */
-import { resolveWorkspacePath } from '@neo/dsh-client-runtime/client'
-import type { TerminalBlockLabels, TerminalBlockProps } from '@neo/dsh-client-ui-primitives'
-import type { TranslateNS } from '@neo/dsh-client-ui-slots'
+import { resolveWorkspacePath } from '@neo/client-runtime/client'
+import type { TerminalBlockLabels, TerminalBlockProps } from '@neo/client-ui-primitives'
+import type { TranslateNS } from '@neo/client-ui-slots'
 import type { ToolCallBlock } from './tool-call-model.ts'
 
 /**

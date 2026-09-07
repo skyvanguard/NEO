@@ -2,8 +2,8 @@ import type { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
 import type {
   ConversationEventInput, ConversationNodeDefinition, ConversationViewDefinition,
-} from '@neo/dsh-client-runtime/client'
-import { ConversationNodeAssembler } from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
+import { ConversationNodeAssembler } from '@neo/client-runtime/client'
 import { registerTrajectoryAssistantDefinition } from '../src/client/trajectory-assistant-definition.ts'
 import { registerTrajectoryCompactionDefinitions } from '../src/client/trajectory-compaction-definition.ts'
 import type { TrajectorySnapshot } from '../src/client/trajectory-contract.ts'

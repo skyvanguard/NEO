@@ -1,7 +1,7 @@
 /** Trajectory toolbar: timeline and ledger fold controls. */
 
-import type { TranslateNS } from '@neo/dsh-client-ui-slots'
-import { IconSearchOutline16 } from '@neo/dsh-client-ui-primitives'
+import type { TranslateNS } from '@neo/client-ui-slots'
+import { IconSearchOutline16 } from '@neo/client-ui-primitives'
 import type { NS } from './locales.ts'
 import css from './TrajectoryToolbar.module.css'
 

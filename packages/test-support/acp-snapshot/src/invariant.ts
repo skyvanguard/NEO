@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-acp-snapshot`.
- * @module @neo/dsh-acp-snapshot/invariant
+ * Package-owned invariant companion for `@neo/acp-snapshot`.
+ * @module @neo/acp-snapshot/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-acp-snapshot'
+const PACKAGE_NAME = '@neo/acp-snapshot'
 
 /** Cordis companion plugin name. */
 export const name = 'acp-snapshot-invariant'

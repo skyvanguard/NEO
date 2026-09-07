@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { RpcResponse } from '@neo/dsh-api-remotes/client'
+import type { RpcResponse } from '@neo/api-remotes/client'
 import { SettingsDocumentStore } from '../src/client/settings-document-store.ts'
 
 function response(hasDocument = false): RpcResponse<{

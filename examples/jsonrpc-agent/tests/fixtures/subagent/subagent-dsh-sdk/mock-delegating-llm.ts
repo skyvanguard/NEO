@@ -1,6 +1,6 @@
 import type { Context } from '@neo/cordis'
-import type { GenerateOptions, StreamChunk } from '@neo/dsh-llm'
-import { CallId, LlmAdapter } from '@neo/dsh-llm'
+import type { GenerateOptions, StreamChunk } from '@neo/llm'
+import { CallId, LlmAdapter } from '@neo/llm'
 
 /**
  * Test adapter for the `mock-delegate` model: the first request calls the

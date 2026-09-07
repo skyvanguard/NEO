@@ -2,12 +2,12 @@ import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
 import { Context } from '@neo/cordis'
-import { CallId } from '@neo/dsh-llm'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { type JsonValue } from '@neo/dsh-tools'
-import { publicToolName, syncTools, type ToolBridgeOptions } from '@neo/dsh-mcp-client/src/tools.ts'
-import { createTransport } from '@neo/dsh-mcp-client/src/transport.ts'
-import type { Config } from '@neo/dsh-mcp-client'
+import { CallId } from '@neo/llm'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { type JsonValue } from '@neo/tools'
+import { publicToolName, syncTools, type ToolBridgeOptions } from '@neo/mcp-client/src/tools.ts'
+import { createTransport } from '@neo/mcp-client/src/transport.ts'
+import type { Config } from '@neo/mcp-client'
 
 const testToolSignal = new AbortController().signal
 

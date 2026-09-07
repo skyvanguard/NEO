@@ -1,7 +1,7 @@
 /**
  * Content identity for workspace instruction duplicate suppression.
  *
- * @module @neo/dsh-agent-instructions/digest
+ * @module @neo/agent-instructions/digest
  */
 
 import { createHash } from 'node:crypto'

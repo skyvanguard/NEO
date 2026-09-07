@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-client-ui-model-selection`.
- * @module @neo/dsh-client-ui-model-selection/invariant
+ * Package-owned invariant companion for `@neo/client-ui-model-selection`.
+ * @module @neo/client-ui-model-selection/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-client-ui-model-selection'
+const PACKAGE_NAME = '@neo/client-ui-model-selection'
 
 /** Cordis companion plugin name. */
 export const name = 'client-ui-model-selection-invariant'

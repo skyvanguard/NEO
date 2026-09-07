@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { Session, SessionId } from '@neo/dsh-session'
-import AgentRegistry, { agentEvents, Inbox, type Agent } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import { ShellExecutor } from '@neo/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellRunResult } from '@neo/dsh-shell'
-import * as tmuxContext from '@neo/dsh-tmux-context'
-import type { Config } from '@neo/dsh-tmux-context'
+import { Session, SessionId } from '@neo/session'
+import AgentRegistry, { agentEvents, Inbox, type Agent } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import { ShellExecutor } from '@neo/shell'
+import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellRunResult } from '@neo/shell'
+import * as tmuxContext from '@neo/tmux-context'
+import type { Config } from '@neo/tmux-context'
 
 const SIGNAL = new AbortController().signal
 

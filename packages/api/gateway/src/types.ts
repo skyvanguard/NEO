@@ -1,6 +1,6 @@
 /**
  * Carrier-independent Typert Gateway request, service, and error contracts.
- * @module @neo/dsh-api-gateway/types
+ * @module @neo/api-gateway/types
  */
 
 /** One Remote method request after a carrier has decoded its envelope. */

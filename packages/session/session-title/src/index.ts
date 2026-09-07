@@ -1,20 +1,20 @@
 /**
  * Log-backed session title service, deterministic fallback, and provider contract.
- * @module @neo/dsh-session-title
+ * @module @neo/session-title
  */
 
 import { Context, FiberState, Service, type Fiber } from '@neo/cordis'
 import z from '@neo/schemastery'
 import { z as zod } from 'zod'
-import type { Branded } from '@neo/dsh-brand'
-import { assertNever, deepFreeze, isAgentLoopRequest } from '@neo/dsh-llm'
-import type { GenerateOptions } from '@neo/dsh-llm'
+import type { Branded } from '@neo/brand'
+import { assertNever, deepFreeze, isAgentLoopRequest } from '@neo/llm'
+import type { GenerateOptions } from '@neo/llm'
 import type {
   Session,
   SessionEvent,
-} from '@neo/dsh-session'
+} from '@neo/session'
 // Type-only: resolves ctx.sessionProjections for the optional unit child.
-import type {} from '@neo/dsh-session-projection'
+import type {} from '@neo/session-projection'
 // The `title` projection-key declaration lives in src/types.ts (its one home);
 // this re-export projects the type face onto the package root AND keeps the
 // module edge in the emitted index.d.ts, so aggregate programs consuming the
@@ -91,7 +91,7 @@ declare module '@neo/cordis' {
   }
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * Latest-wins session title snapshot. Log-only: it never enters the model

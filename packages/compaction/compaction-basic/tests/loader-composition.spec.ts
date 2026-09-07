@@ -6,11 +6,11 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import LlmRuntime from '@neo/dsh-llm'
-import SessionStore from '@neo/dsh-session'
-import TokenMeter from '@neo/dsh-token-meter'
-import BasicCompactionEngine from '@neo/dsh-compaction-basic'
-import ToolResultPruner from '@neo/dsh-compaction-tool-result-pruner'
+import LlmRuntime from '@neo/llm'
+import SessionStore from '@neo/session'
+import TokenMeter from '@neo/token-meter'
+import BasicCompactionEngine from '@neo/compaction-basic'
+import ToolResultPruner from '@neo/compaction-tool-result-pruner'
 
 let root: string | undefined
 let context: Context | undefined
@@ -32,11 +32,11 @@ async function loadYaml(lines: readonly string[]): Promise<Context> {
   await context.plugin(Loader)
   context.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-llm', LlmRuntime],
-    ['@neo/dsh-session', SessionStore],
-    ['@neo/dsh-token-meter', TokenMeter],
-    ['@neo/dsh-compaction-tool-result-pruner', ToolResultPruner],
-    ['@neo/dsh-compaction-basic', BasicCompactionEngine],
+    ['@neo/llm', LlmRuntime],
+    ['@neo/session', SessionStore],
+    ['@neo/token-meter', TokenMeter],
+    ['@neo/compaction-tool-result-pruner', ToolResultPruner],
+    ['@neo/compaction-basic', BasicCompactionEngine],
   ])
   context.loader.internal = {
     version: 'v2',
@@ -56,15 +56,15 @@ async function loadYaml(lines: readonly string[]): Promise<Context> {
 describe('real Loader composition', () => {
   it('loads the shipped token-meter, pruning, and compaction-basic YAML order', async () => {
     const loaded = await loadYaml([
-      "- name: '@neo/dsh-llm'",
-      "- name: '@neo/dsh-session'",
-      "- name: '@neo/dsh-token-meter'",
-      "- name: '@neo/dsh-compaction-tool-result-pruner'",
+      "- name: '@neo/llm'",
+      "- name: '@neo/session'",
+      "- name: '@neo/token-meter'",
+      "- name: '@neo/compaction-tool-result-pruner'",
       '  config:',
       '    thresholdChars: 100',
       '    headChars: 20',
       '    tailChars: 10',
-      "- name: '@neo/dsh-compaction-basic'",
+      "- name: '@neo/compaction-basic'",
       '  config:',
       '    thresholdRatio: 0.5',
       '    retainRatio: 0.125',

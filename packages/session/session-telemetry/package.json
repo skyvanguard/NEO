@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-telemetry",
+  "name": "@neo/session-telemetry",
   "description": "SessionTelemetryBackend seam for the DeepSeek Harness: session-event capture, projection, redaction, and handoff to a reporting backend",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,15 +32,15 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

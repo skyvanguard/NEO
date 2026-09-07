@@ -22,7 +22,7 @@ Names match the way the platform matches them: exactly on POSIX, case-insensitiv
 
 ```ts
 import type { Context } from '@neo/cordis'
-import { launchEnvironmentOf } from '@neo/dsh-launch-environment'
+import { launchEnvironmentOf } from '@neo/launch-environment'
 
 declare const ctx: Context
 const endpoint = launchEnvironmentOf(ctx).get('DEEPSEEK_BASE_URL')?.value

@@ -1,6 +1,6 @@
 /** Model-visible wrap-up instruction for a terminal autonomous goal update. */
 
-import type { ContentBlock } from '@neo/dsh-llm'
+import type { ContentBlock } from '@neo/llm'
 
 const GROUNDING =
   'Report only what earlier rounds and tool results in this session actually establish; '

@@ -6,7 +6,7 @@
     path: ./cordis.yml
     patches:
       - id: tool-subagent
-        name: '@neo/dsh-tool-subagent'
+        name: '@neo/tool-subagent'
         config:
           provider: spawn
           toolName: subagent

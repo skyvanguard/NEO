@@ -1,10 +1,10 @@
 /**
  * Durable and model-facing Schedule value types.
- * @module @neo/dsh-schedule
+ * @module @neo/schedule
  */
 
-import type { Branded } from '@neo/dsh-brand'
-import type {} from '@neo/dsh-session/types'
+import type { Branded } from '@neo/brand'
+import type {} from '@neo/session/types'
 
 /** Stable reminder identity that is unique and never reused within one session. */
 export type ScheduleId = Branded<'ScheduleId'>
@@ -210,7 +210,7 @@ export type ScheduleDeleteResult =
 /** Canonical `schedule_delete` value. */
 export type ScheduleDeleteValue = ScheduleDeleteResult | ScheduleToolError
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * Versioned Schedule mutation. The owning package validates the complete

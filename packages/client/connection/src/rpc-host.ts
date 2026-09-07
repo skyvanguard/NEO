@@ -1,7 +1,7 @@
 /** Host registry and HTTP adapter for generic Connection RPC channels. */
 
 import { Context, Service } from '@neo/cordis'
-import type { WebRoute } from '@neo/dsh-host-webserver'
+import type { WebRoute } from '@neo/host-webserver'
 import {
   clientRequestSchema,
   RpcId,
@@ -10,7 +10,7 @@ import {
   type RpcErrorDetailsMap,
   type RpcId as RpcIdType,
   type ServerResponse as RpcServerResponse,
-} from '@neo/dsh-host-apiproxy/api'
+} from '@neo/host-apiproxy/api'
 import { bridge, type FetchHandler } from './http-bridge.ts'
 import { isTrustedApiRequest } from './api-request-trust.ts'
 import { API_PATH } from './api-path.ts'

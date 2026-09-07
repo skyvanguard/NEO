@@ -1,14 +1,14 @@
 /**
  * Package-owned strict Schedule stream invariant.
- * @module @neo/dsh-schedule/invariant
+ * @module @neo/schedule/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import { foldScheduleEvents, ScheduleLogError } from './domain.ts'
 
-const PACKAGE_NAME = '@neo/dsh-schedule'
+const PACKAGE_NAME = '@neo/schedule'
 
 /** Cordis invariant-companion plugin name. */
 export const name = 'tool-schedule-invariant'

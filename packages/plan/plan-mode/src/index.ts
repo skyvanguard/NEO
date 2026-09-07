@@ -20,22 +20,22 @@
  * Agent Note:
  * - .agents/notes/implemented/simplification/2026-07-22-plan-specific-collaboration-state.md
  *
- * @module @neo/dsh-plan-mode
+ * @module @neo/plan-mode
  */
 
 import { Context, Service } from '@neo/cordis'
 import { z as zod } from 'zod'
 import type { ZodType } from 'zod'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { Session, SessionEvent, UserMessage } from '@neo/dsh-session'
-import { defineTool } from '@neo/dsh-tools'
-import type {} from '@neo/dsh-system-prompt'
-import { UserQuestionError } from '@neo/dsh-user-questions'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { Session, SessionEvent, UserMessage } from '@neo/session'
+import { defineTool } from '@neo/tools'
+import type {} from '@neo/system-prompt'
+import { UserQuestionError } from '@neo/user-questions'
 // Type-only edge: resolves `ctx.commands` for the optional command child.
-import type {} from '@neo/dsh-commands'
+import type {} from '@neo/commands'
 // Type-only: resolves ctx.sessionProjections for the optional unit child.
-import type {} from '@neo/dsh-session-projection'
+import type {} from '@neo/session-projection'
 import type { PlanProjection } from './types.ts'
 // The `plan` projection-key declaration lives in src/types.ts (its one home);
 // this re-export projects the type face onto the package root AND keeps the
@@ -43,7 +43,7 @@ import type { PlanProjection } from './types.ts'
 // declarations still receive the SessionProjectionMap merge.
 export type * from './types.ts'
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * Whether plan mode is in force from this point on: log-only, non-surface,

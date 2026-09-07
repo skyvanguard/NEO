@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-tool-session-query`.
- * @module @neo/dsh-tool-session-query/invariant
+ * Package-owned invariant companion for `@neo/tool-session-query`.
+ * @module @neo/tool-session-query/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tool-session-query'
+const PACKAGE_NAME = '@neo/tool-session-query'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-session-query-invariant'

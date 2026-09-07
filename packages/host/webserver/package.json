@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-host-webserver",
+  "name": "@neo/host-webserver",
   "description": "Web route-registration plugin: HTTP and upgrade routes, index transform taps, and static dist fallback; knows no harness concepts",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -33,13 +33,13 @@
   "license": "MIT",
   "peerDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^"
+    "@neo/invariants": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^"
+    "@neo/invariants": "workspace:^"
   }
 }

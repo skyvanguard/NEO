@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-query",
+  "name": "@neo/session-query",
   "description": "Combined session query service contract with concrete reads, traces, and filters",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,26 +32,26 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-title": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@neo/dsh-session-persistence": {
+    "@neo/session-persistence": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-title": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

@@ -1,22 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { CallId , createMessage, createToolResultMessage } from '@neo/dsh-llm'
-import type { ContentBlock } from '@neo/dsh-llm'
+import { CallId , createMessage, createToolResultMessage } from '@neo/llm'
+import type { ContentBlock } from '@neo/llm'
 import SessionStore, {
   Session,
   SessionId,
-} from '@neo/dsh-session'
-import type { SurfaceEvent } from '@neo/dsh-session'
-import * as SessionInvariant from '@neo/dsh-session/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
-import TokenMeter from '@neo/dsh-token-meter'
+} from '@neo/session'
+import type { SurfaceEvent } from '@neo/session'
+import * as SessionInvariant from '@neo/session/invariant'
+import InvariantRegistry from '@neo/invariants'
+import TokenMeter from '@neo/token-meter'
 import ToolResultPruner, {
   codePointLength,
   DEFAULTS,
   PRUNE_MARKER,
   resolveConfig,
-} from '@neo/dsh-compaction-tool-result-pruner'
-import type { ToolResultPruneConfig } from '@neo/dsh-compaction-tool-result-pruner'
+} from '@neo/compaction-tool-result-pruner'
+import type { ToolResultPruneConfig } from '@neo/compaction-tool-result-pruner'
 
 const MODEL = 'test-model'
 const SMALL: ToolResultPruneConfig = {

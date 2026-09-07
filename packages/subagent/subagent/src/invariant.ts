@@ -1,10 +1,10 @@
-/** Package-owned subagent registry and lifecycle invariants. @module @neo/dsh-subagent/invariant */
+/** Package-owned subagent registry and lifecycle invariants. @module @neo/subagent/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type { SubagentProvider, SubagentRunEndInfo, SubagentRunInfo } from './types.ts'
 
-const PACKAGE_NAME = '@neo/dsh-subagent'
+const PACKAGE_NAME = '@neo/subagent'
 
 /** Cordis companion plugin name. */
 export const name = 'subagent-invariant'

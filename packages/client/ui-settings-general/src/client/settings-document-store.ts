@@ -1,7 +1,7 @@
 /** State owner for the optional local settings-document action. */
 
-import type { IApiClient } from '@neo/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@neo/dsh-client-runtime/client'
+import type { IApiClient } from '@neo/api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@neo/client-runtime/client'
 
 /** Browser state of the Host-owned settings document. */
 export interface SettingsDocumentState {

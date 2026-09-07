@@ -1,4 +1,4 @@
-# @neo/dsh-sdk-jsonrpc-server
+# @neo/sdk-jsonrpc-server
 
 English | [中文](README.zh.md)
 

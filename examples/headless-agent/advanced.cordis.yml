@@ -5,7 +5,7 @@
     path: ./cordis.yml
     patches:
       - id: agent-spine
-        name: '@neo/dsh-agent-spine-demo'
+        name: '@neo/agent-spine-demo'
         config:
           agents:
             - id: main
@@ -21,14 +21,14 @@
 
             Verify your work by running the code or tests. Keep answers brief and factual.
       - id: persistence
-        name: '@neo/dsh-session-persistence-jsonl'
+        name: '@neo/session-persistence-jsonl'
         config:
           root: './.sessions'
           compression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
       - insert:
           - id: code-runtime
-            name: '@neo/dsh-code-runtime-worker-thread'
+            name: '@neo/code-runtime-worker-thread'
           - id: cordis-host-runner
-            name: '@neo/dsh-cordis-host-runner'
+            name: '@neo/cordis-host-runner'
           - id: tool-cordis
-            name: '@neo/dsh-tool-cordis'
+            name: '@neo/tool-cordis'

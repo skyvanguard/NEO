@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-directory-picker-native
+# @neo/client-ui-directory-picker-native
 
 English | [中文](README.zh.md)
 

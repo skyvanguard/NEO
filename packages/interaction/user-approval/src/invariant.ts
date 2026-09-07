@@ -1,12 +1,12 @@
-/** Package-owned approval audit-stream invariants. @module @neo/dsh-user-approval/invariant */
+/** Package-owned approval audit-stream invariants. @module @neo/user-approval/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type { ApprovalRequestId } from './index.ts'
 import { APPROVAL_POLICIES } from './index.ts'
 
-const PACKAGE_NAME = '@neo/dsh-user-approval'
+const PACKAGE_NAME = '@neo/user-approval'
 const APPROVAL_OUTCOMES = ['allowed-once', 'rejected', 'cancelled', 'unavailable'] as const
 
 /** Cordis companion plugin name. */

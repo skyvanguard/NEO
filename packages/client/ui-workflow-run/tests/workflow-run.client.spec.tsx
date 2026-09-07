@@ -4,13 +4,13 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   ConversationEventRegistry, ConversationNodeAssembler, SlotRegistry,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import type {
   ChatConversationViewNode, ConversationEventInput, ConversationMatch, ConversationNodeDefinition,
   ConversationViewDefinition, SessionId, SessionListState,
-} from '@neo/dsh-client-runtime/client'
-import { apply as applyLocale, inject as localeInject } from '@neo/dsh-client-locale/client'
-import { makeTranslate, stubSettingsScope } from '@neo/dsh-client-test-runtime'
+} from '@neo/client-runtime/client'
+import { apply as applyLocale, inject as localeInject } from '@neo/client-locale/client'
+import { makeTranslate, stubSettingsScope } from '@neo/client-test-runtime'
 import {
   WorkflowRunPanel, type WorkflowRunInjected, type WorkflowRunPanelProps,
 } from '../src/client/WorkflowRunPanel.tsx'
@@ -584,6 +584,6 @@ describe('plugin lifecycle', () => {
       register: (pkg: string) => { registered.push(pkg); return () => {} },
     } as never)
     await applyInvariant(ctx)
-    expect(registered).toEqual(['@neo/dsh-client-ui-workflow-run'])
+    expect(registered).toEqual(['@neo/client-ui-workflow-run'])
   })
 })

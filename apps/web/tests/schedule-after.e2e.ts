@@ -5,17 +5,17 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import type { AgentHandle } from '@neo/dsh-agent'
-import { CallId, createUserMessage, LlmAdapter } from '@neo/dsh-llm'
-import type { GenerateOptions, StreamChunk } from '@neo/dsh-llm'
-import { SessionId, type SessionEvent } from '@neo/dsh-session'
+import type { AgentHandle } from '@neo/agent'
+import { CallId, createUserMessage, LlmAdapter } from '@neo/llm'
+import type { GenerateOptions, StreamChunk } from '@neo/llm'
+import { SessionId, type SessionEvent } from '@neo/session'
 import {
   ScheduleId,
   createEveryScheduleRecord,
   foldScheduleEvents,
   resolveEveryOccurrence,
   type EveryScheduleRecord,
-} from '@neo/dsh-schedule'
+} from '@neo/schedule'
 import {
   assertFixtureInventory,
   captureStableAria,

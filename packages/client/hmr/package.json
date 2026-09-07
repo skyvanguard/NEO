@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-hmr",
+  "name": "@neo/client-hmr",
   "description": "Dev-only hot-reload driver for script-loaded client entries: SSE rebuilt frames → invalidate/prefetch → fiber swap through the vendored Loader entry",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -42,16 +42,16 @@
   },
   "peerDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-client-modules": "workspace:^",
-    "@neo/dsh-host-webserver": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-modules": "workspace:^",
+    "@neo/host-webserver": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-client-modules": "workspace:^",
-    "@neo/dsh-host-webserver": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-modules": "workspace:^",
+    "@neo/host-webserver": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "files": [

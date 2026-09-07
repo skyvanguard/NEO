@@ -7,13 +7,13 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { createMessage, createUserMessage } from '@neo/dsh-llm'
+import { createMessage, createUserMessage } from '@neo/llm'
 import {
   SESSION_FORMAT_VERSION,
   Session,
   SessionId,
-} from '@neo/dsh-session'
-import type {} from '@neo/dsh-session-title'
+} from '@neo/session'
+import type {} from '@neo/session-title'
 import {
   assertFixtureInventory,
   captureStableAria,

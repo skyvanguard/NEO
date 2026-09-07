@@ -3,8 +3,8 @@ import { mkdir, readdir, readFile, rename, rm, stat, symlink, writeFile } from '
 import { dirname, join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { Context } from '@neo/cordis'
-import SkillRegistry from '@neo/dsh-skill'
-import { FileSystem, FsError, FsVersion, type FsDirEntry, type FsEditOutcome, type FsEditRequest, type FsInfo, type FsPathInfo, type FsTarget, type FsWriteOutcome } from '@neo/dsh-fs'
+import SkillRegistry from '@neo/skill'
+import { FileSystem, FsError, FsVersion, type FsDirEntry, type FsEditOutcome, type FsEditRequest, type FsInfo, type FsPathInfo, type FsTarget, type FsWriteOutcome } from '@neo/fs'
 import * as SkillFileSystem from '../src/index.ts'
 
 async function tempDir(name: string): Promise<string> {

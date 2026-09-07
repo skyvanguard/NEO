@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-theme
+# @neo/client-ui-theme
 
 English | [中文](README.zh.md)
 

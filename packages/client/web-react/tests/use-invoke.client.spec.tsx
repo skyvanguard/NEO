@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 import { act, render } from '@testing-library/react'
-import { useInvoke } from '@neo/dsh-client-web-react'
+import { useInvoke } from '@neo/client-web-react'
 
 function deferred() {
   let resolve!: () => void

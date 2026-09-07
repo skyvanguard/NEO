@@ -1,17 +1,17 @@
 /**
- * `@neo/dsh-web-search-exa`: registers an Exa-backed `WebSearchProvider`
+ * `@neo/web-search-exa`: registers an Exa-backed `WebSearchProvider`
  * with `ctx.web`. A function/namespace plugin (NOT a default-export service):
  * a search provider does not own the `ctx.web` key — it registers INTO the
- * seam's provider registry, exactly as `@neo/dsh-llm-deepseek`
- * registers an adapter into `ctx.llm`. The key is owned by `@neo/dsh-web`.
+ * seam's provider registry, exactly as `@neo/llm-deepseek`
+ * registers an adapter into `ctx.llm`. The key is owned by `@neo/web`.
  *
- * @module @neo/dsh-web-search-exa
+ * @module @neo/web-search-exa
  */
 
 import type { Context } from '@neo/cordis'
-import { launchEnvironmentOf } from '@neo/dsh-launch-environment'
+import { launchEnvironmentOf } from '@neo/launch-environment'
 import z from '@neo/schemastery'
-import type {} from '@neo/dsh-web'
+import type {} from '@neo/web'
 import {
   ExaSearchProvider,
   EXA_DEFAULT_BASE_URL,

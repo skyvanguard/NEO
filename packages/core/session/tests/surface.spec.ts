@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { SessionEvent, SurfaceEvent, SurfaceEventType } from '@neo/dsh-session'
+import type { SessionEvent, SurfaceEvent, SurfaceEventType } from '@neo/session'
 import {
   Session,
   SessionId,
@@ -8,8 +8,8 @@ import {
   isReplacementSurfaceEvent,
   isSurfaceEligibleType,
   isSurfaceEvent,
-} from '@neo/dsh-session'
-import { SurfaceManager } from '@neo/dsh-session/surface'
+} from '@neo/session'
+import { SurfaceManager } from '@neo/session/surface'
 import {
   createMessage,
   createToolResultMessage,
@@ -17,7 +17,7 @@ import {
   freezeMessage,
   CallId,
   MessageId,
-} from '@neo/dsh-llm'
+} from '@neo/llm'
 
 /** Build a minimal session with turn boundaries and a single user message. */
 function surfaceSession(): Session {

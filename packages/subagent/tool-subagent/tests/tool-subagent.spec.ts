@@ -4,23 +4,23 @@ import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import { CallId } from '@neo/dsh-llm'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH } from '@neo/dsh-tools'
-import { assembleContextFor, type Agent } from '@neo/dsh-agent'
-import AgentRegistry from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
-import SubagentRuntime from '@neo/dsh-subagent'
-import type { SubagentStartRequest } from '@neo/dsh-subagent'
-import LocalJobRegistry from '@neo/dsh-jobs-local'
-import * as SubagentSpawn from '@neo/dsh-subagent-spawn-in-process'
-import * as ToolTasks from '@neo/dsh-tool-jobs'
+import { CallId } from '@neo/llm'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH } from '@neo/tools'
+import { assembleContextFor, type Agent } from '@neo/agent'
+import AgentRegistry from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
+import SubagentRuntime from '@neo/subagent'
+import type { SubagentStartRequest } from '@neo/subagent'
+import LocalJobRegistry from '@neo/jobs-local'
+import * as SubagentSpawn from '@neo/subagent-spawn-in-process'
+import * as ToolTasks from '@neo/tool-jobs'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import * as mock from './scripted-provider.ts'
 import * as tool from '../src/index.ts'
-import { SessionId } from '@neo/dsh-session'
+import { SessionId } from '@neo/session'
 
 const testToolSignal = new AbortController().signal
 
@@ -852,7 +852,7 @@ describe('dsh-tool-subagent background mode', () => {
     const ctx = await setup({ provider: 'mock' })
     const result = await callSubagent(ctx, { description: 'd', prompt: 'p', run_in_background: true })
     expect(result.isError).toBe(true)
-    expect(text(result)).toContain('background jobs unavailable: load @neo/dsh-jobs')
+    expect(text(result)).toContain('background jobs unavailable: load @neo/jobs')
   })
 
   it('skips background startup when the tool signal is already aborted', async () => {

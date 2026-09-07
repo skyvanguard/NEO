@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /** Test driver: one delegation turn through a headless Loader composition. */
 
-import { boot, resolveConfigPath } from '@neo/dsh-app-boot'
-import { runFixtureTurn } from '@neo/dsh-loader-smoke'
+import { boot, resolveConfigPath } from '@neo/app-boot'
+import { runFixtureTurn } from '@neo/loader-smoke'
 
 const configPath = process.argv[2]
 if (configPath === undefined) throw new Error('sdk-subagent cwd driver requires a config path')

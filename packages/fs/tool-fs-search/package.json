@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-fs-search",
+  "name": "@neo/tool-fs-search",
   "description": "Model-facing filesystem discovery tools (glob, grep) backed by the packaged ripgrep binary (@vscode/ripgrep)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,29 +36,29 @@
     "@neo/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-output-retention": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-spill": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/output-retention": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/spill": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-subprocess-local": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-output-retention": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-spill": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/output-retention": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/spill": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

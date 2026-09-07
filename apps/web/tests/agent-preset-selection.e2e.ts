@@ -18,8 +18,8 @@ import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
 import {
   SESSION_FORMAT_VERSION, SessionId as sessionId, type SessionEvent, type SessionId,
-} from '@neo/dsh-session'
-import { snapshotSubagentDescriptor } from '@neo/dsh-subagent'
+} from '@neo/session'
+import { snapshotSubagentDescriptor } from '@neo/subagent'
 import {
   captureStableAria, compareOrRefreshGolden, launchWebScaffold, seedSession, watchConsole,
   webSnapshotMode, type WebScaffold,

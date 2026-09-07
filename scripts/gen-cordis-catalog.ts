@@ -25,8 +25,8 @@ import {
   renderPageRegion,
   REGION_BEGIN,
   REGION_END,
-} from '@neo/dsh-typert-generator'
-import type { CordisCatalogPolicy } from '@neo/dsh-typert-generator'
+} from '@neo/typert-generator'
+import type { CordisCatalogPolicy } from '@neo/typert-generator'
 import { renderCordisCoreApiPages } from './cordis-core-api.ts'
 import { contextKeyMap, contextMergeFiles, eventNameList } from './cordis-walk.ts'
 import {

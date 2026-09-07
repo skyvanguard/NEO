@@ -1,12 +1,12 @@
 /**
  * Durable storage-domain declaration for lifecycle-bound message feedback.
- * @module @neo/dsh-message-feedback/src/spec
+ * @module @neo/message-feedback/src/spec
  */
 
 import { z } from 'zod'
-import type { MessageId } from '@neo/dsh-llm/brand'
-import type { SessionId } from '@neo/dsh-session/types'
-import { defineDomain, domainTable } from '@neo/dsh-storage-domain'
+import type { MessageId } from '@neo/llm/brand'
+import type { SessionId } from '@neo/session/types'
+import { defineDomain, domainTable } from '@neo/storage-domain'
 import type { MessageFeedbackItem, MessageFeedbackRating, MessageFeedbackVersion } from './types.ts'
 
 const nonNegativeSafeInteger = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER)

@@ -13,13 +13,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, render } from '@testing-library/react'
 import { useSyncExternalStore } from 'react'
-import { AppFrame } from '@neo/dsh-client-ui-layout/src/client/AppFrame.tsx'
-import type { AppFrameProps } from '@neo/dsh-client-ui-layout/src/client/AppFrame.tsx'
-import { SIDEBAR_COLLAPSED } from '@neo/dsh-client-ui-layout/src/client/columns.ts'
-import { createLayoutStore } from '@neo/dsh-client-ui-layout/src/client/stores.ts'
+import { AppFrame } from '@neo/client-ui-layout/src/client/AppFrame.tsx'
+import type { AppFrameProps } from '@neo/client-ui-layout/src/client/AppFrame.tsx'
+import { SIDEBAR_COLLAPSED } from '@neo/client-ui-layout/src/client/columns.ts'
+import { createLayoutStore } from '@neo/client-ui-layout/src/client/stores.ts'
 import type {
   SessionId, SessionListState, WorkspaceListState,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 
 // Session selection controls for the SessionProvider and useSessions stubs.
 const selectedSession = { current: 's-test' as SessionId | undefined }

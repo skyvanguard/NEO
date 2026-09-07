@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-hooks-claude-code`.
- * @module @neo/dsh-hooks-claude-code/invariant
+ * Package-owned invariant companion for `@neo/hooks-claude-code`.
+ * @module @neo/hooks-claude-code/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-hooks-claude-code'
+const PACKAGE_NAME = '@neo/hooks-claude-code'
 
 /** Cordis companion plugin name. */
 export const name = 'hooks-claude-code-invariant'

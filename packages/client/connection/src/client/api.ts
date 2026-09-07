@@ -18,12 +18,12 @@ export type {
   CredentialsApi, CredentialView, ConfigurableProviderView, DiscoveredModelView, LlmApi,
   SubagentsApi, SubagentAddress, SubagentCatalog, SubagentListEntry, SubagentPromptReceipt,
   JobView,
-} from '@neo/dsh-host-apiproxy/api'
-export type { ToolCallView, ToolResultView } from '@neo/dsh-tools/presentation'
+} from '@neo/host-apiproxy/api'
+export type { ToolCallView, ToolResultView } from '@neo/tools/presentation'
 export type {
   RpcRequest, RpcResponse, RpcResult, RpcError, RpcErrorCode,
   ClientRequest, ServerResponse, ServerRequest, ClientResponse, RpcMessage, RpcReceipt,
-} from '@neo/dsh-host-apiproxy/api'
+} from '@neo/host-apiproxy/api'
 // transportError lives in the apiproxy api layer (beside RpcResult, its
 // subject); re-exported here so connection consumers keep one contract
 // entry point.
@@ -31,17 +31,17 @@ export {
   RpcId,
   SESSION_SEARCH_RESULT_LIMIT,
   transportError,
-} from '@neo/dsh-host-apiproxy/api'
-export { AbstractApiClient } from '@neo/dsh-host-apiproxy/client'
-export type { IApiClient } from '@neo/dsh-host-apiproxy/client'
-export type { SessionId, SessionEvent } from '@neo/dsh-session/types'
-export type { MessageId } from '@neo/dsh-llm/brand'
-export type { ContentBlock, StreamChunk } from '@neo/dsh-llm/types'
+} from '@neo/host-apiproxy/api'
+export { AbstractApiClient } from '@neo/host-apiproxy/client'
+export type { IApiClient } from '@neo/host-apiproxy/client'
+export type { SessionId, SessionEvent } from '@neo/session/types'
+export type { MessageId } from '@neo/llm/brand'
+export type { ContentBlock, StreamChunk } from '@neo/llm/types'
 
 /** Successful value returned by the connection-generation host handshake. */
-export type HostDescription = import('@neo/dsh-host-apiproxy/api').ResponseValue<'host.describe'>
+export type HostDescription = import('@neo/host-apiproxy/api').ResponseValue<'host.describe'>
 
-import type { RpcResponse, RpcResult } from '@neo/dsh-host-apiproxy/api'
+import type { RpcResponse, RpcResult } from '@neo/host-apiproxy/api'
 
 /**
  * Unwrap a unary response: RpcResponse<T> -> RpcResult<T> (business code only

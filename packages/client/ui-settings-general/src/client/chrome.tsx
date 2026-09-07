@@ -4,8 +4,8 @@
  * The shell renders the surrounding chrome (button, nav heading row) and
  * reads each entry's `label` option for aria text.
  */
-import { IconSettingsOutline14, IconSettingsOutline16 } from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
+import { IconSettingsOutline14, IconSettingsOutline16 } from '@neo/client-ui-primitives'
+import type { PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
 import css from './chrome.module.css'
 
 /** Trigger content props: the sidebar column state + the standard locale seat. */

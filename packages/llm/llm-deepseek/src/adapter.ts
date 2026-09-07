@@ -8,7 +8,7 @@
  * @module dsh-llm-deepseek/adapter
  */
 
-import { attributionHeaders, CONTEXT_WINDOW_EXCEEDED_CODE, isContextWindowExceededError, isQuotaExceededError, LlmAdapter, LlmError, ProviderRequestId, QUOTA_EXCEEDED_CODE, ReasoningEffortId } from '@neo/dsh-llm'
+import { attributionHeaders, CONTEXT_WINDOW_EXCEEDED_CODE, isContextWindowExceededError, isQuotaExceededError, LlmAdapter, LlmError, ProviderRequestId, QUOTA_EXCEEDED_CODE, ReasoningEffortId } from '@neo/llm'
 import type {
   GenerateOptions,
   LlmModelInfo,
@@ -16,10 +16,10 @@ import type {
   LlmResolvedModelInfo,
   ResolvedRetryPolicy,
   StreamChunk,
-} from '@neo/dsh-llm'
-import type { CredentialRef } from '@neo/dsh-credentials'
-import { idleWatchdog, timeoutOf } from '@neo/dsh-timeout'
-import type { AnonymousUserId } from '@neo/dsh-anonymous-user-id'
+} from '@neo/llm'
+import type { CredentialRef } from '@neo/credentials'
+import { idleWatchdog, timeoutOf } from '@neo/timeout'
+import type { AnonymousUserId } from '@neo/anonymous-user-id'
 import { serializeRequest } from './serialize.ts'
 import type { RequestDefaults } from './serialize.ts'
 import { parseSse } from './sse.ts'

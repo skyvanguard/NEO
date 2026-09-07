@@ -3,12 +3,12 @@
  * The tool pauses until a UI provider returns a human answer, then feeds that
  * answer back into the agent loop as an ordinary tool result.
  *
- * @module @neo/dsh-tool-ask-user
+ * @module @neo/tool-ask-user
  */
 
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
-import '@neo/dsh-user-questions'
+import { defineTool } from '@neo/tools'
+import '@neo/user-questions'
 
 export const name = 'tool-ask-user'
 export const inject = ['tools', 'userQuestions']

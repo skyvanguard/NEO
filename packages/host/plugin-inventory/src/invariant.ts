@@ -1,10 +1,10 @@
-/** Package-owned invariant companion. @module @neo/dsh-host-plugin-inventory/invariant */
+/** Package-owned invariant companion. @module @neo/host-plugin-inventory/invariant */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-host-plugin-inventory'
+const PACKAGE_NAME = '@neo/host-plugin-inventory'
 
 /** Cordis companion plugin name. */
 export const name = 'host-plugin-inventory-invariant'

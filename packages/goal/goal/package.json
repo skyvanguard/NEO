@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-goal",
+  "name": "@neo/goal",
   "description": "Event-sourced same-session goal state and lifecycle service for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -53,14 +53,14 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -68,15 +68,15 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-loader-smoke": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/loader-smoke": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

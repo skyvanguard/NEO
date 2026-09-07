@@ -7,6 +7,6 @@
     patches:
       - insert:
           - id: tool-session-query
-            name: '@neo/dsh-tool-session-query'
+            name: '@neo/tool-session-query'
           - id: timeout-policy
-            name: '@neo/dsh-tool-call-timeout-policy'
+            name: '@neo/tool-call-timeout-policy'

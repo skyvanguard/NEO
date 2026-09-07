@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-subprocess-e2b",
+  "name": "@neo/subprocess-e2b",
   "description": "E2B subprocess implementation for DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,20 +32,20 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-e2b": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/e2b": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-e2b": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/e2b": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

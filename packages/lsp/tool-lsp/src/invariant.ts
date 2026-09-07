@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-tool-lsp`.
- * @module @neo/dsh-tool-lsp/invariant
+ * Package-owned invariant companion for `@neo/tool-lsp`.
+ * @module @neo/tool-lsp/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tool-lsp'
+const PACKAGE_NAME = '@neo/tool-lsp'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-lsp-invariant'

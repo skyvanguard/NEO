@@ -9,13 +9,13 @@ import { Service } from '@neo/cordis'
 import type { Context } from '@neo/cordis'
 import type {
   ConnectionHandle, IApiClient, SettingsNamespaceView, SettingsPathOpView,
-} from '@neo/dsh-api-remotes/client'
-import { rehydrateSchema, validateDraft } from '@neo/dsh-client-schema-form'
+} from '@neo/api-remotes/client'
+import { rehydrateSchema, validateDraft } from '@neo/client-schema-form'
 import {
   createSnapshotStore, type SettingsScope, type SettingsScopeSnapshot,
   type SettingsScopeSpec, type SnapshotStore,
-} from '@neo/dsh-client-runtime/client'
-// Type-only, and deliberately NOT `@neo/dsh-api-remotes/client`: this
+} from '@neo/client-runtime/client'
+// Type-only, and deliberately NOT `@neo/api-remotes/client`: this
 // package is reachable from the Host build graph through its feature-package
 // callers, and api-remotes' Client face imports a Host-tsdown-generated
 // `/remote` artifact, which would deadlock the Host tsc phase. The gateway's
@@ -24,13 +24,13 @@ import {
 // `$on` and its key face without dragging a build artifact in. The runtime
 // `remote` injection belongs to whoever calls bindSettingsScope: the
 // subscription is registered on the caller's own context.
-import type {} from '@neo/dsh-api-remotes/client'
-import type {} from '@neo/dsh-api-remotes/types'
+import type {} from '@neo/api-remotes/client'
+import type {} from '@neo/api-remotes/types'
 // The forwarded event's own declaration: `$on`'s key face is
 // `Extract<keyof Events, keyof Selection>`, so the allowlist alone resolves to
 // never — the owning package's client-safe, type-only subpath supplies the
 // cordis `Events` entry (and with it the branded `SettingsNamespace`).
-import type {} from '@neo/dsh-settings/types'
+import type {} from '@neo/settings/types'
 type SettingsFace = Pick<IApiClient, 'settings'>
 
 /**

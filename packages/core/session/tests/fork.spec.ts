@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createUserMessage, CallId , createMessage } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionForkError, SessionId } from '@neo/dsh-session'
-import type { SessionEvent, TurnEndReason } from '@neo/dsh-session'
+import { createUserMessage, CallId , createMessage } from '@neo/llm'
+import SessionStore, { Session, SessionForkError, SessionId } from '@neo/session'
+import type { SessionEvent, TurnEndReason } from '@neo/session'
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     'test/log-only': { value: string }
     /** Stands in for a plugin's open/close bracket (`compaction/start`). */

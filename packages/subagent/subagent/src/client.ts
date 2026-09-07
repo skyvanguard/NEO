@@ -1,7 +1,7 @@
 /**
  * Browser-safe subagent projection vocabulary.
  *
- * @module @neo/dsh-subagent/client
+ * @module @neo/subagent/client
  */
 
 export type { SubagentIdentityProjection, SubagentTimingProjection } from './projection-types.ts'

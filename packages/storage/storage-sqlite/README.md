@@ -1,4 +1,4 @@
-# @neo/dsh-storage-sqlite
+# @neo/storage-sqlite
 
 English | [中文](README.zh.md)
 

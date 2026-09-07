@@ -2,24 +2,24 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@neo/cordis'
-import { createAssistantMessage, createUserMessage } from '@neo/dsh-llm'
-import type { MessageId } from '@neo/dsh-llm/brand'
+import { createAssistantMessage, createUserMessage } from '@neo/llm'
+import type { MessageId } from '@neo/llm/brand'
 import SessionStore, {
   SESSION_FORMAT_VERSION,
   Session,
   SessionId,
   type SessionEvent,
   type SessionHeader,
-} from '@neo/dsh-session'
+} from '@neo/session'
 import SessionPersistence, {
   SessionPersistenceRevision,
   type SessionInspection,
   type SessionLocation,
   type SessionPersistenceSnapshot,
-} from '@neo/dsh-session-persistence'
-import Storage from '@neo/dsh-storage'
-import * as StorageDomain from '@neo/dsh-storage-domain'
-import * as StorageJson from '@neo/dsh-storage-json'
+} from '@neo/session-persistence'
+import Storage from '@neo/storage'
+import * as StorageDomain from '@neo/storage-domain'
+import * as StorageJson from '@neo/storage-json'
 import MessageFeedbackService from '../src/index.ts'
 
 export interface MessageFixture {

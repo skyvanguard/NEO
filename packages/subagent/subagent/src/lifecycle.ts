@@ -11,15 +11,15 @@
  * between this module and one in-package caller, not something a plugin may
  * depend on.
  *
- * @module @neo/dsh-subagent/lifecycle
+ * @module @neo/subagent/lifecycle
  */
 
 import { randomUUID } from 'node:crypto'
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import type { ContentBlock } from '@neo/dsh-llm'
-import { foldConsumedWork } from '@neo/dsh-agent'
-import type { SessionEvent, SessionId } from '@neo/dsh-session'
+import type { Agent } from '@neo/agent'
+import type { ContentBlock } from '@neo/llm'
+import { foldConsumedWork } from '@neo/agent'
+import type { SessionEvent, SessionId } from '@neo/session'
 import { finalAssistantOutput } from './assistant-output.ts'
 import { SubagentRunId } from './types.ts'
 import type { SubagentResult, SubagentRun, SubagentRunEndInfo, SubagentRunInfo } from './types.ts'

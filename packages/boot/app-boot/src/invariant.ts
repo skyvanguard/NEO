@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-app-boot`.
- * @module @neo/dsh-app-boot/invariant
+ * Package-owned invariant companion for `@neo/app-boot`.
+ * @module @neo/app-boot/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-app-boot'
+const PACKAGE_NAME = '@neo/app-boot'
 
 /** Cordis companion plugin name. */
 export const name = 'app-boot-invariant'

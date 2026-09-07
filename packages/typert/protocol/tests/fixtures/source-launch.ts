@@ -4,7 +4,7 @@ import {
   Remote,
   RemoteScope,
   remoteMethods,
-} from '@neo/dsh-typert-protocol'
+} from '@neo/typert-protocol'
 
 class Goals extends TypertRemoteService {
   constructor(ctx: Context) {

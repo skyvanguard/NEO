@@ -14,13 +14,13 @@
  * armed claim folds with zero delta because bounded state cannot reconstruct
  * the replaced range; this preserves replay at the cost of possible drift.
  *
- * @module @neo/dsh-token-meter/surface-projection
+ * @module @neo/token-meter/surface-projection
  */
 
-import { deriveEventMessage, isSurfaceEvent } from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
+import { deriveEventMessage, isSurfaceEvent } from '@neo/session'
+import type { SessionEvent } from '@neo/session'
 // Type-only: the `compaction/*` SessionEventMap merges (shadow-price events).
-import type {} from '@neo/dsh-compaction'
+import type {} from '@neo/compaction'
 import { estimateMessage } from './estimate.ts'
 
 /**

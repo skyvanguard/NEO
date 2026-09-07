@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { renderPrompt } from '@neo/dsh-system-prompt'
+import AgentLoop from '@neo/agent-loop'
+import { renderPrompt } from '@neo/system-prompt'
 import { mountAgentLoopTestDependencies } from '../src/index.ts'
 
 describe('dsh-agent-loop-testkit', () => {

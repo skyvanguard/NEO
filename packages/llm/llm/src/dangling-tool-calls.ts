@@ -9,7 +9,7 @@
  * valid; the synthetic result tells the model plainly that the outcome is
  * unknown.
  *
- * @module @neo/dsh-llm/dangling-tool-calls
+ * @module @neo/llm/dangling-tool-calls
  */
 
 import type { CallId } from './brand.ts'

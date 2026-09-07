@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SystemPrompt, { AssembleContext, PromptAssembly, renderContextSnapshot, renderPrompt } from '@neo/dsh-system-prompt'
+import SystemPrompt, { AssembleContext, PromptAssembly, renderContextSnapshot, renderPrompt } from '@neo/system-prompt'
 
 /**
  * Every assembly carries the plugin's own built-ins — `harness:identity`

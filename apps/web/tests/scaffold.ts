@@ -33,21 +33,21 @@ import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include, { type PatchOptions } from '@neo/cordis-plugin-include'
 import Group from '@neo/cordis-plugin-group'
-import { scrubRequestHeaders, stabilizeFixtureMessageIds } from '@neo/dsh-acp-snapshot'
+import { scrubRequestHeaders, stabilizeFixtureMessageIds } from '@neo/acp-snapshot'
 import {
   assertEntriesLoaded,
   composeEntries,
   healProfilesModuleFallback,
   loadOverlayPatches,
-} from '@neo/dsh-app-boot'
-import { dshHomePath } from '@neo/dsh-home-paths'
-import { settingsNamespace } from '@neo/dsh-settings'
-import { LlmAdapter } from '@neo/dsh-llm'
+} from '@neo/app-boot'
+import { dshHomePath } from '@neo/home-paths'
+import { settingsNamespace } from '@neo/settings'
+import { LlmAdapter } from '@neo/llm'
 import type {
   LlmModelInfo, LlmProviderInfo, LlmResolvedModelInfo, StreamChunk,
-} from '@neo/dsh-llm'
-import type { ReplayHandle } from '@neo/dsh-llm-replay'
-import { installLlmReplay, parseSessionLog } from '@neo/dsh-llm-replay'
+} from '@neo/llm'
+import type { ReplayHandle } from '@neo/llm-replay'
+import { installLlmReplay, parseSessionLog } from '@neo/llm-replay'
 import SessionStore, {
   packChunkRuns,
   SESSION_FORMAT_VERSION,
@@ -55,12 +55,12 @@ import SessionStore, {
   type Session,
   type SessionEvent,
   type SessionHeader,
-} from '@neo/dsh-session'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
+} from '@neo/session'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
 // Empty type imports carry the webServer/agents/sessionPersistence Context merges.
-import type {} from '@neo/dsh-host-webserver'
-import type {} from '@neo/dsh-agent'
-import { provideCmdline } from '@neo/dsh-cmdline'
+import type {} from '@neo/host-webserver'
+import type {} from '@neo/agent'
+import { provideCmdline } from '@neo/cmdline'
 import { REPO_ROOT, requireDist } from './support.ts'
 
 // Host-side web e2e cannot import a browser package: doing so would pull that
@@ -70,7 +70,7 @@ import { REPO_ROOT, requireDist } from './support.ts'
 // import {
 //   WELCOME_NOTICE_ACK_FIELD, WELCOME_NOTICE_SETTINGS_NAMESPACE,
 //   WELCOME_NOTICE_VERSION, WELCOME_NOTICE_COPY,
-// } from '@neo/dsh-client-ui-settings-models'
+// } from '@neo/client-ui-settings-models'
 export const WELCOME_NOTICE_SETTINGS_NAMESPACE = 'ui-onboarding'
 export const WELCOME_NOTICE_ACK_FIELD = 'welcomeNoticeVersion'
 export const WELCOME_NOTICE_VERSION = '2026-08-13.1'
@@ -443,7 +443,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
       config: { host: '127.0.0.1', port: 0 },
     },
     // The bundle's web-runtime row resolves the same built dist under test
-    // (apps/web IS @neo/dsh-web-frontend); only the URL line is silenced.
+    // (apps/web IS @neo/web-frontend); only the URL line is silenced.
     // Preserve the composed surface-context choice because a patch replaces
     // the row's complete config.
     { id: 'web-runtime', config: { printUrl: false, surfaceContext } },
@@ -460,8 +460,8 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     // disable+insert pair.
     { id: 'directory-picker', disabled: true },
     { insert: [
-      { id: 'directory-picker-browse', name: '@neo/dsh-host-directory-picker-browse' },
-      { id: 'ui-directory-picker-browse', name: '@neo/dsh-client-ui-directory-picker-browse' },
+      { id: 'directory-picker-browse', name: '@neo/host-directory-picker-browse' },
+      { id: 'ui-directory-picker-browse', name: '@neo/client-ui-directory-picker-browse' },
     ] },
     ...options.agentPresets === undefined
       ? []
@@ -473,7 +473,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     // scenario adds only the model-facing tools that exercise those services.
     ...options.cordisTools === true
       ? [{ insert: [
-        { id: 'tool-cordis', name: '@neo/dsh-tool-cordis' },
+        { id: 'tool-cordis', name: '@neo/tool-cordis' },
       ] }]
       : [],
     ...options.deepSeekSearch === undefined

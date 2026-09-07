@@ -1,10 +1,10 @@
 /** Request-header canonicalization, equality, snapshot folding, and format rejection. */
 
 import { describe, expect, it } from 'vitest'
-import { Session, SessionId, canonicalHeader, foldRequestHeader, headerEquals } from '@neo/dsh-session'
-import type { EpochHeader, SessionEvent } from '@neo/dsh-session'
-import { createUserMessage, ReasoningEffortId } from '@neo/dsh-llm'
-import type { ToolSchema } from '@neo/dsh-llm'
+import { Session, SessionId, canonicalHeader, foldRequestHeader, headerEquals } from '@neo/session'
+import type { EpochHeader, SessionEvent } from '@neo/session'
+import { createUserMessage, ReasoningEffortId } from '@neo/llm'
+import type { ToolSchema } from '@neo/llm'
 
 const CONFIG = { provider: 'mock', model: 'm' }
 

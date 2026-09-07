@@ -8,14 +8,14 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createScope } from '@neo/dsh-scope'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import { CodeRuntime } from '@neo/dsh-code-runtime'
-import type { CodeRunRequest, CodeRunResult } from '@neo/dsh-code-runtime'
-import ToolRuntime, { RUN_CODE_NAME, defineTool } from '@neo/dsh-tools'
-import type { Agent } from '@neo/dsh-agent'
-import { SessionId } from '@neo/dsh-session'
-import { apply, Config, inject, name } from '@neo/dsh-agent-tool-presentation'
+import { createScope } from '@neo/scope'
+import SystemPrompt from '@neo/system-prompt'
+import { CodeRuntime } from '@neo/code-runtime'
+import type { CodeRunRequest, CodeRunResult } from '@neo/code-runtime'
+import ToolRuntime, { RUN_CODE_NAME, defineTool } from '@neo/tools'
+import type { Agent } from '@neo/agent'
+import { SessionId } from '@neo/session'
+import { apply, Config, inject, name } from '@neo/agent-tool-presentation'
 
 /** A runtime that never runs anything: presentation never dispatches. */
 class StubRuntime extends CodeRuntime {

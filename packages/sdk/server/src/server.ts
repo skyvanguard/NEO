@@ -2,18 +2,18 @@
  * JSON-RPC methods and notifications for out-of-process harness SDKs.
  * The surrounding context owns plugins, persistence, and configured adapters.
  *
- * @module @neo/dsh-sdk-jsonrpc-server/server
+ * @module @neo/sdk-jsonrpc-server/server
  */
 
 import type { Context } from '@neo/cordis'
 import { resolve } from 'node:path'
-import type { Agent, AgentHandle } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import { carrierKeyOf, type Scoped } from '@neo/dsh-scope'
-import { SessionId } from '@neo/dsh-session'
-import type SubagentRuntime from '@neo/dsh-subagent'
-import type { SubagentRunEndInfo } from '@neo/dsh-subagent'
-import * as LlmDeepSeek from '@neo/dsh-llm-deepseek'
+import type { Agent, AgentHandle } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import { carrierKeyOf, type Scoped } from '@neo/scope'
+import { SessionId } from '@neo/session'
+import type SubagentRuntime from '@neo/subagent'
+import type { SubagentRunEndInfo } from '@neo/subagent'
+import * as LlmDeepSeek from '@neo/llm-deepseek'
 import type {
   InitializeParams,
   InitializeResult,
@@ -23,7 +23,7 @@ import type {
   SessionPromptResult,
   SubagentFinishedNotification,
   SubagentStartedNotification,
-} from '@neo/dsh-sdk-protocol'
+} from '@neo/sdk-protocol'
 
 interface SessionRecord {
   handle: AgentHandle
@@ -219,7 +219,7 @@ export class HarnessSdkJsonRpcServer {
     // No preset composition: this server's compositions keep the model-facing
     // rows in the host plane, so this agent reads them from the global layer. A
     // deployment that configures a roster has to join one here first
-    // (@neo/dsh-agent-presets README, "Composing a child agent").
+    // (@neo/agent-presets README, "Composing a child agent").
     const handle = await this.ctx.agents.create({
       sessionId: SessionId(sessionId),
       meta: { cwd: this.cwd },

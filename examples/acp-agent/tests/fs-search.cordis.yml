@@ -1,18 +1,18 @@
 # Minimal live counterpart for the glob-sampling snapshot composition.
 - id: llm-deepseek
-  name: '@neo/dsh-llm-deepseek'
+  name: '@neo/llm-deepseek'
   config:
     models:
       - id: deepseek-v4-pro
 
 - id: subprocess
-  name: '@neo/dsh-subprocess-local'
+  name: '@neo/subprocess-local'
 
 - id: bash
-  name: '@neo/dsh-bash-local'
+  name: '@neo/bash-local'
 
 - id: acp-agent
-  name: '@neo/dsh-acp-demo'
+  name: '@neo/acp-demo'
   config:
     provider: deepseek-official
     model: deepseek-v4-pro
@@ -26,7 +26,7 @@
     persona: You are a concise snapshot agent working in {{cwd}}.
 
 - id: tool-fs-search
-  name: '@neo/dsh-tool-fs-search'
+  name: '@neo/tool-fs-search'
   config:
     sampleOverCapGlobResults: true
     globMaxResults: 4

@@ -1,11 +1,11 @@
 /**
  * Agent-scoped durable one-shot and fixed-rate reminders over the session event log.
- * @module @neo/dsh-schedule
+ * @module @neo/schedule
  */
 
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import type {} from '@neo/dsh-session-persistence'
+import type { Agent } from '@neo/agent'
+import type {} from '@neo/session-persistence'
 import { ScheduleRuntime } from './runtime.ts'
 import { registerScheduleTools } from './tools.ts'
 

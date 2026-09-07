@@ -1,7 +1,7 @@
 /**
  * Model-facing workspace instruction rendering within an explicit byte budget.
  *
- * @module @neo/dsh-agent-instructions/render
+ * @module @neo/agent-instructions/render
  */
 
 import { basename, dirname } from 'node:path'

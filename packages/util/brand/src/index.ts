@@ -18,7 +18,7 @@
  * package can brand its ids without depending on an unrelated capability
  * package.
  *
- * @module @neo/dsh-brand
+ * @module @neo/brand
  */
 
 declare const BRAND: unique symbol

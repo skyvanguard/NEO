@@ -5,12 +5,12 @@
  * the command never ran: foreground calls throw `SANDBOX_UNAVAILABLE`, while
  * background processes carry `runnerFailed`; other spawn rejections retain
  * local-executor semantics. The tool owns approval and passes a complete per-call policy.
- * @module @neo/dsh-bash-sandbox
+ * @module @neo/bash-sandbox
  */
 
 import { Context } from '@neo/cordis'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellRunResult } from '@neo/dsh-shell'
-import { SandboxUnavailableError } from '@neo/dsh-sandbox'
+import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellRunResult } from '@neo/shell'
+import { SandboxUnavailableError } from '@neo/sandbox'
 import type {
   ConfinedArgv,
   ConfinedSandboxMode,
@@ -19,16 +19,16 @@ import type {
   SandboxExecutionPolicy,
   SandboxMode,
   SandboxPolicy,
-} from '@neo/dsh-sandbox'
-import type {} from '@neo/dsh-sandbox-policy'
-import { LocalBashExecutor } from '@neo/dsh-bash-local'
-import type { Config as LocalConfig } from '@neo/dsh-bash-local'
+} from '@neo/sandbox'
+import type {} from '@neo/sandbox-policy'
+import { LocalBashExecutor } from '@neo/bash-local'
+import type { Config as LocalConfig } from '@neo/bash-local'
 import { classifyDenial, classifyRunnerFailure, isRunnerSpawnFailure, matchesSignature } from './helpers.ts'
 
 /**
  * Plugin config: the local executor's knobs, verbatim. The sandbox policy —
  * the default mode and fallback `workspace-write` root — is NOT here: it lives
- * on `ctx.sandboxPolicy` (`@neo/dsh-sandbox-policy`), which resolves
+ * on `ctx.sandboxPolicy` (`@neo/sandbox-policy`), which resolves
  * each calling session's mode and cwd for every enforcing capability. The runner
  * choice is likewise the `ctx.sandbox` provider's config, not this executor's.
  */

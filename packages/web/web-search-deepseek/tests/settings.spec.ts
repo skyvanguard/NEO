@@ -3,11 +3,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import type { Fiber } from '@neo/cordis'
-import { SettingsProvider } from '@neo/dsh-settings'
-import type { SettingsNamespace } from '@neo/dsh-settings'
-import WebRuntime from '@neo/dsh-web'
-import * as deepseekPlugin from '@neo/dsh-web-search-deepseek'
-import { WEB_SEARCH_DEEPSEEK_SETTINGS_NAMESPACE } from '@neo/dsh-web-search-deepseek'
+import { SettingsProvider } from '@neo/settings'
+import type { SettingsNamespace } from '@neo/settings'
+import WebRuntime from '@neo/web'
+import * as deepseekPlugin from '@neo/web-search-deepseek'
+import { WEB_SEARCH_DEEPSEEK_SETTINGS_NAMESPACE } from '@neo/web-search-deepseek'
 
 /** The smallest real provider: one in-memory document, always writable. */
 class MemorySettings extends SettingsProvider {

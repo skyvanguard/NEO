@@ -4,7 +4,7 @@
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
 import type { ReactNode } from 'react'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
 import type { ChatViewSlotProps, ConvViewProps } from '../src/client/contract/slots.ts'
 
 describe('view-ring type negatives (compile-time; body never runs)', () => {

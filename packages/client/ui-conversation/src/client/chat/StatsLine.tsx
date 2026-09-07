@@ -3,12 +3,12 @@
 // active conversation scrollport (see ConversationRoot data-conversation-scroll).
 
 import { Fragment, memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Tooltip } from '@neo/dsh-client-ui-primitives'
-import type { ConversationSnapshot, UseProjection } from '@neo/dsh-client-runtime/client'
-import type { SnapshotSelectorHook } from '@neo/dsh-client-ui-slots'
+import { Tooltip } from '@neo/client-ui-primitives'
+import type { ConversationSnapshot, UseProjection } from '@neo/client-runtime/client'
+import type { SnapshotSelectorHook } from '@neo/client-ui-slots'
 // Type-only: merges the sessionStats key into SessionProjectionMap for useProjection.
-import type {} from '@neo/dsh-session-stats/client'
-import type { ContextPressureProjection, TokenUsageProjection } from '@neo/dsh-token-meter/client'
+import type {} from '@neo/session-stats/client'
+import type { ContextPressureProjection, TokenUsageProjection } from '@neo/token-meter/client'
 import type { ComposerBarProps } from '../contract/slots.ts'
 import { formatTokensPerSecond } from './message-chrome.ts'
 import { assistantStepReading } from './turn-metrics.ts'

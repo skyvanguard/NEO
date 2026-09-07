@@ -1,17 +1,17 @@
 /** Cumulative token-usage section registered into Web Settings. */
 
-import type {} from '@neo/dsh-client-locale/client'
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-client-ui-settings/client'
+import type {} from '@neo/client-locale/client'
+import type { ClientContext } from '@neo/client-runtime/client'
+import type {} from '@neo/client-ui-settings/client'
 // Pulls the `ctx.remote` Context augmentation and the `usage` namespace.
-import type {} from '@neo/dsh-api-remotes/client'
+import type {} from '@neo/api-remotes/client'
 import { UsageSettingsSection, type UsageSectionInjected } from './UsageSettingsSection.tsx'
 import { en, es, zh, type UsageLocaleKey } from './locales.ts'
 
 export type { UsageSectionInjected, UsageSettingsSectionProps } from './UsageSettingsSection.tsx'
 export type { UsageLocaleKey } from './locales.ts'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Cumulative usage panel copy. */
     'settings.usage': UsageLocaleKey

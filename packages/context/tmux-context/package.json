@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tmux-context",
+  "name": "@neo/tmux-context",
   "description": "Opt-in durable per-step context with this agent's tmux pane and window location",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -35,19 +35,19 @@
     "@neo/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-shell": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-shell": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

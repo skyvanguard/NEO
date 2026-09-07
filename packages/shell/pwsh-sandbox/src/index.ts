@@ -1,6 +1,6 @@
 /**
  * Sandbox-consuming PowerShell executor — the pwsh twin of
- * `@neo/dsh-bash-sandbox`. It wraps the exact local pwsh argv through
+ * `@neo/bash-sandbox`. It wraps the exact local pwsh argv through
  * `ctx.sandbox` (which on Windows resolves to the ACL restricted-token runner
  * chain), inherits local process mechanics, and reports the selected mode,
  * enforcement, and denial facts. Positive runner-launch evidence means the
@@ -9,12 +9,12 @@
  * local-executor semantics. The tool layer owns the escalation approval flow
  * through `ctx.approval`; this executor reports the sandbox facts the tool
  * renders.
- * @module @neo/dsh-pwsh-sandbox
+ * @module @neo/pwsh-sandbox
  */
 
 import { Context } from '@neo/cordis'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellRunResult } from '@neo/dsh-shell'
-import { SandboxUnavailableError } from '@neo/dsh-sandbox'
+import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellRunResult } from '@neo/shell'
+import { SandboxUnavailableError } from '@neo/sandbox'
 import type {
   ConfinedArgv,
   ConfinedSandboxMode,
@@ -23,16 +23,16 @@ import type {
   SandboxExecutionPolicy,
   SandboxMode,
   SandboxPolicy,
-} from '@neo/dsh-sandbox'
-import type {} from '@neo/dsh-sandbox-policy'
-import { PwshLocalExecutor } from '@neo/dsh-pwsh-local'
-import type { Config as LocalConfig } from '@neo/dsh-pwsh-local'
+} from '@neo/sandbox'
+import type {} from '@neo/sandbox-policy'
+import { PwshLocalExecutor } from '@neo/pwsh-local'
+import type { Config as LocalConfig } from '@neo/pwsh-local'
 import { classifyDenial, classifyRunnerFailure, isRunnerSpawnFailure, matchesSignature } from './helpers.ts'
 
 /**
  * Plugin config: the local executor's knobs, verbatim. The sandbox policy —
  * the default mode and fallback `workspace-write` root — is NOT here: it lives
- * on `ctx.sandboxPolicy` (`@neo/dsh-sandbox-policy`), which resolves
+ * on `ctx.sandboxPolicy` (`@neo/sandbox-policy`), which resolves
  * each calling session's mode and cwd for every enforcing capability. The
  * runner choice is likewise the `ctx.sandbox` provider's config, not this
  * executor's.

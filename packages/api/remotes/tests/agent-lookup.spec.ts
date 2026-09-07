@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import SessionStore from '@neo/dsh-session'
-import type { Session, SessionEvent, SessionHeader, SessionId } from '@neo/dsh-session'
-import { createApiRemoteAgentResolver } from '@neo/dsh-api-remotes'
-import { TypertLookupFailure } from '@neo/dsh-typert-protocol'
-import TypertRegistry from '@neo/dsh-typert-registry'
+import AgentRegistry from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import SessionStore from '@neo/session'
+import type { Session, SessionEvent, SessionHeader, SessionId } from '@neo/session'
+import { createApiRemoteAgentResolver } from '@neo/api-remotes'
+import { TypertLookupFailure } from '@neo/typert-protocol'
+import TypertRegistry from '@neo/typert-registry'
 
 const sid = (value: string): SessionId => value as SessionId
 

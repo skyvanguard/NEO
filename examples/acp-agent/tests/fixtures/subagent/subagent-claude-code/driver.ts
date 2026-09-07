@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /** Inspect both public product-provider compositions without invoking them. */
 
-import { boot, resolveConfigPath } from '@neo/dsh-app-boot'
-import type {} from '@neo/dsh-subagent'
-import type {} from '@neo/dsh-tools'
+import { boot, resolveConfigPath } from '@neo/app-boot'
+import type {} from '@neo/subagent'
+import type {} from '@neo/tools'
 
 const configPath = process.argv[2]
 if (configPath === undefined) {

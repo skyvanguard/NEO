@@ -8,7 +8,7 @@
     patches:
       - insert:
           - id: session-title-provider
-            name: '@neo/dsh-session-title-first-prompt-llm'
+            name: '@neo/session-title-first-prompt-llm'
             config:
               targetWords: 5
               targetCjkCharacters: 10

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createScope, scopeTarget } from '@neo/dsh-scope'
-import { createUserMessage, CallId, createMessage, createToolResultMessage, freezeMessage } from '@neo/dsh-llm'
-import SessionStore, { SessionId, TOOL_NOT_STARTED } from '@neo/dsh-session'
-import * as SessionInvariant from '@neo/dsh-session/invariant'
-import InvariantRegistry, { InvariantError } from '@neo/dsh-invariants'
+import { createScope, scopeTarget } from '@neo/scope'
+import { createUserMessage, CallId, createMessage, createToolResultMessage, freezeMessage } from '@neo/llm'
+import SessionStore, { SessionId, TOOL_NOT_STARTED } from '@neo/session'
+import * as SessionInvariant from '@neo/session/invariant'
+import InvariantRegistry, { InvariantError } from '@neo/invariants'
 
 async function setup(): Promise<{ ctx: Context; fiber: Awaited<ReturnType<Context['plugin']>> }> {
   const ctx = new Context()

@@ -1,9 +1,9 @@
 /** First-party Host inspect providers registered by the Cordis tool package. */
 
 import type { Context } from '@neo/cordis'
-import { HOST_BUILTIN_INSPECTION } from '@neo/dsh-cordis-host-runner'
-import type { HostCordisInspectProviderRegistration } from '@neo/dsh-cordis-host-runner'
-import type { JsonValue } from '@neo/dsh-session'
+import { HOST_BUILTIN_INSPECTION } from '@neo/cordis-host-runner'
+import type { HostCordisInspectProviderRegistration } from '@neo/cordis-host-runner'
+import type { JsonValue } from '@neo/session'
 import { EVENT_API, queryEventApi, queryServiceApi } from './api-catalog.ts'
 
 const EMPTY_INPUT = { type: 'object', properties: {}, additionalProperties: false } as const

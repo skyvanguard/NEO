@@ -4,15 +4,15 @@ import {
 import {
   indexSubagentDescendants, type SessionId, type SessionListState, type SessionProjectionMap,
   type SessionSummary, type SubagentAddress, type SubagentCatalogSnapshot,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import {
   IconChevronDownOutline14, IconChevronRightOutline14, IconRefreshOutline14, StateDot,
-} from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale, PropsRuntime, TranslateNS } from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-primitives'
+import type { PropsLocale, PropsRuntime, TranslateNS } from '@neo/client-ui-slots'
 import { NS } from './locales.ts'
-import type {} from '@neo/dsh-client-ui-conversation/client'
-import type {} from '@neo/dsh-subagent/client'
-import type {} from '@neo/dsh-token-meter/client'
+import type {} from '@neo/client-ui-conversation/client'
+import type {} from '@neo/subagent/client'
+import type {} from '@neo/token-meter/client'
 import css from './SubagentCatalogAction.module.css'
 
 type CatalogEntry = SubagentCatalogSnapshot['entries'][number]

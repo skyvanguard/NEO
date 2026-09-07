@@ -1,4 +1,4 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import {
@@ -6,11 +6,11 @@ import {
   CompactionEngine,
   compactCheckpointSource,
   isCompactCheckpointSource,
-} from '@neo/dsh-compaction'
-import type { CompactionResult, CompactionTrigger } from '@neo/dsh-compaction'
-import { Session, SessionId } from '@neo/dsh-session'
-import type { CompactionAgentContext } from '@neo/dsh-compaction'
-import type { ManualCompactAgentContext } from '@neo/dsh-compaction'
+} from '@neo/compaction'
+import type { CompactionResult, CompactionTrigger } from '@neo/compaction'
+import { Session, SessionId } from '@neo/session'
+import type { CompactionAgentContext } from '@neo/compaction'
+import type { ManualCompactAgentContext } from '@neo/compaction'
 
 /**
  * A trivial concrete CompactionEngine implementing the abstract contract. The

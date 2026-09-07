@@ -1,4 +1,4 @@
-# @neo/dsh-goal
+# @neo/goal
 
 English | [中文](README.zh.md)
 
@@ -8,7 +8,7 @@ Event-sourced same-session goal state. The service retains one current completio
 
 ```yaml
 - id: goal
-  name: '@neo/dsh-goal'
+  name: '@neo/goal'
   config:
     defaultMaxGoalRounds: 256
 ```

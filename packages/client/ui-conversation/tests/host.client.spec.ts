@@ -1,9 +1,9 @@
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import { SettingsProvider, settingsNamespace, type SettingsNamespace } from '@neo/dsh-settings'
+import { SettingsProvider, settingsNamespace, type SettingsNamespace } from '@neo/settings'
 import {
   CONVERSATION_SETTINGS_NAMESPACE, DEFAULT_BUSY_ENTER_BEHAVIOR, apply,
-} from '@neo/dsh-client-ui-conversation'
+} from '@neo/client-ui-conversation'
 
 class MemorySettings extends SettingsProvider {
   readonly writable = true

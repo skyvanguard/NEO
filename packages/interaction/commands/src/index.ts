@@ -1,14 +1,14 @@
 /**
  * Plugin-owned human-command registry shared by interactive UI adapters.
- * @module @neo/dsh-commands
+ * @module @neo/commands
  */
 
 import { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { NamedEntries, ScopedLayers } from '@neo/dsh-scope'
-import type { ScopeKey, ScopeLayer } from '@neo/dsh-scope'
-import type { Session, SessionEvent, SessionEventMap } from '@neo/dsh-session'
-import { TypertRemoteService, Remote } from '@neo/dsh-typert-protocol'
+import type { Agent } from '@neo/agent'
+import { NamedEntries, ScopedLayers } from '@neo/scope'
+import type { ScopeKey, ScopeLayer } from '@neo/scope'
+import type { Session, SessionEvent, SessionEventMap } from '@neo/session'
+import { TypertRemoteService, Remote } from '@neo/typert-protocol'
 import { CommandId } from './brand.ts'
 import type {
   CommandDescriptor,

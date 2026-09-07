@@ -6,13 +6,13 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import AgentRegistry from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
-import LlmRuntime, { createUserMessage, LlmAdapter, LlmError, resolveRetryPolicy  } from '@neo/dsh-llm'
-import type { GenerateOptions, ResolvedRetryPolicy, StreamChunk } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
+import AgentRegistry from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
+import LlmRuntime, { createUserMessage, LlmAdapter, LlmError, resolveRetryPolicy  } from '@neo/llm'
+import type { GenerateOptions, ResolvedRetryPolicy, StreamChunk } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
 import * as retry from '../src/index.ts'
 
 let root: string | undefined
@@ -58,13 +58,13 @@ async function loadYaml(lines: readonly string[]): Promise<Context> {
   await context.plugin(Loader)
   context.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-llm', LlmRuntime],
-    ['@neo/dsh-session', SessionStore],
-    ['@neo/dsh-system-prompt', SystemPrompt],
-    ['@neo/dsh-tools', ToolRuntime],
-    ['@neo/dsh-agent', AgentRegistry],
-    ['@neo/dsh-llm-retry', retry],
-    ['@neo/dsh-agent-loop', AgentLoop],
+    ['@neo/llm', LlmRuntime],
+    ['@neo/session', SessionStore],
+    ['@neo/system-prompt', SystemPrompt],
+    ['@neo/tools', ToolRuntime],
+    ['@neo/agent', AgentRegistry],
+    ['@neo/llm-retry', retry],
+    ['@neo/agent-loop', AgentLoop],
   ])
   context.loader.internal = {
     version: 'v2',
@@ -87,13 +87,13 @@ describe('real Loader composition', () => {
   // to trip the default 5s budget on cold caches.
   it('loads provider-supplied policy and records recovery through the shipping loop', { timeout: 60_000 }, async () => {
     const loaded = await loadYaml([
-      "- name: '@neo/dsh-llm'",
-      "- name: '@neo/dsh-session'",
-      "- name: '@neo/dsh-system-prompt'",
-      "- name: '@neo/dsh-tools'",
-      "- name: '@neo/dsh-agent'",
-      "- name: '@neo/dsh-llm-retry'",
-      "- name: '@neo/dsh-agent-loop'",
+      "- name: '@neo/llm'",
+      "- name: '@neo/session'",
+      "- name: '@neo/system-prompt'",
+      "- name: '@neo/tools'",
+      "- name: '@neo/agent'",
+      "- name: '@neo/llm-retry'",
+      "- name: '@neo/agent-loop'",
     ])
 
     const unloaded = [...loaded.loader.entries()]

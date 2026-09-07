@@ -10,15 +10,15 @@
 
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import InvariantService from '@neo/dsh-invariants'
+import InvariantService from '@neo/invariants'
 import type {
   ApprovalRequestId, CordisDynamicPackageId, CordisDynamicPluginId, CordisDynamicPluginRunId,
-} from '@neo/dsh-api-remotes/client'
-import type { SessionId } from '@neo/dsh-client-connection/client'
-import type { DynamicCordisInvokeResult } from '@neo/dsh-api-remotes/client'
+} from '@neo/api-remotes/client'
+import type { SessionId } from '@neo/client-connection/client'
+import type { DynamicCordisInvokeResult } from '@neo/api-remotes/client'
 // Type-only: resolves `ctx.remote` and with it the `$on`/`$dispatch` surface.
-import type {} from '@neo/dsh-api-gateway/client'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
+import type {} from '@neo/api-gateway/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
 import * as NodeHalf from '../src/index.ts'
 import * as Invariant from '../src/invariant.ts'
 import * as ClientHalf from '../src/client/index.ts'

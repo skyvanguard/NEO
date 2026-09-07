@@ -13,11 +13,11 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, waitFor, within } from '@testing-library/react'
-import type { ISession, SessionId, WorkspaceId } from '@neo/dsh-client-runtime/client'
-import type { PropsRenderSlots } from '@neo/dsh-client-ui-slots'
-import { SlotTestRuntime, usePinnedBrowserLanguages } from '@neo/dsh-client-test-runtime'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import { apply, inject } from '@neo/dsh-client-ui-workspace/client'
+import type { ISession, SessionId, WorkspaceId } from '@neo/client-runtime/client'
+import type { PropsRenderSlots } from '@neo/client-ui-slots'
+import { SlotTestRuntime, usePinnedBrowserLanguages } from '@neo/client-test-runtime'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import { apply, inject } from '@neo/client-ui-workspace/client'
 
 // The service reads its initial locale from the browser; these specs assert
 // the shipped Chinese copy, so they state the browser they assume.

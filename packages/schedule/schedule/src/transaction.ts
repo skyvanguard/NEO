@@ -1,6 +1,6 @@
 /** Agent-scoped serialization for Schedule reads and durable mutations. */
 
-import type { Agent } from '@neo/dsh-agent'
+import type { Agent } from '@neo/agent'
 
 const tails = new WeakMap<Agent, Promise<void>>()
 

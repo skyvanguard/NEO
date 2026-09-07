@@ -15,15 +15,15 @@
 // chat-toolview-slot.spec.tsx.
 
 import { describe, expect, it, vi } from 'vitest'
-import { SlotTestRuntime, usePinnedBrowserLanguages, stubSettingsScope } from '@neo/dsh-client-test-runtime'
-import type { SessionBehaviorOverrides } from '@neo/dsh-client-test-runtime'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import type { ISession, SessionId } from '@neo/dsh-client-runtime/client'
-import { apply, inject } from '@neo/dsh-client-ui-conversation/client'
+import { SlotTestRuntime, usePinnedBrowserLanguages, stubSettingsScope } from '@neo/client-test-runtime'
+import type { SessionBehaviorOverrides } from '@neo/client-test-runtime'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import type { ISession, SessionId } from '@neo/client-runtime/client'
+import { apply, inject } from '@neo/client-ui-conversation/client'
 import type {
   ChatViewInjected, ComposerBarInjected, ConversationInjected, ConversationSessionHeaderInjected,
   ConversationSessionInjected, DetailsInjected,
-} from '@neo/dsh-client-ui-conversation/client'
+} from '@neo/client-ui-conversation/client'
 import type { createChatStore } from '../src/client/stores.ts'
 
 // The service reads its initial locale from the browser; these specs assert

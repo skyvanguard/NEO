@@ -3,14 +3,14 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import type { Fiber } from '@neo/cordis'
-import LlmRuntime from '@neo/dsh-llm'
-import SessionStore from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import AgentRegistry from '@neo/dsh-agent'
-import { SettingsProvider } from '@neo/dsh-settings'
-import type { SettingsNamespace } from '@neo/dsh-settings'
-import AgentLoop, { AGENT_LOOP_SETTINGS_NAMESPACE } from '@neo/dsh-agent-loop'
+import LlmRuntime from '@neo/llm'
+import SessionStore from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import AgentRegistry from '@neo/agent'
+import { SettingsProvider } from '@neo/settings'
+import type { SettingsNamespace } from '@neo/settings'
+import AgentLoop, { AGENT_LOOP_SETTINGS_NAMESPACE } from '@neo/agent-loop'
 
 /** The smallest real provider: one in-memory document, always writable. */
 class MemorySettings extends SettingsProvider {

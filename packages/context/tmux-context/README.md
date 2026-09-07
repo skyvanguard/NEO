@@ -1,4 +1,4 @@
-# @neo/dsh-tmux-context
+# @neo/tmux-context
 
 English | [中文](README.zh.md)
 
@@ -8,7 +8,7 @@ Opt-in durable context naming the tmux session, window, and pane this agent proc
 
 ```yaml
 - id: tmux-context
-  name: '@neo/dsh-tmux-context'
+  name: '@neo/tmux-context'
   config:
     refreshIntervalMs: 60000 # optional; omit or set to 0 to inject on every changed turn
 ```

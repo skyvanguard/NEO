@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-cordis
+# @neo/client-ui-cordis
 
 English | [中文](README.zh.md)
 

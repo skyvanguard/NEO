@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { jsonSchemaToTs, renderToolsSdk } from '@neo/dsh-tools/src/ts-types.ts'
-import type { ToolSdkSchema } from '@neo/dsh-tools/src/ts-types.ts'
-import { parameterSchemaSpecToJsonSchema } from '@neo/dsh-tools'
+import { jsonSchemaToTs, renderToolsSdk } from '@neo/tools/src/ts-types.ts'
+import type { ToolSdkSchema } from '@neo/tools/src/ts-types.ts'
+import { parameterSchemaSpecToJsonSchema } from '@neo/tools'
 
 describe('jsonSchemaToTs', () => {
   it('maps every unified schema construct', () => {

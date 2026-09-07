@@ -1,10 +1,10 @@
-/** Package-owned filesystem event-data invariants. @module @neo/dsh-fs/invariant */
+/** Package-owned filesystem event-data invariants. @module @neo/fs/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 import type { FsObservation, FsTarget } from './types.ts'
 
-const PACKAGE_NAME = '@neo/dsh-fs'
+const PACKAGE_NAME = '@neo/fs'
 
 /** Cordis companion plugin name. */
 export const name = 'fs-invariant'

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-skill",
+  "name": "@neo/tool-skill",
   "description": "Model-facing skill loading tool for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,25 +32,25 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-skill": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/skill": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-skill": "workspace:^",
-    "@neo/dsh-skill-filesystem": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/skill": "workspace:^",
+    "@neo/skill-filesystem": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

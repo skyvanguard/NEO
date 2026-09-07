@@ -9,13 +9,13 @@
  * capture mode and an outer shutdown deadline: the SDK's export timeout does
  * not bound its preceding `forceFlush()` wait.
  *
- * @module @neo/dsh-session-telemetry-otel
+ * @module @neo/session-telemetry-otel
  */
 
 import { createRequire } from 'node:module'
 import z from '@neo/schemastery'
 import type { Context } from '@neo/cordis'
-import type {} from '@neo/dsh-command-feedback'
+import type {} from '@neo/command-feedback'
 import {
   SessionTelemetryBackend,
   SessionTelemetryCoordinator,
@@ -23,9 +23,9 @@ import {
   type SessionTelemetryRecord,
   type SessionTelemetrySeverity,
   type SessionTelemetrySharingStatus,
-} from '@neo/dsh-session-telemetry'
-import { APP_IDENTITY } from '@neo/dsh-llm'
-import { getOrCreateAnonymousUserId } from '@neo/dsh-anonymous-user-id'
+} from '@neo/session-telemetry'
+import { APP_IDENTITY } from '@neo/llm'
+import { getOrCreateAnonymousUserId } from '@neo/anonymous-user-id'
 import {
   BatchLogRecordProcessor,
   LoggerProvider,
@@ -216,8 +216,8 @@ export class OpenTelemetrySessionBackend extends SessionTelemetryBackend {
         }),
       ],
     })
-    const ledger = this.provider.getLogger('@neo/dsh-session-telemetry-otel', version)
-    const ops = this.provider.getLogger('@neo/dsh-session-telemetry-otel/ops', version)
+    const ledger = this.provider.getLogger('@neo/session-telemetry-otel', version)
+    const ops = this.provider.getLogger('@neo/session-telemetry-otel/ops', version)
     const enqueue: SessionTelemetrySink['emit'] = (record) => {
       const logger: Logger = record.channel === 'ops' ? ops : ledger
       logger.emit({

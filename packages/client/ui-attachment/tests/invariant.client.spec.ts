@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import * as AttachmentInvariant from '@neo/dsh-client-ui-attachment/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import * as AttachmentInvariant from '@neo/client-ui-attachment/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 describe('invariant companion', () => {
   it('registers under the package name with an empty installer', async () => {

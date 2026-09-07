@@ -30,15 +30,15 @@
  * accent row derived only from each logged call/result slice.
  */
 // Type-only: the carrier types, the forwarded Host-event face and the ctx.remote merge.
-import type { ConnectionHandle, SessionId, SkillEntry } from '@neo/dsh-api-remotes/client'
-import type { ClientContext, ISessions } from '@neo/dsh-client-runtime/client'
-import type { InputTriggerServiceContract, InputTriggerSource } from '@neo/dsh-client-ui-input-trigger/client'
+import type { ConnectionHandle, SessionId, SkillEntry } from '@neo/api-remotes/client'
+import type { ClientContext, ISessions } from '@neo/client-runtime/client'
+import type { InputTriggerServiceContract, InputTriggerSource } from '@neo/client-ui-input-trigger/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@neo/dsh-client-locale/client'
+import type {} from '@neo/client-locale/client'
 import { SkillRow } from './SkillRow.tsx'
 import { en, es, NS, zh, type SkillKey } from './locales.ts'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** The dedicated skill tool row's copy. */
     skill: SkillKey

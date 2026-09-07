@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-host-plugin-inventory",
+  "name": "@neo/host-plugin-inventory",
   "description": "Read-only Remote projection of current Cordis Loader plugin state",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -53,16 +53,16 @@
   },
   "peerDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

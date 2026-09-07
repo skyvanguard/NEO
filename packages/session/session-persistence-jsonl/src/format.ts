@@ -9,9 +9,9 @@
  */
 
 import { join } from 'node:path'
-import { decodeStorageRecord, packChunkRuns, SESSION_FORMAT_VERSION } from '@neo/dsh-session'
-import type { SessionEvent, SessionHeader, SessionId, StorageRecord } from '@neo/dsh-session'
-import { SessionFormatUnsupportedError, sessionFormatVersionRefusal } from '@neo/dsh-session-persistence'
+import { decodeStorageRecord, packChunkRuns, SESSION_FORMAT_VERSION } from '@neo/session'
+import type { SessionEvent, SessionHeader, SessionId, StorageRecord } from '@neo/session'
+import { SessionFormatUnsupportedError, sessionFormatVersionRefusal } from '@neo/session-persistence'
 
 /** Physical encoding selected for JSONL session artifacts. */
 export type JsonlCompression = 'zstd' | 'none'

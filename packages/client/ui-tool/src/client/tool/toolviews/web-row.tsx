@@ -10,8 +10,8 @@
 // summary line alone.
 
 import type { Context } from '@neo/cordis'
-import { IconBrowseOutline16, IconGlobeOutline14 } from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale } from '@neo/dsh-client-ui-slots'
+import { IconBrowseOutline16, IconGlobeOutline14 } from '@neo/client-ui-primitives'
+import type { PropsLocale } from '@neo/client-ui-slots'
 import type { ToolCallViewProps } from '../../contract/slots.ts'
 import { webCardModel } from '../models/web-card-model.ts'
 import { toolRowModel } from '../models/tool-call-model.ts'

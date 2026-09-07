@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
+import SessionStore from '@neo/session'
+import type { SessionEvent } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
 import SubagentRuntime from '../src/index.ts'
 import { subagentTimingProjectionDefinition } from '../src/projection.ts'
 

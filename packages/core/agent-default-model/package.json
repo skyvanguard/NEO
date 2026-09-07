@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-agent-default-model",
+  "name": "@neo/agent-default-model",
   "description": "Default model selection shared by Agent entry points",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -35,17 +35,17 @@
     "@neo/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-settings": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/settings": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-settings": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/settings": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

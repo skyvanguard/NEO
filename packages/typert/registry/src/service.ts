@@ -2,7 +2,7 @@
  * Runtime registry for generated Typert reflection, Remote invocations, and
  * dependency-inverted lookup/Context providers. It performs no TypeScript
  * analysis or schema generation.
- * @module @neo/dsh-typert-registry
+ * @module @neo/typert-registry
  */
 
 import { Context, Service } from '@neo/cordis'
@@ -29,7 +29,7 @@ import type {
   TypertRegistryChange,
   TypertRegistryListener,
   TypertRegistryContract,
-} from '@neo/dsh-typert-protocol'
+} from '@neo/typert-protocol'
 import type {
   TypertContribution,
   TypertFace,

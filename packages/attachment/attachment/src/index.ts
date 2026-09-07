@@ -1,4 +1,4 @@
-/** Durable attachment storage seam (`ctx.attachments`). @module @neo/dsh-attachment */
+/** Durable attachment storage seam (`ctx.attachments`). @module @neo/attachment */
 
 import { Context, Service } from '@neo/cordis'
 import type {

@@ -7,7 +7,7 @@
  */
 import { Service } from '@neo/cordis'
 import type { Context } from '@neo/cordis'
-import type { ClientContext, ISessions, SessionId } from '@neo/dsh-client-runtime/client'
+import type { ClientContext, ISessions, SessionId } from '@neo/client-runtime/client'
 import type { InputTriggerSource } from '../types.ts'
 import { InputTriggerController } from './controller.ts'
 import type { InputTriggerServiceContract } from './contract.ts'

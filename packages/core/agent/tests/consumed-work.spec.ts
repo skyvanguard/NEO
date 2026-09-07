@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { createUserMessage } from '@neo/dsh-llm'
-import { Session, SessionId } from '@neo/dsh-session'
-import type { TurnEndReason } from '@neo/dsh-session'
-import { foldConsumedWork } from '@neo/dsh-agent'
+import { createUserMessage } from '@neo/llm'
+import { Session, SessionId } from '@neo/session'
+import type { TurnEndReason } from '@neo/session'
+import { foldConsumedWork } from '@neo/agent'
 
 /** One pending message, as the inbox records it. */
 function message(text: string) {

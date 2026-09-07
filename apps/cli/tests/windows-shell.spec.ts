@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url'
 import yaml from 'js-yaml'
 import { entryListSchema } from '@neo/cordis-plugin-include'
 import { evaluate } from '@neo/cordis-plugin-loader'
-import { composeEntries, initProfile, loadProfile, PROFILES_DIR } from '@neo/dsh-app-boot'
+import { composeEntries, initProfile, loadProfile, PROFILES_DIR } from '@neo/app-boot'
 
 /**
  * The effective disabled state of one row on one platform: a `!!js` expression
@@ -42,7 +42,7 @@ describe('the shipped shell composition (real bundle layers)', () => {
 
   it('composes the confined pwsh roster on win32 and the bash roster on POSIX from the same rows', () => {
     home = mkdtempSync(join(tmpdir(), 'dsh-windows-home-'))
-    initProfile(join(home, PROFILES_DIR, 'web'), ['@neo/dsh-base', '@neo/dsh-web-app'])
+    initProfile(join(home, PROFILES_DIR, 'web'), ['@neo/base', '@neo/web-app'])
     const profile = loadProfile('dsh', 'web', anchor, home)
     const warnings: string[] = []
     const rows = composeEntries(
@@ -72,7 +72,7 @@ describe('the shipped shell composition (real bundle layers)', () => {
     // dependency closure into the profile's node_modules, so every bare
     // plugin name in the base patch must resolve from there.
     const cliManifest = JSON.parse(readFileSync(anchor, 'utf8')) as { dependencies?: Record<string, string> }
-    for (const name of ['@neo/dsh-pwsh-sandbox', '@neo/dsh-tool-pwsh']) {
+    for (const name of ['@neo/pwsh-sandbox', '@neo/tool-pwsh']) {
       expect(cliManifest.dependencies?.[name], `cold-start closure must reach ${name}`).toBeDefined()
     }
     expect(warnings).toEqual([])
@@ -80,7 +80,7 @@ describe('the shipped shell composition (real bundle layers)', () => {
 
   it('base-only profiles carry both stacks with the same platform gating', () => {
     home = mkdtempSync(join(tmpdir(), 'dsh-windows-home-'))
-    initProfile(join(home, PROFILES_DIR, 'base-only'), ['@neo/dsh-base'])
+    initProfile(join(home, PROFILES_DIR, 'base-only'), ['@neo/base'])
     const profile = loadProfile('dsh', 'base-only', anchor, home)
     const warnings: string[] = []
     const rows = composeEntries(

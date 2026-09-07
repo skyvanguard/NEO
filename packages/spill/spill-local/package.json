@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-spill-local",
+  "name": "@neo/spill-local",
   "description": "Local-filesystem implementation of the DeepSeek Harness spill storage seam (private session-scoped files)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,19 +32,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-spill": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/spill": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-spill": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/spill": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

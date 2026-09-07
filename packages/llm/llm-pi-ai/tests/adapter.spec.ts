@@ -1,16 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { AttachmentId, AttachmentStore } from '@neo/dsh-attachment'
+import { AttachmentId, AttachmentStore } from '@neo/attachment'
 import type {
   ImageAttachmentLimits,
   ImageAttachmentRef,
   SaveImageAttachment,
   StoredImageAttachment,
-} from '@neo/dsh-attachment'
-import LlmRuntime, { createUserMessage, CONTEXT_WINDOW_EXCEEDED_CODE, LlmError, ReasoningEffortId, userAgent } from '@neo/dsh-llm'
-import * as LlmPiAi from '@neo/dsh-llm-pi-ai'
-import { PiAiAdapter } from '@neo/dsh-llm-pi-ai'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+} from '@neo/attachment'
+import LlmRuntime, { createUserMessage, CONTEXT_WINDOW_EXCEEDED_CODE, LlmError, ReasoningEffortId, userAgent } from '@neo/llm'
+import * as LlmPiAi from '@neo/llm-pi-ai'
+import { PiAiAdapter } from '@neo/llm-pi-ai'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import { getBuiltinModels } from '@earendil-works/pi-ai/providers/all'
 import { resolveProfiles } from '../src/config.ts'
 import { assemble } from './assemble.ts'

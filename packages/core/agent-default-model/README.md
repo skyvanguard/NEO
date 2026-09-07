@@ -1,4 +1,4 @@
-# @neo/dsh-agent-default-model
+# @neo/agent-default-model
 
 English | [中文](README.zh.md)
 

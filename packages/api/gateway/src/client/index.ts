@@ -6,7 +6,7 @@
 
 import { Service } from '@neo/cordis'
 import type { Context, Events } from '@neo/cordis'
-import type { ConnectionHandle } from '@neo/dsh-client-connection/client'
+import type { ConnectionHandle } from '@neo/client-connection/client'
 import type {
   InvocationDescriptor,
   TypertClientRemote,
@@ -15,7 +15,7 @@ import type {
   TypertDisposer,
   TypertRemoteContribution,
   TypertRemoteEvent,
-} from '@neo/dsh-typert-protocol'
+} from '@neo/typert-protocol'
 
 interface MountToken {
   active: boolean

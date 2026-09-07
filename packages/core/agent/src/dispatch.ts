@@ -3,13 +3,13 @@
  * {@link agentEvents} couples the agent subject to its scope carrier, so the
  * scope key and the payload's `agent` cannot diverge; repeat dispatchers (the
  * loop driver) build it once in the agent's constructor and reuse it.
- * @module @neo/dsh-agent/dispatch
+ * @module @neo/agent/dispatch
  */
 
 import type { Context, Events } from '@neo/cordis'
-import { scopeTarget } from '@neo/dsh-scope'
-import type { Scoped } from '@neo/dsh-scope'
-import type { AssembleContext } from '@neo/dsh-system-prompt'
+import { scopeTarget } from '@neo/scope'
+import type { Scoped } from '@neo/scope'
+import type { AssembleContext } from '@neo/system-prompt'
 import type { Agent } from './runtime-types.ts'
 
 /** Extract the parameter tuple from an event handler type (its `this` is not part of the tuple). */

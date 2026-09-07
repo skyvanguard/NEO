@@ -2,16 +2,16 @@
  * Cross-session snapshot preparation. Hosts adapt mentions into structured
  * references; this service owns exact reads, projection, budgets, and durable context.
  *
- * @module @neo/dsh-session-reference
+ * @module @neo/session-reference
  */
 
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { ContentBlock, UserMessage } from '@neo/dsh-llm'
-import type { SessionId } from '@neo/dsh-session'
-import type { SessionSurfaceSnapshot, SessionTitleObservationResult } from '@neo/dsh-session-query'
+import type { Agent } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { ContentBlock, UserMessage } from '@neo/llm'
+import type { SessionId } from '@neo/session'
+import type { SessionSurfaceSnapshot, SessionTitleObservationResult } from '@neo/session-query'
 import {
   DEFAULT_CANDIDATE_LIMIT,
   DEFAULT_MAX_REFERENCE_BYTES,

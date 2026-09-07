@@ -1,12 +1,12 @@
 import type { Context } from '@neo/cordis'
 import type {
   ConversationLocation, ConversationNodeDefinition, ModelRetryNode,
-} from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-llm-retry/types'
+} from '@neo/client-runtime/client'
+import type {} from '@neo/llm-retry/types'
 import type { RetryChatData } from '../contract/chat-nodes.ts'
 import { chatNode } from './common.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Producer-correlated model retry chain. */
     'model-retry': RetryChatData

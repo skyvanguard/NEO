@@ -1,17 +1,17 @@
 /**
  * Durable, lifecycle-bound feedback for finalized assistant messages.
- * @module @neo/dsh-message-feedback
+ * @module @neo/message-feedback
  */
 
 import { Buffer } from 'node:buffer'
 import { randomUUID } from 'node:crypto'
 import { Context, Service } from '@neo/cordis'
 import s from '@neo/schemastery'
-import { deriveEventMessage, isAppendSurfaceEvent } from '@neo/dsh-session/surface'
-import type { SessionHeader, SessionId } from '@neo/dsh-session/types'
-import type { SessionInspection } from '@neo/dsh-session-persistence'
-import type { KvTable } from '@neo/dsh-storage-domain'
-import { TypertRemoteService, Remote } from '@neo/dsh-typert-protocol'
+import { deriveEventMessage, isAppendSurfaceEvent } from '@neo/session/surface'
+import type { SessionHeader, SessionId } from '@neo/session/types'
+import type { SessionInspection } from '@neo/session-persistence'
+import type { KvTable } from '@neo/storage-domain'
+import { TypertRemoteService, Remote } from '@neo/typert-protocol'
 import { messageFeedbackDomainSpec } from './spec.ts'
 import type { MessageFeedbackRow, MessageFeedbackSessionIdentity } from './spec.ts'
 import type {

@@ -5,8 +5,8 @@ import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { SandboxPolicy } from '@neo/dsh-sandbox'
-import { LocalSandboxProvider } from '@neo/dsh-sandbox-local'
+import type { SandboxPolicy } from '@neo/sandbox'
+import { LocalSandboxProvider } from '@neo/sandbox-local'
 import { bwrapProfileArgs } from '../src/profiles.ts'
 
 /**

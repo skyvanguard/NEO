@@ -9,22 +9,22 @@ import { performance } from 'node:perf_hooks'
 import type { Browser, CDPSession, Locator, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import type { StreamChunk } from '@neo/dsh-llm'
+import type { StreamChunk } from '@neo/llm'
 import {
   CallId,
   createAssistantMessage,
   createToolResultMessage,
   createUserMessage,
-} from '@neo/dsh-llm'
-import type { ReplayEntry, ReplayOverrideDoc } from '@neo/dsh-llm-replay'
-import type { SessionEvent } from '@neo/dsh-session'
+} from '@neo/llm'
+import type { ReplayEntry, ReplayOverrideDoc } from '@neo/llm-replay'
+import type { SessionEvent } from '@neo/session'
 import {
   SESSION_FORMAT_VERSION,
   Session,
   SessionId,
-} from '@neo/dsh-session'
+} from '@neo/session'
 // Carries the session/title event declaration into the fixture builder.
-import type {} from '@neo/dsh-session-title'
+import type {} from '@neo/session-title'
 import {
   launchWebScaffold,
   seedSession,

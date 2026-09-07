@@ -13,16 +13,16 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import { join, sep } from 'node:path'
-import { createUserMessage, CallId } from '@neo/dsh-llm'
-import SystemPrompt, { renderPrompt } from '@neo/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecution, type ToolExecutionToken } from '@neo/dsh-tools'
-import { SubprocessRuntime } from '@neo/dsh-subprocess'
-import type { SubprocessCollectedOutputs, SubprocessHandle, SubprocessOutcome, SubprocessOutputRead, SubprocessOutputReader, SubprocessSpawnSpec } from '@neo/dsh-subprocess'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import { createUserMessage, CallId } from '@neo/llm'
+import SystemPrompt, { renderPrompt } from '@neo/system-prompt'
+import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecution, type ToolExecutionToken } from '@neo/tools'
+import { SubprocessRuntime } from '@neo/subprocess'
+import type { SubprocessCollectedOutputs, SubprocessHandle, SubprocessOutcome, SubprocessOutputRead, SubprocessOutputReader, SubprocessSpawnSpec } from '@neo/subprocess'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import { rgPath } from '@vscode/ripgrep'
-import { SpillLocator, SpillStore } from '@neo/dsh-spill'
-import type { SaveTextSpill, SpillRef } from '@neo/dsh-spill'
-import * as ToolFsSearch from '@neo/dsh-tool-fs-search'
+import { SpillLocator, SpillStore } from '@neo/spill'
+import type { SaveTextSpill, SpillRef } from '@neo/spill'
+import * as ToolFsSearch from '@neo/tool-fs-search'
 import { retainGrepMatches } from '../src/search-core.ts'
 import {
   buildGlobCommand,
@@ -43,7 +43,7 @@ import {
   runRipgrep,
   sampleAcrossTopLevel,
   toWorkdirRelative,
-} from '@neo/dsh-tool-fs-search'
+} from '@neo/tool-fs-search'
 
 const testToolSignal = new AbortController().signal
 

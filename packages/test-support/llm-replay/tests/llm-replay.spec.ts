@@ -3,9 +3,9 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { SessionEvent } from '@neo/dsh-session'
-import { CompactionId } from '@neo/dsh-compaction'
-import LlmRuntime, { CallId, createUserMessage, GenerateOptions, LlmAdapter, StreamChunk } from '@neo/dsh-llm'
+import type { SessionEvent } from '@neo/session'
+import { CompactionId } from '@neo/compaction'
+import LlmRuntime, { CallId, createUserMessage, GenerateOptions, LlmAdapter, StreamChunk } from '@neo/llm'
 import {
   type Config,
   type ReplayEntry,

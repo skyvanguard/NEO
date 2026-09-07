@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
-import { AttachmentId } from '@neo/dsh-attachment'
-import type { AttachmentStore, ImageAttachmentRef } from '@neo/dsh-attachment'
-import { CallId, createMessage, createUserMessage } from '@neo/dsh-llm'
-import type { ContentBlock, GenerateOptions, Message } from '@neo/dsh-llm'
+import { AttachmentId } from '@neo/attachment'
+import type { AttachmentStore, ImageAttachmentRef } from '@neo/attachment'
+import { CallId, createMessage, createUserMessage } from '@neo/llm'
+import type { ContentBlock, GenerateOptions, Message } from '@neo/llm'
 import { toPiContext } from '../src/context.ts'
 import { toPiAssistant } from '../src/replay.ts'
 

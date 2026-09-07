@@ -1,6 +1,6 @@
-/** Durable request-route lookup for one open model step. @module @neo/dsh-llm-retry/history */
+/** Durable request-route lookup for one open model step. @module @neo/llm-retry/history */
 
-import type { SessionEvent } from '@neo/dsh-session'
+import type { SessionEvent } from '@neo/session'
 
 /**
  * Find the provider in force for one currently open step.

@@ -1,4 +1,4 @@
-# @neo/dsh-typert-protocol
+# @neo/typert-protocol
 
 English | [中文](README.zh.md)
 

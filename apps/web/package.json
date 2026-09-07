@@ -1,6 +1,6 @@
 {
-  "name": "@neo/dsh-web-frontend",
-  "description": "Web application entry: vite build over the @neo/dsh-client-web shell library; dist/ served by apps/cli's dsh web",
+  "name": "@neo/web-frontend",
+  "description": "Web application entry: vite build over the @neo/client-web shell library; dist/ served by apps/cli's dsh web",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
@@ -26,18 +26,18 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@neo/dsh-client-web": "workspace:^",
+    "@neo/client-web": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@neo/cordis-plugin-group": "workspace:^",
-    "@neo/dsh-client-modules": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-client-web-react": "workspace:^",
-    "@neo/dsh-cmdline": "workspace:^",
-    "@neo/dsh-pwsh-local": "workspace:^",
+    "@neo/client-modules": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/client-web-react": "workspace:^",
+    "@neo/cmdline": "workspace:^",
+    "@neo/pwsh-local": "workspace:^",
     "@types/node": "^22.0.0",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",

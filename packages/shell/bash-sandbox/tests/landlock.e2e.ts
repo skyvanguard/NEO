@@ -6,10 +6,10 @@ import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import { launcherPath } from '@neo/node-addon-landlock-run'
-import { LocalSandboxProvider } from '@neo/dsh-sandbox-local'
-import { SandboxPolicyService } from '@neo/dsh-sandbox-policy'
-import { SandboxBashExecutor } from '@neo/dsh-bash-sandbox'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
+import { LocalSandboxProvider } from '@neo/sandbox-local'
+import { SandboxPolicyService } from '@neo/sandbox-policy'
+import { SandboxBashExecutor } from '@neo/bash-sandbox'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
 
 /**
  * KEYLESS consumer-integration proof: the REAL `LocalSandboxProvider` (bwrap
@@ -17,7 +17,7 @@ import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
  * REAL `SandboxBashExecutor`, driven through the executor's public run/start
  * paths. Verifies the WORLD (files exist or don't) plus the stamped result
  * facts; the backend-only confinement proofs live with
- * `@neo/dsh-sandbox-local`.
+ * `@neo/sandbox-local`.
  *
  * Self-skips when the running kernel does not enforce Landlock. CI builds the launcher from
  * `native/landlock-run` before running this file.

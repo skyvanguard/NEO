@@ -1,7 +1,7 @@
 /**
  * Public vocabulary for cross-session token-usage aggregation. Types only, no
  * Node imports, so the generated Remote client can consume it in the browser.
- * @module @neo/dsh-usage-stats/types
+ * @module @neo/usage-stats/types
  */
 
 /** Summed token counts (provider-reported), plus the number of requests. */

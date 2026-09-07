@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-session-projection`.
- * @module @neo/dsh-session-projection/invariant
+ * Package-owned invariant companion for `@neo/session-projection`.
+ * @module @neo/session-projection/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-session-projection'
+const PACKAGE_NAME = '@neo/session-projection'
 
 /** Cordis companion plugin name. */
 export const name = 'session-projection-invariant'

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-model-selection",
+  "name": "@neo/client-ui-model-selection",
   "description": "Model selection: the /model popupSelect over session.models / session.selectModel",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,10 +32,10 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-locale",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-commands",
-        "@neo/dsh-api-remotes"
+        "@neo/client-locale",
+        "@neo/client-runtime",
+        "@neo/client-ui-commands",
+        "@neo/api-remotes"
       ],
       "platform": "web"
     }
@@ -46,32 +46,32 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-commands": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-input-trigger": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-commands": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-input-trigger": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "clsx": "^2.1.1",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-commands": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-input-trigger": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-commands": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-input-trigger": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "clsx": "^2.1.1",
     "@neo/cordis": "workspace:^",

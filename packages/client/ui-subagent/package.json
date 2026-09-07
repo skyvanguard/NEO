@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-subagent",
+  "name": "@neo/client-ui-subagent",
   "description": "Subagent conversation catalog, continuation routing UI, and '@' reference source",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,11 +32,11 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-locale",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-conversation",
-        "@neo/dsh-client-ui-primitives",
-        "@neo/dsh-client-ui-input-trigger"
+        "@neo/client-locale",
+        "@neo/client-runtime",
+        "@neo/client-ui-conversation",
+        "@neo/client-ui-primitives",
+        "@neo/client-ui-input-trigger"
       ],
       "platform": "web"
     }
@@ -50,28 +50,28 @@
     "react": "^18.2.0"
   },
   "peerDependencies": {
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-input-trigger": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-token-meter": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-input-trigger": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/token-meter": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-input-trigger": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-token-meter": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-input-trigger": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/token-meter": "workspace:^",
     "@types/react": "~18.3.1",
     "@neo/cordis": "workspace:^"
   },

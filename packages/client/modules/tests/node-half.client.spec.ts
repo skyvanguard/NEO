@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { Context } from '@neo/cordis'
 import { afterEach, describe, expect, it } from 'vitest'
-import type { WebServer, WebRoute } from '@neo/dsh-host-webserver'
+import type { WebServer, WebRoute } from '@neo/host-webserver'
 import { ClientModuleRegistry } from '../src/index.ts'
 
 let root: string | undefined

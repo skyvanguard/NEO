@@ -22,7 +22,7 @@
  * that do not use a `./typert` artifact (hand-written wire schemas,
  * tests, non-loader compositions).
  *
- * @module @neo/dsh-typert-loader
+ * @module @neo/typert-loader
  */
 
 import { readFileSync } from 'node:fs'
@@ -32,8 +32,8 @@ import { pathToFileURL } from 'node:url'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
 import type {} from '@neo/cordis-plugin-loader'
-import type {} from '@neo/dsh-typert-registry'
-import type { TypertContribution } from '@neo/dsh-typert-registry/types'
+import type {} from '@neo/typert-registry'
+import type { TypertContribution } from '@neo/typert-registry/types'
 
 /** The package.json exports key naming a package's host-face typert artifact. */
 export const TYPERT_HOST_EXPORT = './typert'

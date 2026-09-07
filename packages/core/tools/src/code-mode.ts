@@ -3,14 +3,14 @@
  * tools through nested executions scheduled under the native concurrency
  * contract; each sub-dispatch is logged for reconstruction, while only the
  * outer curated result enters model history.
- * @module @neo/dsh-tools/src/code-mode
+ * @module @neo/tools/src/code-mode
  */
 
-import { CallId, HarnessError } from '@neo/dsh-llm'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { CodeBindingFunction, CodeRunResult, CodeRuntime } from '@neo/dsh-code-runtime'
-import { snapshotJsonValue } from '@neo/dsh-session'
-import type { JsonValue } from '@neo/dsh-session'
+import { CallId, HarnessError } from '@neo/llm'
+import type { ContentBlock } from '@neo/llm'
+import type { CodeBindingFunction, CodeRunResult, CodeRuntime } from '@neo/code-runtime'
+import { snapshotJsonValue } from '@neo/session'
+import type { JsonValue } from '@neo/session'
 import { defineTool, parameterSchemaSpecToJsonSchema } from './schema.ts'
 import { TOOL_RUNTIME_SCHEDULER } from './index.ts'
 import type { CodeDispatchLog, ToolDefinition, ToolExecutionResult, ToolRuntime, ToolRunContext } from './index.ts'

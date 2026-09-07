@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { SessionId } from '@neo/dsh-session'
-import JobRegistry, { JobId } from '@neo/dsh-jobs'
-import type { JobDoneListener, JobSnapshot } from '@neo/dsh-jobs'
-import * as JobsInvariant from '@neo/dsh-jobs/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import type { Agent } from '@neo/agent'
+import { SessionId } from '@neo/session'
+import JobRegistry, { JobId } from '@neo/jobs'
+import type { JobDoneListener, JobSnapshot } from '@neo/jobs'
+import * as JobsInvariant from '@neo/jobs/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 const BASE: JobSnapshot = {
   id: JobId('bash-1'),

@@ -6,19 +6,19 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import { CallId } from '@neo/dsh-llm'
-import { Session, SessionId } from '@neo/dsh-session'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import TerminalSessionService from '@neo/dsh-terminal'
-import SandboxProvider from '@neo/dsh-sandbox'
-import type { ConfinedArgv, SandboxPolicy } from '@neo/dsh-sandbox'
-import SandboxPolicyService from '@neo/dsh-sandbox-policy'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
-import * as TerminalLocal from '@neo/dsh-terminal-bash'
-import * as ToolPty from '@neo/dsh-tool-terminal'
+import { CallId } from '@neo/llm'
+import { Session, SessionId } from '@neo/session'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import TerminalSessionService from '@neo/terminal'
+import SandboxProvider from '@neo/sandbox'
+import type { ConfinedArgv, SandboxPolicy } from '@neo/sandbox'
+import SandboxPolicyService from '@neo/sandbox-policy'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
+import * as TerminalLocal from '@neo/terminal-bash'
+import * as ToolPty from '@neo/tool-terminal'
 
 let root: string | undefined
 let context: Context | undefined
@@ -64,17 +64,17 @@ suite('terminal real Loader composition through cordis.yml', () => {
     root = await mkdtemp(join(tmpdir(), 'dsh-pty-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@neo/dsh-agent'",
-      "- name: '@neo/dsh-system-prompt'",
-      "- name: '@neo/dsh-tools'",
-      "- name: '@neo/dsh-terminal'",
-      "- name: '@neo/dsh-test-sandbox'",
-      "- name: '@neo/dsh-sandbox-policy'",
+      "- name: '@neo/agent'",
+      "- name: '@neo/system-prompt'",
+      "- name: '@neo/tools'",
+      "- name: '@neo/terminal'",
+      "- name: '@neo/test-sandbox'",
+      "- name: '@neo/sandbox-policy'",
       '  config:',
       '    mode: danger-full-access',
       `    workspaceRoot: ${JSON.stringify(root)}`,
-      "- name: '@neo/dsh-subprocess-local'",
-      "- name: '@neo/dsh-terminal-bash'",
+      "- name: '@neo/subprocess-local'",
+      "- name: '@neo/terminal-bash'",
       '  config:',
       '    pollIntervalMs: 10',
       '    exactProbeAfterMs: 20',
@@ -82,7 +82,7 @@ suite('terminal real Loader composition through cordis.yml', () => {
       '    handoffGraceMs: 250',
       '    timeoutMs: 2000',
       '    disposeGraceMs: 500',
-      "- name: '@neo/dsh-tool-terminal'",
+      "- name: '@neo/tool-terminal'",
       '',
     ].join('\n'))
 
@@ -91,15 +91,15 @@ suite('terminal real Loader composition through cordis.yml', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@neo/dsh-agent', AgentRegistry],
-      ['@neo/dsh-system-prompt', SystemPrompt],
-      ['@neo/dsh-tools', ToolRuntime],
-      ['@neo/dsh-terminal', TerminalSessionService],
-      ['@neo/dsh-test-sandbox', PassthroughSandbox],
-      ['@neo/dsh-sandbox-policy', SandboxPolicyService],
-      ['@neo/dsh-subprocess-local', LocalSubprocessRuntime],
-      ['@neo/dsh-terminal-bash', TerminalLocal],
-      ['@neo/dsh-tool-terminal', ToolPty],
+      ['@neo/agent', AgentRegistry],
+      ['@neo/system-prompt', SystemPrompt],
+      ['@neo/tools', ToolRuntime],
+      ['@neo/terminal', TerminalSessionService],
+      ['@neo/test-sandbox', PassthroughSandbox],
+      ['@neo/sandbox-policy', SandboxPolicyService],
+      ['@neo/subprocess-local', LocalSubprocessRuntime],
+      ['@neo/terminal-bash', TerminalLocal],
+      ['@neo/tool-terminal', ToolPty],
     ])
     context.loader.internal = {
       version: 'v2',

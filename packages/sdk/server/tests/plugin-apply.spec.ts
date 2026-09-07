@@ -6,8 +6,8 @@ import { tmpdir } from 'node:os'
 import { PassThrough, Writable } from 'node:stream'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import * as agentCore from '@neo/dsh-agent-spine-demo'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
+import * as agentCore from '@neo/agent-spine-demo'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
 import * as jsonrpc from '../src/index.ts'
 
 /**

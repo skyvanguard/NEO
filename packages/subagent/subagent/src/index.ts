@@ -10,8 +10,8 @@
  * (`LlmRuntime.registerAdapter`), not the single-service bash executor.
  *
  * This package owns the Service Definition role of the capability seam. Service Providers
- * (`@neo/dsh-subagent-spawn-in-process`, `-fork`, `-acp`) and the model-facing
- * consumer (`@neo/dsh-tool-subagent`) are separate packages.
+ * (`@neo/subagent-spawn-in-process`, `-fork`, `-acp`) and the model-facing
+ * consumer (`@neo/tool-subagent`) are separate packages.
  *
  * Public operations express caller intent: `start` returns one published owned
  * one-shot run, `startContinuable` establishes a durable continuable child, and
@@ -28,16 +28,16 @@
  * serialization and hostile-input validation belong at real process, worker,
  * persistence, and model boundaries.
  *
- * @module @neo/dsh-subagent
+ * @module @neo/subagent
  */
 
 import { Context, Service } from '@neo/cordis'
-import { scopeTarget } from '@neo/dsh-scope'
-import type { Scoped } from '@neo/dsh-scope'
-import { assertObjectJsonSchema } from '@neo/dsh-tools'
-import type { ContentBlock, MessageId } from '@neo/dsh-llm'
-import type { Agent } from '@neo/dsh-agent'
-import type { SessionId } from '@neo/dsh-session'
+import { scopeTarget } from '@neo/scope'
+import type { Scoped } from '@neo/scope'
+import { assertObjectJsonSchema } from '@neo/tools'
+import type { ContentBlock, MessageId } from '@neo/llm'
+import type { Agent } from '@neo/agent'
+import type { SessionId } from '@neo/session'
 import type {
   ContinuableCreateRequest,
   ContinuableCreateSpec,

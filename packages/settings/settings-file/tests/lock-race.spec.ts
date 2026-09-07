@@ -6,7 +6,7 @@ import z from '@neo/schemastery'
 import { access, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { settingsNamespace } from '@neo/dsh-settings'
+import { settingsNamespace } from '@neo/settings'
 import { FileSettingsProvider } from '../src/index.ts'
 
 const state = vi.hoisted(() => ({

@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-settings-general
+# @neo/client-ui-settings-general
 
 English | [中文](README.zh.md)
 

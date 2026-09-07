@@ -7,7 +7,7 @@ import WebRuntime, {
   type WebSearchProvider,
   type WebSearchRequest,
   type WebSearchResult,
-} from '@neo/dsh-web'
+} from '@neo/web'
 
 /** A scripted search provider for contract tests. */
 function makeSearchProvider(

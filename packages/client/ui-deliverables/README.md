@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-deliverables
+# @neo/client-ui-deliverables
 
 English | [中文](README.zh.md)
 

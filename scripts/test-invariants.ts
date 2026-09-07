@@ -8,14 +8,14 @@
 import { expect } from 'vitest'
 import { FiberState, Inject, RegistryService, ValidationError } from '@neo/cordis'
 import type { Context, Plugin } from '@neo/cordis'
-import { AttachmentStore } from '@neo/dsh-attachment'
+import { AttachmentStore } from '@neo/attachment'
 import type {
   ImageAttachmentLimits,
   ImageAttachmentRef,
   SaveImageAttachment,
   StoredImageAttachment,
-} from '@neo/dsh-attachment'
-import InvariantRegistry from '@neo/dsh-invariants'
+} from '@neo/attachment'
+import InvariantRegistry from '@neo/invariants'
 
 declare global {
   interface ImportMeta {

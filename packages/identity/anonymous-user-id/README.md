@@ -1,4 +1,4 @@
-# @neo/dsh-anonymous-user-id
+# @neo/anonymous-user-id
 
 English | [中文](README.zh.md)
 

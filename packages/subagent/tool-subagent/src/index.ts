@@ -5,19 +5,19 @@
  * Background policy is selected by this plugin's configuration: one-shot
  * calls own a plain Task, while continuable calls use
  * `ctx.subagents.startContinuable()`.
- * @module @neo/dsh-tool-subagent
+ * @module @neo/tool-subagent
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { defineTool } from '@neo/dsh-tools'
-import type { AgentOptions } from '@neo/dsh-agent'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { JsonValue } from '@neo/dsh-session'
-import { assertSubagentMaxDepth, settleRun } from '@neo/dsh-subagent'
-import type { SubagentProvider, SubagentResult, SubagentRun } from '@neo/dsh-subagent'
-import type { JobOutcome } from '@neo/dsh-jobs'
-import type {} from '@neo/dsh-system-prompt'
+import { defineTool } from '@neo/tools'
+import type { AgentOptions } from '@neo/agent'
+import type { ContentBlock } from '@neo/llm'
+import type { JsonValue } from '@neo/session'
+import { assertSubagentMaxDepth, settleRun } from '@neo/subagent'
+import type { SubagentProvider, SubagentResult, SubagentRun } from '@neo/subagent'
+import type { JobOutcome } from '@neo/jobs'
+import type {} from '@neo/system-prompt'
 
 export const name = 'tool-subagent'
 export const inject = ['tools', 'subagents', 'systemPrompt']
@@ -399,7 +399,7 @@ export function apply(ctx: Context, config: Config): void {
           }
           const jobs = ctx.get('jobs')
           if (jobs === undefined) {
-            throw new Error('background jobs unavailable: load @neo/dsh-jobs and @neo/dsh-tool-jobs')
+            throw new Error('background jobs unavailable: load @neo/jobs and @neo/tool-jobs')
           }
           // One-shot background child: job preflight finishes before the
           // starter can spawn, and the task-owned signal covers startup.

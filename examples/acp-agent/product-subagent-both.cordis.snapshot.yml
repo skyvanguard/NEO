@@ -6,11 +6,11 @@
     path: ./cordis.yml
     patches:
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         disabled: true
       - insert:
           - id: llm-replay
-            name: '@neo/dsh-llm-replay'
+            name: '@neo/llm-replay'
             config:
               providers:
                 - id: deepseek-official
@@ -19,18 +19,18 @@
                     - id: deepseek-v4-flash
                     - id: deepseek-v4-pro
           - id: subagent-codex
-            name: '@neo/dsh-subagent-codex'
+            name: '@neo/subagent-codex'
           - id: subagent-claude-code
-            name: '@neo/dsh-subagent-claude-code'
+            name: '@neo/subagent-claude-code'
           - id: tool-subagent-codex
-            name: '@neo/dsh-tool-subagent'
+            name: '@neo/tool-subagent'
             config:
               provider: codex
               toolName: subagent_codex
               enableRunInBackground: false
               maxDepth: provider-managed
           - id: tool-subagent-claude-code
-            name: '@neo/dsh-tool-subagent'
+            name: '@neo/tool-subagent'
             config:
               provider: claude-code
               toolName: subagent_claude_code

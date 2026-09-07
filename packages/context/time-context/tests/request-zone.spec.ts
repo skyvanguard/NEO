@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { UserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
+import type { UserMessage } from '@neo/llm'
 import {
   deriveBrowserTimeZoneContext,
   renderBrowserTimeZoneContext,

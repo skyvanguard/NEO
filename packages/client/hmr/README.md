@@ -1,4 +1,4 @@
-# @neo/dsh-client-hmr
+# @neo/client-hmr
 
 English | [中文](README.zh.md)
 

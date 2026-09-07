@@ -4,12 +4,12 @@
  * NOT queued here — per the backend contract, write ordering belongs to the
  * caller (the domain layer's write chain); this unit only guarantees that
  * each single call publishes a complete, durable file.
- * @module @neo/dsh-storage-json/src/unit
+ * @module @neo/storage-json/src/unit
  */
 
 import { readFile } from 'node:fs/promises'
-import { StorageError } from '@neo/dsh-storage'
-import type { KvUnit, KvUnitDescriptor } from '@neo/dsh-storage'
+import { StorageError } from '@neo/storage'
+import type { KvUnit, KvUnitDescriptor } from '@neo/storage'
 import { writeAtomic } from './atomic.ts'
 import { parse, serialize } from './format.ts'
 import type { UnitState } from './format.ts'

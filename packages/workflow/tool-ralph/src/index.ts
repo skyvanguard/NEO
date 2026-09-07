@@ -2,19 +2,19 @@
  * Model-facing foreground Ralph loop over the workflow and subagent seams. A
  * fixed script starts one fresh structured-output child per round, carrying
  * only the immutable objective and the previous bounded handoff between them.
- * @module @neo/dsh-tool-ralph
+ * @module @neo/tool-ralph
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { JsonValue } from '@neo/dsh-session'
-import type { SubagentProvider } from '@neo/dsh-subagent'
-import { defineTool } from '@neo/dsh-tools'
-import type { ToolCallView, ToolResultView } from '@neo/dsh-tools'
-import type { WorkflowResult, WorkflowRun } from '@neo/dsh-workflow'
+import type { ContentBlock } from '@neo/llm'
+import type { JsonValue } from '@neo/session'
+import type { SubagentProvider } from '@neo/subagent'
+import { defineTool } from '@neo/tools'
+import type { ToolCallView, ToolResultView } from '@neo/tools'
+import type { WorkflowResult, WorkflowRun } from '@neo/workflow'
 // Declaration merge only: makes ctx.systemPrompt visible for section registration.
-import type {} from '@neo/dsh-system-prompt'
+import type {} from '@neo/system-prompt'
 
 export const name = 'tool-ralph'
 export const inject = ['tools', 'workflowEngine', 'subagents', 'systemPrompt']

@@ -10,8 +10,8 @@
  */
 import { describe, expect, it } from 'vitest'
 import { act, render } from '@testing-library/react'
-import type { SessionMaybeProvideInfo, StoredEntry } from '@neo/dsh-client-ui-slots'
-import { createSlotRenderer, type SlotRendererHost } from '@neo/dsh-client-web-react'
+import type { SessionMaybeProvideInfo, StoredEntry } from '@neo/client-ui-slots'
+import { createSlotRenderer, type SlotRendererHost } from '@neo/client-web-react'
 
 function observable<T>(initial: T) {
   let value = initial

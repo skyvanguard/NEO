@@ -1,10 +1,10 @@
 /**
  * Agent-scoped model selection shared by runtime entry points.
- * @module @neo/dsh-agent/model-selection
+ * @module @neo/agent/model-selection
  */
 
 import type { Context } from '@neo/cordis'
-import type { LlmCallConfig, ReasoningEffortId } from '@neo/dsh-llm'
+import type { LlmCallConfig, ReasoningEffortId } from '@neo/llm'
 
 /** Complete provider, model, and optional reasoning effort selected for one live Agent. */
 export interface ModelSelection {

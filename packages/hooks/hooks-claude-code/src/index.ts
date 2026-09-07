@@ -6,18 +6,18 @@
  * `updatedInput` is logged and warned but not honored. Bespoke behavior should
  * use typed native plugins on the same extension points; see the
  * [hook-bridges Agent Note](../../../../.agents/notes/implemented/feature/2026-06-30-hook-bridges.md).
- * @module @neo/dsh-hooks-claude-code
+ * @module @neo/hooks-claude-code
  */
 
 import { readFileSync } from 'node:fs'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { ContentBlock, MessageSource } from '@neo/dsh-llm'
-import type { UserMessage } from '@neo/dsh-session'
-import type {} from '@neo/dsh-session-persistence'
-import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@neo/dsh-tools'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { ContentBlock, MessageSource } from '@neo/llm'
+import type { UserMessage } from '@neo/session'
+import type {} from '@neo/session-persistence'
+import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@neo/tools'
 import {
   appendHookInvoked,
   appendHookResult,
@@ -30,10 +30,10 @@ import {
   type HookOutput,
   type MatcherGroup,
   type MergedHookOutcome,
-} from '@neo/dsh-hook-protocol'
+} from '@neo/hook-protocol'
 // Pulls in the declaration-merged subagent events and the identity pairing their
 // start/end edges.
-import type { SubagentRunId } from '@neo/dsh-subagent'
+import type { SubagentRunId } from '@neo/subagent'
 import { parseClaudeCodeConfig, type ClaudeCodeHookConfig } from './config.ts'
 
 export const name = 'hooks-claude-code'

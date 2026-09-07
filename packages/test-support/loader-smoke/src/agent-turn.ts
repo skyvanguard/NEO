@@ -1,12 +1,12 @@
 /**
  * Test-only direct-agent turn driver shared by assembled Loader fixtures.
- * @module @neo/dsh-loader-smoke/agent-turn
+ * @module @neo/loader-smoke/agent-turn
  */
 
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage, type TokenUsage } from '@neo/dsh-llm'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { Agent } from '@neo/agent'
+import { createUserMessage, type TokenUsage } from '@neo/llm'
+import type { SessionEvent } from '@neo/session'
 
 /** Result envelope consumed only by snapshot and composition tests. */
 export interface FixtureTurnResult {

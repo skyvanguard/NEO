@@ -4,7 +4,7 @@
  * reaches a Host-only symbol, so a Client compilation face reads the same
  * `commands/change` signature the Host emits.
  *
- * @module @neo/dsh-commands/types
+ * @module @neo/commands/types
  */
 
 import type { CommandId } from './brand.ts'
@@ -73,7 +73,7 @@ declare module '@neo/cordis' {
   }
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * A resolved slash command entered its handler. Log-only (never model

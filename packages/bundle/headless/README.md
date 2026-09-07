@@ -1,4 +1,4 @@
-# `@neo/dsh-headless`
+# `@neo/headless`
 
 English | [中文](README.zh.md)
 

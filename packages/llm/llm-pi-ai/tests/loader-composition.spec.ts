@@ -16,10 +16,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import LlmRuntime from '@neo/dsh-llm'
-import LocalCredentialProvider from '@neo/dsh-credentials-local'
-import FileSettingsProvider from '@neo/dsh-settings-file'
-import * as LlmPiAi from '@neo/dsh-llm-pi-ai'
+import LlmRuntime from '@neo/llm'
+import LocalCredentialProvider from '@neo/credentials-local'
+import FileSettingsProvider from '@neo/settings-file'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 import { assemble } from './assemble.ts'
 import { closeMockServers, mockServer, textEvents } from './mock-server.ts'
 
@@ -47,17 +47,17 @@ async function loadComposition(): Promise<{ ctx: Context; settingsPath: string }
     '- id: llm',
     "  name: 'test-llm-service'",
     '- id: settings',
-    "  name: '@neo/dsh-settings-file'",
+    "  name: '@neo/settings-file'",
     '  config:',
     `    path: ${JSON.stringify(settingsPath)}`,
     '    debounceMs: 10',
     '- id: credentials',
-    "  name: '@neo/dsh-credentials-local'",
+    "  name: '@neo/credentials-local'",
     '  config:',
     `    path: ${JSON.stringify(join(root, '.credentials.yaml'))}`,
     '    debounceMs: 10',
     '- id: llm-pi-ai',
-    "  name: '@neo/dsh-llm-pi-ai'",
+    "  name: '@neo/llm-pi-ai'",
     '',
   ].join('\n'))
 
@@ -68,9 +68,9 @@ async function loadComposition(): Promise<{ ctx: Context; settingsPath: string }
   ctx.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
     ['test-llm-service', LlmRuntime],
-    ['@neo/dsh-settings-file', FileSettingsProvider],
-    ['@neo/dsh-credentials-local', LocalCredentialProvider],
-    ['@neo/dsh-llm-pi-ai', LlmPiAi],
+    ['@neo/settings-file', FileSettingsProvider],
+    ['@neo/credentials-local', LocalCredentialProvider],
+    ['@neo/llm-pi-ai', LlmPiAi],
   ])
   ctx.loader.internal = {
     version: 'v2',

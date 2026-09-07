@@ -1,4 +1,4 @@
-# @neo/dsh-subagent-in-process-driver
+# @neo/subagent-in-process-driver
 
 English | [中文](README.zh.md)
 

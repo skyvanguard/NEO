@@ -1,11 +1,11 @@
 /**
  * Owner-scoped persistent PTY registry. Backends own terminal mechanics while
  * this service owns ids, publication, authorization, and awaited cleanup.
- * @module @neo/dsh-terminal
+ * @module @neo/terminal
  */
 
 import { Context, Service } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
+import type { Agent } from '@neo/agent'
 import { TerminalBackendCleanupError } from './types.ts'
 import type {
   TerminalBackend,

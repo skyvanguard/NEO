@@ -3,7 +3,7 @@
  * timestamps, and hook duration while preserving deterministic event sequence numbers.
  * Request-header scrubbers stay composable so one scenario per header class can pin prompt and
  * tool-schema sidecars.
- * @module @neo/dsh-acp-snapshot/normalize
+ * @module @neo/acp-snapshot/normalize
  */
 
 const SESSION_ID = '{{sessionId}}'

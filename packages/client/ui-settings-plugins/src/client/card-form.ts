@@ -13,8 +13,8 @@
  * override equal to the composition default is still an override.
  */
 
-import type { SettingsScope, SettingsScopeSnapshot } from '@neo/dsh-client-runtime/client'
-import { createSnapshotStore, type SnapshotStore } from '@neo/dsh-client-runtime/client'
+import type { SettingsScope, SettingsScopeSnapshot } from '@neo/client-runtime/client'
+import { createSnapshotStore, type SnapshotStore } from '@neo/client-runtime/client'
 
 /** The write one field's staged text performs when the card is saved. */
 export type FieldWrite =

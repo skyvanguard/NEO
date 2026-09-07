@@ -16,9 +16,9 @@ import { join } from 'node:path'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterEach, describe, expect, it, onTestFailed } from 'vitest'
-import { deriveReplayScript, parseSessionLog } from '@neo/dsh-llm-replay'
-import type { ReplayOverrideDoc } from '@neo/dsh-llm-replay'
-import type { SessionEvent } from '@neo/dsh-session'
+import { deriveReplayScript, parseSessionLog } from '@neo/llm-replay'
+import type { ReplayOverrideDoc } from '@neo/llm-replay'
+import type { SessionEvent } from '@neo/session'
 import {
   assertFixtureInventory, captureStableAria, compareOrRefreshGolden, fixtureUserPrompts,
   launchWebScaffold, recordFixture, watchConsole, webSnapshotMode, type WebScaffold,

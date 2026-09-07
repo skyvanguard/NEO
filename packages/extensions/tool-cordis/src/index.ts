@@ -1,20 +1,20 @@
 /**
  * Model-facing Cordis runtime/package inspection, define, run, stop, and remove tools.
- * @module @neo/dsh-tool-cordis
+ * @module @neo/tool-cordis
  */
 
 import type { Context } from '@neo/cordis'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
+import type { Agent, PreStepDecision } from '@neo/agent'
 import {
   CordisDynamicPackageId, CordisDynamicPluginId,
-} from '@neo/dsh-cordis-host-runner'
-import type { DynamicCordisReference } from '@neo/dsh-cordis-host-runner'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { JsonValue } from '@neo/dsh-session'
-import type { UserMessage } from '@neo/dsh-session'
-import { defineTool } from '@neo/dsh-tools'
-import type { ToolExecution } from '@neo/dsh-tools'
-import type {} from '@neo/dsh-system-prompt'
+} from '@neo/cordis-host-runner'
+import type { DynamicCordisReference } from '@neo/cordis-host-runner'
+import { createUserMessage } from '@neo/llm'
+import type { JsonValue } from '@neo/session'
+import type { UserMessage } from '@neo/session'
+import { defineTool } from '@neo/tools'
+import type { ToolExecution } from '@neo/tools'
+import type {} from '@neo/system-prompt'
 import { missingServices, providedServices } from './inspect.ts'
 import {
   presentDefineCall, presentInspectListCall, presentInspectQueryCall, presentInspectSelfCall, presentRunCall,

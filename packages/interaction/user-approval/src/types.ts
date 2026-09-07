@@ -2,10 +2,10 @@
  * Wire-safe approval identifiers and outcome vocabulary, free of
  * cordis/service imports so browser type chains (apiproxy api → client) can
  * consume them without loading this package's Context augmentation.
- * @module @neo/dsh-user-approval/types
+ * @module @neo/user-approval/types
  */
 
-import type { Branded } from '@neo/dsh-brand'
+import type { Branded } from '@neo/brand'
 
 /**
  * Pairs one `approval/asked` audit event with its `approval/decided`.

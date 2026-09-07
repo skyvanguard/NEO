@@ -1,18 +1,18 @@
 /**
  * `LocalSpillStore`: the host-filesystem implementation of the
- * `@neo/dsh-spill` storage seam. Persists a tool's oversized text to a
+ * `@neo/spill` storage seam. Persists a tool's oversized text to a
  * private, session-scoped file (see `./store.ts` for the traversal-safe naming
  * and exclusive owner-only write) and returns a path locator plus local
  * read/grep retrieval guidance.
  *
- * @module @neo/dsh-spill-local
+ * @module @neo/spill-local
  */
 
 import { Context } from '@neo/cordis'
 import { resolve } from 'node:path'
 import z from '@neo/schemastery'
-import { SpillLocator, SpillStore } from '@neo/dsh-spill'
-import type { SaveTextSpill, SpillRef } from '@neo/dsh-spill'
+import { SpillLocator, SpillStore } from '@neo/spill'
+import type { SaveTextSpill, SpillRef } from '@neo/spill'
 import { privateRoot, saveTextFile } from './store.ts'
 
 export { encodeSegment, privateRoot, saveTextFile, sessionDir } from './store.ts'

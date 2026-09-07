@@ -1,4 +1,4 @@
-# @neo/dsh-workspace
+# @neo/workspace
 
 English | [中文](README.zh.md)
 

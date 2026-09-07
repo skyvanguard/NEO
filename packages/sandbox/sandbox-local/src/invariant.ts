@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-sandbox-local`.
- * @module @neo/dsh-sandbox-local/invariant
+ * Package-owned invariant companion for `@neo/sandbox-local`.
+ * @module @neo/sandbox-local/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-sandbox-local'
+const PACKAGE_NAME = '@neo/sandbox-local'
 
 /** Cordis companion plugin name. */
 export const name = 'sandbox-local-invariant'

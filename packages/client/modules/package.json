@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-modules",
+  "name": "@neo/client-modules",
   "description": "Client module system, dual-face: node half composes the __DSH_BOOT__ entry graph (incremental dsh.client scan, bundle route, index tap, webPlugins service); browser half is the lazy-CJS module table the vendored cordis Loader consumes as its internal seam",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -43,8 +43,8 @@
   "license": "MIT",
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-host-webserver": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/host-webserver": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "files": [
@@ -54,7 +54,7 @@
     "lib/types/**/*.d.ts"
   ],
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

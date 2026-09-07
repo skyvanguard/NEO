@@ -1,18 +1,18 @@
 /**
  * Replay-safe, model-free tool-result pruning service.
  *
- * @module @neo/dsh-compaction-tool-result-pruner
+ * @module @neo/compaction-tool-result-pruner
  */
 
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { freezeMessage } from '@neo/dsh-llm'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { Session, SessionEvent, ToolResultMessage } from '@neo/dsh-session'
+import { freezeMessage } from '@neo/llm'
+import type { ContentBlock } from '@neo/llm'
+import type { Session, SessionEvent, ToolResultMessage } from '@neo/session'
 // Type-only: the `compaction/*` SessionEventMap merges (the shadow-price event).
-import type {} from '@neo/dsh-compaction'
+import type {} from '@neo/compaction'
 // Type-only: the `ctx.tokenMeter` Context merge for the declared injection.
-import type {} from '@neo/dsh-token-meter'
+import type {} from '@neo/token-meter'
 import { codePointLength, DEFAULTS, PRUNE_MARKER, resolveConfig } from './config.ts'
 import type {
   PrunedEntry,

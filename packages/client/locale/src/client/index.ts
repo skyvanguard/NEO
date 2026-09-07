@@ -12,12 +12,12 @@
 import type { Context } from '@neo/cordis'
 import {
   type BoundActions, type LocaleDictOf, type LocaleNamespaceMap, type Translate, type TranslateNS,
-} from '@neo/dsh-client-ui-slots'
-import type { ClientContext, SettingsScope } from '@neo/dsh-client-runtime/client'
+} from '@neo/client-ui-slots'
+import type { ClientContext, SettingsScope } from '@neo/client-runtime/client'
 // Type-only: the ctx.settingsScope Context merge and the settings slot types.
 // Cross-plugin collaboration goes through the service, never a value import
 // (client bundle purity gate).
-import type {} from '@neo/dsh-client-ui-settings/client'
+import type {} from '@neo/client-ui-settings/client'
 import {
   LOCALE_PREFERENCE_FIELD, LOCALE_SETTINGS_NAMESPACE, type LocaleId, type LocaleSettings,
 } from '../locale-settings.ts'
@@ -37,9 +37,9 @@ export type { LocaleId, LocaleSettings } from '../locale-settings.ts'
 // The translate currency lives in ui-slots (the render machinery synthesizes
 // the seat); re-exported here so dictionary owners import one package.
 // TranslateNS<'model'> is the namespace-addressed developer-facing form.
-export type { Translate, TranslateNS } from '@neo/dsh-client-ui-slots'
+export type { Translate, TranslateNS } from '@neo/client-ui-slots'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Shared cross-feature vocabulary, consulted by the lookup chain after the entry's own namespace misses. */
     common: CommonKey

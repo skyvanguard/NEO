@@ -1,12 +1,12 @@
 /**
  * workspace domain contract. Wire projection of the host-side workspace
- * entity (@neo/dsh-workspace): a stable id over a directory path,
+ * entity (@neo/workspace): a stable id over a directory path,
  * a display title, and the ordered session account. Method signatures are the
  * source of truth, same as the sessions domain.
  */
 
-import type { SessionId } from '@neo/dsh-session/types'
-import type { Branded } from '@neo/dsh-brand'
+import type { SessionId } from '@neo/session/types'
+import type { Branded } from '@neo/brand'
 import type { RpcRequest, RpcResponse } from './rpc.ts'
 
 /**

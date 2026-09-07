@@ -9,19 +9,19 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import SessionStore from '@neo/dsh-session'
-import type { Session } from '@neo/dsh-session'
-import UserQuestionService from '@neo/dsh-user-questions'
-import { CommandId } from '@neo/dsh-commands/brand'
+import AgentRegistry from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import SessionStore from '@neo/session'
+import type { Session } from '@neo/session'
+import UserQuestionService from '@neo/user-questions'
+import { CommandId } from '@neo/commands/brand'
 // Side-effect type imports: the knob-event SessionEventMap merges.
-import type {} from '@neo/dsh-permission-presets'
-import type {} from '@neo/dsh-sandbox-policy'
-import type {} from '@neo/dsh-user-approval'
-import type { ApiProxy, RpcRequest } from '@neo/dsh-host-apiproxy/api'
-import { RpcId } from '@neo/dsh-host-apiproxy/api/rpc'
-import { createApiProxy } from '@neo/dsh-host-apiproxy'
+import type {} from '@neo/permission-presets'
+import type {} from '@neo/sandbox-policy'
+import type {} from '@neo/user-approval'
+import type { ApiProxy, RpcRequest } from '@neo/host-apiproxy/api'
+import { RpcId } from '@neo/host-apiproxy/api/rpc'
+import { createApiProxy } from '@neo/host-apiproxy'
 
 let nextRpc = 1
 function request<P>(payload: P): RpcRequest<P> {

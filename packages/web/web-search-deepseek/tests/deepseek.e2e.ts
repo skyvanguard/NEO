@@ -6,10 +6,10 @@ import {
   DEEPSEEK_DEFAULT_MAX_TOKENS,
   DEEPSEEK_DEFAULT_MAX_USES,
   DEEPSEEK_DEFAULT_MODEL,
-} from '@neo/dsh-web-search-deepseek'
+} from '@neo/web-search-deepseek'
 
 /** Construct the provider over a fixed options value; production passes a live thunk. */
-import type { DeepSeekSearchProviderOptions } from '@neo/dsh-web-search-deepseek'
+import type { DeepSeekSearchProviderOptions } from '@neo/web-search-deepseek'
 
 const searchProvider = (options: DeepSeekSearchProviderOptions): DeepSeekSearchProvider =>
   new DeepSeekSearchProvider(() => options)

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-user-questions",
+  "name": "@neo/client-ui-user-questions",
   "description": "Web ask_user_question feature: host tool mount plus composer-takeover question UI",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,8 +32,8 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-locale",
-        "@neo/dsh-client-ui-conversation"
+        "@neo/client-locale",
+        "@neo/client-ui-conversation"
       ],
       "platform": "web"
     }
@@ -44,29 +44,29 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
     "clsx": "^2.0.0",
     "react": "^18.2.0"
   },
   "peerDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^"
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/invariants": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
-    "@neo/dsh-user-questions": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-questions": "workspace:^",
     "@types/react": "~18.3.1"
   },
   "files": [

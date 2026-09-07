@@ -1,13 +1,13 @@
 /** Browser plugin for durable workflow-run Conversation Nodes. */
 
-import type { ClientContext, SessionId } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-client-locale/client'
-import type {} from '@neo/dsh-client-ui-conversation/client'
+import type { ClientContext, SessionId } from '@neo/client-runtime/client'
+import type {} from '@neo/client-locale/client'
+import type {} from '@neo/client-ui-conversation/client'
 import { WorkflowRunPanel, type WorkflowRunInjected } from './WorkflowRunPanel.tsx'
 import { en, es, NS, type WorkflowRunKey, zh } from './locales.ts'
 import { workflowRunDefinition } from './workflow-definition.ts'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Durable workflow-run node copy. */
     workflowRun: WorkflowRunKey

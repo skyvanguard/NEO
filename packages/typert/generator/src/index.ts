@@ -2,7 +2,7 @@
  * Public API of the Typert analyzer, compiler-independent model, and
  * model-driven artifact emitters. Build wiring lives in the `./tsdown`
  * subpath.
- * @module @neo/dsh-typert-generator
+ * @module @neo/typert-generator
  */
 
 export { WorkspaceAnalyzer, WorkspaceCaches, TypertAnalysisError } from './analyzer.ts'

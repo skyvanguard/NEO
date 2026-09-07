@@ -1,12 +1,12 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-client-hmr`.
- * @module @neo/dsh-client-hmr/invariant
+ * Package-owned invariant companion for `@neo/client-hmr`.
+ * @module @neo/client-hmr/invariant
  */
 
 import type { Context, Fiber } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-client-hmr'
+const PACKAGE_NAME = '@neo/client-hmr'
 
 /** Cordis companion plugin name. */
 export const name = 'client-hmr-invariant'

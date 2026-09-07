@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-todo",
+  "name": "@neo/tool-todo",
   "description": "Model-facing todo_write tool over the DeepSeek Harness event-sourced session log",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -41,27 +41,27 @@
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-loop": "workspace:^",
-    "@neo/dsh-agent-loop-testkit": "workspace:^",
-    "@neo/dsh-host-apiproxy": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
-    "@neo/dsh-user-questions": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/agent-loop-testkit": "workspace:^",
+    "@neo/host-apiproxy": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-questions": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

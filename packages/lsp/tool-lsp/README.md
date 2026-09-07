@@ -1,4 +1,4 @@
-# @neo/dsh-tool-lsp
+# @neo/tool-lsp
 
 English | [中文](README.zh.md)
 

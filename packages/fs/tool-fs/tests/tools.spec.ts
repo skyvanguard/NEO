@@ -8,10 +8,10 @@ import { Context } from '@neo/cordis'
 import { mkdirSync, mkdtempSync, realpathSync, rmSync, symlinkSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve, sep } from 'node:path'
-import { CallId } from '@neo/dsh-llm'
-import SystemPrompt, { renderPrompt } from '@neo/dsh-system-prompt'
-import ToolRuntime, { type ToolResult } from '@neo/dsh-tools'
-import { FileSystem, FsError, FsTargetKey, FsVersion } from '@neo/dsh-fs'
+import { CallId } from '@neo/llm'
+import SystemPrompt, { renderPrompt } from '@neo/system-prompt'
+import ToolRuntime, { type ToolResult } from '@neo/tools'
+import { FileSystem, FsError, FsTargetKey, FsVersion } from '@neo/fs'
 import type {
   FsDirEntry,
   FsEditOutcome,
@@ -21,18 +21,18 @@ import type {
   FsTarget,
   FsWriteIntent,
   FsWriteOutcome,
-} from '@neo/dsh-fs'
-import * as FsPolicy from '@neo/dsh-fs-observation-policy'
-import * as ToolFs from '@neo/dsh-tool-fs'
+} from '@neo/fs'
+import * as FsPolicy from '@neo/fs-observation-policy'
+import * as ToolFs from '@neo/tool-fs'
 import { editCallDiffs } from '../src/edit.ts'
 import { formatListDirOutput, LIST_DIR_MAX_ENTRIES, projectEntries } from '../src/list-dir.ts'
 import { STREAM_MIN_SIZE } from '../src/read.ts'
 import { formatReadOutput } from '../src/read-render.ts'
 import type { FileReadOutcome } from '../src/read-render.ts'
 import { sessionCwd } from '../src/session-cwd.ts'
-import ApprovalService from '@neo/dsh-user-approval'
-import type { SandboxExecutionPolicy, SandboxMode } from '@neo/dsh-sandbox'
-import SandboxPolicyService from '@neo/dsh-sandbox-policy'
+import ApprovalService from '@neo/user-approval'
+import type { SandboxExecutionPolicy, SandboxMode } from '@neo/sandbox'
+import SandboxPolicyService from '@neo/sandbox-policy'
 
 const testToolSignal = new AbortController().signal
 

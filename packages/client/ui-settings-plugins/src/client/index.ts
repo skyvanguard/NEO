@@ -9,17 +9,17 @@
  * settings scope, which keeps them unaware of one another and of other tabs.
  */
 
-import type { ConnectionHandle } from '@neo/dsh-client-connection/client'
+import type { ConnectionHandle } from '@neo/client-connection/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@neo/dsh-client-locale/client'
+import type {} from '@neo/client-locale/client'
 // Type-only: the settings shell's SlotMap merge (the 'settings.section' entry)
 // and the ctx.settingsScope Context merge. Cross-plugin collaboration goes
 // through the service, never a value import (client bundle purity gate).
-import type {} from '@neo/dsh-client-ui-settings/client'
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
-import { resolveSlotLabel } from '@neo/dsh-client-ui-slots'
+import type {} from '@neo/client-ui-settings/client'
+import type { ClientContext } from '@neo/client-runtime/client'
+import { resolveSlotLabel } from '@neo/client-ui-slots'
 // Type-only: the ctx.remote Context merge and the forwarded-event key face.
-import type {} from '@neo/dsh-api-remotes/client'
+import type {} from '@neo/api-remotes/client'
 import { AgentLoopCard } from './AgentLoopCard.tsx'
 import { BashCard } from './BashCard.tsx'
 import { ConfigurablePluginsTab } from './ConfigurablePluginsTab.tsx'

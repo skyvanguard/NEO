@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { Session, SessionId } from '@neo/dsh-session'
-import { appendHookInvoked, appendHookResult, summarizeStderr, type HookOutput } from '@neo/dsh-hook-protocol'
+import { Session, SessionId } from '@neo/session'
+import { appendHookInvoked, appendHookResult, summarizeStderr, type HookOutput } from '@neo/hook-protocol'
 
 /** A {@link HookOutput} with the required stream fields defaulted. */
 function output(over: Partial<HookOutput> = {}): HookOutput {

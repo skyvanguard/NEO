@@ -2,10 +2,10 @@
  * Pure read presentation: turn provider-decoded text into a bounded, line-numbered window and
  * model-facing envelope. Chunk scanning caps the current line, so even one newline-free giant
  * line cannot grow memory without bound.
- * @module @neo/dsh-tool-fs/read-render
+ * @module @neo/tool-fs/read-render
  */
 
-import { FsError } from '@neo/dsh-fs'
+import { FsError } from '@neo/fs'
 
 /** Default maximum characters returned for a single line (the `readMaxLineLength` config). */
 export const READ_MAX_LINE_LENGTH = 2000

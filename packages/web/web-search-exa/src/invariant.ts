@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-web-search-exa`.
- * @module @neo/dsh-web-search-exa/invariant
+ * Package-owned invariant companion for `@neo/web-search-exa`.
+ * @module @neo/web-search-exa/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-web-search-exa'
+const PACKAGE_NAME = '@neo/web-search-exa'
 
 /** Cordis companion plugin name. */
 export const name = 'web-search-exa-invariant'

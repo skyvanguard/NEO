@@ -1,5 +1,5 @@
 /**
- * Loader export-shape guard for @neo/dsh-tool-lsp. It is a NAMESPACE plugin with `inject`, so a
+ * Loader export-shape guard for @neo/tool-lsp. It is a NAMESPACE plugin with `inject`, so a
  * stray `export default apply` would make the Loader's `unwrapExports` collapse the module to the
  * bare `apply`, dropping `inject` (postmortem 0001). This verifies the namespace survives
  * `Loader.prototype.unwrapExports`; the `lsp-definition` ACP snapshot owns full app composition.
@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest'
 import Loader from '@neo/cordis-plugin-loader'
-import * as toolLsp from '@neo/dsh-tool-lsp'
+import * as toolLsp from '@neo/tool-lsp'
 
 describe('dsh-tool-lsp Loader export-shape guard', () => {
   it('has no default export and keeps name/inject/Config through unwrapExports', () => {

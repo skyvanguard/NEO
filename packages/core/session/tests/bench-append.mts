@@ -2,7 +2,7 @@
 // append as the log grows. Run: npx tsx packages/core/session/tests/bench-append.mts
 import { performance } from 'node:perf_hooks'
 import { Session, SessionId } from '../src/index.ts'
-import { createMessage, createUserMessage } from '@neo/dsh-llm'
+import { createMessage, createUserMessage } from '@neo/llm'
 
 const session = Session.create(SessionId('bench'))
 const STEPS = Number(process.argv[2] ?? 400)

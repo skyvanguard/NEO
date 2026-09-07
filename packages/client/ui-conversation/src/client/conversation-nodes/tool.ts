@@ -2,13 +2,13 @@ import type { Context } from '@neo/cordis'
 import type {
   ConversationMatch, ConversationNodeContext, ConversationNodeDefinition,
   RunningToolCall, ToolCallBlock, ToolResultNode,
-} from '@neo/dsh-client-runtime/client'
-import { isAppendSurfaceEvent } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-tools/types'
+} from '@neo/client-runtime/client'
+import { isAppendSurfaceEvent } from '@neo/client-runtime/client'
+import type {} from '@neo/tools/types'
 import type { ToolChatData } from '../contract/chat-nodes.ts'
 import { CHAT_SYNTHETIC_SEQ_OFFSETS, chatNode } from './common.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Root Tool lifecycle with recursively nested subcalls. */
     'tool-call': ToolChatData

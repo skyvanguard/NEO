@@ -1,15 +1,15 @@
 /**
  * Session-query service error containment and model-safe translation.
  *
- * @module @neo/dsh-tool-session-query/service-boundary
+ * @module @neo/tool-session-query/service-boundary
  */
 
 import type { Context } from '@neo/cordis'
-import { HarnessError } from '@neo/dsh-llm'
+import { HarnessError } from '@neo/llm'
 import {
   SessionQueryError,
   type SessionQueryErrorCode,
-} from '@neo/dsh-session-query'
+} from '@neo/session-query'
 
 interface ModelSafeServiceFailure {
   readonly code: SessionQueryErrorCode | 'SESSION_QUERY_TOOL_FAILED'

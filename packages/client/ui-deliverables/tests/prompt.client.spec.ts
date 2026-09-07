@@ -2,7 +2,7 @@
 
 import { Context } from '@neo/cordis'
 import { afterEach, describe, expect, it } from 'vitest'
-import SystemPrompt from '@neo/dsh-system-prompt'
+import SystemPrompt from '@neo/system-prompt'
 import { apply, inject } from '../src/index.ts'
 
 let ctx: Context | undefined

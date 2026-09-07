@@ -53,15 +53,15 @@ The root entrypoint of each owner remains independent of diagnostics. Loading th
 
 ```ts
 import type { Context } from '@neo/cordis'
-import InvariantRegistry from '@neo/dsh-invariants'
-import * as SessionInvariant from '@neo/dsh-session/invariant'
+import InvariantRegistry from '@neo/invariants'
+import * as SessionInvariant from '@neo/session/invariant'
 
 declare const ctx: Context
 
 ctx.plugin(InvariantRegistry, {
   enabled: true,
-  package_allowlist: ['^@neo/dsh-'],
-  package_blocklist: ['^@neo/dsh-agent-loop$'],
+  package_allowlist: ['^@neo/'],
+  package_blocklist: ['^@neo/agent-loop$'],
 })
 ctx.plugin(SessionInvariant)
 ```

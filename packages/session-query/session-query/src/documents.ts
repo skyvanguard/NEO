@@ -1,7 +1,7 @@
 /** Shared event metadata and semantic-document projection. */
 
-import { foldSurface } from '@neo/dsh-session'
-import type { SessionEvent, SessionId } from '@neo/dsh-session'
+import { foldSurface } from '@neo/session'
+import type { SessionEvent, SessionId } from '@neo/session'
 import type { SessionEventRecord, SessionEventSearchDocument, SessionEventSurface } from './types.ts'
 import { SessionQueryError } from './config.ts'
 import { extractSessionEventText } from './extraction.ts'

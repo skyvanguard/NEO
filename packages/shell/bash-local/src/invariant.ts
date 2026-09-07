@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-bash-local`.
- * @module @neo/dsh-bash-local/invariant
+ * Package-owned invariant companion for `@neo/bash-local`.
+ * @module @neo/bash-local/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-bash-local'
+const PACKAGE_NAME = '@neo/bash-local'
 
 /** Cordis companion plugin name. */
 export const name = 'bash-local-invariant'

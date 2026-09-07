@@ -9,13 +9,13 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { createScope, scopeOf } from '@neo/dsh-client-runtime/client'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
-import { InputTriggerController, InputTriggerService } from '@neo/dsh-client-ui-input-trigger/client'
+import { createScope, scopeOf } from '@neo/client-runtime/client'
+import type { SessionId } from '@neo/client-runtime/client'
+import { InputTriggerController, InputTriggerService } from '@neo/client-ui-input-trigger/client'
 import type {
   BeginCommandRequest, ClientSessionContext, CommandClaim, InsertReferenceRequest, PickOutcome,
   ReferenceInsert, InputTriggerCandidate, InputTriggerPick, InputTriggerSource, SourceRoster, TriggerChar,
-} from '@neo/dsh-client-ui-input-trigger/client'
+} from '@neo/client-ui-input-trigger/client'
 
 const sid = (k: string): SessionId => k as SessionId
 

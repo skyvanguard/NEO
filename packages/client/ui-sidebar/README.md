@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-sidebar
+# @neo/client-ui-sidebar
 
 English | [中文](README.zh.md)
 

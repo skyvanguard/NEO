@@ -6,12 +6,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent, AgentStatus } from '@neo/dsh-agent'
-import CommandRuntime from '@neo/dsh-commands'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import * as CommandFeedback from '@neo/dsh-command-feedback'
-import { getOrCreateAnonymousUserId } from '@neo/dsh-anonymous-user-id'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent, AgentStatus } from '@neo/agent'
+import CommandRuntime from '@neo/commands'
+import SessionStore, { SessionId } from '@neo/session'
+import * as CommandFeedback from '@neo/command-feedback'
+import { getOrCreateAnonymousUserId } from '@neo/anonymous-user-id'
 
 let root: string | undefined
 let context: Context | undefined
@@ -56,10 +56,10 @@ describe('/feedback real Loader composition through cordis.yml', () => {
     vi.stubEnv('DSH_HOME', root)
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@neo/dsh-agent'",
-      "- name: '@neo/dsh-session'",
-      "- name: '@neo/dsh-commands'",
-      "- name: '@neo/dsh-command-feedback'",
+      "- name: '@neo/agent'",
+      "- name: '@neo/session'",
+      "- name: '@neo/commands'",
+      "- name: '@neo/command-feedback'",
       '',
     ].join('\n'))
 
@@ -68,10 +68,10 @@ describe('/feedback real Loader composition through cordis.yml', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@neo/dsh-agent', AgentRegistry],
-      ['@neo/dsh-session', SessionStore],
-      ['@neo/dsh-commands', CommandRuntime],
-      ['@neo/dsh-command-feedback', CommandFeedback],
+      ['@neo/agent', AgentRegistry],
+      ['@neo/session', SessionStore],
+      ['@neo/commands', CommandRuntime],
+      ['@neo/command-feedback', CommandFeedback],
     ])
     context.loader.internal = {
       version: 'v2',

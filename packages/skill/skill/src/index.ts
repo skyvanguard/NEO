@@ -3,17 +3,17 @@
  *
  * This package owns the Service Definition role of the skill capability seam.
  * Concrete
- * providers such as `@neo/dsh-skill-filesystem` decide where skills come
+ * providers such as `@neo/skill-filesystem` decide where skills come
  * from; this service only merges provider catalogs, resolves the winning skill
  * for a name, and exposes the winning summaries and definitions to consumers.
  *
- * @module @neo/dsh-skill
+ * @module @neo/skill
  */
 
 import { Context, Service } from '@neo/cordis'
-import { assertNever } from '@neo/dsh-llm'
-import { NamedEntries, ScopedLayers, scopeChainOf, scopeOf } from '@neo/dsh-scope'
-import type { ScopeKey, ScopeLayer } from '@neo/dsh-scope'
+import { assertNever } from '@neo/llm'
+import { NamedEntries, ScopedLayers, scopeChainOf, scopeOf } from '@neo/scope'
+import type { ScopeKey, ScopeLayer } from '@neo/scope'
 import z from '@neo/schemastery'
 import type Schema from '@neo/schemastery'
 
@@ -152,7 +152,7 @@ export interface SkillInvocationSource {
   readonly form: 'instructions'
 }
 
-declare module '@neo/dsh-llm' {
+declare module '@neo/llm' {
   interface MessageSourceMap {
     /** A user-explicit skill invocation injected by the host. */
     'skill-invocation': SkillInvocationSource

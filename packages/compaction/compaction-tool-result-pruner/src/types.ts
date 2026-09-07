@@ -1,4 +1,4 @@
-import type { CallId } from '@neo/dsh-llm'
+import type { CallId } from '@neo/llm'
 
 /** Character-budget policy for deterministic tool-result pruning. */
 export interface ToolResultPruneConfig {

@@ -2,7 +2,7 @@ import { Context, Service } from '@neo/cordis'
 import type { Fiber } from '@neo/cordis'
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
 import { z } from 'zod'
-import type { ConnectionHandle } from '@neo/dsh-client-connection/client'
+import type { ConnectionHandle } from '@neo/client-connection/client'
 import type {
   InvocationDescriptor,
   RemoteResult,
@@ -10,8 +10,8 @@ import type {
   TypertContext,
   TypertRemoteScopeApi,
   TypertRemoteNamespace,
-} from '@neo/dsh-typert-protocol'
-import TypertRegistry from '@neo/dsh-typert-registry'
+} from '@neo/typert-protocol'
+import TypertRegistry from '@neo/typert-registry'
 import type { ClientRemote } from '../src/client/index.ts'
 import { apply, inject } from '../src/client/index.ts'
 
@@ -35,7 +35,7 @@ declare module '@neo/cordis' {
   }
 }
 
-declare module '@neo/dsh-typert-protocol' {
+declare module '@neo/typert-protocol' {
   interface TypertRemoteEventSelection extends Record<'fixture/changed' | 'fixture/idle', true> {}
 
   interface TypertContextMap {

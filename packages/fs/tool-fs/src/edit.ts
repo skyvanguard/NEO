@@ -2,14 +2,14 @@
  * Model-facing literal edit, unique-match by default. It obtains an optional guard from the
  * single intent slot, calls `ctx.fs.editText` without a separate stat, then records the observed
  * version; no policy means an unconditional atomic edit.
- * @module @neo/dsh-tool-fs/src/edit
+ * @module @neo/tool-fs/src/edit
  */
 
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
-import type { DiffCallView, DiffResultView, ToolResult } from '@neo/dsh-tools'
-import type {} from '@neo/dsh-fs'
-import type {} from '@neo/dsh-system-prompt'
+import { defineTool } from '@neo/tools'
+import type { DiffCallView, DiffResultView, ToolResult } from '@neo/tools'
+import type {} from '@neo/fs'
+import type {} from '@neo/system-prompt'
 import { computeHunkDiffs, diffsFromMeta } from './diff.ts'
 import { remediateFsError } from './error.ts'
 import { sessionResolveOptions } from './session-cwd.ts'

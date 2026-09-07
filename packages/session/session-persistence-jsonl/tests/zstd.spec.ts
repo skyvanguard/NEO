@@ -5,9 +5,9 @@ import type { FileHandle } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { performance } from 'node:perf_hooks'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
+import SessionStore, { SessionId } from '@neo/session'
+import type { SessionEvent } from '@neo/session'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
 import { logPath, scanLog, sessionDir, toHeaderLine, type JsonlCompression } from '../src/format.ts'
 import {
   compressZstdFrame, createZstdFrameDecoder, decompressZstdFrame, decompressZstdPrefix, scanZstdFrames,

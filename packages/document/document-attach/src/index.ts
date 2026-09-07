@@ -4,11 +4,11 @@
  * — writes the file into the session workspace and returns its path. The agent
  * then processes it with its own tools (pdftotext, grep, unzip), so a large
  * document never floods the model context.
- * @module @neo/dsh-document-attach
+ * @module @neo/document-attach
  */
 
 import type { Context } from '@neo/cordis'
-import { TypertRemoteService, Remote } from '@neo/dsh-typert-protocol'
+import { TypertRemoteService, Remote } from '@neo/typert-protocol'
 import { saveAttachment } from './save.ts'
 import type { DocumentSaveRequest, DocumentSaveResult } from './types.ts'
 

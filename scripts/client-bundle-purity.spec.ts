@@ -14,7 +14,7 @@ interface CssModulePlugin {
   load?: (this: { addWatchFile: (id: string) => void }, id: string) => Promise<unknown>
 }
 
-function clientConfigs(id = '@neo/dsh-client-test') {
+function clientConfigs(id = '@neo/client-test') {
   return clientBundle(id, ['lib/types/index.js', 'lib/types/invariant.js'])(
     { env: { DSH_BUILD_FACE: 'client' } },
   ).filter(config => config.platform === 'browser')
@@ -22,7 +22,7 @@ function clientConfigs(id = '@neo/dsh-client-test') {
 
 describe('client bundle build faces', () => {
   it('watches source in development and consumes emitted JavaScript in the Client build', () => {
-    const bundle = clientBundle('@neo/dsh-client-test', ['lib/types/index.js'])
+    const bundle = clientBundle('@neo/client-test', ['lib/types/index.js'])
     const development = bundle({ env: {} }).find(config => config.platform === 'browser')
     const artifact = bundle({ env: { DSH_BUILD_FACE: 'client' } })
       .find(config => config.platform === 'browser')
@@ -60,46 +60,46 @@ describe('client bundle purity gate', () => {
   const resolveId = purityResolveId()
 
   it('leaves platform table entries and non-scoped specifiers alone', () => {
-    expect(resolveId('@neo/dsh-client-ui-slots')).toBeNull()
-    expect(resolveId('@neo/dsh-client-web-react')).toBeNull()
-    expect(resolveId('@neo/dsh-client-ui-primitives')).toBeNull()
+    expect(resolveId('@neo/client-ui-slots')).toBeNull()
+    expect(resolveId('@neo/client-web-react')).toBeNull()
+    expect(resolveId('@neo/client-ui-primitives')).toBeNull()
     expect(resolveId('react')).toBeNull()
     expect(resolveId('zod')).toBeNull()
   })
 
   it('rejects retired table entries (web-react/store left the 8-entry seed)', () => {
-    expect(() => resolveId('@neo/dsh-client-web-react/store')).toThrow(/purity/)
+    expect(() => resolveId('@neo/client-web-react/store')).toThrow(/purity/)
   })
 
   it('lets inline-safe wire layers inline', () => {
-    expect(resolveId('@neo/dsh-host-apiproxy/api')).toBeNull()
-    expect(resolveId('@neo/dsh-session/surface')).toBeNull()
-    expect(resolveId('@neo/dsh-brand')).toBeNull()
+    expect(resolveId('@neo/host-apiproxy/api')).toBeNull()
+    expect(resolveId('@neo/session/surface')).toBeNull()
+    expect(resolveId('@neo/brand')).toBeNull()
   })
 
   it('lets exact generated Remote contributions inline without admitting their package implementation', () => {
-    expect(resolveId('@neo/dsh-goal/remote')).toBeNull()
-    expect(() => resolveId('@neo/dsh-goal')).toThrow(/purity/)
-    expect(() => resolveId('@neo/dsh-goal/client')).toThrow(/purity/)
-    expect(() => resolveId('@neo/dsh-goal/remote/nested')).toThrow(/purity/)
+    expect(resolveId('@neo/goal/remote')).toBeNull()
+    expect(() => resolveId('@neo/goal')).toThrow(/purity/)
+    expect(() => resolveId('@neo/goal/client')).toThrow(/purity/)
+    expect(() => resolveId('@neo/goal/remote/nested')).toThrow(/purity/)
   })
 
   it('throws on any other @neo leak', () => {
-    expect(() => resolveId('@neo/dsh-agent')).toThrow(/purity/)
-    expect(() => resolveId('@neo/dsh-client-web')).toThrow(/purity/)
+    expect(() => resolveId('@neo/agent')).toThrow(/purity/)
+    expect(() => resolveId('@neo/client-web')).toThrow(/purity/)
   })
 
   it('throws on cross-plugin value imports — bare plugin names and /client subpaths alike (the rewrite arm is gone)', () => {
-    expect(() => resolveId('@neo/dsh-client-connection')).toThrow(/purity/)
-    expect(() => resolveId('@neo/dsh-client-runtime')).toThrow(/purity/)
-    expect(() => resolveId('@neo/dsh-client-ui-layout/client')).toThrow(/purity/)
+    expect(() => resolveId('@neo/client-connection')).toThrow(/purity/)
+    expect(() => resolveId('@neo/client-runtime')).toThrow(/purity/)
+    expect(() => resolveId('@neo/client-ui-layout/client')).toThrow(/purity/)
   })
 
   it('carries exactly one documented temporary exemption: runtime/client (store engine pending rehoming)', () => {
-    expect(resolveId('@neo/dsh-client-runtime/client')).toBeNull()
+    expect(resolveId('@neo/client-runtime/client')).toBeNull()
     const clientChannels = CLIENT_EXTERNALS.filter(
       entry => entry.startsWith('@neo/') && entry.endsWith('/client'))
-    expect(clientChannels).toEqual(['@neo/dsh-client-runtime/client'])
+    expect(clientChannels).toEqual(['@neo/client-runtime/client'])
   })
 })
 
@@ -110,7 +110,7 @@ describe('client bundle debug artifacts', () => {
   })
 
   it('maps first-party sources to their repository package paths', () => {
-    const configs = clientConfigs('@neo/dsh-client-ui-goal')
+    const configs = clientConfigs('@neo/client-ui-goal')
     const outputOptions = configs[0]?.outputOptions
     if (typeof outputOptions !== 'object' || outputOptions === null) throw new Error('client output options missing')
     const transform = outputOptions.sourcemapPathTransform
@@ -118,12 +118,12 @@ describe('client bundle debug artifacts', () => {
 
     const source = transform('../src/client/GoalBar.tsx', clientSourceMapPath('client/ui-goal'))
     expect(source).toBe('../../../packages/client/ui-goal/src/client/GoalBar.tsx')
-    const resolved = new URL(source, 'https://dsh.test/plugins/@neo/dsh-client-ui-goal/client.js.map')
+    const resolved = new URL(source, 'https://dsh.test/plugins/@neo/client-ui-goal/client.js.map')
     expect(resolved.pathname).toBe('/packages/client/ui-goal/src/client/GoalBar.tsx')
   })
 
   it('maps dual-face host sources to the host package group', () => {
-    const configs = clientConfigs('@neo/dsh-host-directory-picker-native')
+    const configs = clientConfigs('@neo/host-directory-picker-native')
     const outputOptions = configs[0]?.outputOptions
     if (typeof outputOptions !== 'object' || outputOptions === null) throw new Error('client output options missing')
     const transform = outputOptions.sourcemapPathTransform
@@ -134,7 +134,7 @@ describe('client bundle debug artifacts', () => {
   })
 
   it('maps inlined workspace sources to packages and leaves dependencies outside it unchanged', () => {
-    const configs = clientConfigs('@neo/dsh-client-connection')
+    const configs = clientConfigs('@neo/client-connection')
     const outputOptions = configs[0]?.outputOptions
     if (typeof outputOptions !== 'object' || outputOptions === null) throw new Error('client output options missing')
     const transform = outputOptions.sourcemapPathTransform
@@ -143,7 +143,7 @@ describe('client bundle debug artifacts', () => {
     const sourceMapPath = clientSourceMapPath('client/connection')
     const workspaceSource = transform('../../../host/apiproxy/src/api/rpc.ts', sourceMapPath)
     expect(workspaceSource).toBe('../../../packages/host/apiproxy/src/api/rpc.ts')
-    const resolved = new URL(workspaceSource, 'https://dsh.test/plugins/@neo/dsh-client-connection/client.js.map')
+    const resolved = new URL(workspaceSource, 'https://dsh.test/plugins/@neo/client-connection/client.js.map')
     expect(resolved.pathname).toBe('/packages/host/apiproxy/src/api/rpc.ts')
 
     const dependencySource = '../../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/index.js'

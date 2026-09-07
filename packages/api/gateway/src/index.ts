@@ -1,11 +1,11 @@
 /**
  * Live Typert Remote dispatch over Cordis Services and registered providers.
  * Transport, request correlation, and response envelopes belong to Connection.
- * @module @neo/dsh-api-gateway
+ * @module @neo/api-gateway
  */
 
 import { Context, Service, symbols } from '@neo/cordis'
-import type { ConnectionRpcHandler } from '@neo/dsh-client-connection'
+import type { ConnectionRpcHandler } from '@neo/client-connection'
 import {
   remoteMethods,
   TypertLookupFailure,
@@ -13,7 +13,7 @@ import {
   type InvocationParameterDescriptor,
   type TypertCodec,
   type TypertGatewayBinding,
-} from '@neo/dsh-typert-protocol'
+} from '@neo/typert-protocol'
 import type {
   InvokeRemoteRequest,
   TypertGateway,

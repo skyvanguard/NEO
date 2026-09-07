@@ -7,7 +7,7 @@
  * locator and retrieval guidance.
  *
  * It registers NO service and owns NO storage or preview mechanics: preview is
- * `@neo/dsh-output-retention` (`TextRetainer`), storage is `ctx.spillStore`.
+ * `@neo/output-retention` (`TextRetainer`), storage is `ctx.spillStore`.
  * The policy only decides WHEN to spill and composes the notice.
  *
  * A second arm applies the SAME cap to the durable log: the
@@ -40,18 +40,18 @@
  * replaced content still has its replacement bounded, and value replacements
  * and `block` decisions pass through unchanged.
  *
- * @module @neo/dsh-spill-policy
+ * @module @neo/spill-policy
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { ContentBlock } from '@neo/dsh-llm'
-import { TextRetainer, describeOmitted } from '@neo/dsh-output-retention'
-import type { Omitted } from '@neo/dsh-output-retention'
-import type { SaveTextSpill, SpillRef } from '@neo/dsh-spill'
-import type { SessionId } from '@neo/dsh-session'
-import type { CallId } from '@neo/dsh-llm'
-import type { PostToolDecision, ToolExecution } from '@neo/dsh-tools'
+import type { ContentBlock } from '@neo/llm'
+import { TextRetainer, describeOmitted } from '@neo/output-retention'
+import type { Omitted } from '@neo/output-retention'
+import type { SaveTextSpill, SpillRef } from '@neo/spill'
+import type { SessionId } from '@neo/session'
+import type { CallId } from '@neo/llm'
+import type { PostToolDecision, ToolExecution } from '@neo/tools'
 import type { SpillPolicyExec } from './types.ts'
 
 export type { SpillPolicyExec } from './types.ts'

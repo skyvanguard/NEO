@@ -6,8 +6,8 @@
  */
 
 import { z } from 'zod'
-import { canonicalHeader } from '@neo/dsh-session'
-import type { ProjectionDefinition } from '@neo/dsh-session-projection'
+import { canonicalHeader } from '@neo/session'
+import type { ProjectionDefinition } from '@neo/session-projection'
 import { estimateSystemTokens, estimateToolsTokens } from './estimate.ts'
 import { foldSurfaceProjection } from './surface-projection.ts'
 import type { ShadowPriceClaim } from './surface-projection.ts'

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-fs-e2b`.
- * @module @neo/dsh-fs-e2b/invariant
+ * Package-owned invariant companion for `@neo/fs-e2b`.
+ * @module @neo/fs-e2b/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-fs-e2b'
+const PACKAGE_NAME = '@neo/fs-e2b'
 
 /** Cordis companion plugin name. */
 export const name = 'fs-e2b-invariant'

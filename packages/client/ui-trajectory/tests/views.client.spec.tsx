@@ -11,30 +11,30 @@ import { Context } from '@neo/cordis'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { createElement, type ComponentProps, type FC, type ReactNode } from 'react'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
-import { resolveSlotLabel } from '@neo/dsh-client-ui-slots'
+import { bindSnapshotSelector } from '@neo/client-web-react'
+import { resolveSlotLabel } from '@neo/client-ui-slots'
 import {
   ConversationEventRegistry, ConversationViewRegistry, createSnapshotStore,
   EMPTY_CHAT_SNAPSHOT,
-} from '@neo/dsh-client-runtime/client'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
 import type {
   ConversationSnapshot, RequestView,
   SessionId, SessionListState, SnapshotStore, WorkspaceListState,
-} from '@neo/dsh-client-runtime/client'
-import type { ConvViewProps, ViewTab } from '@neo/dsh-client-ui-conversation/client'
+} from '@neo/client-runtime/client'
+import type { ConvViewProps, ViewTab } from '@neo/client-ui-conversation/client'
 import {
   ConversationSession, ConversationSessionHeader,
   type ConversationSessionHeaderProps, type ConversationSessionProps,
-} from '@neo/dsh-client-ui-conversation/src/client/skeleton/ConversationSession.tsx'
-import { createChatStore } from '@neo/dsh-client-ui-conversation/src/client/stores.ts'
-import { zh as conversationZh } from '@neo/dsh-client-ui-conversation/src/client/locales.ts'
-import { apply as localeApply, inject as localeInject } from '@neo/dsh-client-locale/client'
-import { stubSettingsScope } from '@neo/dsh-client-test-runtime'
-import type { LocaleKeysOf } from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-conversation/src/client/skeleton/ConversationSession.tsx'
+import { createChatStore } from '@neo/client-ui-conversation/src/client/stores.ts'
+import { zh as conversationZh } from '@neo/client-ui-conversation/src/client/locales.ts'
+import { apply as localeApply, inject as localeInject } from '@neo/client-locale/client'
+import { stubSettingsScope } from '@neo/client-test-runtime'
+import type { LocaleKeysOf } from '@neo/client-ui-slots'
 import { zh, type TrajectoryKey } from '../src/client/locales.ts'
-import { apply, inject } from '@neo/dsh-client-ui-trajectory/client'
-import { apply as nodeApply } from '@neo/dsh-client-ui-trajectory'
+import { apply, inject } from '@neo/client-ui-trajectory/client'
+import { apply as nodeApply } from '@neo/client-ui-trajectory'
 import type { TrajectoryTurnModel } from '../src/client/layout.ts'
 import { TrajectoryTimeline } from '../src/client/TrajectoryTimeline.tsx'
 import {

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-projection-cache",
+  "name": "@neo/session-projection-cache",
   "description": "Persisted projection cache (ctx.sessionProjectionCache): durable per-session projection checkpoints over the domain data form, throttled write-behind, and the cold-read ladder (cache row + persistence tail replay)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,20 +36,20 @@
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-storage-domain": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/storage-domain": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-storage": "workspace:^",
-    "@neo/dsh-storage-domain": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/storage": "workspace:^",
+    "@neo/storage-domain": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

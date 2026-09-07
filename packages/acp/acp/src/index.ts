@@ -6,7 +6,7 @@
  * permission decisions; presentation and human-interaction features stay with
  * the harness's UI modules.
  *
- * @module @neo/dsh-acp
+ * @module @neo/acp
  */
 
 import type { Context } from '@neo/cordis'
@@ -14,7 +14,7 @@ import { randomUUID } from 'node:crypto'
 import { isAbsolute } from 'node:path'
 import { Readable, Writable } from 'node:stream'
 import Schema from '@neo/schemastery'
-import { createUserMessage, errorChain } from '@neo/dsh-llm'
+import { createUserMessage, errorChain } from '@neo/llm'
 import {
   AgentSideConnection,
   ndJsonStream,
@@ -33,10 +33,10 @@ import {
   type StopReason,
   type Stream,
 } from '@agentclientprotocol/sdk'
-import type { Agent } from '@neo/dsh-agent'
-import { SessionId, type SessionEvent, type TurnEndReason } from '@neo/dsh-session'
+import type { Agent } from '@neo/agent'
+import { SessionId, type SessionEvent, type TurnEndReason } from '@neo/session'
 // Side-effect type import: declaration-merges the approval waterfall answered below.
-import type {} from '@neo/dsh-user-approval'
+import type {} from '@neo/user-approval'
 import { acpPromptToText, promptHasUnsupportedContent, turnEndToStopReason } from './codec.ts'
 
 export const name = 'acp'
@@ -255,7 +255,7 @@ export function apply(ctx: Context, config: AcpConfig): void {
         // No preset composition: the ACP bundle keeps the model-facing rows in
         // the host plane, so this agent reads them from the global layer. A
         // deployment that configures a roster has to join one here first
-        // (@neo/dsh-agent-presets README, "Composing a child agent").
+        // (@neo/agent-presets README, "Composing a child agent").
         const handle = await agents.create({
           sessionId,
           meta: { cwd: params.cwd },

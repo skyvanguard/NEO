@@ -3,31 +3,31 @@
 # turn over stream-json; the replay adapter supplies the deterministic response.
 
 - id: persistence
-  name: '@neo/dsh-session-persistence-jsonl'
+  name: '@neo/session-persistence-jsonl'
   config:
     root: './.sessions'
     compression: none
 
 - id: checkpoint
-  name: '@neo/dsh-session-checkpoint-policy'
+  name: '@neo/session-checkpoint-policy'
 
 - id: replay
-  name: '@neo/dsh-llm-replay'
+  name: '@neo/llm-replay'
   config:
     file: !!js process.env.DSH_SNAPSHOT_FILE
     overrideFile: !!js process.env.DSH_SNAPSHOT_OVERRIDE
 
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
 - id: subprocess
-  name: '@neo/dsh-subprocess-local'
+  name: '@neo/subprocess-local'
 
 - id: bash
-  name: '@neo/dsh-bash-local'
+  name: '@neo/bash-local'
   config:
     timeoutMs: 60000
 
 - id: agent
-  name: '@neo/dsh-agent-spine-demo'
+  name: '@neo/agent-spine-demo'
   config:
     agents: []
     workspaceContext: false

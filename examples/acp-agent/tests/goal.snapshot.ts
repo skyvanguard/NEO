@@ -9,9 +9,9 @@ import {
   type AgentUnderTest,
   type InputScript,
   type NormalizeContext,
-} from '@neo/dsh-acp-snapshot'
-import { foldGoal } from '@neo/dsh-goal'
-import type { SessionEvent } from '@neo/dsh-session'
+} from '@neo/acp-snapshot'
+import { foldGoal } from '@neo/goal'
+import type { SessionEvent } from '@neo/session'
 import { describe, expect, it } from 'vitest'
 
 // This lifecycle proof has goal-specific timestamp normalization and semantic

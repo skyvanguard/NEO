@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-tool-subagent-report`.
- * @module @neo/dsh-tool-subagent-report/invariant
+ * Package-owned invariant companion for `@neo/tool-subagent-report`.
+ * @module @neo/tool-subagent-report/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tool-subagent-report'
+const PACKAGE_NAME = '@neo/tool-subagent-report'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-subagent-report-invariant'

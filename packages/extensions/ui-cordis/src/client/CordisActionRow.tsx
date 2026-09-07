@@ -2,9 +2,9 @@
 
 import {
   IconInspectOutline12, IconStopFill16, IconTrashOutline16, StateDot,
-} from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale } from '@neo/dsh-client-ui-slots'
-import type { ToolCallViewProps } from '@neo/dsh-client-ui-tool/client'
+} from '@neo/client-ui-primitives'
+import type { PropsLocale } from '@neo/client-ui-slots'
+import type { ToolCallViewProps } from '@neo/client-ui-tool/client'
 import { cordisActionCard } from './card-model.ts'
 import css from './CordisRunRow.module.css'
 

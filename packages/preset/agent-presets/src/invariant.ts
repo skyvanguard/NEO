@@ -1,20 +1,20 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-agent-presets`.
- * @module @neo/dsh-agent-presets/invariant
+ * Package-owned invariant companion for `@neo/agent-presets`.
+ * @module @neo/agent-presets/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 // Type-only: resolves the `system-prompt/assemble` waterfall this companion
 // joins, and the `agent` field `dsh-agent` merges into its context.
-import type {} from '@neo/dsh-system-prompt'
-import type {} from '@neo/dsh-agent'
+import type {} from '@neo/system-prompt'
+import type {} from '@neo/agent'
 // Imported through the package name, not `./mount.ts`: a module shared between
 // the two build entry points becomes a third chunk that the published `files`
 // list does not carry, which `verify-built-package-invariants` rejects.
-import { leakedServices, livePresetMounts } from '@neo/dsh-agent-presets'
+import { leakedServices, livePresetMounts } from '@neo/agent-presets'
 
-const PACKAGE_NAME = '@neo/dsh-agent-presets'
+const PACKAGE_NAME = '@neo/agent-presets'
 
 /** Cordis companion plugin name. */
 export const name = 'agent-presets-invariant'

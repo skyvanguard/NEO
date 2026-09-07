@@ -1,13 +1,13 @@
 /**
  * Service Definition for combined session-history reads, traces, filters, and full-text search.
  *
- * @module @neo/dsh-session-query
+ * @module @neo/session-query
  */
 
 import { Context, Service } from '@neo/cordis'
-import { Session, snapshotSessionEvent, type SessionId } from '@neo/dsh-session'
-import { foldSessionTitle } from '@neo/dsh-session-title'
-import type { SessionTitleSnapshot } from '@neo/dsh-session-title'
+import { Session, snapshotSessionEvent, type SessionId } from '@neo/session'
+import { foldSessionTitle } from '@neo/session-title'
+import type { SessionTitleSnapshot } from '@neo/session-title'
 import type {
   SessionEventResultFilter,
   SessionEventSearchPage,

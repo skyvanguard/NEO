@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { RpcResponse } from '@neo/dsh-api-remotes/client'
+import type { RpcResponse } from '@neo/api-remotes/client'
 import { refreshWelcomeIfLoaded, WelcomeNoticeStore } from '../src/client/welcome-store.ts'
 import {
   WELCOME_NOTICE_ACK_FIELD, WELCOME_NOTICE_SETTINGS_NAMESPACE, WELCOME_NOTICE_VERSION,

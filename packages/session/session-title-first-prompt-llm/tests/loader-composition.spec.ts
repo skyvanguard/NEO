@@ -6,11 +6,11 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import LlmRuntime, { createUserMessage, LlmAdapter  } from '@neo/dsh-llm'
-import type { GenerateOptions, StreamChunk } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import SessionTitleService from '@neo/dsh-session-title'
-import * as providerPlugin from '@neo/dsh-session-title-first-prompt-llm'
+import LlmRuntime, { createUserMessage, LlmAdapter  } from '@neo/llm'
+import type { GenerateOptions, StreamChunk } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
+import SessionTitleService from '@neo/session-title'
+import * as providerPlugin from '@neo/session-title-first-prompt-llm'
 
 let root: string | undefined
 let context: Context | undefined
@@ -36,14 +36,14 @@ async function loadComposition(): Promise<Context> {
   root = await mkdtemp(join(tmpdir(), 'dsh-title-loader-'))
   const configPath = join(root, 'cordis.yml')
   await writeFile(configPath, [
-    "- name: '@neo/dsh-llm'",
-    "- name: '@neo/dsh-session'",
-    "- name: '@neo/dsh-session-title'",
+    "- name: '@neo/llm'",
+    "- name: '@neo/session'",
+    "- name: '@neo/session-title'",
     '  config:',
     '    fallbackMaxWords: 5',
     '    fallbackMaxBytes: 40',
     '    maxTitleBytes: 80',
-    "- name: '@neo/dsh-session-title-first-prompt-llm'",
+    "- name: '@neo/session-title-first-prompt-llm'",
     '  config:',
     '    targetWords: 5',
     '    targetCjkCharacters: 10',
@@ -60,10 +60,10 @@ async function loadComposition(): Promise<Context> {
   await context.plugin(Loader)
   context.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-llm', LlmRuntime],
-    ['@neo/dsh-session', SessionStore],
-    ['@neo/dsh-session-title', SessionTitleService],
-    ['@neo/dsh-session-title-first-prompt-llm', providerPlugin],
+    ['@neo/llm', LlmRuntime],
+    ['@neo/session', SessionStore],
+    ['@neo/session-title', SessionTitleService],
+    ['@neo/session-title-first-prompt-llm', providerPlugin],
   ])
   context.loader.internal = {
     version: 'v2',

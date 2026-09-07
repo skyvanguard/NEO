@@ -1,10 +1,10 @@
 /**
  * Process-local dynamic Plugin registry and its opaque identity mints.
- * @module @neo/dsh-cordis-host-runner/registry
+ * @module @neo/cordis-host-runner/registry
  */
 
 import type { Fiber } from '@neo/cordis'
-import type { SessionId } from '@neo/dsh-session/types'
+import type { SessionId } from '@neo/session/types'
 import type {
   ApprovalRequestId, CordisDynamicPackageId, CordisDynamicPluginId, CordisDynamicPluginRunId,
   CordisDynamicRunMode, DynamicCordisRenderFailure, DynamicCordisRunAttempt,

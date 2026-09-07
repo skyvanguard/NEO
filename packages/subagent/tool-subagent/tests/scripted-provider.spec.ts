@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { type Agent } from '@neo/dsh-agent'
-import SubagentRuntime, { type SubagentStartRequest } from '@neo/dsh-subagent'
-import { SessionId } from '@neo/dsh-session'
+import { type Agent } from '@neo/agent'
+import SubagentRuntime, { type SubagentStartRequest } from '@neo/subagent'
+import { SessionId } from '@neo/session'
 import * as scripted from './scripted-provider.ts'
 
 /** A minimal parent; the scripted provider only reads its id. */

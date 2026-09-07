@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-session-checkpoint-policy`.
- * @module @neo/dsh-session-checkpoint-policy/invariant
+ * Package-owned invariant companion for `@neo/session-checkpoint-policy`.
+ * @module @neo/session-checkpoint-policy/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-session-checkpoint-policy'
+const PACKAGE_NAME = '@neo/session-checkpoint-policy'
 
 /** Cordis companion plugin name. */
 export const name = 'session-checkpoint-policy-invariant'

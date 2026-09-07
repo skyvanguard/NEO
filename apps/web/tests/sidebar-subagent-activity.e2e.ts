@@ -4,12 +4,12 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import type { AgentHandle } from '@neo/dsh-agent'
-import { createUserMessage, LlmAdapter } from '@neo/dsh-llm'
-import type { GenerateOptions, StreamChunk } from '@neo/dsh-llm'
-import { SessionId, type SessionId as SessionIdValue } from '@neo/dsh-session'
-import type {} from '@neo/dsh-subagent'
-import type {} from '@neo/dsh-workspace'
+import type { AgentHandle } from '@neo/agent'
+import { createUserMessage, LlmAdapter } from '@neo/llm'
+import type { GenerateOptions, StreamChunk } from '@neo/llm'
+import { SessionId, type SessionId as SessionIdValue } from '@neo/session'
+import type {} from '@neo/subagent'
+import type {} from '@neo/workspace'
 import {
   assertFixtureInventory,
   captureStableAria,

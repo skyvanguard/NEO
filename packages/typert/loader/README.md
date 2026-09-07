@@ -1,4 +1,4 @@
-# @neo/dsh-typert-loader
+# @neo/typert-loader
 
 English | [中文](README.zh.md)
 

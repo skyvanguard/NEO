@@ -1,14 +1,14 @@
 /**
  * Model-facing UTF-8 read. It performs one provider stat for type, routing, and observed version,
  * streams large or size-unknown files, renders a bounded window, then emits the observation.
- * @module @neo/dsh-tool-fs/src/read
+ * @module @neo/tool-fs/src/read
  */
 
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
-import type { GenericCallView, ReadResultView, ToolResult } from '@neo/dsh-tools'
-import type {} from '@neo/dsh-fs'
-import type {} from '@neo/dsh-system-prompt'
+import { defineTool } from '@neo/tools'
+import type { GenericCallView, ReadResultView, ToolResult } from '@neo/tools'
+import type {} from '@neo/fs'
+import type {} from '@neo/system-prompt'
 import { buildWindow, formatReadOutput, langFromPath, readMetaFromMeta } from './read-render.ts'
 import { resolveRegularReadTarget } from './read-target.ts'
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { TurnEndReason } from '@neo/dsh-session'
+import type { TurnEndReason } from '@neo/session'
 import { acpPromptToText, turnEndToStopReason } from '../src/codec.ts'
 
 describe('ACP codec', () => {

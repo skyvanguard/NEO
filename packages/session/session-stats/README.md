@@ -1,4 +1,4 @@
-# @neo/dsh-session-stats
+# @neo/session-stats
 
 English | [中文](README.zh.md)
 
@@ -18,7 +18,7 @@ Function plugin registering the `sessionStats` projection unit: whole-log conver
 
 ```yaml
 - id: session-stats
-  name: '@neo/dsh-session-stats'
+  name: '@neo/session-stats'
 ```
 
 Injects `sessionProjections` — the plugin's whole purpose; in assemblies without the registry the fiber stays pending and nothing registers.

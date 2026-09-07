@@ -1,12 +1,12 @@
 /**
  * Internal platform-profile builders for the local sandbox provider.
  *
- * @module @neo/dsh-sandbox-local/profiles
+ * @module @neo/sandbox-local/profiles
  */
 
 import { grantArgs as landlockGrantArgs } from '@neo/node-addon-landlock-run'
-import { writableRoots } from '@neo/dsh-sandbox'
-import type { SandboxPolicy } from '@neo/dsh-sandbox'
+import { writableRoots } from '@neo/sandbox'
+import type { SandboxPolicy } from '@neo/sandbox'
 
 /**
  * Build the bwrap profile arguments for one file-effect policy.
@@ -44,7 +44,7 @@ function sbplString(path: string): string {
  * Build the sandbox-exec arguments and SBPL profile for one policy. The
  * writable roots come from the shared {@link writableRoots} helper (canonical,
  * deduplicated) so the Seatbelt grant and the in-process fs fence
- * (`@neo/dsh-fs-sandbox`) can never drift apart.
+ * (`@neo/fs-sandbox`) can never drift apart.
  * @param policy - file-effect policy to express as an SBPL profile.
  * @returns sandbox-exec arguments before the trailing separator and command argv.
  */

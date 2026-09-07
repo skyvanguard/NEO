@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SystemPrompt from '@neo/dsh-system-prompt'
+import SystemPrompt from '@neo/system-prompt'
 import {
   agentEvents,
   installModelSelection,
   type Agent,
   type ModelSelectionRef,
 } from '../src/index.ts'
-import { ReasoningEffortId, type LlmCallConfig } from '@neo/dsh-llm'
+import { ReasoningEffortId, type LlmCallConfig } from '@neo/llm'
 
 describe('installModelSelection()', () => {
   it('snapshots prompt variables and request routing together, then disposes both listeners', async () => {

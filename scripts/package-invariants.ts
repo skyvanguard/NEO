@@ -95,19 +95,19 @@ function checkManifest(
   if (!manifest.files?.includes('lib/invariant.js')) {
     addViolation(violations, owner.manifestPath, 'files must publish lib/invariant.js')
   }
-  if (owner.packageName === '@neo/dsh-invariants') return
-  if (manifest.peerDependencies?.['@neo/dsh-invariants'] !== 'workspace:^') {
+  if (owner.packageName === '@neo/invariants') return
+  if (manifest.peerDependencies?.['@neo/invariants'] !== 'workspace:^') {
     addViolation(
       violations,
       owner.manifestPath,
-      '@neo/dsh-invariants must be a workspace:^ peerDependency',
+      '@neo/invariants must be a workspace:^ peerDependency',
     )
   }
-  if (manifest.devDependencies?.['@neo/dsh-invariants'] !== 'workspace:^') {
+  if (manifest.devDependencies?.['@neo/invariants'] !== 'workspace:^') {
     addViolation(
       violations,
       owner.manifestPath,
-      '@neo/dsh-invariants must also be a workspace:^ devDependency',
+      '@neo/invariants must also be a workspace:^ devDependency',
     )
   }
 }
@@ -118,7 +118,7 @@ function checkBuild(
   violations: PackageInvariantViolation[],
 ): void {
   const tsconfigPath = `${owner.dir}/tsconfig.json`
-  if (owner.packageName !== '@neo/dsh-invariants'
+  if (owner.packageName !== '@neo/invariants'
     && !projectReferencesInvariants(root, owner.dir, tsconfigPath)) {
     addViolation(
       violations,

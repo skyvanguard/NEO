@@ -1,10 +1,10 @@
-/** Package-owned invariant companion for `@neo/dsh-attachment`. @module @neo/dsh-attachment/invariant */
+/** Package-owned invariant companion for `@neo/attachment`. @module @neo/attachment/invariant */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-attachment'
+const PACKAGE_NAME = '@neo/attachment'
 /** Cordis companion plugin name. */
 export const name = 'attachment-invariant'
 /** Service required before package ownership can be reserved. */

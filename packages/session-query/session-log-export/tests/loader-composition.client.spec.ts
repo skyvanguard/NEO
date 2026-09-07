@@ -6,10 +6,10 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import type { Agent } from '@neo/dsh-agent'
-import CommandRuntime from '@neo/dsh-commands'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import * as SessionLogDownload from '@neo/dsh-session-log-export'
+import type { Agent } from '@neo/agent'
+import CommandRuntime from '@neo/commands'
+import SessionStore, { SessionId } from '@neo/session'
+import * as SessionLogDownload from '@neo/session-log-export'
 
 let root: string | undefined
 let context: Context | undefined
@@ -26,9 +26,9 @@ describe('session-log-download real Loader composition', () => {
     root = await mkdtemp(join(tmpdir(), 'dsh-session-export-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@neo/dsh-session'",
-      "- name: '@neo/dsh-commands'",
-      "- name: '@neo/dsh-session-log-export'",
+      "- name: '@neo/session'",
+      "- name: '@neo/commands'",
+      "- name: '@neo/session-log-export'",
       '',
     ].join('\n'))
 
@@ -37,9 +37,9 @@ describe('session-log-download real Loader composition', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@neo/dsh-session', SessionStore],
-      ['@neo/dsh-commands', CommandRuntime],
-      ['@neo/dsh-session-log-export', SessionLogDownload],
+      ['@neo/session', SessionStore],
+      ['@neo/commands', CommandRuntime],
+      ['@neo/session-log-export', SessionLogDownload],
     ])
     context.loader.internal = {
       version: 'v2',

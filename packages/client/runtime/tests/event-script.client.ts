@@ -1,8 +1,8 @@
-import { createUserMessage, createMessage, createToolResultMessage, CallId } from '@neo/dsh-llm'
+import { createUserMessage, createMessage, createToolResultMessage, CallId } from '@neo/llm'
 // Minimal SessionEvent builders for orchestration tests (shape mirrors what the
 // host emits; only the fields the object layer reads).
-import type { ContentBlock } from '@neo/dsh-llm/types'
-import type { SessionEvent } from '@neo/dsh-session/types'
+import type { ContentBlock } from '@neo/llm/types'
+import type { SessionEvent } from '@neo/session/types'
 
 /** One text content block (local helper). */
 const text = (t: string): ContentBlock[] => [{ type: 'text', text: t }]

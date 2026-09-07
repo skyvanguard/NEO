@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-session-title-all-prompts-llm`.
- * @module @neo/dsh-session-title-all-prompts-llm/invariant
+ * Package-owned invariant companion for `@neo/session-title-all-prompts-llm`.
+ * @module @neo/session-title-all-prompts-llm/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-session-title-all-prompts-llm'
+const PACKAGE_NAME = '@neo/session-title-all-prompts-llm'
 
 /** Cordis companion plugin name. */
 export const name = 'session-title-all-prompts-llm-invariant'

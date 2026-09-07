@@ -7,12 +7,12 @@
     path: ./cordis.yml
     patches:
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         disabled: true
       - insert:
           - id: goal
-            name: '@neo/dsh-goal'
+            name: '@neo/goal'
           - id: tool-goal
-            name: '@neo/dsh-tool-goal'
+            name: '@neo/tool-goal'
           - id: llm-replay
-            name: '@neo/dsh-llm-replay'
+            name: '@neo/llm-replay'

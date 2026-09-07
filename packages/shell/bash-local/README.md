@@ -1,8 +1,8 @@
-# @neo/dsh-bash-local
+# @neo/bash-local
 
 English | [中文](README.zh.md)
 
-Local Service Provider for the `@neo/dsh-shell` executor seam over the [`@neo/dsh-subprocess`](../../subprocess/subprocess/README.md) service: `LocalBashExecutor` spawns `bash -c <command>` per call as a managed process group through `ctx.subprocess`, and owns everything bash-shaped — command defaulting and caps, timeout/cancel classification, the model-friendly terminal environment, and the model-facing stdout/stderr merge for background reads. Group mechanics (bounded spill-backed output, credential scrub, kill escalation, disposal) are the subprocess service's.
+Local Service Provider for the `@neo/shell` executor seam over the [`@neo/subprocess`](../../subprocess/subprocess/README.md) service: `LocalBashExecutor` spawns `bash -c <command>` per call as a managed process group through `ctx.subprocess`, and owns everything bash-shaped — command defaulting and caps, timeout/cancel classification, the model-friendly terminal environment, and the model-facing stdout/stderr merge for background reads. Group mechanics (bounded spill-backed output, credential scrub, kill escalation, disposal) are the subprocess service's.
 
 The package root exports the default and named `LocalBashExecutor` plugin plus its `Config`.
 
@@ -10,7 +10,7 @@ The package root exports the default and named `LocalBashExecutor` plugin plus i
 
 ```yaml
 - id: bash
-  name: '@neo/dsh-bash-local'
+  name: '@neo/bash-local'
   config:
     cwd: /path/to/workspace   # default: process.cwd()
     timeoutMs: 120000          # default foreground timeout

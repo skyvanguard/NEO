@@ -7,14 +7,14 @@
 // coverage gate still requires exercised.
 
 import { Context } from '@neo/cordis'
-import { stubSettingsScope } from '@neo/dsh-client-test-runtime'
+import { stubSettingsScope } from '@neo/client-test-runtime'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import { apply as themeApply, inject as themeInject, ThemeRuntime } from '@neo/dsh-client-ui-theme/client'
-import { apply, inject, LayoutController } from '@neo/dsh-client-ui-layout/client'
-import { apply as nodeApply } from '@neo/dsh-client-ui-layout'
-import * as invariant from '@neo/dsh-client-ui-layout/invariant'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import { apply as themeApply, inject as themeInject, ThemeRuntime } from '@neo/client-ui-theme/client'
+import { apply, inject, LayoutController } from '@neo/client-ui-layout/client'
+import { apply as nodeApply } from '@neo/client-ui-layout'
+import * as invariant from '@neo/client-ui-layout/invariant'
 
 beforeEach(() => {
   document.head.querySelectorAll('meta[name="theme-color"]').forEach((node) => { node.remove() })
@@ -117,7 +117,7 @@ describe('node half + invariant companion', () => {
     // The /invariant subpath types live in lib/types (build product); assert
     // the API so the call stays typed where lint runs without a build.
     const dispose = await (invariant as { apply: (ctx: never) => Promise<() => void> }).apply(ctx)
-    expect(register).toHaveBeenCalledWith('@neo/dsh-client-ui-layout', expect.any(Function))
+    expect(register).toHaveBeenCalledWith('@neo/client-ui-layout', expect.any(Function))
     // The installer is the declared no-op — calling it must not throw.
     expect(() => { (register.mock.calls[0]![1] as (c: never) => void)(undefined as never) }).not.toThrow()
     expect(dispose).toBeTypeOf('function')

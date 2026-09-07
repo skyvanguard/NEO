@@ -16,12 +16,12 @@ import {
   type KeyboardEvent, type FocusEvent,
 } from 'react'
 import clsx from 'clsx'
-import type { ModelReasoningEffort, ModelSelection } from '@neo/dsh-api-remotes/client'
+import type { ModelReasoningEffort, ModelSelection } from '@neo/api-remotes/client'
 import {
   IconCheckOutline16, IconChevronDownOutline14, IconChevronRightOutline14,
   IconWarningOutline16, Toast,
-} from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale } from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-primitives'
+import type { PropsLocale } from '@neo/client-ui-slots'
 import type { ModelSelectInjected } from './slots.ts'
 import css from './ModelSelect.module.css'
 

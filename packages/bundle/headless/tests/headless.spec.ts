@@ -2,12 +2,12 @@
 
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent, AgentHandle, CreateAgentOptions } from '@neo/dsh-agent'
-import AgentDefaultModelConfig from '@neo/dsh-agent-default-model'
-import { createAssistantMessage } from '@neo/dsh-llm'
-import SessionStore from '@neo/dsh-session'
-import type { Session, UserMessage } from '@neo/dsh-session'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent, AgentHandle, CreateAgentOptions } from '@neo/agent'
+import AgentDefaultModelConfig from '@neo/agent-default-model'
+import { createAssistantMessage } from '@neo/llm'
+import SessionStore from '@neo/session'
+import type { Session, UserMessage } from '@neo/session'
 import { apply, Config, internals } from '../src/index.ts'
 
 const originalInternals = { ...internals }

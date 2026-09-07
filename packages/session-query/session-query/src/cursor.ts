@@ -1,6 +1,6 @@
 /** Opaque cursor identity for session-search pagination. */
 
-import type { Branded } from '@neo/dsh-brand'
+import type { Branded } from '@neo/brand'
 
 /** Provider-owned opaque continuation token returned by session search. */
 export type SessionSearchCursor = Branded<'SessionSearchCursor'>

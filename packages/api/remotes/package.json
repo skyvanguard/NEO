@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-api-remotes",
+  "name": "@neo/api-remotes",
   "description": "Remote BFF assembly and Host Agent/Session lookup policy",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,7 +36,7 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-api-gateway"
+        "@neo/api-gateway"
       ],
       "platform": "web",
       "immediately": true
@@ -55,46 +55,46 @@
     "lib/types/**/*.d.ts"
   ],
   "dependencies": {
-    "@neo/dsh-typert-protocol": "workspace:^"
+    "@neo/typert-protocol": "workspace:^"
   },
   "peerDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-api-gateway": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-credentials": "workspace:^",
-    "@neo/dsh-goal": "workspace:^",
-    "@neo/dsh-cordis-host-runner": "workspace:^",
-    "@neo/dsh-host-plugin-inventory": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-agent-presets": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-message-feedback": "workspace:^",
-    "@neo/dsh-document-attach": "workspace:^",
-    "@neo/dsh-usage-stats": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-settings": "workspace:^",
-    "@neo/dsh-typert-registry": "workspace:^"
+    "@neo/agent": "workspace:^",
+    "@neo/api-gateway": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/credentials": "workspace:^",
+    "@neo/goal": "workspace:^",
+    "@neo/cordis-host-runner": "workspace:^",
+    "@neo/host-plugin-inventory": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/agent-presets": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/message-feedback": "workspace:^",
+    "@neo/document-attach": "workspace:^",
+    "@neo/usage-stats": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/settings": "workspace:^",
+    "@neo/typert-registry": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-api-gateway": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-credentials": "workspace:^",
-    "@neo/dsh-goal": "workspace:^",
-    "@neo/dsh-cordis-host-runner": "workspace:^",
-    "@neo/dsh-host-plugin-inventory": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-agent-presets": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-message-feedback": "workspace:^",
-    "@neo/dsh-document-attach": "workspace:^",
-    "@neo/dsh-usage-stats": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-settings": "workspace:^",
-    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/api-gateway": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/credentials": "workspace:^",
+    "@neo/goal": "workspace:^",
+    "@neo/cordis-host-runner": "workspace:^",
+    "@neo/host-plugin-inventory": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/agent-presets": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/message-feedback": "workspace:^",
+    "@neo/document-attach": "workspace:^",
+    "@neo/usage-stats": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/settings": "workspace:^",
+    "@neo/typert-registry": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

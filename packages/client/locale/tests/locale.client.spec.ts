@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { stubSettingsScope, type StubSettingsScope } from '@neo/dsh-client-test-runtime'
-import type { LocaleSettings, LocaleSnapshot } from '@neo/dsh-client-locale/client'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
+import { stubSettingsScope, type StubSettingsScope } from '@neo/client-test-runtime'
+import type { LocaleSettings, LocaleSnapshot } from '@neo/client-locale/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
 
 const make = (host?: StubSettingsScope<LocaleSettings>): {
   ctx: Context

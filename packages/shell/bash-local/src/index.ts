@@ -6,16 +6,16 @@
  * classification, the model-friendly terminal environment, and the model-facing
  * stdout/stderr merge for background reads. Execution policy belongs in
  * `tools/pre-execute` or a sandboxing executor.
- * @module @neo/dsh-bash-local
+ * @module @neo/bash-local
  */
 
 import { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { SHELL_SETTINGS_NAMESPACE, ShellExecutor } from '@neo/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult, CollectedOutput } from '@neo/dsh-shell'
-import type { SubprocessCollect, SubprocessHandle, SubprocessOutputReader, SubprocessSpawnSpec } from '@neo/dsh-subprocess'
-import { installSettingsSection } from '@neo/dsh-settings'
-import { clampTimeout, deadline, MAX_TIMER_DELAY_MS, timeoutOf } from '@neo/dsh-timeout'
+import { SHELL_SETTINGS_NAMESPACE, ShellExecutor } from '@neo/shell'
+import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult, CollectedOutput } from '@neo/shell'
+import type { SubprocessCollect, SubprocessHandle, SubprocessOutputReader, SubprocessSpawnSpec } from '@neo/subprocess'
+import { installSettingsSection } from '@neo/settings'
+import { clampTimeout, deadline, MAX_TIMER_DELAY_MS, timeoutOf } from '@neo/timeout'
 
 /**
  * Model-friendly environment overrides: disable colors, pagers, and

@@ -9,10 +9,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, render } from '@testing-library/react'
 import { Context } from '@neo/cordis'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import { TestSessions, TestWorkspaces } from '@neo/dsh-client-test-runtime'
-import type { Stabilizer } from '@neo/dsh-client-test-runtime'
-import * as AppShell from '@neo/dsh-client-web/src/app-shell.ts'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import { TestSessions, TestWorkspaces } from '@neo/client-test-runtime'
+import type { Stabilizer } from '@neo/client-test-runtime'
+import * as AppShell from '@neo/client-web/src/app-shell.ts'
 
 afterEach(cleanup)
 

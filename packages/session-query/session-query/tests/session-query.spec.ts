@@ -1,15 +1,15 @@
-import { createUserMessage, createMessage } from '@neo/dsh-llm'
+import { createUserMessage, createMessage } from '@neo/llm'
 import { describe, expect, it, vi } from 'vitest'
 import { Context, type Fiber } from '@neo/cordis'
-import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@neo/dsh-session'
-import type { SessionEvent, SessionHeader, SessionId as SessionIdType } from '@neo/dsh-session'
-import SessionPersistence, { SessionPersistenceCorruptionError, SessionPersistenceRevision } from '@neo/dsh-session-persistence'
+import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@neo/session'
+import type { SessionEvent, SessionHeader, SessionId as SessionIdType } from '@neo/session'
+import SessionPersistence, { SessionPersistenceCorruptionError, SessionPersistenceRevision } from '@neo/session-persistence'
 import SessionQueryEngine, {
   SESSION_QUERY_DEFAULT_PERSISTED_INSPECT_CONCURRENCY,
   type SessionEventSurface,
   type SessionQueryErrorCode,
-} from '@neo/dsh-session-query'
-import { SessionTitleProviderId } from '@neo/dsh-session-title'
+} from '@neo/session-query'
+import { SessionTitleProviderId } from '@neo/session-title'
 import { TestSessionQueryEngine } from './test-service.ts'
 
 function header(id: string, createdAt = 1, extra: Partial<SessionHeader> = {}): SessionHeader {

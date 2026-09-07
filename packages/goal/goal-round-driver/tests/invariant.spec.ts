@@ -1,15 +1,15 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import {
   GoalId,
   type GoalSnapshotChangeMeta,
   type GoalView,
-} from '@neo/dsh-goal'
-import * as GoalSessionInvariant from '@neo/dsh-goal-round-driver/invariant'
-import { renderGoalRoundPrompt } from '@neo/dsh-goal-round-driver'
-import InvariantRegistry, { InvariantError } from '@neo/dsh-invariants'
-import SessionStore, { SessionId, type Session } from '@neo/dsh-session'
+} from '@neo/goal'
+import * as GoalSessionInvariant from '@neo/goal-round-driver/invariant'
+import { renderGoalRoundPrompt } from '@neo/goal-round-driver'
+import InvariantRegistry, { InvariantError } from '@neo/invariants'
+import SessionStore, { SessionId, type Session } from '@neo/session'
 
 const change: GoalSnapshotChangeMeta = {
   kind: 'goal/change',
@@ -95,7 +95,7 @@ describe('goal-round-driver prompt invariants', () => {
       appendRound(session, 2, [{ type: 'text', text: 'counterfeit continuation' }])
     }).toThrow(expect.objectContaining<Partial<InvariantError>>({
       code: 'INVARIANT',
-      packageName: '@neo/dsh-goal-round-driver',
+      packageName: '@neo/goal-round-driver',
     }))
   })
 
@@ -110,7 +110,7 @@ describe('goal-round-driver prompt invariants', () => {
         source,
       }), { surfaceOp: 'append' })
     }).toThrow(expect.objectContaining<Partial<InvariantError>>({
-      packageName: '@neo/dsh-goal-round-driver',
+      packageName: '@neo/goal-round-driver',
     }))
   })
 
@@ -122,7 +122,7 @@ describe('goal-round-driver prompt invariants', () => {
 
     await expect(ctx.plugin(GoalSessionInvariant)).rejects.toMatchObject({
       code: 'INVARIANT',
-      packageName: '@neo/dsh-goal-round-driver',
+      packageName: '@neo/goal-round-driver',
     })
   })
 })

@@ -1,7 +1,7 @@
 import { clientBundle } from '../tsdown.client.ts'
 
 export default clientBundle(
-  '@neo/dsh-client-ui-theme',
+  '@neo/client-ui-theme',
   ['lib/types/index.js', 'lib/types/invariant.js'],
   {
     lib: {

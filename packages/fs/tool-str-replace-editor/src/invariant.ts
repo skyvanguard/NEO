@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-tool-str-replace-editor`.
- * @module @neo/dsh-tool-str-replace-editor/invariant
+ * Package-owned invariant companion for `@neo/tool-str-replace-editor`.
+ * @module @neo/tool-str-replace-editor/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tool-str-replace-editor'
+const PACKAGE_NAME = '@neo/tool-str-replace-editor'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-str-replace-editor-invariant'

@@ -1,13 +1,13 @@
-/** Package-owned goal-round prompt invariants. @module @neo/dsh-goal-round-driver/invariant */
+/** Package-owned goal-round prompt invariants. @module @neo/goal-round-driver/invariant */
 
 import { isDeepStrictEqual } from 'node:util'
 import type { Context } from '@neo/cordis'
-import { foldGoal, type FoldedGoal, type GoalMessageSource, type GoalView } from '@neo/dsh-goal'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
-import type { Session, SessionEvent } from '@neo/dsh-session'
+import { foldGoal, type FoldedGoal, type GoalMessageSource, type GoalView } from '@neo/goal'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
+import type { Session, SessionEvent } from '@neo/session'
 import { renderGoalRoundPrompt } from './prompt.ts'
 
-const PACKAGE_NAME = '@neo/dsh-goal-round-driver'
+const PACKAGE_NAME = '@neo/goal-round-driver'
 
 /** Cordis companion plugin name. */
 export const name = 'goal-round-driver-invariant'

@@ -1,4 +1,4 @@
-import type { AssistantBlock } from '@neo/dsh-client-runtime/client'
+import type { AssistantBlock } from '@neo/client-runtime/client'
 
 /**
  * Collect visible prose from one Assistant lifecycle.

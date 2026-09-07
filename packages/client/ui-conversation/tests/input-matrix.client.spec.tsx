@@ -7,14 +7,14 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
+import { bindSnapshotSelector } from '@neo/client-web-react'
 import {
   createSnapshotStore, EMPTY_CHAT_SNAPSHOT, EMPTY_CONVERSATION_VIEWS,
-} from '@neo/dsh-client-runtime/client'
-import type { ClientContext, ConversationSnapshot, SessionId } from '@neo/dsh-client-runtime/client'
-import type { SubmitOutcome } from '@neo/dsh-client-ui-input-trigger/client'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+} from '@neo/client-runtime/client'
+import type { ClientContext, ConversationSnapshot, SessionId } from '@neo/client-runtime/client'
+import type { SubmitOutcome } from '@neo/client-ui-input-trigger/client'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { InputBar } from '../src/client/skeleton/InputBar.tsx'
 import type { InputBarProps } from '../src/client/skeleton/InputBar.tsx'

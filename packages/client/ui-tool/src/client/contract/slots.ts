@@ -1,10 +1,10 @@
 /** Tool UI slot declarations and their composed component props. */
-import type { PropsLocale, PropsRenderSlots, PropsRuntime } from '@neo/dsh-client-ui-slots'
-import type { ToolCallBlock } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-client-ui-conversation/client'
-import type {} from '@neo/dsh-client-locale/client'
+import type { PropsLocale, PropsRenderSlots, PropsRuntime } from '@neo/client-ui-slots'
+import type { ToolCallBlock } from '@neo/client-runtime/client'
+import type {} from '@neo/client-ui-conversation/client'
+import type {} from '@neo/client-locale/client'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface SlotMap {
     /**
      * Keyed atomic Tool call view, dispatched by the wire Tool name. Register

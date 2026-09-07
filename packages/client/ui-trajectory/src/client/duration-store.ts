@@ -1,6 +1,6 @@
 import {
   createSnapshotStore, type SnapshotStore,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 
 /**
  * Create the browser-wide trajectory duration preference source.

@@ -4,8 +4,8 @@
  */
 
 import type { Context } from '@neo/cordis'
-import type {} from '@neo/dsh-agent-loop'
-import type {} from '@neo/dsh-subagent'
+import type {} from '@neo/agent-loop'
+import type {} from '@neo/subagent'
 
 /** Fixture plugin name. */
 export const name = 'subagent-settlement-fence'

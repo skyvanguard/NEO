@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { CommandDefinition, CommandInvocation } from '@neo/dsh-commands'
+import type { CommandDefinition, CommandInvocation } from '@neo/commands'
 import * as SessionLogDownload from '../src/index.ts'
 
 describe('/export Web download command', () => {

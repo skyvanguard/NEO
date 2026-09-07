@@ -6,11 +6,11 @@
 
 import { expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import SubagentRuntime from '@neo/dsh-subagent'
-import type { SubagentProvider } from '@neo/dsh-subagent'
+import type { Agent } from '@neo/agent'
+import SubagentRuntime from '@neo/subagent'
+import type { SubagentProvider } from '@neo/subagent'
 import WorkerThreadWorkflowEngine from '../src/index.ts'
-import { SessionId } from '@neo/dsh-session'
+import { SessionId } from '@neo/session'
 
 // A fresh thread compiles the source runtime. Leave contention headroom on
 // shared CI runners without weakening any engine-level timeout assertion.

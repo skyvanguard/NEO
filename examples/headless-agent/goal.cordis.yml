@@ -6,6 +6,6 @@
     patches:
       - insert:
           - id: goal
-            name: '@neo/dsh-goal'
+            name: '@neo/goal'
           - id: tool-goal
-            name: '@neo/dsh-tool-goal'
+            name: '@neo/tool-goal'

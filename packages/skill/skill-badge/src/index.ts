@@ -1,7 +1,7 @@
 /**
  * Bundled `dsh-badge` skill provider.
  *
- * @module @neo/dsh-skill-badge
+ * @module @neo/skill-badge
  */
 
 import { readFile } from 'node:fs/promises'
@@ -12,7 +12,7 @@ import {
   type SkillCandidate,
   type SkillDefinition,
   type SkillProvider,
-} from '@neo/dsh-skill'
+} from '@neo/skill'
 
 const PROVIDER_NAME = 'dsh-badge'
 const SKILL_BODY_URL = new URL('../assets/dsh-badge.md', import.meta.url)

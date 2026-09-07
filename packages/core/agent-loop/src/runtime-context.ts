@@ -1,15 +1,15 @@
 /**
  * Durable projection state for dynamic runtime context.
- * @module @neo/dsh-agent-loop/runtime-context
+ * @module @neo/agent-loop/runtime-context
  */
 
-import { createUserMessage } from '@neo/dsh-llm'
-import type { ContextSnapshotSection } from '@neo/dsh-llm'
-import type { Session, UserMessage } from '@neo/dsh-session'
-import { isReplacementSurfaceEvent } from '@neo/dsh-session'
+import { createUserMessage } from '@neo/llm'
+import type { ContextSnapshotSection } from '@neo/llm'
+import type { Session, UserMessage } from '@neo/session'
+import { isReplacementSurfaceEvent } from '@neo/session'
 import type { Context } from '@neo/cordis'
 
-const SOURCE = '@neo/dsh-system-prompt'
+const SOURCE = '@neo/system-prompt'
 const CLEARED = 'Current runtime context: none. Earlier runtime-context snapshots no longer apply.'
 
 function isOwned(message: UserMessage): boolean {

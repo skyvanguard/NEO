@@ -1,6 +1,6 @@
 /** Canonical session URI and inline mention encoding. */
 
-import { SessionId, type SessionId as SessionIdType } from '@neo/dsh-session'
+import { SessionId, type SessionId as SessionIdType } from '@neo/session'
 import { SessionReferenceError } from './config.ts'
 import type { SessionReferenceInput } from './types.ts'
 

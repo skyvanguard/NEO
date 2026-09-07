@@ -71,9 +71,9 @@ SNAPSHOT_DIRECTORY = (
 SNAPSHOT_FILENAMES = ("result.json", "session.jsonl", "session.1.jsonl", "session.2.jsonl")
 CUSTOM_CORDIS = """\
 - id: sdk-jsonrpc-server
-  name: '@neo/dsh-sdk-jsonrpc-server'
+  name: '@neo/sdk-jsonrpc-server'
 - id: agent-core
-  name: '@neo/dsh-agent-spine-demo'
+  name: '@neo/agent-spine-demo'
   config:
     workspaceContext: false
     skills:
@@ -82,32 +82,32 @@ CUSTOM_CORDIS = """\
     tools:
       mode: both
 - id: sessions
-  name: '@neo/dsh-session-persistence-jsonl'
+  name: '@neo/session-persistence-jsonl'
   config:
     root: !!js process.env.DSH_SESSION_ROOT
     compression: 'none'
 - id: code-runtime
-  name: '@neo/dsh-code-runtime-worker-thread'
+  name: '@neo/code-runtime-worker-thread'
 - id: subagents
-  name: '@neo/dsh-subagent'
+  name: '@neo/subagent'
 - id: subagent-spawn-in-process
-  name: '@neo/dsh-subagent-spawn-in-process'
+  name: '@neo/subagent-spawn-in-process'
   config:
     providerName: spawn
 - id: subagent-tool
-  name: '@neo/dsh-tool-subagent'
+  name: '@neo/tool-subagent'
   config:
     provider: spawn
 - id: workflow-engine
-  name: '@neo/dsh-workflow-worker-thread'
+  name: '@neo/workflow-worker-thread'
   config:
     provider: spawn
 - id: workflow-tool
-  name: '@neo/dsh-tool-workflow'
+  name: '@neo/tool-workflow'
 - id: cordis-host-runner
-  name: '@neo/dsh-cordis-host-runner'
+  name: '@neo/cordis-host-runner'
 - id: cordis-tool
-  name: '@neo/dsh-tool-cordis'
+  name: '@neo/tool-cordis'
 """
 class MockModelHandler(BaseHTTPRequestHandler):
     """Return deterministic text, worker, and orchestration completions."""

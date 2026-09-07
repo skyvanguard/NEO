@@ -14,9 +14,9 @@
  */
 
 import { Context } from '@neo/cordis'
-import type { DynamicCordisPackage } from '@neo/dsh-api-remotes/client'
-import type { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import type { ThemeRuntime } from '@neo/dsh-client-ui-theme/client'
+import type { DynamicCordisPackage } from '@neo/api-remotes/client'
+import type { SlotRegistry } from '@neo/client-runtime/client'
+import type { ThemeRuntime } from '@neo/client-ui-theme/client'
 
 /** Facade verbs beyond declared services (host CTX_VERBS twin). */
 const CTX_VERBS = new Set([

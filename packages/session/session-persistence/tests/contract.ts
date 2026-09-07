@@ -5,13 +5,13 @@
  * to the same append-only / contiguous-seq / lazy-materialization / crash
  * semantics. The JSONL backend's own spec adds file-specific tests on top.
  *
- * @module @neo/dsh-session-persistence/tests/contract
+ * @module @neo/session-persistence/tests/contract
  */
 
 import { describe, expect, it } from 'vitest'
-import { SESSION_FORMAT_VERSION, Session, SessionId, TOOL_NOT_STARTED, TOOL_OUTCOME_UNKNOWN } from '@neo/dsh-session'
-import type { SessionEvent, SessionHeader, SurfaceEventType, SurfaceIntent } from '@neo/dsh-session'
-import { CallId, MessageId, createMessage, freezeMessage } from '@neo/dsh-llm'
+import { SESSION_FORMAT_VERSION, Session, SessionId, TOOL_NOT_STARTED, TOOL_OUTCOME_UNKNOWN } from '@neo/session'
+import type { SessionEvent, SessionHeader, SurfaceEventType, SurfaceIntent } from '@neo/session'
+import { CallId, MessageId, createMessage, freezeMessage } from '@neo/llm'
 import type { SessionPersistence } from '../src/index.ts'
 
 /** A backend under test plus its teardown. */

@@ -15,11 +15,11 @@
       # `name` asserts the target: a mismatch skips the patch and warns only
       # when a logger exists.
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         disabled: true
       - insert:
           - id: llm-replay
-            name: '@neo/dsh-llm-replay'
+            name: '@neo/llm-replay'
             config:
               providers:
                 - id: deepseek-official

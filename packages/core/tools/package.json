@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tools",
+  "name": "@neo/tools",
   "description": "Tool registry and execution pipeline for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -41,28 +41,28 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-code-runtime": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-user-approval": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/code-runtime": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/user-approval": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-code-runtime": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-user-approval": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/code-runtime": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/user-approval": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-app-boot",
+  "name": "@neo/app-boot",
   "description": "Shared boot glue for the app bins: .env loading, fail-loud Loader guards, snapshot-aware config resolution, and the Loader boot sequence",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -39,10 +39,10 @@
     "@neo/cordis-plugin-hmr": "workspace:^",
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-launch-environment": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-home-paths": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/launch-environment": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
@@ -56,10 +56,10 @@
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
     "@neo/cordis-plugin-timer": "workspace:^",
-    "@neo/dsh-launch-environment": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-home-paths": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/launch-environment": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
     "@types/js-yaml": "^4.0.9",
     "@neo/cordis": "workspace:^"
   }

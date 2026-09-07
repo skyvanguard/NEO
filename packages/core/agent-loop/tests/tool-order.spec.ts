@@ -1,4 +1,4 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 /**
  * Loop-level tool-order determinism: the request/header event — and therefore the frozen
  * request the adapter receives — carries the assembly's canonical tool order (system-prompt's
@@ -9,14 +9,14 @@ import { createUserMessage } from '@neo/dsh-llm'
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import LlmRuntime from '@neo/dsh-llm'
-import SessionStore, { SessionId, foldRequestHeader } from '@neo/dsh-session'
-import SystemPrompt, { TOOL_ORDER_REST } from '@neo/dsh-system-prompt'
-import type { Config as SystemPromptConfig } from '@neo/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture } from '@neo/dsh-tools'
-import AgentRegistry, { type Agent } from '@neo/dsh-agent'
+import LlmRuntime from '@neo/llm'
+import SessionStore, { SessionId, foldRequestHeader } from '@neo/session'
+import SystemPrompt, { TOOL_ORDER_REST } from '@neo/system-prompt'
+import type { Config as SystemPromptConfig } from '@neo/system-prompt'
+import ToolRuntime, { defineContentToolFixture } from '@neo/tools'
+import AgentRegistry, { type Agent } from '@neo/agent'
 
-import AgentLoop from '@neo/dsh-agent-loop'
+import AgentLoop from '@neo/agent-loop'
 import { MockAdapter, textResponse } from './mock-adapter.ts'
 
 async function harness(adapter: MockAdapter, toolOrder?: SystemPromptConfig['toolOrder']) {

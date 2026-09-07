@@ -9,7 +9,7 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import type { JsonValue } from '@neo/dsh-session'
+import type { JsonValue } from '@neo/session'
 import {
   globSearchMeta,
   grepSearchMeta,

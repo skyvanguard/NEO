@@ -1,12 +1,12 @@
 import type {
   ChatConversationViewNode, ConversationLocation, ConversationNodeContext,
   ConversationNodeDefinition,
-} from '@neo/dsh-client-runtime/client'
-import type { SessionId } from '@neo/dsh-session/types'
+} from '@neo/client-runtime/client'
+import type { SessionId } from '@neo/session/types'
 import type {
   ToolWorkflowAgentEndData, ToolWorkflowAgentStartData,
-} from '@neo/dsh-tool-workflow/types'
-import type { WorkflowAgentOutcome, WorkflowStopReason } from '@neo/dsh-workflow/types'
+} from '@neo/tool-workflow/types'
+import type { WorkflowAgentOutcome, WorkflowStopReason } from '@neo/workflow/types'
 
 /** Status shown for a workflow, phase, or member. */
 export type WorkflowRunStatus = 'running' | 'completed' | 'failed' | 'cancelled' | 'interrupted'
@@ -34,7 +34,7 @@ export interface WorkflowRunChatData {
   readonly phases: readonly WorkflowRunPhaseData[]
 }
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Durable top-level workflow run and all members that actually started. */
     'workflow-run': WorkflowRunChatData

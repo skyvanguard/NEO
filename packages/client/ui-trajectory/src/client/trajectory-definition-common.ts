@@ -1,4 +1,4 @@
-import type { ConversationNodeContext } from '@neo/dsh-client-runtime/client'
+import type { ConversationNodeContext } from '@neo/client-runtime/client'
 import type {
   TrajectoryContribution, TrajectoryConversationViewNode,
 } from './trajectory-contract.ts'

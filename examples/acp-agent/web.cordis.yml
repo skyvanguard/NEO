@@ -10,12 +10,12 @@
     patches:
       - insert:
           - id: web
-            name: '@neo/dsh-web'
+            name: '@neo/web'
           - id: web-fetch-http
-            name: '@neo/dsh-web-fetch-http'
+            name: '@neo/web-fetch-http'
           - id: web-fetch-fixture
             name: './web-fetch-fixture-server.mjs'
           - id: tool-web
-            name: '@neo/dsh-tool-web'
+            name: '@neo/tool-web'
             config:
               search: false

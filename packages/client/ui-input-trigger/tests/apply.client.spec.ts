@@ -6,12 +6,12 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import { usePinnedBrowserLanguages } from '@neo/dsh-client-test-runtime'
-import { createScope, scopeOf, SlotRegistry } from '@neo/dsh-client-runtime/client'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
-import { apply, inject, InputTriggerService } from '@neo/dsh-client-ui-input-trigger/client'
-import type { MenuViewInjected } from '@neo/dsh-client-ui-input-trigger/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import { usePinnedBrowserLanguages } from '@neo/client-test-runtime'
+import { createScope, scopeOf, SlotRegistry } from '@neo/client-runtime/client'
+import type { SessionId } from '@neo/client-runtime/client'
+import { apply, inject, InputTriggerService } from '@neo/client-ui-input-trigger/client'
+import type { MenuViewInjected } from '@neo/client-ui-input-trigger/client'
 
 // The service reads its initial locale from the browser; these specs assert
 // the shipped Chinese copy, so they state the browser they assume.

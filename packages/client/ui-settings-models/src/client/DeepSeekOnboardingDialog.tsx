@@ -8,9 +8,9 @@
 
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
-import type { IApiClient } from '@neo/dsh-api-remotes/client'
-import type { SnapshotStore } from '@neo/dsh-client-runtime/client'
-import type { InjectFace, PropsRuntime } from '@neo/dsh-client-ui-slots'
+import type { IApiClient } from '@neo/api-remotes/client'
+import type { SnapshotStore } from '@neo/client-runtime/client'
+import type { InjectFace, PropsRuntime } from '@neo/client-ui-slots'
 import type { ModelsSettingsState, ModelsSettingsStore } from './store.ts'
 import { onboardingReadiness } from './store.ts'
 import { ProviderEditor } from './ProviderEditor.tsx'

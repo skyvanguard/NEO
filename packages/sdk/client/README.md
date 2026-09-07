@@ -1,4 +1,4 @@
-# @neo/dsh-sdk-client
+# @neo/sdk-client
 
 English | [中文](README.zh.md)
 
@@ -9,7 +9,7 @@ Unlike the Python SDK, the launch spec is fully explicit (`command`/`args`): thi
 ## DeepSeekHarness
 
 ```ts
-import { DeepSeekHarness } from '@neo/dsh-sdk-client'
+import { DeepSeekHarness } from '@neo/sdk-client'
 
 await using harness = new DeepSeekHarness({
   launch: { command: 'node', args: ['lib/bin.js', 'cordis.yml'] },

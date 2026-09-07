@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-typert-protocol`.
- * @module @neo/dsh-typert-protocol/invariant
+ * Package-owned invariant companion for `@neo/typert-protocol`.
+ * @module @neo/typert-protocol/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-typert-protocol'
+const PACKAGE_NAME = '@neo/typert-protocol'
 
 /** Cordis companion plugin name. */
 export const name = 'typert-protocol-invariant'

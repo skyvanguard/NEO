@@ -1,10 +1,10 @@
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import LlmRuntime, { createUserMessage, LlmAdapter  } from '@neo/dsh-llm'
-import type { GenerateOptions, StreamChunk } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
-import SessionTitleService from '@neo/dsh-session-title'
-import * as providerPlugin from '@neo/dsh-session-title-all-prompts-llm'
+import LlmRuntime, { createUserMessage, LlmAdapter  } from '@neo/llm'
+import type { GenerateOptions, StreamChunk } from '@neo/llm'
+import SessionStore, { Session, SessionId } from '@neo/session'
+import SessionTitleService from '@neo/session-title'
+import * as providerPlugin from '@neo/session-title-all-prompts-llm'
 
 class RecordingAdapter extends LlmAdapter {
   readonly requests: GenerateOptions[] = []

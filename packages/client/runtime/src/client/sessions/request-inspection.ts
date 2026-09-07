@@ -1,4 +1,4 @@
-import type { ContentBlock, ToolSchema } from '@neo/dsh-llm/types'
+import type { ContentBlock, ToolSchema } from '@neo/llm/types'
 import type {
   AssistantProvenanceView, AssistantRequestConfig,
 } from './conversation.ts'

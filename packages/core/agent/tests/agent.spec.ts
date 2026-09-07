@@ -1,12 +1,12 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
 import { Context, Service, symbols } from '@neo/cordis'
-import { createUserMessage, freezeMessage } from '@neo/dsh-llm'
-import { Session, SessionId, type UserMessage } from '@neo/dsh-session'
+import { createUserMessage, freezeMessage } from '@neo/llm'
+import { Session, SessionId, type UserMessage } from '@neo/session'
 import AgentRegistry, {
   agentEvents,
   Inbox,
-} from '@neo/dsh-agent'
-import TypertRegistry from '@neo/dsh-typert-registry'
+} from '@neo/agent'
+import TypertRegistry from '@neo/typert-registry'
 
 import type {
   Agent,
@@ -15,7 +15,7 @@ import type {
   AgentStatus,
   CreateAgentOptions,
   ResumeAgentOptions,
-} from '@neo/dsh-agent'
+} from '@neo/agent'
 
 function stubAgent(rawId: string, overrides: Partial<Agent> = {}): Agent {
   const id = SessionId(rawId)
@@ -155,8 +155,8 @@ describe('AgentRegistry', () => {
     expect(lookup).toMatchObject({
       parameter: 'agent',
       wire: 'agentId',
-      hostTypeSymbol: '@neo/dsh-agent#Agent',
-      wireTypeSymbol: '@neo/dsh-session/types#SessionId',
+      hostTypeSymbol: '@neo/agent#Agent',
+      wireTypeSymbol: '@neo/session/types#SessionId',
     })
     expect(lookup?.resolve(agent.id)).toBe(agent)
     expect(ctx.typert.contexts.getHost('agent')?.resolve(agent.id)).toBe(agent.ctx)

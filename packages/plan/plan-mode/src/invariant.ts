@@ -1,10 +1,10 @@
-/** Package-owned durable plan-mode invariants. @module @neo/dsh-plan-mode/invariant */
+/** Package-owned durable plan-mode invariants. @module @neo/plan-mode/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-plan-mode'
+const PACKAGE_NAME = '@neo/plan-mode'
 
 /** Cordis companion plugin name. */
 export const name = 'plan-mode-invariant'

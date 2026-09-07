@@ -14,8 +14,8 @@ import { closeSync, mkdtempSync, openSync, unlinkSync, writeSync } from 'node:fs
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { setTimeout as sleepMs } from 'node:timers/promises'
-import { scrubbedParentEnv } from '@neo/dsh-subprocess'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import { scrubbedParentEnv } from '@neo/subprocess'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import type {
   CollectedOutput,
   SubprocessCollect,
@@ -23,7 +23,7 @@ import type {
   SubprocessOutcome,
   SubprocessOutputMode,
   SubprocessSpawnSpec,
-} from '@neo/dsh-subprocess'
+} from '@neo/subprocess'
 import { linuxProcessGroupHasLiveMembers } from './process-inspector.ts'
 
 /**

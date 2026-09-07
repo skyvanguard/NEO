@@ -8,8 +8,8 @@ import { chromium } from 'playwright'
 import { expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import type { Fiber } from '@neo/cordis'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
-import type { SubprocessHandle, SubprocessSpawnSpec } from '@neo/dsh-subprocess'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
+import type { SubprocessHandle, SubprocessSpawnSpec } from '@neo/subprocess'
 import { REPO_ROOT } from './support.ts'
 
 function spawnSpec(argv: readonly string[], cwd: string, env?: Record<string, string>): SubprocessSpawnSpec {

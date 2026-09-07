@@ -8,7 +8,7 @@
  * Not part of the product plugin graph (no `dsh.client`); feature packages
  * depend on it in devDependencies only. It copies no SlotCore/renderer/store
  * machinery — everything mounts the production implementations.
- * @module @neo/dsh-client-test-runtime
+ * @module @neo/client-test-runtime
  */
 /* oxlint-disable typescript/no-redundant-type-constituents --
  * `keyof SlotMap & string` is the declare-merge key pattern (see ui-slots):
@@ -24,11 +24,11 @@ import type { queries } from '@testing-library/dom'
 import type { BoundFunctions } from '@testing-library/dom'
 import {
   ConversationEventRegistry, ConversationViewRegistry, SlotRegistry,
-} from '@neo/dsh-client-runtime/client'
-import { createSlotRenderer } from '@neo/dsh-client-web-react'
+} from '@neo/client-runtime/client'
+import { createSlotRenderer } from '@neo/client-web-react'
 import type {
   ChildrenDecl, ComposedProps, OwnerOf, SlotComponent, SlotMap, SlotRendererHost, StoreInstanceLike,
-} from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-slots'
 import { registerDomSnapshotSerializer } from './snapshot.ts'
 import { TestSessions } from './sessions.ts'
 import { TestWorkspaces } from './workspaces.ts'

@@ -1,17 +1,17 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 /**
  * Keyless real-Loader-path smoke for the combined SQLite session-query service.
  *
- * @module @neo/dsh-session-query-sqlite/tests/load-path
+ * @module @neo/session-query-sqlite/tests/load-path
  */
 
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import { SESSION_FORMAT_VERSION, SessionId } from '@neo/dsh-session'
-import SessionStore from '@neo/dsh-session'
-import SqliteSessionPersistence from '@neo/dsh-session-persistence-sqlite'
-import SqliteSessionQueryEngine, * as queryModule from '@neo/dsh-session-query-sqlite'
+import { SESSION_FORMAT_VERSION, SessionId } from '@neo/session'
+import SessionStore from '@neo/session'
+import SqliteSessionPersistence from '@neo/session-persistence-sqlite'
+import SqliteSessionQueryEngine, * as queryModule from '@neo/session-query-sqlite'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'

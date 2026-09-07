@@ -4,16 +4,16 @@
 
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
 - id: subprocess
-  name: '@neo/dsh-subprocess-local'
+  name: '@neo/subprocess-local'
 
 - id: bash
-  name: '@neo/dsh-bash-local'
+  name: '@neo/bash-local'
 
 - id: time-context
-  name: '@neo/dsh-time-context'
+  name: '@neo/time-context'
 
 - id: agent-spine
-  name: '@neo/dsh-agent-spine-demo'
+  name: '@neo/agent-spine-demo'
   config:
     agents:
       - id: main
@@ -24,10 +24,10 @@
     workspaceContext: false
 
 - id: persistence
-  name: '@neo/dsh-session-persistence-jsonl'
+  name: '@neo/session-persistence-jsonl'
   config:
     root: './.sessions'
     compression: 'none'
 
 - id: checkpoint-policy
-  name: '@neo/dsh-session-checkpoint-policy'
+  name: '@neo/session-checkpoint-policy'

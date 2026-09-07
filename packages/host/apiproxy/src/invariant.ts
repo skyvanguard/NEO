@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-host-apiproxy`.
- * @module @neo/dsh-host-apiproxy/invariant
+ * Package-owned invariant companion for `@neo/host-apiproxy`.
+ * @module @neo/host-apiproxy/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-host-apiproxy'
+const PACKAGE_NAME = '@neo/host-apiproxy'
 
 /** Cordis companion plugin name. */
 export const name = 'host-apiproxy-invariant'

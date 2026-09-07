@@ -11,13 +11,13 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
-import type { ISession, SessionId, ToolResultNode } from '@neo/dsh-client-runtime/client'
-import type { PropsRenderSlots } from '@neo/dsh-client-ui-slots'
-import { SlotTestRuntime, stubSettingsScope } from '@neo/dsh-client-test-runtime'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import { apply as applyConversation, inject as injectConversation } from '@neo/dsh-client-ui-conversation/client'
-import { apply as applyTool, inject as injectTool } from '@neo/dsh-client-ui-tool/client'
-import type { ToolCallViewProps } from '@neo/dsh-client-ui-tool/client'
+import type { ISession, SessionId, ToolResultNode } from '@neo/client-runtime/client'
+import type { PropsRenderSlots } from '@neo/client-ui-slots'
+import { SlotTestRuntime, stubSettingsScope } from '@neo/client-test-runtime'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import { apply as applyConversation, inject as injectConversation } from '@neo/client-ui-conversation/client'
+import { apply as applyTool, inject as injectTool } from '@neo/client-ui-tool/client'
+import type { ToolCallViewProps } from '@neo/client-ui-tool/client'
 import { toolChatSnapshot } from './tool-details-render.client.tsx'
 
 const SID = 's1' as SessionId

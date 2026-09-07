@@ -8,22 +8,22 @@
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render } from '@testing-library/react'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
+import { bindSnapshotSelector } from '@neo/client-web-react'
 import {
   createSnapshotStore, EMPTY_CONVERSATION_VIEWS,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import type {
   ConversationSnapshot, RunningToolCall, SessionId, SessionListState, ToolResultNode, WorkspaceListState,
-} from '@neo/dsh-client-runtime/client'
-import type { ToolResultView } from '@neo/dsh-api-remotes/client'
-import type { SelectionTarget } from '@neo/dsh-client-ui-conversation/client'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+} from '@neo/client-runtime/client'
+import type { ToolResultView } from '@neo/api-remotes/client'
+import type { SelectionTarget } from '@neo/client-ui-conversation/client'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 import { CHAT_SEARCH_MAX_LINES, searchCardModel } from '../src/client/tool/models/search-card-model.ts'
-import { zh } from '@neo/dsh-client-ui-conversation/src/client/locales.ts'
-import { createChatStore } from '@neo/dsh-client-ui-conversation/src/client/stores.ts'
+import { zh } from '@neo/client-ui-conversation/src/client/locales.ts'
+import { createChatStore } from '@neo/client-ui-conversation/src/client/stores.ts'
 import { GenericToolCard, type GenericToolCardProps } from '../src/client/tool/toolviews/GenericToolCard.tsx'
-import { DetailsPanel } from '@neo/dsh-client-ui-conversation/src/client/skeleton/DetailsPanel.tsx'
+import { DetailsPanel } from '@neo/client-ui-conversation/src/client/skeleton/DetailsPanel.tsx'
 import { SearchRow, searchToolview } from '../src/client/tool/toolviews/search-row.tsx'
 import { renderToolDetails, SessionProviderStub, toolChatSnapshot } from './tool-details-render.client.tsx'
 

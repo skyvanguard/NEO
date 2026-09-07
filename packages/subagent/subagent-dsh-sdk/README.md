@@ -1,4 +1,4 @@
-# @neo/dsh-subagent-dsh-sdk
+# @neo/subagent-dsh-sdk
 
 English | [中文](README.zh.md)
 
@@ -40,7 +40,7 @@ The provider advertises no start-time capabilities (`outputSchema`/`depthLimit`/
 
 ```yaml
 - id: subagent-dsh-sdk
-  name: '@neo/dsh-subagent-dsh-sdk'
+  name: '@neo/subagent-dsh-sdk'
   config:
     providerName: dsh-sdk
     command: node
@@ -49,7 +49,7 @@ The provider advertises no start-time capabilities (`outputSchema`/`depthLimit`/
     env:
       DEEPSEEK_API_KEY: !!js process.env.DEEPSEEK_API_KEY
 - id: tool-subagent
-  name: '@neo/dsh-tool-subagent'
+  name: '@neo/tool-subagent'
   config: { provider: dsh-sdk, toolName: subagent, maxDepth: 'provider-managed' }
 ```
 

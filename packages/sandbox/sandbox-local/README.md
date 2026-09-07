@@ -1,4 +1,4 @@
-# @neo/dsh-sandbox-local
+# @neo/sandbox-local
 
 English | [中文](README.zh.md)
 
@@ -18,10 +18,10 @@ The Windows rung keeps one deterministic write SID and standing ACE per workspac
 
 ```yaml
 - id: sandbox
-  name: '@neo/dsh-sandbox-local'
+  name: '@neo/sandbox-local'
 ```
 
-Consumers: [`@neo/dsh-bash-sandbox`](../../shell/bash-sandbox/); see [the acp-agent example](../../../examples/acp-agent/) for the runnable default composition.
+Consumers: [`@neo/bash-sandbox`](../../shell/bash-sandbox/); see [the acp-agent example](../../../examples/acp-agent/) for the runnable default composition.
 
 ## Model Experience
 

@@ -1,4 +1,4 @@
-# `@neo/dsh-acp-snapshot`
+# `@neo/acp-snapshot`
 
 English | [中文](README.zh.md)
 
@@ -22,7 +22,7 @@ import {
   defineAcpSnapshotSuite,
   type Scenario,
   type SnapshotSuiteOptions,
-} from '@neo/dsh-acp-snapshot'
+} from '@neo/acp-snapshot'
 
 function snapshotMode(value: string | undefined): SnapshotSuiteOptions['mode'] {
   switch (value) {

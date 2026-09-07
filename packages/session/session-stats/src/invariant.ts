@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-session-stats`.
- * @module @neo/dsh-session-stats/invariant
+ * Package-owned invariant companion for `@neo/session-stats`.
+ * @module @neo/session-stats/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-session-stats'
+const PACKAGE_NAME = '@neo/session-stats'
 
 /** Cordis companion plugin name. */
 export const name = 'session-stats-invariant'

@@ -1,15 +1,15 @@
 /**
  * Default one-shot summarization and durable checkpoint framing.
  *
- * @module @neo/dsh-compaction-basic/summarizer
+ * @module @neo/compaction-basic/summarizer
  */
 
 import type { Context } from '@neo/cordis'
-import { contentHasImage, createUserMessage, BlockAssembler, LlmError } from '@neo/dsh-llm'
+import { contentHasImage, createUserMessage, BlockAssembler, LlmError } from '@neo/llm'
 import type {
   ContentBlock, FinishReason, GenerateOptions, Message, TokenUsage, ToolSchema,
-} from '@neo/dsh-llm'
-import type { Agent } from '@neo/dsh-agent'
+} from '@neo/llm'
+import type { Agent } from '@neo/agent'
 
 interface SummaryConfig {
   readonly summarizationProvider: string

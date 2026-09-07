@@ -8,11 +8,11 @@
 import clsx from 'clsx'
 import {
   IconDarkOutline16, IconFollowsystemOutline16, IconLightOutline16,
-} from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale, PropsRuntime, PropsStore } from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-primitives'
+import type { PropsLocale, PropsRuntime, PropsStore } from '@neo/client-ui-slots'
 import type { ThemePreference } from '../theme-settings.ts'
 import type { ThemeKey } from './locales.ts'
-import type {} from '@neo/dsh-client-ui-settings/client'
+import type {} from '@neo/client-ui-settings/client'
 import type { createAppearanceRowStore } from './settings-store.ts'
 import css from './AppearanceRow.module.css'
 

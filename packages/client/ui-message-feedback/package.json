@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-message-feedback",
+  "name": "@neo/client-ui-message-feedback",
   "description": "Per-message feedback controls contributed to the assistant-message action strip, backed by the messageFeedback Host Remote",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,10 +32,10 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-api-remotes",
-        "@neo/dsh-client-locale",
-        "@neo/dsh-client-ui-conversation"
+        "@neo/client-runtime",
+        "@neo/api-remotes",
+        "@neo/client-locale",
+        "@neo/client-ui-conversation"
       ],
       "platform": "web"
     }
@@ -46,31 +46,31 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-message-feedback": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/message-feedback": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-message-feedback": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/message-feedback": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^",
     "@testing-library/react": "^16.1.0",
     "@types/react": "~18.3.1",

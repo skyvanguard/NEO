@@ -1,6 +1,6 @@
 import type { Context } from '@neo/cordis'
-import type { GenerateOptions, StreamChunk } from '@neo/dsh-llm'
-import { LlmAdapter } from '@neo/dsh-llm'
+import type { GenerateOptions, StreamChunk } from '@neo/llm'
+import { LlmAdapter } from '@neo/llm'
 
 /**
  * Scripted model for the CHILD runtime: answers every request with its own

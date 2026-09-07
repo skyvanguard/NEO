@@ -13,36 +13,36 @@
     path: ./advanced.cordis.yml
     patches:
       - id: subprocess
-        name: '@neo/dsh-subprocess-local'
+        name: '@neo/subprocess-local'
         disabled: true
       - id: fs-local
-        name: '@neo/dsh-fs-local'
+        name: '@neo/fs-local'
         disabled: true
       - insert:
           - id: e2b
-            name: '@neo/dsh-e2b'
+            name: '@neo/e2b'
             config:
               cwd: !!js process.cwd()
               timeoutMs: 300000
           - id: subprocess-e2b
-            name: '@neo/dsh-subprocess-e2b'
+            name: '@neo/subprocess-e2b'
           - id: fs-e2b
-            name: '@neo/dsh-fs-e2b'
+            name: '@neo/fs-e2b'
           - id: sandbox-policy
-            name: '@neo/dsh-sandbox-policy'
+            name: '@neo/sandbox-policy'
             config:
               mode: danger-full-access
               workspaceRoot: !!js process.cwd()
           - id: pty
-            name: '@neo/dsh-terminal'
+            name: '@neo/terminal'
           - id: terminal-bash
-            name: '@neo/dsh-terminal-bash'
+            name: '@neo/terminal-bash'
           - id: tool-terminal
-            name: '@neo/dsh-tool-terminal'
+            name: '@neo/tool-terminal'
           - id: lsp
-            name: '@neo/dsh-lsp'
+            name: '@neo/lsp'
           - id: lsp-stdio
-            name: '@neo/dsh-lsp-stdio'
+            name: '@neo/lsp-stdio'
             config:
               servers:
                 typescript:
@@ -54,4 +54,4 @@
                     .js: javascript
                     .jsx: javascriptreact
           - id: tool-lsp
-            name: '@neo/dsh-tool-lsp'
+            name: '@neo/tool-lsp'

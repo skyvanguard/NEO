@@ -13,19 +13,19 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import {
   EMPTY_CHAT_SNAPSHOT, EMPTY_CONVERSATION_VIEWS, SessionRuntime,
-} from '@neo/dsh-client-runtime/client'
-import { InputTriggerService } from '@neo/dsh-client-ui-input-trigger/client'
-import type { ClientSessionContext, CommandClaim, PickOutcome, SubmitOutcome } from '@neo/dsh-client-ui-input-trigger/client'
+} from '@neo/client-runtime/client'
+import { InputTriggerService } from '@neo/client-ui-input-trigger/client'
+import type { ClientSessionContext, CommandClaim, PickOutcome, SubmitOutcome } from '@neo/client-ui-input-trigger/client'
 import { FakeApiClient, fakeRemote, ok } from '../../runtime/tests/fake-api.client.ts'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { InputBar } from '../src/client/skeleton/InputBar.tsx'
 import type { InputBarProps } from '../src/client/skeleton/InputBar.tsx'
 import { zh } from '../src/client/locales.ts'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
-import { createSnapshotStore } from '@neo/dsh-client-runtime/client'
-import type { ConversationSnapshot } from '@neo/dsh-client-runtime/client'
+import { bindSnapshotSelector } from '@neo/client-web-react'
+import { createSnapshotStore } from '@neo/client-runtime/client'
+import type { ConversationSnapshot } from '@neo/client-runtime/client'
 
 afterEach(cleanup)
 

@@ -1,11 +1,11 @@
-/** Package-owned durable workflow-record invariants. @module @neo/dsh-tool-workflow/invariant */
+/** Package-owned durable workflow-record invariants. @module @neo/tool-workflow/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type {} from './types.ts'
 
-const PACKAGE_NAME = '@neo/dsh-tool-workflow'
+const PACKAGE_NAME = '@neo/tool-workflow'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-workflow-invariant'

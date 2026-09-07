@@ -12,12 +12,12 @@ import {
   tokenizeSessionFixtureCwd,
   type HarvestedLog,
   type NormalizeContext,
-} from '@neo/dsh-acp-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@neo/dsh-loader-smoke'
+} from '@neo/acp-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@neo/loader-smoke'
 import {
   decompressZstdFrame,
   scanZstdFrames,
-} from '@neo/dsh-session-persistence-jsonl/src/zstd.ts'
+} from '@neo/session-persistence-jsonl/src/zstd.ts'
 import { describe, expect, it } from 'vitest'
 
 const snapshotsDir = join(dirname(fileURLToPath(import.meta.url)), 'snapshots')

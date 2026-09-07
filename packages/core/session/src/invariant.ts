@@ -1,18 +1,18 @@
 /**
  * Package-owned relational invariants for the session event log. Load this
- * companion beside `@neo/dsh-invariants` to enable the checks.
+ * companion beside `@neo/invariants` to enable the checks.
  *
- * @module @neo/dsh-session/invariant
+ * @module @neo/session/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import { assertNever } from '@neo/dsh-llm'
-import type { CallId } from '@neo/dsh-llm'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
-import type { Session, SessionEvent } from '@neo/dsh-session'
+import { assertNever } from '@neo/llm'
+import type { CallId } from '@neo/llm'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
+import type { Session, SessionEvent } from '@neo/session'
 import { TOOL_NOT_STARTED } from './repair.ts'
 
-const PACKAGE_NAME = '@neo/dsh-session'
+const PACKAGE_NAME = '@neo/session'
 
 /** Cordis companion plugin name. */
 export const name = 'session-invariant'

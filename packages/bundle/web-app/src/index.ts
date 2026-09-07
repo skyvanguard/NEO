@@ -1,5 +1,5 @@
 /**
- * @neo/dsh-web-app — the browser-surface bundle's runtime glue plugin
+ * @neo/web-app — the browser-surface bundle's runtime glue plugin
  * plus the bundle patch (`cordis.patch.yml`, declared by the `dsh.bundle.patch`
  * manifest field). The plugin owns the browser-surface glue: it resolves
  * the built frontend dist (workspace knowledge of this bundle, never user
@@ -7,7 +7,7 @@
  * harness-source and web-surface prompt sections, the bash-visible web runtime
  * variable, and the URL line. App command-line values arrive through the
  * `webStartup` service expressions in the bundle patch.
- * @module @neo/dsh-web-app
+ * @module @neo/web-app
  */
 
 import { createRequire } from 'node:module'
@@ -15,12 +15,12 @@ import { networkInterfaces } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { addHarnessSourceSection } from '@neo/dsh-app-boot'
-import * as FrontendStatic from '@neo/dsh-host-frontend-static'
+import { addHarnessSourceSection } from '@neo/app-boot'
+import * as FrontendStatic from '@neo/host-frontend-static'
 import type {} from '@neo/cordis-plugin-loader'
-import type {} from '@neo/dsh-host-webserver'
-import type {} from '@neo/dsh-system-prompt'
-import type {} from '@neo/dsh-shell-env'
+import type {} from '@neo/host-webserver'
+import type {} from '@neo/system-prompt'
+import type {} from '@neo/shell-env'
 
 /** Stable Cordis plugin name. */
 export const name = 'web-app'
@@ -116,7 +116,7 @@ function localWebUrl(ctx: Context): string {
 function resolveDistIndex(): string {
   const require = createRequire(import.meta.url)
   try {
-    return require.resolve('@neo/dsh-web-frontend/dist/index.html')
+    return require.resolve('@neo/web-frontend/dist/index.html')
   } catch {
     /* v8 ignore next 2 -- reachable only on a checkout without a built dist; the test tree builds it */
     throw new Error('web-app: frontend dist not built; run pnpm run build from the repository root first')

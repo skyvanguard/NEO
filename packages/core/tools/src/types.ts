@@ -1,11 +1,11 @@
 /**
  * Durable Tool event vocabulary shared with type-only consumers.
  *
- * @module @neo/dsh-tools/types
+ * @module @neo/tools/types
  */
 
-import type { CallId } from '@neo/dsh-llm/brand'
-import type { ContentBlock } from '@neo/dsh-llm/types'
+import type { CallId } from '@neo/llm/brand'
+import type { ContentBlock } from '@neo/llm/types'
 
 /** Payload recorded when one nested Code Mode Tool dispatch starts. */
 export interface CodeDispatchStartEventData {
@@ -22,7 +22,7 @@ export interface CodeDispatchEventData extends CodeDispatchStartEventData {
   content: ContentBlock[]
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * One sub-dispatch STARTING inside a `run_code` program: the parent

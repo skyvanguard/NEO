@@ -1,4 +1,4 @@
-# @neo/dsh-jobs
+# @neo/jobs
 
 English | [中文](README.zh.md)
 

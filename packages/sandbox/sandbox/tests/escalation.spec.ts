@@ -14,8 +14,8 @@ import {
   escalationHintMarker,
   sandboxDenialMarker,
   validateEscalationArgs,
-} from '@neo/dsh-sandbox'
-import type { EscalationApprover, EscalationOutcome } from '@neo/dsh-sandbox'
+} from '@neo/sandbox'
+import type { EscalationApprover, EscalationOutcome } from '@neo/sandbox'
 
 describe('the strictly-wider ladder', () => {
   it('read-only escalates to either wider mode; workspace-write only to full access', () => {

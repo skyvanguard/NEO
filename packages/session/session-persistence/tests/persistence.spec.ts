@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { DurabilitySuspendedError, isDurabilitySuspended, Session, SessionId, isJsonValue } from '@neo/dsh-session'
-import type { SessionEvent, SessionHeader } from '@neo/dsh-session'
+import SessionStore, { DurabilitySuspendedError, isDurabilitySuspended, Session, SessionId, isJsonValue } from '@neo/session'
+import type { SessionEvent, SessionHeader } from '@neo/session'
 import {
   DEFAULT_PREPARED_SESSION_CACHE_SIZE, DEFAULT_WRITE_BATCH_MAX_DELAY_MS, MAX_WRITE_BATCH_DELAY_MS,
   SessionPersistence, SessionPersistenceRevision, PersistenceCoordinator,

@@ -1,4 +1,4 @@
-# @neo/dsh-session-persistence-sqlite
+# @neo/session-persistence-sqlite
 
 English | [中文](README.zh.md)
 

@@ -1,7 +1,7 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { bindScopeParent, carrierKeyOf, createScope, isScopeCarrier, scopeChainOf, scopeOf, scopeParentOf, scopeTarget } from '@neo/dsh-scope'
-import type { Scope, Scoped } from '@neo/dsh-scope'
+import { bindScopeParent, carrierKeyOf, createScope, isScopeCarrier, scopeChainOf, scopeOf, scopeParentOf, scopeTarget } from '@neo/scope'
+import type { Scope, Scoped } from '@neo/scope'
 
 declare module '@neo/cordis' {
   interface Events {

@@ -4,13 +4,13 @@
  * product methods, current thread/turn association, unattended approval
  * responses, and terminal-answer selection.
  *
- * @module @neo/dsh-subagent-codex/wire
+ * @module @neo/subagent-codex/wire
  */
 
 import type { Readable, Writable } from 'node:stream'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { SubagentResult } from '@neo/dsh-subagent'
-import { JsonRpcLineTransport } from '@neo/dsh-sdk-protocol'
+import type { ContentBlock } from '@neo/llm'
+import type { SubagentResult } from '@neo/subagent'
+import { JsonRpcLineTransport } from '@neo/sdk-protocol'
 
 type JsonObject = Record<string, unknown>
 

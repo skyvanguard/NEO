@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-web",
+  "name": "@neo/client-web",
   "description": "Web shell kernel: bootWebShell (module system holding + seed table + two-stage boot + AppRoot gate + app-shell assembly entry), consumed by the apps/web vite entry",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -27,21 +27,21 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@neo/dsh-client-modules": "workspace:^",
-    "@neo/dsh-client-schema-form": "workspace:^",
-    "@neo/dsh-client-ui-attachment": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-client-ui-theme": "workspace:^",
-    "@neo/dsh-client-web-react": "workspace:^",
+    "@neo/client-modules": "workspace:^",
+    "@neo/client-schema-form": "workspace:^",
+    "@neo/client-ui-attachment": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/client-ui-theme": "workspace:^",
+    "@neo/client-web-react": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",
     "@neo/cordis": "workspace:^",
@@ -49,7 +49,7 @@
   },
   "peerDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "files": [

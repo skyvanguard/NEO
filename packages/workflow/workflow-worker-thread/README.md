@@ -1,4 +1,4 @@
-# @neo/dsh-workflow-worker-thread
+# @neo/workflow-worker-thread
 
 English | [中文](README.zh.md)
 

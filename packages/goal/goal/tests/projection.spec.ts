@@ -10,15 +10,15 @@
 
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent, AgentStatus } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { UserMessage } from '@neo/dsh-session'
-import SessionStore from '@neo/dsh-session'
-import type { Session } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import GoalService, { applyGoalProjection, foldGoal } from '@neo/dsh-goal'
-import type { GoalRef } from '@neo/dsh-goal'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent, AgentStatus } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { UserMessage } from '@neo/session'
+import SessionStore from '@neo/session'
+import type { Session } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
+import GoalService, { applyGoalProjection, foldGoal } from '@neo/goal'
+import type { GoalRef } from '@neo/goal'
 
 interface Bench {
   ctx: Context

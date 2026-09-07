@@ -9,11 +9,11 @@
 import { useEffect, useRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { act, render } from '@testing-library/react'
-import type { SessionMaybeProvideInfo, StoredEntry } from '@neo/dsh-client-ui-slots'
+import type { SessionMaybeProvideInfo, StoredEntry } from '@neo/client-ui-slots'
 import {
   createSlotRenderer, SessionProvider,
   type SessionProvideInfo, type SlotRendererHost,
-} from '@neo/dsh-client-web-react'
+} from '@neo/client-web-react'
 
 function observable<T>(initial: T) {
   let value = initial

@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-subagent
+# @neo/client-ui-subagent
 
 English | [中文](README.zh.md)
 

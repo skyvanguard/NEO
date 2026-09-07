@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createScope, scopeOf } from '@neo/dsh-scope'
-import type { Scope, ScopeKey } from '@neo/dsh-scope'
-import SystemPrompt, { TOOL_ORDER_REST, renderContextSnapshot, renderPrompt } from '@neo/dsh-system-prompt'
-import type { Config, PromptAssembly } from '@neo/dsh-system-prompt'
+import { createScope, scopeOf } from '@neo/scope'
+import type { Scope, ScopeKey } from '@neo/scope'
+import SystemPrompt, { TOOL_ORDER_REST, renderContextSnapshot, renderPrompt } from '@neo/system-prompt'
+import type { Config, PromptAssembly } from '@neo/system-prompt'
 
 async function mount(config: Config = {}): Promise<Context> {
   const ctx = new Context()

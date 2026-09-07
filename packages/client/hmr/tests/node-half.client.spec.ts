@@ -7,8 +7,8 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@neo/cordis'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { WebBootGraph, ClientModuleRegistry } from '@neo/dsh-client-modules'
-import type { WebRoute, WebServer } from '@neo/dsh-host-webserver'
+import type { WebBootGraph, ClientModuleRegistry } from '@neo/client-modules'
+import type { WebRoute, WebServer } from '@neo/host-webserver'
 import { apply, Config, EVENTS_ENDPOINT, inject } from '../src/index.ts'
 
 const POLL_MS = 20

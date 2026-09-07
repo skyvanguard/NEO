@@ -2,16 +2,16 @@
  * Durable session-persistence Service Definition (`ctx.sessionPersistence`). Backends store
  * {@link SessionEvent}s as the event-sourced log and carry non-replayable
  * {@link SessionHeader} metadata separately.
- * @module @neo/dsh-session-persistence
+ * @module @neo/session-persistence
  */
 
 import { Context, Service } from '@neo/cordis'
-import { SessionPreparation } from '@neo/dsh-session'
-import type { SessionEvent, SessionId, SessionHeader } from '@neo/dsh-session'
+import { SessionPreparation } from '@neo/session'
+import type { SessionEvent, SessionId, SessionHeader } from '@neo/session'
 import type { SessionPersistenceRevision } from './revision.ts'
 
 // Re-export the metadata vocabulary so Consumers import it from the Service Definition.
-export type { SessionHeader } from '@neo/dsh-session'
+export type { SessionHeader } from '@neo/session'
 export { SessionPersistenceRevision } from './revision.ts'
 
 /** Lightweight immutable source identity returned without loading a full log. */

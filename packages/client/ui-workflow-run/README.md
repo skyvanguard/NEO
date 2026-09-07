@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-workflow-run
+# @neo/client-ui-workflow-run
 
 English | [中文](README.zh.md)
 

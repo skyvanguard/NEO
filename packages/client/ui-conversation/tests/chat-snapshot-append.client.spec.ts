@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatConversationViewNode, ConversationLocation, ConversationTimelineSnapshot } from '@neo/dsh-client-runtime/client'
+import type { ChatConversationViewNode, ConversationLocation, ConversationTimelineSnapshot } from '@neo/client-runtime/client'
 import { ChatSnapshotBuilder } from '../src/client/conversation-nodes/chat-snapshot-builder.ts'
 
 const timeline: ConversationTimelineSnapshot = { turnOrder: [], turns: new Map() }

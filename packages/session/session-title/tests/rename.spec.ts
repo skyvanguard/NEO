@@ -3,13 +3,13 @@
 // revision; explicit refresh stays the unpin).
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { createUserMessage } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
+import { createUserMessage } from '@neo/llm'
+import SessionStore, { Session, SessionId } from '@neo/session'
 import SessionTitleService, {
   SessionTitleProviderId,
   foldSessionTitle,
   type SessionTitleProviderRequest,
-} from '@neo/dsh-session-title'
+} from '@neo/session-title'
 
 const CONFIG = {
   fallbackMaxWords: 5,

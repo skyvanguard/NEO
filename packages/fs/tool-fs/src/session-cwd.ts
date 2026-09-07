@@ -5,11 +5,11 @@
  * `dsh-tool-bash` defaults a bash `workdir` to the session cwd.
  * Non-agent calls return `undefined`, leaving the fallback in the provider rather than reading
  * `process.cwd()` at the tool boundary.
- * @module @neo/dsh-tool-fs/session-cwd
+ * @module @neo/tool-fs/session-cwd
  */
 
-import type { ToolExecution } from '@neo/dsh-tools'
-import { canonicalPath } from '@neo/dsh-sandbox'
+import type { ToolExecution } from '@neo/tools'
+import { canonicalPath } from '@neo/sandbox'
 
 const PARENT_PATH_SEGMENT = /(?:^|[\\/])\.\.(?:[\\/]|$)/
 

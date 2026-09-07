@@ -7,17 +7,17 @@
  * imports no provider.
  *
  * Namespace plugin (named exports, no default export).
- * @module @neo/dsh-tool-lsp
+ * @module @neo/tool-lsp
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { defineTool } from '@neo/dsh-tools'
-import { assertNever } from '@neo/dsh-llm'
-import { LspError } from '@neo/dsh-lsp'
-import type {} from '@neo/dsh-lsp'
-import type {} from '@neo/dsh-system-prompt'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import { defineTool } from '@neo/tools'
+import { assertNever } from '@neo/llm'
+import { LspError } from '@neo/lsp'
+import type {} from '@neo/lsp'
+import type {} from '@neo/system-prompt'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import {
   DEFAULT_MAX_LOCATIONS,
   DEFAULT_MAX_RESULT_CHARS,

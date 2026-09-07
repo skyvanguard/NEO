@@ -1,3 +1,3 @@
 import { clientBundle } from '../tsdown.client.ts'
 
-export default clientBundle('@neo/dsh-client-modules', ['lib/types/index.js', 'lib/types/invariant.js'])
+export default clientBundle('@neo/client-modules', ['lib/types/index.js', 'lib/types/invariant.js'])

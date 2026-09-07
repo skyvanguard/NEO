@@ -6,7 +6,7 @@
  * user roots, parses YAML frontmatter, and loads bodies through `ctx.fs` when a
  * filesystem service is present.
  *
- * @module @neo/dsh-skill-filesystem
+ * @module @neo/skill-filesystem
  */
 
 import { access, lstat, readdir, readFile, stat } from 'node:fs/promises'
@@ -18,8 +18,8 @@ import chokidar from 'chokidar'
 import z from '@neo/schemastery'
 import type Schema from '@neo/schemastery'
 import { parse as parseYaml } from 'yaml'
-import type { FileSystem, FsDirEntry, FsTarget } from '@neo/dsh-fs'
-import { canonicalizeWatchPath, resolveDshHome } from '@neo/dsh-home-paths'
+import type { FileSystem, FsDirEntry, FsTarget } from '@neo/fs'
+import { canonicalizeWatchPath, resolveDshHome } from '@neo/home-paths'
 import {
   BUNDLED_SKILL_RANK,
   isSkillName,
@@ -31,7 +31,7 @@ import {
   type SkillProviderControl,
   type SkillProviderObservation,
   type SkillSource,
-} from '@neo/dsh-skill'
+} from '@neo/skill'
 
 const PROJECT_DSH_RANK = 100
 const PROJECT_AGENTS_RANK = 200

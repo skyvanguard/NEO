@@ -6,9 +6,9 @@ English | [中文](README.zh.md)
 
 | Package | Role | ctx key |
 |---|---|---|
-| [`pty`](terminal/README.md) (`@neo/dsh-terminal`) | Backend registry, branded ids, exact-Agent ownership, session operations, and awaited cleanup | `ctx.terminals` |
-| `terminal-bash` (`@neo/dsh-terminal-bash`) | Shell backend over `ctx.subprocess.spawnTerminal`: readiness detection, bounded terminal state, sandbox policy, and session operations | registers on `ctx.terminals` |
-| `tool-terminal` (`@neo/dsh-tool-terminal`) | Six model-facing tools and generic task integration for background sends | registers on `ctx.tools` |
+| [`pty`](terminal/README.md) (`@neo/terminal`) | Backend registry, branded ids, exact-Agent ownership, session operations, and awaited cleanup | `ctx.terminals` |
+| `terminal-bash` (`@neo/terminal-bash`) | Shell backend over `ctx.subprocess.spawnTerminal`: readiness detection, bounded terminal state, sandbox policy, and session operations | registers on `ctx.terminals` |
+| `tool-terminal` (`@neo/tool-terminal`) | Six model-facing tools and generic task integration for background sends | registers on `ctx.tools` |
 
 The design and deferred boundaries live in the [persistent PTY Agent Note](../../.agents/notes/implemented/feature/2026-07-16-persistent-pty-sessions.md).
 

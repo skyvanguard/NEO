@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-launch-environment`.
- * @module @neo/dsh-launch-environment/invariant
+ * Package-owned invariant companion for `@neo/launch-environment`.
+ * @module @neo/launch-environment/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-launch-environment'
+const PACKAGE_NAME = '@neo/launch-environment'
 
 /** Cordis companion plugin name. */
 export const name = 'launch-environment-invariant'

@@ -1,4 +1,4 @@
-/** Content-block structure helpers. @module @neo/dsh-llm/content */
+/** Content-block structure helpers. @module @neo/llm/content */
 
 import type { ContentBlock } from './types.ts'
 

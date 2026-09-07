@@ -17,8 +17,8 @@
  */
 import { Context as CordisContext } from '@neo/cordis'
 import type { Context, Fiber } from '@neo/cordis'
-import type { SessionId } from '@neo/dsh-api-remotes/client'
-import type { TypertClientRemote, TypertRemoteScopeApi } from '@neo/dsh-typert-protocol'
+import type { SessionId } from '@neo/api-remotes/client'
+import type { TypertClientRemote, TypertRemoteScopeApi } from '@neo/typert-protocol'
 
 /** Client Cordis Context carrying one Agent identity and its scoped Remote namespaces. */
 export type AgentContext = Omit<Context, 'remote'> & {

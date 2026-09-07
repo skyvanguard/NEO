@@ -1,10 +1,10 @@
-import { createUserMessage, createMessage } from '@neo/dsh-llm'
+import { createUserMessage, createMessage } from '@neo/llm'
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@neo/dsh-session'
-import type { Session, SessionEvent, SessionHeader, SessionId as SessionIdType } from '@neo/dsh-session'
-import SessionPersistence from '@neo/dsh-session-persistence'
-import { type SessionQueryErrorCode } from '@neo/dsh-session-query'
+import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@neo/session'
+import type { Session, SessionEvent, SessionHeader, SessionId as SessionIdType } from '@neo/session'
+import SessionPersistence from '@neo/session-persistence'
+import { type SessionQueryErrorCode } from '@neo/session-query'
 import { TestSessionQueryEngine } from './test-service.ts'
 
 type MutableSessionHeader = { -readonly [K in keyof SessionHeader]: SessionHeader[K] }

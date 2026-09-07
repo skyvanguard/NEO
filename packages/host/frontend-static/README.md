@@ -1,4 +1,4 @@
-# `@neo/dsh-host-frontend-static`
+# `@neo/host-frontend-static`
 
 English | [中文](README.zh.md)
 

@@ -3,19 +3,19 @@ import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@neo/cordis'
-import { createLaunchEnvironmentSnapshot } from '@neo/dsh-launch-environment'
+import { createLaunchEnvironmentSnapshot } from '@neo/launch-environment'
 import LlmRuntime, { createUserMessage,
   CONTEXT_WINDOW_EXCEEDED_CODE,
   ProviderRequestId,
   QUOTA_EXCEEDED_CODE,
   ReasoningEffortId,
   userAgent,
-} from '@neo/dsh-llm'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@neo/dsh-anonymous-user-id'
-import { SessionId } from '@neo/dsh-session'
-import * as LlmDeepSeek from '@neo/dsh-llm-deepseek'
-import { DeepSeekAdapter, resolveAdapterOptions } from '@neo/dsh-llm-deepseek'
+} from '@neo/llm'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@neo/anonymous-user-id'
+import { SessionId } from '@neo/session'
+import * as LlmDeepSeek from '@neo/llm-deepseek'
+import { DeepSeekAdapter, resolveAdapterOptions } from '@neo/llm-deepseek'
 import { httpErrorCode } from '../src/adapter.ts'
 import { assemble } from './assemble.ts'
 import { closeMockServers, mockServer, textEvents } from './mock-server.ts'

@@ -1,11 +1,11 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { SessionId, type SessionEvent } from '@neo/dsh-session'
-import type { Agent } from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
-import * as ToolTodo from '@neo/dsh-tool-todo'
+import { SessionId, type SessionEvent } from '@neo/session'
+import type { Agent } from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
+import * as ToolTodo from '@neo/tool-todo'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 
 /**

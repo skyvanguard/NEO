@@ -2,11 +2,11 @@
 
 import { Service } from '@neo/cordis'
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { snapshotJsonValue } from '@neo/dsh-session'
-import type { JsonValue } from '@neo/dsh-session/types'
-import { assertSupportedJsonSchema, validateJsonSchemaValue } from '@neo/dsh-tools'
-import type { JsonSchemaNode } from '@neo/dsh-tools'
+import type { Agent } from '@neo/agent'
+import { snapshotJsonValue } from '@neo/session'
+import type { JsonValue } from '@neo/session/types'
+import { assertSupportedJsonSchema, validateJsonSchemaValue } from '@neo/tools'
+import type { JsonSchemaNode } from '@neo/tools'
 import type {
   CordisInspectMethodManifest, CordisInspectPlatform, CordisInspectProviderManifest,
   CordisInspectProviderView, CordisInspectQueryRequest, CordisInspectQueryResolution,

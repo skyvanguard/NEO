@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-e2b`.
- * @module @neo/dsh-e2b/invariant
+ * Package-owned invariant companion for `@neo/e2b`.
+ * @module @neo/e2b/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-e2b'
+const PACKAGE_NAME = '@neo/e2b'
 
 /** Cordis companion plugin name. */
 export const name = 'e2b-invariant'

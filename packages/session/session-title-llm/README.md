@@ -1,4 +1,4 @@
-# @neo/dsh-session-title-llm
+# @neo/session-title-llm
 
 English | [中文](README.zh.md)
 

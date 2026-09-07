@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-acp-snapshot",
+  "name": "@neo/acp-snapshot",
   "description": "ACP test kit: shared subprocess launcher, snapshot scenario harness, expected-output normalizers, and suite factory",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -33,17 +33,17 @@
   "license": "MIT",
   "dependencies": {
     "@agentclientprotocol/sdk": "0.25.1",
-    "@neo/dsh-loader-smoke": "workspace:*",
+    "@neo/loader-smoke": "workspace:*",
     "vitest": "^4.1.8"
   },
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

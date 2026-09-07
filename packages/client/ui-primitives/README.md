@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-primitives
+# @neo/client-ui-primitives
 
 English | [中文](README.zh.md)
 

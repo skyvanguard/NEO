@@ -5,7 +5,7 @@
  */
 
 import type { Context } from '@neo/cordis'
-import type { SessionId } from '@neo/dsh-session'
+import type { SessionId } from '@neo/session'
 
 /**
  * Reject every step of the stand-in parent. Each child settlement wakes its

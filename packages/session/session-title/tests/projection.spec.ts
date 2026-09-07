@@ -11,10 +11,10 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { Session } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import SessionTitleService from '@neo/dsh-session-title'
+import SessionStore, { SessionId } from '@neo/session'
+import type { Session } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
+import SessionTitleService from '@neo/session-title'
 
 const CONFIG = { fallbackMaxWords: 8, fallbackMaxBytes: 64, maxTitleBytes: 256 }
 

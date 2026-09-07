@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-title-all-prompts-llm",
+  "name": "@neo/session-title-all-prompts-llm",
   "description": "All-user-messages LLM provider plugin for DeepSeek Harness session titles",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -27,22 +27,22 @@
   "files": ["lib/index.js", "lib/invariant.js", "lib/types/**/*.d.ts"],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-title": "workspace:^",
-    "@neo/dsh-session-title-llm": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/session-title-llm": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-title": "workspace:^",
-    "@neo/dsh-session-title-llm": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/session-title-llm": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

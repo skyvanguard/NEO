@@ -19,12 +19,12 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import { z } from 'zod'
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import { CallId } from '@neo/dsh-llm'
-import { apply } from '@neo/dsh-mcp-client/src/index.ts'
-import { publicToolName } from '@neo/dsh-mcp-client/src/tools.ts'
-import type { Config } from '@neo/dsh-mcp-client'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import { CallId } from '@neo/llm'
+import { apply } from '@neo/mcp-client/src/index.ts'
+import { publicToolName } from '@neo/mcp-client/src/tools.ts'
+import type { Config } from '@neo/mcp-client'
 
 const testToolSignal = new AbortController().signal
 

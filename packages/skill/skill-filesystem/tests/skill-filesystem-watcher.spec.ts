@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import SkillRegistry from '@neo/dsh-skill'
+import SkillRegistry from '@neo/skill'
 
 interface FakeWatcherControl {
   emitter: EventEmitter

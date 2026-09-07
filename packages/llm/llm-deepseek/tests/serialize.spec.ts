@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { AttachmentId } from '@neo/dsh-attachment'
-import { createUserMessage, CallId, ReasoningEffortId, createMessage } from '@neo/dsh-llm'
-import type { ContentBlock, GenerateOptions, Message } from '@neo/dsh-llm'
+import { AttachmentId } from '@neo/attachment'
+import { createUserMessage, CallId, ReasoningEffortId, createMessage } from '@neo/llm'
+import type { ContentBlock, GenerateOptions, Message } from '@neo/llm'
 import { serializeMessages, serializeRequest } from '../src/serialize.ts'
 
 function request(overrides: Partial<GenerateOptions> = {}): GenerateOptions {

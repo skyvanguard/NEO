@@ -1,5 +1,5 @@
 import type { Context } from '@neo/cordis'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { SessionEvent } from '@neo/session'
 import { describe, expect, it, vi } from 'vitest'
 import { runFixtureTurn } from '../src/agent-turn.ts'
 

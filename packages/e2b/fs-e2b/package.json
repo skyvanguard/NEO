@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-fs-e2b",
+  "name": "@neo/fs-e2b",
   "description": "E2B filesystem implementation for DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,15 +32,15 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-e2b": "workspace:^",
-    "@neo/dsh-fs": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/e2b": "workspace:^",
+    "@neo/fs": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-e2b": "workspace:^",
-    "@neo/dsh-fs": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/e2b": "workspace:^",
+    "@neo/fs": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

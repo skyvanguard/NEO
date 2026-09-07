@@ -7,9 +7,9 @@ import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
 import {
   SESSION_FORMAT_VERSION, SessionId as sessionId, type SessionEvent, type SessionId,
-} from '@neo/dsh-session'
-import type {} from '@neo/dsh-agent'
-import { snapshotSubagentDescriptor } from '@neo/dsh-subagent'
+} from '@neo/session'
+import type {} from '@neo/agent'
+import { snapshotSubagentDescriptor } from '@neo/subagent'
 import {
   acknowledgeReloadConnectionLoss, captureStableAria, compareOrRefreshGolden,
   launchWebScaffold, watchConsole,

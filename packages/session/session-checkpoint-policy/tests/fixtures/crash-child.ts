@@ -1,10 +1,10 @@
 import { writeFile } from 'node:fs/promises'
 import { Context } from '@neo/cordis'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
-import { createUserMessage, CallId, type GenerateOptions, LlmAdapter, type StreamChunk  } from '@neo/dsh-llm'
-import { SessionId } from '@neo/dsh-session'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
+import { createUserMessage, CallId, type GenerateOptions, LlmAdapter, type StreamChunk  } from '@neo/llm'
+import { SessionId } from '@neo/session'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
 import * as checkpointPolicy from '../../src/index.ts'
 
 function waitForCrash(): Promise<never> {

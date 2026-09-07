@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-lsp",
+  "name": "@neo/tool-lsp",
   "description": "Model-facing lsp tool over the DeepSeek Harness LSP capability seam (ctx.lsp) — one read-only tool with goToDefinition/findReferences/goToImplementation/hover operations, one-based UTF-16 cursor coordinates, bounded location rendering, and hover normalization",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,30 +32,30 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-lsp": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/lsp": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-fs-local": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-lsp": "workspace:^",
-    "@neo/dsh-lsp-stdio": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subprocess-local": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
-    "@neo/dsh-tool-call-timeout-policy": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/fs-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/lsp": "workspace:^",
+    "@neo/lsp-stdio": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tool-call-timeout-policy": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

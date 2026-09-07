@@ -1,4 +1,4 @@
-# @neo/dsh-host-plugin-inventory
+# @neo/host-plugin-inventory
 
 English | [中文](README.zh.md)
 

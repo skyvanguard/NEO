@@ -18,14 +18,14 @@
  * durable descriptor, so it neither restores the prior budget nor inherits
  * the parent's current one; the resumed route's defaults apply instead.
  *
- * @module @neo/dsh-subagent/descriptor
+ * @module @neo/subagent/descriptor
  */
 
-import { snapshotJsonValue } from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
-import type { ToolRestriction } from '@neo/dsh-tools'
+import { snapshotJsonValue } from '@neo/session'
+import type { SessionEvent } from '@neo/session'
+import type { ToolRestriction } from '@neo/tools'
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * Durable identity and lifecycle mode of a session-backed subagent child,

@@ -4,19 +4,19 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import { credentialRef } from '@neo/dsh-credentials'
-import LocalCredentialProvider from '@neo/dsh-credentials-local'
-import WebRuntime from '@neo/dsh-web'
+import { credentialRef } from '@neo/credentials'
+import LocalCredentialProvider from '@neo/credentials-local'
+import WebRuntime from '@neo/web'
 import {
   DeepSeekSearchProvider,
   DEEPSEEK_PROVIDER_ID,
-} from '@neo/dsh-web-search-deepseek'
-import * as deepseekPlugin from '@neo/dsh-web-search-deepseek'
+} from '@neo/web-search-deepseek'
+import * as deepseekPlugin from '@neo/web-search-deepseek'
 import { citationSnippets, mapAnthropicResponse } from '../src/provider.ts'
-import type { AnthropicResponse } from '@neo/dsh-web-search-deepseek/src/types.ts'
+import type { AnthropicResponse } from '@neo/web-search-deepseek/src/types.ts'
 
 /** Construct the provider over a fixed options value; production passes a live thunk. */
-import type { DeepSeekSearchProviderOptions } from '@neo/dsh-web-search-deepseek'
+import type { DeepSeekSearchProviderOptions } from '@neo/web-search-deepseek'
 
 const searchProvider = (options: DeepSeekSearchProviderOptions): DeepSeekSearchProvider =>
   new DeepSeekSearchProvider(() => options)

@@ -14,8 +14,8 @@
  */
 import { Service } from '@neo/cordis'
 import type { Context } from '@neo/cordis'
-import type { ConnectionHandle, SessionId } from '@neo/dsh-api-remotes/client'
-import type { SessionRuntime } from '@neo/dsh-client-runtime/client'
+import type { ConnectionHandle, SessionId } from '@neo/api-remotes/client'
+import type { SessionRuntime } from '@neo/client-runtime/client'
 import { ModelDirectory } from './directory.ts'
 
 declare module '@neo/cordis' {

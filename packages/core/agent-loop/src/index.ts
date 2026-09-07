@@ -2,13 +2,13 @@
  * Concrete agent-loop plugin: creates scoped ReactLoopAgents, publishes them
  * through the agent/session registries, and owns their ordered teardown.
  *
- * @module @neo/dsh-agent-loop
+ * @module @neo/agent-loop
  */
 
 import { Context, FiberState, Service } from '@neo/cordis'
 import { randomUUID } from 'node:crypto'
 import z from '@neo/schemastery'
-import { emitAgentEvent } from '@neo/dsh-agent'
+import { emitAgentEvent } from '@neo/agent'
 import type {
   Agent,
   AgentFactory,
@@ -18,14 +18,14 @@ import type {
   CreateAgentOptions,
   ResumeAgentOptions,
   SessionStartSource,
-} from '@neo/dsh-agent'
-import { errorChain } from '@neo/dsh-llm'
-import { installSettingsSection, settingsNamespace } from '@neo/dsh-settings'
-import { SessionId, SessionPreparation } from '@neo/dsh-session'
-import type { Session, SessionHeader } from '@neo/dsh-session'
-import type {} from '@neo/dsh-system-prompt'
-import type {} from '@neo/dsh-tools'
-import type { SessionPersistence } from '@neo/dsh-session-persistence'
+} from '@neo/agent'
+import { errorChain } from '@neo/llm'
+import { installSettingsSection, settingsNamespace } from '@neo/settings'
+import { SessionId, SessionPreparation } from '@neo/session'
+import type { Session, SessionHeader } from '@neo/session'
+import type {} from '@neo/system-prompt'
+import type {} from '@neo/tools'
+import type { SessionPersistence } from '@neo/session-persistence'
 import { ReactLoopAgent } from './agent.ts'
 import { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from './constants.ts'
 

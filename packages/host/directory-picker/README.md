@@ -1,4 +1,4 @@
-# @neo/dsh-host-directory-picker
+# @neo/host-directory-picker
 
 English | [中文](README.zh.md)
 

@@ -14,11 +14,11 @@ import { existsSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'
 import { join, parse } from 'node:path'
 import { Context } from '@neo/cordis'
-import { FsError, FsTargetKey } from '@neo/dsh-fs'
-import type { FsTarget } from '@neo/dsh-fs'
-import SandboxPolicyService from '@neo/dsh-sandbox-policy'
-import type { SandboxMode } from '@neo/dsh-sandbox'
-import { SandboxedFileSystem } from '@neo/dsh-fs-sandbox'
+import { FsError, FsTargetKey } from '@neo/fs'
+import type { FsTarget } from '@neo/fs'
+import SandboxPolicyService from '@neo/sandbox-policy'
+import type { SandboxMode } from '@neo/sandbox'
+import { SandboxedFileSystem } from '@neo/fs-sandbox'
 
 let base: string
 let workspace: string

@@ -1,10 +1,10 @@
-/** Package-owned prompt-assembly invariants. @module @neo/dsh-system-prompt/invariant */
+/** Package-owned prompt-assembly invariants. @module @neo/system-prompt/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type { PromptAssembly } from './index.ts'
 
-const PACKAGE_NAME = '@neo/dsh-system-prompt'
+const PACKAGE_NAME = '@neo/system-prompt'
 const VARIABLE_NAME = /^[a-z][a-z0-9_]*$/
 
 /** Cordis companion plugin name. */

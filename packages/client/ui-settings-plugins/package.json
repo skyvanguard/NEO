@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-settings-plugins",
+  "name": "@neo/client-ui-settings-plugins",
   "description": "Plugins settings section with feature-owned tabs and configurable host-plane plugin cards",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,11 +32,11 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-connection",
-        "@neo/dsh-client-locale",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-settings",
-        "@neo/dsh-api-remotes"
+        "@neo/client-connection",
+        "@neo/client-locale",
+        "@neo/client-runtime",
+        "@neo/client-ui-settings",
+        "@neo/api-remotes"
       ],
       "platform": "web"
     }
@@ -48,29 +48,29 @@
   "license": "MIT",
   "peerDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-settings": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-client-web-react": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-settings": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/client-web-react": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-settings": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-client-web-react": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-settings": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/client-web-react": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "react": "^18.2.0"
   },

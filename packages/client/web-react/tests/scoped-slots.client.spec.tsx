@@ -11,13 +11,13 @@
 import { describe, expect, it, vi } from 'vitest'
 import { act, fireEvent, render } from '@testing-library/react'
 import { useEffect, useState, type ReactNode } from 'react'
-import type { ActionsDecl, SlotEntryDef, SlotSpec, StoreHandle, StoredEntry } from '@neo/dsh-client-ui-slots'
-import type { SessionMaybeProvideInfo } from '@neo/dsh-client-ui-slots'
+import type { ActionsDecl, SlotEntryDef, SlotSpec, StoreHandle, StoredEntry } from '@neo/client-ui-slots'
+import type { SessionMaybeProvideInfo } from '@neo/client-ui-slots'
 import {
   createSlotRenderer, SessionProvider, SlotOwnershipError, StaleAuthorizationError,
   type RenderOpts, type SessionProvideInfo,
   type SlotRendererHost, type StoreInstanceLike,
-} from '@neo/dsh-client-web-react'
+} from '@neo/client-web-react'
 
 type AnyProps = Record<string, unknown>
 type RenderSlotFn = (key: string, owner: object, opts?: RenderOpts) => ReactNode

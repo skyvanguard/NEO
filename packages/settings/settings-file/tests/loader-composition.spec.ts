@@ -15,7 +15,7 @@ import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
 import z from '@neo/schemastery'
-import { settingsNamespace, type SettingsScope } from '@neo/dsh-settings'
+import { settingsNamespace, type SettingsScope } from '@neo/settings'
 import FileSettingsProvider from '../src/index.ts'
 
 interface ThemeConfig {
@@ -79,7 +79,7 @@ async function loadComposition(
     ...withSettings
       ? [
         '- id: settings',
-        "  name: '@neo/dsh-settings-file'",
+        "  name: '@neo/settings-file'",
         '  config:',
         `    path: ${JSON.stringify(settingsPath)}`,
         '    debounceMs: 10',
@@ -96,7 +96,7 @@ async function loadComposition(
   await ctx.plugin(Loader)
   ctx.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-settings-file', FileSettingsProvider],
+    ['@neo/settings-file', FileSettingsProvider],
     ['test-settings-consumer', consumer],
   ])
   ctx.loader.internal = {

@@ -7,9 +7,9 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import type { SessionId } from '@neo/client-runtime/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
 import { PlanChip } from '../src/client/PlanModeControl.tsx'
 import type { PlanChipInjected } from '../src/client/index.ts'
 import { apply, inject } from '../src/client/index.ts'

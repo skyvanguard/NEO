@@ -4,16 +4,16 @@
  * surface events; a separate replacement `user/message` carries the summary.
  * Backend packages own configuration and retention policy; see
  * `.agents/notes/implemented/feature/2026-06-18-compaction-capability-seam.md`.
- * @module @neo/dsh-compaction/types
+ * @module @neo/compaction/types
  */
 
-import type { ContentBlock, TokenUsage } from '@neo/dsh-llm'
-import type { CommandId } from '@neo/dsh-commands/brand'
+import type { ContentBlock, TokenUsage } from '@neo/llm'
+import type { CommandId } from '@neo/commands/brand'
 import type { CompactionId } from './brand.ts'
 
 export type { CompactionId }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * Marks the start of a compaction — log-only, holds the lock until

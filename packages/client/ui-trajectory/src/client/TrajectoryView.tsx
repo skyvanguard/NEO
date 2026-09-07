@@ -1,12 +1,12 @@
 /** Trajectory view: compact summary over a turn-aware event ledger. */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { ConvViewProps } from '@neo/dsh-client-ui-conversation/client'
-import type { InjectFace, PropsLocale } from '@neo/dsh-client-ui-slots'
+import type { ConvViewProps } from '@neo/client-ui-conversation/client'
+import type { InjectFace, PropsLocale } from '@neo/client-ui-slots'
 import type {
   AssistantBlock, AssistantMessageNode, ConversationSnapshot,
   SnapshotStore,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import {
   TrajectoryTable,
   type TrajectoryRequestNumber,

@@ -6,7 +6,7 @@
  */
 
 import type { Context } from '@neo/cordis'
-import type {} from '@neo/dsh-system-prompt'
+import type {} from '@neo/system-prompt'
 
 /** Services required for the model guidance paired with the browser renderer. */
 export const inject = ['systemPrompt']

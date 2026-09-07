@@ -1,4 +1,4 @@
-import type { Branded } from '@neo/dsh-brand'
+import type { Branded } from '@neo/brand'
 
 /** Stable identity shared by one compact start/summary/checkpoint/end transaction. */
 export type CompactionId = Branded<'CompactionId'>

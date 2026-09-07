@@ -1,9 +1,9 @@
 import { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
 import { describe, expect, it, vi } from 'vitest'
-import type { RpcResponse, SettingsNamespaceView } from '@neo/dsh-api-remotes/client'
-import { TestRemote } from '@neo/dsh-client-test-runtime'
-import type { SettingsScope } from '@neo/dsh-client-runtime/client'
+import type { RpcResponse, SettingsNamespaceView } from '@neo/api-remotes/client'
+import { TestRemote } from '@neo/client-test-runtime'
+import type { SettingsScope } from '@neo/client-runtime/client'
 import { SettingsScopeController, SettingsScopeBinder } from '../src/client/settings-scope.ts'
 
 interface UiTestSettings {

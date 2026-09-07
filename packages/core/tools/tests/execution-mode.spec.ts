@@ -2,14 +2,14 @@
 
 import { describe, expect, expectTypeOf, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { CallId } from '@neo/dsh-llm'
-import SystemPrompt from '@neo/dsh-system-prompt'
+import { CallId } from '@neo/llm'
+import SystemPrompt from '@neo/system-prompt'
 import ToolRuntime, {
   defineContentToolFixture,
   type ToolDefinition,
   type ToolExecutionInput,
   type ToolExecutionMode,
-} from '@neo/dsh-tools'
+} from '@neo/tools'
 
 const testToolSignal = new AbortController().signal
 

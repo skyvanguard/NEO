@@ -6,7 +6,7 @@
  * compaction cannot change. The plugin owns only the fold; delivery is the
  * seam's.
  *
- * @module @neo/dsh-session-stats
+ * @module @neo/session-stats
  */
 
 import type { Context } from '@neo/cordis'

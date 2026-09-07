@@ -125,7 +125,7 @@ describe.skipIf(!packable)('sandbox-local: packed-tarball distribution (publish-
       import { existsSync } from 'node:fs'
       import { Context } from '@neo/cordis'
       import { launcherPath } from '@neo/node-addon-landlock-run'
-      import { LocalSandboxProvider } from '@neo/dsh-sandbox-local'
+      import { LocalSandboxProvider } from '@neo/sandbox-local'
       const ctx = new Context()
       await ctx.plugin(LocalSandboxProvider, {})
       const sandbox = ctx.sandbox

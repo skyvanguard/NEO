@@ -1,12 +1,12 @@
 /**
  * Human-facing `/goal` command over the persisted same-session goal domain.
- * @module @neo/dsh-command-goal
+ * @module @neo/command-goal
  */
 
 import type { Context } from '@neo/cordis'
-import type { CommandInvocation, CommandResult } from '@neo/dsh-commands'
-import { GoalError } from '@neo/dsh-goal'
-import type { GoalPhase, GoalRef, GoalView } from '@neo/dsh-goal'
+import type { CommandInvocation, CommandResult } from '@neo/commands'
+import { GoalError } from '@neo/goal'
+import type { GoalPhase, GoalRef, GoalView } from '@neo/goal'
 
 export const name = 'command-goal'
 export const inject = ['commands', 'goals']

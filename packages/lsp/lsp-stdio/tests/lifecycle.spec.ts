@@ -5,12 +5,12 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL, fileURLToPath } from 'node:url'
 import { Context } from '@neo/cordis'
-import Lsp, { type LspProvider, type LspQueryRequest, type LspQueryResult } from '@neo/dsh-lsp'
-import { deadline } from '@neo/dsh-timeout'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
-import LocalFileSystem from '@neo/dsh-fs-local'
-import * as LspLocal from '@neo/dsh-lsp-stdio'
-import type { LspLocalServerConfig } from '@neo/dsh-lsp-stdio'
+import Lsp, { type LspProvider, type LspQueryRequest, type LspQueryResult } from '@neo/lsp'
+import { deadline } from '@neo/timeout'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
+import LocalFileSystem from '@neo/fs-local'
+import * as LspLocal from '@neo/lsp-stdio'
+import type { LspLocalServerConfig } from '@neo/lsp-stdio'
 
 const fixtureServer = fileURLToPath(new URL('./fixture-server.ts', import.meta.url))
 

@@ -5,9 +5,9 @@
  * one-shot convenience method.
  */
 
-import { BlockAssembler } from '@neo/dsh-llm'
+import { BlockAssembler } from '@neo/llm'
 import type { Context } from '@neo/cordis'
-import type { FinishReason, GenerateOptions, Message, TokenUsage } from '@neo/dsh-llm'
+import type { FinishReason, GenerateOptions, Message, TokenUsage } from '@neo/llm'
 
 export interface AssembledResult {
   message: Message

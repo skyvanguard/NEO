@@ -7,8 +7,8 @@
     patches:
       - insert:
           - id: user-questions
-            name: '@neo/dsh-user-questions'
+            name: '@neo/user-questions'
           - id: tool-ask-user
-            name: '@neo/dsh-tool-ask-user'
+            name: '@neo/tool-ask-user'
           - id: child-question-tripwire
             name: './tests/fixtures/child-question-tripwire.ts'

@@ -9,8 +9,8 @@
 // section, its first line in the collapsed summary.
 
 import type { Context } from '@neo/cordis'
-import { IconEditOutline16 } from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale } from '@neo/dsh-client-ui-slots'
+import { IconEditOutline16 } from '@neo/client-ui-primitives'
+import type { PropsLocale } from '@neo/client-ui-slots'
 import type { ToolCallViewProps } from '../../contract/slots.ts'
 import { diffCardModel } from '../models/diff-card-model.ts'
 import { toolRowModel } from '../models/tool-call-model.ts'

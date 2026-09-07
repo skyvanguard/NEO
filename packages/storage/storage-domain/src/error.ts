@@ -1,6 +1,6 @@
 /**
  * Error vocabulary of the domain data form.
- * @module @neo/dsh-storage-domain/src/error
+ * @module @neo/storage-domain/src/error
  */
 
 /** Discriminant codes carried by every {@link DomainError}. */

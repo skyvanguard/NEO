@@ -7,19 +7,19 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import { stat } from 'node:fs/promises'
-import AgentRegistry from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import SessionStore from '@neo/dsh-session'
-import type { SessionHeader, SessionId } from '@neo/dsh-session'
-import UserQuestionService from '@neo/dsh-user-questions'
+import AgentRegistry from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import SessionStore from '@neo/session'
+import type { SessionHeader, SessionId } from '@neo/session'
+import UserQuestionService from '@neo/user-questions'
 import {
   SessionQueryError,
   type SessionSearchHit,
   type SessionSearchRequest,
-} from '@neo/dsh-session-query'
-import type { RpcRequest } from '@neo/dsh-host-apiproxy/api'
-import { RpcId } from '@neo/dsh-host-apiproxy/api'
-import { createApiProxy } from '@neo/dsh-host-apiproxy'
+} from '@neo/session-query'
+import type { RpcRequest } from '@neo/host-apiproxy/api'
+import { RpcId } from '@neo/host-apiproxy/api'
+import { createApiProxy } from '@neo/host-apiproxy'
 
 vi.mock('node:fs/promises', async (importOriginal) => {
   const actual = await importOriginal<typeof import('node:fs/promises')>()

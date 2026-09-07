@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry, { type Agent } from '@neo/dsh-agent'
-import SessionStore from '@neo/dsh-session'
-import UserQuestionService from '@neo/dsh-user-questions'
-import type { ApiProxy, MuxFrame, RpcRequest } from '@neo/dsh-host-apiproxy/api'
-import { RpcId } from '@neo/dsh-host-apiproxy/api/rpc'
+import AgentRegistry, { type Agent } from '@neo/agent'
+import SessionStore from '@neo/session'
+import UserQuestionService from '@neo/user-questions'
+import type { ApiProxy, MuxFrame, RpcRequest } from '@neo/host-apiproxy/api'
+import { RpcId } from '@neo/host-apiproxy/api/rpc'
 import { createApiProxy } from '../src/api-proxy.ts'
 
 async function harness(): Promise<{ ctx: Context; api: ApiProxy }> {

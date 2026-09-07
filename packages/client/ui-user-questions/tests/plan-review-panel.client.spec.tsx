@@ -7,16 +7,16 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type {
   ConversationSnapshot, SessionId, SessionListState, WorkspaceListState,
-} from '@neo/dsh-client-runtime/client'
-import { PendingWait } from '@neo/dsh-client-runtime/client'
-import type { RpcReceipt } from '@neo/dsh-api-remotes/client'
-import { RpcId } from '@neo/dsh-client-connection/client'
-import type { SnapshotSelectorHook } from '@neo/dsh-client-ui-slots'
+} from '@neo/client-runtime/client'
+import { PendingWait } from '@neo/client-runtime/client'
+import type { RpcReceipt } from '@neo/api-remotes/client'
+import { RpcId } from '@neo/client-connection/client'
+import type { SnapshotSelectorHook } from '@neo/client-ui-slots'
 import { planReviewOf, type QuestionComposerProps, type QuestionWait } from '../src/client/contract/slots.ts'
 import { QuestionComposer } from '../src/client/QuestionComposer.tsx'
 import { en, zh } from '../src/client/locales.ts'
-import { en as commonEn } from '@neo/dsh-client-locale/src/locales/en.ts'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+import { en as commonEn } from '@neo/client-locale/src/locales/en.ts'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 
 afterEach(cleanup)
 

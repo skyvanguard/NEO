@@ -1,4 +1,4 @@
-import type { TypertContext, TypertLookup } from '@neo/dsh-typert-protocol'
+import type { TypertContext, TypertLookup } from '@neo/typert-protocol'
 import type { AgentId } from './types.ts'
 
 /** Host-only live Agent object. */
@@ -6,7 +6,7 @@ export class Agent {
   constructor(readonly id: AgentId) {}
 }
 
-declare module '@neo/dsh-typert-protocol' {
+declare module '@neo/typert-protocol' {
   interface TypertLookupMap {
     agent: TypertLookup<Agent, AgentId>
   }

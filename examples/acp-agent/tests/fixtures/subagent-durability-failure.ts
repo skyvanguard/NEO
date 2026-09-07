@@ -1,5 +1,5 @@
 import type { Context } from '@neo/cordis'
-import { SessionId } from '@neo/dsh-session'
+import { SessionId } from '@neo/session'
 
 export const name = 'subagent-durability-failure'
 export const inject = ['agents', 'sessionPersistence', 'subagents']

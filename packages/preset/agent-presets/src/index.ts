@@ -18,17 +18,17 @@
  * agent factory's `setup(agentCtx)` hook is the one supported call site,
  * because only there is the join installed while the agent is still
  * unpublished, so a rejected composition rolls the whole creation back.
- * @module @neo/dsh-agent-presets
+ * @module @neo/agent-presets
  */
 
 import { stat } from 'node:fs/promises'
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { bindScopeParent, createScope, scopeOf, type Scope, type ScopeKey, type ScopeParentBinding } from '@neo/dsh-scope'
+import { bindScopeParent, createScope, scopeOf, type Scope, type ScopeKey, type ScopeParentBinding } from '@neo/scope'
 // Type-only: resolves the `agent/created` lifecycle event this service watches.
-import type {} from '@neo/dsh-agent'
-import { settingsNamespace, type SettingsScope, type default as SettingsService } from '@neo/dsh-settings'
-import { dshHomePath } from '@neo/dsh-home-paths'
+import type {} from '@neo/agent'
+import { settingsNamespace, type SettingsScope, type default as SettingsService } from '@neo/settings'
+import { dshHomePath } from '@neo/home-paths'
 import { discoverPresets, USER_PRESET_DIR } from './discovery.ts'
 import { copyComposition, deleteComposition, readComposition } from './authoring.ts'
 import { mountPreset, serviceForAgent, standingMountFor } from './mount.ts'

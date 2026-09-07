@@ -1,9 +1,9 @@
 /** Browser plugin owning Session export download state and its shared modal. */
 
-import type { ClientContext, SessionId } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-client-locale/client'
-import type {} from '@neo/dsh-client-ui-commands/client'
-import type {} from '@neo/dsh-client-ui-conversation/client'
+import type { ClientContext, SessionId } from '@neo/client-runtime/client'
+import type {} from '@neo/client-locale/client'
+import type {} from '@neo/client-ui-commands/client'
+import type {} from '@neo/client-ui-conversation/client'
 import { SessionLogDownloadController } from './controller.ts'
 import type { SessionLogDownloadDialogInjected } from './Dialog.tsx'
 import { SessionLogDownloadHeaderAction } from './HeaderAction.tsx'
@@ -15,7 +15,7 @@ declare module '@neo/cordis' {
   }
 }
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface LocaleNamespaceMap {
     'session-log-download': SessionLogDownloadKey
   }

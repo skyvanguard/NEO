@@ -22,8 +22,8 @@ describe.skipIf(!existsSync(builtIndex) || !existsSync(builtWorker))('built work
     try {
       await writeFile(driver, `
 import { Context } from '@neo/cordis'
-import SubagentRuntime from '@neo/dsh-subagent'
-import WorkerThreadWorkflowEngine from '@neo/dsh-workflow-worker-thread'
+import SubagentRuntime from '@neo/subagent'
+import WorkerThreadWorkflowEngine from '@neo/workflow-worker-thread'
 
 const ctx = new Context()
 await ctx.plugin(SubagentRuntime)

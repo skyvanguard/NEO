@@ -2,7 +2,7 @@
 
 import type { Context, FiberState } from '@neo/cordis'
 import type {} from '@neo/cordis-plugin-loader'
-import { TypertRemoteService, Remote } from '@neo/dsh-typert-protocol'
+import { TypertRemoteService, Remote } from '@neo/typert-protocol'
 // Typert-generated ./typert and ./remote artifacts import Zod at runtime.
 import type {} from 'zod'
 import type {

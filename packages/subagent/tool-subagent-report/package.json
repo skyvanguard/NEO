@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-subagent-report",
+  "name": "@neo/tool-subagent-report",
   "description": "Child-scoped report tool over ctx.subagents continuations",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,30 +32,30 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-loop": "workspace:^",
-    "@neo/dsh-agent-loop-testkit": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-session-persistence-jsonl": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-subagent-spawn-in-process": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tool-subagent-control": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/agent-loop-testkit": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/subagent-spawn-in-process": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tool-subagent-control": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

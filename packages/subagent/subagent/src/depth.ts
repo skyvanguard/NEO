@@ -3,12 +3,12 @@
  * children. Kept apart from the service so composition helpers can read it
  * without importing the registry.
  *
- * @module @neo/dsh-subagent/depth
+ * @module @neo/subagent/depth
  */
 
-import type { Agent } from '@neo/dsh-agent'
+import type { Agent } from '@neo/agent'
 
-declare module '@neo/dsh-agent' {
+declare module '@neo/agent' {
   interface AgentOptions {
     /** Delegation depth: zero for a top-level agent and parent depth + 1 for a child. */
     subagentDepth?: number

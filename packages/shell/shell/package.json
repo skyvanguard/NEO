@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-shell",
+  "name": "@neo/shell",
   "description": "Abstract bash executor seam (ctx.shell) for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,17 +32,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/sandbox": "workspace:^",
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-settings": "workspace:^"
+    "@neo/settings": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/sandbox": "workspace:^",
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-settings": "workspace:^"
+    "@neo/settings": "workspace:^"
   }
 }

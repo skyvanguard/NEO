@@ -1,4 +1,4 @@
-# @neo/dsh-permission-presets
+# @neo/permission-presets
 
 English | [中文](README.zh.md)
 

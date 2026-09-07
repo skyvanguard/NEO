@@ -1,37 +1,37 @@
 /** Platform-neutral assembly of generated Host Remote contributions. */
 
 import type { Context } from '@neo/cordis'
-import commandsRemote from '@neo/dsh-commands/remote'
-import goalsRemote from '@neo/dsh-goal/remote'
-import dynamicRemote from '@neo/dsh-cordis-host-runner/remote'
-import pluginInventoryRemote from '@neo/dsh-host-plugin-inventory/remote'
-import messageFeedbackRemote from '@neo/dsh-message-feedback/remote'
-import documentAttachRemote from '@neo/dsh-document-attach/remote'
-import usageRemote from '@neo/dsh-usage-stats/remote'
-import type { TypertClientRemote } from '@neo/dsh-typert-protocol'
+import commandsRemote from '@neo/commands/remote'
+import goalsRemote from '@neo/goal/remote'
+import dynamicRemote from '@neo/cordis-host-runner/remote'
+import pluginInventoryRemote from '@neo/host-plugin-inventory/remote'
+import messageFeedbackRemote from '@neo/message-feedback/remote'
+import documentAttachRemote from '@neo/document-attach/remote'
+import usageRemote from '@neo/usage-stats/remote'
+import type { TypertClientRemote } from '@neo/typert-protocol'
 
-export type { TypertClientRemote as ClientRemote } from '@neo/dsh-typert-protocol'
-export type { PluginInventorySnapshot } from '@neo/dsh-host-plugin-inventory/types'
-export type {} from '@neo/dsh-commands/remote'
-export type {} from '@neo/dsh-goal/remote'
-export type {} from '@neo/dsh-host-plugin-inventory/remote'
-export type {} from '@neo/dsh-message-feedback/remote'
-export type {} from '@neo/dsh-document-attach/remote'
-export type {} from '@neo/dsh-document-attach/types'
-export type {} from '@neo/dsh-usage-stats/remote'
-export type {} from '@neo/dsh-usage-stats/types'
+export type { TypertClientRemote as ClientRemote } from '@neo/typert-protocol'
+export type { PluginInventorySnapshot } from '@neo/host-plugin-inventory/types'
+export type {} from '@neo/commands/remote'
+export type {} from '@neo/goal/remote'
+export type {} from '@neo/host-plugin-inventory/remote'
+export type {} from '@neo/message-feedback/remote'
+export type {} from '@neo/document-attach/remote'
+export type {} from '@neo/document-attach/types'
+export type {} from '@neo/usage-stats/remote'
+export type {} from '@neo/usage-stats/types'
 // The forwarded-event allowlist's selection seat: without it in the consumer's
 // compilation face `TypertRemoteEvent` is `never` and every `$on` call fails.
 export type { ApiRemoteForwardedEvent } from '../types.ts'
 // The owner packages' client-safe `./types` exports supply the `Events`
 // signatures `$on` hands to a listener, so a consumer reads the very
 // declaration the Host emits rather than a flattened restatement of it.
-export type {} from '@neo/dsh-commands/types'
-export type {} from '@neo/dsh-cordis-host-runner/types'
-export type {} from '@neo/dsh-credentials/types'
-export type {} from '@neo/dsh-llm/types'
-export type {} from '@neo/dsh-agent-presets/types'
-export type {} from '@neo/dsh-settings/types'
+export type {} from '@neo/commands/types'
+export type {} from '@neo/cordis-host-runner/types'
+export type {} from '@neo/credentials/types'
+export type {} from '@neo/llm/types'
+export type {} from '@neo/agent-presets/types'
+export type {} from '@neo/settings/types'
 
 /**
  * The carrier's Client-facing types, re-exported so a business package names one
@@ -47,9 +47,9 @@ export type {
   SessionSummary, SettingsNamespaceView, SettingsPathOpView, SkillEntry, StreamChunk,
   SubagentAddress, SubagentCatalog, JobView, ToolCallView, ToolEventView, ToolResultView,
   WorkspaceId, WorkspaceView,
-} from '@neo/dsh-client-connection/client'
-export type {} from '@neo/dsh-api-gateway/client'
-export type {} from '@neo/dsh-cordis-host-runner/remote'
+} from '@neo/client-connection/client'
+export type {} from '@neo/api-gateway/client'
+export type {} from '@neo/cordis-host-runner/remote'
 
 // The payload vocabulary of the selected namespaces, re-exported so a Client
 // contribution can name what it sends and receives without importing a Host
@@ -87,11 +87,11 @@ export type {
   DynamicCordisStopResponse,
   DynamicCordisUndefineReceipt,
   RequestRunOutcome,
-} from '@neo/dsh-cordis-host-runner/types'
+} from '@neo/cordis-host-runner/types'
 // The JSON vocabulary those payloads are built from, re-exported for the same
 // reason: a Client contribution names what it sends without importing a Host
 // package, and this assembly is where both planes legitimately meet.
-export type { JsonValue } from '@neo/dsh-session/types'
+export type { JsonValue } from '@neo/session/types'
 
 declare module '@neo/cordis' {
   interface Context {

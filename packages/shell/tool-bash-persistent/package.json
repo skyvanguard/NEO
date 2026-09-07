@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-bash-persistent",
+  "name": "@neo/tool-bash-persistent",
   "description": "Model-facing owner-scoped persistent Bash tool backed by the Harness PTY service",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -31,11 +31,11 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-terminal": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/terminal": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -44,18 +44,18 @@
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-terminal": "workspace:^",
-    "@neo/dsh-terminal-bash": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subprocess-local": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/terminal": "workspace:^",
+    "@neo/terminal-bash": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

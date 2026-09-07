@@ -1,17 +1,17 @@
 /**
  * Single replay-aware token-meter service for request and surface pressure.
  *
- * @module @neo/dsh-token-meter
+ * @module @neo/token-meter
  */
 
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { BlockAssembler, deepFreeze } from '@neo/dsh-llm'
-import type { Message, TokenUsage } from '@neo/dsh-llm'
-import type { EpochHeader, Session, SessionEvent } from '@neo/dsh-session'
-import { canonicalHeader, headerEquals, isSurfaceEvent } from '@neo/dsh-session'
+import { BlockAssembler, deepFreeze } from '@neo/llm'
+import type { Message, TokenUsage } from '@neo/llm'
+import type { EpochHeader, Session, SessionEvent } from '@neo/session'
+import { canonicalHeader, headerEquals, isSurfaceEvent } from '@neo/session'
 // Type-only: resolves the optional projection registry Context declaration.
-import type {} from '@neo/dsh-session-projection'
+import type {} from '@neo/session-projection'
 import type {
   TokenMeasurement,
   TokenMeasurementBaseline,

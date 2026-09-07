@@ -7,9 +7,9 @@
 
 import { describe, expect, it } from 'vitest'
 import fc from 'fast-check'
-import { isJsonValue } from '@neo/dsh-session'
-import { parameterSchemaSpecToJsonSchema, validateArgs } from '@neo/dsh-tools'
-import type { ParameterPropertySpec, ParameterSchemaSpec, ValueSchemaSpec } from '@neo/dsh-tools'
+import { isJsonValue } from '@neo/session'
+import { parameterSchemaSpecToJsonSchema, validateArgs } from '@neo/tools'
+import type { ParameterPropertySpec, ParameterSchemaSpec, ValueSchemaSpec } from '@neo/tools'
 
 /** Remove parameter-only requiredness before nesting a schema as an array item. */
 function asValueSchema(prop: ParameterPropertySpec): ValueSchemaSpec {

@@ -7,13 +7,13 @@
  * `sidebar.settings` registrant's (ui-settings), followed by optional footer
  * actions in `sidebar.footer.action`.
  */
-import type { PropsLocale, PropsRenderSlots, PropsRuntime } from '@neo/dsh-client-ui-slots'
+import type { PropsLocale, PropsRenderSlots, PropsRuntime } from '@neo/client-ui-slots'
 // Type-only: pulls ui-layout's SlotMap merge (the 'sidebar' entry) into every
 // program that sees this contract, so PropsRuntime<'sidebar'> resolves.
-import type {} from '@neo/dsh-client-ui-layout/client'
-import type { WorkspaceId } from '@neo/dsh-client-runtime/client'
+import type {} from '@neo/client-ui-layout/client'
+import type { WorkspaceId } from '@neo/client-runtime/client'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface SlotMap {
     /**
      * The workspace/session browsing region: section header, search, the

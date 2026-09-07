@@ -5,11 +5,11 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import {
   IconCheckOutline16, IconCloseOutline16, IconCordisPluginOutline14, IconPlayOutline16,
   IconStopFill16, IconTrashOutline16, Tooltip,
-} from '@neo/dsh-client-ui-primitives'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
-import type {} from '@neo/dsh-client-ui-sidebar/client'
-import type { CordisRunActivity } from '@neo/dsh-cordis-client-runner/client'
-import type { SessionId } from '@neo/dsh-client-connection/client'
+} from '@neo/client-ui-primitives'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
+import type {} from '@neo/client-ui-sidebar/client'
+import type { CordisRunActivity } from '@neo/cordis-client-runner/client'
+import type { SessionId } from '@neo/client-connection/client'
 import type { CordisInventoryRow } from './dynamic-port.ts'
 import type { CordisPanelFace } from './slots.ts'
 import type { CordisKey } from './locales.ts'

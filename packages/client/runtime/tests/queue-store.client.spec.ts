@@ -4,10 +4,10 @@
  * projection, and snapshot reference stability.
  */
 import { describe, expect, it } from 'vitest'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { ContentBlock, UserMessage } from '@neo/dsh-llm/types'
-import type { SessionEvent } from '@neo/dsh-session/types'
-import type { MessageId, MuxFrame, RpcId, SessionId } from '@neo/dsh-api-remotes/client'
+import { createUserMessage } from '@neo/llm'
+import type { ContentBlock, UserMessage } from '@neo/llm/types'
+import type { SessionEvent } from '@neo/session/types'
+import type { MessageId, MuxFrame, RpcId, SessionId } from '@neo/api-remotes/client'
 import { Session } from '../src/client/sessions/session.ts'
 import { SessionManager } from '../src/client/sessions/manager.ts'
 import { FakeApiClient, fakeRemote } from './fake-api.client.ts'

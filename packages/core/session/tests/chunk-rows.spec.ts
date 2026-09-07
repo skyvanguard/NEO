@@ -6,10 +6,10 @@
 
 import { describe, expect, it } from 'vitest'
 import fc from 'fast-check'
-import { CallId } from '@neo/dsh-llm'
-import type { StreamChunk } from '@neo/dsh-llm'
-import { decodeStorageRecord, packChunkRuns } from '@neo/dsh-session'
-import type { ChunkRow, SessionEvent, StorageRecord } from '@neo/dsh-session'
+import { CallId } from '@neo/llm'
+import type { StreamChunk } from '@neo/llm'
+import { decodeStorageRecord, packChunkRuns } from '@neo/session'
+import type { ChunkRow, SessionEvent, StorageRecord } from '@neo/session'
 
 /** Build an `assistant/chunk` event with the exact live-append shape. */
 function chunkEvent(seq: number, time: number, chunk: StreamChunk, turn = 1, step = 1): SessionEvent {

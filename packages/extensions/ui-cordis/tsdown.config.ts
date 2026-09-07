@@ -1,3 +1,3 @@
 import { clientBundle } from '../../client/tsdown.client.ts'
 
-export default clientBundle('@neo/dsh-client-ui-cordis', ['lib/types/index.js', 'lib/types/invariant.js'])
+export default clientBundle('@neo/client-ui-cordis', ['lib/types/index.js', 'lib/types/invariant.js'])

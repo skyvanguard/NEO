@@ -8,101 +8,101 @@ The ACP demo exposes fresh baseline-prompt agent sessions to programmatic client
 ```mermaid
 flowchart LR
   cfg["examples/acp-agent<br/>cordis.yml"]
-  plugin_acp_llm_deepseek["llm-deepseek<br/>@neo/dsh-llm-deepseek"]
+  plugin_acp_llm_deepseek["llm-deepseek<br/>@neo/llm-deepseek"]
   cfg --> plugin_acp_llm_deepseek
-  plugin_acp_sandbox["sandbox<br/>@neo/dsh-sandbox-local"]
+  plugin_acp_sandbox["sandbox<br/>@neo/sandbox-local"]
   cfg --> plugin_acp_sandbox
-  plugin_acp_sandbox_policy["sandbox-policy<br/>@neo/dsh-sandbox-policy"]
+  plugin_acp_sandbox_policy["sandbox-policy<br/>@neo/sandbox-policy"]
   cfg --> plugin_acp_sandbox_policy
-  plugin_acp_subprocess["subprocess<br/>@neo/dsh-subprocess-local"]
+  plugin_acp_subprocess["subprocess<br/>@neo/subprocess-local"]
   cfg --> plugin_acp_subprocess
-  plugin_acp_bash["bash<br/>@neo/dsh-bash-sandbox"]
+  plugin_acp_bash["bash<br/>@neo/bash-sandbox"]
   cfg --> plugin_acp_bash
-  plugin_acp_approval["approval<br/>@neo/dsh-user-approval"]
+  plugin_acp_approval["approval<br/>@neo/user-approval"]
   cfg --> plugin_acp_approval
-  plugin_acp_acp_agent["acp-agent<br/>@neo/dsh-acp-demo"]
+  plugin_acp_acp_agent["acp-agent<br/>@neo/acp-demo"]
   cfg --> plugin_acp_acp_agent
-  plugin_acp_acp_agent --> bundle_agent_core["@neo/dsh-agent-spine-demo"]
-  plugin_acp_acp_agent --> bundle_jsonl["@neo/dsh-session-persistence-jsonl"]
-  plugin_acp_acp_agent --> entrypoint_acp["@neo/dsh-acp<br/>automation-only JSON-RPC stdio<br/>fresh sessions created by client"]
+  plugin_acp_acp_agent --> bundle_agent_core["@neo/agent-spine-demo"]
+  plugin_acp_acp_agent --> bundle_jsonl["@neo/session-persistence-jsonl"]
+  plugin_acp_acp_agent --> entrypoint_acp["@neo/acp<br/>automation-only JSON-RPC stdio<br/>fresh sessions created by client"]
   bundle_agent_core --> spine_llm["ctx.llm"]
   bundle_agent_core --> spine_sessions["ctx.sessions"]
   bundle_agent_core --> spine_tools["ctx.tools + tool-bash"]
   bundle_agent_core --> spine_loop["ctx.agents + ctx.agentLoop"]
-  plugin_acp_token_meter["token-meter<br/>@neo/dsh-token-meter"]
+  plugin_acp_token_meter["token-meter<br/>@neo/token-meter"]
   cfg --> plugin_acp_token_meter
-  plugin_acp_compaction_basic["compaction-basic<br/>@neo/dsh-compaction-basic"]
+  plugin_acp_compaction_basic["compaction-basic<br/>@neo/compaction-basic"]
   cfg --> plugin_acp_compaction_basic
-  plugin_acp_session_projection["session-projection<br/>@neo/dsh-session-projection"]
+  plugin_acp_session_projection["session-projection<br/>@neo/session-projection"]
   cfg --> plugin_acp_session_projection
-  plugin_acp_subagent["subagent<br/>@neo/dsh-subagent"]
+  plugin_acp_subagent["subagent<br/>@neo/subagent"]
   cfg --> plugin_acp_subagent
-  plugin_acp_subagent_spawn_in_process["subagent-spawn-in-process<br/>@neo/dsh-subagent-spawn-in-process"]
+  plugin_acp_subagent_spawn_in_process["subagent-spawn-in-process<br/>@neo/subagent-spawn-in-process"]
   cfg --> plugin_acp_subagent_spawn_in_process
-  plugin_acp_subagent_fork_in_process["subagent-fork-in-process<br/>@neo/dsh-subagent-fork-in-process"]
+  plugin_acp_subagent_fork_in_process["subagent-fork-in-process<br/>@neo/subagent-fork-in-process"]
   cfg --> plugin_acp_subagent_fork_in_process
-  plugin_acp_tool_subagent_control["tool-subagent-control<br/>@neo/dsh-tool-subagent-control"]
+  plugin_acp_tool_subagent_control["tool-subagent-control<br/>@neo/tool-subagent-control"]
   cfg --> plugin_acp_tool_subagent_control
-  plugin_acp_tool_subagent_list_agents["tool-subagent-list-agents<br/>@neo/dsh-tool-subagent-control/list-agents"]
+  plugin_acp_tool_subagent_list_agents["tool-subagent-list-agents<br/>@neo/tool-subagent-control/list-agents"]
   cfg --> plugin_acp_tool_subagent_list_agents
-  plugin_acp_tool_subagent_report["tool-subagent-report<br/>@neo/dsh-tool-subagent-report"]
+  plugin_acp_tool_subagent_report["tool-subagent-report<br/>@neo/tool-subagent-report"]
   cfg --> plugin_acp_tool_subagent_report
-  plugin_acp_tool_subagent["tool-subagent<br/>@neo/dsh-tool-subagent"]
+  plugin_acp_tool_subagent["tool-subagent<br/>@neo/tool-subagent"]
   cfg --> plugin_acp_tool_subagent
-  plugin_acp_tool_subagent_fork["tool-subagent-fork<br/>@neo/dsh-tool-subagent"]
+  plugin_acp_tool_subagent_fork["tool-subagent-fork<br/>@neo/tool-subagent"]
   cfg --> plugin_acp_tool_subagent_fork
-  plugin_acp_workflow_worker_thread["workflow-worker-thread<br/>@neo/dsh-workflow-worker-thread"]
+  plugin_acp_workflow_worker_thread["workflow-worker-thread<br/>@neo/workflow-worker-thread"]
   cfg --> plugin_acp_workflow_worker_thread
-  plugin_acp_tool_workflow["tool-workflow<br/>@neo/dsh-tool-workflow"]
+  plugin_acp_tool_workflow["tool-workflow<br/>@neo/tool-workflow"]
   cfg --> plugin_acp_tool_workflow
-  plugin_acp_tool_ralph["tool-ralph<br/>@neo/dsh-tool-ralph"]
+  plugin_acp_tool_ralph["tool-ralph<br/>@neo/tool-ralph"]
   cfg --> plugin_acp_tool_ralph
-  plugin_acp_tool_todo["tool-todo<br/>@neo/dsh-tool-todo"]
+  plugin_acp_tool_todo["tool-todo<br/>@neo/tool-todo"]
   cfg --> plugin_acp_tool_todo
-  plugin_acp_repeat_tool_reminder["repeat-tool-reminder<br/>@neo/dsh-repeat-tool-reminder"]
+  plugin_acp_repeat_tool_reminder["repeat-tool-reminder<br/>@neo/repeat-tool-reminder"]
   cfg --> plugin_acp_repeat_tool_reminder
-  plugin_acp_fs_sandbox["fs-sandbox<br/>@neo/dsh-fs-sandbox"]
+  plugin_acp_fs_sandbox["fs-sandbox<br/>@neo/fs-sandbox"]
   cfg --> plugin_acp_fs_sandbox
-  plugin_acp_fs_observation_policy["fs-observation-policy<br/>@neo/dsh-fs-observation-policy"]
+  plugin_acp_fs_observation_policy["fs-observation-policy<br/>@neo/fs-observation-policy"]
   cfg --> plugin_acp_fs_observation_policy
-  plugin_acp_tool_fs["tool-fs<br/>@neo/dsh-tool-fs"]
+  plugin_acp_tool_fs["tool-fs<br/>@neo/tool-fs"]
   cfg --> plugin_acp_tool_fs
-  plugin_acp_hooks_claude_code["hooks-claude-code<br/>@neo/dsh-hooks-claude-code"]
+  plugin_acp_hooks_claude_code["hooks-claude-code<br/>@neo/hooks-claude-code"]
   cfg --> plugin_acp_hooks_claude_code
-  plugin_acp_hooks_codex["hooks-codex<br/>@neo/dsh-hooks-codex"]
+  plugin_acp_hooks_codex["hooks-codex<br/>@neo/hooks-codex"]
   cfg --> plugin_acp_hooks_codex
 ```
 
 | Plugin id | Package / module |
 | --- | --- |
-| `llm-deepseek` | `@neo/dsh-llm-deepseek` |
-| `sandbox` | `@neo/dsh-sandbox-local` |
-| `sandbox-policy` | `@neo/dsh-sandbox-policy` |
-| `subprocess` | `@neo/dsh-subprocess-local` |
-| `bash` | `@neo/dsh-bash-sandbox` |
-| `approval` | `@neo/dsh-user-approval` |
-| `acp-agent` | `@neo/dsh-acp-demo` |
-| `token-meter` | `@neo/dsh-token-meter` |
-| `compaction-basic` | `@neo/dsh-compaction-basic` |
-| `session-projection` | `@neo/dsh-session-projection` |
-| `subagent` | `@neo/dsh-subagent` |
-| `subagent-spawn-in-process` | `@neo/dsh-subagent-spawn-in-process` |
-| `subagent-fork-in-process` | `@neo/dsh-subagent-fork-in-process` |
-| `tool-subagent-control` | `@neo/dsh-tool-subagent-control` |
-| `tool-subagent-list-agents` | `@neo/dsh-tool-subagent-control/list-agents` |
-| `tool-subagent-report` | `@neo/dsh-tool-subagent-report` |
-| `tool-subagent` | `@neo/dsh-tool-subagent` |
-| `tool-subagent-fork` | `@neo/dsh-tool-subagent` |
-| `workflow-worker-thread` | `@neo/dsh-workflow-worker-thread` |
-| `tool-workflow` | `@neo/dsh-tool-workflow` |
-| `tool-ralph` | `@neo/dsh-tool-ralph` |
-| `tool-todo` | `@neo/dsh-tool-todo` |
-| `repeat-tool-reminder` | `@neo/dsh-repeat-tool-reminder` |
-| `fs-sandbox` | `@neo/dsh-fs-sandbox` |
-| `fs-observation-policy` | `@neo/dsh-fs-observation-policy` |
-| `tool-fs` | `@neo/dsh-tool-fs` |
-| `hooks-claude-code` | `@neo/dsh-hooks-claude-code` |
-| `hooks-codex` | `@neo/dsh-hooks-codex` |
+| `llm-deepseek` | `@neo/llm-deepseek` |
+| `sandbox` | `@neo/sandbox-local` |
+| `sandbox-policy` | `@neo/sandbox-policy` |
+| `subprocess` | `@neo/subprocess-local` |
+| `bash` | `@neo/bash-sandbox` |
+| `approval` | `@neo/user-approval` |
+| `acp-agent` | `@neo/acp-demo` |
+| `token-meter` | `@neo/token-meter` |
+| `compaction-basic` | `@neo/compaction-basic` |
+| `session-projection` | `@neo/session-projection` |
+| `subagent` | `@neo/subagent` |
+| `subagent-spawn-in-process` | `@neo/subagent-spawn-in-process` |
+| `subagent-fork-in-process` | `@neo/subagent-fork-in-process` |
+| `tool-subagent-control` | `@neo/tool-subagent-control` |
+| `tool-subagent-list-agents` | `@neo/tool-subagent-control/list-agents` |
+| `tool-subagent-report` | `@neo/tool-subagent-report` |
+| `tool-subagent` | `@neo/tool-subagent` |
+| `tool-subagent-fork` | `@neo/tool-subagent` |
+| `workflow-worker-thread` | `@neo/workflow-worker-thread` |
+| `tool-workflow` | `@neo/tool-workflow` |
+| `tool-ralph` | `@neo/tool-ralph` |
+| `tool-todo` | `@neo/tool-todo` |
+| `repeat-tool-reminder` | `@neo/repeat-tool-reminder` |
+| `fs-sandbox` | `@neo/fs-sandbox` |
+| `fs-observation-policy` | `@neo/fs-observation-policy` |
+| `tool-fs` | `@neo/tool-fs` |
+| `hooks-claude-code` | `@neo/hooks-claude-code` |
+| `hooks-codex` | `@neo/hooks-codex` |
 
 Source config: [`examples/acp-agent/cordis.yml`](cordis.yml).
 

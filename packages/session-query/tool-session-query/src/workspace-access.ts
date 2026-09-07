@@ -1,22 +1,22 @@
 /**
  * Caller identity, workspace authorization, and visible lineage projection.
  *
- * @module @neo/dsh-tool-session-query/workspace-access
+ * @module @neo/tool-session-query/workspace-access
  */
 
 import type { Context } from '@neo/cordis'
-import { HarnessError } from '@neo/dsh-llm'
+import { HarnessError } from '@neo/llm'
 import {
   SessionId,
   type SessionEvent,
   type SessionHeader,
   type SessionId as SessionIdValue,
-} from '@neo/dsh-session'
+} from '@neo/session'
 import type {
   SessionLineageNode,
   SessionRecord,
-} from '@neo/dsh-session-query'
-import type { ToolRunContext } from '@neo/dsh-tools'
+} from '@neo/session-query'
+import type { ToolRunContext } from '@neo/tools'
 import { serviceBoundary } from './service-boundary.ts'
 
 interface Caller {

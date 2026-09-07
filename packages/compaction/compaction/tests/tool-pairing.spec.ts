@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { createUserMessage, CallId , createMessage, createToolResultMessage } from '@neo/dsh-llm'
-import { toolPairingBalancedAfter, toolPairingBalancedBefore } from '@neo/dsh-compaction'
-import { Session, SessionId } from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
+import { createUserMessage, CallId , createMessage, createToolResultMessage } from '@neo/llm'
+import { toolPairingBalancedAfter, toolPairingBalancedBefore } from '@neo/compaction'
+import { Session, SessionId } from '@neo/session'
+import type { SessionEvent } from '@neo/session'
 
 const SURFACE = { surfaceOp: 'append' as const }
 

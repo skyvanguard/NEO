@@ -2,8 +2,8 @@
 
 import type {
   HostFrame, IApiClient, RpcError, RpcRequest, RpcResult, SessionId, WorkspaceId, WorkspaceView,
-} from '@neo/dsh-api-remotes/client'
-import { transportError } from '@neo/dsh-host-apiproxy/api'
+} from '@neo/api-remotes/client'
+import { transportError } from '@neo/host-apiproxy/api'
 import { Notifier } from '../sessions/notifier.ts'
 import { Workspace, type WorkspaceCreateInput } from './workspace.ts'
 

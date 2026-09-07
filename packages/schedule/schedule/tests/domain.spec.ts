@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { SessionEvent } from '@neo/session'
 import {
   ScheduleId,
   ScheduleInputError,

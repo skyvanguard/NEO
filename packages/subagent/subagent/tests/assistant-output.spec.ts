@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { ContentBlock } from '@neo/llm'
+import type { SessionEvent } from '@neo/session'
 import { AssistantOutputFold, finalAssistantOutput } from '../src/assistant-output.ts'
 
 function message(content: ContentBlock[]): SessionEvent {

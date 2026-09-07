@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { type Session, type SessionEvent } from '@neo/dsh-session'
-import ToolRuntime from '@neo/dsh-tools'
-import * as ToolTodo from '@neo/dsh-tool-todo'
-import * as TodoInvariant from '@neo/dsh-tool-todo/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import SessionStore, { type Session, type SessionEvent } from '@neo/session'
+import ToolRuntime from '@neo/tools'
+import * as ToolTodo from '@neo/tool-todo'
+import * as TodoInvariant from '@neo/tool-todo/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()

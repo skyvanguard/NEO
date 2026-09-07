@@ -4,7 +4,7 @@ import {
   RpcId,
   serverResponseSchema,
   type ClientRequest,
-} from '@neo/dsh-host-apiproxy/api'
+} from '@neo/host-apiproxy/api'
 import type { ClientConnectionRpc } from '../rpc.ts'
 import { randomUuid } from './random-uuid.ts'
 

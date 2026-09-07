@@ -2,12 +2,12 @@
  * The workspace domain declaration: record schema and the `defineDomain` spec
  * the registry opens. The zod schema is the durable-boundary validator today
  * and the direct source of the RPC wire projection in a later phase.
- * @module @neo/dsh-workspace/src/spec
+ * @module @neo/workspace/src/spec
  */
 
 import { z } from 'zod'
-import { SessionId } from '@neo/dsh-session'
-import { defineDomain, domainTable } from '@neo/dsh-storage-domain'
+import { SessionId } from '@neo/session'
+import { defineDomain, domainTable } from '@neo/storage-domain'
 import type { WorkspaceId } from './types.ts'
 
 /** Workspace id schema at the durable boundary; branding has no runtime representation. */

@@ -11,7 +11,7 @@
  * design and its trade-offs are pinned in
  * .agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.md.
  *
- * @module @neo/dsh-session-telemetry
+ * @module @neo/session-telemetry
  */
 
 import { Context, Service } from '@neo/cordis'

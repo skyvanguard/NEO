@@ -4,15 +4,15 @@
  * compaction calls, then binds fresh live sessions to parent/child scripts by
  * first-call order. Throw and hang cases require an explicit override because
  * a session log cannot reconstruct them alone.
- * @module @neo/dsh-llm-replay
+ * @module @neo/llm-replay
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { delimiter as pathDelimiter } from 'node:path'
 import type { Context } from '@neo/cordis'
-import type {} from '@neo/dsh-compaction'
-import { decodeStorageRecord } from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
+import type {} from '@neo/compaction'
+import { decodeStorageRecord } from '@neo/session'
+import type { SessionEvent } from '@neo/session'
 import type {
   ContentBlock,
   GenerateOptions,
@@ -24,8 +24,8 @@ import type {
   RetryPolicyConfig,
   StreamChunk,
   TokenUsage,
-} from '@neo/dsh-llm'
-import { LlmAdapter, LlmError, ReasoningEffortId, assertNever, resolveRetryPolicy } from '@neo/dsh-llm'
+} from '@neo/llm'
+import { LlmAdapter, LlmError, ReasoningEffortId, assertNever, resolveRetryPolicy } from '@neo/llm'
 
 /**
  * One recorded model call. `throw` may replay prefix chunks before failing;

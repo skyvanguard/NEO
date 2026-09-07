@@ -5,17 +5,17 @@ import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { LocalSandboxProvider } from '@neo/dsh-sandbox-local'
-import { SandboxPolicyService } from '@neo/dsh-sandbox-policy'
-import { seatbeltProfileArgs } from '@neo/dsh-sandbox-local/src/profiles.ts'
-import { SandboxBashExecutor } from '@neo/dsh-bash-sandbox'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
+import { LocalSandboxProvider } from '@neo/sandbox-local'
+import { SandboxPolicyService } from '@neo/sandbox-policy'
+import { seatbeltProfileArgs } from '@neo/sandbox-local/src/profiles.ts'
+import { SandboxBashExecutor } from '@neo/bash-sandbox'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
 
 /**
  * Keyless macOS integration of the real provider and executor through public run/start paths.
  * Linux rungs are forced off so Seatbelt is selected. The tests check world effects and stamped
  * facts, including EPERM classification through the wrap-carried dialect; backend-only
- * confinement is covered by `@neo/dsh-sandbox-local`. Skips off macOS or when
+ * confinement is covered by `@neo/sandbox-local`. Skips off macOS or when
  * `sandbox-exec` rejects the profile.
  */
 

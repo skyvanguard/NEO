@@ -7,14 +7,14 @@ import {
   createAssistantMessage,
   createToolResultMessage,
   createUserMessage,
-} from '@neo/dsh-llm'
+} from '@neo/llm'
 import {
   SESSION_FORMAT_VERSION,
   Session,
   SessionId,
-} from '@neo/dsh-session'
+} from '@neo/session'
 // Carries the session/title event declaration into this fixture builder.
-import type {} from '@neo/dsh-session-title'
+import type {} from '@neo/session-title'
 
 /** Options for one deterministic long-chat fixture. */
 export interface ChatScrollFixtureOptions {

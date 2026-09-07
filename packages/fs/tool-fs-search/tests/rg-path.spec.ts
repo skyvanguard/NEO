@@ -8,9 +8,9 @@
 
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { CallId } from '@neo/dsh-llm'
-import type { ToolExecution } from '@neo/dsh-tools'
-import { resolveRgPath, runRipgrep } from '@neo/dsh-tool-fs-search'
+import { CallId } from '@neo/llm'
+import type { ToolExecution } from '@neo/tools'
+import { resolveRgPath, runRipgrep } from '@neo/tool-fs-search'
 
 // Any access to the mocked module's surface throws — the shape a missing
 // platform package produces at module evaluation.

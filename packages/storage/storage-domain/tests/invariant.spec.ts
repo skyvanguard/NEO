@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import { z } from 'zod'
-import Storage from '@neo/dsh-storage'
-import InvariantRegistry, { InvariantError } from '@neo/dsh-invariants'
-import * as DomainInvariantCompanion from '@neo/dsh-storage-domain/invariant'
+import Storage from '@neo/storage'
+import InvariantRegistry, { InvariantError } from '@neo/invariants'
+import * as DomainInvariantCompanion from '@neo/storage-domain/invariant'
 import { DomainFacility, defineDomain, domainTable } from '../src/index.ts'
 import type { DomainChanged } from '../src/events.ts'
 import { MemoryStorageBackend } from './helpers/memory-backend.ts'
@@ -31,7 +31,7 @@ async function setup() {
 
 const invariantViolation: unknown = expect.objectContaining<Partial<InvariantError>>({
   code: 'INVARIANT',
-  packageName: '@neo/dsh-storage-domain',
+  packageName: '@neo/storage-domain',
 })
 
 describe('domain change-event invariants', () => {

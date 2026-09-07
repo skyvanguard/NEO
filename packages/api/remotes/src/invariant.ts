@@ -1,10 +1,10 @@
-/** Package-owned invariant companion for `@neo/dsh-api-remotes`. */
+/** Package-owned invariant companion for `@neo/api-remotes`. */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-api-remotes'
+const PACKAGE_NAME = '@neo/api-remotes'
 
 /** Cordis companion plugin name. */
 export const name = 'api-remotes-invariant'

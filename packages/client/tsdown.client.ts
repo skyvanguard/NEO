@@ -30,7 +30,7 @@ const CSS_VIRTUAL_SUFFIX = '.mjs'
  * Everything else under @neo/* is either a module-table entry
  * (external) or a leak the purity gate rejects.
  */
-export const INLINE_SAFE = /^@neo\/dsh-(host-apiproxy|session|llm|tools|brand)(\/|$)/
+export const INLINE_SAFE = /^@neo\/(host-apiproxy|session|llm|tools|brand)(\/|$)/
 
 /**
  * Vendored framework libraries: rescoped into @neo, so the gate below
@@ -41,7 +41,7 @@ export const INLINE_SAFE = /^@neo\/dsh-(host-apiproxy|session|llm|tools|brand)(\
 const VENDORED_LIBRARY = /^@neo\/(cosmokit|schemastery)(\/|$)/
 
 /** Generated descriptor/codec contribution with no shared runtime identity. */
-const GENERATED_REMOTE = /^@neo\/dsh-[a-z0-9]+(?:-[a-z0-9]+)*\/remote$/
+const GENERATED_REMOTE = /^@neo\/[a-z0-9]+(?:-[a-z0-9]+)*\/remote$/
 
 /**
  * Workspace mode replaces an empty config array with the root defaults. A
@@ -59,7 +59,7 @@ const SKIP_WORKSPACE_BUILD: UserConfig = { entry: '' }
  * dependent bundle materializes. TODO(webload/store-rehome): remove with the
  * store-engine relocation follow-up.
  */
-const RUNTIME_STORE_EXEMPTION = '@neo/dsh-client-runtime/client'
+const RUNTIME_STORE_EXEMPTION = '@neo/client-runtime/client'
 
 /** Externals resolved from the loader module table: the platform seed entries plus the documented runtime exemption. */
 export const CLIENT_EXTERNALS: readonly string[] = [...PLATFORM_MODULES, RUNTIME_STORE_EXEMPTION]

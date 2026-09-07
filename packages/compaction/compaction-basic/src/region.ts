@@ -2,7 +2,7 @@
  * Surface retention selection and the shared log-recorded compaction
  * transaction for automatic open-turn and manual idle-session compaction.
  *
- * @module @neo/dsh-compaction-basic/region
+ * @module @neo/compaction-basic/region
  */
 
 import { randomUUID } from 'node:crypto'
@@ -13,14 +13,14 @@ import {
   compactCheckpointSource,
   toolPairingBalancedAfter,
   toolPairingBalancedBefore,
-} from '@neo/dsh-compaction'
-import type { CompactionResult } from '@neo/dsh-compaction'
-import type { CommandId } from '@neo/dsh-commands/brand'
-import { createUserMessage, errorChain } from '@neo/dsh-llm'
-import type { Message, UserMessage } from '@neo/dsh-llm'
-import type { TokenMeasurement, TokenMeter } from '@neo/dsh-token-meter'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { Agent } from '@neo/dsh-agent'
+} from '@neo/compaction'
+import type { CompactionResult } from '@neo/compaction'
+import type { CommandId } from '@neo/commands/brand'
+import { createUserMessage, errorChain } from '@neo/llm'
+import type { Message, UserMessage } from '@neo/llm'
+import type { TokenMeasurement, TokenMeter } from '@neo/token-meter'
+import type { Session, SessionEvent } from '@neo/session'
+import type { Agent } from '@neo/agent'
 import { frameSummary } from './summarizer.ts'
 import type { SummarizationInput, SummaryResult } from './summarizer.ts'
 

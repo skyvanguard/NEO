@@ -1,15 +1,15 @@
-/** Package-owned compaction log-stream invariants. @module @neo/dsh-compaction/invariant */
+/** Package-owned compaction log-stream invariants. @module @neo/compaction/invariant */
 
 import type { Context } from '@neo/cordis'
-import { isReplacementSurfaceEvent } from '@neo/dsh-session'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import { isReplacementSurfaceEvent } from '@neo/session'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type { CompactionId } from './brand.ts'
 import { isCompactCheckpointSource } from './checkpoint.ts'
 import type { CompactionCheckpointSource } from './checkpoint.ts'
 import type {} from './types.ts'
 
-const PACKAGE_NAME = '@neo/dsh-compaction'
+const PACKAGE_NAME = '@neo/compaction'
 
 /** Cordis companion plugin name. */
 export const name = 'compaction-invariant'

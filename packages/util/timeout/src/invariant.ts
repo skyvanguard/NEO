@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-timeout`.
- * @module @neo/dsh-timeout/invariant
+ * Package-owned invariant companion for `@neo/timeout`.
+ * @module @neo/timeout/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-timeout'
+const PACKAGE_NAME = '@neo/timeout'
 
 /** Cordis companion plugin name. */
 export const name = 'timeout-invariant'

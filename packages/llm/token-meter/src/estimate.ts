@@ -3,11 +3,11 @@
  * pure context-breakdown projection, so both surfaces price identical content
  * to identical numbers.
  *
- * @module @neo/dsh-token-meter/estimate
+ * @module @neo/token-meter/estimate
  */
 
-import type { ContentBlock, Message } from '@neo/dsh-llm'
-import type { EpochHeader } from '@neo/dsh-session'
+import type { ContentBlock, Message } from '@neo/llm'
+import type { EpochHeader } from '@neo/session'
 
 /** Fixed text-density estimate used until exact tokenization is needed. */
 const CHARS_PER_TOKEN = 4

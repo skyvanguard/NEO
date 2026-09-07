@@ -32,7 +32,7 @@
  * as the user's environment layer; a store that doubled as the environment
  * layer would shadow non-secret entries behind its precedence, making them
  * silently unreachable.
- * @module @neo/dsh-credentials-local
+ * @module @neo/credentials-local
  */
 
 import { Context, Service } from '@neo/cordis'
@@ -41,12 +41,12 @@ import { watch as chokidarWatch } from 'chokidar'
 import { mkdir, readFile, stat } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { Document, parseDocument, type YAMLError } from 'yaml'
-import { withFileLock, writeFileAtomic } from '@neo/dsh-atomic-write'
-import { canonicalizeWatchPath, resolveDshHome } from '@neo/dsh-home-paths'
-import { launchEnvironmentOf } from '@neo/dsh-launch-environment'
-import { CredentialProvider, credentialRef } from '@neo/dsh-credentials'
-import type { CredentialInfo, CredentialRef, ResolvedCredential } from '@neo/dsh-credentials'
-import type { LaunchEnvironmentEntry } from '@neo/dsh-launch-environment'
+import { withFileLock, writeFileAtomic } from '@neo/atomic-write'
+import { canonicalizeWatchPath, resolveDshHome } from '@neo/home-paths'
+import { launchEnvironmentOf } from '@neo/launch-environment'
+import { CredentialProvider, credentialRef } from '@neo/credentials'
+import type { CredentialInfo, CredentialRef, ResolvedCredential } from '@neo/credentials'
+import type { LaunchEnvironmentEntry } from '@neo/launch-environment'
 
 /** Basename of the credentials document inside the harness home. */
 export const CREDENTIALS_FILENAME = '.credentials.yaml'

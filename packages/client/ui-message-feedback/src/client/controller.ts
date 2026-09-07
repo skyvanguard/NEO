@@ -4,19 +4,19 @@
  * version this controller last observed, and a `version-conflict` reply carries
  * the authoritative item, so a lost race reconciles from the reply itself
  * instead of refetching the whole Session.
- * @module @neo/dsh-client-ui-message-feedback/client/controller
+ * @module @neo/client-ui-message-feedback/client/controller
  */
 
-import type { RemoteResult } from '@neo/dsh-typert-protocol'
-import type { HostObservable } from '@neo/dsh-client-ui-slots'
-import type { MessageId, SessionId } from '@neo/dsh-client-connection/client'
+import type { RemoteResult } from '@neo/typert-protocol'
+import type { HostObservable } from '@neo/client-ui-slots'
+import type { MessageId, SessionId } from '@neo/client-connection/client'
 import type {
   MessageFeedbackDeleteResult,
   MessageFeedbackItem,
   MessageFeedbackListResult,
   MessageFeedbackPutResult,
   MessageFeedbackRating,
-} from '@neo/dsh-message-feedback/types'
+} from '@neo/message-feedback/types'
 
 /**
  * The three Remote calls this controller needs. The generated face wraps every

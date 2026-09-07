@@ -3,12 +3,12 @@
  * Typert Remote. Aggregates provider-reported usage from every persisted
  * session log so the UI can show cumulative consumption (like a usage page),
  * running in Node where it can read and decompress the session store.
- * @module @neo/dsh-usage-stats
+ * @module @neo/usage-stats
  */
 
 import type { Context } from '@neo/cordis'
-import { dshHomePath } from '@neo/dsh-home-paths'
-import { TypertRemoteService, Remote } from '@neo/dsh-typert-protocol'
+import { dshHomePath } from '@neo/home-paths'
+import { TypertRemoteService, Remote } from '@neo/typert-protocol'
 import { aggregateUsage } from './aggregate.ts'
 import type { UsageCache } from './aggregate.ts'
 import type { UsageSummary, UsageSummaryRequest } from './types.ts'

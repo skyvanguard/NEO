@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent, AgentStatus } from '@neo/dsh-agent'
-import CommandRuntime from '@neo/dsh-commands'
-import GoalService from '@neo/dsh-goal'
-import type { GoalRef } from '@neo/dsh-goal'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
-import * as commandGoal from '@neo/dsh-command-goal'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent, AgentStatus } from '@neo/agent'
+import CommandRuntime from '@neo/commands'
+import GoalService from '@neo/goal'
+import type { GoalRef } from '@neo/goal'
+import SessionStore, { Session, SessionId } from '@neo/session'
+import * as commandGoal from '@neo/command-goal'
 
 interface Harness {
   readonly ctx: Context
@@ -84,7 +84,7 @@ function ref(goal: NonNullable<ReturnType<GoalService['get']>>): GoalRef {
   return { id: goal.id, revision: goal.revision }
 }
 
-describe('@neo/dsh-command-goal registration', () => {
+describe('@neo/command-goal registration', () => {
   it('registers one global command with Loader-safe exports and disposes it', async () => {
     const test = await harness()
     expect(commandGoal.name).toBe('command-goal')

@@ -14,7 +14,7 @@ Credential Service Definition (`ctx.credentials`). One doctrine, three consequen
 
 ```ts
 import type { Context } from '@neo/cordis'
-import { credentialRef } from '@neo/dsh-credentials'
+import { credentialRef } from '@neo/credentials'
 
 declare const ctx: Context
 

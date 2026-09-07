@@ -1,15 +1,15 @@
 /**
  * Service Definition for the user-questions capability seam (`ctx.userQuestions`): a UI-backed service for
  * pausing an agent tool call until the human answers a question. The model-
- * facing tool lives in `@neo/dsh-tool-ask-user`; UI packages provide
+ * facing tool lives in `@neo/tool-ask-user`; UI packages provide
  * the single active provider.
  *
- * @module @neo/dsh-user-questions
+ * @module @neo/user-questions
  */
 
 import { Context, Service } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { HarnessError } from '@neo/dsh-llm'
+import type { Agent } from '@neo/agent'
+import { HarnessError } from '@neo/llm'
 
 declare module '@neo/cordis' {
   interface Context {

@@ -1,4 +1,4 @@
-# @neo/dsh-web
+# @neo/web
 
 English | [中文](README.zh.md)
 
@@ -8,11 +8,11 @@ This package owns the Service Definition role of the web capability. Unlike shel
 
 | Package | Role |
 |---|---|
-| `@neo/dsh-web` (this) | Service Definition: the service, provider registries, selection policy, request/result vocabulary, the `WebError` taxonomy |
-| `@neo/dsh-web-search-exa` | Search provider: Exa |
-| `@neo/dsh-web-search-perplexity` | Search provider: Perplexity |
-| `@neo/dsh-web-fetch-http` | Fetch provider: anonymous public HTTP(S) |
-| `@neo/dsh-tool-web` | Consumer: the model-facing `web_search` / `web_fetch` tool schemas over `ctx.web` |
+| `@neo/web` (this) | Service Definition: the service, provider registries, selection policy, request/result vocabulary, the `WebError` taxonomy |
+| `@neo/web-search-exa` | Search provider: Exa |
+| `@neo/web-search-perplexity` | Search provider: Perplexity |
+| `@neo/web-fetch-http` | Fetch provider: anonymous public HTTP(S) |
+| `@neo/tool-web` | Consumer: the model-facing `web_search` / `web_fetch` tool schemas over `ctx.web` |
 
 Search and fetch share no request schema and no business logic, but they are deliberately one seam: `ctx.web` is a single web-access middle layer with one provider-selection policy owner, one abort/error vocabulary, and one product-facing "how this harness reaches the web" config surface. The `Search`/`Fetch` method pairs are deliberately parallel.
 

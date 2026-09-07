@@ -8,10 +8,10 @@
     path: ../cordis.yml
     patches:
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         disabled: true
       - id: acp-agent
-        name: '@neo/dsh-acp-demo'
+        name: '@neo/acp-demo'
         config:
           provider: deepseek-official
           model: deepseek-v4-flash
@@ -24,13 +24,13 @@
 
             Verify your work by running the code or tests. Keep answers brief and factual.
       - id: fs-sandbox
-        name: '@neo/dsh-fs-sandbox'
+        name: '@neo/fs-sandbox'
         config:
           cwd: !!js process.cwd()
           diffBasisMaxBytes: 64
       - insert:
           - id: llm-replay
-            name: '@neo/dsh-llm-replay'
+            name: '@neo/llm-replay'
             config:
               providers:
                 - id: deepseek-official

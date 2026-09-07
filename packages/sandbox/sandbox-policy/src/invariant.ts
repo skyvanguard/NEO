@@ -1,11 +1,11 @@
-/** Package-owned session-event invariants for sandbox policy. @module @neo/dsh-sandbox-policy/invariant */
+/** Package-owned session-event invariants for sandbox policy. @module @neo/sandbox-policy/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import { SANDBOX_MODES } from './session-mode.ts'
 
-const PACKAGE_NAME = '@neo/dsh-sandbox-policy'
+const PACKAGE_NAME = '@neo/sandbox-policy'
 
 /** Cordis companion plugin name. */
 export const name = 'sandbox-policy-invariant'

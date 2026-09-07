@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-llm-retry",
+  "name": "@neo/llm-retry",
   "description": "Provider-routed LLM request retry policy for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,34 +36,34 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-brand": "workspace:^",
+    "@neo/brand": "workspace:^",
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-loop": "workspace:^",
-    "@neo/dsh-agent-loop-testkit": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-llm-deepseek": "workspace:^",
-    "@neo/dsh-llm-mock-server": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence-jsonl": "workspace:^",
-    "@neo/dsh-session-persistence-sqlite": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/agent-loop-testkit": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/llm-deepseek": "workspace:^",
+    "@neo/llm-mock-server": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/session-persistence-sqlite": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

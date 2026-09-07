@@ -1,14 +1,14 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import LlmRuntime from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture } from '@neo/dsh-tools'
-import AgentRegistry, { type Agent } from '@neo/dsh-agent'
+import LlmRuntime from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { defineContentToolFixture } from '@neo/tools'
+import AgentRegistry, { type Agent } from '@neo/agent'
 
-import AgentLoop from '@neo/dsh-agent-loop'
-import * as LlmDeepSeek from '@neo/dsh-llm-deepseek'
+import AgentLoop from '@neo/agent-loop'
+import * as LlmDeepSeek from '@neo/llm-deepseek'
 
 /**
  * With-key proof that log-derived requests translate into real provider cache hits: a

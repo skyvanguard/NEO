@@ -1,17 +1,17 @@
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import LlmRuntime, { createUserMessage, CallId, isAgentLoopRequest, LlmAdapter  } from '@neo/dsh-llm'
-import type { FinishReason, GenerateOptions, StreamChunk } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import { SessionTitleProviderId } from '@neo/dsh-session-title'
-import type { SessionTitleProviderRequest } from '@neo/dsh-session-title'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import LlmRuntime, { createUserMessage, CallId, isAgentLoopRequest, LlmAdapter  } from '@neo/llm'
+import type { FinishReason, GenerateOptions, StreamChunk } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
+import { SessionTitleProviderId } from '@neo/session-title'
+import type { SessionTitleProviderRequest } from '@neo/session-title'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import {
   generateSessionTitleWithLlm,
   resolveSessionTitleLlmConfig,
   SESSION_TITLE_TIMEOUT_CODE,
-} from '@neo/dsh-session-title-llm'
-import type { SessionTitleLlmConfig } from '@neo/dsh-session-title-llm'
+} from '@neo/session-title-llm'
+import type { SessionTitleLlmConfig } from '@neo/session-title-llm'
 
 class RecordingAdapter extends LlmAdapter {
   readonly requests: GenerateOptions[] = []

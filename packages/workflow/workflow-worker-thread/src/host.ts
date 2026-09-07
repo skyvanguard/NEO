@@ -3,7 +3,7 @@
  * cancellation-grace expiry owns settlement and closes message admission.
  * Pending starts share one abort signal; published children share idempotent
  * cleanup, and quiescence waits for both while synthesizing any missing end events.
- * @module @neo/dsh-workflow-worker-thread/host
+ * @module @neo/workflow-worker-thread/host
  */
 
 import { tmpdir } from 'node:os'
@@ -11,12 +11,12 @@ import { Worker } from 'node:worker_threads'
 import type { WorkerOptions } from 'node:worker_threads'
 import { fileURLToPath } from 'node:url'
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { assertNever } from '@neo/dsh-llm'
-import { snapshotJsonValue } from '@neo/dsh-session'
-import type SubagentRuntime from '@neo/dsh-subagent'
-import type { SubagentRun } from '@neo/dsh-subagent'
-import type { WorkflowAgentEndInfo, WorkflowAgentInfo, WorkflowMeta, WorkflowResult, WorkflowRun, WorkflowRunId } from '@neo/dsh-workflow'
+import type { Agent } from '@neo/agent'
+import { assertNever } from '@neo/llm'
+import { snapshotJsonValue } from '@neo/session'
+import type SubagentRuntime from '@neo/subagent'
+import type { SubagentRun } from '@neo/subagent'
+import type { WorkflowAgentEndInfo, WorkflowAgentInfo, WorkflowMeta, WorkflowResult, WorkflowRun, WorkflowRunId } from '@neo/workflow'
 import { renderThrown } from './realm.ts'
 import type { ExecutionObserver } from './runtime.ts'
 import { HostToWorkerType, WorkerToHostType } from './protocol.ts'

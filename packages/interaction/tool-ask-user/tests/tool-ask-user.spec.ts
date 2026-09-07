@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { CallId } from '@neo/dsh-llm'
-import AgentRegistry, { type Agent } from '@neo/dsh-agent'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import UserQuestionService, { type AskUserQuestionRequest } from '@neo/dsh-user-questions'
-import * as toolAskUser from '@neo/dsh-tool-ask-user'
+import { CallId } from '@neo/llm'
+import AgentRegistry, { type Agent } from '@neo/agent'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import UserQuestionService, { type AskUserQuestionRequest } from '@neo/user-questions'
+import * as toolAskUser from '@neo/tool-ask-user'
 
 const testToolSignal = new AbortController().signal
 

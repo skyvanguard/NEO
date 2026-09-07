@@ -1,13 +1,13 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { boot } from '@neo/dsh-app-boot'
-import { Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import { Session, SessionId } from '@neo/dsh-session'
-import type {} from '@neo/dsh-fs-e2b'
-import type {} from '@neo/dsh-bash-local'
-import type {} from '@neo/dsh-lsp-stdio'
-import type {} from '@neo/dsh-terminal-bash'
+import { boot } from '@neo/app-boot'
+import { Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import { Session, SessionId } from '@neo/session'
+import type {} from '@neo/fs-e2b'
+import type {} from '@neo/bash-local'
+import type {} from '@neo/lsp-stdio'
+import type {} from '@neo/terminal-bash'
 
 const configPath = process.argv[2]
 if (configPath === undefined) throw new Error('usage: bin.ts <cordis.yml>')

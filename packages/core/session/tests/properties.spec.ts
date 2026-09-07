@@ -9,9 +9,9 @@
 
 import { describe, expect, it } from 'vitest'
 import fc from 'fast-check'
-import { createUserMessage, CallId , createMessage, createToolResultMessage } from '@neo/dsh-llm'
-import { Session, SessionId } from '@neo/dsh-session'
-import type { SessionEventMap, SessionEventType, SurfaceIntent } from '@neo/dsh-session'
+import { createUserMessage, CallId , createMessage, createToolResultMessage } from '@neo/llm'
+import { Session, SessionId } from '@neo/session'
+import type { SessionEventMap, SessionEventType, SurfaceIntent } from '@neo/session'
 
 // Each arbitrary supplies its own surface intent; `build` must not synthesize
 // one or the property would fail to exercise malformed fixture choices.

@@ -6,10 +6,10 @@
  */
 
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
-import type { GenericCallView, JsonValue, ToolResult, WebSearchResultView, WebSource } from '@neo/dsh-tools'
-import type { WebSearchResult, WebSearchSource } from '@neo/dsh-web'
-import type {} from '@neo/dsh-system-prompt'
+import { defineTool } from '@neo/tools'
+import type { GenericCallView, JsonValue, ToolResult, WebSearchResultView, WebSource } from '@neo/tools'
+import type { WebSearchResult, WebSearchSource } from '@neo/web'
+import type {} from '@neo/system-prompt'
 
 /**
  * Default upper bound on returned sources (the `searchMaxResults` config).
@@ -203,7 +203,7 @@ export function presentSearchResult(args: { query: string }, result: ToolResult)
  * @param maxResults - the deployment's source cap, sent as every seam
  *   request's `maxResults`.
  * @param timeoutMs - the cooperative tool-call budget (ms) attached as the tool's
- *   `ToolDefinition.timeoutMs` for `@neo/dsh-tool-call-timeout-policy` to enforce.
+ *   `ToolDefinition.timeoutMs` for `@neo/tool-call-timeout-policy` to enforce.
  * @param fetchEnabled - whether the same composition exposes `web_fetch`, which
  *   controls whether search guidance may recommend that follow-up tool.
  */

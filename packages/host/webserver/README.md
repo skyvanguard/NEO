@@ -1,4 +1,4 @@
-# @neo/dsh-host-webserver
+# @neo/host-webserver
 
 English | [中文](README.zh.md)
 

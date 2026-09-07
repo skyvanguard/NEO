@@ -3,16 +3,16 @@
  * API. No API key and no model turn — a metasearch call against infrastructure
  * the operator controls, so reconnaissance queries never leave for a cloud
  * search vendor under the operator's identity.
- * @module @neo/dsh-web-search-searxng/provider
+ * @module @neo/web-search-searxng/provider
  */
 
-import { WebError } from '@neo/dsh-web'
+import { WebError } from '@neo/web'
 import type {
   WebSearchProvider,
   WebSearchRequest,
   WebSearchResult,
   WebSearchSource,
-} from '@neo/dsh-web'
+} from '@neo/web'
 
 /** Stable id this provider registers under. */
 export const SEARXNG_PROVIDER_ID = 'searxng'

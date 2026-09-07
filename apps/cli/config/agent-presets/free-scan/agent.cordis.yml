@@ -26,7 +26,7 @@
 # ── identity ────────────────────────────────────────────────────────────────
 
 - id: persona
-  name: '@neo/dsh-persona'
+  name: '@neo/persona'
   config:
     text: >-
       You are NEO, an autonomous external attack-surface analyst powered by the {{model}}
@@ -170,7 +170,7 @@
 # Blank the NEO-development context: this agent works on an external target, not
 # the NEO checkout, so the source-tree and Web-GUI guidance is pure noise.
 - id: prompt-section
-  name: '@neo/dsh-prompt-section'
+  name: '@neo/prompt-section'
   config:
     sections:
       - name: 'harness:source'
@@ -181,47 +181,47 @@
         text: ''
 
 - id: agent-instructions
-  name: '@neo/dsh-agent-instructions'
+  name: '@neo/agent-instructions'
   config:
     maxBytes: 65536
 
 # ── shell ───────────────────────────────────────────────────────────────────
 
 - id: tool-bash
-  name: '@neo/dsh-tool-bash'
+  name: '@neo/tool-bash'
   disabled: !!js process.platform === 'win32'
 
 - id: tool-pwsh
-  name: '@neo/dsh-tool-pwsh'
+  name: '@neo/tool-pwsh'
   disabled: !!js process.platform !== 'win32'
 
 # ── filesystem ──────────────────────────────────────────────────────────────
 
 - id: tool-fs
-  name: '@neo/dsh-tool-fs'
+  name: '@neo/tool-fs'
 
 - id: tool-fs-search
-  name: '@neo/dsh-tool-fs-search'
+  name: '@neo/tool-fs-search'
   config:
     sampleOverCapGlobResults: false
 
 # ── background jobs ────────────────────────────────────────────────────────
 
 - id: tool-jobs
-  name: '@neo/dsh-tool-jobs'
+  name: '@neo/tool-jobs'
 
 # ── skills ──────────────────────────────────────────────────────────────────
 
 - id: skill-filesystem
-  name: '@neo/dsh-skill-filesystem'
+  name: '@neo/skill-filesystem'
 
 - id: tool-skill
-  name: '@neo/dsh-tool-skill'
+  name: '@neo/tool-skill'
 
 # ── goals ───────────────────────────────────────────────────────────────────
 
 - id: tool-goal
-  name: '@neo/dsh-tool-goal'
+  name: '@neo/tool-goal'
 
 # ── compaction ──────────────────────────────────────────────────────────────
 
@@ -233,13 +233,13 @@
     toolResultPruner: true
   config:
     - id: compaction-basic
-      name: '@neo/dsh-compaction-basic'
+      name: '@neo/compaction-basic'
 
     - id: command-compact
-      name: '@neo/dsh-command-compact'
+      name: '@neo/command-compact'
 
     - id: tool-result-pruner
-      name: '@neo/dsh-compaction-tool-result-pruner'
+      name: '@neo/compaction-tool-result-pruner'
       config:
         thresholdChars: 8192
         headChars: 4096
@@ -248,12 +248,12 @@
 # ── remaining model-facing rows ─────────────────────────────────────────────
 
 - id: tool-todo
-  name: '@neo/dsh-tool-todo'
+  name: '@neo/tool-todo'
   config:
     allowParallelInProgress: true
 
 - id: tool-web
-  name: '@neo/dsh-tool-web'
+  name: '@neo/tool-web'
   config:
     fetch: true
     searchTimeoutMs: 60000
@@ -261,6 +261,6 @@
 # ── presentation ────────────────────────────────────────────────────────────
 
 - id: tool-presentation
-  name: '@neo/dsh-agent-tool-presentation'
+  name: '@neo/agent-tool-presentation'
   config:
     mode: code

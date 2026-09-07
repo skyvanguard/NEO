@@ -3,9 +3,9 @@ import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import TypertRegistry from '@neo/dsh-typert-registry'
-import type { TypertContribution } from '@neo/dsh-typert-registry/types'
-import { EVENT_API, SERVICE_API, TYPE_API } from '@neo/dsh-tool-cordis/src/api-catalog.ts'
+import TypertRegistry from '@neo/typert-registry'
+import type { TypertContribution } from '@neo/typert-registry/types'
+import { EVENT_API, SERVICE_API, TYPE_API } from '@neo/tool-cordis/src/api-catalog.ts'
 import { WorkspaceAnalyzer } from '../src/analyzer.ts'
 import { FaceModelEmitter } from '../src/emitter.ts'
 
@@ -21,11 +21,11 @@ describe('model-driven dsh-tools generation', () => {
     const workspace = new WorkspaceAnalyzer({
       root: workspaceRoot,
       faces: ['host'],
-      packages: ['@neo/dsh-tools'],
+      packages: ['@neo/tools'],
     }).analyze()
     const host = workspace.faces.find(candidate => candidate.face === 'host')
     if (host === undefined) throw new Error('dsh-tools has no analyzed host face')
-    const artifact = new FaceModelEmitter(host).emit('@neo/dsh-tools')
+    const artifact = new FaceModelEmitter(host).emit('@neo/tools')
 
     const root = mkdtempSync(join(import.meta.dirname, '.generated-tools-'))
     temporaryRoots.push(root)
@@ -38,7 +38,7 @@ describe('model-driven dsh-tools generation', () => {
     const ctx = new Context()
     await ctx.plugin(TypertRegistry)
     const dispose = ctx.typert.register(generated.TYPERT)
-    const record = ctx.typert.getPackage('@neo/dsh-tools', 'host')
+    const record = ctx.typert.getPackage('@neo/tools', 'host')
     const service = record?.model.services.find(candidate => candidate.key === 'tools')
     expect(service).toBeDefined()
     expect({
@@ -71,6 +71,6 @@ describe('model-driven dsh-tools generation', () => {
     )
 
     await dispose()
-    expect(ctx.typert.getPackage('@neo/dsh-tools', 'host')).toBeUndefined()
+    expect(ctx.typert.getPackage('@neo/tools', 'host')).toBeUndefined()
   })
 })

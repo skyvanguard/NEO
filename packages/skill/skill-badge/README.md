@@ -1,4 +1,4 @@
-# @neo/dsh-skill-badge
+# @neo/skill-badge
 
 English | [中文](README.zh.md)
 
@@ -10,7 +10,7 @@ The provider exposes its packaged `assets/` directory as the skill resource base
 
 ## Model Experience
 
-Indirectly, through `@neo/dsh-tool-skill`, which renders the catalog entry and selected skill body.
+Indirectly, through `@neo/tool-skill`, which renders the catalog entry and selected skill body.
 
 #### KV Cache effect
 

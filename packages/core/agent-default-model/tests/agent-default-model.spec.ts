@@ -3,9 +3,9 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import AgentDefaultModelConfig, { AGENT_DEFAULT_MODEL_SETTINGS_NAMESPACE } from '../src/index.ts'
-import { SettingsProvider } from '@neo/dsh-settings'
-import type { SettingsNamespace } from '@neo/dsh-settings'
-import { ReasoningEffortId } from '@neo/dsh-llm'
+import { SettingsProvider } from '@neo/settings'
+import type { SettingsNamespace } from '@neo/settings'
+import { ReasoningEffortId } from '@neo/llm'
 
 /** The smallest real provider: one in-memory document, always writable. */
 class MemorySettings extends SettingsProvider {

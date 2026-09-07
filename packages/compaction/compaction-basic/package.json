@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-compaction-basic",
+  "name": "@neo/compaction-basic",
   "description": "Token-meter-driven compaction policy and LLM summarization backend for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,18 +32,18 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-compaction": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-token-meter": "workspace:^",
-    "@neo/dsh-compaction-tool-result-pruner": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/compaction": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/token-meter": "workspace:^",
+    "@neo/compaction-tool-result-pruner": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@neo/dsh-compaction-tool-result-pruner": {
+    "@neo/compaction-tool-result-pruner": {
       "optional": true
     }
   },
@@ -53,18 +53,18 @@
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-loop": "workspace:^",
-    "@neo/dsh-agent-loop-testkit": "workspace:^",
-    "@neo/dsh-compaction": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-llm-retry": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-token-meter": "workspace:^",
-    "@neo/dsh-compaction-tool-result-pruner": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/agent-loop-testkit": "workspace:^",
+    "@neo/compaction": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/llm-retry": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/token-meter": "workspace:^",
+    "@neo/compaction-tool-result-pruner": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

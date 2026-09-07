@@ -11,7 +11,7 @@
  *
  * ```yaml
  * - id: llm
- *   name: '@neo/dsh-llm-pi-ai'
+ *   name: '@neo/llm-pi-ai'
  *   config:
  *     providers:
  *       # Catalog route: everything but the credential comes from pi-ai.
@@ -52,14 +52,14 @@
  *               max: ultra
  * ```
  *
- * @module @neo/dsh-llm-pi-ai
+ * @module @neo/llm-pi-ai
  */
 
 import type { Context } from '@neo/cordis'
-import { launchEnvironmentOf } from '@neo/dsh-launch-environment'
-import { assertUsableApiKey, LlmError } from '@neo/dsh-llm'
-import type { AdapterRegistrationHandle, DirectoryRegistrationHandle, LlmConfigurableProvider } from '@neo/dsh-llm'
-import { deepEqualJson, installSettingsSection, settingsNamespace } from '@neo/dsh-settings'
+import { launchEnvironmentOf } from '@neo/launch-environment'
+import { assertUsableApiKey, LlmError } from '@neo/llm'
+import type { AdapterRegistrationHandle, DirectoryRegistrationHandle, LlmConfigurableProvider } from '@neo/llm'
+import { deepEqualJson, installSettingsSection, settingsNamespace } from '@neo/settings'
 import { PiAiAdapter } from './adapter.ts'
 import { catalogProviderIds, catalogProviderTakesApiKey } from './catalog.ts'
 import { assertServiceable, Config, resolveProfiles } from './config.ts'

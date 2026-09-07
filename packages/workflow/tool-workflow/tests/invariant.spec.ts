@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import InvariantRegistry, { InvariantError } from '@neo/dsh-invariants'
-import SessionStore, { SessionId, type Session } from '@neo/dsh-session'
-import { WorkflowRunId, type WorkflowRunId as WorkflowRunIdType } from '@neo/dsh-workflow/types'
+import InvariantRegistry, { InvariantError } from '@neo/invariants'
+import SessionStore, { SessionId, type Session } from '@neo/session'
+import { WorkflowRunId, type WorkflowRunId as WorkflowRunIdType } from '@neo/workflow/types'
 import * as ToolWorkflowInvariant from '../src/invariant.ts'
 import type {} from '../src/types.ts'
 
@@ -53,7 +53,7 @@ describe('durable workflow-record invariants', () => {
       runId, seq: 1, outcome: 'completed',
     })).toThrow(expect.objectContaining<Partial<InvariantError>>({
       code: 'INVARIANT',
-      packageName: '@neo/dsh-tool-workflow',
+      packageName: '@neo/tool-workflow',
     }))
     expect(session.seq).toBe(before)
     expect(() => session.append('tool-workflow/run-end', {

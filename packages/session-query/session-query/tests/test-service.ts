@@ -1,4 +1,4 @@
-import SessionQueryEngine from '@neo/dsh-session-query'
+import SessionQueryEngine from '@neo/session-query'
 import type {
   SessionEventSearchPage,
   SessionEventSearchRequest,
@@ -6,7 +6,7 @@ import type {
   SessionSearchHit,
   SessionSearchPage,
   SessionSearchRequest,
-} from '@neo/dsh-session-query'
+} from '@neo/session-query'
 
 /** Test-only concrete query service for backend-independent behavior. */
 export class TestSessionQueryEngine extends SessionQueryEngine {

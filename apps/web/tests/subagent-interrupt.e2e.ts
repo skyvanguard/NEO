@@ -10,8 +10,8 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { SessionId as sessionId, type SessionId } from '@neo/dsh-session'
-import type {} from '@neo/dsh-agent'
+import { SessionId as sessionId, type SessionId } from '@neo/session'
+import type {} from '@neo/agent'
 import { launchWebScaffold, webSnapshotMode, type WebScaffold } from './scaffold.ts'
 
 const MODE = webSnapshotMode()

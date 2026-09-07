@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-tool-ralph`.
- * @module @neo/dsh-tool-ralph/invariant
+ * Package-owned invariant companion for `@neo/tool-ralph`.
+ * @module @neo/tool-ralph/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tool-ralph'
+const PACKAGE_NAME = '@neo/tool-ralph'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-ralph-invariant'

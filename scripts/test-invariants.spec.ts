@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { Context, FiberState, Service, ValidationError } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import z from '@neo/schemastery'
-import InvariantRegistry from '@neo/dsh-invariants'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 import { packageInvariantOwners } from './package-invariants.ts'
 import {
   TEST_INVARIANT_READY_SERVICE,

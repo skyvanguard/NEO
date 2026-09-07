@@ -1,21 +1,21 @@
 /**
  * Model argument schemas, normalization, and filter construction.
  *
- * @module @neo/dsh-tool-session-query/input
+ * @module @neo/tool-session-query/input
  */
 
 import {
   SessionId,
   type SessionEventType,
   type SessionId as SessionIdValue,
-} from '@neo/dsh-session'
+} from '@neo/session'
 import {
   SessionQueryError,
   type SessionAvailability,
   type SessionEventMetadataFilter,
   type SessionEventSurface,
   type SessionResultFilter,
-} from '@neo/dsh-session-query'
+} from '@neo/session-query'
 
 interface SessionSearchArgs {
   query: string

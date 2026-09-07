@@ -1,25 +1,25 @@
 /**
  * Shared route, framing, timeout, assembly, and validation policy for
  * model-backed session-title providers.
- * @module @neo/dsh-session-title-llm
+ * @module @neo/session-title-llm
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { createUserMessage, BlockAssembler, deepFreeze } from '@neo/dsh-llm'
-import type { FinishReason, GenerateOptions, Message } from '@neo/dsh-llm'
-import { deadline, MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import { createUserMessage, BlockAssembler, deepFreeze } from '@neo/llm'
+import type { FinishReason, GenerateOptions, Message } from '@neo/llm'
+import { deadline, MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import {
   normalizeSessionTitle,
   SessionTitleProviderId,
-} from '@neo/dsh-session-title'
+} from '@neo/session-title'
 import type {
   SessionTitleAutomaticMode,
   SessionTitleModelProvenance,
   SessionTitleProviderRequest,
   SessionTitleProviderResult,
   SessionTitleUserMessage,
-} from '@neo/dsh-session-title'
+} from '@neo/session-title'
 
 /** Exact model-visible request recorded before one auxiliary title dispatch. */
 export interface SessionTitleLlmRequestEventData {
@@ -37,7 +37,7 @@ export interface SessionTitleLlmRequestEventData {
   readonly maxTokens: number
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /** Log-only pre-dispatch record of one session-title model request. */
     'session/title-llm-request': SessionTitleLlmRequestEventData

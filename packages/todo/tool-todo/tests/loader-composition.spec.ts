@@ -9,13 +9,13 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import { CallId } from '@neo/dsh-llm'
-import { Session, SessionId } from '@neo/dsh-session'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import * as ToolTodo from '@neo/dsh-tool-todo'
+import { CallId } from '@neo/llm'
+import { Session, SessionId } from '@neo/session'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import * as ToolTodo from '@neo/tool-todo'
 
 let root: string | undefined
 let context: Context | undefined
@@ -55,10 +55,10 @@ async function boot(configLines: readonly string[]): Promise<Context> {
   root = await mkdtemp(join(tmpdir(), 'dsh-todo-loader-'))
   const configPath = join(root, 'cordis.yml')
   await writeFile(configPath, [
-    "- name: '@neo/dsh-agent'",
-    "- name: '@neo/dsh-system-prompt'",
-    "- name: '@neo/dsh-tools'",
-    "- name: '@neo/dsh-tool-todo'",
+    "- name: '@neo/agent'",
+    "- name: '@neo/system-prompt'",
+    "- name: '@neo/tools'",
+    "- name: '@neo/tool-todo'",
     ...configLines.length > 0 ? ['  config:', ...configLines] : [],
     '',
   ].join('\n'))
@@ -69,10 +69,10 @@ async function boot(configLines: readonly string[]): Promise<Context> {
   await ctx.plugin(Loader)
   ctx.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-agent', AgentRegistry],
-    ['@neo/dsh-system-prompt', SystemPrompt],
-    ['@neo/dsh-tools', ToolRuntime],
-    ['@neo/dsh-tool-todo', ToolTodo],
+    ['@neo/agent', AgentRegistry],
+    ['@neo/system-prompt', SystemPrompt],
+    ['@neo/tools', ToolRuntime],
+    ['@neo/tool-todo', ToolTodo],
   ])
   ctx.loader.internal = {
     version: 'v2',

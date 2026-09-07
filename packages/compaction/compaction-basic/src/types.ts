@@ -1,10 +1,10 @@
 /**
  * Configuration vocabulary for the replay-aware basic compaction backend.
  *
- * @module @neo/dsh-compaction-basic/types
+ * @module @neo/compaction-basic/types
  */
 
-import type { LlmCallConfig } from '@neo/dsh-llm'
+import type { LlmCallConfig } from '@neo/llm'
 
 /** Policy fields shared by the default policy and exact model overrides. */
 export interface CompactionPolicyConfig {

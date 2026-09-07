@@ -1,7 +1,7 @@
 /** Host registration for the browser locale preference. */
 
 import type { Context } from '@neo/cordis'
-import { settingsNamespace } from '@neo/dsh-settings'
+import { settingsNamespace } from '@neo/settings'
 import { LOCALE_SETTINGS_NAMESPACE, LocaleSettingsSchema } from './locale-settings.ts'
 
 export {

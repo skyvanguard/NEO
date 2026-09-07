@@ -8,9 +8,9 @@
     patches:
       - insert:
           - id: subagent-codex
-            name: '@neo/dsh-subagent-codex'
+            name: '@neo/subagent-codex'
           - id: tool-subagent-codex
-            name: '@neo/dsh-tool-subagent'
+            name: '@neo/tool-subagent'
             config:
               provider: codex
               toolName: subagent_codex

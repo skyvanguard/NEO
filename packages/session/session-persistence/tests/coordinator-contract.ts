@@ -1,4 +1,4 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 /**
  * Shared write-path orchestration contract for backends using {@link PersistenceCoordinator}.
  * Unlike the public storage-semantics suite in `contract.ts`, it covers SessionStore event wiring,
@@ -7,14 +7,14 @@ import { createUserMessage } from '@neo/dsh-llm'
  *
  * Each real backend supplies a shared storage scope and optional torn-tail injector; backend specs
  * retain only storage-mechanics tests, while these scenarios run once per backend.
- * @module @neo/dsh-session-persistence/tests/coordinator-contract
+ * @module @neo/session-persistence/tests/coordinator-contract
  */
 
 import { describe, expect, it, vi } from 'vitest'
 import { Context, type Fiber } from '@neo/cordis'
-import { scopeTarget } from '@neo/dsh-scope'
-import SessionStore, { SESSION_FORMAT_VERSION, Session, SessionId } from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
+import { scopeTarget } from '@neo/scope'
+import SessionStore, { SESSION_FORMAT_VERSION, Session, SessionId } from '@neo/session'
+import type { SessionEvent } from '@neo/session'
 import { meta, oneTurnLog, appendLog } from './contract.ts'
 
 /**

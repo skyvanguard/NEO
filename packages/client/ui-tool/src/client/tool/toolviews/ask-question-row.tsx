@@ -6,9 +6,9 @@
 // when the user dismissed the whole set — because the questions themselves
 // render in the composer takeover.
 
-import { IconQuestionOutline14 } from '@neo/dsh-client-ui-primitives'
+import { IconQuestionOutline14 } from '@neo/client-ui-primitives'
 import type { Context } from '@neo/cordis'
-import type { PropsLocale } from '@neo/dsh-client-ui-slots'
+import type { PropsLocale } from '@neo/client-ui-slots'
 import type { ToolCallViewProps } from '../../contract/slots.ts'
 import { toolRowModel } from '../models/tool-call-model.ts'
 import { ToolRow } from '../components/ToolRow.tsx'

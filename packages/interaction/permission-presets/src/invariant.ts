@@ -1,10 +1,10 @@
-/** Package-owned permission-preset event invariants. @module @neo/dsh-permission-presets/invariant */
+/** Package-owned permission-preset event invariants. @module @neo/permission-presets/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-permission-presets'
+const PACKAGE_NAME = '@neo/permission-presets'
 
 /** Cordis companion plugin name. */
 export const name = 'permission-presets-invariant'

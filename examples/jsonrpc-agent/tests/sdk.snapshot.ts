@@ -1,7 +1,7 @@
 /**
  * Keyless snapshot coverage for the TypeScript SDK path: each scenario spawns
  * the REAL `dsh-jsonrpc-agent` runtime (per `DSH_EXAMPLE_MODE`) through the
- * REAL `@neo/dsh-sdk-client`, drives one turn over stdio JSON-RPC,
+ * REAL `@neo/sdk-client`, drives one turn over stdio JSON-RPC,
  * and pins the SDK `RunResult`, the complete notification stream, and the
  * persisted session logs. Replay serves recorded model
  * responses via `llm-replay` (`cordis.snapshot.yml`); `DSH_SNAPSHOT=record`
@@ -25,9 +25,9 @@ import {
   tokenizeSessionFixtureCwd,
   type HarvestedLog,
   type NormalizeContext,
-} from '@neo/dsh-acp-snapshot'
-import { resolveExampleLaunch } from '@neo/dsh-loader-smoke'
-import { DeepSeekHarness, type HarnessNotification, type RunResult } from '@neo/dsh-sdk-client'
+} from '@neo/acp-snapshot'
+import { resolveExampleLaunch } from '@neo/loader-smoke'
+import { DeepSeekHarness, type HarnessNotification, type RunResult } from '@neo/sdk-client'
 
 const testsDir = dirOf(import.meta.url)
 const snapshotsDir = join(testsDir, 'snapshots')
@@ -187,7 +187,7 @@ function assembledRuntimeContexts(log: PersistedLog): string[] {
     }
     if (event.type !== 'user/message'
       || event.data?.source?.kind !== 'plugin'
-      || event.data.source.plugin !== '@neo/dsh-system-prompt') return []
+      || event.data.source.plugin !== '@neo/system-prompt') return []
     return event.data.content?.flatMap(block => block.type === 'text' && typeof block.text === 'string' ? [block.text] : []) ?? []
   })
 }

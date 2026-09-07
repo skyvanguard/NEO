@@ -8,12 +8,12 @@
  * Activation disposal, so no installation outlives either owner and no removed
  * contribution can be installed after revocation reports completion.
  *
- * @module @neo/dsh-subagent/activation-setup-registry
+ * @module @neo/subagent/activation-setup-registry
  */
 
 import type { Context } from '@neo/cordis'
-import type { AgentSetupCommit } from '@neo/dsh-agent'
-import { errorChain } from '@neo/dsh-llm'
+import type { AgentSetupCommit } from '@neo/agent'
+import { errorChain } from '@neo/llm'
 import { SubagentError } from './error.ts'
 
 /**

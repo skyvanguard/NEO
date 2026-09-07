@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-bash-sandbox`.
- * @module @neo/dsh-bash-sandbox/invariant
+ * Package-owned invariant companion for `@neo/bash-sandbox`.
+ * @module @neo/bash-sandbox/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-bash-sandbox'
+const PACKAGE_NAME = '@neo/bash-sandbox'
 
 /** Cordis companion plugin name. */
 export const name = 'bash-sandbox-invariant'

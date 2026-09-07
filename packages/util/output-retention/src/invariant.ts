@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-output-retention`.
- * @module @neo/dsh-output-retention/invariant
+ * Package-owned invariant companion for `@neo/output-retention`.
+ * @module @neo/output-retention/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-output-retention'
+const PACKAGE_NAME = '@neo/output-retention'
 
 /** Cordis companion plugin name. */
 export const name = 'output-retention-invariant'

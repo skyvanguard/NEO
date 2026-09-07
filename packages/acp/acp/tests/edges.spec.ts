@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { PROTOCOL_VERSION } from '@agentclientprotocol/sdk'
-import { createUserMessage, CallId, type StreamChunk  } from '@neo/dsh-llm'
-import { SessionId } from '@neo/dsh-session'
-import { defineContentToolFixture } from '@neo/dsh-tools'
+import { createUserMessage, CallId, type StreamChunk  } from '@neo/llm'
+import { SessionId } from '@neo/session'
+import { defineContentToolFixture } from '@neo/tools'
 import { makeBridgeHarness, textResponse, type BridgeHarness } from './harness.ts'
 
 function toolCallResponse(): StreamChunk[] {

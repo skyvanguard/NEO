@@ -6,15 +6,15 @@
  * Plugin lifecycle reads use the optional `ctx.fs` provider, so providerless products
  * mount it as a no-op.
  *
- * @module @neo/dsh-agent-instructions
+ * @module @neo/agent-instructions
  */
 
 import type { Context } from '@neo/cordis'
 import { isDeepStrictEqual } from 'node:util'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { Session, UserMessage } from '@neo/dsh-session'
-import type { ToolExecution, ToolExecutionResult, ToolExecutionToken } from '@neo/dsh-tools'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { Session, UserMessage } from '@neo/session'
+import type { ToolExecution, ToolExecutionResult, ToolExecutionToken } from '@neo/tools'
 import { Config, resolveConfig, workspaceBaselineIdentity, type ResolvedConfig } from './config.ts'
 import { findProjectRoot, loadBaselineInstructionSet } from './files.ts'
 import {

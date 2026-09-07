@@ -7,9 +7,9 @@ import { execFile } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 import { promisify } from 'node:util'
 import { Context } from '@neo/cordis'
-import LocalFileSystem from '@neo/dsh-fs-local'
-import { deadline } from '@neo/dsh-timeout'
-import { canonicalizeWorkspace, readHostSource } from '@neo/dsh-lsp-stdio'
+import LocalFileSystem from '@neo/fs-local'
+import { deadline } from '@neo/timeout'
+import { canonicalizeWorkspace, readHostSource } from '@neo/lsp-stdio'
 
 const execFileAsync = promisify(execFile)
 

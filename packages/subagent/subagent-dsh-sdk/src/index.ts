@@ -7,13 +7,13 @@
  * `request.parent` is the session's workspace cwd. This plugin uses named
  * exports only; a default would hide its loader metadata (see
  * `docs/postmortem/0001-acp-default-export-drops-inject.md`).
- * @module @neo/dsh-subagent-dsh-sdk
+ * @module @neo/subagent-dsh-sdk
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { SubagentCapabilities, SubagentProvider, SubagentStartRequest } from '@neo/dsh-subagent'
-import { assertPositiveFinite, NO_START_CAPABILITIES, resolveChildCwd, validateConfiguredCwd } from '@neo/dsh-subagent'
+import type { SubagentCapabilities, SubagentProvider, SubagentStartRequest } from '@neo/subagent'
+import { assertPositiveFinite, NO_START_CAPABILITIES, resolveChildCwd, validateConfiguredCwd } from '@neo/subagent'
 import {
   DEFAULT_DISPOSE_EOF_GRACE_MS,
   DEFAULT_DISPOSE_GRACE_MS,

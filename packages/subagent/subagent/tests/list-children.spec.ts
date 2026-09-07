@@ -4,24 +4,24 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { z } from 'zod'
 import { Context } from '@neo/cordis'
-import { createUserMessage } from '@neo/dsh-llm'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
-import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@neo/dsh-session'
-import type { SessionEvent, SessionHeader } from '@neo/dsh-session'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import type { ProjectionDefinition } from '@neo/dsh-session-projection'
-import SessionProjectionCache from '@neo/dsh-session-projection-cache'
-import Storage from '@neo/dsh-storage'
-import { DomainFacility } from '@neo/dsh-storage-domain'
+import { createUserMessage } from '@neo/llm'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
+import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@neo/session'
+import type { SessionEvent, SessionHeader } from '@neo/session'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
+import SessionProjectionRegistry from '@neo/session-projection'
+import type { ProjectionDefinition } from '@neo/session-projection'
+import SessionProjectionCache from '@neo/session-projection-cache'
+import Storage from '@neo/storage'
+import { DomainFacility } from '@neo/storage-domain'
 import { MemoryMediaPool, MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
 import SubagentRuntime, {
   SUBAGENT_DESCRIPTOR_VERSION,
   SubagentError,
-} from '@neo/dsh-subagent'
-import * as SubagentSpawn from '@neo/dsh-subagent-spawn-in-process'
-import * as SubagentFork from '@neo/dsh-subagent-fork-in-process'
+} from '@neo/subagent'
+import * as SubagentSpawn from '@neo/subagent-spawn-in-process'
+import * as SubagentFork from '@neo/subagent-fork-in-process'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 
 type Script = ConstructorParameters<typeof MockAdapter>[0]
@@ -117,7 +117,7 @@ function descriptorPayload(label: string, version = SUBAGENT_DESCRIPTOR_VERSION)
   return { version, mode: 'continuable' as const, provider: 'spawn', label }
 }
 
-declare module '@neo/dsh-session-projection/types' {
+declare module '@neo/session-projection/types' {
   interface SessionProjectionMap {
     /** Test-only hostile probe proving per-child isolation of foreign unit failures. */
     subagentListHostileProbe: null

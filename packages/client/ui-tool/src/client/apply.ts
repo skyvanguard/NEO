@@ -1,6 +1,6 @@
 /** Register the Tool call tree, details renderer, and built-in atomic views. */
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-client-ui-conversation/client'
+import type { ClientContext } from '@neo/client-runtime/client'
+import type {} from '@neo/client-ui-conversation/client'
 import { ToolCallTree } from './tool/ToolCallTree.tsx'
 import { ToolDetails } from './tool/ToolDetails.tsx'
 import { CONVERSATION_NS as NS } from './locale.ts'

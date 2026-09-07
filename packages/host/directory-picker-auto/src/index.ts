@@ -8,13 +8,13 @@
  * entries, so the surface is discovered exactly as a config-row's would be
  * and one resolved choice still swaps both faces; pinning an interaction
  * remains composing that pair directly instead of this row.
- * @module @neo/dsh-host-directory-picker-auto
+ * @module @neo/host-directory-picker-auto
  */
 
 import type { Context } from '@neo/cordis'
 // Empty type imports carry the `loader` and `webServer` Context merges for the reads below.
 import type {} from '@neo/cordis-plugin-loader'
-import type {} from '@neo/dsh-host-webserver'
+import type {} from '@neo/host-webserver'
 import { canExecute, hasLinuxChooserBinary } from './probe.ts'
 import type { DirectoryPickerBackendKind } from './resolve.ts'
 import { resolveDirectoryPickerBackend } from './resolve.ts'
@@ -35,8 +35,8 @@ export const inject = ['webServer', 'loader']
  * app composing this chooser to declare both values as dependencies.
  */
 export const BACKEND_PACKAGES: Record<DirectoryPickerBackendKind, string> = {
-  native: '@neo/dsh-host-directory-picker-native',
-  browse: '@neo/dsh-host-directory-picker-browse',
+  native: '@neo/host-directory-picker-native',
+  browse: '@neo/host-directory-picker-browse',
 }
 
 /**
@@ -48,8 +48,8 @@ export const BACKEND_PACKAGES: Record<DirectoryPickerBackendKind, string> = {
  * workspace.
  */
 export const SURFACE_PACKAGES: Record<DirectoryPickerBackendKind, string> = {
-  native: '@neo/dsh-client-ui-directory-picker-native',
-  browse: '@neo/dsh-client-ui-directory-picker-browse',
+  native: '@neo/client-ui-directory-picker-native',
+  browse: '@neo/client-ui-directory-picker-browse',
 }
 
 /**

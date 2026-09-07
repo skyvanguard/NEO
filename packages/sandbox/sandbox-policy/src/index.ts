@@ -15,16 +15,16 @@
  * reads session state once at each operation boundary; executors and providers
  * remain session-free.
  *
- * @module @neo/dsh-sandbox-policy
+ * @module @neo/sandbox-policy
  */
 
 import { resolve as resolvePath } from 'node:path'
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type {} from '@neo/dsh-agent'
-import { canonicalPath, type SandboxExecutionPolicy, type SandboxMode } from '@neo/dsh-sandbox'
-import type { Session } from '@neo/dsh-session'
-import type {} from '@neo/dsh-system-prompt'
+import type {} from '@neo/agent'
+import { canonicalPath, type SandboxExecutionPolicy, type SandboxMode } from '@neo/sandbox'
+import type { Session } from '@neo/session'
+import type {} from '@neo/system-prompt'
 import { effectiveSandboxMode } from './session-mode.ts'
 
 export { SANDBOX_MODES, effectiveSandboxMode, setSandboxMode } from './session-mode.ts'

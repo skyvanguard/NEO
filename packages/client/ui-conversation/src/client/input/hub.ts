@@ -8,9 +8,9 @@
  * bail events) and owns the default-sink choreography: every session is a
  * real host entity, so the sink is one unconditional prompt path.
  */
-import type { ClientContext, ISessions, SessionBinding, SessionFace, SessionId } from '@neo/dsh-client-runtime/client'
-import type { InputTriggerController } from '@neo/dsh-client-ui-input-trigger/client'
-import type { TranslateNS } from '@neo/dsh-client-locale/client'
+import type { ClientContext, ISessions, SessionBinding, SessionFace, SessionId } from '@neo/client-runtime/client'
+import type { InputTriggerController } from '@neo/client-ui-input-trigger/client'
+import type { TranslateNS } from '@neo/client-locale/client'
 import { queueReadFaceOf } from '../queue/store.ts'
 import type { ComposerKeyboard, DraftAttachmentId, SessionInputResolver, SessionInput } from './contract.ts'
 import type { InputSubmitMode } from '../contract/composer-submission.ts'

@@ -5,16 +5,16 @@
  * the registry itself while plugins can register additional, enumerable facts
  * with effect-scoped disposal.
  *
- * @module @neo/dsh-shell-env
+ * @module @neo/shell-env
  */
 
 import { Service, type Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { DSH_ENV_PREFIX } from '@neo/dsh-shell'
-import type { DshEnvironment, DshEnvironmentKey } from '@neo/dsh-shell'
-import { DSH_HOME_ENV, resolveDshHome } from '@neo/dsh-home-paths'
-import type { ToolExecution } from '@neo/dsh-tools'
-import type {} from '@neo/dsh-session-persistence'
+import { DSH_ENV_PREFIX } from '@neo/shell'
+import type { DshEnvironment, DshEnvironmentKey } from '@neo/shell'
+import { DSH_HOME_ENV, resolveDshHome } from '@neo/home-paths'
+import type { ToolExecution } from '@neo/tools'
+import type {} from '@neo/session-persistence'
 
 declare module '@neo/cordis' {
   interface Context {

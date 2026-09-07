@@ -1,21 +1,21 @@
 /**
  * Six model-facing persistent terminal tools. Owner identity comes from the exact
  * tool execution Agent; generic `ctx.jobs` owns background ids and collection.
- * @module @neo/dsh-tool-terminal
+ * @module @neo/tool-terminal
  */
 
 import { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent } from '@neo/dsh-agent'
-import type { ContentBlock } from '@neo/dsh-llm'
-import { TerminalSessionId } from '@neo/dsh-terminal'
-import type { TerminalSendResult, TerminalSessionId as TerminalSessionIdType, TerminalSignal } from '@neo/dsh-terminal'
-import type {} from '@neo/dsh-jobs'
-import { defineTool } from '@neo/dsh-tools'
-import type { ToolDefinition } from '@neo/dsh-tools'
+import type { Agent } from '@neo/agent'
+import type { ContentBlock } from '@neo/llm'
+import { TerminalSessionId } from '@neo/terminal'
+import type { TerminalSendResult, TerminalSessionId as TerminalSessionIdType, TerminalSignal } from '@neo/terminal'
+import type {} from '@neo/jobs'
+import { defineTool } from '@neo/tools'
+import type { ToolDefinition } from '@neo/tools'
 import { boundTerminalText, renderList, renderRead, renderSend, renderSendRead, renderSpawn } from './render.ts'
 
-declare module '@neo/dsh-jobs' {
+declare module '@neo/jobs' {
   interface JobKindMap {
     'pty-send': 'pty-send'
   }
@@ -250,7 +250,7 @@ export function apply(ctx: Context, config: Config = {}): void {
       if (args.run_in_background === true) {
         if (!enableRunInBackground) throw new Error('background terminal sends are disabled by tool-terminal configuration')
         const jobs = ctx.get('jobs')
-        if (jobs === undefined) throw new Error('background terminal sends require @neo/dsh-jobs and @neo/dsh-tool-jobs')
+        if (jobs === undefined) throw new Error('background terminal sends require @neo/jobs and @neo/tool-jobs')
         let cancelRequested = false
         const jobId = jobs.start({
           kind: 'pty-send',

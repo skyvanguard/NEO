@@ -1,5 +1,5 @@
 /**
- * @neo/dsh-host-apiproxy — the API gateway every client shape shares:
+ * @neo/host-apiproxy — the API gateway every client shape shares:
  * the ApiProxy contract (api/: types + zod schemas, browser-safe), the fetch
  * carrier pair (fetch/: toFetchHandler on the host side, AbstractApiClient +
  * platform subclasses on the client side), and the host-side implementation
@@ -14,7 +14,7 @@
 
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type {} from '@neo/dsh-agent-default-model'
+import type {} from '@neo/agent-default-model'
 import type { ApiProxy } from './api/index.ts'
 import { createApiProxy, DEFAULT_COLD_BLANK_PROBE_MAX_BYTES } from './api-proxy.ts'
 import {

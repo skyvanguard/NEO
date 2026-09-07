@@ -1,4 +1,4 @@
-# @neo/dsh-client-schema-form
+# @neo/client-schema-form
 
 English | [中文](README.zh.md)
 

@@ -7,9 +7,9 @@ import E2BRuntime, {
   FileType,
   SandboxNotFoundError,
   quoteE2BShellArg,
-} from '@neo/dsh-e2b'
+} from '@neo/e2b'
 import * as E2BInvariant from '../src/invariant.ts'
-import InvariantRegistry from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
 
 const sdk = vi.hoisted(() => ({
   create: vi.fn(),

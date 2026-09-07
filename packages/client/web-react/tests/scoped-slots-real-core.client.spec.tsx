@@ -9,10 +9,10 @@
  */
 import { describe, expect, it, vi } from 'vitest'
 import { act, render } from '@testing-library/react'
-import { SlotCore, type PropsRenderSlots, type SlotRendererHost } from '@neo/dsh-client-ui-slots'
-import { createSlotRenderer, StaleAuthorizationError } from '@neo/dsh-client-web-react'
+import { SlotCore, type PropsRenderSlots, type SlotRendererHost } from '@neo/client-ui-slots'
+import { createSlotRenderer, StaleAuthorizationError } from '@neo/client-web-react'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface SlotMap {
     // No 'root' merge: the aggregate client program already carries runtime's
     // authoritative 'root' declaration (a private merge would TS2717-collide);

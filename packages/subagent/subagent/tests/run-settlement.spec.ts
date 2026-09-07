@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SessionId } from '@neo/dsh-session'
+import { SessionId } from '@neo/session'
 import { settleRun } from '../src/index.ts'
 
 describe('outcome mapping helpers', () => {

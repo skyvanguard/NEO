@@ -7,11 +7,11 @@
  * must stub); runtime-internal entry points (history staging, wire-frame
  * dispatch) stay on the class, invisible out here.
  */
-import type { AttachmentIdType, ImageAttachmentRef } from '@neo/dsh-attachment'
+import type { AttachmentIdType, ImageAttachmentRef } from '@neo/attachment'
 import type {
   MessageId, PromptContentPart, QueueAction, RpcResult, SessionId,
-} from '@neo/dsh-api-remotes/client'
-import type { RemoteResult } from '@neo/dsh-typert-protocol'
+} from '@neo/api-remotes/client'
+import type { RemoteResult } from '@neo/typert-protocol'
 import type { ConversationSnapshot } from '../sessions/conversation.ts'
 import type { ObservableSnapshot } from './store.ts'
 

@@ -2,17 +2,17 @@
  * Register a DeepSeek-backed provider in `ctx.web`. It calls the Anthropic-compatible Messages API
  * with native `web_search_20250305`. The provider reuses `DEEPSEEK_API_KEY` but not
  * `DEEPSEEK_BASE_URL`, because search and chat-completions use different bases.
- * @module @neo/dsh-web-search-deepseek
+ * @module @neo/web-search-deepseek
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type {} from '@neo/dsh-agent'
-import { credentialRef } from '@neo/dsh-credentials'
-import { installSettingsSection, settingsNamespace } from '@neo/dsh-settings'
-import { launchEnvironmentOf } from '@neo/dsh-launch-environment'
-import type {} from '@neo/dsh-session'
-import type {} from '@neo/dsh-web'
+import type {} from '@neo/agent'
+import { credentialRef } from '@neo/credentials'
+import { installSettingsSection, settingsNamespace } from '@neo/settings'
+import { launchEnvironmentOf } from '@neo/launch-environment'
+import type {} from '@neo/session'
+import type {} from '@neo/web'
 import {
   DeepSeekSearchProvider,
   DEEPSEEK_DEFAULT_API_VERSION,

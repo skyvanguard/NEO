@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry, { type Agent } from '@neo/dsh-agent'
+import AgentRegistry, { type Agent } from '@neo/agent'
 import UserQuestionService, {
   UserQuestionError,
   type AskUserQuestionRequest,
   type UserQuestionProvider,
-} from '@neo/dsh-user-questions'
+} from '@neo/user-questions'
 
 function provider(answer = 'approved'): UserQuestionProvider & { seen: AskUserQuestionRequest[] } {
   const seen: AskUserQuestionRequest[] = []

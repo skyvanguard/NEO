@@ -1,23 +1,23 @@
 import type { Context } from '@neo/cordis'
 import type {
   ConversationMatch, ConversationNodeContext, ConversationNodeDefinition, TurnLocation,
-} from '@neo/dsh-client-runtime/client'
-import { isAppendSurfaceEvent, toAssistantBlocks } from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-llm-retry/types'
+} from '@neo/client-runtime/client'
+import { isAppendSurfaceEvent, toAssistantBlocks } from '@neo/client-runtime/client'
+import type {} from '@neo/llm-retry/types'
 import type {
   AssistantChatData, FinalAssistantChatData, TurnTailChatData,
 } from '../contract/chat-nodes.ts'
 import { deriveTurnMetrics } from '../chat/turn-metrics.ts'
 import { CHAT_SYNTHETIC_SEQ_OFFSETS, chatNode } from './common.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Completed-turn actions and extension tail. */
     'turn-tail': TurnTailChatData
   }
 }
 
-declare module '@neo/dsh-client-runtime/client' {
+declare module '@neo/client-runtime/client' {
   interface ConversationTurnDataMap {
     /** Closing Assistant and footer facts derived for this completed Turn. */
     'turn-tail': TurnTailChatData

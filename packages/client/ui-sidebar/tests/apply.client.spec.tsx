@@ -1,10 +1,10 @@
 /** Sidebar shell slot registration and its plain runtime/layout callbacks. */
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import { apply, inject } from '@neo/dsh-client-ui-sidebar/client'
-import type { SidebarRootInjected } from '@neo/dsh-client-ui-sidebar/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import { apply, inject } from '@neo/client-ui-sidebar/client'
+import type { SidebarRootInjected } from '@neo/client-ui-sidebar/client'
 
 async function bench(declare = true) {
   const ctx = new Context()

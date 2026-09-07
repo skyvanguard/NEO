@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-command-goal`.
- * @module @neo/dsh-command-goal/invariant
+ * Package-owned invariant companion for `@neo/command-goal`.
+ * @module @neo/command-goal/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-command-goal'
+const PACKAGE_NAME = '@neo/command-goal'
 
 /** Cordis companion plugin name. */
 export const name = 'command-goal-invariant'

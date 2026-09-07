@@ -7,8 +7,8 @@
  */
 
 import { writeFile } from 'node:fs/promises'
-import { boot, resolveConfigPath } from '@neo/dsh-app-boot'
-import { CallId } from '@neo/dsh-llm'
+import { boot, resolveConfigPath } from '@neo/app-boot'
+import { CallId } from '@neo/llm'
 
 const configPath = process.argv[2]
 if (configPath === undefined) throw new Error('tool-pwsh driver requires a config path')

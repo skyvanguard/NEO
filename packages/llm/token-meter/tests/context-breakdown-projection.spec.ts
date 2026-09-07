@@ -3,14 +3,14 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createMessage, createUserMessage } from '@neo/dsh-llm'
-import type { ContentBlock, ToolSchema } from '@neo/dsh-llm'
-import SessionStore from '@neo/dsh-session'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import TokenMeter from '@neo/dsh-token-meter'
-import type { ContextBreakdownProjection } from '@neo/dsh-token-meter/client'
-import { CompactionId } from '@neo/dsh-compaction'
+import { createMessage, createUserMessage } from '@neo/llm'
+import type { ContentBlock, ToolSchema } from '@neo/llm'
+import SessionStore from '@neo/session'
+import type { Session, SessionEvent } from '@neo/session'
+import SessionProjectionRegistry from '@neo/session-projection'
+import TokenMeter from '@neo/token-meter'
+import type { ContextBreakdownProjection } from '@neo/token-meter/client'
+import { CompactionId } from '@neo/compaction'
 import { contextBreakdownProjectionDefinition } from '../src/breakdown-projection.ts'
 import {
   estimateContent,

@@ -1,7 +1,7 @@
 /**
  * Model text rendering and generic tool-call presentation.
  *
- * @module @neo/dsh-tool-session-query/presentation
+ * @module @neo/tool-session-query/presentation
  */
 
 import {
@@ -12,12 +12,12 @@ import {
   type SessionLineageTrace,
   type SessionRecord,
   type SessionSearchHit,
-} from '@neo/dsh-session-query'
+} from '@neo/session-query'
 import type {
   SessionEvent,
   SessionId,
-} from '@neo/dsh-session'
-import type { GenericCallView } from '@neo/dsh-tools'
+} from '@neo/session'
+import type { GenericCallView } from '@neo/tools'
 import { workspaceAccess } from './workspace-access.ts'
 
 type TitleView = Awaited<ReturnType<typeof workspaceAccess.readTitle>>

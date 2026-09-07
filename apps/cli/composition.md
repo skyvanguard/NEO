@@ -12,157 +12,157 @@ flowchart LR
   cfg --> plugin_dsh_base_timer
   plugin_dsh_base_hmr["hmr<br/>@neo/cordis-plugin-hmr"]
   cfg --> plugin_dsh_base_hmr
-  plugin_dsh_base_llm["llm<br/>@neo/dsh-llm"]
+  plugin_dsh_base_llm["llm<br/>@neo/llm"]
   cfg --> plugin_dsh_base_llm
-  plugin_dsh_base_session["session<br/>@neo/dsh-session"]
+  plugin_dsh_base_session["session<br/>@neo/session"]
   cfg --> plugin_dsh_base_session
-  plugin_dsh_base_typert["typert<br/>@neo/dsh-typert-registry"]
+  plugin_dsh_base_typert["typert<br/>@neo/typert-registry"]
   cfg --> plugin_dsh_base_typert
-  plugin_dsh_base_typert_loader["typert-loader<br/>@neo/dsh-typert-loader"]
+  plugin_dsh_base_typert_loader["typert-loader<br/>@neo/typert-loader"]
   cfg --> plugin_dsh_base_typert_loader
-  plugin_dsh_base_typert_gateway["typert-gateway<br/>@neo/dsh-api-gateway"]
+  plugin_dsh_base_typert_gateway["typert-gateway<br/>@neo/api-gateway"]
   cfg --> plugin_dsh_base_typert_gateway
-  plugin_dsh_base_session_title["session-title<br/>@neo/dsh-session-title"]
+  plugin_dsh_base_session_title["session-title<br/>@neo/session-title"]
   cfg --> plugin_dsh_base_session_title
-  plugin_dsh_base_session_title_llm["session-title-llm<br/>@neo/dsh-session-title-first-prompt-llm"]
+  plugin_dsh_base_session_title_llm["session-title-llm<br/>@neo/session-title-first-prompt-llm"]
   cfg --> plugin_dsh_base_session_title_llm
-  plugin_dsh_base_user_questions["user-questions<br/>@neo/dsh-user-questions"]
+  plugin_dsh_base_user_questions["user-questions<br/>@neo/user-questions"]
   cfg --> plugin_dsh_base_user_questions
-  plugin_dsh_base_agent["agent<br/>@neo/dsh-agent"]
+  plugin_dsh_base_agent["agent<br/>@neo/agent"]
   cfg --> plugin_dsh_base_agent
-  plugin_dsh_base_agent_default_model["agent-default-model<br/>@neo/dsh-agent-default-model"]
+  plugin_dsh_base_agent_default_model["agent-default-model<br/>@neo/agent-default-model"]
   cfg --> plugin_dsh_base_agent_default_model
-  plugin_dsh_base_jobs["jobs<br/>@neo/dsh-jobs-local"]
+  plugin_dsh_base_jobs["jobs<br/>@neo/jobs-local"]
   cfg --> plugin_dsh_base_jobs
-  plugin_dsh_base_llm_retry["llm-retry<br/>@neo/dsh-llm-retry"]
+  plugin_dsh_base_llm_retry["llm-retry<br/>@neo/llm-retry"]
   cfg --> plugin_dsh_base_llm_retry
-  plugin_dsh_base_settings["settings<br/>@neo/dsh-settings-file"]
+  plugin_dsh_base_settings["settings<br/>@neo/settings-file"]
   cfg --> plugin_dsh_base_settings
-  plugin_dsh_base_credentials["credentials<br/>@neo/dsh-credentials-local"]
+  plugin_dsh_base_credentials["credentials<br/>@neo/credentials-local"]
   cfg --> plugin_dsh_base_credentials
-  plugin_dsh_base_llm_pi_ai["llm-pi-ai<br/>@neo/dsh-llm-pi-ai"]
+  plugin_dsh_base_llm_pi_ai["llm-pi-ai<br/>@neo/llm-pi-ai"]
   cfg --> plugin_dsh_base_llm_pi_ai
-  plugin_dsh_base_session_persistence_jsonl["session-persistence-jsonl<br/>@neo/dsh-session-persistence-jsonl"]
+  plugin_dsh_base_session_persistence_jsonl["session-persistence-jsonl<br/>@neo/session-persistence-jsonl"]
   cfg --> plugin_dsh_base_session_persistence_jsonl
-  plugin_dsh_base_attachment_local["attachment-local<br/>@neo/dsh-attachment-local"]
+  plugin_dsh_base_attachment_local["attachment-local<br/>@neo/attachment-local"]
   cfg --> plugin_dsh_base_attachment_local
-  plugin_dsh_base_session_query_sqlite["session-query-sqlite<br/>@neo/dsh-session-query-sqlite"]
+  plugin_dsh_base_session_query_sqlite["session-query-sqlite<br/>@neo/session-query-sqlite"]
   cfg --> plugin_dsh_base_session_query_sqlite
-  plugin_dsh_base_session_projection["session-projection<br/>@neo/dsh-session-projection"]
+  plugin_dsh_base_session_projection["session-projection<br/>@neo/session-projection"]
   cfg --> plugin_dsh_base_session_projection
-  plugin_dsh_base_session_telemetry_otel["session-telemetry-otel<br/>@neo/dsh-session-telemetry-otel"]
+  plugin_dsh_base_session_telemetry_otel["session-telemetry-otel<br/>@neo/session-telemetry-otel"]
   cfg --> plugin_dsh_base_session_telemetry_otel
-  plugin_dsh_base_subprocess["subprocess<br/>@neo/dsh-subprocess-local"]
+  plugin_dsh_base_subprocess["subprocess<br/>@neo/subprocess-local"]
   cfg --> plugin_dsh_base_subprocess
-  plugin_dsh_base_sandbox["sandbox<br/>@neo/dsh-sandbox-local"]
+  plugin_dsh_base_sandbox["sandbox<br/>@neo/sandbox-local"]
   cfg --> plugin_dsh_base_sandbox
-  plugin_dsh_base_sandbox_policy["sandbox-policy<br/>@neo/dsh-sandbox-policy"]
+  plugin_dsh_base_sandbox_policy["sandbox-policy<br/>@neo/sandbox-policy"]
   cfg --> plugin_dsh_base_sandbox_policy
-  plugin_dsh_base_bash_sandbox["bash-sandbox<br/>@neo/dsh-bash-sandbox"]
+  plugin_dsh_base_bash_sandbox["bash-sandbox<br/>@neo/bash-sandbox"]
   cfg --> plugin_dsh_base_bash_sandbox
-  plugin_dsh_base_pwsh_sandbox["pwsh-sandbox<br/>@neo/dsh-pwsh-sandbox"]
+  plugin_dsh_base_pwsh_sandbox["pwsh-sandbox<br/>@neo/pwsh-sandbox"]
   cfg --> plugin_dsh_base_pwsh_sandbox
-  plugin_dsh_base_approval["approval<br/>@neo/dsh-user-approval"]
+  plugin_dsh_base_approval["approval<br/>@neo/user-approval"]
   cfg --> plugin_dsh_base_approval
-  plugin_dsh_base_permission["permission<br/>@neo/dsh-permission-presets"]
+  plugin_dsh_base_permission["permission<br/>@neo/permission-presets"]
   cfg --> plugin_dsh_base_permission
-  plugin_dsh_base_shell_env["shell-env<br/>@neo/dsh-shell-env"]
+  plugin_dsh_base_shell_env["shell-env<br/>@neo/shell-env"]
   cfg --> plugin_dsh_base_shell_env
-  plugin_dsh_base_tool_bash["tool-bash<br/>@neo/dsh-tool-bash"]
+  plugin_dsh_base_tool_bash["tool-bash<br/>@neo/tool-bash"]
   cfg --> plugin_dsh_base_tool_bash
-  plugin_dsh_base_tool_pwsh["tool-pwsh<br/>@neo/dsh-tool-pwsh"]
+  plugin_dsh_base_tool_pwsh["tool-pwsh<br/>@neo/tool-pwsh"]
   cfg --> plugin_dsh_base_tool_pwsh
-  plugin_dsh_base_tool_jobs["tool-jobs<br/>@neo/dsh-tool-jobs"]
+  plugin_dsh_base_tool_jobs["tool-jobs<br/>@neo/tool-jobs"]
   cfg --> plugin_dsh_base_tool_jobs
-  plugin_dsh_base_fs_observation_policy["fs-observation-policy<br/>@neo/dsh-fs-observation-policy"]
+  plugin_dsh_base_fs_observation_policy["fs-observation-policy<br/>@neo/fs-observation-policy"]
   cfg --> plugin_dsh_base_fs_observation_policy
-  plugin_dsh_base_tool_fs["tool-fs<br/>@neo/dsh-tool-fs"]
+  plugin_dsh_base_tool_fs["tool-fs<br/>@neo/tool-fs"]
   cfg --> plugin_dsh_base_tool_fs
-  plugin_dsh_base_tool_fs_search["tool-fs-search<br/>@neo/dsh-tool-fs-search"]
+  plugin_dsh_base_tool_fs_search["tool-fs-search<br/>@neo/tool-fs-search"]
   cfg --> plugin_dsh_base_tool_fs_search
-  plugin_dsh_base_agent_instructions["agent-instructions<br/>@neo/dsh-agent-instructions"]
+  plugin_dsh_base_agent_instructions["agent-instructions<br/>@neo/agent-instructions"]
   cfg --> plugin_dsh_base_agent_instructions
-  plugin_dsh_base_skill["skill<br/>@neo/dsh-skill"]
+  plugin_dsh_base_skill["skill<br/>@neo/skill"]
   cfg --> plugin_dsh_base_skill
-  plugin_dsh_base_skill_filesystem["skill-filesystem<br/>@neo/dsh-skill-filesystem"]
+  plugin_dsh_base_skill_filesystem["skill-filesystem<br/>@neo/skill-filesystem"]
   cfg --> plugin_dsh_base_skill_filesystem
-  plugin_dsh_base_skill_badge["skill-badge<br/>@neo/dsh-skill-badge"]
+  plugin_dsh_base_skill_badge["skill-badge<br/>@neo/skill-badge"]
   cfg --> plugin_dsh_base_skill_badge
-  plugin_dsh_base_tool_skill["tool-skill<br/>@neo/dsh-tool-skill"]
+  plugin_dsh_base_tool_skill["tool-skill<br/>@neo/tool-skill"]
   cfg --> plugin_dsh_base_tool_skill
-  plugin_dsh_base_commands["commands<br/>@neo/dsh-commands"]
+  plugin_dsh_base_commands["commands<br/>@neo/commands"]
   cfg --> plugin_dsh_base_commands
-  plugin_dsh_base_command_feedback["command-feedback<br/>@neo/dsh-command-feedback"]
+  plugin_dsh_base_command_feedback["command-feedback<br/>@neo/command-feedback"]
   cfg --> plugin_dsh_base_command_feedback
-  plugin_dsh_base_goal["goal<br/>@neo/dsh-goal"]
+  plugin_dsh_base_goal["goal<br/>@neo/goal"]
   cfg --> plugin_dsh_base_goal
-  plugin_dsh_base_goal_round_driver["goal-round-driver<br/>@neo/dsh-goal-round-driver"]
+  plugin_dsh_base_goal_round_driver["goal-round-driver<br/>@neo/goal-round-driver"]
   cfg --> plugin_dsh_base_goal_round_driver
-  plugin_dsh_base_command_goal["command-goal<br/>@neo/dsh-command-goal"]
+  plugin_dsh_base_command_goal["command-goal<br/>@neo/command-goal"]
   cfg --> plugin_dsh_base_command_goal
-  plugin_dsh_base_plan_mode["plan-mode<br/>@neo/dsh-plan-mode"]
+  plugin_dsh_base_plan_mode["plan-mode<br/>@neo/plan-mode"]
   cfg --> plugin_dsh_base_plan_mode
-  plugin_dsh_base_token_meter["token-meter<br/>@neo/dsh-token-meter"]
+  plugin_dsh_base_token_meter["token-meter<br/>@neo/token-meter"]
   cfg --> plugin_dsh_base_token_meter
-  plugin_dsh_base_compaction_basic["compaction-basic<br/>@neo/dsh-compaction-basic"]
+  plugin_dsh_base_compaction_basic["compaction-basic<br/>@neo/compaction-basic"]
   cfg --> plugin_dsh_base_compaction_basic
-  plugin_dsh_base_command_compact["command-compact<br/>@neo/dsh-command-compact"]
+  plugin_dsh_base_command_compact["command-compact<br/>@neo/command-compact"]
   cfg --> plugin_dsh_base_command_compact
-  plugin_dsh_base_subagent["subagent<br/>@neo/dsh-subagent"]
+  plugin_dsh_base_subagent["subagent<br/>@neo/subagent"]
   cfg --> plugin_dsh_base_subagent
-  plugin_dsh_base_subagent_spawn_in_process["subagent-spawn-in-process<br/>@neo/dsh-subagent-spawn-in-process"]
+  plugin_dsh_base_subagent_spawn_in_process["subagent-spawn-in-process<br/>@neo/subagent-spawn-in-process"]
   cfg --> plugin_dsh_base_subagent_spawn_in_process
-  plugin_dsh_base_subagent_fork_in_process["subagent-fork-in-process<br/>@neo/dsh-subagent-fork-in-process"]
+  plugin_dsh_base_subagent_fork_in_process["subagent-fork-in-process<br/>@neo/subagent-fork-in-process"]
   cfg --> plugin_dsh_base_subagent_fork_in_process
-  plugin_dsh_base_tool_subagent_control["tool-subagent-control<br/>@neo/dsh-tool-subagent-control"]
+  plugin_dsh_base_tool_subagent_control["tool-subagent-control<br/>@neo/tool-subagent-control"]
   cfg --> plugin_dsh_base_tool_subagent_control
-  plugin_dsh_base_tool_subagent_list_agents["tool-subagent-list-agents<br/>@neo/dsh-tool-subagent-control/list-agents"]
+  plugin_dsh_base_tool_subagent_list_agents["tool-subagent-list-agents<br/>@neo/tool-subagent-control/list-agents"]
   cfg --> plugin_dsh_base_tool_subagent_list_agents
-  plugin_dsh_base_tool_subagent["tool-subagent<br/>@neo/dsh-tool-subagent"]
+  plugin_dsh_base_tool_subagent["tool-subagent<br/>@neo/tool-subagent"]
   cfg --> plugin_dsh_base_tool_subagent
-  plugin_dsh_base_tool_subagent_fork["tool-subagent-fork<br/>@neo/dsh-tool-subagent"]
+  plugin_dsh_base_tool_subagent_fork["tool-subagent-fork<br/>@neo/tool-subagent"]
   cfg --> plugin_dsh_base_tool_subagent_fork
-  plugin_dsh_base_tool_subagent_report["tool-subagent-report<br/>@neo/dsh-tool-subagent-report"]
+  plugin_dsh_base_tool_subagent_report["tool-subagent-report<br/>@neo/tool-subagent-report"]
   cfg --> plugin_dsh_base_tool_subagent_report
-  plugin_dsh_base_workflow_worker_thread["workflow-worker-thread<br/>@neo/dsh-workflow-worker-thread"]
+  plugin_dsh_base_workflow_worker_thread["workflow-worker-thread<br/>@neo/workflow-worker-thread"]
   cfg --> plugin_dsh_base_workflow_worker_thread
-  plugin_dsh_base_tool_workflow["tool-workflow<br/>@neo/dsh-tool-workflow"]
+  plugin_dsh_base_tool_workflow["tool-workflow<br/>@neo/tool-workflow"]
   cfg --> plugin_dsh_base_tool_workflow
-  plugin_dsh_base_timeout_policy["timeout-policy<br/>@neo/dsh-tool-call-timeout-policy"]
+  plugin_dsh_base_timeout_policy["timeout-policy<br/>@neo/tool-call-timeout-policy"]
   cfg --> plugin_dsh_base_timeout_policy
-  plugin_dsh_base_spill_local["spill-local<br/>@neo/dsh-spill-local"]
+  plugin_dsh_base_spill_local["spill-local<br/>@neo/spill-local"]
   cfg --> plugin_dsh_base_spill_local
-  plugin_dsh_base_spill_policy["spill-policy<br/>@neo/dsh-spill-policy"]
+  plugin_dsh_base_spill_policy["spill-policy<br/>@neo/spill-policy"]
   cfg --> plugin_dsh_base_spill_policy
-  plugin_dsh_base_session_checkpoint_policy["session-checkpoint-policy<br/>@neo/dsh-session-checkpoint-policy"]
+  plugin_dsh_base_session_checkpoint_policy["session-checkpoint-policy<br/>@neo/session-checkpoint-policy"]
   cfg --> plugin_dsh_base_session_checkpoint_policy
-  plugin_dsh_base_tool_result_pruner["tool-result-pruner<br/>@neo/dsh-compaction-tool-result-pruner"]
+  plugin_dsh_base_tool_result_pruner["tool-result-pruner<br/>@neo/compaction-tool-result-pruner"]
   cfg --> plugin_dsh_base_tool_result_pruner
-  plugin_dsh_base_tool_todo["tool-todo<br/>@neo/dsh-tool-todo"]
+  plugin_dsh_base_tool_todo["tool-todo<br/>@neo/tool-todo"]
   cfg --> plugin_dsh_base_tool_todo
-  plugin_dsh_base_tool_goal["tool-goal<br/>@neo/dsh-tool-goal"]
+  plugin_dsh_base_tool_goal["tool-goal<br/>@neo/tool-goal"]
   cfg --> plugin_dsh_base_tool_goal
-  plugin_dsh_base_tool_ralph["tool-ralph<br/>@neo/dsh-tool-ralph"]
+  plugin_dsh_base_tool_ralph["tool-ralph<br/>@neo/tool-ralph"]
   cfg --> plugin_dsh_base_tool_ralph
-  plugin_dsh_base_tool_str_replace_editor["tool-str-replace-editor<br/>@neo/dsh-tool-str-replace-editor"]
+  plugin_dsh_base_tool_str_replace_editor["tool-str-replace-editor<br/>@neo/tool-str-replace-editor"]
   cfg --> plugin_dsh_base_tool_str_replace_editor
-  plugin_dsh_base_repeat_tool_reminder["repeat-tool-reminder<br/>@neo/dsh-repeat-tool-reminder"]
+  plugin_dsh_base_repeat_tool_reminder["repeat-tool-reminder<br/>@neo/repeat-tool-reminder"]
   cfg --> plugin_dsh_base_repeat_tool_reminder
-  plugin_dsh_base_web["web<br/>@neo/dsh-web"]
+  plugin_dsh_base_web["web<br/>@neo/web"]
   cfg --> plugin_dsh_base_web
-  plugin_dsh_base_web_search_deepseek["web-search-deepseek<br/>@neo/dsh-web-search-deepseek"]
+  plugin_dsh_base_web_search_deepseek["web-search-deepseek<br/>@neo/web-search-deepseek"]
   cfg --> plugin_dsh_base_web_search_deepseek
-  plugin_dsh_base_tool_web["tool-web<br/>@neo/dsh-tool-web"]
+  plugin_dsh_base_tool_web["tool-web<br/>@neo/tool-web"]
   cfg --> plugin_dsh_base_tool_web
-  plugin_dsh_base_tools["tools<br/>@neo/dsh-tools"]
+  plugin_dsh_base_tools["tools<br/>@neo/tools"]
   cfg --> plugin_dsh_base_tools
-  plugin_dsh_base_system_prompt["system-prompt<br/>@neo/dsh-system-prompt"]
+  plugin_dsh_base_system_prompt["system-prompt<br/>@neo/system-prompt"]
   cfg --> plugin_dsh_base_system_prompt
-  plugin_dsh_base_agent_loop["agent-loop<br/>@neo/dsh-agent-loop"]
+  plugin_dsh_base_agent_loop["agent-loop<br/>@neo/agent-loop"]
   cfg --> plugin_dsh_base_agent_loop
-  plugin_dsh_base_fs_sandbox["fs-sandbox<br/>@neo/dsh-fs-sandbox"]
+  plugin_dsh_base_fs_sandbox["fs-sandbox<br/>@neo/fs-sandbox"]
   cfg --> plugin_dsh_base_fs_sandbox
-  plugin_dsh_base_llm_deepseek["llm-deepseek<br/>@neo/dsh-llm-deepseek"]
+  plugin_dsh_base_llm_deepseek["llm-deepseek<br/>@neo/llm-deepseek"]
   cfg --> plugin_dsh_base_llm_deepseek
 ```
 
@@ -170,82 +170,82 @@ flowchart LR
 | --- | --- |
 | `timer` | `@neo/cordis-plugin-timer` |
 | `hmr` | `@neo/cordis-plugin-hmr` |
-| `llm` | `@neo/dsh-llm` |
-| `session` | `@neo/dsh-session` |
-| `typert` | `@neo/dsh-typert-registry` |
-| `typert-loader` | `@neo/dsh-typert-loader` |
-| `typert-gateway` | `@neo/dsh-api-gateway` |
-| `session-title` | `@neo/dsh-session-title` |
-| `session-title-llm` | `@neo/dsh-session-title-first-prompt-llm` |
-| `user-questions` | `@neo/dsh-user-questions` |
-| `agent` | `@neo/dsh-agent` |
-| `agent-default-model` | `@neo/dsh-agent-default-model` |
-| `jobs` | `@neo/dsh-jobs-local` |
-| `llm-retry` | `@neo/dsh-llm-retry` |
-| `settings` | `@neo/dsh-settings-file` |
-| `credentials` | `@neo/dsh-credentials-local` |
-| `llm-pi-ai` | `@neo/dsh-llm-pi-ai` |
-| `session-persistence-jsonl` | `@neo/dsh-session-persistence-jsonl` |
-| `attachment-local` | `@neo/dsh-attachment-local` |
-| `session-query-sqlite` | `@neo/dsh-session-query-sqlite` |
-| `session-projection` | `@neo/dsh-session-projection` |
-| `session-telemetry-otel` | `@neo/dsh-session-telemetry-otel` |
-| `subprocess` | `@neo/dsh-subprocess-local` |
-| `sandbox` | `@neo/dsh-sandbox-local` |
-| `sandbox-policy` | `@neo/dsh-sandbox-policy` |
-| `bash-sandbox` | `@neo/dsh-bash-sandbox` |
-| `pwsh-sandbox` | `@neo/dsh-pwsh-sandbox` |
-| `approval` | `@neo/dsh-user-approval` |
-| `permission` | `@neo/dsh-permission-presets` |
-| `shell-env` | `@neo/dsh-shell-env` |
-| `tool-bash` | `@neo/dsh-tool-bash` |
-| `tool-pwsh` | `@neo/dsh-tool-pwsh` |
-| `tool-jobs` | `@neo/dsh-tool-jobs` |
-| `fs-observation-policy` | `@neo/dsh-fs-observation-policy` |
-| `tool-fs` | `@neo/dsh-tool-fs` |
-| `tool-fs-search` | `@neo/dsh-tool-fs-search` |
-| `agent-instructions` | `@neo/dsh-agent-instructions` |
-| `skill` | `@neo/dsh-skill` |
-| `skill-filesystem` | `@neo/dsh-skill-filesystem` |
-| `skill-badge` | `@neo/dsh-skill-badge` |
-| `tool-skill` | `@neo/dsh-tool-skill` |
-| `commands` | `@neo/dsh-commands` |
-| `command-feedback` | `@neo/dsh-command-feedback` |
-| `goal` | `@neo/dsh-goal` |
-| `goal-round-driver` | `@neo/dsh-goal-round-driver` |
-| `command-goal` | `@neo/dsh-command-goal` |
-| `plan-mode` | `@neo/dsh-plan-mode` |
-| `token-meter` | `@neo/dsh-token-meter` |
-| `compaction-basic` | `@neo/dsh-compaction-basic` |
-| `command-compact` | `@neo/dsh-command-compact` |
-| `subagent` | `@neo/dsh-subagent` |
-| `subagent-spawn-in-process` | `@neo/dsh-subagent-spawn-in-process` |
-| `subagent-fork-in-process` | `@neo/dsh-subagent-fork-in-process` |
-| `tool-subagent-control` | `@neo/dsh-tool-subagent-control` |
-| `tool-subagent-list-agents` | `@neo/dsh-tool-subagent-control/list-agents` |
-| `tool-subagent` | `@neo/dsh-tool-subagent` |
-| `tool-subagent-fork` | `@neo/dsh-tool-subagent` |
-| `tool-subagent-report` | `@neo/dsh-tool-subagent-report` |
-| `workflow-worker-thread` | `@neo/dsh-workflow-worker-thread` |
-| `tool-workflow` | `@neo/dsh-tool-workflow` |
-| `timeout-policy` | `@neo/dsh-tool-call-timeout-policy` |
-| `spill-local` | `@neo/dsh-spill-local` |
-| `spill-policy` | `@neo/dsh-spill-policy` |
-| `session-checkpoint-policy` | `@neo/dsh-session-checkpoint-policy` |
-| `tool-result-pruner` | `@neo/dsh-compaction-tool-result-pruner` |
-| `tool-todo` | `@neo/dsh-tool-todo` |
-| `tool-goal` | `@neo/dsh-tool-goal` |
-| `tool-ralph` | `@neo/dsh-tool-ralph` |
-| `tool-str-replace-editor` | `@neo/dsh-tool-str-replace-editor` |
-| `repeat-tool-reminder` | `@neo/dsh-repeat-tool-reminder` |
-| `web` | `@neo/dsh-web` |
-| `web-search-deepseek` | `@neo/dsh-web-search-deepseek` |
-| `tool-web` | `@neo/dsh-tool-web` |
-| `tools` | `@neo/dsh-tools` |
-| `system-prompt` | `@neo/dsh-system-prompt` |
-| `agent-loop` | `@neo/dsh-agent-loop` |
-| `fs-sandbox` | `@neo/dsh-fs-sandbox` |
-| `llm-deepseek` | `@neo/dsh-llm-deepseek` |
+| `llm` | `@neo/llm` |
+| `session` | `@neo/session` |
+| `typert` | `@neo/typert-registry` |
+| `typert-loader` | `@neo/typert-loader` |
+| `typert-gateway` | `@neo/api-gateway` |
+| `session-title` | `@neo/session-title` |
+| `session-title-llm` | `@neo/session-title-first-prompt-llm` |
+| `user-questions` | `@neo/user-questions` |
+| `agent` | `@neo/agent` |
+| `agent-default-model` | `@neo/agent-default-model` |
+| `jobs` | `@neo/jobs-local` |
+| `llm-retry` | `@neo/llm-retry` |
+| `settings` | `@neo/settings-file` |
+| `credentials` | `@neo/credentials-local` |
+| `llm-pi-ai` | `@neo/llm-pi-ai` |
+| `session-persistence-jsonl` | `@neo/session-persistence-jsonl` |
+| `attachment-local` | `@neo/attachment-local` |
+| `session-query-sqlite` | `@neo/session-query-sqlite` |
+| `session-projection` | `@neo/session-projection` |
+| `session-telemetry-otel` | `@neo/session-telemetry-otel` |
+| `subprocess` | `@neo/subprocess-local` |
+| `sandbox` | `@neo/sandbox-local` |
+| `sandbox-policy` | `@neo/sandbox-policy` |
+| `bash-sandbox` | `@neo/bash-sandbox` |
+| `pwsh-sandbox` | `@neo/pwsh-sandbox` |
+| `approval` | `@neo/user-approval` |
+| `permission` | `@neo/permission-presets` |
+| `shell-env` | `@neo/shell-env` |
+| `tool-bash` | `@neo/tool-bash` |
+| `tool-pwsh` | `@neo/tool-pwsh` |
+| `tool-jobs` | `@neo/tool-jobs` |
+| `fs-observation-policy` | `@neo/fs-observation-policy` |
+| `tool-fs` | `@neo/tool-fs` |
+| `tool-fs-search` | `@neo/tool-fs-search` |
+| `agent-instructions` | `@neo/agent-instructions` |
+| `skill` | `@neo/skill` |
+| `skill-filesystem` | `@neo/skill-filesystem` |
+| `skill-badge` | `@neo/skill-badge` |
+| `tool-skill` | `@neo/tool-skill` |
+| `commands` | `@neo/commands` |
+| `command-feedback` | `@neo/command-feedback` |
+| `goal` | `@neo/goal` |
+| `goal-round-driver` | `@neo/goal-round-driver` |
+| `command-goal` | `@neo/command-goal` |
+| `plan-mode` | `@neo/plan-mode` |
+| `token-meter` | `@neo/token-meter` |
+| `compaction-basic` | `@neo/compaction-basic` |
+| `command-compact` | `@neo/command-compact` |
+| `subagent` | `@neo/subagent` |
+| `subagent-spawn-in-process` | `@neo/subagent-spawn-in-process` |
+| `subagent-fork-in-process` | `@neo/subagent-fork-in-process` |
+| `tool-subagent-control` | `@neo/tool-subagent-control` |
+| `tool-subagent-list-agents` | `@neo/tool-subagent-control/list-agents` |
+| `tool-subagent` | `@neo/tool-subagent` |
+| `tool-subagent-fork` | `@neo/tool-subagent` |
+| `tool-subagent-report` | `@neo/tool-subagent-report` |
+| `workflow-worker-thread` | `@neo/workflow-worker-thread` |
+| `tool-workflow` | `@neo/tool-workflow` |
+| `timeout-policy` | `@neo/tool-call-timeout-policy` |
+| `spill-local` | `@neo/spill-local` |
+| `spill-policy` | `@neo/spill-policy` |
+| `session-checkpoint-policy` | `@neo/session-checkpoint-policy` |
+| `tool-result-pruner` | `@neo/compaction-tool-result-pruner` |
+| `tool-todo` | `@neo/tool-todo` |
+| `tool-goal` | `@neo/tool-goal` |
+| `tool-ralph` | `@neo/tool-ralph` |
+| `tool-str-replace-editor` | `@neo/tool-str-replace-editor` |
+| `repeat-tool-reminder` | `@neo/repeat-tool-reminder` |
+| `web` | `@neo/web` |
+| `web-search-deepseek` | `@neo/web-search-deepseek` |
+| `tool-web` | `@neo/tool-web` |
+| `tools` | `@neo/tools` |
+| `system-prompt` | `@neo/system-prompt` |
+| `agent-loop` | `@neo/agent-loop` |
+| `fs-sandbox` | `@neo/fs-sandbox` |
+| `llm-deepseek` | `@neo/llm-deepseek` |
 
 Source config: [`packages/bundle/base/cordis.patch.yml`](../../packages/bundle/base/cordis.patch.yml).
 

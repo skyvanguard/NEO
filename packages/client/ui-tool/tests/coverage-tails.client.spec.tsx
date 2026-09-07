@@ -3,15 +3,15 @@
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
-import { createSnapshotStore } from '@neo/dsh-client-runtime/client'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
-import type { RunningToolCall, SessionId, SessionListState, ToolResultNode } from '@neo/dsh-client-runtime/client'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+import { createSnapshotStore } from '@neo/client-runtime/client'
+import { bindSnapshotSelector } from '@neo/client-web-react'
+import type { RunningToolCall, SessionId, SessionListState, ToolResultNode } from '@neo/client-runtime/client'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 import { GenericToolCard, type GenericToolCardProps } from '../src/client/tool/toolviews/GenericToolCard.tsx'
 import { ToolRow } from '../src/client/tool/components/ToolRow.tsx'
 import { BashRow } from '../src/client/tool/toolviews/bash-sample.tsx'
-import { zh } from '@neo/dsh-client-ui-conversation/src/client/locales.ts'
+import { zh } from '@neo/client-ui-conversation/src/client/locales.ts'
 
 type BashRowProps = Parameters<typeof BashRow>[0]
 

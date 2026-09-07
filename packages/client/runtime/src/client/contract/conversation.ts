@@ -1,5 +1,5 @@
-import type { SessionEvent } from '@neo/dsh-session/types'
-import type { ToolEventView } from '@neo/dsh-api-remotes/client'
+import type { SessionEvent } from '@neo/session/types'
+import type { ToolEventView } from '@neo/api-remotes/client'
 
 /* oxlint-disable typescript/no-duplicate-type-constituents, typescript/no-redundant-type-constituents --
  * The unaugmented declaration-merge maps intentionally resolve to never in the Runtime program;

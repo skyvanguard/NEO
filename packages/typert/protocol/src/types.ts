@@ -1,7 +1,7 @@
 /**
  * Compiler-independent Typert protocol shared by business packages, generated
  * Remote artifacts, the Host Gateway, and Client API implementations.
- * @module @neo/dsh-typert-protocol/types
+ * @module @neo/typert-protocol/types
  */
 
 import type { Context, Events } from '@neo/cordis'

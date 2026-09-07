@@ -1,17 +1,17 @@
 /**
  * Execution types for the bash executor seam. Background job semantics belong
- * to `@neo/dsh-jobs`; this seam exposes only process handles. The
+ * to `@neo/jobs`; this seam exposes only process handles. The
  * managed-environment and captured-output vocabulary is owned by the
  * subprocess seam and re-exported here so bash consumers keep one import
  * root.
  * @module dsh-shell/types
  */
 
-import type { SandboxEnforcement, SandboxExecutionPolicy, SandboxMode } from '@neo/dsh-sandbox'
-import type { CollectedOutput, DshEnvironment } from '@neo/dsh-subprocess'
+import type { SandboxEnforcement, SandboxExecutionPolicy, SandboxMode } from '@neo/sandbox'
+import type { CollectedOutput, DshEnvironment } from '@neo/subprocess'
 
-export { DSH_ENV_PREFIX } from '@neo/dsh-subprocess'
-export type { CollectedOutput, DshEnvironment, DshEnvironmentKey } from '@neo/dsh-subprocess'
+export { DSH_ENV_PREFIX } from '@neo/subprocess'
+export type { CollectedOutput, DshEnvironment, DshEnvironmentKey } from '@neo/subprocess'
 
 /**
  * Sandbox facts for one run, present iff a sandboxing executor handled it.

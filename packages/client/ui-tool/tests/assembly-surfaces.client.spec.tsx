@@ -2,11 +2,11 @@
 /** Tool assembly acceptance through the real ui-conversation host. */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, waitFor } from '@testing-library/react'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import type { ISession, SessionId, TodoItem, ToolResultNode } from '@neo/dsh-client-runtime/client'
-import type { PropsRenderSlots } from '@neo/dsh-client-ui-slots'
-import { SlotTestRuntime, usePinnedBrowserLanguages, stubSettingsScope } from '@neo/dsh-client-test-runtime'
-import { apply as applyConversation, inject as injectConversation } from '@neo/dsh-client-ui-conversation/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import type { ISession, SessionId, TodoItem, ToolResultNode } from '@neo/client-runtime/client'
+import type { PropsRenderSlots } from '@neo/client-ui-slots'
+import { SlotTestRuntime, usePinnedBrowserLanguages, stubSettingsScope } from '@neo/client-test-runtime'
+import { apply as applyConversation, inject as injectConversation } from '@neo/client-ui-conversation/client'
 import { apply as applyTool, inject as injectTool } from '../src/client/apply.ts'
 import { toolChatSnapshot } from './tool-details-render.client.tsx'
 

@@ -3,12 +3,12 @@
  * official `codex app-server --stdio` process in the delegating Session's
  * workspace and publishes only after an ephemeral thread exists.
  *
- * @module @neo/dsh-subagent-codex
+ * @module @neo/subagent-codex
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import {
   assertPositiveFinite,
   NO_START_CAPABILITIES,
@@ -16,7 +16,7 @@ import {
   type ResolvedSubagentStartRequest,
   type SubagentCapabilities,
   type SubagentProvider,
-} from '@neo/dsh-subagent'
+} from '@neo/subagent'
 import {
   DEFAULT_DISPOSE_GRACE_MS,
   startCodexRun,

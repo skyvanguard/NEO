@@ -2,10 +2,10 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { FsTargetKey, FsVersion } from '@neo/dsh-fs'
-import type { FsObservation, FsTarget, FsWriteIntent } from '@neo/dsh-fs'
-import * as FsPolicy from '@neo/dsh-fs-observation-policy'
-import type { FsObservationActor } from '@neo/dsh-fs-observation-policy'
+import { FsTargetKey, FsVersion } from '@neo/fs'
+import type { FsObservation, FsTarget, FsWriteIntent } from '@neo/fs'
+import * as FsPolicy from '@neo/fs-observation-policy'
+import type { FsObservationActor } from '@neo/fs-observation-policy'
 
 function target(path: string): FsTarget {
   return { targetKey: FsTargetKey(path), displayPath: path }

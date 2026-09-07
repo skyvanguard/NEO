@@ -1,4 +1,4 @@
-# @neo/dsh-lsp-stdio
+# @neo/lsp-stdio
 
 English | [中文](README.zh.md)
 

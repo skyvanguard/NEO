@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { CompactionId, compactCheckpointSource } from '@neo/dsh-compaction'
-import { createUserMessage, CallId , createMessage, createToolResultMessage } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
-import SessionQueryEngine from '@neo/dsh-session-query'
+import type { Agent } from '@neo/agent'
+import { CompactionId, compactCheckpointSource } from '@neo/compaction'
+import { createUserMessage, CallId , createMessage, createToolResultMessage } from '@neo/llm'
+import SessionStore, { Session, SessionId } from '@neo/session'
+import SessionQueryEngine from '@neo/session-query'
 import SessionReferenceResolver, {
   decodeSessionReferenceUri,
   encodeSessionReferenceUri,
@@ -12,7 +12,7 @@ import SessionReferenceResolver, {
   parseSessionReferenceText,
   type Config,
   type SessionReferenceErrorCode,
-} from '@neo/dsh-session-reference'
+} from '@neo/session-reference'
 import { stringifyTagSafeJson } from '../src/serialization.ts'
 
 class TestSessionQueryEngine extends SessionQueryEngine {

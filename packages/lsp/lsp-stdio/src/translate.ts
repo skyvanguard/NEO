@@ -2,7 +2,7 @@
  * Pure protocol translation for the local host: what the server's capabilities allow, and how its
  * `Location`/`LocationLink`/`Hover` payloads normalize into the seam's closed result unions. No I/O
  * or process state — every function here is a pure transform, which the fake-stdio tests pin exactly.
- * @module @neo/dsh-lsp-stdio/translate
+ * @module @neo/lsp-stdio/translate
  */
 
 import type {
@@ -10,9 +10,9 @@ import type {
   LspLocation,
   LspOperation,
   LspRange,
-} from '@neo/dsh-lsp'
-import { LspError } from '@neo/dsh-lsp'
-import { assertNever } from '@neo/dsh-llm'
+} from '@neo/lsp'
+import { LspError } from '@neo/lsp'
+import { assertNever } from '@neo/llm'
 import type {
   WireHover,
   WireLocation,

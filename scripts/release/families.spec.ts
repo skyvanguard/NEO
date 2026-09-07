@@ -19,7 +19,7 @@ describe('release families', () => {
   it('names one tag for the whole dsh family and one per vendored package', () => {
     const dsh = releaseFamily('dsh')
     const vendor = releaseFamily('vendor')
-    const cli = member('apps/cli', '@neo/dsh')
+    const cli = member('apps/cli', '@neo/cli')
     const cordis = { ...member('vendor/cordis', '@neo/cordis'), version: '4.0.1' }
 
     expect(dsh.tagFor(cli)).toBe('dsh-v0.0.1')
@@ -32,7 +32,7 @@ describe('release families', () => {
 
   it('rejects a family whose members disagree on the shared version', () => {
     const dsh = releaseFamily('dsh')
-    const members = [member('apps/cli', '@neo/dsh'), { ...member('apps/web', '@neo/dsh-web-frontend'), version: '0.0.2' }]
+    const members = [member('apps/cli', '@neo/cli'), { ...member('apps/web', '@neo/web-frontend'), version: '0.0.2' }]
 
     expect(() => { dsh.verifyVersions(members) }).toThrow(/must share one version/)
     expect(() => { dsh.verifyVersions([members[0]!]) }).not.toThrow()
@@ -52,23 +52,23 @@ describe('release families', () => {
   it('publishes a dependency before its consumer, and orders ties by name', () => {
     const dsh = releaseFamily('dsh')
     const members = [
-      member('packages/a/consumer', '@neo/dsh-consumer', { dependencies: { '@neo/dsh-library': 'workspace:^' } }),
-      member('packages/a/library', '@neo/dsh-library'),
-      member('packages/a/zebra', '@neo/dsh-zebra'),
+      member('packages/a/consumer', '@neo/consumer', { dependencies: { '@neo/library': 'workspace:^' } }),
+      member('packages/a/library', '@neo/library'),
+      member('packages/a/zebra', '@neo/zebra'),
     ]
 
     expect(dsh.publishOrder(members).map(entry => entry.name)).toEqual([
-      '@neo/dsh-library',
-      '@neo/dsh-consumer',
-      '@neo/dsh-zebra',
+      '@neo/library',
+      '@neo/consumer',
+      '@neo/zebra',
     ])
   })
 
   it('reports a runtime dependency cycle instead of emitting an arbitrary order', () => {
     const dsh = releaseFamily('dsh')
     const members = [
-      member('packages/a/left', '@neo/dsh-left', { dependencies: { '@neo/dsh-right': 'workspace:^' } }),
-      member('packages/a/right', '@neo/dsh-right', { dependencies: { '@neo/dsh-left': 'workspace:^' } }),
+      member('packages/a/left', '@neo/left', { dependencies: { '@neo/right': 'workspace:^' } }),
+      member('packages/a/right', '@neo/right', { dependencies: { '@neo/left': 'workspace:^' } }),
     ]
 
     expect(() => { dsh.publishOrder(members) }).toThrow(/dependency cycle/)
@@ -77,7 +77,7 @@ describe('release families', () => {
   it('applies the harness payload policy to dsh and keeps upstream payloads for vendored packages', () => {
     const dsh = releaseFamily('dsh')
     const vendor = releaseFamily('vendor')
-    const harness = member('packages/a/library', '@neo/dsh-library')
+    const harness = member('packages/a/library', '@neo/library')
     const vendored = member('vendor/cordis', '@neo/cordis')
 
     expect(() => { dsh.validatePayload(harness, ['package/lib/index.js', 'package/src/index.ts']) })
@@ -87,7 +87,7 @@ describe('release families', () => {
   })
 
   it('drives the installed entry only for the family that publishes one', () => {
-    expect(releaseFamily('dsh').installedEntry).toEqual({ packageName: '@neo/dsh', binPath: 'lib/bin.js' })
+    expect(releaseFamily('dsh').installedEntry).toEqual({ packageName: '@neo/cli', binPath: 'lib/bin.js' })
     expect(releaseFamily('vendor').installedEntry).toBeUndefined()
   })
 
@@ -170,7 +170,7 @@ describe('payload change judgement', () => {
     // unnecessary patch bump, while under-reporting fails the next publish on a
     // version whose bytes moved.
     expect(reachesPayload(sourceShipping, 'vendor/cosmokit/README.i18n.yaml')).toBe(true)
-    expect(reachesPayload(member('packages/a/library', '@neo/dsh-library', { files: ['lib/index.js'] }),
+    expect(reachesPayload(member('packages/a/library', '@neo/library', { files: ['lib/index.js'] }),
       'packages/a/library/tests/library.spec.ts')).toBe(false)
   })
 })

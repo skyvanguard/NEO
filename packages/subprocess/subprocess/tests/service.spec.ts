@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { PassThrough } from 'node:stream'
 import { Context } from '@neo/cordis'
-import { scrubbedParentEnv, SubprocessRuntime } from '@neo/dsh-subprocess'
+import { scrubbedParentEnv, SubprocessRuntime } from '@neo/subprocess'
 import type {
   SubprocessHandle,
   SubprocessOutputRead,
   SubprocessSpawnSpec,
   SubprocessTerminalHandle,
   SubprocessTerminalSpawnSpec,
-} from '@neo/dsh-subprocess'
+} from '@neo/subprocess'
 
 /**
  * Minimal concrete service: a hand-built handle. The seam is spawn-only —

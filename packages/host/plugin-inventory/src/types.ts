@@ -1,4 +1,4 @@
-import type { Branded } from '@neo/dsh-brand'
+import type { Branded } from '@neo/brand'
 
 /** Stable Loader-tree identity of one configured plugin entry. */
 export type PluginEntryId = Branded<'PluginEntryId'>

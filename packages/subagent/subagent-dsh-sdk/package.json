@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-subagent-dsh-sdk",
+  "name": "@neo/subagent-dsh-sdk",
   "description": "Out-of-process SDK subagent backend: drives a child DeepSeek Harness runtime subprocess over stdio JSON-RPC through the TypeScript SDK client",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,13 +32,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-sdk-client": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sdk-client": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/subprocess": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -46,15 +46,15 @@
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-loader-smoke": "workspace:^",
-    "@neo/dsh-sdk-client": "workspace:^",
-    "@neo/dsh-sdk-protocol": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/loader-smoke": "workspace:^",
+    "@neo/sdk-client": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/subprocess": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

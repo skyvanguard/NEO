@@ -13,8 +13,8 @@
 // lifecycle updates replace only their own row without remounting it.
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import type { ConversationTimelineSnapshot } from '@neo/dsh-client-runtime/client'
-import { IconChevronDownOutline14 } from '@neo/dsh-client-ui-primitives'
+import type { ConversationTimelineSnapshot } from '@neo/client-runtime/client'
+import { IconChevronDownOutline14 } from '@neo/client-ui-primitives'
 import type { ChatViewSlotProps } from '../contract/slots.ts'
 import { PendingSteeringBubble } from './MessageItem.tsx'
 import { ChatNodeSeat } from './ChatNodeSeat.tsx'

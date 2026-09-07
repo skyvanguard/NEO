@@ -16,13 +16,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import LlmRuntime from '@neo/dsh-llm'
-import { credentialRef } from '@neo/dsh-credentials'
-import LocalCredentialProvider from '@neo/dsh-credentials-local'
-import { settingsNamespace } from '@neo/dsh-settings'
-import FileSettingsProvider from '@neo/dsh-settings-file'
-import { getOrCreateAnonymousUserId } from '@neo/dsh-anonymous-user-id'
-import * as LlmDeepSeek from '@neo/dsh-llm-deepseek'
+import LlmRuntime from '@neo/llm'
+import { credentialRef } from '@neo/credentials'
+import LocalCredentialProvider from '@neo/credentials-local'
+import { settingsNamespace } from '@neo/settings'
+import FileSettingsProvider from '@neo/settings-file'
+import { getOrCreateAnonymousUserId } from '@neo/anonymous-user-id'
+import * as LlmDeepSeek from '@neo/llm-deepseek'
 import { assemble } from './assemble.ts'
 import { closeMockServers, mockServer, textEvents } from './mock-server.ts'
 
@@ -63,19 +63,19 @@ async function loadComposition(
     ...options.withDynamic
       ? [
         '- id: settings',
-        "  name: '@neo/dsh-settings-file'",
+        "  name: '@neo/settings-file'",
         '  config:',
         `    path: ${JSON.stringify(settingsPath)}`,
         '    debounceMs: 10',
         '- id: credentials',
-        "  name: '@neo/dsh-credentials-local'",
+        "  name: '@neo/credentials-local'",
         '  config:',
         `    path: ${JSON.stringify(credentialsPath)}`,
         '    debounceMs: 10',
       ]
       : [],
     '- id: llm-deepseek',
-    "  name: '@neo/dsh-llm-deepseek'",
+    "  name: '@neo/llm-deepseek'",
     '  config:',
     `    baseURL: ${JSON.stringify(options.baseURL)}`,
     '',
@@ -88,9 +88,9 @@ async function loadComposition(
   ctx.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
     ['test-llm-service', LlmRuntime],
-    ['@neo/dsh-settings-file', FileSettingsProvider],
-    ['@neo/dsh-credentials-local', LocalCredentialProvider],
-    ['@neo/dsh-llm-deepseek', LlmDeepSeek],
+    ['@neo/settings-file', FileSettingsProvider],
+    ['@neo/credentials-local', LocalCredentialProvider],
+    ['@neo/llm-deepseek', LlmDeepSeek],
   ])
   ctx.loader.internal = {
     version: 'v2',

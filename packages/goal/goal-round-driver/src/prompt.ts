@@ -1,7 +1,7 @@
 /** Model-visible continuation prompt for one same-session goal round. */
 
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { GoalView } from '@neo/dsh-goal'
+import type { ContentBlock } from '@neo/llm'
+import type { GoalView } from '@neo/goal'
 
 /**
  * Render the complete goal-round instruction retained in session history.

@@ -1,4 +1,4 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 /**
  * Tests for the queue-aware `Agent.cancel()` primitive. The default clears
  * queued and steering work, while `keepInbox` preserves pending input for a
@@ -9,12 +9,12 @@ import { createUserMessage } from '@neo/dsh-llm'
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import LlmRuntime from '@neo/dsh-llm'
-import SessionStore, { SessionId, TurnEndReason } from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED_BEFORE_DISPATCH } from '@neo/dsh-tools'
-import AgentRegistry, { type Agent } from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
+import LlmRuntime from '@neo/llm'
+import SessionStore, { SessionId, TurnEndReason } from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED_BEFORE_DISPATCH } from '@neo/tools'
+import AgentRegistry, { type Agent } from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
 import { MockAdapter, textResponse, toolCallResponse } from './mock-adapter.ts'
 
 function driverDone(agent: Agent): Promise<void> {

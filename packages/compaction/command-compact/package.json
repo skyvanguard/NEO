@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-command-compact",
+  "name": "@neo/command-compact",
   "description": "Human-facing slash command for explicit session compaction",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,20 +32,20 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-compaction": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/compaction": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-compaction": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/compaction": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

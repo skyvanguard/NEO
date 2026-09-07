@@ -1,10 +1,10 @@
-/** Package-owned LLM stream-protocol invariants. @module @neo/dsh-llm/invariant */
+/** Package-owned LLM stream-protocol invariants. @module @neo/llm/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type { ContentBlockType, StreamChunk } from './types.ts'
 
-const PACKAGE_NAME = '@neo/dsh-llm'
+const PACKAGE_NAME = '@neo/llm'
 
 /** Cordis companion plugin name. */
 export const name = 'llm-invariant'

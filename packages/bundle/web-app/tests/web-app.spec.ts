@@ -10,8 +10,8 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import type { WebServer } from '@neo/dsh-host-webserver'
+import SystemPrompt from '@neo/system-prompt'
+import type { WebServer } from '@neo/host-webserver'
 import { apply, Config, internals } from '../src/index.ts'
 
 vi.mock('node:os', async importOriginal => ({

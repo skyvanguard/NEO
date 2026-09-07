@@ -214,9 +214,9 @@
 <h3>4.1 Familia <code>web-search-*</code>: validación y clasificación de errores divergentes <span class="badge b-medio">medio</span></h3>
 <ul>
 <li><b>Perplexity acepta <code>url</code> sin el guard que SearXNG sí aplica</b> (<code>web-search-perplexity/src/provider.ts:56-77</code> vs <code>web-search-searxng:64</code>). Replicar el guard por-campo. Riesgo nulo.</li>
-<li><b>Los 4 proveedores clasifican abort/timeout con 3 criterios distintos</b> (deepseek:239, exa:119/134/145, perplexity:122/137/149, searxng:113/125). El hermano <code>web-fetch-http:349</code> ya centraliza en <code>translateAbortOrNetwork</code>. Extraerlo a <code>@neo/dsh-web</code> y usarlo en los cuatro.</li>
+<li><b>Los 4 proveedores clasifican abort/timeout con 3 criterios distintos</b> (deepseek:239, exa:119/134/145, perplexity:122/137/149, searxng:113/125). El hermano <code>web-fetch-http:349</code> ya centraliza en <code>translateAbortOrNetwork</code>. Extraerlo a <code>@neo/web</code> y usarlo en los cuatro.</li>
 <li><b>SearXNG etiqueta su timeout interno como <code>WEB_PROVIDER_ERROR</code></b> (:103/:113) en vez de un <code>WEB_FETCH_TIMEOUT</code> como el hermano.</li>
-<li><b>Helpers puros duplicados</b> (<code>isPositiveInteger</code>, <code>isAbortError</code>, <code>searchAborted</code>) en los 4; supresión jscpd inconsistente. Mover a <code>@neo/dsh-web/internal</code> (no API pública).</li>
+<li><b>Helpers puros duplicados</b> (<code>isPositiveInteger</code>, <code>isAbortError</code>, <code>searchAborted</code>) en los 4; supresión jscpd inconsistente. Mover a <code>@neo/web/internal</code> (no API pública).</li>
 </ul>
 <p class="risk">Riesgo: bajo (funciones puras / solo descarta basura o mejora diagnóstico).</p>
 </div>

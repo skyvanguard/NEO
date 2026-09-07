@@ -1,13 +1,13 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { stubSettingsScope, type StubSettingsScope } from '@neo/dsh-client-test-runtime'
+import { stubSettingsScope, type StubSettingsScope } from '@neo/client-test-runtime'
 import type {
   ThemeSettings,
   ThemeSnapshot,
   ThemeTokenOverrides,
-} from '@neo/dsh-client-ui-theme/client'
-import { ThemeRuntime } from '@neo/dsh-client-ui-theme/client'
+} from '@neo/client-ui-theme/client'
+import { ThemeRuntime } from '@neo/client-ui-theme/client'
 
 const make = (host = stubSettingsScope<ThemeSettings>()): {
   ctx: Context

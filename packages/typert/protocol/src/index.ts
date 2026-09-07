@@ -1,7 +1,7 @@
 /**
  * Remote decorators and explicit Gateway bindings backed only by private
  * module state. Strict reflection remains a Typert compiler responsibility.
- * @module @neo/dsh-typert-protocol
+ * @module @neo/typert-protocol
  */
 
 import { Service, type Context } from '@neo/cordis'

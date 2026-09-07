@@ -1,14 +1,14 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
+import SessionStore, { Session, SessionId } from '@neo/session'
 import SessionTitleService, {
   SessionTitleProviderId,
   fallbackSessionTitle,
   foldSessionTitle,
   normalizeSessionTitle,
   truncateTitleUtf8,
-} from '@neo/dsh-session-title'
+} from '@neo/session-title'
 
 const CONFIG = {
   fallbackMaxWords: 5,

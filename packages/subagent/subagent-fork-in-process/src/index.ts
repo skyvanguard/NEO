@@ -4,21 +4,21 @@
  * parent's session log — so the child inherits the parent's conversation context instead of
  * starting fresh. The seed ends at the last `turn/end`: the current tool-call turn is
  * unbalanced and cannot be replayed as a valid child session.
- * @module @neo/dsh-subagent-fork-in-process
+ * @module @neo/subagent-fork-in-process
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { SessionEvent } from '@neo/dsh-session'
-import type { Agent } from '@neo/dsh-agent'
+import type { SessionEvent } from '@neo/session'
+import type { Agent } from '@neo/agent'
 import type {
   ContinuableCreateRequest,
   ContinuableCreateSpec,
   ResolvedSubagentStartRequest,
   SubagentCapabilities,
   SubagentProvider,
-} from '@neo/dsh-subagent'
-import { startInProcessRun } from '@neo/dsh-subagent-in-process-driver'
+} from '@neo/subagent'
+import { startInProcessRun } from '@neo/subagent-in-process-driver'
 
 export const name = 'subagent-fork-in-process'
 // `tools` is deliberately NOT injected — same rationale as subagent-spawn-in-process: the

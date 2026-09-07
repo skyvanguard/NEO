@@ -14,9 +14,9 @@ import type { Context } from '@neo/cordis'
 import type {
   ApprovalRequestId, CordisDynamicPluginId, DynamicCordisInvokeResult, JsonValue,
   DynamicCordisInventoryRow,
-} from '@neo/dsh-api-remotes/client'
-import type { ClientModuleSystem } from '@neo/dsh-client-modules/client'
-import type { SlotRegistry } from '@neo/dsh-client-runtime/client'
+} from '@neo/api-remotes/client'
+import type { ClientModuleSystem } from '@neo/client-modules/client'
+import type { SlotRegistry } from '@neo/client-runtime/client'
 // The Client Remote assembly is the one place the two planes meet: it mounts the
 // `dynamicCordisRunner` namespace and re-exports its payload vocabulary, so this
 // package names what it sends without importing a Host package.
@@ -54,7 +54,7 @@ export { ClientTimerService } from './timer.ts'
 export type {
   ApprovalRequestId, CordisDynamicPackageId, CordisDynamicPluginId, CordisDynamicPluginRunId,
   DynamicCordisPackage,
-} from '@neo/dsh-api-remotes/client'
+} from '@neo/api-remotes/client'
 
 
 /**

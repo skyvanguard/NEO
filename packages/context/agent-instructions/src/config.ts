@@ -1,12 +1,12 @@
 /**
  * Configuration normalization for workspace instruction discovery and rendering.
  *
- * @module @neo/dsh-agent-instructions/config
+ * @module @neo/agent-instructions/config
  */
 
 import { relative } from 'node:path'
 import z from '@neo/schemastery'
-import { resolveDshHome } from '@neo/dsh-home-paths'
+import { resolveDshHome } from '@neo/home-paths'
 
 const DEFAULT_PROJECT_ROOT_MARKERS = ['.git'] as const
 const DEFAULT_INSTRUCTION_FILE_CANDIDATES = ['AGENTS.md', 'CLAUDE.md'] as const

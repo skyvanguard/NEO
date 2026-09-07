@@ -7,9 +7,9 @@
  * both sides of the native interaction with one cordis.yml row; no client
  * code branches on a capability kind.
  */
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
+import type { ClientContext } from '@neo/client-runtime/client'
 // Type-only: pulls the SlotMap merge declaring the directory-flow holes.
-import type {} from '@neo/dsh-client-ui-workspace/client'
+import type {} from '@neo/client-ui-workspace/client'
 import type { NativeFlowInjected } from './flow.ts'
 import { NativeDirectoryFlow } from './flow.ts'
 

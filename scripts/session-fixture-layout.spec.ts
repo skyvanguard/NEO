@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { decodeStorageRecord, type SessionEvent } from '@neo/dsh-session'
+import { decodeStorageRecord, type SessionEvent } from '@neo/session'
 import { canonicalSessionFixture } from './session-fixture-layout.ts'
 
 const HEADER = '  {"type":"session","version":0,"id":"fixture","createdAt":1,"delegationDepth":0}  '

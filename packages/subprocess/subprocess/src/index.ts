@@ -4,8 +4,8 @@
  * collected stdio, and one terminal-process primitive. Command defaulting,
  * shell semantics, deadlines, protocol framing, terminal readiness, and
  * presentation belong to consumers. The local implementation lives in
- * `@neo/dsh-subprocess-local`.
- * @module @neo/dsh-subprocess
+ * `@neo/subprocess-local`.
+ * @module @neo/subprocess
  */
 
 import { Context, Service } from '@neo/cordis'

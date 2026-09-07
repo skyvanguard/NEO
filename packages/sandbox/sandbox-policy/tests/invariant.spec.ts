@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { type Session, type SessionEvent } from '@neo/dsh-session'
-import InvariantRegistry, { InvariantError } from '@neo/dsh-invariants'
-import * as SandboxPolicyInvariant from '@neo/dsh-sandbox-policy/invariant'
+import SessionStore, { type Session, type SessionEvent } from '@neo/session'
+import InvariantRegistry, { InvariantError } from '@neo/invariants'
+import * as SandboxPolicyInvariant from '@neo/sandbox-policy/invariant'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()
@@ -36,7 +36,7 @@ describe('sandbox-policy invariants', () => {
   it('rejects and attributes an unknown durable sandbox mode', async () => {
     const ctx = await setup()
     expect(() => { ctx.emit('session/event', {} as Session, modeEvent('host-root')) })
-      .toThrow(new InvariantError('@neo/dsh-sandbox-policy', 'sandbox/mode carries unknown mode "host-root"'))
+      .toThrow(new InvariantError('@neo/sandbox-policy', 'sandbox/mode carries unknown mode "host-root"'))
   })
 
   it('rejects an unknown mode already present on late registration', async () => {
@@ -47,7 +47,7 @@ describe('sandbox-policy invariants', () => {
 
     await expect(ctx.plugin(SandboxPolicyInvariant).then(() => undefined)).rejects.toMatchObject({
       code: 'INVARIANT',
-      packageName: '@neo/dsh-sandbox-policy',
+      packageName: '@neo/sandbox-policy',
     })
   })
 })

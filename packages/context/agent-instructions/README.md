@@ -1,4 +1,4 @@
-# @neo/dsh-agent-instructions
+# @neo/agent-instructions
 
 English | [中文](README.zh.md)
 

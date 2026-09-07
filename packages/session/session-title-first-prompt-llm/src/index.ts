@@ -5,8 +5,8 @@ import z from '@neo/schemastery'
 import {
   registerSessionTitleLlmProvider,
   SessionTitleLlmConfigFields,
-} from '@neo/dsh-session-title-llm'
-import type { SessionTitleLlmConfig } from '@neo/dsh-session-title-llm'
+} from '@neo/session-title-llm'
+import type { SessionTitleLlmConfig } from '@neo/session-title-llm'
 
 export const name = 'session-title-first-prompt-llm'
 export const inject = ['sessionTitle', 'llm', 'sessions']

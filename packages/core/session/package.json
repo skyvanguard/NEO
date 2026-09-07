@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session",
+  "name": "@neo/session",
   "description": "Event-sourced session store for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -41,20 +41,20 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
-    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
+    "@neo/typert-registry": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

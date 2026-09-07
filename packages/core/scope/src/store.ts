@@ -1,7 +1,7 @@
 /**
  * Shared insertion-ordered storage and effect ownership for scope-aware registries.
  *
- * @module @neo/dsh-scope
+ * @module @neo/scope
  */
 
 import type { Context } from '@neo/cordis'

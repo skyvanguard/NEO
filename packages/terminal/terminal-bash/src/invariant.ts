@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-terminal-bash`.
- * @module @neo/dsh-terminal-bash/invariant
+ * Package-owned invariant companion for `@neo/terminal-bash`.
+ * @module @neo/terminal-bash/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-terminal-bash'
+const PACKAGE_NAME = '@neo/terminal-bash'
 
 /** Cordis companion plugin name. */
 export const name = 'terminal-bash-invariant'

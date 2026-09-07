@@ -1,18 +1,18 @@
-import { createAssistantMessage, createUserMessage } from '@neo/dsh-llm'
+import { createAssistantMessage, createUserMessage } from '@neo/llm'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context, type Fiber } from '@neo/cordis'
 import { DatabaseSync } from 'node:sqlite'
 import { chmod, mkdtemp, rm, stat, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
-import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@neo/dsh-session'
-import type { SessionEvent, SessionHeader, SessionId as SessionIdType } from '@neo/dsh-session'
-import SessionPersistence, { SessionPersistenceRevision } from '@neo/dsh-session-persistence'
-import type { SessionPersistenceSnapshot } from '@neo/dsh-session-persistence'
-import SqliteSessionPersistence from '@neo/dsh-session-persistence-sqlite'
+import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@neo/session'
+import type { SessionEvent, SessionHeader, SessionId as SessionIdType } from '@neo/session'
+import SessionPersistence, { SessionPersistenceRevision } from '@neo/session-persistence'
+import type { SessionPersistenceSnapshot } from '@neo/session-persistence'
+import SqliteSessionPersistence from '@neo/session-persistence-sqlite'
 import SqliteSessionQueryEngine, {
   SESSION_QUERY_SQLITE_SCHEMA_VERSION,
-} from '@neo/dsh-session-query-sqlite'
+} from '@neo/session-query-sqlite'
 import {
   SESSION_QUERY_DEFAULT_PERSISTED_INSPECT_CONCURRENCY,
   SessionQueryError,
@@ -20,7 +20,7 @@ import {
   type SessionAvailability,
   type SessionQueryErrorCode,
   type SessionSearchRequest,
-} from '@neo/dsh-session-query'
+} from '@neo/session-query'
 
 const temporaryDirectories: string[] = []
 

@@ -3,16 +3,16 @@
  * continuable in-process child's unpublished context. Roots, one-shot children,
  * remote providers, and agentless executions never see the registration.
  *
- * @module @neo/dsh-tool-subagent-report
+ * @module @neo/tool-subagent-report
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent } from '@neo/dsh-agent'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { SubagentReportDelivery } from '@neo/dsh-subagent'
-import type {} from '@neo/dsh-system-prompt'
-import { defineTool } from '@neo/dsh-tools'
+import type { Agent } from '@neo/agent'
+import type { ContentBlock } from '@neo/llm'
+import type { SubagentReportDelivery } from '@neo/subagent'
+import type {} from '@neo/system-prompt'
+import { defineTool } from '@neo/tools'
 
 export const name = 'tool-subagent-report'
 // The contribution registers only through childCtx.tools and

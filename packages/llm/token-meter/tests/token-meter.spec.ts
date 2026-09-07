@@ -1,11 +1,11 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createUserMessage, CallId, createMessage } from '@neo/dsh-llm'
-import type { ContentBlock, Message, TokenUsage } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId, canonicalHeader } from '@neo/dsh-session'
-import type { EpochHeader, SessionEvent } from '@neo/dsh-session'
-import TokenMeter from '@neo/dsh-token-meter'
-import type { TokenMeasurement, TokenMeterConfig } from '@neo/dsh-token-meter'
+import { createUserMessage, CallId, createMessage } from '@neo/llm'
+import type { ContentBlock, Message, TokenUsage } from '@neo/llm'
+import SessionStore, { Session, SessionId, canonicalHeader } from '@neo/session'
+import type { EpochHeader, SessionEvent } from '@neo/session'
+import TokenMeter from '@neo/token-meter'
+import type { TokenMeasurement, TokenMeterConfig } from '@neo/token-meter'
 
 function header(model: string, extras: Omit<EpochHeader, 'config'> = {}): EpochHeader {
   return canonicalHeader({ config: { provider: 'mock', model }, ...extras })

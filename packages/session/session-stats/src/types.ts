@@ -5,7 +5,7 @@
  * serve it — `./types` for host consumers, `./client` for client aggregates —
  * with zero content duplication.
  *
- * @module @neo/dsh-session-stats/types
+ * @module @neo/session-stats/types
  */
 
 // Marks this file a module so the declaration below AUGMENTS the projection
@@ -38,7 +38,7 @@ export interface SessionStatsProjection {
   decodeTokens: number
 }
 
-declare module '@neo/dsh-session-projection/types' {
+declare module '@neo/session-projection/types' {
   interface SessionProjectionMap {
     /** Whole-log turn/step counts and wall times; see {@link SessionStatsProjection}. */
     sessionStats: SessionStatsProjection

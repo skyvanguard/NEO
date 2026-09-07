@@ -12,7 +12,7 @@ import { dirname, join, resolve, sep } from 'node:path'
 import ts from 'typescript'
 
 /** The module whose `SlotMap` / standard-kit interfaces every slot owner merges into. */
-const SLOTS_MODULE = '@neo/dsh-client-ui-slots'
+const SLOTS_MODULE = '@neo/client-ui-slots'
 
 /** Cheap textual prefilter for a slot-contract merge, quote-style agnostic. */
 const MERGE_HEAD = /declare module ['"]@neo\/dsh-client-ui-slots['"]/

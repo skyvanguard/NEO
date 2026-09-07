@@ -12,16 +12,16 @@
  * source's own contract.
  */
 import { Context } from '@neo/cordis'
-import { stubSettingsScope } from '@neo/dsh-client-test-runtime'
+import { stubSettingsScope } from '@neo/client-test-runtime'
 import { describe, expect, it } from 'vitest'
 import {
   SlotRegistry, type ConversationSnapshot, type SessionId, type SessionListState,
   type SessionSummary, type SubagentAddress,
-} from '@neo/dsh-client-runtime/client'
-import type { ComposerChainProps } from '@neo/dsh-client-ui-conversation/client'
-import { InputTriggerService } from '@neo/dsh-client-ui-input-trigger/client'
-import type { ClientSessionContext, InputTriggerSource } from '@neo/dsh-client-ui-input-trigger/client'
-import { apply as applyLocale, inject as localeInject } from '@neo/dsh-client-locale/client'
+} from '@neo/client-runtime/client'
+import type { ComposerChainProps } from '@neo/client-ui-conversation/client'
+import { InputTriggerService } from '@neo/client-ui-input-trigger/client'
+import type { ClientSessionContext, InputTriggerSource } from '@neo/client-ui-input-trigger/client'
+import { apply as applyLocale, inject as localeInject } from '@neo/client-locale/client'
 import {
   SubagentCatalogAction, type SubagentCatalogInjected,
 } from '../src/client/SubagentCatalogAction.tsx'

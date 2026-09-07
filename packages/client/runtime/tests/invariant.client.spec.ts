@@ -5,7 +5,7 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import InvariantRegistry from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
 import * as RuntimeInvariant from '../src/invariant.ts'
 import { SlotRegistry } from '../src/client/slots.ts'
 

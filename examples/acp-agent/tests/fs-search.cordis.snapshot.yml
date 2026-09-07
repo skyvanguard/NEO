@@ -1,6 +1,6 @@
 # Minimal keyless composition: real app, bash, and search tool; replayed model.
 - id: llm-replay
-  name: '@neo/dsh-llm-replay'
+  name: '@neo/llm-replay'
   config:
     providers:
       - id: deepseek-official
@@ -9,13 +9,13 @@
           - id: deepseek-v4-pro
 
 - id: subprocess
-  name: '@neo/dsh-subprocess-local'
+  name: '@neo/subprocess-local'
 
 - id: bash
-  name: '@neo/dsh-bash-local'
+  name: '@neo/bash-local'
 
 - id: acp-agent
-  name: '@neo/dsh-acp-demo'
+  name: '@neo/acp-demo'
   config:
     provider: deepseek-official
     model: deepseek-v4-pro
@@ -29,7 +29,7 @@
     persona: You are a concise snapshot agent working in {{cwd}}.
 
 - id: tool-fs-search
-  name: '@neo/dsh-tool-fs-search'
+  name: '@neo/tool-fs-search'
   config:
     sampleOverCapGlobResults: true
     globMaxResults: 4

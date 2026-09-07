@@ -10,16 +10,16 @@ import {
   FileNotFoundError,
   SandboxNotFoundError,
   quoteE2BShellArg,
-} from '@neo/dsh-e2b'
-import type { CommandHandle, CommandResult, Sandbox } from '@neo/dsh-e2b'
+} from '@neo/e2b'
+import type { CommandHandle, CommandResult, Sandbox } from '@neo/e2b'
 import type {
   SubprocessOutcome,
   SubprocessTerminalForeground,
   SubprocessTerminalHandle,
   SubprocessTerminalSignal,
   SubprocessTerminalSpawnSpec,
-} from '@neo/dsh-subprocess'
-import type E2BRuntime from '@neo/dsh-e2b'
+} from '@neo/subprocess'
+import type E2BRuntime from '@neo/e2b'
 import {
   bootstrapEnvironment,
   readRemoteEnvironment,

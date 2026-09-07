@@ -22,14 +22,14 @@
 - insert:
     # Code Mode is a core execution capability, not a Web component.
     - id: code-runtime
-      name: '@neo/dsh-code-runtime-worker-thread'
+      name: '@neo/code-runtime-worker-thread'
 
     - id: headless-startup
-      name: '@neo/dsh-headless/startup'
+      name: '@neo/headless/startup'
 
     # Reads its task from the ordinary headlessStartup provider.
     - id: headless-runner
-      name: '@neo/dsh-headless'
+      name: '@neo/headless'
       inject: [headlessStartup]
       config:
         task: !!js ctx.headlessStartup.task

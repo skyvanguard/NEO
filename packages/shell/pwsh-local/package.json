@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-pwsh-local",
+  "name": "@neo/pwsh-local",
   "description": "Local PowerShell implementation of the DeepSeek Harness bash executor seam",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,23 +32,23 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-shell": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-settings": "workspace:^"
+    "@neo/settings": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-shell": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-subprocess-local": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-settings": "workspace:^"
+    "@neo/settings": "workspace:^"
   }
 }

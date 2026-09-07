@@ -1,11 +1,11 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import type { Context } from '@neo/cordis'
 import { spawnHarness, waitForIdle } from './harness.ts'
-import { SessionId } from '@neo/dsh-session'
+import { SessionId } from '@neo/session'
 
 /** Key-gated smoke for a real parent delegating filesystem work to a real child. */
 

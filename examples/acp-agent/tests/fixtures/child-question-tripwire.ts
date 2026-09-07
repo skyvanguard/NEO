@@ -1,5 +1,5 @@
 import type { Context } from '@neo/cordis'
-import '@neo/dsh-user-questions'
+import '@neo/user-questions'
 
 /** Snapshot-only provider whose invocation means the child guard failed. */
 export const name = 'child-question-tripwire'

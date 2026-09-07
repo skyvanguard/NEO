@@ -11,15 +11,15 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import LlmRuntime from '@neo/dsh-llm'
-import { createUserMessage, LlmAdapter } from '@neo/dsh-llm'
-import type { GenerateOptions, StreamChunk } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import AgentRegistry, { type Agent } from '@neo/dsh-agent'
+import LlmRuntime from '@neo/llm'
+import { createUserMessage, LlmAdapter } from '@neo/llm'
+import type { GenerateOptions, StreamChunk } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import AgentRegistry, { type Agent } from '@neo/agent'
 
-import AgentLoop from '@neo/dsh-agent-loop'
+import AgentLoop from '@neo/agent-loop'
 import fc from 'fast-check'
 
 /** A never-exhausting adapter: every model call returns the same short reply. */

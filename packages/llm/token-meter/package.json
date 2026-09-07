@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-token-meter",
+  "name": "@neo/token-meter",
   "description": "Replay-aware token measurement service (ctx.tokenMeter) for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -37,11 +37,11 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-compaction": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
+    "@neo/compaction": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-projection": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -49,11 +49,11 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@neo/dsh-compaction": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
+    "@neo/compaction": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-projection": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

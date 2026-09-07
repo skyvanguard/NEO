@@ -1,19 +1,19 @@
 /**
  * Concrete session-query service with SQLite FTS5 over the live-preferred corpus.
  *
- * @module @neo/dsh-session-query-sqlite
+ * @module @neo/session-query-sqlite
  */
 
 import { createHash, randomUUID } from 'node:crypto'
 import type { DatabaseSync } from 'node:sqlite'
 import { Context, Service, type Fiber } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Session, SessionEvent, SessionHeader, SessionId } from '@neo/dsh-session'
-import type SessionPersistence from '@neo/dsh-session-persistence'
+import type { Session, SessionEvent, SessionHeader, SessionId } from '@neo/session'
+import type SessionPersistence from '@neo/session-persistence'
 import type {
   SessionPersistenceRevision,
   SessionPersistenceSnapshot,
-} from '@neo/dsh-session-persistence'
+} from '@neo/session-persistence'
 import SessionQueryEngine, {
   SESSION_QUERY_DEFAULT_PERSISTED_INSPECT_CONCURRENCY,
   SESSION_QUERY_READ_WINDOW_MAX,
@@ -21,7 +21,7 @@ import SessionQueryEngine, {
   SessionSearchCursor,
   assertSessionHeadersCompatible,
   buildSessionEventSearchDocuments,
-} from '@neo/dsh-session-query'
+} from '@neo/session-query'
 import type {
   Config as SessionQueryConfig,
   SessionEventSearchDocument,
@@ -33,7 +33,7 @@ import type {
   SessionSearchCursor as SessionSearchCursorValue,
   SessionSearchPage,
   SessionSearchRequest,
-} from '@neo/dsh-session-query'
+} from '@neo/session-query'
 import {
   type JournalMode,
   openSearchDatabase,

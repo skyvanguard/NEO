@@ -2,9 +2,9 @@ import { useState, type ReactNode } from 'react'
 import {
   DisclosureRow, IconChevronRightOutline14, StateDot,
   type DisclosureRowProps, type StateDotState,
-} from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
-import { shallowEqual, type SessionId, type SessionListState } from '@neo/dsh-client-runtime/client'
+} from '@neo/client-ui-primitives'
+import type { PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
+import { shallowEqual, type SessionId, type SessionListState } from '@neo/client-runtime/client'
 import type { WorkflowRunKey } from './locales.ts'
 import type {
   WorkflowRunMemberData, WorkflowRunPhaseData, WorkflowRunStatus,

@@ -11,10 +11,10 @@ import { Context } from '@neo/cordis'
 import { mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join, normalize } from 'node:path'
-import { CallId } from '@neo/dsh-llm'
-import { SessionId } from '@neo/dsh-session'
-import type { SaveTextSpill } from '@neo/dsh-spill'
-import LocalSpillStore, { encodeSegment, privateRoot, saveTextFile, sessionDir } from '@neo/dsh-spill-local'
+import { CallId } from '@neo/llm'
+import { SessionId } from '@neo/session'
+import type { SaveTextSpill } from '@neo/spill'
+import LocalSpillStore, { encodeSegment, privateRoot, saveTextFile, sessionDir } from '@neo/spill-local'
 
 let root: string
 

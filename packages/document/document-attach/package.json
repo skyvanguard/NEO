@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-document-attach",
+  "name": "@neo/document-attach",
   "description": "Host-side document attachment: saves an uploaded document into the session workspace for the agent to process, exposed over Typert Remote",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -39,13 +39,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {

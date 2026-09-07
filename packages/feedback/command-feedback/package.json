@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-command-feedback",
+  "name": "@neo/command-feedback",
   "description": "Log-only session feedback producer and human-facing slash command",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,23 +32,23 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-telemetry": "workspace:^",
-    "@neo/dsh-anonymous-user-id": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-telemetry": "workspace:^",
+    "@neo/anonymous-user-id": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-telemetry": "workspace:^",
-    "@neo/dsh-anonymous-user-id": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-telemetry": "workspace:^",
+    "@neo/anonymous-user-id": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

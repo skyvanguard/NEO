@@ -1,16 +1,16 @@
 /**
  * Durable session skill catalog and model-facing `skill` loader tool.
  *
- * @module @neo/dsh-tool-skill
+ * @module @neo/tool-skill
  */
 
 import { createHash } from 'node:crypto'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import { defineTool } from '@neo/dsh-tools'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { UserMessage } from '@neo/dsh-session'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import { defineTool } from '@neo/tools'
+import { createUserMessage } from '@neo/llm'
+import type { UserMessage } from '@neo/session'
 import {
   escapeText,
   isModelInvocable,
@@ -19,7 +19,7 @@ import {
   renderSkillContent,
   type SkillInvocationSource,
   type SkillSummary,
-} from '@neo/dsh-skill'
+} from '@neo/skill'
 
 export const name = 'tool-skill'
 export const inject = ['agents', 'tools', 'skills']
@@ -40,7 +40,7 @@ export interface SkillCatalogSource {
   readonly entries: readonly { readonly name: string; readonly description: string }[]
 }
 
-declare module '@neo/dsh-llm' {
+declare module '@neo/llm' {
   interface MessageSourceMap {
     'skill-catalog': SkillCatalogSource
   }

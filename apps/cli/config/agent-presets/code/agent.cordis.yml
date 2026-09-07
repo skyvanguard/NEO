@@ -29,13 +29,13 @@
 # The preset's own persona, shadowing the deployment default for this agent.
 # `{{model}}` and `{{cwd}}` resolve from the agent's own route and workspace.
 - id: persona
-  name: '@neo/dsh-persona'
+  name: '@neo/persona'
   config:
     text: >-
       You are a coding agent powered by the {{model}} model. Your working directory is {{cwd}}.
 
 - id: agent-instructions
-  name: '@neo/dsh-agent-instructions'
+  name: '@neo/agent-instructions'
   config:
     maxBytes: 65536
 
@@ -49,11 +49,11 @@
 # registry from here; their executors (`bash-sandbox`/`pwsh-sandbox`) are
 # host-plane too.
 - id: tool-bash
-  name: '@neo/dsh-tool-bash'
+  name: '@neo/tool-bash'
   disabled: !!js process.platform === 'win32'
 
 - id: tool-pwsh
-  name: '@neo/dsh-tool-pwsh'
+  name: '@neo/tool-pwsh'
   disabled: !!js process.platform !== 'win32'
 
 # ── filesystem ──────────────────────────────────────────────────────────────
@@ -61,10 +61,10 @@
 # Both register into the host `tools` registry and provide nothing, so
 # they need no realm. The `fs` service and its policy stay in the host.
 - id: tool-fs
-  name: '@neo/dsh-tool-fs'
+  name: '@neo/tool-fs'
 
 - id: tool-fs-search
-  name: '@neo/dsh-tool-fs-search'
+  name: '@neo/tool-fs-search'
   config:
     sampleOverCapGlobResults: false
 
@@ -78,7 +78,7 @@
 # owning agent anyway, so one host instance serves every session. What a preset
 # chooses is whether its agent can collect and stop background work at all.
 - id: tool-jobs
-  name: '@neo/dsh-tool-jobs'
+  name: '@neo/tool-jobs'
 
 # ── skills ──────────────────────────────────────────────────────────────────
 
@@ -88,10 +88,10 @@
 # `tool-skill` gives them the catalog and loader; the merged catalog also
 # carries whatever the deployment registered globally (repository plugins).
 - id: skill-filesystem
-  name: '@neo/dsh-skill-filesystem'
+  name: '@neo/skill-filesystem'
 
 - id: tool-skill
-  name: '@neo/dsh-tool-skill'
+  name: '@neo/tool-skill'
 
 # ── goals ───────────────────────────────────────────────────────────────────
 
@@ -102,7 +102,7 @@
 # registry is keyed by session anyway, so one host instance serves every
 # session. What a preset chooses is whether its agent can call the goal tool.
 - id: tool-goal
-  name: '@neo/dsh-tool-goal'
+  name: '@neo/tool-goal'
 
 # ── plan mode ───────────────────────────────────────────────────────────────
 
@@ -115,7 +115,7 @@
     planMode: true
   config:
     - id: plan-mode
-      name: '@neo/dsh-plan-mode'
+      name: '@neo/plan-mode'
       config:
         section: |
               You are in plan mode. Stay in plan mode until exit_plan_mode succeeds or the user switches the session mode. Imperative language to implement changes means plan the implementation, not execute it. A user's conversational agreement — including an answer confirming something you asked — approves nothing and does not end plan mode; fold the confirmed decision into the plan and submit it through exit_plan_mode.
@@ -149,13 +149,13 @@
     toolResultPruner: true
   config:
     - id: compaction-basic
-      name: '@neo/dsh-compaction-basic'
+      name: '@neo/compaction-basic'
 
     - id: command-compact
-      name: '@neo/dsh-command-compact'
+      name: '@neo/command-compact'
 
     - id: tool-result-pruner
-      name: '@neo/dsh-compaction-tool-result-pruner'
+      name: '@neo/compaction-tool-result-pruner'
       config:
         thresholdChars: 8192
         headChars: 4096
@@ -183,15 +183,15 @@
     # composition without a continuable provider would pay their tool schemas
     # on every request for nothing. Re-enable them with a continuable row.
     - id: tool-subagent-control
-      name: '@neo/dsh-tool-subagent-control'
+      name: '@neo/tool-subagent-control'
       disabled: true
 
     - id: tool-subagent-list-agents
-      name: '@neo/dsh-tool-subagent-control/list-agents'
+      name: '@neo/tool-subagent-control/list-agents'
       disabled: true
 
     - id: tool-subagent
-      name: '@neo/dsh-tool-subagent'
+      name: '@neo/tool-subagent'
       config:
         provider: spawn
         toolName: subagent
@@ -203,7 +203,7 @@
         backgroundMode: one-shot
 
     - id: tool-subagent-fork
-      name: '@neo/dsh-tool-subagent'
+      name: '@neo/tool-subagent'
       config:
         provider: fork
         toolName: subagent_fork
@@ -213,7 +213,7 @@
     # remove `disabled` from either ordinary tool row to expose that product
     # only to agents composed from the copy.
     - id: tool-subagent-codex
-      name: '@neo/dsh-tool-subagent'
+      name: '@neo/tool-subagent'
       disabled: true
       config:
         provider: codex
@@ -222,7 +222,7 @@
         maxDepth: provider-managed
 
     - id: tool-subagent-claude-code
-      name: '@neo/dsh-tool-subagent'
+      name: '@neo/tool-subagent'
       disabled: true
       config:
         provider: claude-code
@@ -231,7 +231,7 @@
         maxDepth: provider-managed
 
     - id: workflow-worker-thread
-      name: '@neo/dsh-workflow-worker-thread'
+      name: '@neo/workflow-worker-thread'
       config:
         provider: spawn
         # One agent at a time: the default fans out to min(16, cores - 2)
@@ -239,10 +239,10 @@
         maxConcurrentAgents: 1
 
     - id: tool-workflow
-      name: '@neo/dsh-tool-workflow'
+      name: '@neo/tool-workflow'
 
     - id: tool-ralph
-      name: '@neo/dsh-tool-ralph'
+      name: '@neo/tool-ralph'
       config:
         subagentProvider: spawn
         maxRounds: 64
@@ -250,10 +250,10 @@
 # ── remaining model-facing rows ─────────────────────────────────────────────
 
 - id: tool-ask-user
-  name: '@neo/dsh-tool-ask-user'
+  name: '@neo/tool-ask-user'
 
 - id: tool-todo
-  name: '@neo/dsh-tool-todo'
+  name: '@neo/tool-todo'
   config:
     allowParallelInProgress: true
 
@@ -262,7 +262,7 @@
 # so the agent can retrieve a concrete URL during reconnaissance — see the SSRF
 # note on the host `web` row in base.cordis.patch.yml.
 - id: tool-web
-  name: '@neo/dsh-tool-web'
+  name: '@neo/tool-web'
   config:
     fetch: true
     searchTimeoutMs: 60000
@@ -273,6 +273,6 @@
 # rather than assuming it: a deployment that composes no TypeScript runtime
 # fails this preset at mount, naming this id, instead of at the first request.
 - id: tool-presentation
-  name: '@neo/dsh-agent-tool-presentation'
+  name: '@neo/agent-tool-presentation'
   config:
     mode: code

@@ -1,16 +1,16 @@
 /**
  * Semantic durability checkpoints for model requests, top-level tool dispatch,
  * and completed agent steps.
- * @module @neo/dsh-session-checkpoint-policy
+ * @module @neo/session-checkpoint-policy
  */
 
 import type { Context } from '@neo/cordis'
-import { isDurabilitySuspended } from '@neo/dsh-session'
-import type { Session } from '@neo/dsh-session'
-import type { StreamChunk } from '@neo/dsh-llm'
-import { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecutionResult } from '@neo/dsh-tools'
-import type { PreStepDecision } from '@neo/dsh-agent'
-import type {} from '@neo/dsh-session-persistence'
+import { isDurabilitySuspended } from '@neo/session'
+import type { Session } from '@neo/session'
+import type { StreamChunk } from '@neo/llm'
+import { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecutionResult } from '@neo/tools'
+import type { PreStepDecision } from '@neo/agent'
+import type {} from '@neo/session-persistence'
 
 /** Cordis plugin name used by Loader diagnostics. */
 export const name = 'session-checkpoint-policy'

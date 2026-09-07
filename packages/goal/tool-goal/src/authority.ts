@@ -1,11 +1,11 @@
 /** Execution-time authority checks for the model-facing goal tools. */
 
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import type { GoalView } from '@neo/dsh-goal'
-import { HarnessError } from '@neo/dsh-llm'
-import type { SessionEvent } from '@neo/dsh-session'
-import type { ToolRunContext } from '@neo/dsh-tools'
+import type { Agent } from '@neo/agent'
+import type { GoalView } from '@neo/goal'
+import { HarnessError } from '@neo/llm'
+import type { SessionEvent } from '@neo/session'
+import type { ToolRunContext } from '@neo/tools'
 
 type TurnStartEvent = Extract<SessionEvent, { type: 'turn/start' }>
 

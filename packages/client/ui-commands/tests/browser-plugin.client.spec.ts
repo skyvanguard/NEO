@@ -8,12 +8,12 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import { createScope, scopeOf, SlotRegistry } from '@neo/dsh-client-runtime/client'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
-import type { InputTriggerSource } from '@neo/dsh-client-ui-input-trigger/client'
+import { createScope, scopeOf, SlotRegistry } from '@neo/client-runtime/client'
+import type { SessionId } from '@neo/client-runtime/client'
+import type { InputTriggerSource } from '@neo/client-ui-input-trigger/client'
 import type { CommandUiContract } from '../src/client/contract.ts'
 import type { PopupSelectInjected } from '../src/client/PopupSelectView.tsx'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
 import { apply, CommandUiRuntime, inject } from '../src/client/index.ts'
 
 const sid = (k: string): SessionId => k as SessionId

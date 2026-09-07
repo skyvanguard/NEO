@@ -8,11 +8,11 @@
  * program picks this merge up transitively through its ui-input-trigger imports.
  */
 // Type-only edge: the SlotMap augmentation below merges into this package's interface.
-import type {} from '@neo/dsh-client-ui-slots'
-import type { SnapshotStore } from '@neo/dsh-client-runtime/client'
+import type {} from '@neo/client-ui-slots'
+import type { SnapshotStore } from '@neo/client-runtime/client'
 import type { MenuState } from '../core/contract.ts'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface SlotMap {
     /**
      * The InputBar floating overlay anchor: MenuView (this package) and the

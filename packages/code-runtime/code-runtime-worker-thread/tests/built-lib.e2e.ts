@@ -19,7 +19,7 @@ describe.skipIf(!built)('built lib real load path (plain node)', () => {
   it('runs a TypeScript program with a binding through lib/index.js and its lib/worker.cjs entry', async () => {
     const script = `
       const { Context } = await import('@neo/cordis')
-      const { WorkerThreadCodeRuntime } = await import('@neo/dsh-code-runtime-worker-thread')
+      const { WorkerThreadCodeRuntime } = await import('@neo/code-runtime-worker-thread')
       const ctx = new Context()
       await ctx.plugin(WorkerThreadCodeRuntime, {})
       const result = await ctx.codeRuntime.run({

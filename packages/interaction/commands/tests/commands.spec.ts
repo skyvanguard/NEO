@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createScope } from '@neo/dsh-scope'
-import type { Scope } from '@neo/dsh-scope'
-import type { Agent } from '@neo/dsh-agent'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import CommandRuntime, { parseCommand, type CommandDefinition } from '@neo/dsh-commands'
+import { createScope } from '@neo/scope'
+import type { Scope } from '@neo/scope'
+import type { Agent } from '@neo/agent'
+import SessionStore, { SessionId } from '@neo/session'
+import CommandRuntime, { parseCommand, type CommandDefinition } from '@neo/commands'
 
 function command(name: string, text = `ran:${name}`): CommandDefinition {
   return {

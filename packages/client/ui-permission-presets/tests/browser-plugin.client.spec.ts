@@ -10,11 +10,11 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import { SlotRegistry, type SessionId } from '@neo/dsh-client-runtime/client'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import { TestRemote } from '@neo/dsh-client-test-runtime'
-import type { CommandDecoration } from '@neo/dsh-client-ui-commands/client'
-import type { PermissionSelect } from '@neo/dsh-permission-presets/client'
+import { SlotRegistry, type SessionId } from '@neo/client-runtime/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import { TestRemote } from '@neo/client-test-runtime'
+import type { CommandDecoration } from '@neo/client-ui-commands/client'
+import type { PermissionSelect } from '@neo/permission-presets/client'
 import {
   PermissionRow, type PermissionRowInjected,
 } from '../src/client/PermissionRow.tsx'

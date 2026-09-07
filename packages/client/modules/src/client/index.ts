@@ -7,7 +7,7 @@
  * providing it as `ctx.modules`. The kernel statically registers this module,
  * so the graph row for this package never triggers a real fetch — arrival is
  * a no-op against the already-registered entry.
- * @module @neo/dsh-client-modules/client
+ * @module @neo/client-modules/client
  */
 import type { Context } from '@neo/cordis'
 import type { DshWindow } from './manifest.ts'

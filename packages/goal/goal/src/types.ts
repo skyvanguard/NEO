@@ -7,10 +7,10 @@
  * aggregates — with zero content duplication. Host-coupled domain
  * vocabulary (message sources, events, fold shapes) lives in ./domain.ts.
  *
- * @module @neo/dsh-goal/types
+ * @module @neo/goal/types
  */
 
-import type { Branded } from '@neo/dsh-brand'
+import type { Branded } from '@neo/brand'
 
 /** Identifies one goal across its durable revisions. */
 export type GoalId = Branded<'GoalId'>
@@ -99,7 +99,7 @@ export interface GoalProjection {
   readonly updatedAt: number
 }
 
-declare module '@neo/dsh-session-projection/types' {
+declare module '@neo/session-projection/types' {
   interface SessionProjectionMap {
     /**
      * The session's current goal (the latest `goal/change` whole value), or

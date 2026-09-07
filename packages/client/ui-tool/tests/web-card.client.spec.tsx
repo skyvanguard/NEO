@@ -12,24 +12,24 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render } from '@testing-library/react'
 import {
   createSnapshotStore, EMPTY_CONVERSATION_VIEWS,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import type {
   ConversationSnapshot, RunningToolCall, SessionId, SessionListState, ToolResultNode, WorkspaceListState,
-} from '@neo/dsh-client-runtime/client'
-import type { ToolResultView } from '@neo/dsh-api-remotes/client'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
-import type { SelectionTarget } from '@neo/dsh-client-ui-conversation/client'
-import type { ToolCallOwnerProps } from '@neo/dsh-client-ui-tool/client'
-import { IconGlobeOutline14 } from '@neo/dsh-client-ui-primitives'
+} from '@neo/client-runtime/client'
+import type { ToolResultView } from '@neo/api-remotes/client'
+import { bindSnapshotSelector } from '@neo/client-web-react'
+import type { SelectionTarget } from '@neo/client-ui-conversation/client'
+import type { ToolCallOwnerProps } from '@neo/client-ui-tool/client'
+import { IconGlobeOutline14 } from '@neo/client-ui-primitives'
 import { webCardModel } from '../src/client/tool/models/web-card-model.ts'
-import { createChatStore } from '@neo/dsh-client-ui-conversation/src/client/stores.ts'
+import { createChatStore } from '@neo/client-ui-conversation/src/client/stores.ts'
 import { GenericToolCard } from '../src/client/tool/toolviews/GenericToolCard.tsx'
-import { DetailsPanel } from '@neo/dsh-client-ui-conversation/src/client/skeleton/DetailsPanel.tsx'
+import { DetailsPanel } from '@neo/client-ui-conversation/src/client/skeleton/DetailsPanel.tsx'
 import { WebRow, webToolview } from '../src/client/tool/toolviews/web-row.tsx'
 import { renderToolDetails, SessionProviderStub, toolChatSnapshot } from './tool-details-render.client.tsx'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
-import { zh } from '@neo/dsh-client-ui-conversation/src/client/locales.ts'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
+import { zh } from '@neo/client-ui-conversation/src/client/locales.ts'
 
 afterEach(cleanup)
 

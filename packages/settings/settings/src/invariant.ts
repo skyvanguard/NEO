@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-settings`.
- * @module @neo/dsh-settings/invariant
+ * Package-owned invariant companion for `@neo/settings`.
+ * @module @neo/settings/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import { deepEqualJson } from './index.ts'
 
-const PACKAGE_NAME = '@neo/dsh-settings'
+const PACKAGE_NAME = '@neo/settings'
 
 /** Cordis companion plugin name. */
 export const name = 'settings-invariant'

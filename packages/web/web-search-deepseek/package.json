@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-web-search-deepseek",
+  "name": "@neo/web-search-deepseek",
   "description": "DeepSeek-backed search provider (native web_search via the Anthropic-compatible API) for the DeepSeek Harness web capability seam (ctx.web)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,27 +32,27 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-credentials": "workspace:^",
-    "@neo/dsh-launch-environment": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-web": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/credentials": "workspace:^",
+    "@neo/launch-environment": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/web": "workspace:^",
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-settings": "workspace:^"
+    "@neo/settings": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-credentials": "workspace:^",
-    "@neo/dsh-credentials-local": "workspace:^",
-    "@neo/dsh-launch-environment": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-web": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/credentials": "workspace:^",
+    "@neo/credentials-local": "workspace:^",
+    "@neo/launch-environment": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/web": "workspace:^",
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-settings": "workspace:^"
+    "@neo/settings": "workspace:^"
   }
 }

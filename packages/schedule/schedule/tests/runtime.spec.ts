@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent, AgentCancelCause, InboxTarget } from '@neo/dsh-agent'
-import type { UserMessage } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent, AgentCancelCause, InboxTarget } from '@neo/agent'
+import type { UserMessage } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
 import {
   ScheduleId,
   createAfterScheduleRecord,

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-typert-generator",
+  "name": "@neo/typert-generator",
   "description": "TypeScript project analyzer and model-driven Typert artifact generator",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -41,13 +41,13 @@
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-tool-cordis": "workspace:^",
-    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/tool-cordis": "workspace:^",
+    "@neo/typert-registry": "workspace:^",
     "@neo/cordis": "workspace:^",
     "zod": "^4.4.3"
   }

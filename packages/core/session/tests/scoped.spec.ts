@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createScope, scopeOf } from '@neo/dsh-scope'
-import type { Scope, ScopeKey } from '@neo/dsh-scope'
-import SessionStore from '@neo/dsh-session'
-import type { Session } from '@neo/dsh-session'
+import { createScope, scopeOf } from '@neo/scope'
+import type { Scope, ScopeKey } from '@neo/scope'
+import SessionStore from '@neo/session'
+import type { Session } from '@neo/session'
 
 async function mount(): Promise<Context> {
   const ctx = new Context()

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-typert-registry`.
- * @module @neo/dsh-typert-registry/invariant
+ * Package-owned invariant companion for `@neo/typert-registry`.
+ * @module @neo/typert-registry/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-typert-registry'
+const PACKAGE_NAME = '@neo/typert-registry'
 
 /** Cordis companion plugin name. */
 export const name = 'typert-registry-invariant'

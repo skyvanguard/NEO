@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-subagent",
+  "name": "@neo/subagent",
   "description": "Abstract subagent seam (ctx.subagents): named-provider registry for delegating to child agents",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -40,67 +40,67 @@
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-presets": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-session-projection-cache": "workspace:^",
-    "@neo/dsh-jobs": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
-    "@neo/dsh-user-approval": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-presets": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/session-projection-cache": "workspace:^",
+    "@neo/jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-approval": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@neo/dsh-agent-presets": {
+    "@neo/agent-presets": {
       "optional": true
     },
-    "@neo/dsh-sandbox": {
+    "@neo/sandbox": {
       "optional": true
     },
-    "@neo/dsh-sandbox-policy": {
+    "@neo/sandbox-policy": {
       "optional": true
     },
-    "@neo/dsh-session-persistence": {
+    "@neo/session-persistence": {
       "optional": true
     },
-    "@neo/dsh-session-projection": {
+    "@neo/session-projection": {
       "optional": true
     },
-    "@neo/dsh-session-projection-cache": {
+    "@neo/session-projection-cache": {
       "optional": true
     },
-    "@neo/dsh-jobs": {
+    "@neo/jobs": {
       "optional": true
     },
-    "@neo/dsh-user-approval": {
+    "@neo/user-approval": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-presets": "workspace:^",
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-session-projection-cache": "workspace:^",
-    "@neo/dsh-storage": "workspace:^",
-    "@neo/dsh-storage-domain": "workspace:^",
-    "@neo/dsh-jobs": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
-    "@neo/dsh-user-approval": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-presets": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/session-projection-cache": "workspace:^",
+    "@neo/storage": "workspace:^",
+    "@neo/storage-domain": "workspace:^",
+    "@neo/jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-approval": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

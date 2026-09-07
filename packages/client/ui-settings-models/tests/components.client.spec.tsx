@@ -3,8 +3,8 @@
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import Schema from '@neo/schemastery'
-import { bindSnapshotSelector } from '@neo/dsh-client-web-react'
-import type { RpcResponse, SettingsNamespaceView } from '@neo/dsh-api-remotes/client'
+import { bindSnapshotSelector } from '@neo/client-web-react'
+import type { RpcResponse, SettingsNamespaceView } from '@neo/api-remotes/client'
 import {
   ModelsSection, needsSetup, providerCopy, providerTargetLabel, removeProviderProfile,
 } from '../src/client/ModelsSection.tsx'

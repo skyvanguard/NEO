@@ -2,15 +2,15 @@ import type { Context } from '@neo/cordis'
 import type {
   CommandNode, CompactionSummaryNode, ConversationMatch, ConversationNodeContext,
   ConversationNodeDefinition,
-} from '@neo/dsh-client-runtime/client'
-import { isReplacementSurfaceEvent } from '@neo/dsh-client-runtime/client'
-import type { CompactionCheckpointSource } from '@neo/dsh-compaction/checkpoint'
-import type {} from '@neo/dsh-compaction/types'
-import type {} from '@neo/dsh-commands/types'
+} from '@neo/client-runtime/client'
+import { isReplacementSurfaceEvent } from '@neo/client-runtime/client'
+import type { CompactionCheckpointSource } from '@neo/compaction/checkpoint'
+import type {} from '@neo/compaction/types'
+import type {} from '@neo/commands/types'
 import type { ManualCompactionChatData } from '../contract/chat-nodes.ts'
 import { chatNode } from './common.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Ordinary slash-command lifecycle. */
     command: CommandNode

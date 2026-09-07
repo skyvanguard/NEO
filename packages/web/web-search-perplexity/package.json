@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-web-search-perplexity",
+  "name": "@neo/web-search-perplexity",
   "description": "Perplexity-backed search provider for the DeepSeek Harness web capability seam (ctx.web)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,18 +32,18 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-launch-environment": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-web": "workspace:^",
+    "@neo/launch-environment": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/web": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-launch-environment": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-web": "workspace:^",
+    "@neo/launch-environment": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/web": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

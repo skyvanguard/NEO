@@ -41,7 +41,7 @@ const appOverlayFiles = new Set([
 const metadataFields = ['id', 'name', 'group', 'inject', 'intercept', 'isolate'] as const
 
 /** The adaptive directory-picker chooser package (mounts a backend row at boot). */
-const CHOOSER_PACKAGE = '@neo/dsh-host-directory-picker-auto'
+const CHOOSER_PACKAGE = '@neo/host-directory-picker-auto'
 
 /**
  * The packages the chooser mounts by runtime string (mirror of its exported
@@ -51,10 +51,10 @@ const CHOOSER_PACKAGE = '@neo/dsh-host-directory-picker-auto'
  * until a macOS boot.
  */
 const CHOOSER_BACKEND_PACKAGES = [
-  '@neo/dsh-host-directory-picker-native',
-  '@neo/dsh-host-directory-picker-browse',
-  '@neo/dsh-client-ui-directory-picker-browse',
-  '@neo/dsh-client-ui-directory-picker-native',
+  '@neo/host-directory-picker-native',
+  '@neo/host-directory-picker-browse',
+  '@neo/client-ui-directory-picker-browse',
+  '@neo/client-ui-directory-picker-native',
 ]
 const jsExprType = new yaml.Type('tag:yaml.org,2002:js', {
   kind: 'scalar',

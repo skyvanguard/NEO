@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import WebRuntime from '@neo/dsh-web'
-import { ExaSearchProvider, EXA_PROVIDER_ID } from '@neo/dsh-web-search-exa'
-import * as exaPlugin from '@neo/dsh-web-search-exa'
+import WebRuntime from '@neo/web'
+import { ExaSearchProvider, EXA_PROVIDER_ID } from '@neo/web-search-exa'
+import * as exaPlugin from '@neo/web-search-exa'
 import { mapExaResponse, mapExaResult } from '../src/provider.ts'
 
 const options = { apiKey: 'exa-key', baseURL: 'https://api.exa.test', searchType: 'auto' as const, highlightsPerResult: 1 }

@@ -5,26 +5,26 @@
  * provider driver and the continuation manager compose children this way, so
  * depth accounting, lineage stamping, and delegation policy have one home.
  *
- * @module @neo/dsh-subagent/child-agent
+ * @module @neo/subagent/child-agent
  */
 
 import type { Context } from '@neo/cordis'
-import type { Agent, AgentOptions, CreateAgentOptions } from '@neo/dsh-agent'
-import type { SandboxMode } from '@neo/dsh-sandbox'
-import type { Session, SessionId } from '@neo/dsh-session'
-import type { ToolRestriction } from '@neo/dsh-tools'
+import type { Agent, AgentOptions, CreateAgentOptions } from '@neo/agent'
+import type { SandboxMode } from '@neo/sandbox'
+import type { Session, SessionId } from '@neo/session'
+import type { ToolRestriction } from '@neo/tools'
 // Type-only: make `ctx.get('sandboxPolicy')` / `ctx.get('approval')` resolve
 // to the policy services when composed — delegation consumes both
 // opportunistically (the documented `ctx.get` pattern), never as a hard dep —
 // and merge the `sandbox/mode` / `approval/policy` session-event payloads.
-import type {} from '@neo/dsh-sandbox-policy'
-import type {} from '@neo/dsh-user-approval'
+import type {} from '@neo/sandbox-policy'
+import type {} from '@neo/user-approval'
 // Type-only: make `ctx.get('agentPresets')` resolve to the preset roster when
 // composed — a child inherits its parent's composition opportunistically (the
 // documented `ctx.get` pattern), never as a hard dep. A rosterless deployment
 // keeps its model-facing rows on the host plane, where the child already sees
 // them through the tool registry's global layer.
-import type {} from '@neo/dsh-agent-presets'
+import type {} from '@neo/agent-presets'
 import { delegationDepthOf } from './depth.ts'
 
 /** Thrown when starting a child would exceed the requested depth cap. */

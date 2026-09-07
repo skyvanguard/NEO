@@ -1,4 +1,4 @@
-# @neo/dsh-storage-domain
+# @neo/storage-domain
 
 English | [中文](README.zh.md)
 

@@ -1,15 +1,15 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createUserMessage, CallId, HarnessError, type ContentBlock  } from '@neo/dsh-llm'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import type { Agent } from '@neo/dsh-agent'
-import ApprovalService, { type ApprovalOutcome, type ApprovalRequest } from '@neo/dsh-user-approval'
+import { createUserMessage, CallId, HarnessError, type ContentBlock  } from '@neo/llm'
+import SystemPrompt from '@neo/system-prompt'
+import type { Agent } from '@neo/agent'
+import ApprovalService, { type ApprovalOutcome, type ApprovalRequest } from '@neo/user-approval'
 import ToolRuntime, {
   defineContentToolFixture, defineTool, JsonSchemaError, parameterSchemaSpecToJsonSchema, validateArgs, ToolArgsError, ToolNotFoundError,
   TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH,
   type InferArgs, type JsonValue, type ParameterSchemaSpec, type PreToolDecision, type PostToolDecision,
   type JsonSchemaNode, type ToolDefinition, type ToolDispatchExecution, type ToolExecutionResult, type ToolExecutionToken,
-} from '@neo/dsh-tools'
+} from '@neo/tools'
 
 const testToolSignal = new AbortController().signal
 
@@ -665,7 +665,7 @@ describe('ToolRuntime', () => {
   })
 
   it('ToolNotFoundError carries a stable message and code', async () => {
-    const { HarnessError } = await import('@neo/dsh-llm')
+    const { HarnessError } = await import('@neo/llm')
     const err = new ToolNotFoundError('ghost')
     expect(err).toBeInstanceOf(HarnessError)
     expect(err.name).toBe('ToolNotFoundError')
@@ -2631,7 +2631,7 @@ describe('defineTool validation (the runtime-validation Agent Note, part 1)', ()
   })
 
   it('a tool throwing a HarnessError surfaces its name and code', async () => {
-    const { HarnessError } = await import('@neo/dsh-llm')
+    const { HarnessError } = await import('@neo/llm')
     const ctx = await setup()
     ctx.tools.register({
       ...echoTool,

@@ -9,13 +9,13 @@
  * No caller supplies composition text: the inputs are ids the host resolves
  * against its own roots plus an optional display name, so authoring grants no
  * capability the copied preset did not already carry.
- * @module @neo/dsh-agent-presets/authoring
+ * @module @neo/agent-presets/authoring
  */
 
 import { chmod, cp, readdir, readFile, rm, stat } from 'node:fs/promises'
 import { dirname, isAbsolute, join, resolve } from 'node:path'
-import { writeFileAtomic } from '@neo/dsh-atomic-write'
-import { expandHomePath } from '@neo/dsh-home-paths'
+import { writeFileAtomic } from '@neo/atomic-write'
+import { expandHomePath } from '@neo/home-paths'
 import { METADATA_FILE, renderPresetMetadata } from './metadata.ts'
 import { PRESET_ID, type AgentPreset, type PresetRoot } from './preset.ts'
 

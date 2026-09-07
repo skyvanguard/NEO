@@ -1,6 +1,6 @@
 /** Model and UI rendering for persistent terminal tool results. */
 
-import { TextRetainer } from '@neo/dsh-output-retention'
+import { TextRetainer } from '@neo/output-retention'
 
 interface RenderedSessionStatusRunning {
   kind: 'running'

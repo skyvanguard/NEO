@@ -1,4 +1,4 @@
-# @neo/dsh-session-title
+# @neo/session-title
 
 English | [中文](README.zh.md)
 

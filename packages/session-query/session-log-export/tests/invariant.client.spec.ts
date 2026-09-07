@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import { apply, inject, name } from '../src/invariant.ts'
 
-describe('@neo/dsh-session-log-export/invariant', () => {
+describe('@neo/session-log-export/invariant', () => {
   it('registers the package-owned empty companion', async () => {
     const register = vi.fn(() => vi.fn())
     const ctx = new Context()
@@ -10,7 +10,7 @@ describe('@neo/dsh-session-log-export/invariant', () => {
     const dispose = await apply(ctx)
     expect(name).toBe('session-export-invariant')
     expect(inject).toEqual(['invariants'])
-    expect(register).toHaveBeenCalledWith('@neo/dsh-session-log-export', expect.any(Function))
+    expect(register).toHaveBeenCalledWith('@neo/session-log-export', expect.any(Function))
     dispose()
   })
 })

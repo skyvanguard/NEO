@@ -1,18 +1,18 @@
 /** Host BFF entry and Loader shell for the Remote contribution assembly. */
 
-import type { TypertForwardableEvent } from '@neo/dsh-typert-protocol'
+import type { TypertForwardableEvent } from '@neo/typert-protocol'
 import { API_REMOTE_FORWARDED_EVENTS } from './remote-events.ts'
 
 // The owner packages' client-safe `./types` exports carry the cordis `Events`
 // declarations for every allowlisted event. Pulling them into this face is what
 // makes the shape assertion below judge real signatures rather than an empty
 // event vocabulary.
-import type {} from '@neo/dsh-commands/types'
-import type {} from '@neo/dsh-cordis-host-runner/types'
-import type {} from '@neo/dsh-credentials/types'
-import type {} from '@neo/dsh-llm/types'
-import type {} from '@neo/dsh-agent-presets/types'
-import type {} from '@neo/dsh-settings/types'
+import type {} from '@neo/commands/types'
+import type {} from '@neo/cordis-host-runner/types'
+import type {} from '@neo/credentials/types'
+import type {} from '@neo/llm/types'
+import type {} from '@neo/agent-presets/types'
+import type {} from '@neo/settings/types'
 
 export {
   ApiRemoteSessionNotFound,

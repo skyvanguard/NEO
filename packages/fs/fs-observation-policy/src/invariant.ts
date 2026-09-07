@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-fs-observation-policy`.
- * @module @neo/dsh-fs-observation-policy/invariant
+ * Package-owned invariant companion for `@neo/fs-observation-policy`.
+ * @module @neo/fs-observation-policy/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-fs-observation-policy'
+const PACKAGE_NAME = '@neo/fs-observation-policy'
 
 /** Cordis companion plugin name. */
 export const name = 'fs-observation-policy-invariant'

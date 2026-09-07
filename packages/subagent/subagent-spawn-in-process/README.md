@@ -1,4 +1,4 @@
-# @neo/dsh-subagent-spawn-in-process
+# @neo/subagent-spawn-in-process
 
 English | [中文](README.zh.md)
 

@@ -3,11 +3,11 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import type { Fiber } from '@neo/cordis'
-import { SettingsProvider } from '@neo/dsh-settings'
-import type { SettingsNamespace } from '@neo/dsh-settings'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
-import { SHELL_SETTINGS_NAMESPACE } from '@neo/dsh-shell'
-import { LocalBashExecutor } from '@neo/dsh-bash-local'
+import { SettingsProvider } from '@neo/settings'
+import type { SettingsNamespace } from '@neo/settings'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
+import { SHELL_SETTINGS_NAMESPACE } from '@neo/shell'
+import { LocalBashExecutor } from '@neo/bash-local'
 
 /** The smallest real provider: one in-memory document, always writable. */
 class MemorySettings extends SettingsProvider {

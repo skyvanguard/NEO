@@ -1,9 +1,9 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import { type Agent } from '@neo/dsh-agent'
+import { type Agent } from '@neo/agent'
 
-import { HarnessError } from '@neo/dsh-llm'
-import { carrierKeyOf } from '@neo/dsh-scope'
+import { HarnessError } from '@neo/llm'
+import { carrierKeyOf } from '@neo/scope'
 import SubagentRuntime, {
   foldSubagentDescriptor,
   snapshotSubagentDescriptor,
@@ -17,8 +17,8 @@ import SubagentRuntime, {
   type SubagentRun,
   type SubagentRunEndInfo,
   type SubagentStartRequest,
-} from '@neo/dsh-subagent'
-import { SessionId, type SessionEvent } from '@neo/dsh-session'
+} from '@neo/subagent'
+import { SessionId, type SessionEvent } from '@neo/session'
 
 function fakeParent(id = 'parent-1'): Agent {
   return { id: SessionId(id) } as unknown as Agent

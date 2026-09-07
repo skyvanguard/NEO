@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
-import type { SnapshotStore } from '@neo/dsh-client-runtime/client'
-import type { InjectFace, PropsRuntime } from '@neo/dsh-client-ui-slots'
-import { Button } from '@neo/dsh-client-ui-primitives'
+import type { SnapshotStore } from '@neo/client-runtime/client'
+import type { InjectFace, PropsRuntime } from '@neo/client-ui-slots'
+import { Button } from '@neo/client-ui-primitives'
 import type { WelcomeNoticeState, WelcomeNoticeStore } from './welcome-store.ts'
 import type { en } from './locales.ts'
 import { OnboardingModal } from './OnboardingModal.tsx'

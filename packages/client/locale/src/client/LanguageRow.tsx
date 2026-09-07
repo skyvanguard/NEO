@@ -5,9 +5,9 @@
  * settings surface.
  */
 import { useState } from 'react'
-import type { PropsLocale, PropsRuntime, PropsStore } from '@neo/dsh-client-ui-slots'
-import { IconChevronDownOutline14, Menu } from '@neo/dsh-client-ui-primitives'
-import type {} from '@neo/dsh-client-ui-settings/client'
+import type { PropsLocale, PropsRuntime, PropsStore } from '@neo/client-ui-slots'
+import { IconChevronDownOutline14, Menu } from '@neo/client-ui-primitives'
+import type {} from '@neo/client-ui-settings/client'
 import type { createLanguageRowStore } from './settings-store.ts'
 import css from './LanguageRow.module.css'
 

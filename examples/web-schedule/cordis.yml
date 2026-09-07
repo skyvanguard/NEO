@@ -3,7 +3,7 @@
 
 - insert:
     - id: time-context
-      name: '@neo/dsh-time-context'
+      name: '@neo/time-context'
 
     - id: schedule
-      name: '@neo/dsh-schedule'
+      name: '@neo/schedule'

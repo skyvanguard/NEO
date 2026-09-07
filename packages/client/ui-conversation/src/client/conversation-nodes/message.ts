@@ -1,16 +1,16 @@
 import type { Context } from '@neo/cordis'
 import type {
   ContextMessageNode, ConversationNodeDefinition, SteeringMessageNode, UserMessageNode,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import {
   contextForm, contextProvenance, isAppendSurfaceEvent, isReplacementSurfaceEvent,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import type { InboxState } from './inbox.ts'
 import { chatNode } from './common.ts'
 
 type MessageNode = UserMessageNode | SteeringMessageNode | ContextMessageNode
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Ordinary turn-opening user message. */
     user: UserMessageNode

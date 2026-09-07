@@ -11,7 +11,7 @@
  * checkpoint may proceed non-durably, while a schedule or an export must
  * report the outcome as uncertain.
  *
- * @module @neo/dsh-session/durability
+ * @module @neo/session/durability
  */
 
 /** Stable code carried by {@link DurabilitySuspendedError}. */

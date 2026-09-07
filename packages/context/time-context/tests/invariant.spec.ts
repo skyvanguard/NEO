@@ -1,10 +1,10 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { ContentBlock } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId, type SessionEvent } from '@neo/dsh-session'
-import * as TimeInvariant from '@neo/dsh-time-context/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import type { ContentBlock } from '@neo/llm'
+import SessionStore, { Session, SessionId, type SessionEvent } from '@neo/session'
+import * as TimeInvariant from '@neo/time-context/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 const SECOND = Date.parse('2026-07-14T00:00:00Z')
 

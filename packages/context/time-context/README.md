@@ -1,4 +1,4 @@
-# @neo/dsh-time-context
+# @neo/time-context
 
 English | [中文](README.zh.md)
 
@@ -8,7 +8,7 @@ Opt-in durable context with the current zoned time, the browser zone attached to
 
 ```yaml
 - id: time-context
-  name: '@neo/dsh-time-context'
+  name: '@neo/time-context'
   config:
     timeZone: Asia/Shanghai  # optional fallback when the request has no unique browser zone
     refreshIntervalMs: 60000 # optional; omit or set to 0 for every eligible attempt

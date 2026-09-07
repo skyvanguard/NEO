@@ -2,17 +2,17 @@
  * Shared mounting for the services required before tests load the concrete
  * agent loop. The caller retains ownership of the context, loop, adapters,
  * optional plugins, and teardown.
- * @module @neo/dsh-agent-loop-testkit
+ * @module @neo/agent-loop-testkit
  */
 
 import type { Context } from '@neo/cordis'
-import AgentRegistry from '@neo/dsh-agent'
-import LlmRuntime from '@neo/dsh-llm'
-import SessionStore from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import type { Config as SystemPromptConfig } from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import type { Config as ToolRuntimeConfig } from '@neo/dsh-tools'
+import AgentRegistry from '@neo/agent'
+import LlmRuntime from '@neo/llm'
+import SessionStore from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import type { Config as SystemPromptConfig } from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import type { Config as ToolRuntimeConfig } from '@neo/tools'
 
 /** Configuration forwarded to the prerequisite service plugins. */
 export interface AgentLoopTestDependenciesOptions {

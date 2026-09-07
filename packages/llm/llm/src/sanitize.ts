@@ -13,7 +13,7 @@
  * second line, covering every other producer (file reads, web fetches, plugin
  * messages) for every adapter instead of one tool at a time.
  *
- * @module @neo/dsh-llm/sanitize
+ * @module @neo/llm/sanitize
  */
 
 // C0 controls except tab, line feed and carriage return, which are legitimate

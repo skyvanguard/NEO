@@ -8,12 +8,12 @@
  * the process machinery itself (spawn, env scrub, tree-scoped teardown)
  * belongs to the `dsh-subprocess` seam.
  *
- * @module @neo/dsh-subagent/out-of-process
+ * @module @neo/subagent/out-of-process
  */
 
 import { accessSync, constants, statSync } from 'node:fs'
 import { isAbsolute, resolve } from 'node:path'
-import type { ContentBlock } from '@neo/dsh-llm'
+import type { ContentBlock } from '@neo/llm'
 import type { SubagentCapabilities, SubagentResult, SubagentRun, SubagentStopReason } from './types.ts'
 
 /**

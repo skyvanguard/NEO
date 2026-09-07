@@ -5,8 +5,8 @@ import type {
   ClientResponse, HostFrame, IApiClient, ModelSelection, MuxFrame,
   RpcError, RpcReceipt, RpcRequest, RpcResponse, SessionId, SessionModels, SessionSearchItem, SkillEntry,
   WorkspaceId, WorkspaceView,
-} from '@neo/dsh-api-remotes/client'
-import { RpcId } from '@neo/dsh-client-connection/client'
+} from '@neo/api-remotes/client'
+import { RpcId } from '@neo/client-connection/client'
 import type { SessionRemotes } from '../src/client/sessions/remotes.ts'
 
 /** Programmable-default workspace row (branded id, ISO-ish times). */

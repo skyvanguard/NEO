@@ -3,7 +3,7 @@
  * API. Exports the `LlmRuntime` default, the abstract `LlmAdapter` for
  * provider backends, and `BlockAssembler` for chunk assembly.
  *
- * @module @neo/dsh-llm
+ * @module @neo/llm
  */
 
 import { Context, Service } from '@neo/cordis'

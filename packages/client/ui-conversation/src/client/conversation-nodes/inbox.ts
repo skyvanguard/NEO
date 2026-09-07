@@ -1,8 +1,8 @@
 import type { Context } from '@neo/cordis'
 import type {
   ConversationNodeDefinition, ConversationPreviousContext,
-} from '@neo/dsh-client-runtime/client'
-import type { InboxTarget } from '@neo/dsh-agent/types'
+} from '@neo/client-runtime/client'
+import type { InboxTarget } from '@neo/agent/types'
 
 interface InboxIdentity {
   readonly id: string

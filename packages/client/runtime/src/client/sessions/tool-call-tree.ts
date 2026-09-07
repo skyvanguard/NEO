@@ -1,5 +1,5 @@
-import type { SessionEvent } from '@neo/dsh-session/types'
-import type {} from '@neo/dsh-tools/types'
+import type { SessionEvent } from '@neo/session/types'
+import type {} from '@neo/tools/types'
 import type {
   ConversationNode, RunningToolCall, ToolCallBlock, ToolResultNode,
 } from './conversation.ts'

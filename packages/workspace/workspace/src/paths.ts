@@ -1,6 +1,6 @@
 /**
  * Path canonicalization for workspace identity.
- * @module @neo/dsh-workspace/src/paths
+ * @module @neo/workspace/src/paths
  */
 
 import { realpath } from 'node:fs/promises'

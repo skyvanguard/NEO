@@ -2,15 +2,15 @@
  * Provider-routed model-request retry policy on the agent loop's request
  * recovery extension point. Each scheduled retry is durable before its cancellable wait.
  *
- * @module @neo/dsh-llm-retry
+ * @module @neo/llm-retry
  */
 
 import { randomUUID } from 'node:crypto'
 import type { Context, Events } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent, RequestErrorAction } from '@neo/dsh-agent'
-import type { LlmFailure, ResolvedRetryPolicy } from '@neo/dsh-llm'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { Agent, RequestErrorAction } from '@neo/agent'
+import type { LlmFailure, ResolvedRetryPolicy } from '@neo/llm'
+import type { SessionEvent } from '@neo/session'
 import { RetryId } from './brand.ts'
 import type { LlmRetryEventData } from './types.ts'
 

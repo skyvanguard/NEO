@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-web-search-perplexity`.
- * @module @neo/dsh-web-search-perplexity/invariant
+ * Package-owned invariant companion for `@neo/web-search-perplexity`.
+ * @module @neo/web-search-perplexity/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-web-search-perplexity'
+const PACKAGE_NAME = '@neo/web-search-perplexity'
 
 /** Cordis companion plugin name. */
 export const name = 'web-search-perplexity-invariant'

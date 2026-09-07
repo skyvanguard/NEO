@@ -2848,7 +2848,7 @@
             ],
             "source": {
               "kind": "plugin",
-              "plugin": "@neo/dsh-system-prompt",
+              "plugin": "@neo/system-prompt",
               "form": "snapshot",
               "sections": [
                 {
@@ -3552,7 +3552,7 @@
             ],
             "source": {
               "kind": "plugin",
-              "plugin": "@neo/dsh-system-prompt",
+              "plugin": "@neo/system-prompt",
               "form": "snapshot",
               "sections": [
                 {

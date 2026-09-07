@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-agent-instructions`.
- * @module @neo/dsh-agent-instructions/invariant
+ * Package-owned invariant companion for `@neo/agent-instructions`.
+ * @module @neo/agent-instructions/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-agent-instructions'
+const PACKAGE_NAME = '@neo/agent-instructions'
 
 /** Cordis companion plugin name. */
 export const name = 'workspace-context-invariant'

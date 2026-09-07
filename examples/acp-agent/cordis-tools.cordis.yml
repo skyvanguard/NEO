@@ -7,6 +7,6 @@
     patches:
       - insert:
           - id: cordis-host-runner
-            name: '@neo/dsh-cordis-host-runner'
+            name: '@neo/cordis-host-runner'
           - id: tool-cordis
-            name: '@neo/dsh-tool-cordis'
+            name: '@neo/tool-cordis'

@@ -8,7 +8,7 @@ import {
   launchAcpTestAgent,
   type AgentUnderTest,
   type LaunchedAcpTestAgent,
-} from '@neo/dsh-acp-snapshot'
+} from '@neo/acp-snapshot'
 import { cleanupAcpExampleTest } from './cleanup.ts'
 
 /**

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-slots",
+  "name": "@neo/client-ui-slots",
   "description": "Slot registry pure core: SlotMap declaration merging, single register composition API, four-share props types, store-seat types, renderer install seam",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -27,7 +27,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "@neo/cordis": "workspace:^"
   },
@@ -37,7 +37,7 @@
     "lib/types/**/*.d.ts"
   ],
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

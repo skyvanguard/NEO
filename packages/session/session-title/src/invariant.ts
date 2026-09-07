@@ -1,14 +1,14 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-session-title`.
- * @module @neo/dsh-session-title/invariant
+ * Package-owned invariant companion for `@neo/session-title`.
+ * @module @neo/session-title/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
+import type { SessionEvent } from '@neo/session'
 
-const PACKAGE_NAME = '@neo/dsh-session-title'
+const PACKAGE_NAME = '@neo/session-title'
 
 /** Cordis companion plugin name. */
 export const name = 'session-title-invariant'

@@ -5,9 +5,9 @@
 
 import { afterEach, describe, expect, it } from 'vitest'
 import { cleanup, fireEvent, render } from '@testing-library/react'
-import { AttachmentId } from '@neo/dsh-attachment'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
+import { AttachmentId } from '@neo/attachment'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
 import { AssistantMarkdown } from '../src/client/chat/AssistantMarkdown.tsx'
 import { attachmentErrorText, imageSizeText } from '../src/client/image-labels.ts'
 import { en, zh } from '../src/client/locales.ts'

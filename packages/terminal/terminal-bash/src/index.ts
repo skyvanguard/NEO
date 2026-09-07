@@ -1,17 +1,17 @@
 /**
  * Persistent shell PTY backend over the subprocess terminal primitive, shared
  * sandbox policy, bounded output, and provider-owned session cleanup.
- * @module @neo/dsh-terminal-bash
+ * @module @neo/terminal-bash
  */
 
 import { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import { TerminalBackendCleanupError } from '@neo/dsh-terminal'
-import type { TerminalBackend, TerminalBackendSpawnSpec } from '@neo/dsh-terminal'
-import type { SubprocessTerminalHandle, SubprocessTerminalSpawnSpec } from '@neo/dsh-subprocess'
-import type { SandboxExecutionPolicy } from '@neo/dsh-sandbox'
-import { effectiveSandboxMode } from '@neo/dsh-sandbox-policy'
+import type { Agent } from '@neo/agent'
+import type { Session, SessionEvent } from '@neo/session'
+import { TerminalBackendCleanupError } from '@neo/terminal'
+import type { TerminalBackend, TerminalBackendSpawnSpec } from '@neo/terminal'
+import type { SubprocessTerminalHandle, SubprocessTerminalSpawnSpec } from '@neo/subprocess'
+import type { SandboxExecutionPolicy } from '@neo/sandbox'
+import { effectiveSandboxMode } from '@neo/sandbox-policy'
 import { type Config, type ResolvedConfig, validateConfig } from './config.ts'
 import { LocalPtySession } from './session.ts'
 import { CONTROLLED_PROMPT } from './sanitize.ts'

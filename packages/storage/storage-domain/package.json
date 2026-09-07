@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-storage-domain",
+  "name": "@neo/storage-domain",
   "description": "Domain data form (ctx.storage.domain): schema-validated, event-emitting KV domains over storage backends for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,8 +32,8 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-storage": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/storage": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -41,8 +41,8 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-storage": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/storage": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

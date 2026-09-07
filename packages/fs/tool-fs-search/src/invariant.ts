@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-tool-fs-search`.
- * @module @neo/dsh-tool-fs-search/invariant
+ * Package-owned invariant companion for `@neo/tool-fs-search`.
+ * @module @neo/tool-fs-search/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tool-fs-search'
+const PACKAGE_NAME = '@neo/tool-fs-search'
 
 /** Cordis companion plugin name. */
 export const name = 'tool-fs-search-invariant'

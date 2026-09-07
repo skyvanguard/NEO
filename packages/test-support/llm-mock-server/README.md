@@ -1,4 +1,4 @@
-# `@neo/dsh-llm-mock-server`
+# `@neo/llm-mock-server`
 
 English | [中文](README.zh.md)
 

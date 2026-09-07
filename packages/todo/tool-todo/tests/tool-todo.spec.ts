@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import { CallId } from '@neo/dsh-llm'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import { Session, SessionId } from '@neo/dsh-session'
-import type { TodoItem } from '@neo/dsh-session'
-import { type Agent } from '@neo/dsh-agent'
+import { CallId } from '@neo/llm'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import { Session, SessionId } from '@neo/session'
+import type { TodoItem } from '@neo/session'
+import { type Agent } from '@neo/agent'
 
 import * as tool from '../src/index.ts'
 

@@ -8,15 +8,15 @@
  * composes and drives them directly, so this driver owns exactly one turn with
  * one result.
  *
- * @module @neo/dsh-subagent-in-process-driver
+ * @module @neo/subagent-in-process-driver
  */
 
 import { randomUUID } from 'node:crypto'
 import type { Context } from '@neo/cordis'
-import { foldConsumedWork } from '@neo/dsh-agent'
-import type { Agent, AgentHandle } from '@neo/dsh-agent'
-import { SessionId, type SessionEvent, type TurnEndReason } from '@neo/dsh-session'
-import { createUserMessage, type ContentBlock } from '@neo/dsh-llm'
+import { foldConsumedWork } from '@neo/agent'
+import type { Agent, AgentHandle } from '@neo/agent'
+import { SessionId, type SessionEvent, type TurnEndReason } from '@neo/session'
+import { createUserMessage, type ContentBlock } from '@neo/llm'
 import {
   appendDelegatedPolicyOverrides,
   applyChildComposition,
@@ -26,14 +26,14 @@ import {
   finalAssistantOutput,
   resolveChildAgentOptions,
   resolveChildDepth,
-} from '@neo/dsh-subagent'
+} from '@neo/subagent'
 import type {
   ResolvedSubagentStartRequest,
   SubagentDescriptorData,
   SubagentResult,
   SubagentRun,
   SubagentStopReason,
-} from '@neo/dsh-subagent'
+} from '@neo/subagent'
 import {
   attachStructuredRuntime,
   type StructuredAttachment,

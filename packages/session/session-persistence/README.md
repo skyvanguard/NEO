@@ -1,4 +1,4 @@
-# @neo/dsh-session-persistence
+# @neo/session-persistence
 
 English | [中文](README.zh.md)
 
@@ -28,7 +28,7 @@ The persisted unit IS the existing `SessionEvent` (event-sourced model — the l
 - **Append-only; a crashed turn is closed, not truncated.** Flushed events are never rewritten. A crash can leave an unclosed final turn whose events are real and possibly large; `load` preserves them and durably appends synthetic closers (a risk-classified error `tool/result` per unanswered assistant call, then `step/end?`+`turn/end {interrupted}`) to balance the log and keep the rehydrated history a valid provider transcript. Only a never-fully-written torn tail fragment is discarded.
 - **Contiguous seq.** `load` rejects a `seq` gap/parse error in the MIDDLE of the log; `append`'s first `seq` must equal the stored next-seq.
 - **JSON-serializable data.** `append` materializes each direct/replay batch through the shared one-pass lossless-JSON boundary. Live `Session` events are already deep-frozen, but the write coordinator still copies each event into a persistence-owned buffer.
-- **Durability.** `append` returns only once the batch is durable. A live session whose retained batch fails `DEFAULT_MAX_WRITE_ATTEMPTS` times in a row has its durability **suspended**: the batch and every later event are dropped (later seqs must stay contiguous behind it), the suspension is logged once with the number of dropped events, and every later `session/flush` rejects with `DurabilitySuspendedError` (`@neo/dsh-session`) so callers that need confirmed durability never mistake dropped events for stored ones. The stored log keeps its valid prefix; a restart reloads it.
+- **Durability.** `append` returns only once the batch is durable. A live session whose retained batch fails `DEFAULT_MAX_WRITE_ATTEMPTS` times in a row has its durability **suspended**: the batch and every later event are dropped (later seqs must stay contiguous behind it), the suspension is logged once with the number of dropped events, and every later `session/flush` rejects with `DurabilitySuspendedError` (`@neo/session`) so callers that need confirmed durability never mistake dropped events for stored ones. The stored log keeps its valid prefix; a restart reloads it.
 
 ## The write coordinator
 

@@ -1,4 +1,4 @@
-# @neo/dsh-terminal-bash
+# @neo/terminal-bash
 
 English | [中文](README.zh.md)
 
@@ -18,7 +18,7 @@ Send cancellation marks queued input as canceled before asking the terminal hand
 
 #### What the model sees
 
-The policy owner contributes capability-neutral `sandbox:policy` context. Through `@neo/dsh-tool-terminal` or another PTY consumer, the model may also receive bounded MOTD, send deltas, scrollback pages, readiness reasons, and cleanup errors.
+The policy owner contributes capability-neutral `sandbox:policy` context. Through `@neo/tool-terminal` or another PTY consumer, the model may also receive bounded MOTD, send deltas, scrollback pages, readiness reasons, and cleanup errors.
 
 #### Token effect
 

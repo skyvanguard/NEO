@@ -5,15 +5,15 @@
 // views. callId/approvalId stay plain string here (narrow to real brands when
 // convenient).
 
-import type { CommandId } from '@neo/dsh-commands/brand'
-import type { MessageId } from '@neo/dsh-llm/brand'
-import type { ContentBlock } from '@neo/dsh-llm/types'
-import type { ImageAttachmentRef } from '@neo/dsh-attachment'
-import type { LlmRetryEventData } from '@neo/dsh-llm-retry/types'
-import type { TodoItem } from '@neo/dsh-session/types'
+import type { CommandId } from '@neo/commands/brand'
+import type { MessageId } from '@neo/llm/brand'
+import type { ContentBlock } from '@neo/llm/types'
+import type { ImageAttachmentRef } from '@neo/attachment'
+import type { LlmRetryEventData } from '@neo/llm-retry/types'
+import type { TodoItem } from '@neo/session/types'
 import type {
   RpcError, SessionId, SubagentAddress, ToolCallView, ToolResultView,
-} from '@neo/dsh-api-remotes/client'
+} from '@neo/api-remotes/client'
 import type { PendingInteraction } from './pending.ts'
 import type { ContextProvenanceView, KnownContextForm } from './context-provenance.ts'
 import type {

@@ -8,8 +8,8 @@
  * @module dsh-llm-deepseek/translate
  */
 
-import { CallId, EMPTY_RESPONSE_CODE, LlmError } from '@neo/dsh-llm'
-import type { ContentBlock, FinishReason, StreamChunk, TokenUsage } from '@neo/dsh-llm'
+import { CallId, EMPTY_RESPONSE_CODE, LlmError } from '@neo/llm'
+import type { ContentBlock, FinishReason, StreamChunk, TokenUsage } from '@neo/llm'
 import { DONE } from './sse.ts'
 import type { WireChunk, WireUsage } from './types.ts'
 

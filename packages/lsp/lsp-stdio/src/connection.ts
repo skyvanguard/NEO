@@ -7,11 +7,11 @@
  * fatal close, and exposes tree-scoped termination through the handle so the
  * instance owns teardown; group/tree mechanics live in the subprocess
  * Service Provider.
- * @module @neo/dsh-lsp-stdio/connection
+ * @module @neo/lsp-stdio/connection
  */
 
 import type { Writable } from 'node:stream'
-import type { SubprocessHandle, SubprocessSpawnSpec } from '@neo/dsh-subprocess'
+import type { SubprocessHandle, SubprocessSpawnSpec } from '@neo/subprocess'
 import { encodeMessage, MessageDecoder } from './framing.ts'
 
 /** How to launch the server and answer its config requests. */

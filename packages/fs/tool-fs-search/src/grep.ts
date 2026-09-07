@@ -8,15 +8,15 @@
  * `--json` record parsing, per-line preview retention, match retention,
  * grouping, and formatting; process concerns stay behind `ctx.subprocess`.
  *
- * @module @neo/dsh-tool-fs-search/grep
+ * @module @neo/tool-fs-search/grep
  */
 
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
-import type { GenericCallView, SearchResultView, ToolResult } from '@neo/dsh-tools'
-import type { RetainedItems } from '@neo/dsh-output-retention'
-import type { SpillRef } from '@neo/dsh-spill'
-import type {} from '@neo/dsh-system-prompt'
+import { defineTool } from '@neo/tools'
+import type { GenericCallView, SearchResultView, ToolResult } from '@neo/tools'
+import type { RetainedItems } from '@neo/output-retention'
+import type { SpillRef } from '@neo/spill'
+import type {} from '@neo/system-prompt'
 import type { GrepMatch } from './search-core.ts'
 import { SearchError, previewLine, retainGrepMatches, runRipgrep, toWorkdirRelative, trySaveFormattedResult } from './search-core.ts'
 import { grepSearchMeta, searchViewFromMeta } from './presentation.ts'

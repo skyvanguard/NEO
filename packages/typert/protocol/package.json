@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-typert-protocol",
+  "name": "@neo/typert-protocol",
   "description": "Compiler-independent Remote metadata and Typert provider protocols",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -37,11 +37,11 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

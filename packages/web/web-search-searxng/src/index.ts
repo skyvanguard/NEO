@@ -2,12 +2,12 @@
  * Register a SearXNG-backed local search provider in `ctx.web`. It queries a
  * self-hosted SearXNG instance's `format=json` API — no API key and no model
  * turn — so reconnaissance search stays on operator-controlled infrastructure.
- * @module @neo/dsh-web-search-searxng
+ * @module @neo/web-search-searxng
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type {} from '@neo/dsh-web'
+import type {} from '@neo/web'
 import {
   SearxngSearchProvider,
   SEARXNG_DEFAULT_BASE_URL,

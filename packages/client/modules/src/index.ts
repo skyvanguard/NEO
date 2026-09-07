@@ -17,7 +17,7 @@
  * expires — plugin-set changes take effect on restart; bundle content
  * changes reach the graph only through
  * {@link ClientModuleRegistry.rebuilt}.
- * @module @neo/dsh-client-modules
+ * @module @neo/client-modules
  */
 
 import { createHash } from 'node:crypto'
@@ -29,7 +29,7 @@ import { dirname, join } from 'node:path'
 import { Service } from '@neo/cordis'
 import type { Context } from '@neo/cordis'
 import type {} from '@neo/cordis-plugin-loader'
-import type {} from '@neo/dsh-host-webserver'
+import type {} from '@neo/host-webserver'
 import type { WebBootEntry, WebBootGraph } from './client/manifest.ts'
 
 export type {

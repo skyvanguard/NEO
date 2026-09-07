@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-reference",
+  "name": "@neo/session-reference",
   "description": "Cross-session snapshot references and durable untrusted model context (ctx.sessionReferenceResolver)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -35,23 +35,23 @@
     "@neo/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-compaction": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-output-retention": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-query": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/compaction": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/output-retention": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-query": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-compaction": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-output-retention": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-query": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/compaction": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/output-retention": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-query": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

@@ -1,16 +1,16 @@
 /**
  * Same-session goal-round driver over public agent, session, and goal services.
- * @module @neo/dsh-goal-round-driver
+ * @module @neo/goal-round-driver
  */
 
 import { isDeepStrictEqual } from 'node:util'
 import { FiberState } from '@neo/cordis'
 import type { Context } from '@neo/cordis'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import type { GoalMessageSource, GoalRef, GoalView } from '@neo/dsh-goal'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { ContentBlock, MessageId, MessageSource } from '@neo/dsh-llm'
-import type { Session, SessionEvent, UserMessage } from '@neo/dsh-session'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import type { GoalMessageSource, GoalRef, GoalView } from '@neo/goal'
+import { createUserMessage } from '@neo/llm'
+import type { ContentBlock, MessageId, MessageSource } from '@neo/llm'
+import type { Session, SessionEvent, UserMessage } from '@neo/session'
 import { renderGoalRoundPrompt } from './prompt.ts'
 
 export { renderGoalRoundPrompt } from './prompt.ts'

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-shell-env",
+  "name": "@neo/shell-env",
   "description": "Tool-independent managed DSH_* shell environment registry",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,24 +32,24 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-shell": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-home-paths": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-shell": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-home-paths": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

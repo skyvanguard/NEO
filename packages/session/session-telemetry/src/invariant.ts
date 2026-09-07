@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-session-telemetry`.
- * @module @neo/dsh-session-telemetry/invariant
+ * Package-owned invariant companion for `@neo/session-telemetry`.
+ * @module @neo/session-telemetry/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-session-telemetry'
+const PACKAGE_NAME = '@neo/session-telemetry'
 
 /** Cordis companion plugin name. */
 export const name = 'session-telemetry-invariant'

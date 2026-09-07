@@ -5,16 +5,16 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createUserMessage, CallId, StreamChunk  } from '@neo/dsh-llm'
-import SessionStore, { SessionEvent, SessionId } from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import LlmRuntime from '@neo/dsh-llm'
-import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, TOOL_SCHEDULER_FAILED, type PostToolDecision, type PreToolDecision } from '@neo/dsh-tools'
-import AgentRegistry, { type Agent } from '@neo/dsh-agent'
-import AgentLoop, { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from '@neo/dsh-agent-loop'
+import { createUserMessage, CallId, StreamChunk  } from '@neo/llm'
+import SessionStore, { SessionEvent, SessionId } from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import LlmRuntime from '@neo/llm'
+import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, TOOL_SCHEDULER_FAILED, type PostToolDecision, type PreToolDecision } from '@neo/tools'
+import AgentRegistry, { type Agent } from '@neo/agent'
+import AgentLoop, { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from '@neo/agent-loop'
 import { MockAdapter, textResponse } from './mock-adapter.ts'
-import { CodeRuntime } from '@neo/dsh-code-runtime'
-import type { CodeRunRequest, CodeRunResult } from '@neo/dsh-code-runtime'
+import { CodeRuntime } from '@neo/code-runtime'
+import type { CodeRunRequest, CodeRunResult } from '@neo/code-runtime'
 
 async function harness(adapter: MockAdapter, maxParallelToolCalls?: number) {
   const ctx = new Context()

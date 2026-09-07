@@ -1,18 +1,18 @@
 /**
  * Service Definition for the approval capability seam, covering requests, cancellation, audit, and per-session policy. Missing
  * answerers fail closed; grants apply only to the requested action.
- * @module @neo/dsh-user-approval
+ * @module @neo/user-approval
  */
 
 import { randomUUID } from 'node:crypto'
 import { Context, Service } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage, type CallId } from '@neo/dsh-llm'
-import { scopeTarget } from '@neo/dsh-scope'
-import type { Scoped } from '@neo/dsh-scope'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type {} from '@neo/dsh-system-prompt'
+import type { Agent } from '@neo/agent'
+import { createUserMessage, type CallId } from '@neo/llm'
+import { scopeTarget } from '@neo/scope'
+import type { Scoped } from '@neo/scope'
+import type { Session, SessionEvent } from '@neo/session'
+import type {} from '@neo/system-prompt'
 
 declare module '@neo/cordis' {
   interface Context {
@@ -23,7 +23,7 @@ declare module '@neo/cordis' {
     /**
      * Ask composed answerers for one decision. Return an outcome to claim the
      * request or call `next()`; failure yields the fail-closed default.
-     * Scope-filtered dispatch (`@neo/dsh-scope`): agent-scoped listeners receive only that agent.
+     * Scope-filtered dispatch (`@neo/scope`): agent-scoped listeners receive only that agent.
      * @param req - the pending decision (agent, tool identity, reason, signal).
      * @mode waterfall
      */
@@ -31,7 +31,7 @@ declare module '@neo/cordis' {
   }
 }
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * An approval question was put to the answerer chain — log-only audit

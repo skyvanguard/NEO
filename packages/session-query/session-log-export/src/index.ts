@@ -1,7 +1,7 @@
 /** Web Session-log download command over the host endpoint owned by ApiProxy. */
 
 import type { Context } from '@neo/cordis'
-import type { CommandResult } from '@neo/dsh-commands'
+import type { CommandResult } from '@neo/commands'
 
 export const name = 'session-log-download'
 export const inject = ['commands']

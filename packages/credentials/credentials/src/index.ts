@@ -5,7 +5,7 @@
  * operation, so a changed credential reaches the next operation without any
  * plugin restart, and configuration surfaces describe a reference without
  * ever seeing its value.
- * @module @neo/dsh-credentials
+ * @module @neo/credentials
  */
 
 import { Context, Service } from '@neo/cordis'

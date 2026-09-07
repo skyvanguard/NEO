@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-jobs",
+  "name": "@neo/client-ui-jobs",
   "description": "Session-header background-job list: live registry state mirrored from session/jobs frames",
   "version": "0.1.0-rc.5",
   "type": "module",
@@ -24,10 +24,10 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-locale",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-conversation",
-        "@neo/dsh-client-ui-primitives"
+        "@neo/client-locale",
+        "@neo/client-runtime",
+        "@neo/client-ui-conversation",
+        "@neo/client-ui-primitives"
       ],
       "platform": "web"
     }
@@ -49,22 +49,22 @@
     "react": "^18.2.0"
   },
   "peerDependencies": {
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-conversation": "workspace:^",
-    "@neo/dsh-client-ui-primitives": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-conversation": "workspace:^",
+    "@neo/client-ui-primitives": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "@neo/cordis": "workspace:^"
   },

@@ -16,11 +16,11 @@
 
 import type { CacheRetention, ModelThinkingLevel, Provider, ThinkingBudgets, Transport } from '@earendil-works/pi-ai'
 import z from '@neo/schemastery'
-import { credentialRef } from '@neo/dsh-credentials'
-import type { CredentialRef } from '@neo/dsh-credentials'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import { resolveRetryPolicy, RetryPolicySchema } from '@neo/dsh-llm'
-import type { ResolvedRetryPolicy, RetryPolicyConfig } from '@neo/dsh-llm'
+import { credentialRef } from '@neo/credentials'
+import type { CredentialRef } from '@neo/credentials'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import { resolveRetryPolicy, RetryPolicySchema } from '@neo/llm'
+import type { ResolvedRetryPolicy, RetryPolicyConfig } from '@neo/llm'
 import { MODALITIES, resolveRouteModels, SUPPORTED_THINKING_FORMATS, THINKING_LEVELS } from './catalog.ts'
 import type {
   PiAiCompatProfile,

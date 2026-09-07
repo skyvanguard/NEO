@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-mcp-client`.
- * @module @neo/dsh-mcp-client/invariant
+ * Package-owned invariant companion for `@neo/mcp-client`.
+ * @module @neo/mcp-client/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-mcp-client'
+const PACKAGE_NAME = '@neo/mcp-client'
 
 /** Cordis companion plugin name. */
 export const name = 'mcp-client-invariant'

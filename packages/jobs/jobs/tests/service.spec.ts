@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { JobId, JobRegistry } from '@neo/dsh-jobs'
+import type { Agent } from '@neo/agent'
+import { JobId, JobRegistry } from '@neo/jobs'
 import type {
   JobDoneListener, JobRead, JobSnapshot, JobStart, JobsChangedListener,
-} from '@neo/dsh-jobs'
+} from '@neo/jobs'
 
 /**
  * Minimal concrete registry: one canned record. The Service Definition owns the contract
  * only (ids, snapshots, authorization-shaped signatures); the registry
- * behavior suite lives with `@neo/dsh-jobs-local`.
+ * behavior suite lives with `@neo/jobs-local`.
  */
 class StubJobRegistry extends JobRegistry {
   snapshotOf(id: JobId): JobSnapshot {

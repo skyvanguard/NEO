@@ -8,7 +8,7 @@
  * App flags are not the launcher's business: the invocation's inner arguments
  * are provided to the tree through `ctx.cmdlineArgs`, where any injected app
  * plugin may read the same immutable snapshot.
- * @module @neo/dsh/profile-boot
+ * @module @neo/cli/profile-boot
  */
 
 import { writeFileSync } from 'node:fs'
@@ -28,14 +28,14 @@ import {
   PROFILE_PATCH_FILENAME,
   watchUserPatches,
   type Profile,
-} from '@neo/dsh-app-boot'
-import { resolveDshHome } from '@neo/dsh-home-paths'
+} from '@neo/app-boot'
+import { resolveDshHome } from '@neo/home-paths'
 
 /** Shipped agent-preset root: beside this app's own config, in both source and built layouts. */
 const SHIPPED_PRESET_ROOT = fileURLToPath(new URL('../config/agent-presets/', import.meta.url))
 
-import { DSH_LAUNCH_ENVIRONMENT_KEY, type LaunchEnvironmentSnapshot } from '@neo/dsh-launch-environment'
-import { provideCmdline } from '@neo/dsh-cmdline'
+import { DSH_LAUNCH_ENVIRONMENT_KEY, type LaunchEnvironmentSnapshot } from '@neo/launch-environment'
+import { provideCmdline } from '@neo/cmdline'
 import { createProcessShutdown, type ProcessShutdown } from './process-shutdown.ts'
 
 const NAME = 'dsh'

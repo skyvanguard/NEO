@@ -10,15 +10,15 @@ import { act, cleanup, fireEvent, render, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   ConversationEventRegistry, ConversationNodeAssembler, SlotRegistry,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import type {
   ConversationEventInput, ConversationLocationDataStore, ConversationMatch, ConversationNodeDefinition,
   ConversationTimelineSnapshot, ConversationTurnDataMap, ConversationViewDefinition,
   ConversationViewNode, ToolResultNode, TurnLocation,
-} from '@neo/dsh-client-runtime/client'
-import { apply as applyLocale, inject as localeInject } from '@neo/dsh-client-locale/client'
-import type { ChatFileMentions, TurnTailOwnerProps } from '@neo/dsh-client-ui-conversation/client'
-import { makeTranslate, stubSettingsScope } from '@neo/dsh-client-test-runtime'
+} from '@neo/client-runtime/client'
+import { apply as applyLocale, inject as localeInject } from '@neo/client-locale/client'
+import type { ChatFileMentions, TurnTailOwnerProps } from '@neo/client-ui-conversation/client'
+import { makeTranslate, stubSettingsScope } from '@neo/client-test-runtime'
 import {
   fitProducedFiles, ProducedFiles, type ProducedFilesProps,
 } from '../src/client/ProducedFiles.tsx'
@@ -445,7 +445,7 @@ describe('package shells', () => {
       register: (pkg: string) => { registered.push(pkg); return () => {} },
     } as never)
     const dispose = await applyInvariant(ctx)
-    expect(registered).toEqual(['@neo/dsh-client-ui-deliverables'])
+    expect(registered).toEqual(['@neo/client-ui-deliverables'])
     expect(dispose).toBeTypeOf('function')
   })
 })

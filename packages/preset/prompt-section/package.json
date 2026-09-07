@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-prompt-section",
+  "name": "@neo/prompt-section",
   "description": "Composition-authored named system-prompt sections for one agent scope (shadow or suppress globals)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -27,17 +27,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

@@ -4,7 +4,7 @@
  * namespace (repo discipline), so `./client` projects the same single-source
  * content `./types` serves to host consumers — zero duplication.
  *
- * @module @neo/dsh-session-stats/client
+ * @module @neo/session-stats/client
  */
 
 export type * from './types.ts'

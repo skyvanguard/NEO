@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-client-ui-attachment`.
- * @module @neo/dsh-client-ui-attachment/invariant
+ * Package-owned invariant companion for `@neo/client-ui-attachment`.
+ * @module @neo/client-ui-attachment/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-client-ui-attachment'
+const PACKAGE_NAME = '@neo/client-ui-attachment'
 
 /** Cordis companion plugin name. */
 export const name = 'client-ui-attachment-invariant'

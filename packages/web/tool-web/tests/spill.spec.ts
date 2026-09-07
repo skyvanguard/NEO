@@ -14,18 +14,18 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@neo/cordis'
-import { CallId } from '@neo/dsh-llm'
-import { SessionId } from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import type { ToolExecution } from '@neo/dsh-tools'
+import { CallId } from '@neo/llm'
+import { SessionId } from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import type { ToolExecution } from '@neo/tools'
 
 const testToolSignal = new AbortController().signal
-import WebRuntime from '@neo/dsh-web'
-import * as WebFetchLocal from '@neo/dsh-web-fetch-http'
-import LocalSpillStore from '@neo/dsh-spill-local'
-import * as SpillPolicy from '@neo/dsh-spill-policy'
-import * as ToolWeb from '@neo/dsh-tool-web'
+import WebRuntime from '@neo/web'
+import * as WebFetchLocal from '@neo/web-fetch-http'
+import LocalSpillStore from '@neo/spill-local'
+import * as SpillPolicy from '@neo/spill-policy'
+import * as ToolWeb from '@neo/tool-web'
 
 type Handler = (req: IncomingMessage, res: ServerResponse) => void
 

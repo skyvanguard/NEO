@@ -1,8 +1,8 @@
 import type { Context } from '@neo/cordis'
-import type {} from '@neo/dsh-agent'
-import { CompactionId, compactCheckpointSource } from '@neo/dsh-compaction'
-import { createUserMessage } from '@neo/dsh-llm'
-import type {} from '@neo/dsh-tools'
+import type {} from '@neo/agent'
+import { CompactionId, compactCheckpointSource } from '@neo/compaction'
+import { createUserMessage } from '@neo/llm'
+import type {} from '@neo/tools'
 
 export const name = 'workspace-context-compaction'
 

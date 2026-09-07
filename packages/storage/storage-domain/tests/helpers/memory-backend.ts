@@ -15,8 +15,8 @@
  * @module
  */
 
-import { StorageError } from '@neo/dsh-storage'
-import type { KvFacet, KvUnit, KvUnitDescriptor, StorageBackend } from '@neo/dsh-storage'
+import { StorageError } from '@neo/storage'
+import type { KvFacet, KvUnit, KvUnitDescriptor, StorageBackend } from '@neo/storage'
 
 /** One unit's medium: tables of records plus the global slot (`null` = never written). */
 export interface MemoryMedium {

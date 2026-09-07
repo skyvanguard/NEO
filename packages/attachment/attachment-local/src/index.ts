@@ -1,11 +1,11 @@
-/** Local durable attachment backend rooted below `DSH_HOME`. @module @neo/dsh-attachment-local */
+/** Local durable attachment backend rooted below `DSH_HOME`. @module @neo/attachment-local */
 
 import { join, resolve } from 'node:path'
 import { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { AttachmentStore } from '@neo/dsh-attachment'
-import type { ImageAttachmentLimits, ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@neo/dsh-attachment'
-import { resolveDshHome } from '@neo/dsh-home-paths'
+import { AttachmentStore } from '@neo/attachment'
+import type { ImageAttachmentLimits, ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@neo/attachment'
+import { resolveDshHome } from '@neo/home-paths'
 import { readImageFile, saveImageFile, validateImageFile } from './store.ts'
 
 export { detectImage } from './image.ts'

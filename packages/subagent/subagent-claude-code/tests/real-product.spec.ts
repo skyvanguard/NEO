@@ -18,10 +18,10 @@ import type {
 } from '@anthropic-ai/claude-agent-sdk'
 import { Context } from '@neo/cordis'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
-import type { Agent } from '@neo/dsh-agent'
-import SubagentRuntime from '@neo/dsh-subagent'
-import type { SubprocessHandle, SubprocessSpawnSpec } from '@neo/dsh-subprocess'
-import LocalSubprocessRuntime from '@neo/dsh-subprocess-local'
+import type { Agent } from '@neo/agent'
+import SubagentRuntime from '@neo/subagent'
+import type { SubprocessHandle, SubprocessSpawnSpec } from '@neo/subprocess'
+import LocalSubprocessRuntime from '@neo/subprocess-local'
 import * as claudeCode from '../src/index.ts'
 import {
   startMessagesFixture,

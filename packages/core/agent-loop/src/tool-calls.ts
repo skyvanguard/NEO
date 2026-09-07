@@ -14,9 +14,9 @@
  */
 
 import type { Context } from '@neo/cordis'
-import { assertNever, createToolResultMessage, type ToolCallBlock } from '@neo/dsh-llm'
-import type { Session, UserMessage } from '@neo/dsh-session'
-import { TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, TOOL_SCHEDULER_FAILED, type ToolExecutionInput, type ToolExecutionMode, type ToolExecutionResult, type ToolRunContext } from '@neo/dsh-tools'
+import { assertNever, createToolResultMessage, type ToolCallBlock } from '@neo/llm'
+import type { Session, UserMessage } from '@neo/session'
+import { TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, TOOL_SCHEDULER_FAILED, type ToolExecutionInput, type ToolExecutionMode, type ToolExecutionResult, type ToolRunContext } from '@neo/tools'
 
 /** One tool call after argument parsing, ready to schedule. */
 interface PlannedCall {

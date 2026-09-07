@@ -1,25 +1,25 @@
 /**
- * @neo/dsh-headless — one-shot direct Agent driver. The bundle patch
+ * @neo/headless — one-shot direct Agent driver. The bundle patch
  * rides over dsh-base without Host, HTTP, or browser plugins; this runner
  * creates one Agent through the core registry, drives the task to quiescence,
  * flushes its Session, prints the final assistant text, and exits.
  *
- * @module @neo/dsh-headless
+ * @module @neo/headless
  */
 
 import { randomUUID } from 'node:crypto'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { installModelSelection } from '@neo/dsh-agent'
-import type { ModelSelectionRef } from '@neo/dsh-agent'
-import type {} from '@neo/dsh-agent-default-model'
-import { createUserMessage } from '@neo/dsh-llm'
-import { SessionId } from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
+import { installModelSelection } from '@neo/agent'
+import type { ModelSelectionRef } from '@neo/agent'
+import type {} from '@neo/agent-default-model'
+import { createUserMessage } from '@neo/llm'
+import { SessionId } from '@neo/session'
+import type { SessionEvent } from '@neo/session'
 // Empty type imports carry the loader Context merge for the settlement await
 // and the cmdline Context merge for the appExit host value.
 import type {} from '@neo/cordis-plugin-loader'
-import type {} from '@neo/dsh-cmdline'
+import type {} from '@neo/cmdline'
 
 /** Stable Cordis plugin name. */
 export const name = 'headless-runner'
@@ -107,7 +107,7 @@ async function run(ctx: Context, task: string, io: HeadlessIo): Promise<void> {
   // This bundle composes no preset roster, so the model-facing rows sit in the
   // host plane and the agent reads them from the global layer. A deployment
   // that DOES configure one has to join it here first
-  // (@neo/dsh-agent-presets README, "Composing a child agent").
+  // (@neo/agent-presets README, "Composing a child agent").
   const { agent } = await agents.create({
     sessionId: SessionId(`session-${randomUUID()}`),
     meta: { cwd: process.cwd() },

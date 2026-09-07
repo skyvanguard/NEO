@@ -4,11 +4,11 @@
  * Adapters expose one resolved policy per registered provider route; the
  * optional dsh-llm-retry plugin executes it on the agent's failed-step extension point.
  *
- * @module @neo/dsh-llm/retry-policy
+ * @module @neo/llm/retry-policy
  */
 
 import z from '@neo/schemastery'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import { EMPTY_RESPONSE_CODE } from './error.ts'
 
 const DEFAULT_MAX_RETRIES = 2

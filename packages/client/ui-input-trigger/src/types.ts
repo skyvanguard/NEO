@@ -8,7 +8,7 @@
  * never a Cordis context or the mutable Session. RPC and service access go
  * through the provider plugin's own root context captured at registration.
  */
-import type { ClientContext, SessionId } from '@neo/dsh-client-runtime/client'
+import type { ClientContext, SessionId } from '@neo/client-runtime/client'
 
 /**
  * The provider-facing projection of one client session. It carries stable

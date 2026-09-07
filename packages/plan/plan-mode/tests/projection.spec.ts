@@ -11,16 +11,16 @@
 
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import AgentRegistry from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import SessionStore from '@neo/dsh-session'
-import type { Session } from '@neo/dsh-session'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import UserQuestionService from '@neo/dsh-user-questions'
-import { CommandId } from '@neo/dsh-commands/brand'
-import PlanModeController from '@neo/dsh-plan-mode'
+import AgentRegistry from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import SessionStore from '@neo/session'
+import type { Session } from '@neo/session'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import SessionProjectionRegistry from '@neo/session-projection'
+import UserQuestionService from '@neo/user-questions'
+import { CommandId } from '@neo/commands/brand'
+import PlanModeController from '@neo/plan-mode'
 
 interface Bench {
   ctx: Context

@@ -18,7 +18,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { ToolListChangedNotificationSchema } from '@modelcontextprotocol/sdk/types.js'
 import type { Context } from '@neo/cordis'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import { createTransport } from './transport.ts'
 import { syncTools } from './tools.ts'
 import type { ToolBridgeOptions, ToolDisposers } from './tools.ts'

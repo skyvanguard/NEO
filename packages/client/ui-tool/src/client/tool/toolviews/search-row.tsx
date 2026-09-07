@@ -12,8 +12,8 @@
 // model-facing text through ToolRow's Output section instead.
 
 import type { Context } from '@neo/cordis'
-import { IconSearchOutline16 } from '@neo/dsh-client-ui-primitives'
-import type { PropsLocale } from '@neo/dsh-client-ui-slots'
+import { IconSearchOutline16 } from '@neo/client-ui-primitives'
+import type { PropsLocale } from '@neo/client-ui-slots'
 import type { ToolCallViewProps } from '../../contract/slots.ts'
 import { searchCardModel } from '../models/search-card-model.ts'
 import { toolRowModel } from '../models/tool-call-model.ts'

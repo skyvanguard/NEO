@@ -6,7 +6,7 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import type { IApiClient } from '@neo/dsh-api-remotes/client'
+import type { IApiClient } from '@neo/api-remotes/client'
 import {
   AGENT_PRESET_SETTINGS_NS, AgentPresetSettingsController, messageOf,
 } from '../src/client/settings-store.ts'

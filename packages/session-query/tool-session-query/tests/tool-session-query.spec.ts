@@ -1,16 +1,16 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context, type Fiber } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage, CallId, HarnessError , createMessage } from '@neo/dsh-llm'
-import { MAX_TIMER_DELAY_MS, TimeoutReason } from '@neo/dsh-timeout'
-import * as TimeoutPolicy from '@neo/dsh-tool-call-timeout-policy'
+import type { Agent } from '@neo/agent'
+import { createUserMessage, CallId, HarnessError , createMessage } from '@neo/llm'
+import { MAX_TIMER_DELAY_MS, TimeoutReason } from '@neo/timeout'
+import * as TimeoutPolicy from '@neo/tool-call-timeout-policy'
 import SessionStore, {
   SESSION_FORMAT_VERSION,
   SessionId,
   type Session,
   type SessionHeader,
   type SessionId as SessionIdValue,
-} from '@neo/dsh-session'
+} from '@neo/session'
 import SessionQueryEngine, {
   SessionQueryError,
   SessionSearchCursor,
@@ -23,10 +23,10 @@ import SessionQueryEngine, {
   type SessionSearchPage,
   type SessionSearchRequest,
   type SessionTitleObservationResult,
-} from '@neo/dsh-session-query'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { type ToolExecutionResult } from '@neo/dsh-tools'
-import * as ToolSessionQuery from '@neo/dsh-tool-session-query'
+} from '@neo/session-query'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { type ToolExecutionResult } from '@neo/tools'
+import * as ToolSessionQuery from '@neo/tool-session-query'
 
 const activeContexts: Context[] = []
 

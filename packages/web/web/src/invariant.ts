@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-web`.
- * @module @neo/dsh-web/invariant
+ * Package-owned invariant companion for `@neo/web`.
+ * @module @neo/web/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-web'
+const PACKAGE_NAME = '@neo/web'
 
 /** Cordis companion plugin name. */
 export const name = 'web-invariant'

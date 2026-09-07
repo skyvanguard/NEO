@@ -2,11 +2,11 @@
  * On-disk JSON unit format: the file is always the current net state, kept
  * human-readable (pretty-printed, stable key order from insertion) — that
  * legibility is this backend's reason to exist.
- * @module @neo/dsh-storage-json/src/format
+ * @module @neo/storage-json/src/format
  */
 
-import { StorageError } from '@neo/dsh-storage'
-import type { KvUnitDescriptor } from '@neo/dsh-storage'
+import { StorageError } from '@neo/storage'
+import type { KvUnitDescriptor } from '@neo/storage'
 
 /** In-memory authoritative state of one unit; the file is its projection. `global` is `null` until first written. */
 export interface UnitState {

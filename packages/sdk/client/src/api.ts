@@ -4,12 +4,12 @@
  * prompt and settles when the whole agent next becomes idle.
  * Mirrors the Python SDK's `DeepSeekHarness`/`Session` pair.
  *
- * @module @neo/dsh-sdk-client/api
+ * @module @neo/sdk-client/api
  */
 
 import { randomUUID } from 'node:crypto'
 import { resolve } from 'node:path'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { SessionEvent } from '@neo/session'
 import { HarnessClient, isRecord, SdkProtocolError } from './client.ts'
 import type { ContentBlock, DeepSeekHarnessOptions, HarnessClientOptions, HarnessNotification, RunResult } from './types.ts'
 

@@ -7,8 +7,8 @@
  * only the source roster. One controller per session scope; the service
  * disposes it with the scope fiber.
  */
-import type { ClientContext, SessionId, SnapshotStore } from '@neo/dsh-client-runtime/client'
-import { createSnapshotStore } from '@neo/dsh-client-runtime/client'
+import type { ClientContext, SessionId, SnapshotStore } from '@neo/client-runtime/client'
+import { createSnapshotStore } from '@neo/client-runtime/client'
 import { detectTrigger } from '../core/detect.ts'
 import { MENU_CLOSED, menuReduce, seedGroups } from '../core/menu.ts'
 import type { MenuEvent, MenuState, TriggerHit } from '../core/contract.ts'

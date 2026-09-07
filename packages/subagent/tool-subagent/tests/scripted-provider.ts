@@ -1,8 +1,8 @@
 /** Package-local scripted child boundary for deterministic tool-subagent tests. */
 
 import type { Context } from '@neo/cordis'
-import type { ContentBlock } from '@neo/dsh-llm'
-import { SessionId } from '@neo/dsh-session'
+import type { ContentBlock } from '@neo/llm'
+import { SessionId } from '@neo/session'
 import type {
   SubagentCapabilities,
   SubagentProvider,
@@ -10,7 +10,7 @@ import type {
   SubagentRun,
   SubagentStartRequest,
   SubagentStopReason,
-} from '@neo/dsh-subagent'
+} from '@neo/subagent'
 
 const DEFAULT_CAPABILITIES: SubagentCapabilities = {
   outputSchema: true,

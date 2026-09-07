@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-client-schema-form`.
- * @module @neo/dsh-client-schema-form/invariant
+ * Package-owned invariant companion for `@neo/client-schema-form`.
+ * @module @neo/client-schema-form/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-client-schema-form'
+const PACKAGE_NAME = '@neo/client-schema-form'
 
 /** Cordis companion plugin name. */
 export const name = 'client-schema-form-invariant'

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-tool-web",
+  "name": "@neo/tool-web",
   "description": "Model-facing web tools (web_search, web_fetch) over the DeepSeek Harness web capability seam (ctx.web)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,11 +32,11 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
-    "@neo/dsh-web": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/web": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -45,19 +45,19 @@
     "turndown": "^7.2.4"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
+    "@neo/agent": "workspace:^",
     "@types/turndown": "^5.0.6",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-spill-local": "workspace:^",
-    "@neo/dsh-spill-policy": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tool-call-timeout-policy": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
-    "@neo/dsh-web": "workspace:^",
-    "@neo/dsh-web-fetch-http": "workspace:^",
-    "@neo/dsh-web-search-exa": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/spill-local": "workspace:^",
+    "@neo/spill-policy": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tool-call-timeout-policy": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/web": "workspace:^",
+    "@neo/web-fetch-http": "workspace:^",
+    "@neo/web-search-exa": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

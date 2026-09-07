@@ -10,8 +10,8 @@
 import { tmpdir } from 'node:os'
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import type { SandboxPolicy } from '@neo/dsh-sandbox'
-import { LocalSandboxProvider } from '@neo/dsh-sandbox-local'
+import type { SandboxPolicy } from '@neo/sandbox'
+import { LocalSandboxProvider } from '@neo/sandbox-local'
 
 const RO: SandboxPolicy = { mode: 'read-only', workspaceRoot: '/ws' }
 const WW: SandboxPolicy = { mode: 'workspace-write', workspaceRoot: '/ws' }

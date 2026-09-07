@@ -11,7 +11,7 @@ import {
   dshHomePath,
   expandHomePath,
   resolveDshHome,
-} from '@neo/dsh-home-paths'
+} from '@neo/home-paths'
 
 afterEach(() => {
   vi.unstubAllEnvs()

@@ -1,4 +1,4 @@
-# @neo/dsh-tool-str-replace-editor
+# @neo/tool-str-replace-editor
 
 English | [中文](README.zh.md)
 

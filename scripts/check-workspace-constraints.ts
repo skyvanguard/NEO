@@ -52,10 +52,10 @@ const releaseMemberDirectory = /^(?:packages\/[^/]+\/[^/]+|apps\/[^/]+|vendor\/[
 
 const localArtifactDirs = new Set(['node_modules'])
 const appPackageFiles: Readonly<Record<string, readonly string[]>> = {
-  '@neo/dsh': ['lib/*.js', 'config'],
+  '@neo/cli': ['lib/*.js', 'config'],
   // The Web build emits sourcemaps for browser debugging; publishing them is
   // what the payload policy forbids, so the bundle ships without them.
-  '@neo/dsh-web-frontend': ['dist', '!dist/**/*.map'],
+  '@neo/web-frontend': ['dist', '!dist/**/*.map'],
 }
 
 /** The subset of package.json fields this constraint check cares about. */
@@ -132,19 +132,19 @@ function workspaceManifests(): WorkspaceManifest[] {
 
 const packageFileExtras: Readonly<Record<string, readonly string[]>> = {
   // Profile bundles publish their dsh.bundle.patch layer beside the lib.
-  '@neo/dsh-base': ['cordis.patch.yml'],
-  '@neo/dsh-web-app': ['cordis.patch.yml'],
-  '@neo/dsh-headless': ['cordis.patch.yml'],
-  '@neo/dsh-client-ui-theme': ['lib/styles'],
+  '@neo/base': ['cordis.patch.yml'],
+  '@neo/web-app': ['cordis.patch.yml'],
+  '@neo/headless': ['cordis.patch.yml'],
+  '@neo/client-ui-theme': ['lib/styles'],
   // The Python runtime uses a distinct closed-resolution bin; the public CLI
   // keeps config-owned bare-package resolution through lib/bin.js.
-  '@neo/dsh-sdk-jsonrpc-demo': ['lib/packaged-bin.js'],
+  '@neo/sdk-jsonrpc-demo': ['lib/packaged-bin.js'],
   // The argv-prefix runner entry ships beside the lib as its own bundle;
   // sandbox-local resolves it through the package's ./runner export. tsdown
   // also shares its generated FFI code through a hashed runtime chunk.
-  '@neo/dsh-sandbox-windows-acl': ['lib/runner.js', 'lib/types-*.js'],
-  '@neo/dsh-skill-badge': ['assets'],
-  '@neo/dsh-subprocess-local': ['scripts/ensure-spawn-helper.mjs'],
+  '@neo/sandbox-windows-acl': ['lib/runner.js', 'lib/types-*.js'],
+  '@neo/skill-badge': ['assets'],
+  '@neo/subprocess-local': ['scripts/ensure-spawn-helper.mjs'],
 }
 
 function sameStringList(actual: readonly string[] | undefined, expected: readonly string[]): boolean {
@@ -297,7 +297,7 @@ function checkWorkspace({ dir, manifest }: WorkspaceManifest): string[] {
     }
   }
 
-  if (dir.startsWith('packages/') && manifest.name?.startsWith('@neo/dsh-')) {
+  if (dir.startsWith('packages/') && manifest.name?.startsWith('@neo/')) {
     const peer = manifest.peerDependencies?.['@neo/cordis']
     const dev = manifest.devDependencies?.['@neo/cordis']
 

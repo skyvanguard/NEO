@@ -5,9 +5,9 @@
 // Host machine.
 
 import { useLayoutEffect, useRef, useState } from 'react'
-import type { HostDescriptionSource } from '@neo/dsh-client-connection/client'
-import type { InjectFace, PropsLocale } from '@neo/dsh-client-ui-slots'
-import type { TurnTailOwnerProps } from '@neo/dsh-client-ui-conversation/client'
+import type { HostDescriptionSource } from '@neo/client-connection/client'
+import type { InjectFace, PropsLocale } from '@neo/client-ui-slots'
+import type { TurnTailOwnerProps } from '@neo/client-ui-conversation/client'
 import { basename } from './turn-deliverables.ts'
 import type { NS } from './locales.ts'
 import css from './ProducedFiles.module.css'

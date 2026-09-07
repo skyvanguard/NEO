@@ -1,14 +1,14 @@
 /**
  * Vocabulary for the spill storage Service Definition. Types only — the abstract service
  * lives in `./index.ts`, implementations in sibling packages
- * (`@neo/dsh-spill-local` first).
+ * (`@neo/spill-local` first).
  *
- * @module @neo/dsh-spill/types
+ * @module @neo/spill/types
  */
 
-import type { Branded } from '@neo/dsh-brand'
-import type { CallId } from '@neo/dsh-llm'
-import type { SessionId } from '@neo/dsh-session'
+import type { Branded } from '@neo/brand'
+import type { CallId } from '@neo/llm'
+import type { SessionId } from '@neo/session'
 
 /**
  * Opaque model-facing handle for one spilled artifact. A local backend may use a

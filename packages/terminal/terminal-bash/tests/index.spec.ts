@@ -2,23 +2,23 @@ import { describe, expect, it, vi } from 'vitest'
 import { PassThrough } from 'node:stream'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
-import AgentRegistry, { Inbox, type Agent } from '@neo/dsh-agent'
-import SandboxProvider from '@neo/dsh-sandbox'
-import type { ConfinedArgv, SandboxPolicy } from '@neo/dsh-sandbox'
-import SandboxPolicyService, { setSandboxMode } from '@neo/dsh-sandbox-policy'
-import TerminalSessionService, { TerminalBackendCleanupError, TerminalSessionId } from '@neo/dsh-terminal'
-import { BashTerminalBackend } from '@neo/dsh-terminal-bash'
-import * as ptyLocal from '@neo/dsh-terminal-bash'
-import type { ResolvedConfig } from '@neo/dsh-terminal-bash/src/config.ts'
-import type { LocalPtySession } from '@neo/dsh-terminal-bash/src/session.ts'
-import { SubprocessRuntime } from '@neo/dsh-subprocess'
+import SessionStore, { Session, SessionId } from '@neo/session'
+import AgentRegistry, { Inbox, type Agent } from '@neo/agent'
+import SandboxProvider from '@neo/sandbox'
+import type { ConfinedArgv, SandboxPolicy } from '@neo/sandbox'
+import SandboxPolicyService, { setSandboxMode } from '@neo/sandbox-policy'
+import TerminalSessionService, { TerminalBackendCleanupError, TerminalSessionId } from '@neo/terminal'
+import { BashTerminalBackend } from '@neo/terminal-bash'
+import * as ptyLocal from '@neo/terminal-bash'
+import type { ResolvedConfig } from '@neo/terminal-bash/src/config.ts'
+import type { LocalPtySession } from '@neo/terminal-bash/src/session.ts'
+import { SubprocessRuntime } from '@neo/subprocess'
 import type {
   SubprocessHandle,
   SubprocessSpawnSpec,
   SubprocessTerminalHandle,
   SubprocessTerminalSpawnSpec,
-} from '@neo/dsh-subprocess'
+} from '@neo/subprocess'
 
 class EmptySandbox extends SandboxProvider {
   confine(_argv: readonly string[], _policy: SandboxPolicy): ConfinedArgv {

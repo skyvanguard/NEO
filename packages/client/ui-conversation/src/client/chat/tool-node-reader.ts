@@ -1,7 +1,7 @@
 import type {
   ConversationSnapshot, ToolCallBlock,
-} from '@neo/dsh-client-runtime/client'
-import { conversationContextKey } from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
+import { conversationContextKey } from '@neo/client-runtime/client'
 import type { ChatNode } from '../contract/chat-nodes.ts'
 
 function toolNode(node: ReturnType<ConversationSnapshot['chat']['nodes']['get']>): ChatNode<'tool-call'> | undefined {

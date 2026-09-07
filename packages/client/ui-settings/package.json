@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-settings",
+  "name": "@neo/client-ui-settings",
   "description": "Settings domain base plugin: the settings-namespace scope service and the canonical settings slot-type contract",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,9 +32,9 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-connection",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-api-remotes"
+        "@neo/client-connection",
+        "@neo/client-runtime",
+        "@neo/api-remotes"
       ],
       "platform": "web"
     }
@@ -46,24 +46,24 @@
   "license": "MIT",
   "peerDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-schema-form": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-settings": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-schema-form": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/settings": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-schema-form": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-settings": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-schema-form": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/settings": "workspace:^",
     "@types/react": "~18.3.1",
     "react": "^18.2.0"
   },

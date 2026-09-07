@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-web-search-deepseek`.
- * @module @neo/dsh-web-search-deepseek/invariant
+ * Package-owned invariant companion for `@neo/web-search-deepseek`.
+ * @module @neo/web-search-deepseek/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-web-search-deepseek'
+const PACKAGE_NAME = '@neo/web-search-deepseek'
 
 /** Cordis companion plugin name. */
 export const name = 'web-search-deepseek-invariant'

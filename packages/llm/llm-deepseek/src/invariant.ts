@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-llm-deepseek`.
- * @module @neo/dsh-llm-deepseek/invariant
+ * Package-owned invariant companion for `@neo/llm-deepseek`.
+ * @module @neo/llm-deepseek/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-llm-deepseek'
+const PACKAGE_NAME = '@neo/llm-deepseek'
 
 /** Cordis companion plugin name. */
 export const name = 'llm-deepseek-invariant'

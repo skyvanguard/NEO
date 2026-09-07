@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-connection",
+  "name": "@neo/client-connection",
   "description": "Wire consumer layer: HTTP-up/WebSocket-down client, ConnectionController dual streams with reconnect, and fixture api",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -38,12 +38,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@neo/dsh-attachment": "workspace:^",
-    "@neo/dsh-host-apiproxy": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/attachment": "workspace:^",
+    "@neo/host-apiproxy": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/schemastery": "workspace:^",
     "ws": "^8.21.0"
   },
@@ -54,13 +54,13 @@
     "lib/types/**/*.d.ts"
   ],
   "peerDependencies": {
-    "@neo/dsh-host-webserver": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/host-webserver": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-host-webserver": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/host-webserver": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@types/ws": "^8.18.1",
     "@neo/cordis": "workspace:^"
   }

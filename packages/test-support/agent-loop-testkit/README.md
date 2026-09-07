@@ -1,4 +1,4 @@
-# `@neo/dsh-agent-loop-testkit`
+# `@neo/agent-loop-testkit`
 
 English | [中文](README.zh.md)
 
@@ -8,8 +8,8 @@ The caller registers adapters and optional plugins, mounts `AgentLoop` with the 
 
 ```ts
 import { Context } from '@neo/cordis'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
 
 const ctx = new Context()
 

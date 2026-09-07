@@ -1,14 +1,14 @@
 /**
  * Package-owned request-reconstruction invariant for loop-built LLM calls.
- * @module @neo/dsh-agent-loop/invariant
+ * @module @neo/agent-loop/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import { isAgentLoopRequest, type GenerateOptions } from '@neo/dsh-llm'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
-import { foldRequestHeader } from '@neo/dsh-session'
+import { isAgentLoopRequest, type GenerateOptions } from '@neo/llm'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
+import { foldRequestHeader } from '@neo/session'
 
-const PACKAGE_NAME = '@neo/dsh-agent-loop'
+const PACKAGE_NAME = '@neo/agent-loop'
 
 /** Cordis companion plugin name. */
 export const name = 'agent-loop-invariant'

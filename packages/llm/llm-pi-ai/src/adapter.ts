@@ -37,7 +37,7 @@ import {
   LlmAdapter,
   LlmError,
   ReasoningEffortId,
-} from '@neo/dsh-llm'
+} from '@neo/llm'
 import type {
   GenerateOptions,
   LlmModelInfo,
@@ -46,9 +46,9 @@ import type {
   ReasoningEffortId as ReasoningEffortIdType,
   ResolvedRetryPolicy,
   StreamChunk,
-} from '@neo/dsh-llm'
-import type { AttachmentStore } from '@neo/dsh-attachment'
-import { idleWatchdog, timeoutOf } from '@neo/dsh-timeout'
+} from '@neo/llm'
+import type { AttachmentStore } from '@neo/attachment'
+import { idleWatchdog, timeoutOf } from '@neo/timeout'
 import type { ResolvedPiAiProviderProfile } from './config.ts'
 import { toPiContext } from './context.ts'
 import { toStreamChunks } from './stream.ts'

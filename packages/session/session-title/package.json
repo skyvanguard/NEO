@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-title",
+  "name": "@neo/session-title",
   "description": "Log-backed session title service and provider registry for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -41,11 +41,11 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-projection": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -53,13 +53,13 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@neo/dsh-brand": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence-jsonl": "workspace:^",
-    "@neo/dsh-session-persistence-sqlite": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/session-persistence-sqlite": "workspace:^",
+    "@neo/session-projection": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

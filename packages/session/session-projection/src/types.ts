@@ -5,7 +5,7 @@
  * packages may declare-merge through either the package root or this outlet —
  * re-export preserves symbol identity, so both land on the same table.
  *
- * @module @neo/dsh-session-projection/types
+ * @module @neo/session-projection/types
  */
 
 /**

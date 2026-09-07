@@ -8,7 +8,7 @@ import {
   type Scope,
   type ScopeKey,
   type ScopeLayer,
-} from '@neo/dsh-scope'
+} from '@neo/scope'
 
 class TestLayer implements ScopeLayer {
   readonly named: NamedEntries<number>

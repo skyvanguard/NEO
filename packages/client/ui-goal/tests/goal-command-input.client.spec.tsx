@@ -4,13 +4,13 @@ import { afterEach, describe, expect, it } from 'vitest'
 import type {
   ChatConversationViewNode, ChatSnapshot, ConversationEventInput,
   ConversationNodeDefinition, ConversationViewDefinition,
-} from '@neo/dsh-client-runtime/client'
-import { ConversationNodeAssembler } from '@neo/dsh-client-runtime/client'
-import { makeTranslate } from '@neo/dsh-client-test-runtime'
-import { zh as commonZh } from '@neo/dsh-client-locale/src/locales/zh.ts'
-import type { SessionEvent } from '@neo/dsh-session/types'
-import { commandDefinition } from '@neo/dsh-client-ui-conversation/src/client/conversation-nodes/command.ts'
-import { chatViewDefinition } from '@neo/dsh-client-ui-conversation/src/client/conversation-nodes/chat-snapshot-builder.ts'
+} from '@neo/client-runtime/client'
+import { ConversationNodeAssembler } from '@neo/client-runtime/client'
+import { makeTranslate } from '@neo/client-test-runtime'
+import { zh as commonZh } from '@neo/client-locale/src/locales/zh.ts'
+import type { SessionEvent } from '@neo/session/types'
+import { commandDefinition } from '@neo/client-ui-conversation/src/client/conversation-nodes/command.ts'
+import { chatViewDefinition } from '@neo/client-ui-conversation/src/client/conversation-nodes/chat-snapshot-builder.ts'
 import { GoalCommandInputView } from '../src/client/GoalCommandInputView.tsx'
 import {
   goalCommandInputDefinition, goalCommandText,

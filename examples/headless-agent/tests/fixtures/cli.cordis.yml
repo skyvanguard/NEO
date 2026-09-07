@@ -7,10 +7,10 @@
     path: ../../cordis.yml
     patches:
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         disabled: true
       - id: agent-spine
-        name: '@neo/dsh-agent-spine-demo'
+        name: '@neo/agent-spine-demo'
         config:
           agents:
             - id: main
@@ -24,6 +24,6 @@
               agentsHome: './.agents-home'
           persona: 'Keyless headless-agent smoke.'
       - id: persistence
-        name: '@neo/dsh-session-persistence-jsonl'
+        name: '@neo/session-persistence-jsonl'
         config:
           root: './.sessions'

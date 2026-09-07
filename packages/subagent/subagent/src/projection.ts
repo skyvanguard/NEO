@@ -2,12 +2,12 @@
  * Pure session projections for subagent identity (mode/label) and active-turn
  * duration.
  *
- * @module @neo/dsh-subagent/projection
+ * @module @neo/subagent/projection
  */
 
 import { z } from 'zod'
-import type { ProjectionDefinition } from '@neo/dsh-session-projection'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { ProjectionDefinition } from '@neo/session-projection'
+import type { SessionEvent } from '@neo/session'
 import { foldSubagentDescriptor } from './descriptor.ts'
 import type { SubagentDescriptorData } from './descriptor.ts'
 import type { SubagentIdentityProjection, SubagentTimingProjection } from './projection-types.ts'

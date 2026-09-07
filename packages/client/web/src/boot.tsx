@@ -35,11 +35,11 @@
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import { createRoot, type Root } from 'react-dom/client'
-import * as ModulesClient from '@neo/dsh-client-modules/client'
+import * as ModulesClient from '@neo/client-modules/client'
 import {
   ClientModuleSystem, parseBootManifest,
   type BootManifest, type ClientModuleSystemOptions, type DshWindow,
-} from '@neo/dsh-client-modules/client'
+} from '@neo/client-modules/client'
 import * as AppShell from './app-shell.ts'
 import { APP_SHELL_ID } from './app-shell.ts'
 import { AppRoot } from './AppRoot.tsx'
@@ -57,7 +57,7 @@ export type BootSeams = Pick<ClientModuleSystemOptions, 'loadBundle'>
  * does not deduplicate by name, and a second fiber would provide 'modules'
  * twice.
  */
-const MODULES_ID = '@neo/dsh-client-modules'
+const MODULES_ID = '@neo/client-modules'
 
 /**
  * The web shell kernel: mounts the loading page into a DOM element and runs

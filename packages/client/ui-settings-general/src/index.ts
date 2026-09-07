@@ -2,7 +2,7 @@
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { settingsNamespace } from '@neo/dsh-settings'
+import { settingsNamespace } from '@neo/settings'
 
 /** Durable settings namespace for product-wide GUI onboarding facts. */
 const ONBOARDING_SETTINGS_NAMESPACE = 'ui-onboarding'

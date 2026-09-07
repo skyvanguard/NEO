@@ -1,11 +1,11 @@
 /**
  * Types shared by job producers, the registry, and controllers. The
  * service implementation lives in `./index.ts`.
- * @module @neo/dsh-jobs/types
+ * @module @neo/jobs/types
  */
 
-import type { Agent } from '@neo/dsh-agent'
-import type { SessionId } from '@neo/dsh-session'
+import type { Agent } from '@neo/agent'
+import type { SessionId } from '@neo/session'
 import type { JobId } from './brand.ts'
 
 export { JobId } from './brand.ts'

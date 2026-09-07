@@ -1,9 +1,9 @@
 /** Test adapter for the production conversation.details.tool registration. */
 import type {
   ChatConversationViewNode, ChatSnapshot, ConversationNode, RunningToolCall, SessionId,
-} from '@neo/dsh-client-runtime/client'
-import type { SessionProviderComponent, TranslateNS } from '@neo/dsh-client-ui-slots'
-import type { DetailsSlotProps, DetailsToolOwnerProps } from '@neo/dsh-client-ui-conversation/src/client/contract/slots.ts'
+} from '@neo/client-runtime/client'
+import type { SessionProviderComponent, TranslateNS } from '@neo/client-ui-slots'
+import type { DetailsSlotProps, DetailsToolOwnerProps } from '@neo/client-ui-conversation/src/client/contract/slots.ts'
 import { ToolDetails } from '../src/client/tool/ToolDetails.tsx'
 
 /** Framework session-area seat used by direct DetailsPanel tests. */

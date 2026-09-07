@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { FsTargetKey, FsVersion } from '@neo/dsh-fs'
-import type { FsTarget } from '@neo/dsh-fs'
-import * as FsInvariant from '@neo/dsh-fs/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import { FsTargetKey, FsVersion } from '@neo/fs'
+import type { FsTarget } from '@neo/fs'
+import * as FsInvariant from '@neo/fs/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()

@@ -1,10 +1,10 @@
-/** Package-owned agent lifecycle invariants. @module @neo/dsh-agent/invariant */
+/** Package-owned agent lifecycle invariants. @module @neo/agent/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
-import type { Agent, AgentStatus } from '@neo/dsh-agent'
+import type { InvariantInstaller } from '@neo/invariants'
+import type { Agent, AgentStatus } from '@neo/agent'
 
-const PACKAGE_NAME = '@neo/dsh-agent'
+const PACKAGE_NAME = '@neo/agent'
 
 /** Cordis companion plugin name. */
 export const name = 'agent-invariant'

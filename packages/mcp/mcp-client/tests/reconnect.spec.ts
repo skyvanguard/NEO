@@ -6,10 +6,10 @@
  */
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { Context } from '@neo/cordis'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import { CallId } from '@neo/dsh-llm'
-import type { Config } from '@neo/dsh-mcp-client'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import { CallId } from '@neo/llm'
+import type { Config } from '@neo/mcp-client'
 
 // ---- Mock MCP SDK ----
 
@@ -58,8 +58,8 @@ vi.mock('@modelcontextprotocol/sdk/client/streamableHttp.js', () => ({
 
 // vi.mock is hoisted above static imports, so the modules under test see the
 // mocked SDK even through a static import.
-import { apply } from '@neo/dsh-mcp-client/src/index.ts'
-import { RECONNECT_DEFAULTS, resolveReconnectPolicy, startConnection } from '@neo/dsh-mcp-client/src/connection.ts'
+import { apply } from '@neo/mcp-client/src/index.ts'
+import { RECONNECT_DEFAULTS, resolveReconnectPolicy, startConnection } from '@neo/mcp-client/src/connection.ts'
 
 // ---- Helpers ----
 

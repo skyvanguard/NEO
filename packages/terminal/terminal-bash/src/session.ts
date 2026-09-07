@@ -5,8 +5,8 @@ import type {
   SubprocessOutcome,
   SubprocessTerminalForeground,
   SubprocessTerminalHandle,
-} from '@neo/dsh-subprocess'
-import { TerminalError } from '@neo/dsh-terminal'
+} from '@neo/subprocess'
+import { TerminalError } from '@neo/terminal'
 import type {
   TerminalBackendSession,
   TerminalReadRequest,
@@ -19,7 +19,7 @@ import type {
   TerminalSignal,
   TerminalSignalResult,
   TerminalWaitReason,
-} from '@neo/dsh-terminal'
+} from '@neo/terminal'
 import type { ResolvedConfig } from './config.ts'
 import { CONTROLLED_PROMPT, TerminalSanitizer } from './sanitize.ts'
 

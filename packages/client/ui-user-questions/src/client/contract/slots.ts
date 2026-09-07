@@ -6,12 +6,12 @@
  * cancelled error encoding, receipt checks — lives HERE, with the package
  * that consumes it.
  */
-import type { PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
+import type { PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
 // Also pulls ui-conversation's SlotMap merge (the 'conversation.composer'
 // entry) into every program that sees this contract, so PropsRuntime resolves.
-import type {} from '@neo/dsh-client-ui-conversation/client'
-import type { PendingWait } from '@neo/dsh-client-runtime/client'
-import type { QuestionResponsePayload } from '@neo/dsh-api-remotes/client'
+import type {} from '@neo/client-ui-conversation/client'
+import type { PendingWait } from '@neo/client-runtime/client'
+import type { QuestionResponsePayload } from '@neo/api-remotes/client'
 
 /** The pending question carrier the owner dispatches into the composer slot. */
 export type QuestionWait = PendingWait<'question'>

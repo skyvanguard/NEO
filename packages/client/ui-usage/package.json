@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-ui-usage",
+  "name": "@neo/client-ui-usage",
   "description": "Cumulative cross-session token-usage panel in Web Settings",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -27,10 +27,10 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-api-remotes",
-        "@neo/dsh-client-runtime",
-        "@neo/dsh-client-ui-settings",
-        "@neo/dsh-client-locale"
+        "@neo/api-remotes",
+        "@neo/client-runtime",
+        "@neo/client-ui-settings",
+        "@neo/client-locale"
       ],
       "platform": "web"
     }
@@ -41,25 +41,25 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-ui-settings": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-usage-stats": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-ui-settings": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/usage-stats": "workspace:^",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-client-locale": "workspace:^",
-    "@neo/dsh-client-runtime": "workspace:^",
-    "@neo/dsh-client-test-runtime": "workspace:^",
-    "@neo/dsh-client-ui-settings": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-usage-stats": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/client-locale": "workspace:^",
+    "@neo/client-runtime": "workspace:^",
+    "@neo/client-test-runtime": "workspace:^",
+    "@neo/client-ui-settings": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/usage-stats": "workspace:^",
     "@types/react": "~18.3.1",
     "@neo/cordis": "workspace:^",
     "react": "^18.2.0",

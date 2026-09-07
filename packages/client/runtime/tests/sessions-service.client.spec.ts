@@ -8,7 +8,7 @@
  */
 import { Context } from '@neo/cordis'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { SessionId } from '@neo/dsh-api-remotes/client'
+import type { SessionId } from '@neo/api-remotes/client'
 import { SessionCreateError, SessionRuntime, scopeOf } from '../src/client/sessions/service.ts'
 import { FakeApiClient, deferred, err, fakeRemote, ok } from './fake-api.client.ts'
 

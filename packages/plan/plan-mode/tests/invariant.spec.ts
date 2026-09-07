@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { Session, SessionId, type SessionEvent } from '@neo/dsh-session'
-import * as PlanModeInvariant from '@neo/dsh-plan-mode/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import SessionStore, { Session, SessionId, type SessionEvent } from '@neo/session'
+import * as PlanModeInvariant from '@neo/plan-mode/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()

@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-input-trigger
+# @neo/client-ui-input-trigger
 
 English | [中文](README.zh.md)
 

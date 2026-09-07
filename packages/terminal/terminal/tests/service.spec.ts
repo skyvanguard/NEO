@@ -1,9 +1,9 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { Session, SessionId } from '@neo/dsh-session'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import TerminalSessionService, { TerminalBackendCleanupError, TerminalError, TerminalSessionId } from '@neo/dsh-terminal'
+import { Session, SessionId } from '@neo/session'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import TerminalSessionService, { TerminalBackendCleanupError, TerminalError, TerminalSessionId } from '@neo/terminal'
 import type {
   TerminalBackend,
   TerminalBackendSession,
@@ -13,7 +13,7 @@ import type {
   TerminalSessionId as TerminalSessionIdType,
   TerminalSessionStatus,
   TerminalSignal,
-} from '@neo/dsh-terminal'
+} from '@neo/terminal'
 
 const agentScopeDisposers = new WeakMap<Agent, () => Promise<void>>()
 const ptyServiceDisposers = new WeakMap<Context, () => Promise<void>>()

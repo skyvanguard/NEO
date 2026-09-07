@@ -1,6 +1,6 @@
-/** JSON string-prefix accounting for the outer-output ledger. @module @neo/dsh-code-runtime-worker-thread/output-json */
+/** JSON string-prefix accounting for the outer-output ledger. @module @neo/code-runtime-worker-thread/output-json */
 
-import type { CodeJsonValue } from '@neo/dsh-code-runtime'
+import type { CodeJsonValue } from '@neo/code-runtime'
 
 type IntrinsicCallable = (this: unknown, ...args: unknown[]) => unknown
 

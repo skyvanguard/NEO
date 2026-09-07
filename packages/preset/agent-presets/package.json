@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-agent-presets",
+  "name": "@neo/agent-presets",
   "description": "Per-session agent composition from preset cordis.yml files for the DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -39,14 +39,14 @@
   "peerDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-atomic-write": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-home-paths": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-settings": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/atomic-write": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/settings": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -56,18 +56,18 @@
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-loop": "workspace:^",
-    "@neo/dsh-atomic-write": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-home-paths": "workspace:^",
-    "@neo/dsh-scope": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-settings": "workspace:^",
-    "@neo/dsh-settings-file": "workspace:^",
-    "@neo/dsh-system-prompt": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/atomic-write": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/settings": "workspace:^",
+    "@neo/settings-file": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

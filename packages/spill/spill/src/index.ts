@@ -3,15 +3,15 @@
  * spill backend does — persist a tool's oversized text and return a model-facing
  * locator plus retrieval guidance — without saying HOW. Implementations
  * subclass {@link SpillStore} and register as the `spillStore` service;
- * `@neo/dsh-spill-local` (host filesystem) is the first.
+ * `@neo/spill-local` (host filesystem) is the first.
  *
  * The Service Definition is deliberately minimal: `saveText` and nothing else. It owns NO
- * retention policy (that is `@neo/dsh-output-retention`), NO tool-result
- * replacement (that is `@neo/dsh-spill-policy`), and NO retrieval or
+ * retention policy (that is `@neo/output-retention`), NO tool-result
+ * replacement (that is `@neo/spill-policy`), and NO retrieval or
  * search API. The backend supplies the locator and retrieval hint appropriate
  * for its storage substrate.
  *
- * @module @neo/dsh-spill
+ * @module @neo/spill
  */
 
 import { Context, Service } from '@neo/cordis'

@@ -15,11 +15,11 @@
  * data. The decoder validates before expanding and fails loud on a malformed
  * row-tagged value instead of silently dropping a whole run.
  *
- * @module @neo/dsh-session/chunk-rows
+ * @module @neo/session/chunk-rows
  */
 
-import { CallId, assertNever } from '@neo/dsh-llm'
-import type { StreamChunk } from '@neo/dsh-llm'
+import { CallId, assertNever } from '@neo/llm'
+import type { StreamChunk } from '@neo/llm'
 import type { SessionEvent } from './types.ts'
 
 /** The chunk kinds that may pack; block boundaries, usage, and finish chunks always stay one event per line. */

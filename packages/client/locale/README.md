@@ -1,4 +1,4 @@
-# @neo/dsh-client-locale
+# @neo/client-locale
 
 English | [中文](README.zh.md)
 

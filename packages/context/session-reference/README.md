@@ -1,4 +1,4 @@
-# `@neo/dsh-session-reference`
+# `@neo/session-reference`
 
 English | [中文](README.zh.md)
 

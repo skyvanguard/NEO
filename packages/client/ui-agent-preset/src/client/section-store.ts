@@ -14,8 +14,8 @@
  * more than the row it targeted.
  */
 
-import type { IApiClient } from '@neo/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@neo/dsh-client-runtime/client'
+import type { IApiClient } from '@neo/api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@neo/client-runtime/client'
 import { beginRosterRead, messageOf, writeDefaultPreset } from './settings-store.ts'
 
 /** Ids a preset directory may be named, mirroring the host's own rule. */

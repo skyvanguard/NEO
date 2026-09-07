@@ -10,8 +10,8 @@
 import { readdir, readFile, stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { decompressConcatenatedZstd } from './zstd.ts'
-import type { TokenUsage } from '@neo/dsh-llm'
-import type { SessionEvent } from '@neo/dsh-session'
+import type { TokenUsage } from '@neo/llm'
+import type { SessionEvent } from '@neo/session'
 import type {
   UsageDayBucket, UsageSessionRow, UsageSummary, UsageSummaryRequest, UsageTotals, UsageWorkspaceBucket,
 } from './types.ts'

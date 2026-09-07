@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-api-gateway`.
- * @module @neo/dsh-api-gateway/invariant
+ * Package-owned invariant companion for `@neo/api-gateway`.
+ * @module @neo/api-gateway/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-api-gateway'
+const PACKAGE_NAME = '@neo/api-gateway'
 
 /** Cordis companion plugin name. */
 export const name = 'api-gateway-invariant'

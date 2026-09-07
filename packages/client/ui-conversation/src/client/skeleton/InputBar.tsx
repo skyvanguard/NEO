@@ -11,18 +11,18 @@ import type { ChangeEvent, KeyboardEvent, MouseEvent, ReactNode } from 'react'
 import clsx from 'clsx'
 import {
   IconPlusOutline16, IconWarningOutline16, Toast, Tooltip,
-} from '@neo/dsh-client-ui-primitives'
-import { AttachmentRail, DropOverlay, ImageLightbox } from '@neo/dsh-client-ui-attachment'
-import type { AttachmentRailItem } from '@neo/dsh-client-ui-attachment'
+} from '@neo/client-ui-primitives'
+import { AttachmentRail, DropOverlay, ImageLightbox } from '@neo/client-ui-attachment'
+import type { AttachmentRailItem } from '@neo/client-ui-attachment'
 // Type-only: the `plan` projection key merge (the TodoDock posture — the
 // composer reads a host-computed value; the domain owns the key).
-import type {} from '@neo/dsh-plan-mode/client'
+import type {} from '@neo/plan-mode/client'
 // Type-only: the `goal` projection key merge (hint disambiguation).
-import type {} from '@neo/dsh-goal/client'
+import type {} from '@neo/goal/client'
 // The `imageLimits` projection key merge (intake pre-check) arrives with the
 // wire types: apiproxy's sessions contract declares it, and client-runtime's
 // api-remotes import already places it in every client program.
-import type { Translate } from '@neo/dsh-client-ui-slots'
+import type { Translate } from '@neo/client-ui-slots'
 import type { ComposerAttachment, ComposerBarProps } from '../contract/slots.ts'
 import { deriveDecorations } from '../input/decorations.ts'
 import type { DraftDecorations } from '../input/decorations.ts'

@@ -9,9 +9,9 @@
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { CallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@neo/dsh-llm'
-import { SESSION_FORMAT_VERSION, Session, SessionId } from '@neo/dsh-session'
-import type {} from '@neo/dsh-session-title'
+import { CallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@neo/llm'
+import { SESSION_FORMAT_VERSION, Session, SessionId } from '@neo/session'
+import type {} from '@neo/session-title'
 import {
   launchWebScaffold, seedSession, watchConsole, webSnapshotMode, type WebScaffold,
 } from './scaffold.ts'

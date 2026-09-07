@@ -1,6 +1,6 @@
-import type { ObservableSnapshot, SessionId } from '@neo/dsh-client-runtime/client'
-import { Button, Modal } from '@neo/dsh-client-ui-primitives'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
+import type { ObservableSnapshot, SessionId } from '@neo/client-runtime/client'
+import { Button, Modal } from '@neo/client-ui-primitives'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
 import type { SessionLogDownloadState } from './controller.ts'
 import { NS } from './locales.ts'
 

@@ -1,6 +1,6 @@
-/** Attachment identifier brand. @module @neo/dsh-attachment/brand */
+/** Attachment identifier brand. @module @neo/attachment/brand */
 
-import type { Branded } from '@neo/dsh-brand'
+import type { Branded } from '@neo/brand'
 
 /** Opaque content-addressed identifier for one immutable attachment object. */
 export type AttachmentId = Branded<'AttachmentId'>

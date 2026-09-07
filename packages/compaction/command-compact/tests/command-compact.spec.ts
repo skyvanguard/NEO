@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import type { Agent } from '@neo/dsh-agent'
-import CommandRuntime, { type CommandResult } from '@neo/dsh-commands'
+import type { Agent } from '@neo/agent'
+import CommandRuntime, { type CommandResult } from '@neo/commands'
 import {
   CompactionId,
   CompactionEngine,
@@ -11,9 +11,9 @@ import {
   type CompactionResult,
   type CompactionTrigger,
   type ManualCompactAgentContext,
-} from '@neo/dsh-compaction'
-import { Session, SessionId } from '@neo/dsh-session'
-import * as commandCompact from '@neo/dsh-command-compact'
+} from '@neo/compaction'
+import { Session, SessionId } from '@neo/session'
+import * as commandCompact from '@neo/command-compact'
 
 const COMPACTION_ID = CompactionId('command-compact-test')
 
@@ -153,7 +153,7 @@ function expectLastLifecycle(
   return runEvent.data.commandId
 }
 
-describe('@neo/dsh-command-compact registration', () => {
+describe('@neo/command-compact registration', () => {
   it('registers one argument-free command with Loader-safe exports and disposes it', async () => {
     const test = await harness()
     expect(commandCompact.name).toBe('command-compact')

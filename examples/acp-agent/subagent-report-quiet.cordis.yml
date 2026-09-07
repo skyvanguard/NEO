@@ -9,7 +9,7 @@
     path: ./cordis.yml
     patches:
       - id: tool-subagent-report
-        name: '@neo/dsh-tool-subagent-report'
+        name: '@neo/tool-subagent-report'
         config:
           reportDelivery: quiet
 

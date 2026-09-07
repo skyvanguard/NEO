@@ -14,11 +14,11 @@ It is a **library, not a service or plugin**: no `ctx`, registers nothing, emits
 import {
   ItemRetainer, TextRetainer,
   describeOmitted, formatRetentionNotice,
-} from '@neo/dsh-output-retention'
+} from '@neo/output-retention'
 import type {
   Omitted, PushDecision, RetainedItems, RetainedText,
   ItemRetentionStrategy, TextRetentionStrategy, RetentionNotice,
-} from '@neo/dsh-output-retention'
+} from '@neo/output-retention'
 ```
 
 | Export | Role |

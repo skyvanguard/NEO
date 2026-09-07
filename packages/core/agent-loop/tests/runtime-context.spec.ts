@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { createUserMessage } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
+import { createUserMessage } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
 import { RuntimeContextProjection } from '../src/runtime-context.ts'
 
-const SOURCE = '@neo/dsh-system-prompt'
+const SOURCE = '@neo/system-prompt'
 
 function contextMessage(text: string) {
   return createUserMessage({

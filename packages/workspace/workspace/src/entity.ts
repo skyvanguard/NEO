@@ -5,12 +5,12 @@
  * `updatedAt` stamping and invalid-account pruning happen exactly once.
  * Not re-exported from the package entrypoint — consumers see only the
  * `Workspace` interface.
- * @module @neo/dsh-workspace/src/entity
+ * @module @neo/workspace/src/entity
  */
 
 import { stat } from 'node:fs/promises'
-import type { SessionHeader, SessionId } from '@neo/dsh-session'
-import type { KvTable } from '@neo/dsh-storage-domain'
+import type { SessionHeader, SessionId } from '@neo/session'
+import type { KvTable } from '@neo/storage-domain'
 import type { WorkspaceRecord } from './spec.ts'
 import type { Workspace, WorkspaceId } from './types.ts'
 import { realpathNormalize } from './paths.ts'

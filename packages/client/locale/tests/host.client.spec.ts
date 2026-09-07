@@ -1,9 +1,9 @@
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import { SettingsProvider, settingsNamespace, type SettingsNamespace } from '@neo/dsh-settings'
+import { SettingsProvider, settingsNamespace, type SettingsNamespace } from '@neo/settings'
 import {
   LOCALE_SETTINGS_NAMESPACE, apply,
-} from '@neo/dsh-client-locale'
+} from '@neo/client-locale'
 
 class MemorySettings extends SettingsProvider {
   readonly writable = true

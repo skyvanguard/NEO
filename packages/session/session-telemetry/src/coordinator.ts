@@ -11,12 +11,12 @@
  * stop-on-throw) or touch the agent loop. Composed by a backend in its
  * constructor.
  *
- * @module @neo/dsh-session-telemetry/coordinator
+ * @module @neo/session-telemetry/coordinator
  */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { Agent } from '@neo/dsh-agent'
+import type { Session, SessionEvent } from '@neo/session'
+import type { Agent } from '@neo/agent'
 import type { SessionTelemetrySink, SessionTelemetryRecord, SessionTelemetrySeverity } from './index.ts'
 
 /** Whether capture follows live events or reads the canonical log only when requested. */

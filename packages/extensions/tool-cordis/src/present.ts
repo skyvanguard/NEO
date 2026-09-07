@@ -1,6 +1,6 @@
 /** Pure replay-safe render intents for Cordis tools. */
 
-import type { GenericCallView } from '@neo/dsh-tools'
+import type { GenericCallView } from '@neo/tools'
 
 /**
  * Render a runtime-inspection call.

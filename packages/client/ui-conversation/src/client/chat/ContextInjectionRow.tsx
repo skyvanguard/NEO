@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import type { ContextMessageNode } from '@neo/dsh-client-runtime/client'
+import type { ContextMessageNode } from '@neo/client-runtime/client'
 import type { ChatViewSlotProps } from '../contract/slots.ts'
-import { DisclosureRow, IconBrowseOutline16 } from '@neo/dsh-client-ui-primitives'
+import { DisclosureRow, IconBrowseOutline16 } from '@neo/client-ui-primitives'
 import { contextBody } from './ContextBody.tsx'
 import css from './ContextInjectionRow.module.css'
 

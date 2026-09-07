@@ -1,13 +1,13 @@
 /**
  * Service Definition for the `ctx.shell` capability seam, covering foreground commands and background process
  * handles. Job ids, ownership, polling, and notices belong to
- * `@neo/dsh-jobs`, keeping executors independent of sessions.
- * @module @neo/dsh-shell
+ * `@neo/jobs`, keeping executors independent of sessions.
+ * @module @neo/shell
  */
 
 import { Context, Service } from '@neo/cordis'
-import { settingsNamespace } from '@neo/dsh-settings'
-import type { SandboxMode } from '@neo/dsh-sandbox'
+import { settingsNamespace } from '@neo/settings'
+import type { SandboxMode } from '@neo/sandbox'
 import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellRunResult } from './types.ts'
 
 /**

@@ -1,12 +1,12 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-headless`.
- * @module @neo/dsh-headless/invariant
+ * Package-owned invariant companion for `@neo/headless`.
+ * @module @neo/headless/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-headless'
+const PACKAGE_NAME = '@neo/headless'
 
 /** Cordis companion plugin name. */
 export const name = 'headless-invariant'

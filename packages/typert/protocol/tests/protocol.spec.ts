@@ -11,7 +11,7 @@ import {
   type TypertContext,
   type TypertForwardableEvent,
   type TypertRemoteEvent,
-} from '@neo/dsh-typert-protocol'
+} from '@neo/typert-protocol'
 
 declare module '@neo/cordis' {
   interface Events {
@@ -34,7 +34,7 @@ declare module '@neo/cordis' {
   }
 }
 
-declare module '@neo/dsh-typert-protocol' {
+declare module '@neo/typert-protocol' {
   interface TypertContextMap {
     metaFixture: TypertContext<string>
   }

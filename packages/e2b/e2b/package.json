@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-e2b",
+  "name": "@neo/e2b",
   "description": "Shared E2B sandbox lifecycle for DeepSeek Harness provider adapters",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,7 +32,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -40,9 +40,9 @@
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-loader-smoke": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/loader-smoke": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

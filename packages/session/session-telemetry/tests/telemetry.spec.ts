@@ -1,4 +1,4 @@
-import { createToolResultMessage, createUserMessage } from '@neo/dsh-llm'
+import { createToolResultMessage, createUserMessage } from '@neo/llm'
 /**
  * Coordinator semantics against a bare fake backend — the RFC's named unit
  * tier for the seam: adoption (fresh, seeded, re-adoption via the handoff
@@ -8,8 +8,8 @@ import { createToolResultMessage, createUserMessage } from '@neo/dsh-llm'
 
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { SessionId, type Session, type SessionEvent } from '@neo/dsh-session'
-import type { Agent } from '@neo/dsh-agent'
+import SessionStore, { SessionId, type Session, type SessionEvent } from '@neo/session'
+import type { Agent } from '@neo/agent'
 import {
   SessionTelemetryCoordinator,
   type SessionTelemetrySink,
@@ -17,7 +17,7 @@ import {
   type SessionTelemetryRecord,
 } from '../src/index.ts'
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * Test-only merged event proving unknown types flow through unchanged.

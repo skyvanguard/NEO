@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-storage-sqlite",
+  "name": "@neo/storage-sqlite",
   "description": "SQLite storage backend (kv facet) for the DeepSeek Harness storage hub",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,16 +32,16 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-storage": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/storage": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-storage": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/storage": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

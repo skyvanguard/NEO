@@ -5,7 +5,7 @@
  * cannot ride the `dsh-subprocess` service — this module is the seam's
  * documented exception for SDK-managed transports.
  *
- * @module @neo/dsh-sdk-client/dispose
+ * @module @neo/sdk-client/dispose
  */
 
 import type { ChildProcess } from 'node:child_process'

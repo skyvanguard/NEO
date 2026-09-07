@@ -13,9 +13,9 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { Context } from '@neo/cordis'
-import { LocalFileSystem } from '@neo/dsh-fs-local'
-import { FsVersion } from '@neo/dsh-fs'
-import type { FsTarget } from '@neo/dsh-fs'
+import { LocalFileSystem } from '@neo/fs-local'
+import { FsVersion } from '@neo/fs'
+import type { FsTarget } from '@neo/fs'
 
 let dir: string
 let ctx: Context

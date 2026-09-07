@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-token-meter`.
- * @module @neo/dsh-token-meter/invariant
+ * Package-owned invariant companion for `@neo/token-meter`.
+ * @module @neo/token-meter/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-token-meter'
+const PACKAGE_NAME = '@neo/token-meter'
 
 /** Cordis companion plugin name. */
 export const name = 'token-meter-invariant'

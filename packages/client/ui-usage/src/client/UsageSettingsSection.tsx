@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
-import type { UsageSummary, UsageTotals } from '@neo/dsh-usage-stats/types'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
+import type { UsageSummary, UsageTotals } from '@neo/usage-stats/types'
 import css from './UsageSettingsSection.module.css'
 
 /** Registration-side Remote face used by the section. */

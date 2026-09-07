@@ -1,4 +1,4 @@
-# @neo/dsh-session-query-sqlite
+# @neo/session-query-sqlite
 
 English | [中文](README.zh.md)
 

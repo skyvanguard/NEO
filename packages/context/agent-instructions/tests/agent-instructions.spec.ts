@@ -4,12 +4,12 @@ import { tmpdir } from 'node:os'
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import * as workspaceContext from '@neo/dsh-agent-instructions'
-import LlmRuntime, { createUserMessage, CallId, type Message, type StreamChunk } from '@neo/dsh-llm'
-import SessionStore, { Session, SessionId, SESSION_FORMAT_VERSION, type SessionEvent, type UserMessage } from '@neo/dsh-session'
-import AgentRegistry, { agentEvents, Inbox, type Agent } from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { FileSystem, FsTargetKey, FsVersion } from '@neo/dsh-fs'
+import * as workspaceContext from '@neo/agent-instructions'
+import LlmRuntime, { createUserMessage, CallId, type Message, type StreamChunk } from '@neo/llm'
+import SessionStore, { Session, SessionId, SESSION_FORMAT_VERSION, type SessionEvent, type UserMessage } from '@neo/session'
+import AgentRegistry, { agentEvents, Inbox, type Agent } from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
+import { FileSystem, FsTargetKey, FsVersion } from '@neo/fs'
 import type {
   FsDirEntry,
   FsEditOutcome,
@@ -19,20 +19,20 @@ import type {
   FsTarget,
   FsWriteIntent,
   FsWriteOutcome,
-} from '@neo/dsh-fs'
-import LocalFileSystem from '@neo/dsh-fs-local'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture } from '@neo/dsh-tools'
+} from '@neo/fs'
+import LocalFileSystem from '@neo/fs-local'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime, { defineContentToolFixture } from '@neo/tools'
 import type {
   ToolExecution,
   ToolExecutionToken,
-} from '@neo/dsh-tools'
-import * as ToolFs from '@neo/dsh-tool-fs'
+} from '@neo/tools'
+import * as ToolFs from '@neo/tool-fs'
 import {
   discoverBaselineInstructionFiles,
   loadBaselineInstructions,
   renderWorkspaceContext,
-} from '@neo/dsh-agent-instructions'
+} from '@neo/agent-instructions'
 import {
   applyInstructionVersionUpdates,
   baselineInstructionState,
@@ -628,7 +628,7 @@ describe('workspace context instruction discovery', () => {
       vi.stubEnv('DSH_HOME', '')
       vi.resetModules()
       vi.doMock('node:os', () => ({ homedir: () => home }))
-      const isolated = await import('@neo/dsh-agent-instructions')
+      const isolated = await import('@neo/agent-instructions')
       const files = await isolated.discoverBaselineInstructionFiles({ cwd: root })
 
       expect(files.map(file => file.displayPath)).toEqual(['~/.dsh/AGENTS.md'])
@@ -649,7 +649,7 @@ describe('workspace context instruction discovery', () => {
 
       vi.resetModules()
       vi.doMock('node:os', () => ({ homedir: () => home }))
-      const isolated = await import('@neo/dsh-agent-instructions')
+      const isolated = await import('@neo/agent-instructions')
       const files = await isolated.discoverBaselineInstructionFiles({ cwd: root, dshHome: '~/.dsh' })
 
       expect(files).toEqual([{ absolutePath: join(home, '.dsh/AGENTS.md'), displayPath: '~/.dsh/AGENTS.md' }])
@@ -2439,7 +2439,7 @@ describe('workspace context request injection', () => {
           },
         }
       })
-      const isolated = await import('@neo/dsh-agent-instructions')
+      const isolated = await import('@neo/agent-instructions')
       await isolated.loadBaselineInstructions({ cwd: root, dshHome: home, maxBytes: 65536 })
       observedStats.clear()
       await isolated.loadBaselineInstructions({ cwd: root, dshHome: home, maxBytes: 65536 })
@@ -2472,7 +2472,7 @@ describe('workspace context request injection', () => {
           },
         }
       })
-      const isolated = await import('@neo/dsh-agent-instructions')
+      const isolated = await import('@neo/agent-instructions')
 
       const rendered = await isolated.loadBaselineInstructions({ cwd: root, dshHome: home, maxBytes: 65536 })
 

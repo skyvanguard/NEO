@@ -1,15 +1,15 @@
 /**
  * Durable agent session-event vocabulary shared with type-only consumers.
  *
- * @module @neo/dsh-agent/types
+ * @module @neo/agent/types
  */
 
-import type { UserMessage } from '@neo/dsh-llm/types'
+import type { UserMessage } from '@neo/llm/types'
 
 /** One of the two ordered pending-message lists owned by an agent. */
 export type InboxTarget = 'next-turn' | 'next-step'
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * One normalized mutation of an agent's durable pending-message lists.

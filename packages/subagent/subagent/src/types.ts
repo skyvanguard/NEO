@@ -6,14 +6,14 @@
  * continuation host in `./continuation.ts` — so this module stays the published
  * surface rather than a bag of everything type-shaped.
  *
- * @module @neo/dsh-subagent/types
+ * @module @neo/subagent/types
  */
 
-import type { Agent, AgentOptions } from '@neo/dsh-agent'
-import type { Branded } from '@neo/dsh-brand'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { SessionEvent, SessionId } from '@neo/dsh-session'
-import type { ObjectJsonSchema, ToolRestriction } from '@neo/dsh-tools'
+import type { Agent, AgentOptions } from '@neo/agent'
+import type { Branded } from '@neo/brand'
+import type { ContentBlock } from '@neo/llm'
+import type { SessionEvent, SessionId } from '@neo/session'
+import type { ObjectJsonSchema, ToolRestriction } from '@neo/tools'
 import type { SubagentDescriptorData } from './descriptor.ts'
 
 /** Identifies one accepted subagent run across its lifecycle event pair. */

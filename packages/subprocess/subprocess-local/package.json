@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-subprocess-local",
+  "name": "@neo/subprocess-local",
   "description": "Local-subprocess implementation of the DeepSeek Harness subprocess seam",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -36,19 +36,19 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "node-pty": "^1.1.0"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-loader-smoke": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/loader-smoke": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

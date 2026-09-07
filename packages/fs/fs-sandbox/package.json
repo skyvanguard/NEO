@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-fs-sandbox",
+  "name": "@neo/fs-sandbox",
   "description": "Sandbox-enforcing implementation of the DeepSeek Harness filesystem seam: fences write/edit by the per-call sandbox mode (read-only denies mutation, workspace-write contains it to the workspace + temp roots) while reads pass through",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,19 +32,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-fs": "workspace:^",
-    "@neo/dsh-fs-local": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
+    "@neo/fs": "workspace:^",
+    "@neo/fs-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-fs": "workspace:^",
-    "@neo/dsh-fs-local": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
+    "@neo/fs": "workspace:^",
+    "@neo/fs-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

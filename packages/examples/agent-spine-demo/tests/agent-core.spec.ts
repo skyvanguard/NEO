@@ -4,13 +4,13 @@ import { join, sep } from 'node:path'
 import { tmpdir } from 'node:os'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import { renderPrompt, TOOL_ORDER_REST } from '@neo/dsh-system-prompt'
+import { renderPrompt, TOOL_ORDER_REST } from '@neo/system-prompt'
 import * as agentCore from '../src/index.ts'
-import { agentEvents, type Agent } from '@neo/dsh-agent'
-import { SessionId } from '@neo/dsh-session'
-import LocalBashExecutor from '@neo/dsh-bash-local'
-import LocalFileSystem from '@neo/dsh-fs-local'
-import * as ToolFs from '@neo/dsh-tool-fs'
+import { agentEvents, type Agent } from '@neo/agent'
+import { SessionId } from '@neo/session'
+import LocalBashExecutor from '@neo/bash-local'
+import LocalFileSystem from '@neo/fs-local'
+import * as ToolFs from '@neo/tool-fs'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import {
   createUserMessage,
@@ -22,16 +22,16 @@ import {
   type Message,
   type ResolvedRetryPolicy,
   type StreamChunk,
-} from '@neo/dsh-llm'
-import type { ToolExecution } from '@neo/dsh-tools'
-import * as sessionInvariant from '@neo/dsh-session/invariant'
-import * as agentInvariant from '@neo/dsh-agent/invariant'
-import * as scopeInvariant from '@neo/dsh-scope/invariant'
-import * as agentLoopInvariant from '@neo/dsh-agent-loop/invariant'
+} from '@neo/llm'
+import type { ToolExecution } from '@neo/tools'
+import * as sessionInvariant from '@neo/session/invariant'
+import * as agentInvariant from '@neo/agent/invariant'
+import * as scopeInvariant from '@neo/scope/invariant'
+import * as agentLoopInvariant from '@neo/agent-loop/invariant'
 
 const testToolSignal = new AbortController().signal
 
-declare module '@neo/dsh-jobs' {
+declare module '@neo/jobs' {
   interface JobKindMap {
     probe: 'probe'
   }
@@ -53,7 +53,7 @@ async function composePrefix(ctx: Context, cwd: string): Promise<Message[]> {
 }
 
 /**
- * Unit coverage for the @neo/dsh-agent-spine-demo bundle: mounting it brings
+ * Unit coverage for the @neo/agent-spine-demo bundle: mounting it brings
  * up the whole default spine in one `ctx.plugin`, and the forwarded
  * `agents` config reaches the loop (default `[]`, or a pre-created agent).
  *
@@ -227,8 +227,8 @@ describe('dsh-agent-spine-demo bundle', () => {
 
     for (const invariants of [
       { enabled: false },
-      { package_allowlist: ['^@neo/dsh-agent$'] },
-      { package_blocklist: ['^@neo/dsh-session$'] },
+      { package_allowlist: ['^@neo/agent$'] },
+      { package_blocklist: ['^@neo/session$'] },
     ]) {
       const filtered = await mount({ workspaceContext: false, invariants })
       expect(() => { nestedTurn(filtered) }).not.toThrow()

@@ -1,11 +1,11 @@
-/** Package-owned background-job snapshot invariants. @module @neo/dsh-jobs/invariant */
+/** Package-owned background-job snapshot invariants. @module @neo/jobs/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Agent } from '@neo/agent'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type { JobSnapshot } from './types.ts'
 
-const PACKAGE_NAME = '@neo/dsh-jobs'
+const PACKAGE_NAME = '@neo/jobs'
 const TERMINAL_STATUSES = new Set(['completed', 'killed', 'failed'])
 
 /** Cordis companion plugin name. */

@@ -1,7 +1,7 @@
-import { createUserMessage } from '@neo/dsh-llm'
+import { createUserMessage } from '@neo/llm'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { PROTOCOL_VERSION } from '@agentclientprotocol/sdk'
-import { SessionId } from '@neo/dsh-session'
+import { SessionId } from '@neo/session'
 import {
   errorResponse,
   makeBridgeHarness,

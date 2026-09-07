@@ -6,12 +6,12 @@
  * the storage-domain routing decides the medium (the shipped composition's
  * json backend lands it at `<root>/session_projcache.json`, beside
  * `workspace.json`).
- * @module @neo/dsh-session-projection-cache/src/spec
+ * @module @neo/session-projection-cache/src/spec
  */
 
 import { z } from 'zod'
-import { SessionId } from '@neo/dsh-session'
-import { defineDomain, domainTable } from '@neo/dsh-storage-domain'
+import { SessionId } from '@neo/session'
+import { defineDomain, domainTable } from '@neo/storage-domain'
 
 /**
  * One persisted checkpoint row (the RFC's `(sessionId, key, ver, seq, val)`

@@ -1,4 +1,4 @@
-# @neo/dsh-typert-generator
+# @neo/typert-generator
 
 English | [中文](README.zh.md)
 

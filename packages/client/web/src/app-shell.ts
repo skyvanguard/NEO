@@ -4,11 +4,11 @@
  */
 import type { ReactNode } from 'react'
 import type { Context } from '@neo/cordis'
-import { createSlotRenderer } from '@neo/dsh-client-web-react'
+import { createSlotRenderer } from '@neo/client-web-react'
 import { buildRenderApp } from './app.tsx'
 
 /** Shell-owned pseudo entry id under which the host graph mounts this plugin. */
-export const APP_SHELL_ID = '@neo/dsh-client-app-shell'
+export const APP_SHELL_ID = '@neo/client-app-shell'
 
 /** The assembled-UI face AppRoot renders once the boot settles. */
 export interface AppShellService {

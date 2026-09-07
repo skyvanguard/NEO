@@ -1,4 +1,4 @@
-import { createUserMessage, createMessage } from '@neo/dsh-llm'
+import { createUserMessage, createMessage } from '@neo/llm'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import { existsSync } from 'node:fs'
@@ -6,9 +6,9 @@ import { chmod, mkdtemp, rm, stat, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { Session, SessionEvent, SurfaceEvent, SurfaceEventType } from '@neo/dsh-session'
-import SqliteSessionPersistence, { SCHEMA_VERSION } from '@neo/dsh-session-persistence-sqlite'
+import SessionStore, { SessionId } from '@neo/session'
+import type { Session, SessionEvent, SurfaceEvent, SurfaceEventType } from '@neo/session'
+import SqliteSessionPersistence, { SCHEMA_VERSION } from '@neo/session-persistence-sqlite'
 import {
   openDatabase,
   rowToEvent,

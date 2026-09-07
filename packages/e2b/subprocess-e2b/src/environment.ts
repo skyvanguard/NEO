@@ -2,9 +2,9 @@
 
 import { Buffer } from 'node:buffer'
 import { posix } from 'node:path'
-import { e2bControlEnvs } from '@neo/dsh-e2b'
-import type { Sandbox } from '@neo/dsh-e2b'
-import { SENSITIVE_ENV_PATTERN } from '@neo/dsh-subprocess'
+import { e2bControlEnvs } from '@neo/e2b'
+import type { Sandbox } from '@neo/e2b'
+import { SENSITIVE_ENV_PATTERN } from '@neo/subprocess'
 
 const BASE64 = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
 

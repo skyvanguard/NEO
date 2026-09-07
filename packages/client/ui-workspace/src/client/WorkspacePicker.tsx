@@ -12,11 +12,11 @@ import type { ReactNode, RefObject } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import {
   Button, IconFolderClose16, IconPlusOutline16, Menu, Modal, type MenuEntry,
-} from '@neo/dsh-client-ui-primitives'
+} from '@neo/client-ui-primitives'
 import type {
   WorkspaceId, WorkspaceListState, WorkspaceView,
-} from '@neo/dsh-client-runtime/client'
-import type { SnapshotSelectorHook } from '@neo/dsh-client-ui-slots'
+} from '@neo/client-runtime/client'
+import type { SnapshotSelectorHook } from '@neo/client-ui-slots'
 import type { DirectoryFlowOwnerProps, WorkspacePickerProps } from './contract/slots.ts'
 import css from './WorkspacePicker.module.css'
 

@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { Context, Service } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import { agentEvents } from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
-import { CallId } from '@neo/dsh-llm'
-import { SessionId } from '@neo/dsh-session'
+import { agentEvents } from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
+import { CallId } from '@neo/llm'
+import { SessionId } from '@neo/session'
 import * as toolSchedule from '../src/index.ts'
 
 class PersistenceProbe extends Service {

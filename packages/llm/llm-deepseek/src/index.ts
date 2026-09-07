@@ -8,18 +8,18 @@
  * anything, while an in-flight stream keeps the facts it started with. The
  * one registration-captured fact — the retry policy — re-registers the route
  * in place when it changes.
- * @module @neo/dsh-llm-deepseek
+ * @module @neo/llm-deepseek
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { assertUsableApiKey, LlmError, resolveRetryPolicy, RetryPolicySchema } from '@neo/dsh-llm'
-import type { RetryPolicyConfig } from '@neo/dsh-llm'
-import { credentialRef } from '@neo/dsh-credentials'
-import { launchEnvironmentOf, type LaunchEnvironmentSnapshot } from '@neo/dsh-launch-environment'
-import { deepEqualJson, installSettingsSection, settingsNamespace } from '@neo/dsh-settings'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@neo/dsh-anonymous-user-id'
+import { assertUsableApiKey, LlmError, resolveRetryPolicy, RetryPolicySchema } from '@neo/llm'
+import type { RetryPolicyConfig } from '@neo/llm'
+import { credentialRef } from '@neo/credentials'
+import { launchEnvironmentOf, type LaunchEnvironmentSnapshot } from '@neo/launch-environment'
+import { deepEqualJson, installSettingsSection, settingsNamespace } from '@neo/settings'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@neo/anonymous-user-id'
 import {
   DEFAULT_CONTEXT_WINDOW,
   DEFAULT_MAX_TOKENS,

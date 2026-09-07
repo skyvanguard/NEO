@@ -1,10 +1,10 @@
 /** Session/workspace fixture shapes and snapshot defaults for the test runtime. */
 import type {
   ConversationSnapshot, ISession, SessionId, SessionSummary, WorkspaceListState,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import {
   EMPTY_CHAT_SNAPSHOT, EMPTY_CONVERSATION_VIEWS,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 
 /**
  * Fixture overrides for the session behavior face: any subset of the

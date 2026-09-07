@@ -1,13 +1,13 @@
 import { describe, expectTypeOf, it } from 'vitest'
 import type { Context } from '@neo/cordis'
-import { CallId } from '@neo/dsh-llm'
-import { defineTool } from '@neo/dsh-tools'
+import { CallId } from '@neo/llm'
+import { defineTool } from '@neo/tools'
 import type {
   ToolDispatchExecution,
   ToolExecution,
   ToolExecutionInput,
   ToolRunContext,
-} from '@neo/dsh-tools'
+} from '@neo/tools'
 
 function inputAndExecutionContracts(
   input: ToolExecutionInput,

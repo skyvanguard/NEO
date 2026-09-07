@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-storage`.
- * @module @neo/dsh-storage/invariant
+ * Package-owned invariant companion for `@neo/storage`.
+ * @module @neo/storage/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-storage'
+const PACKAGE_NAME = '@neo/storage'
 
 /** Cordis companion plugin name. */
 export const name = 'storage-invariant'

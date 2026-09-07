@@ -3,13 +3,13 @@
  * recovery after an HMR collapse of the declaring entry. */
 import { Context } from '@neo/cordis'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import { SettingsScopeBinder } from '@neo/dsh-client-ui-settings/client'
-import { TestRemote } from '@neo/dsh-client-test-runtime'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import { SettingsScopeBinder } from '@neo/client-ui-settings/client'
+import { TestRemote } from '@neo/client-test-runtime'
 import {
   apply, inject, SETTINGS_NS,
-} from '@neo/dsh-client-locale/client'
-import type { LanguageRowInjected, LocaleRuntime } from '@neo/dsh-client-locale/client'
+} from '@neo/client-locale/client'
+import type { LanguageRowInjected, LocaleRuntime } from '@neo/client-locale/client'
 import { LOCALE_SETTINGS_NAMESPACE, LocaleSettingsSchema } from '../src/locale-settings.ts'
 import { LanguageRow } from '../src/client/LanguageRow.tsx'
 import type { createLanguageRowStore } from '../src/client/settings-store.ts'

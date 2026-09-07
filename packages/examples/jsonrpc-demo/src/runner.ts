@@ -1,11 +1,11 @@
 /**
  * Shared process lifecycle for the generic and closed-runtime JSON-RPC bins.
  *
- * @module @neo/dsh-sdk-jsonrpc-demo/runner
+ * @module @neo/sdk-jsonrpc-demo/runner
  */
 
 import { existsSync } from 'node:fs'
-import { boot, installFailLoud, loadEnv, resolveConfigPath } from '@neo/dsh-app-boot'
+import { boot, installFailLoud, loadEnv, resolveConfigPath } from '@neo/app-boot'
 
 /* v8 ignore start -- composition over tested app-boot/jsonrpc and executable acceptance paths */
 const NAME = 'dsh-jsonrpc-agent'

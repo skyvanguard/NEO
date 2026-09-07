@@ -1,15 +1,15 @@
 /**
  * Model-facing persistent `bash` tool over the owner-scoped PTY seam.
- * @module @neo/dsh-tool-bash-persistent
+ * @module @neo/tool-bash-persistent
  */
 
 import { randomUUID } from 'node:crypto'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent } from '@neo/dsh-agent'
-import type { TerminalReadResult, TerminalSendResult, TerminalSessionId } from '@neo/dsh-terminal'
-import { deadline, timeoutOf } from '@neo/dsh-timeout'
-import { defineTool } from '@neo/dsh-tools'
+import type { Agent } from '@neo/agent'
+import type { TerminalReadResult, TerminalSendResult, TerminalSessionId } from '@neo/terminal'
+import { deadline, timeoutOf } from '@neo/timeout'
+import { defineTool } from '@neo/tools'
 
 // TODO: Replace the file-search advice; arbitrary command output need not come from a searchable file.
 const TRUNCATED_MESSAGE = '<response clipped><NOTE>To save on context only part of this file has been shown to you. You should retry this tool after you have searched inside the file with `grep -n` in order to find the line numbers of what you are looking for.</NOTE>'

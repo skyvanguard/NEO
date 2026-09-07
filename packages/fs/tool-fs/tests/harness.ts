@@ -1,11 +1,11 @@
 import { Context } from '@neo/cordis'
-import type { Agent } from '@neo/dsh-agent'
-import AgentLoop from '@neo/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@neo/dsh-agent-loop-testkit'
-import LocalFileSystem from '@neo/dsh-fs-local'
-import * as FsPolicy from '@neo/dsh-fs-observation-policy'
-import * as ToolFs from '@neo/dsh-tool-fs'
-import * as LlmDeepSeek from '@neo/dsh-llm-deepseek'
+import type { Agent } from '@neo/agent'
+import AgentLoop from '@neo/agent-loop'
+import { mountAgentLoopTestDependencies } from '@neo/agent-loop-testkit'
+import LocalFileSystem from '@neo/fs-local'
+import * as FsPolicy from '@neo/fs-observation-policy'
+import * as ToolFs from '@neo/tool-fs'
+import * as LlmDeepSeek from '@neo/llm-deepseek'
 
 /**
  * Build the real fs-tool stack for with-key e2e tests. Agents have no session

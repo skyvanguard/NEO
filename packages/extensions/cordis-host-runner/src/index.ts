@@ -1,16 +1,16 @@
 /**
  * Dynamic Cordis Plugin service: immutable package definitions, one active run
  * per Plugin, human-approved Client activation, and Host/Client invocation.
- * @module @neo/dsh-cordis-host-runner
+ * @module @neo/cordis-host-runner
  */
 
 import { Context } from '@neo/cordis'
 import type { Fiber } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { JsonValue } from '@neo/dsh-session/types'
-import { TypertRemoteService, Remote } from '@neo/dsh-typert-protocol'
+import type { Agent } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { JsonValue } from '@neo/session/types'
+import { TypertRemoteService, Remote } from '@neo/typert-protocol'
 import { isPlugin, normalizeHandler } from './guard.ts'
 import { CordisInspectRegistryService } from './inspect-registry.ts'
 import { missingServices, startHostHalf } from './lifecycle.ts'

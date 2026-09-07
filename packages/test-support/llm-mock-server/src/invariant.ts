@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-llm-mock-server`.
- * @module @neo/dsh-llm-mock-server/invariant
+ * Package-owned invariant companion for `@neo/llm-mock-server`.
+ * @module @neo/llm-mock-server/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-llm-mock-server'
+const PACKAGE_NAME = '@neo/llm-mock-server'
 
 /** Cordis companion plugin name. */
 export const name = 'llm-mock-server-invariant'

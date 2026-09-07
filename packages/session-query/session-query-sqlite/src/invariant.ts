@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-session-query-sqlite`.
- * @module @neo/dsh-session-query-sqlite/invariant
+ * Package-owned invariant companion for `@neo/session-query-sqlite`.
+ * @module @neo/session-query-sqlite/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-session-query-sqlite'
+const PACKAGE_NAME = '@neo/session-query-sqlite'
 
 /** Cordis companion plugin name. */
 export const name = 'session-query-sqlite-invariant'

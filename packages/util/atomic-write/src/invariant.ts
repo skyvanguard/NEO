@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-atomic-write`.
- * @module @neo/dsh-atomic-write/invariant
+ * Package-owned invariant companion for `@neo/atomic-write`.
+ * @module @neo/atomic-write/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-atomic-write'
+const PACKAGE_NAME = '@neo/atomic-write'
 
 /** Cordis companion plugin name. */
 export const name = 'atomic-write-invariant'

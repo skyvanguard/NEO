@@ -1,9 +1,9 @@
 import { Context } from '@neo/cordis'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import type {} from '@neo/dsh-client-ui-conversation/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import type { SessionId } from '@neo/client-runtime/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import type {} from '@neo/client-ui-conversation/client'
 import { SessionLogDownloadHeaderAction } from '../src/client/HeaderAction.tsx'
 import { apply, inject } from '../src/client/index.ts'
 

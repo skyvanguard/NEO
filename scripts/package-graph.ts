@@ -8,11 +8,11 @@
 import { globSync, readFileSync } from 'node:fs'
 import { dirname, resolve, sep } from 'node:path'
 
-const SCOPE = '@neo/dsh-'
+const SCOPE = '@neo/'
 
 /** One harness package and its in-repo peer-dependency edges. */
 export interface PackageGraphNode {
-  /** Package name with the `@neo/dsh-` prefix removed. */
+  /** Package name with the `@neo/` prefix removed. */
   short: string
   /** Full npm package name. */
   name: string

@@ -15,14 +15,14 @@
  * This row therefore waits for it rather than assuming it: a preset selecting
  * Code Mode against a deployment that composes no runtime fails at mount, named
  * in the preset's own activation audit, instead of at the first prompt.
- * @module @neo/dsh-agent-tool-presentation
+ * @module @neo/agent-tool-presentation
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { ToolPresentationMode } from '@neo/dsh-tools'
+import type { ToolPresentationMode } from '@neo/tools'
 // Type-only: brings the `ctx.tools` Context merge into this program.
-import type {} from '@neo/dsh-tools'
+import type {} from '@neo/tools'
 
 /** Cordis plugin name. */
 export const name = 'tool-presentation'

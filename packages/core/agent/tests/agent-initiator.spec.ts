@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import { runInNewContext } from 'node:vm'
-import AgentRegistry from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import { SessionId } from '@neo/dsh-session'
+import AgentRegistry from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import { SessionId } from '@neo/session'
 
 function agent(id: string): Agent {
   return { id: SessionId(id) } as Agent

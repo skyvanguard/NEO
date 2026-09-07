@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-usage-stats",
+  "name": "@neo/usage-stats",
   "description": "Host-side cross-session token-usage aggregation, exposed over Typert Remote for a cumulative usage view",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -40,22 +40,22 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
-    "@neo/dsh-home-paths": "workspace:^",
+    "@neo/home-paths": "workspace:^",
     "@neo/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@neo/cordis-plugin-include": "workspace:^",
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

@@ -5,7 +5,7 @@
  * resumes an Agent.
  */
 
-import type { SessionId } from '@neo/dsh-session/types'
+import type { SessionId } from '@neo/session/types'
 import type { RpcRequest, RpcResponse } from './rpc.ts'
 
 /** Skill catalog row (wire projection of the host SkillSummary; provider/source vocabulary stays host-side). */

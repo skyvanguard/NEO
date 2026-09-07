@@ -1,11 +1,11 @@
 import { fileURLToPath } from 'node:url'
 import { Context } from '@neo/cordis'
-import { agentEvents, Inbox, type Agent } from '@neo/dsh-agent'
-import { CallId } from '@neo/dsh-llm'
-import { boot, loadOverlayPatches } from '@neo/dsh-app-boot'
-import { SessionId } from '@neo/dsh-session'
-import type {} from '@neo/dsh-skill'
-import type {} from '@neo/dsh-tools'
+import { agentEvents, Inbox, type Agent } from '@neo/agent'
+import { CallId } from '@neo/llm'
+import { boot, loadOverlayPatches } from '@neo/app-boot'
+import { SessionId } from '@neo/session'
+import type {} from '@neo/skill'
+import type {} from '@neo/tools'
 
 const overlayPath = process.argv[2]
 if (overlayPath === undefined) throw new Error('dsh-badge snapshot requires an overlay path')

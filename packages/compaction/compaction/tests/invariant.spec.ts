@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
-import { createUserMessage } from '@neo/dsh-llm'
-import { CompactionId, compactCheckpointSource } from '@neo/dsh-compaction'
-import * as CompactionInvariant from '@neo/dsh-compaction/invariant'
-import { CommandId } from '@neo/dsh-commands/brand'
-import InvariantRegistry from '@neo/dsh-invariants'
+import SessionStore, { Session, SessionId } from '@neo/session'
+import { createUserMessage } from '@neo/llm'
+import { CompactionId, compactCheckpointSource } from '@neo/compaction'
+import * as CompactionInvariant from '@neo/compaction/invariant'
+import { CommandId } from '@neo/commands/brand'
+import InvariantRegistry from '@neo/invariants'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()

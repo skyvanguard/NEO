@@ -1,4 +1,4 @@
-# @neo/dsh-sdk-protocol
+# @neo/sdk-protocol
 
 English | [中文](README.zh.md)
 

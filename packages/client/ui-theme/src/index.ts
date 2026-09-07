@@ -1,8 +1,8 @@
 /** Host registration for the browser theme preference and pre-plugin palette. */
 
 import type { Context } from '@neo/cordis'
-import type {} from '@neo/dsh-host-webserver'
-import { settingsNamespace } from '@neo/dsh-settings'
+import type {} from '@neo/host-webserver'
+import { settingsNamespace } from '@neo/settings'
 import { injectBootTheme } from './boot-theme.ts'
 import {
   DEFAULT_PREFERENCE, THEME_SETTINGS_NAMESPACE, ThemeSettingsSchema,

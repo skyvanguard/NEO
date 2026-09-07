@@ -7,38 +7,38 @@
 # delegation bypass.
 
 - id: persistence
-  name: '@neo/dsh-session-persistence-jsonl'
+  name: '@neo/session-persistence-jsonl'
   config:
     root: './.sessions'
     compression: none
 
 # file/override/childFiles all default to their DSH_SNAPSHOT_* env vars.
 - id: replay
-  name: '@neo/dsh-llm-replay'
+  name: '@neo/llm-replay'
 
 # The confining filesystem stack: the wide deployment default lives on the
 # shared policy home; the seeded parent's read-only override must beat it
 # INSIDE the child for the scenario to deny.
 - id: sandbox-policy
-  name: '@neo/dsh-sandbox-policy'
+  name: '@neo/sandbox-policy'
   config:
     mode: workspace-write
     workspaceRoot: !!js process.cwd()
 
 - id: fs-sandbox
-  name: '@neo/dsh-fs-sandbox'
+  name: '@neo/fs-sandbox'
 
 - id: fs-observation-policy
-  name: '@neo/dsh-fs-observation-policy'
+  name: '@neo/fs-observation-policy'
 
 - id: tool-fs
-  name: '@neo/dsh-tool-fs'
+  name: '@neo/tool-fs'
 
 # This scenario probes filesystem confinement only, so the bash stack is absent:
 # without it the bundle's `toolBash: false` is required, because `tool-bash` would
 # otherwise wait forever for a `bash` executor this tree never mounts.
 - id: agent
-  name: '@neo/dsh-agent-spine-demo'
+  name: '@neo/agent-spine-demo'
   config:
     agents: []
     workspaceContext: false
@@ -49,15 +49,15 @@
     goals: false
 
 - id: subagent
-  name: '@neo/dsh-subagent'
+  name: '@neo/subagent'
 
 - id: subagent-spawn-in-process
-  name: '@neo/dsh-subagent-spawn-in-process'
+  name: '@neo/subagent-spawn-in-process'
   config:
     providerName: spawn
 
 - id: tool-subagent
-  name: '@neo/dsh-tool-subagent'
+  name: '@neo/tool-subagent'
   config:
     provider: spawn
     toolName: subagent

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-credentials-local`.
- * @module @neo/dsh-credentials-local/invariant
+ * Package-owned invariant companion for `@neo/credentials-local`.
+ * @module @neo/credentials-local/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-credentials-local'
+const PACKAGE_NAME = '@neo/credentials-local'
 
 /** Cordis companion plugin name. */
 export const name = 'credentials-local-invariant'

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-terminal-bash",
+  "name": "@neo/terminal-bash",
   "description": "Persistent shell PTY backend over the DeepSeek Harness subprocess terminal primitive",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,27 +32,27 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-terminal": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/terminal": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subprocess": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-terminal": "workspace:^",
-    "@neo/dsh-sandbox": "workspace:^",
-    "@neo/dsh-sandbox-policy": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subprocess": "workspace:^",
-    "@neo/dsh-subprocess-local": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/terminal": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subprocess": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

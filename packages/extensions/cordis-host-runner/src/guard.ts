@@ -10,16 +10,16 @@
  * VM-realm schemas and canonical values are rebuilt as host objects, while rendered content and
  * presentation metadata are shape-checked before entering the registry. Common JSON-Schema spellings are normalized when they
  * have one meaning; invalid vocabulary fails during registration with a teaching error.
- * @module @neo/dsh-cordis-host-runner/guard
+ * @module @neo/cordis-host-runner/guard
  */
 
 import { Context } from '@neo/cordis'
 import type { Plugin } from '@neo/cordis'
-import { scopeOf } from '@neo/dsh-scope'
-import { assertSupportedJsonSchema, defineTool } from '@neo/dsh-tools'
-import type { ToolDefinition } from '@neo/dsh-tools'
-import type { ContentBlock } from '@neo/dsh-llm'
-import type { JsonValue } from '@neo/dsh-session'
+import { scopeOf } from '@neo/scope'
+import { assertSupportedJsonSchema, defineTool } from '@neo/tools'
+import type { ToolDefinition } from '@neo/tools'
+import type { ContentBlock } from '@neo/llm'
+import type { JsonValue } from '@neo/session'
 
 const DYNAMIC_TOOL = Symbol('cordis-host-runner.dynamic-tool')
 const SCHEMA_TYPES = new Set<unknown>(['string', 'number', 'integer', 'boolean', 'null', 'object', 'array', 'json'])
@@ -744,7 +744,7 @@ function sandboxContext(ctx: Context, reportFailure: (error: Error) => void): Co
   }
   const get = (name: string): unknown => readService(name, false)
   // The browser half builds the same façade over its own Context
-  // (`@neo/dsh-cordis-client-runner`, whose CTX_VERBS names this one its
+  // (`@neo/cordis-client-runner`, whose CTX_VERBS names this one its
   // twin), and the sameness is the point: a package author meets ONE contract on
   // both halves. Folding them together is not available — the two halves compile
   // in separate programs where `Context` merges different service keys — so the

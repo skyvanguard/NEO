@@ -1,18 +1,18 @@
 /** Conversation slot declarations and their composed component props. */
 import type { ReactNode, RefObject } from 'react'
-import type { ImageAttachmentRef } from '@neo/dsh-attachment'
+import type { ImageAttachmentRef } from '@neo/attachment'
 import type {
   InjectFace, MaybeSnapshotSelectorHook, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore,
   SlotHookFactory, SnapshotSelectorHook,
-} from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-slots'
 import type {
   CommandNode, CompactionSummaryNode, ConversationSnapshot, ConversationTurnDataMap,
   ObservableSnapshot, PendingInteraction, PendingWait, SessionId, ToolCallBlock,
   TurnLocation, WorkspaceId,
-} from '@neo/dsh-client-runtime/client'
-import type { MarkdownFileMentions } from '@neo/dsh-client-ui-primitives'
-import type { MessageId } from '@neo/dsh-client-connection/client'
-import type {} from '@neo/dsh-client-ui-layout/client'
+} from '@neo/client-runtime/client'
+import type { MarkdownFileMentions } from '@neo/client-ui-primitives'
+import type { MessageId } from '@neo/client-connection/client'
+import type {} from '@neo/client-ui-layout/client'
 import type { DocumentKind } from '../document-classify.ts'
 import type { ComposerBlock } from '../input/blocks.ts'
 import type {
@@ -35,7 +35,7 @@ export interface ComposerAttachment {
   documentKind?: DocumentKind
 }
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface SlotMap {
     /**
      * The entire body of one session: taking this seat means rendering that

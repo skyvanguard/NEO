@@ -11,15 +11,15 @@
 
 import { describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { Session } from '@neo/dsh-session'
-import type { Agent } from '@neo/dsh-agent'
-import { createScope } from '@neo/dsh-scope'
-import SessionProjectionRegistry from '@neo/dsh-session-projection'
-import CommandRuntime from '@neo/dsh-commands'
-import PermissionPresetService from '@neo/dsh-permission-presets'
-import type { Config } from '@neo/dsh-permission-presets'
-import ApprovalService from '@neo/dsh-user-approval'
+import SessionStore, { SessionId } from '@neo/session'
+import type { Session } from '@neo/session'
+import type { Agent } from '@neo/agent'
+import { createScope } from '@neo/scope'
+import SessionProjectionRegistry from '@neo/session-projection'
+import CommandRuntime from '@neo/commands'
+import PermissionPresetService from '@neo/permission-presets'
+import type { Config } from '@neo/permission-presets'
+import ApprovalService from '@neo/user-approval'
 
 async function harness(options: { withPermission?: boolean; config?: Config } = {}): Promise<{ ctx: Context; session: Session }> {
   const ctx = new Context()

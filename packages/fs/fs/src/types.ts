@@ -2,11 +2,11 @@
  * Vocabulary for the filesystem Service Definition (`ctx.fs`): the opaque target/version
  * identities, the metadata `stat` returns, the write-intent and outcome shapes, the
  * literal-edit request/outcome, and the typed error taxonomy.
- * @module @neo/dsh-fs/types
+ * @module @neo/fs/types
  */
 
-import { HarnessError } from '@neo/dsh-llm'
-import type { Branded } from '@neo/dsh-brand'
+import { HarnessError } from '@neo/llm'
+import type { Branded } from '@neo/brand'
 
 /**
  * Opaque key for stale guards and target lookup. The local backend uses a

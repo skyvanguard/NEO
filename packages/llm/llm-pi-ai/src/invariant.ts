@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-llm-pi-ai`.
- * @module @neo/dsh-llm-pi-ai/invariant
+ * Package-owned invariant companion for `@neo/llm-pi-ai`.
+ * @module @neo/llm-pi-ai/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-llm-pi-ai'
+const PACKAGE_NAME = '@neo/llm-pi-ai'
 
 /** Cordis companion plugin name. */
 export const name = 'llm-pi-ai-invariant'

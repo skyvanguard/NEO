@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-client-runtime",
+  "name": "@neo/client-runtime",
   "description": "Client core services: SlotRegistry, SessionRuntime (scope tree + object layer)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,9 +32,9 @@
   "dsh": {
     "client": {
       "inject": [
-        "@neo/dsh-client-connection",
-        "@neo/dsh-typert-registry",
-        "@neo/dsh-api-remotes"
+        "@neo/client-connection",
+        "@neo/typert-registry",
+        "@neo/api-remotes"
       ],
       "platform": "web",
       "immediately": true
@@ -42,36 +42,36 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-attachment": "workspace:^",
-    "@neo/dsh-client-connection": "workspace:^",
-    "@neo/dsh-commands": "workspace:^",
-    "@neo/dsh-client-ui-slots": "workspace:^",
-    "@neo/dsh-host-apiproxy": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-llm-retry": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-projection": "workspace:^",
-    "@neo/dsh-session-title": "workspace:^",
-    "@neo/dsh-tools": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/attachment": "workspace:^",
+    "@neo/client-connection": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/client-ui-slots": "workspace:^",
+    "@neo/host-apiproxy": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/llm-retry": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/tools": "workspace:^",
     "immer": "^10.1.1",
     "react": "^18.2.0",
     "zustand": "~4.4.7"
   },
   "peerDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
-    "@neo/dsh-typert-registry": "workspace:^"
+    "@neo/api-remotes": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
+    "@neo/typert-registry": "workspace:^"
   },
   "devDependencies": {
     "@neo/cordis": "workspace:^",
-    "@neo/dsh-api-remotes": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-timeout": "workspace:^",
-    "@neo/dsh-typert-protocol": "workspace:^",
-    "@neo/dsh-typert-registry": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
+    "@neo/typert-registry": "workspace:^",
     "@types/react": "~18.3.1"
   },
   "files": [

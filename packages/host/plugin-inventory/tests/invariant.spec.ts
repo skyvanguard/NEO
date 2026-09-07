@@ -1,6 +1,6 @@
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import InvariantRegistry from '@neo/dsh-invariants'
+import InvariantRegistry from '@neo/invariants'
 import * as PluginInventoryInvariant from '../src/invariant.ts'
 
 describe('plugin-inventory invariant companion', () => {

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-fs-local",
+  "name": "@neo/fs-local",
   "description": "Local-filesystem implementation of the DeepSeek Harness filesystem seam (ctx.fs)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,8 +32,8 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-fs": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/fs": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -41,9 +41,9 @@
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-fs": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
+    "@neo/fs": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

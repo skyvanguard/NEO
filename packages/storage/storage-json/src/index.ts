@@ -2,15 +2,15 @@
  * JSON storage backend: one human-readable file per unit under a configured
  * root, published by atomic whole-file rewrite. Registers as backend `json`
  * on the storage hub.
- * @module @neo/dsh-storage-json
+ * @module @neo/storage-json
  */
 
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { StorageError, UNIT_NAME_RE, storageBackendServiceKey } from '@neo/dsh-storage'
-import type { KvFacet, KvUnit, KvUnitDescriptor, StorageBackend } from '@neo/dsh-storage'
+import { StorageError, UNIT_NAME_RE, storageBackendServiceKey } from '@neo/storage'
+import type { KvFacet, KvUnit, KvUnitDescriptor, StorageBackend } from '@neo/storage'
 import { openJsonUnit } from './unit.ts'
 
 /** Cordis plugin name. */

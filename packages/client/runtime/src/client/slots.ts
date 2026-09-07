@@ -16,13 +16,13 @@
  * redundancy. */
 import { Service } from '@neo/cordis'
 import type { Context } from '@neo/cordis'
-import { SlotCore } from '@neo/dsh-client-ui-slots'
+import { SlotCore } from '@neo/client-ui-slots'
 import type {
   LiveSlotNode, LocaleFace, OwnerOf, SlotEntryDef, SlotMap, SlotRenderer, SlotRendererHost,
   SlotScope, SlotSpec, StoreDecl, StoreFactory, StoredEntry, StoreInstanceLike,
-} from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-slots'
 
-declare module '@neo/dsh-client-ui-slots' {
+declare module '@neo/client-ui-slots' {
   interface SlotMap {
     /**
      * The built-in render-tree root hole (seeded by SlotCore): the one slot the

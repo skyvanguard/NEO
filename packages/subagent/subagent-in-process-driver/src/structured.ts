@@ -7,13 +7,13 @@
  * Capture commits only after the authoritative `tools/result` succeeds; Code Mode capture also
  * waits for the enclosing `run_code` result. The terminal result marker and monotonic tool
  * guard prevent later calls from reopening a completed structured run.
- * @module @neo/dsh-subagent-in-process-driver/structured
+ * @module @neo/subagent-in-process-driver/structured
  */
 
 import type { Context } from '@neo/cordis'
-import type { ToolSchema } from '@neo/dsh-llm'
-import type { ToolExecution, ToolRunContext } from '@neo/dsh-tools'
-import { ToolArgsError, validateJsonSchemaValue, type ObjectJsonSchema } from '@neo/dsh-tools'
+import type { ToolSchema } from '@neo/llm'
+import type { ToolExecution, ToolRunContext } from '@neo/tools'
+import { ToolArgsError, validateJsonSchemaValue, type ObjectJsonSchema } from '@neo/tools'
 
 /** The model-facing tool name a structured child must call to finish. */
 export const STRUCTURED_OUTPUT_TOOL = 'structured_output'

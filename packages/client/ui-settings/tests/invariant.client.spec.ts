@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import * as SettingsInvariant from '@neo/dsh-client-ui-settings/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import * as SettingsInvariant from '@neo/client-ui-settings/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 describe('invariant companion', () => {
   it('registers under the package name with an empty installer', async () => {
@@ -11,7 +11,7 @@ describe('invariant companion', () => {
   })
 
   it('node-half apply is a no-op host placeholder', async () => {
-    const { apply } = await import('@neo/dsh-client-ui-settings')
+    const { apply } = await import('@neo/client-ui-settings')
     apply()
     expect(true).toBe(true) // reaching here without throw is the contract
   })

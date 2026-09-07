@@ -1,13 +1,13 @@
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import LlmRuntime, { createUserMessage, deepFreeze, markAgentLoopRequest  } from '@neo/dsh-llm'
-import SessionStore, { SessionId } from '@neo/dsh-session'
+import LlmRuntime, { createUserMessage, deepFreeze, markAgentLoopRequest  } from '@neo/llm'
+import SessionStore, { SessionId } from '@neo/session'
 import SessionTitleService, {
   SessionTitleProviderId,
   type SessionTitleProvider,
   type SessionTitleProviderRequest,
   type SessionTitleProviderResult,
-} from '@neo/dsh-session-title'
+} from '@neo/session-title'
 
 const CONFIG = {
   fallbackMaxWords: 5,

@@ -1,10 +1,10 @@
 /**
  * Pure translation between the harness lifecycle and the automation-only ACP wire.
- * @module @neo/dsh-acp/codec
+ * @module @neo/acp/codec
  */
 
 import type { ContentBlock as AcpContentBlock, StopReason } from '@agentclientprotocol/sdk'
-import type { TurnEndReason } from '@neo/dsh-session'
+import type { TurnEndReason } from '@neo/session'
 
 /**
  * Map a harness turn ending to ACP's terminal reason vocabulary.

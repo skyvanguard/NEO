@@ -122,7 +122,7 @@ This plugin logs tool calls and results:
 
 ```ts
 import type { Context } from '@neo/cordis'
-import '@neo/dsh-tools'
+import '@neo/tools'
 
 export const name = 'tool-logger'
 

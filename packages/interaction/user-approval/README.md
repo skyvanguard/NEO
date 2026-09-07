@@ -1,4 +1,4 @@
-# @neo/dsh-user-approval
+# @neo/user-approval
 
 English | [中文](README.zh.md)
 

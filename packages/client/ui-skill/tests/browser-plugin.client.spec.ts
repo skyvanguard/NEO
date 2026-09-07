@@ -15,11 +15,11 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import type { SessionId } from '@neo/dsh-client-runtime/client'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import { InputTriggerService } from '@neo/dsh-client-ui-input-trigger/client'
-import { TestRemote } from '@neo/dsh-client-test-runtime'
-import type { ClientSessionContext, InputTriggerSource } from '@neo/dsh-client-ui-input-trigger/client'
+import type { SessionId } from '@neo/client-runtime/client'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import { InputTriggerService } from '@neo/client-ui-input-trigger/client'
+import { TestRemote } from '@neo/client-test-runtime'
+import type { ClientSessionContext, InputTriggerSource } from '@neo/client-ui-input-trigger/client'
 import { apply, inject } from '../src/client/index.ts'
 import { SkillRow as SkillToolRow } from '../src/client/SkillRow.tsx'
 

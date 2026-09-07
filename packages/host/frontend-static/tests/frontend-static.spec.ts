@@ -14,7 +14,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import HttpServer from '@neo/dsh-host-webserver'
+import HttpServer from '@neo/host-webserver'
 import * as FrontendStatic from '../src/index.ts'
 
 let root: string | undefined
@@ -39,12 +39,12 @@ async function loadComposition(): Promise<Context> {
   await writeFile(join(dist, 'manifest.webmanifest'), '{}')
   const configPath = join(root, 'cordis.yml')
   await writeFile(configPath, [
-    "- name: '@neo/dsh-host-webserver'",
+    "- name: '@neo/host-webserver'",
     '  config:',
     "    host: '127.0.0.1'",
     '    port: 0',
     '- id: frontend',
-    "  name: '@neo/dsh-host-frontend-static'",
+    "  name: '@neo/host-frontend-static'",
     '  config:',
     `    distIndex: '${distIndex}'`,
     '',
@@ -55,8 +55,8 @@ async function loadComposition(): Promise<Context> {
   await context.plugin(Loader)
   context.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-host-webserver', HttpServer],
-    ['@neo/dsh-host-frontend-static', FrontendStatic],
+    ['@neo/host-webserver', HttpServer],
+    ['@neo/host-frontend-static', FrontendStatic],
   ])
   context.loader.internal = {
     version: 'v2',

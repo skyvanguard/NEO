@@ -6,13 +6,13 @@
 
 import type {
   IApiClient, SettingsNamespaceView,
-} from '@neo/dsh-api-remotes/client'
+} from '@neo/api-remotes/client'
 import {
   createSnapshotStore, type SnapshotStore,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import {
   nodeAtPath, rehydrateSchema, type SchemaNode,
-} from '@neo/dsh-client-schema-form'
+} from '@neo/client-schema-form'
 import { displayPermissionPreset } from './presentation.ts'
 
 /** Permission's settings namespace on the host wire. */

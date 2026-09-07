@@ -4,8 +4,8 @@ import z from '@neo/schemastery'
 import { chmod, lstat, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { writeFileAtomic } from '@neo/dsh-atomic-write'
-import { settingsNamespace } from '@neo/dsh-settings'
+import { writeFileAtomic } from '@neo/atomic-write'
+import { settingsNamespace } from '@neo/settings'
 import { FileSettingsProvider, resolveSpec } from '../src/index.ts'
 
 interface ThemeConfig {

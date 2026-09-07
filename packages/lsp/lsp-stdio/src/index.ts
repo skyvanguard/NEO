@@ -8,18 +8,18 @@
  *
  * Namespace plugin (named exports, no default export). Lifecycle is effect-scoped: disposal
  * unregisters from `ctx.lsp` and tears down every live server.
- * @module @neo/dsh-lsp-stdio
+ * @module @neo/lsp-stdio
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import { LspError, LspProviderId } from '@neo/dsh-lsp'
+import { LspError, LspProviderId } from '@neo/lsp'
 import type {
   LspProvider,
   LspProviderQuery,
   LspQueryResult,
-} from '@neo/dsh-lsp'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
+} from '@neo/lsp'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
 import { abortable, abortError } from './abort.ts'
 import { canonicalizeWorkspace, readHostSource } from './host.ts'
 import type { HostWorkspace } from './host.ts'

@@ -2,9 +2,9 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it } from 'vitest'
-import type {} from '@neo/dsh-skill'
-import { SessionId } from '@neo/dsh-session'
-import type {} from '@neo/dsh-agent-presets'
+import type {} from '@neo/skill'
+import { SessionId } from '@neo/session'
+import type {} from '@neo/agent-presets'
 import { launchWebScaffold, type WebScaffold } from './scaffold.ts'
 
 async function writeSkill(root: string, name: string): Promise<void> {

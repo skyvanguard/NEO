@@ -1,10 +1,10 @@
 /**
  * Message-boundary pagination for session history.
- * @module @neo/dsh-host-apiproxy/paginate
+ * @module @neo/host-apiproxy/paginate
  */
 
-import { isAppendSurfaceEvent } from '@neo/dsh-session'
-import type { SessionEvent } from '@neo/dsh-session'
+import { isAppendSurfaceEvent } from '@neo/session'
+import type { SessionEvent } from '@neo/session'
 
 /** Event types that count as a reader-visible message for paging. */
 export const MESSAGE_TYPES = new Set(['user/message', 'assistant/message'])

@@ -1,11 +1,11 @@
 /**
  * Service Definition for the workflow capability seam. Service Providers execute orchestration scripts;
  * observe-only lifecycle events never expose run control.
- * @module @neo/dsh-workflow
+ * @module @neo/workflow
  */
 
 import { Context, Service } from '@neo/cordis'
-import { HarnessError } from '@neo/dsh-llm'
+import { HarnessError } from '@neo/llm'
 import type {
   WorkflowAgentEndInfo,
   WorkflowAgentInfo,

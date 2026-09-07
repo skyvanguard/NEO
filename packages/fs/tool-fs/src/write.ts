@@ -2,15 +2,15 @@
  * Model-facing full-file write. It obtains an optional intent from the single policy slot, calls
  * `ctx.fs.writeText` without a stat, then records the resulting version; no policy means an
  * unconditional atomic create-or-overwrite.
- * @module @neo/dsh-tool-fs/src/write
+ * @module @neo/tool-fs/src/write
  */
 
 import type { Context } from '@neo/cordis'
-import { defineTool } from '@neo/dsh-tools'
-import type { DiffCallView, DiffResultView, ToolResult } from '@neo/dsh-tools'
-import type { FsWriteOutcome } from '@neo/dsh-fs'
-import type {} from '@neo/dsh-fs'
-import type {} from '@neo/dsh-system-prompt'
+import { defineTool } from '@neo/tools'
+import type { DiffCallView, DiffResultView, ToolResult } from '@neo/tools'
+import type { FsWriteOutcome } from '@neo/fs'
+import type {} from '@neo/fs'
+import type {} from '@neo/system-prompt'
 import { computeHunkDiffs, diffsFromMeta } from './diff.ts'
 import { remediateFsError } from './error.ts'
 import { sessionResolveOptions } from './session-cwd.ts'

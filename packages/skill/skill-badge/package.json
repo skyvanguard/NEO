@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-skill-badge",
+  "name": "@neo/skill-badge",
   "description": "Bundled dsh badge skill provider for DeepSeek Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,13 +32,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-skill": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/skill": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-skill": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/skill": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

@@ -3,7 +3,7 @@
  * serialized schemastery envelope, resolve nodes by settings path, validate
  * drafts, and edit them immutably by path. Editors render their own controls
  * (the Models page hand-writes its layout) on top of these helpers.
- * @module @neo/dsh-client-schema-form
+ * @module @neo/client-schema-form
  */
 
 export {

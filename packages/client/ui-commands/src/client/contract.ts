@@ -3,8 +3,8 @@
  * CommandUiRuntime (`ctx.commandUi`) implements this face; business packages
  * consume `register` alone.
  */
-import type { ClientContext } from '@neo/dsh-client-runtime/client'
-import type { ClientSessionContext } from '@neo/dsh-client-ui-input-trigger/client'
+import type { ClientContext } from '@neo/client-runtime/client'
+import type { ClientSessionContext } from '@neo/client-ui-input-trigger/client'
 
 /** Copy for an option that must be acknowledged before onSelect can run. */
 export interface SelectConfirmation {

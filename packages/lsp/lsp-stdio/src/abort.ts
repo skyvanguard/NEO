@@ -1,9 +1,9 @@
 /**
  * Shared cancellation helpers for the local LSP provider's host-I/O, queue, and protocol phases.
- * @module @neo/dsh-lsp-stdio/abort
+ * @module @neo/lsp-stdio/abort
  */
 
-import { timeoutOf } from '@neo/dsh-timeout'
+import { timeoutOf } from '@neo/timeout'
 
 /**
  * Build an abort Error carrying the signal's reason and preserving timeout classification.

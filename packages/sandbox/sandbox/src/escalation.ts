@@ -1,6 +1,6 @@
 /**
  * The escalation vocabulary and choreography shared by every sandbox-enforcing
- * tool family (`@neo/dsh-tool-bash`, `@neo/dsh-tool-fs`): the
+ * tool family (`@neo/tool-bash`, `@neo/tool-fs`): the
  * strictly-wider ladder, the argument-pairing validation, the model-facing
  * denial/hint markers, and {@link approveEscalation} — the ordered fail-closed
  * sequence that resolves a `sandbox_permissions` request through a
@@ -16,7 +16,7 @@
  * @module dsh-sandbox/escalation
  */
 
-import { assertNever } from '@neo/dsh-llm'
+import { assertNever } from '@neo/llm'
 import type { SandboxMode } from './index.ts'
 
 /**

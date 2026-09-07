@@ -1,6 +1,6 @@
 /**
  * Dependency-free CLI parsing for the standalone mock LLM server.
- * @module @neo/dsh-llm-mock-server/cli
+ * @module @neo/llm-mock-server/cli
  */
 
 import { parseArgs } from 'node:util'

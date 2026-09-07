@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { ShellExecutor } from '@neo/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult } from '@neo/dsh-shell'
+import { ShellExecutor } from '@neo/shell'
+import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult } from '@neo/shell'
 
 /**
  * Minimal concrete executor: canned foreground results, a hand-built process

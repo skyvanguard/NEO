@@ -1,10 +1,10 @@
-/** Package-owned durable todo-snapshot invariants. @module @neo/dsh-tool-todo/invariant */
+/** Package-owned durable todo-snapshot invariants. @module @neo/tool-todo/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tool-todo'
+const PACKAGE_NAME = '@neo/tool-todo'
 const TODO_STATUSES = new Set(['pending', 'in_progress', 'completed'])
 
 /** Cordis companion plugin name. */

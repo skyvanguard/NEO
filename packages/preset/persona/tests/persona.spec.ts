@@ -1,9 +1,9 @@
 import { Context } from '@neo/cordis'
-import SystemPrompt, { renderPrompt } from '@neo/dsh-system-prompt'
-import { createScope, type ScopeKey } from '@neo/dsh-scope'
+import SystemPrompt, { renderPrompt } from '@neo/system-prompt'
+import { createScope, type ScopeKey } from '@neo/scope'
 import { describe, expect, it } from 'vitest'
-import * as Persona from '@neo/dsh-persona'
-import { PERSONA_SECTION } from '@neo/dsh-persona'
+import * as Persona from '@neo/persona'
+import { PERSONA_SECTION } from '@neo/persona'
 
 async function harness(deploymentPersona: string): Promise<Context> {
   const ctx = new Context()

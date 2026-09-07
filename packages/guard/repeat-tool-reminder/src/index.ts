@@ -3,16 +3,16 @@
  * with logged model context without vetoing or rewriting calls. Configuration
  * and chain semantics live in the package README; rationale lives in the
  * repeat-tool-reminder Agent Note.
- * @module @neo/dsh-repeat-tool-reminder
+ * @module @neo/repeat-tool-reminder
  */
 
 import type { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
-import type { Agent, PreStepDecision } from '@neo/dsh-agent'
-import { createUserMessage } from '@neo/dsh-llm'
-import type { MessageSource } from '@neo/dsh-llm'
-import type { UserMessage } from '@neo/dsh-session'
-import type { PostToolDecision, ToolExecution } from '@neo/dsh-tools'
+import type { Agent, PreStepDecision } from '@neo/agent'
+import { createUserMessage } from '@neo/llm'
+import type { MessageSource } from '@neo/llm'
+import type { UserMessage } from '@neo/session'
+import type { PostToolDecision, ToolExecution } from '@neo/tools'
 
 export const name = 'repeat-tool-reminder'
 

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-settings-file`.
- * @module @neo/dsh-settings-file/invariant
+ * Package-owned invariant companion for `@neo/settings-file`.
+ * @module @neo/settings-file/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-settings-file'
+const PACKAGE_NAME = '@neo/settings-file'
 
 /** Cordis companion plugin name. */
 export const name = 'settings-file-invariant'
@@ -17,7 +17,7 @@ export const inject = ['invariants']
 /**
  * No runtime invariant: this provider's contracts are file round-trip,
  * watcher timing, and atomic-write behavior — IO effects proven by package
- * tests; the in-process commit relation is owned by `@neo/dsh-settings`.
+ * tests; the in-process commit relation is owned by `@neo/settings`.
  */
 const install: InvariantInstaller = () => {}
 

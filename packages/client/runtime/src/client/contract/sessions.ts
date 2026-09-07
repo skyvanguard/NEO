@@ -10,8 +10,8 @@
 import type { Context } from '@neo/cordis'
 import type {
   RpcResult, SessionId, SubagentAddress,
-} from '@neo/dsh-api-remotes/client'
-import type { HostObservable, SessionMaybeProvideInfo } from '@neo/dsh-client-ui-slots'
+} from '@neo/api-remotes/client'
+import type { HostObservable, SessionMaybeProvideInfo } from '@neo/client-ui-slots'
 import type { AgentContext } from '../agents/scope.ts'
 import type { SessionSearchResultItem } from '../sessions/manager.ts'
 import type {

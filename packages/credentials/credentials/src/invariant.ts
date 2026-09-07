@@ -1,12 +1,12 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-credentials`.
- * @module @neo/dsh-credentials/invariant
+ * Package-owned invariant companion for `@neo/credentials`.
+ * @module @neo/credentials/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-credentials'
+const PACKAGE_NAME = '@neo/credentials'
 
 /** Cordis companion plugin name. */
 export const name = 'credentials-invariant'

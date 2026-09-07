@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-subagent-fork-in-process",
+  "name": "@neo/subagent-fork-in-process",
   "description": "In-process fork subagent backend: runs a child agent seeded with a prefix of the parent's log",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,11 +32,11 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-subagent-in-process-driver": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/subagent-in-process-driver": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -44,15 +44,15 @@
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-agent": "workspace:^",
-    "@neo/dsh-agent-loop": "workspace:^",
-    "@neo/dsh-agent-loop-testkit": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-llm": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-subagent": "workspace:^",
-    "@neo/dsh-subagent-in-process-driver": "workspace:^",
-    "@neo/dsh-subagent-spawn-in-process": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/agent-loop-testkit": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/subagent-in-process-driver": "workspace:^",
+    "@neo/subagent-spawn-in-process": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

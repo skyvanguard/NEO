@@ -1,12 +1,12 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-base`.
- * @module @neo/dsh-base/invariant
+ * Package-owned invariant companion for `@neo/base`.
+ * @module @neo/base/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-base'
+const PACKAGE_NAME = '@neo/base'
 
 /** Cordis companion plugin name. */
 export const name = 'base-bundle-invariant'

@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { CallId } from '@neo/dsh-llm'
-import { Session, SessionId } from '@neo/dsh-session'
-import AgentRegistry, { Inbox } from '@neo/dsh-agent'
-import type { Agent } from '@neo/dsh-agent'
-import TerminalSessionService from '@neo/dsh-terminal'
+import { CallId } from '@neo/llm'
+import { Session, SessionId } from '@neo/session'
+import AgentRegistry, { Inbox } from '@neo/agent'
+import type { Agent } from '@neo/agent'
+import TerminalSessionService from '@neo/terminal'
 import type {
   TerminalBackend,
   TerminalBackendSession,
@@ -14,10 +14,10 @@ import type {
   TerminalSessionStatus,
   TerminalSignal,
   TerminalWaitReason,
-} from '@neo/dsh-terminal'
-import SystemPrompt from '@neo/dsh-system-prompt'
-import ToolRuntime from '@neo/dsh-tools'
-import * as ToolBashPersistent from '@neo/dsh-tool-bash-persistent'
+} from '@neo/terminal'
+import SystemPrompt from '@neo/system-prompt'
+import ToolRuntime from '@neo/tools'
+import * as ToolBashPersistent from '@neo/tool-bash-persistent'
 
 const contexts: Context[] = []
 let callNumber = 0

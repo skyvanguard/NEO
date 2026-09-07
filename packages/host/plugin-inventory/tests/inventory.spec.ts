@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context, type Plugin } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
-import { remoteMethods } from '@neo/dsh-typert-protocol'
+import { remoteMethods } from '@neo/typert-protocol'
 import PluginInventoryGateway from '../src/index.ts'
 
 const contexts: Context[] = []

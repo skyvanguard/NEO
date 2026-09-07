@@ -2,15 +2,15 @@
 
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { resolveSlotLabel } from '@neo/dsh-client-ui-slots'
-import { SlotRegistry } from '@neo/dsh-client-runtime/client'
-import { LocaleRuntime } from '@neo/dsh-client-locale/client'
-import { TestRemote, usePinnedBrowserLanguages } from '@neo/dsh-client-test-runtime'
-import { SettingsScopeBinder } from '@neo/dsh-client-ui-settings/client'
-import { apply, inject } from '@neo/dsh-client-ui-settings-plugins/client'
+import { resolveSlotLabel } from '@neo/client-ui-slots'
+import { SlotRegistry } from '@neo/client-runtime/client'
+import { LocaleRuntime } from '@neo/client-locale/client'
+import { TestRemote, usePinnedBrowserLanguages } from '@neo/client-test-runtime'
+import { SettingsScopeBinder } from '@neo/client-ui-settings/client'
+import { apply, inject } from '@neo/client-ui-settings-plugins/client'
 import type {
   ConfigurablePluginsTabInjected, PluginsSettingsSectionInjected,
-} from '@neo/dsh-client-ui-settings-plugins/client'
+} from '@neo/client-ui-settings-plugins/client'
 
 // The service reads its initial locale from the browser; these specs assert
 // the shipped Chinese copy, so they state the browser they assume.

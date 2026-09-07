@@ -1,14 +1,14 @@
-/** Package-owned durable retry-event invariants. @module @neo/dsh-llm-retry/invariant */
+/** Package-owned durable retry-event invariants. @module @neo/llm-retry/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { LlmFailure } from '@neo/dsh-llm'
-import { MAX_TIMER_DELAY_MS } from '@neo/dsh-timeout'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { LlmFailure } from '@neo/llm'
+import { MAX_TIMER_DELAY_MS } from '@neo/timeout'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import { providerForOpenStep } from './history.ts'
 import type {} from './index.ts'
 
-const PACKAGE_NAME = '@neo/dsh-llm-retry'
+const PACKAGE_NAME = '@neo/llm-retry'
 
 /** Cordis companion plugin name. */
 export const name = 'llm-retry-invariant'

@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-host-frontend-static",
+  "name": "@neo/host-frontend-static",
   "description": "SPA dist server for the Web shell: owns the webserver fallback seat, serving the built frontend with index-tap injection, traversal rejection, and SPA index fallback",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,8 +32,8 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-host-webserver": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/host-webserver": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
@@ -41,8 +41,8 @@
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-host-webserver": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
+    "@neo/host-webserver": "workspace:^",
+    "@neo/invariants": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

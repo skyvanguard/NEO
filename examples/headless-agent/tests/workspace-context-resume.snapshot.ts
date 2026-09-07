@@ -8,18 +8,18 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Context } from '@neo/cordis'
-import { normalizeSessionLog, scrubRequestHeaders, type NormalizeContext } from '@neo/dsh-acp-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@neo/dsh-loader-smoke'
-import { createUserMessage } from '@neo/dsh-llm'
+import { normalizeSessionLog, scrubRequestHeaders, type NormalizeContext } from '@neo/acp-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@neo/loader-smoke'
+import { createUserMessage } from '@neo/llm'
 import SessionStore, {
   SESSION_FORMAT_VERSION,
   SessionId,
   type SessionEvent,
   type SessionHeader,
-} from '@neo/dsh-session'
-import JsonlSessionPersistence from '@neo/dsh-session-persistence-jsonl'
-import { renderWorkspaceContext } from '@neo/dsh-agent-instructions'
-import { resolveConfig, workspaceBaselineIdentity } from '@neo/dsh-agent-instructions/src/config.ts'
+} from '@neo/session'
+import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
+import { renderWorkspaceContext } from '@neo/agent-instructions'
+import { resolveConfig, workspaceBaselineIdentity } from '@neo/agent-instructions/src/config.ts'
 import { describe, expect, it } from 'vitest'
 
 const fixtureDir = join(dirname(fileURLToPath(import.meta.url)), 'workspace-context-resume-snapshots/offline-edit')

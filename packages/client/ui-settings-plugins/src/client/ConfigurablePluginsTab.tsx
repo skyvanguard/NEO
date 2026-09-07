@@ -1,6 +1,6 @@
 /** Configurable Host plugins contributed to the shared Plugins section. */
 
-import type { InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime } from '@neo/dsh-client-ui-slots'
+import type { InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime } from '@neo/client-ui-slots'
 import type {} from './slot-contract.ts'
 import css from './PluginsSettingsSection.module.css'
 

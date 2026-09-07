@@ -1,23 +1,23 @@
 /**
  * Fresh-process SDK subagent client. Drives one child DeepSeek Harness
- * runtime over stdio JSON-RPC through `@neo/dsh-sdk-client` and owns
+ * runtime over stdio JSON-RPC through `@neo/sdk-client` and owns
  * cancellation and quiescent disposal. Structure mirrors the ACP backend
- * (`@neo/dsh-subagent-acp`): publish after the child handshake,
+ * (`@neo/subagent-acp`): publish after the child handshake,
  * flatten child failures into stop reasons, tear down to quiescence. The
  * child is spawned BY the SDK client rather than through `ctx.subprocess` —
  * the subprocess seam's documented exception for SDK-managed transports —
  * so this driver applies the seam's shared env scrub itself.
  *
- * @module @neo/dsh-subagent-dsh-sdk/run
+ * @module @neo/subagent-dsh-sdk/run
  */
 
 import { randomUUID } from 'node:crypto'
-import { DeepSeekHarness, type HarnessNotification } from '@neo/dsh-sdk-client'
-import type { ContentBlock } from '@neo/dsh-llm'
-import { SessionId, type SessionEvent, type TurnEndReason } from '@neo/dsh-session'
-import type { SubagentResult, SubagentRun, SubagentStartRequest, SubagentStopReason } from '@neo/dsh-subagent'
-import { AssistantOutputFold, settleRunResult, subprocessRunHandle } from '@neo/dsh-subagent'
-import { scrubbedParentEnv } from '@neo/dsh-subprocess'
+import { DeepSeekHarness, type HarnessNotification } from '@neo/sdk-client'
+import type { ContentBlock } from '@neo/llm'
+import { SessionId, type SessionEvent, type TurnEndReason } from '@neo/session'
+import type { SubagentResult, SubagentRun, SubagentStartRequest, SubagentStopReason } from '@neo/subagent'
+import { AssistantOutputFold, settleRunResult, subprocessRunHandle } from '@neo/subagent'
+import { scrubbedParentEnv } from '@neo/subprocess'
 
 /** Resolved spawn spec for an SDK runtime child process (no defaults — see Config). */
 export interface SdkRunSpec {

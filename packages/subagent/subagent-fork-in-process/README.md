@@ -1,4 +1,4 @@
-# @neo/dsh-subagent-fork-in-process
+# @neo/subagent-fork-in-process
 
 English | [中文](README.zh.md)
 

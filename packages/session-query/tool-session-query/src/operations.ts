@@ -1,20 +1,20 @@
 /**
  * Tool operation orchestration over session-query service capabilities.
  *
- * @module @neo/dsh-tool-session-query/operations
+ * @module @neo/tool-session-query/operations
  */
 
 import type { Context } from '@neo/cordis'
-import { HarnessError } from '@neo/dsh-llm'
-import type { SessionId } from '@neo/dsh-session'
+import { HarnessError } from '@neo/llm'
+import type { SessionId } from '@neo/session'
 import {
   SessionQueryError,
   type SessionEventSearchPage,
   type SessionEventSurface,
   type SessionRecord,
   type SessionSearchCursor,
-} from '@neo/dsh-session-query'
-import type { ToolRunContext } from '@neo/dsh-tools'
+} from '@neo/session-query'
+import type { ToolRunContext } from '@neo/tools'
 import { toolInput } from './input.ts'
 import { presentation } from './presentation.ts'
 import { serviceBoundary } from './service-boundary.ts'

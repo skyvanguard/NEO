@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-tmux-context`.
- * @module @neo/dsh-tmux-context/invariant
+ * Package-owned invariant companion for `@neo/tmux-context`.
+ * @module @neo/tmux-context/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-tmux-context'
+const PACKAGE_NAME = '@neo/tmux-context'
 
 /** Cordis companion plugin name. */
 export const name = 'tmux-context-invariant'

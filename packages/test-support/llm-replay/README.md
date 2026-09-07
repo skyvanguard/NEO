@@ -1,4 +1,4 @@
-# @neo/dsh-llm-replay
+# @neo/llm-replay
 
 English | [中文](README.zh.md)
 
@@ -34,7 +34,7 @@ Replay keys every call by its calling session id (`GenerateOptions.sessionId`, s
 
 ```yaml
 - id: llm-replay
-  name: '@neo/dsh-llm-replay'
+  name: '@neo/llm-replay'
   config:
     providers:
       - id: deepseek-official

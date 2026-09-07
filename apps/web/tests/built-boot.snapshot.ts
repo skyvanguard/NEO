@@ -99,7 +99,7 @@ it('boots the built plugin graph and renders a fixture session end to end', asyn
   // Every bundle injected its plugin-owned style tag (the loader's CSS path).
   const styleOwners = [...document.head.querySelectorAll('style[data-plugin]')]
     .map(style => style.getAttribute('data-plugin'))
-  for (const plugin of ['@neo/dsh-client-ui-layout', '@neo/dsh-client-ui-sidebar', '@neo/dsh-client-ui-conversation', '@neo/dsh-client-ui-tool']) {
+  for (const plugin of ['@neo/client-ui-layout', '@neo/client-ui-sidebar', '@neo/client-ui-conversation', '@neo/client-ui-tool']) {
     expect(styleOwners).toContain(plugin)
   }
 })

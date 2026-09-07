@@ -1,4 +1,4 @@
-# @neo/dsh-client-runtime
+# @neo/client-runtime
 
 English | [中文](README.zh.md)
 

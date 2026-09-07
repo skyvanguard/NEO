@@ -3,12 +3,12 @@ import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os'
 import { basename, join } from 'node:path'
 import { Context } from '@neo/cordis'
-import Storage from '@neo/dsh-storage'
-import type { StorageBackend } from '@neo/dsh-storage'
-import { DomainFacility } from '@neo/dsh-storage-domain'
-import type { DomainChanged } from '@neo/dsh-storage-domain'
-import SessionStore, { SessionId } from '@neo/dsh-session'
-import type { SessionHeader } from '@neo/dsh-session'
+import Storage from '@neo/storage'
+import type { StorageBackend } from '@neo/storage'
+import { DomainFacility } from '@neo/storage-domain'
+import type { DomainChanged } from '@neo/storage-domain'
+import SessionStore, { SessionId } from '@neo/session'
+import type { SessionHeader } from '@neo/session'
 import { MemoryMediaPool, MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
 import WorkspaceRegistry, {
   WorkspaceId,

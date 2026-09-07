@@ -6,15 +6,15 @@
  * argument validation, argv construction, result parsing, inline sampling,
  * and formatting; process concerns (spawn execution, tree termination,
  * environment scrubbing, output capture) stay behind `ctx.subprocess`.
- * @module @neo/dsh-tool-fs-search/glob
+ * @module @neo/tool-fs-search/glob
  */
 
 import type { Context } from '@neo/cordis'
 import { sep } from 'node:path'
-import { defineTool } from '@neo/dsh-tools'
-import type { GenericCallView, SearchResultView, ToolResult } from '@neo/dsh-tools'
-import type { SpillRef } from '@neo/dsh-spill'
-import type {} from '@neo/dsh-system-prompt'
+import { defineTool } from '@neo/tools'
+import type { GenericCallView, SearchResultView, ToolResult } from '@neo/tools'
+import type { SpillRef } from '@neo/spill'
+import type {} from '@neo/system-prompt'
 import { runRipgrep, toWorkdirRelative, trySaveFormattedResult } from './search-core.ts'
 import { globSearchMeta, searchViewFromMeta } from './presentation.ts'
 import { acceptedDirectCallValue } from './direct-call.ts'

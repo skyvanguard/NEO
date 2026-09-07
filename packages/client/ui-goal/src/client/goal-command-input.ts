@@ -1,9 +1,9 @@
-import type { SessionEvent } from '@neo/dsh-session/types'
-import type { CommandId } from '@neo/dsh-commands/brand'
-import type {} from '@neo/dsh-commands/types'
+import type { SessionEvent } from '@neo/session/types'
+import type { CommandId } from '@neo/commands/brand'
+import type {} from '@neo/commands/types'
 import type {
   ConversationNodeDefinition,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 
 /** Goal-owned human command input projected independently of model messages. */
 export interface GoalCommandInputData {
@@ -12,7 +12,7 @@ export interface GoalCommandInputData {
   readonly time: number
 }
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Human-entered `/goal` command input. */
     'command-input': GoalCommandInputData

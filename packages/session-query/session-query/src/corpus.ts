@@ -1,8 +1,8 @@
 /** Live/persisted logical-corpus resolution for session-query. */
 
 import type { Context, Fiber } from '@neo/cordis'
-import type { Session, SessionEvent, SessionHeader, SessionId } from '@neo/dsh-session'
-import SessionPersistence, { SessionPersistenceCorruptionError } from '@neo/dsh-session-persistence'
+import type { Session, SessionEvent, SessionHeader, SessionId } from '@neo/session'
+import SessionPersistence, { SessionPersistenceCorruptionError } from '@neo/session-persistence'
 import type { SessionRecord } from './types.ts'
 import { SessionQueryError } from './config.ts'
 import { assertSessionHeadersCompatible } from './sources.ts'

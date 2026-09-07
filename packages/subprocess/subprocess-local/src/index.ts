@@ -5,7 +5,7 @@
  * any trees the service still owns. It has no config: every disposition and
  * limit arrives on the spec, so the deployment-varying choices stay with the
  * caller's config (the bash executor's, the LSP host's, …).
- * @module @neo/dsh-subprocess-local
+ * @module @neo/subprocess-local
  */
 
 import { constants } from 'node:fs'
@@ -14,13 +14,13 @@ import { delimiter, extname, isAbsolute, resolve } from 'node:path'
 import { Context } from '@neo/cordis'
 import * as nodePty from 'node-pty'
 import type { IPtyForkOptions } from 'node-pty'
-import { SubprocessRuntime } from '@neo/dsh-subprocess'
+import { SubprocessRuntime } from '@neo/subprocess'
 import type {
   SubprocessHandle,
   SubprocessSpawnSpec,
   SubprocessTerminalHandle,
   SubprocessTerminalSpawnSpec,
-} from '@neo/dsh-subprocess'
+} from '@neo/subprocess'
 import { childEnv, spawnSubprocess } from './spawn.ts'
 import type { LocalSubprocessHandle, SpawnInternals } from './spawn.ts'
 import { createProcessInspector } from './process-inspector.ts'

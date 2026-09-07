@@ -1,5 +1,5 @@
 {
-  "name": "@neo/dsh-session-query-sqlite",
+  "name": "@neo/session-query-sqlite",
   "description": "Concrete ctx.sessionQuery backend with SQLite FTS5 search",
   "version": "0.1.0-rc.5",
   "publishConfig": {
@@ -32,14 +32,14 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-session-query": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-query": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@neo/dsh-session-persistence": {
+    "@neo/session-persistence": {
       "optional": true
     }
   },
@@ -48,11 +48,11 @@
   },
   "devDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",
-    "@neo/dsh-invariants": "workspace:^",
-    "@neo/dsh-session": "workspace:^",
-    "@neo/dsh-session-persistence": "workspace:^",
-    "@neo/dsh-session-persistence-sqlite": "workspace:^",
-    "@neo/dsh-session-query": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-persistence-sqlite": "workspace:^",
+    "@neo/session-query": "workspace:^",
     "@neo/cordis": "workspace:^"
   }
 }

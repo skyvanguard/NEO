@@ -8,7 +8,7 @@
  */
 import { Context } from '@neo/cordis'
 import { describe, expect, it } from 'vitest'
-import type { SessionId } from '@neo/dsh-api-remotes/client'
+import type { SessionId } from '@neo/api-remotes/client'
 import { createScope, scopeOf } from '../src/client/agents/scope.ts'
 
 const sid = (k: string): SessionId => k as SessionId

@@ -16,10 +16,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import Loader from '@neo/cordis-plugin-loader'
 import Include from '@neo/cordis-plugin-include'
-import HttpServer from '@neo/dsh-host-webserver'
-import type { DirectoryPicker } from '@neo/dsh-host-directory-picker'
-import BrowseDirectoryPicker from '@neo/dsh-host-directory-picker-browse'
-import NativeDirectoryPicker from '@neo/dsh-host-directory-picker-native'
+import HttpServer from '@neo/host-webserver'
+import type { DirectoryPicker } from '@neo/host-directory-picker'
+import BrowseDirectoryPicker from '@neo/host-directory-picker-browse'
+import NativeDirectoryPicker from '@neo/host-directory-picker-native'
 import * as DirectoryPickerAuto from '../src/index.ts'
 
 const renameControl = vi.hoisted(() => ({
@@ -45,11 +45,11 @@ vi.mock('node:fs/promises', async (importOriginal) => {
   }
 })
 
-const AUTO = '@neo/dsh-host-directory-picker-auto'
-const NATIVE = '@neo/dsh-host-directory-picker-native'
-const BROWSE = '@neo/dsh-host-directory-picker-browse'
-const NATIVE_SURFACE = '@neo/dsh-client-ui-directory-picker-native'
-const BROWSE_SURFACE = '@neo/dsh-client-ui-directory-picker-browse'
+const AUTO = '@neo/host-directory-picker-auto'
+const NATIVE = '@neo/host-directory-picker-native'
+const BROWSE = '@neo/host-directory-picker-browse'
+const NATIVE_SURFACE = '@neo/client-ui-directory-picker-native'
+const BROWSE_SURFACE = '@neo/client-ui-directory-picker-browse'
 
 /**
  * Loader-visible stand-in for a client surface package: the surfaces belong to
@@ -95,7 +95,7 @@ async function loadComposition(
   root = await mkdtemp(join(tmpdir(), 'dsh-directory-picker-auto-'))
   const configPath = join(root, 'cordis.yml')
   await writeFile(configPath, [
-    "- name: '@neo/dsh-host-webserver'",
+    "- name: '@neo/host-webserver'",
     '  config:',
     `    host: '${bindHost}'`,
     '    port: 0',
@@ -108,7 +108,7 @@ async function loadComposition(
   await context.plugin(Loader)
   context.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@neo/dsh-host-webserver', HttpServer],
+    ['@neo/host-webserver', HttpServer],
     [AUTO, DirectoryPickerAuto],
     [NATIVE, NativeDirectoryPicker],
     [BROWSE, BrowseDirectoryPicker],

@@ -3,11 +3,11 @@
  * consumes and produces, plus the fields in the `workflow/*` event payloads.
  * Types only (plus the id-brand factory), per the package convention.
  *
- * @module @neo/dsh-workflow/types
+ * @module @neo/workflow/types
  */
 
-import type { Branded } from '@neo/dsh-brand'
-import type { SessionId } from '@neo/dsh-session/types'
+import type { Branded } from '@neo/brand'
+import type { SessionId } from '@neo/session/types'
 
 /** Identifies one workflow run. */
 export type WorkflowRunId = Branded<'WorkflowRunId'>

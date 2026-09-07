@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-command-feedback`.
- * @module @neo/dsh-command-feedback/invariant
+ * Package-owned invariant companion for `@neo/command-feedback`.
+ * @module @neo/command-feedback/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-command-feedback'
+const PACKAGE_NAME = '@neo/command-feedback'
 
 /** Cordis companion plugin name. */
 export const name = 'command-feedback-invariant'

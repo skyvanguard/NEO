@@ -1,4 +1,4 @@
-# @neo/dsh-tool-jobs
+# @neo/tool-jobs
 
 English | [中文](README.zh.md)
 

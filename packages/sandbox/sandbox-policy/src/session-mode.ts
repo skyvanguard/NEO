@@ -18,10 +18,10 @@
  * @module dsh-sandbox-policy/session-mode
  */
 
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { SandboxMode } from '@neo/dsh-sandbox'
+import type { Session, SessionEvent } from '@neo/session'
+import type { SandboxMode } from '@neo/sandbox'
 
-declare module '@neo/dsh-session/types' {
+declare module '@neo/session/types' {
   interface SessionEventMap {
     /**
      * The session's sandbox mode was switched — log-only (like `approval/*`;

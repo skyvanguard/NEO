@@ -5,9 +5,9 @@
 // tag probe).
 import { Context } from '@neo/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { AttachmentId } from '@neo/dsh-attachment'
-import { makeTranslate, SlotTestRuntime } from '@neo/dsh-client-test-runtime'
-import type { QueuedMessage, SessionFace } from '@neo/dsh-client-runtime/client'
+import { AttachmentId } from '@neo/attachment'
+import { makeTranslate, SlotTestRuntime } from '@neo/client-test-runtime'
+import type { QueuedMessage, SessionFace } from '@neo/client-runtime/client'
 import { ComposerBlockRegistry } from '../src/client/input/blocks.ts'
 import { InputHub } from '../src/client/input/hub.ts'
 import { ConversationController } from '../src/client/service.ts'

@@ -18,10 +18,10 @@
   - img
   - img
   - text: Context injection goal
-- button "Context injection @neo/dsh-system-prompt":
+- button "Context injection @neo/system-prompt":
   - img
   - img
-  - text: Context injection @neo/dsh-system-prompt
+  - text: Context injection @neo/system-prompt
 - paragraph: partial
 - status: Deep diving...
 - region "To-dos":

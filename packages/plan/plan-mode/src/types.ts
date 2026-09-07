@@ -5,7 +5,7 @@
  * `./types` for host consumers, `./client` for client aggregates — with zero
  * content duplication.
  *
- * @module @neo/dsh-plan-mode/types
+ * @module @neo/plan-mode/types
  */
 
 /**
@@ -20,7 +20,7 @@ export interface PlanProjection {
   pending: boolean
 }
 
-declare module '@neo/dsh-session-projection/types' {
+declare module '@neo/session-projection/types' {
   interface SessionProjectionMap {
     /** Plan collaboration state folded from `command/run` (name `plan`) and `plan/mode` events. */
     plan: PlanProjection

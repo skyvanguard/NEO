@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { WorkerThreadCodeRuntime } from '@neo/dsh-code-runtime-worker-thread'
-import type { Config } from '@neo/dsh-code-runtime-worker-thread'
-import type { CodeBindingFunction, CodeBindingNamespace, CodeRunResult } from '@neo/dsh-code-runtime'
+import { WorkerThreadCodeRuntime } from '@neo/code-runtime-worker-thread'
+import type { Config } from '@neo/code-runtime-worker-thread'
+import type { CodeBindingFunction, CodeBindingNamespace, CodeRunResult } from '@neo/code-runtime'
 
 /**
  * Integration suite over REAL worker threads (no mocks — workers are cheap

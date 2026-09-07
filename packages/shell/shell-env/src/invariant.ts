@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-shell-env`.
- * @module @neo/dsh-shell-env/invariant
+ * Package-owned invariant companion for `@neo/shell-env`.
+ * @module @neo/shell-env/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-shell-env'
+const PACKAGE_NAME = '@neo/shell-env'
 
 /** Cordis companion plugin name. */
 export const name = 'shell-env-invariant'

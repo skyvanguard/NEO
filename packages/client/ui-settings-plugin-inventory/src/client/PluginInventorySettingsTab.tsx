@@ -1,10 +1,10 @@
 import { useEffect, useId, useMemo, useState, type ReactNode } from 'react'
-import type { PluginInventorySnapshot } from '@neo/dsh-api-remotes/client'
+import type { PluginInventorySnapshot } from '@neo/api-remotes/client'
 import {
   IconChevronDownOutline14,
   IconSearchOutline16,
-} from '@neo/dsh-client-ui-primitives'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/dsh-client-ui-slots'
+} from '@neo/client-ui-primitives'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@neo/client-ui-slots'
 import type { PluginInventoryLocaleKey } from './locales.ts'
 import css from './PluginInventorySettingsTab.module.css'
 

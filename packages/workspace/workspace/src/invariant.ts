@@ -1,14 +1,14 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-workspace`.
- * @module @neo/dsh-workspace/invariant
+ * Package-owned invariant companion for `@neo/workspace`.
+ * @module @neo/workspace/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
-import type { DomainChanged } from '@neo/dsh-storage-domain'
-import { WorkspaceId } from '@neo/dsh-workspace'
+import type { InvariantInstaller } from '@neo/invariants'
+import type { DomainChanged } from '@neo/storage-domain'
+import { WorkspaceId } from '@neo/workspace'
 
-const PACKAGE_NAME = '@neo/dsh-workspace'
+const PACKAGE_NAME = '@neo/workspace'
 
 /** Cordis companion plugin name. */
 export const name = 'workspace-invariant'

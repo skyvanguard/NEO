@@ -14,9 +14,9 @@ import type {
   InboxTarget,
   PreStepDecision,
   RequestErrorAction,
-} from '@neo/dsh-agent'
-import { Inbox, agentEvents, assembleContextFor } from '@neo/dsh-agent'
-import type { GenerateOptions, LlmCallConfig, Message, PreparedLlmCall } from '@neo/dsh-llm'
+} from '@neo/agent'
+import { Inbox, agentEvents, assembleContextFor } from '@neo/agent'
+import type { GenerateOptions, LlmCallConfig, Message, PreparedLlmCall } from '@neo/llm'
 import {
   BlockAssembler,
   LlmError,
@@ -24,13 +24,13 @@ import {
   deepFreeze,
   errorChain,
   markAgentLoopRequest,
-} from '@neo/dsh-llm'
-import type { Scope } from '@neo/dsh-scope'
-import { createScope } from '@neo/dsh-scope'
-import type { EpochHeader, RequestContext, Session, SessionId, TurnEndReason, UserMessage } from '@neo/dsh-session'
-import { canonicalHeader, headerEquals } from '@neo/dsh-session'
-import { joinContextSections, renderContextSections, renderPrompt } from '@neo/dsh-system-prompt'
-import type { PromptAssembly } from '@neo/dsh-system-prompt'
+} from '@neo/llm'
+import type { Scope } from '@neo/scope'
+import { createScope } from '@neo/scope'
+import type { EpochHeader, RequestContext, Session, SessionId, TurnEndReason, UserMessage } from '@neo/session'
+import { canonicalHeader, headerEquals } from '@neo/session'
+import { joinContextSections, renderContextSections, renderPrompt } from '@neo/system-prompt'
+import type { PromptAssembly } from '@neo/system-prompt'
 import type { Context } from '@neo/cordis'
 import { RuntimeContextProjection } from './runtime-context.ts'
 import { executeToolCalls } from './tool-calls.ts'

@@ -1,10 +1,10 @@
 /**
  * Public configuration and measurement vocabulary for replay token metering.
  *
- * @module @neo/dsh-token-meter/types
+ * @module @neo/token-meter/types
  */
 
-import type { TokenUsage } from '@neo/dsh-llm'
+import type { TokenUsage } from '@neo/llm'
 
 export type { ContextBreakdownProjection, ContextPressureProjection, TokenUsageProjection } from './projection.ts'
 

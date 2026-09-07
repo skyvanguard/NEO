@@ -2,22 +2,22 @@ import type { Context } from '@neo/cordis'
 import type {
   AssistantBlock, AssistantMessageNode, ConversationLocation, ConversationMatch,
   ConversationNodeContext, ConversationNodeDefinition,
-} from '@neo/dsh-client-runtime/client'
+} from '@neo/client-runtime/client'
 import {
   emptyAssistantBlock, isAppendSurfaceEvent, isTokenDelta, toAssistantBlock, toAssistantBlocks,
-} from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-llm-retry/types'
+} from '@neo/client-runtime/client'
+import type {} from '@neo/llm-retry/types'
 import type { AssistantChatData } from '../contract/chat-nodes.ts'
 import { CHAT_SYNTHETIC_SEQ_OFFSETS, chatNode } from './common.ts'
 
-declare module '@neo/dsh-client-ui-conversation/client' {
+declare module '@neo/client-ui-conversation/client' {
   interface ChatNodeDataMap {
     /** Streaming, settled, or interrupted Assistant step. */
     'assistant-step': AssistantChatData
   }
 }
 
-declare module '@neo/dsh-client-runtime/client' {
+declare module '@neo/client-runtime/client' {
   interface ConversationStepDataMap {
     /** Streaming, settled, or interrupted Assistant material for this Step. */
     'assistant-step': AssistantChatData

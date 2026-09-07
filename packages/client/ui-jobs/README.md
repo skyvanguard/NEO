@@ -1,4 +1,4 @@
-# @neo/dsh-client-ui-jobs
+# @neo/client-ui-jobs
 
 English | [中文](README.zh.md)
 

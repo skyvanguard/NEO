@@ -1,16 +1,16 @@
 import { readFile } from 'node:fs/promises'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import { AttachmentId, AttachmentStore } from '@neo/dsh-attachment'
+import { AttachmentId, AttachmentStore } from '@neo/attachment'
 import type {
   ImageAttachmentLimits,
   ImageAttachmentRef,
   SaveImageAttachment,
   StoredImageAttachment,
-} from '@neo/dsh-attachment'
-import LlmRuntime, { createUserMessage, CallId } from '@neo/dsh-llm'
-import type { Message, ToolSchema } from '@neo/dsh-llm'
-import * as LlmPiAi from '@neo/dsh-llm-pi-ai'
+} from '@neo/attachment'
+import LlmRuntime, { createUserMessage, CallId } from '@neo/llm'
+import type { Message, ToolSchema } from '@neo/llm'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 import type { PiAiReplayState } from '../src/replay.ts'
 import { assemble, type AssembledResult } from './assemble.ts'
 

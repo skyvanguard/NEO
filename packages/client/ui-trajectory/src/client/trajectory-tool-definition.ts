@@ -2,8 +2,8 @@ import type { Context } from '@neo/cordis'
 import type {
   ConversationMatch, ConversationNodeContext, ConversationNodeDefinition,
   RunningToolCall, ToolCallBlock, ToolResultNode,
-} from '@neo/dsh-client-runtime/client'
-import type {} from '@neo/dsh-tools/types'
+} from '@neo/client-runtime/client'
+import type {} from '@neo/tools/types'
 import { trajectoryNode } from './trajectory-definition-common.ts'
 
 /* jscpd:ignore-start -- Target-owned Definitions intentionally keep their event

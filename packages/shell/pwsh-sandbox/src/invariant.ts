@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-pwsh-sandbox`.
- * @module @neo/dsh-pwsh-sandbox/invariant
+ * Package-owned invariant companion for `@neo/pwsh-sandbox`.
+ * @module @neo/pwsh-sandbox/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-pwsh-sandbox'
+const PACKAGE_NAME = '@neo/pwsh-sandbox'
 
 /** Cordis companion plugin name. */
 export const name = 'pwsh-sandbox-invariant'

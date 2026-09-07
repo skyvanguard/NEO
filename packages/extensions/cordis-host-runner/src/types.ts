@@ -1,10 +1,10 @@
 /**
  * Client-safe wire vocabulary of the dynamic Cordis plugin runner.
- * @module @neo/dsh-cordis-host-runner/types
+ * @module @neo/cordis-host-runner/types
  */
 
-import type { Branded } from '@neo/dsh-brand'
-import type { JsonValue, SessionId } from '@neo/dsh-session/types'
+import type { Branded } from '@neo/brand'
+import type { JsonValue, SessionId } from '@neo/session/types'
 
 /** Stable identity of one dynamic plugin instance. */
 export type CordisDynamicPluginId = Branded<'CordisDynamicPluginId'>

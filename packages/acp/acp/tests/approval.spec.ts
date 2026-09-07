@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { PROTOCOL_VERSION } from '@agentclientprotocol/sdk'
-import { CallId } from '@neo/dsh-llm'
-import type { Agent } from '@neo/dsh-agent'
-import { SessionId } from '@neo/dsh-session'
-import ApprovalService, { type ApprovalRequest } from '@neo/dsh-user-approval'
+import { CallId } from '@neo/llm'
+import type { Agent } from '@neo/agent'
+import { SessionId } from '@neo/session'
+import ApprovalService, { type ApprovalRequest } from '@neo/user-approval'
 import { makeBridgeHarness, type BridgeHarness } from './harness.ts'
 
 describe('ACP machine permission policy', () => {

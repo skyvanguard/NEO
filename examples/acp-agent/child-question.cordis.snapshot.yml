@@ -7,10 +7,10 @@
     path: ./cordis.yml
     patches:
       - id: llm-deepseek
-        name: '@neo/dsh-llm-deepseek'
+        name: '@neo/llm-deepseek'
         disabled: true
       - id: sandbox
-        name: '@neo/dsh-sandbox-local'
+        name: '@neo/sandbox-local'
         config:
           runnerCommand:
             - bash
@@ -20,7 +20,7 @@
           runnerFailureSignatures:
             - 'passthrough-runner: profile rejected'
       - id: acp-agent
-        name: '@neo/dsh-acp-demo'
+        name: '@neo/acp-demo'
         config:
           provider: deepseek-official
           model: deepseek-v4-flash
@@ -34,7 +34,7 @@
             Verify your work by running the code or tests. Keep answers brief and factual.
       - insert:
           - id: llm-replay
-            name: '@neo/dsh-llm-replay'
+            name: '@neo/llm-replay'
             config:
               providers:
                 - id: deepseek-official
@@ -43,8 +43,8 @@
                     - id: deepseek-v4-flash
                     - id: deepseek-v4-pro
           - id: user-questions
-            name: '@neo/dsh-user-questions'
+            name: '@neo/user-questions'
           - id: tool-ask-user
-            name: '@neo/dsh-tool-ask-user'
+            name: '@neo/tool-ask-user'
           - id: child-question-tripwire
             name: './tests/fixtures/child-question-tripwire.ts'

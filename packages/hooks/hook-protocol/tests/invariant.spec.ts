@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Context } from '@neo/cordis'
-import SessionStore, { Session, SessionId } from '@neo/dsh-session'
-import * as HookInvariant from '@neo/dsh-hook-protocol/invariant'
-import InvariantRegistry from '@neo/dsh-invariants'
+import SessionStore, { Session, SessionId } from '@neo/session'
+import * as HookInvariant from '@neo/hook-protocol/invariant'
+import InvariantRegistry from '@neo/invariants'
 
 async function setup(): Promise<Context> {
   const ctx = new Context()

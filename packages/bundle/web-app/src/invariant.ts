@@ -1,12 +1,12 @@
 /**
- * Package-owned invariant companion for `@neo/dsh-web-app`.
- * @module @neo/dsh-web-app/invariant
+ * Package-owned invariant companion for `@neo/web-app`.
+ * @module @neo/web-app/invariant
  */
 
 import type { Context } from '@neo/cordis'
-import type { InvariantInstaller } from '@neo/dsh-invariants'
+import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/dsh-web-app'
+const PACKAGE_NAME = '@neo/web-app'
 
 /** Cordis companion plugin name. */
 export const name = 'web-app-invariant'

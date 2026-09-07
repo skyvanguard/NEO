@@ -4,7 +4,7 @@ import {
   LlmAdapter,
   LlmError,
   resolveRetryPolicy,
-} from '@neo/dsh-llm'
+} from '@neo/llm'
 
 class RetrySnapshotAdapter extends LlmAdapter {
   requests = 0

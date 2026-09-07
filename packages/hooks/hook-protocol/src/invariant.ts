@@ -1,11 +1,11 @@
-/** Package-owned hook invocation/result stream invariants. @module @neo/dsh-hook-protocol/invariant */
+/** Package-owned hook invocation/result stream invariants. @module @neo/hook-protocol/invariant */
 
 import type { Context } from '@neo/cordis'
-import type { Session, SessionEvent } from '@neo/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@neo/dsh-invariants'
+import type { Session, SessionEvent } from '@neo/session'
+import type { InvariantFailure, InvariantInstaller } from '@neo/invariants'
 import type {} from './types.ts'
 
-const PACKAGE_NAME = '@neo/dsh-hook-protocol'
+const PACKAGE_NAME = '@neo/hook-protocol'
 
 /** Cordis companion plugin name. */
 export const name = 'hook-protocol-invariant'

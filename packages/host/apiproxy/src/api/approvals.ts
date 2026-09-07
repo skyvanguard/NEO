@@ -5,8 +5,8 @@
  * RpcReceipt carrier receipt as the HTTP response body; the final outcome arrives in the resolved frame.
  */
 
-import type { ApprovalRequestId } from '@neo/dsh-user-approval/types'
-import type { SessionId } from '@neo/dsh-session/types'
+import type { ApprovalRequestId } from '@neo/user-approval/types'
+import type { SessionId } from '@neo/session/types'
 
 /**
  * Approval answer payload (the result.value slot of a client-response). outcome accepts only
