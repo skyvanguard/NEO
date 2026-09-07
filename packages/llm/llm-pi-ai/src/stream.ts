@@ -34,6 +34,31 @@ export function mapUsage(usage: PiUsage): TokenUsage {
   }
 }
 
+/**
+ * When the provider bundles thinking tokens into `output` without a breakdown
+ * (llama.cpp reports only total completion tokens, even though the model emits
+ * `reasoning_content`), estimate the reasoning share by apportioning
+ * `outputTokens` by the CHARACTER ratio of thinking vs. visible text — grounded
+ * in the real output count, no extra tokenizer call. A provider that already
+ * reported `reasoning` (mapped to `reasoningTokens`) is returned unchanged.
+ * @param usage - the mapped usage.
+ * @param content - the finalized assistant message content blocks.
+ * @returns usage with an estimated `reasoningTokens` when the model produced
+ *   thinking content and the provider gave no breakdown; otherwise unchanged.
+ */
+export function withReasoningEstimate(usage: TokenUsage, content: AssistantMessage['content']): TokenUsage {
+  if (usage.reasoningTokens !== undefined) return usage
+  let thinkingChars = 0
+  let textChars = 0
+  for (const block of content) {
+    if (block.type === 'thinking') thinkingChars += block.thinking.length
+    else if (block.type === 'text') textChars += block.text.length
+  }
+  const total = thinkingChars + textChars
+  if (thinkingChars === 0 || total === 0 || usage.outputTokens <= 0) return usage
+  return { ...usage, reasoningTokens: Math.round((usage.outputTokens * thinkingChars) / total) }
+}
+
 // XXX(pi-ai upstream): pi-ai flattens the caught error to `error.message`
 // (api/anthropic-messages.js: `errorMessage = error instanceof Error ?
 // error.message : JSON.stringify(error)`), discarding the original Error and its
@@ -204,7 +229,7 @@ export async function* toStreamChunks(
         break
       case 'done': {
         const reason = mapStopReason(event.message, contextWindow)
-        yield { type: 'usage', usage: mapUsage(event.message.usage) }
+        yield { type: 'usage', usage: withReasoningEstimate(mapUsage(event.message.usage), event.message.content) }
         yield {
           type: 'finish',
           reason,

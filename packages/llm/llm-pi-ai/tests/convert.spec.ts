@@ -6,7 +6,7 @@ import type { ContentBlock, StreamChunk } from '@neo/llm'
 import type { AssistantMessage, AssistantMessageEvent, Usage } from '@earendil-works/pi-ai'
 import { toPiContext } from '../src/context.ts'
 import { toPiReplayState } from '../src/replay.ts'
-import { mapStopReason, mapUsage, toStreamChunks } from '../src/stream.ts'
+import { mapStopReason, mapUsage, toStreamChunks, withReasoningEstimate } from '../src/stream.ts'
 
 function usage(input = 0, output = 0, cacheRead = 0, cacheWrite = 0, reasoning?: number): Usage {
   return {
@@ -828,6 +828,19 @@ describe('mapStopReason / mapUsage', () => {
     // Zero or absent reasoning is omitted (providers with no breakdown leave it undefined).
     expect(mapUsage(usage(10, 5, 0, 0, 0))).toEqual({ inputTokens: 10, outputTokens: 5 })
     expect(mapUsage(usage(10, 5))).not.toHaveProperty('reasoningTokens')
+  })
+
+  it('estimates reasoning tokens by content char-ratio when the provider gave no breakdown', () => {
+    const think = { type: 'thinking' as const, thinking: 'x'.repeat(75) }
+    const text = { type: 'text' as const, text: 'y'.repeat(25) }
+    // 75/100 of 200 output tokens → 150 reasoning tokens.
+    expect(withReasoningEstimate({ inputTokens: 10, outputTokens: 200 }, [think, text]).reasoningTokens).toBe(150)
+    // No thinking content → unchanged.
+    expect(withReasoningEstimate({ inputTokens: 10, outputTokens: 200 }, [text])).not.toHaveProperty('reasoningTokens')
+    // Zero output → unchanged.
+    expect(withReasoningEstimate({ inputTokens: 10, outputTokens: 0 }, [think, text])).not.toHaveProperty('reasoningTokens')
+    // A provider-reported breakdown is never overwritten by the estimate.
+    expect(withReasoningEstimate({ inputTokens: 10, outputTokens: 200, reasoningTokens: 7 }, [think, text]).reasoningTokens).toBe(7)
   })
 })
 
