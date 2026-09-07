@@ -6,8 +6,8 @@
 // record cannot hang on a live model answering differently); assertion steps
 // run in replay/refresh only. Settled states only — streaming incrementality
 // is asserted from the persisted assistant/chunk events, not transient DOM.
-// Record: DSH_SNAPSHOT=record rewrites session.jsonl, then a keyless
-// DSH_SNAPSHOT=refresh regenerates ui.expected.md.
+// Record: NEO_SNAPSHOT=record rewrites session.jsonl, then a keyless
+// NEO_SNAPSHOT=refresh regenerates ui.expected.md.
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -101,7 +101,7 @@ describe('web e2e: fresh round trip through the real assembly', () => {
       callId: CallId('web-url-probe'),
       name: 'bash',
       arguments: {
-        command: 'printf \'%s\\n\' "$DSH_WEB_URL"',
+        command: 'printf \'%s\\n\' "$NEO_WEB_URL"',
         description: 'Print current Web runtime',
       },
       agent,

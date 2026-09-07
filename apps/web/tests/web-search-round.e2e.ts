@@ -24,7 +24,7 @@ const UI_EXPECTED = fileURLToPath(new URL('./snapshots/web-search-round/ui.expec
 const MODE = webSnapshotMode()
 const QUERY = 'DeepSeek Harness snapshot search'
 const PROMPT = `Use web_search to search exactly "${QUERY}". Then reply exactly SEARCH_DONE and stop.`
-const SEARCH_CREDENTIAL_REF = credentialRef('DSH_WEB_SEARCH_E2E_KEY')
+const SEARCH_CREDENTIAL_REF = credentialRef('NEO_WEB_SEARCH_E2E_KEY')
 const SEARCH_CREDENTIAL = 'snapshot-search-key'
 
 /**

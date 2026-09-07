@@ -72,14 +72,14 @@
     - id: llm-retry
       name: '@neo/llm-retry'
 
-    # User-settings document (`$DSH_HOME/settings.yaml`, hot-reloaded): a
+    # User-settings document (`$NEO_HOME/settings.yaml`, hot-reloaded): a
     # `llm-deepseek:` or `llm-pi-ai:` section there overrides the adapter entries
     # below without a restart, and is what the web Models page writes.
     - id: settings
       name: '@neo/settings-file'
 
     # Credential sources: inherited environment over the managed
-    # `$DSH_HOME/.credentials.yaml`, with project and user `.env` fallbacks.
+    # `$NEO_HOME/.credentials.yaml`, with project and user `.env` fallbacks.
     # Adapters resolve references per request; the Models page writes only the
     # managed document, which is never materialized into the process environment.
     - id: credentials
@@ -98,7 +98,7 @@
     - id: session-persistence-jsonl
       name: '@neo/session-persistence-jsonl'
       config:
-        root: !!js dshHomePath('sessions')
+        root: !!js neoHomePath('sessions')
 
     # Durable image bytes live outside the append-only session log. Messages
     # keep content-addressed references that this shared backend resolves for
@@ -128,7 +128,7 @@
 
     # NEO: session telemetry is REMOVED. The row is patched `disabled: true`
     # below, so the plugin never mounts and no session-log records are ever
-    # exported — DSH_TELEMETRY_MODE/DSH_TELEMETRY_OTLP_URL have no effect while
+    # exported — NEO_TELEMETRY_MODE/NEO_TELEMETRY_OTLP_URL have no effect while
     # the row is disabled. The former upstream behaviour (mirror raw session-log
     # records onto an external OTLP collector with no redaction) is intentionally
     # gone for a private, local-first offensive-security harness. The config
@@ -146,14 +146,14 @@
     - id: session-telemetry-otel
       name: '@neo/session-telemetry-otel'
       # NEO: telemetry is removed. The plugin never mounts, so no session-log
-      # records can ever be exported anywhere, regardless of DSH_TELEMETRY_* env.
+      # records can ever be exported anywhere, regardless of NEO_TELEMETRY_* env.
       # The default endpoint is also pinned to loopback (no external collector).
       disabled: true
       config:
         mode: DISABLED
         shutdownTimeoutMillis: 3000
         exporter:
-          url: !!js process.env.DSH_TELEMETRY_OTLP_URL ?? 'http://127.0.0.1:4318/v1/logs'
+          url: !!js process.env.NEO_TELEMETRY_OTLP_URL ?? 'http://127.0.0.1:4318/v1/logs'
           compression: gzip
           timeoutMillis: 1000
         processor:
@@ -174,7 +174,7 @@
     - id: sandbox-policy
       name: '@neo/sandbox-policy'
       config:
-        mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'
+        mode: !!js process.env.NEO_PERMISSION_MODE ?? 'workspace-write'
         workspaceRoot: !!js process.cwd()
 
     - id: bash-sandbox
@@ -190,7 +190,7 @@
     - id: approval
       name: '@neo/user-approval'
       config:
-        policy: !!js "(process.env.DSH_PERMISSION_MODE ?? 'workspace-write') === 'danger-full-access' ? 'never' : 'ask'"
+        policy: !!js "(process.env.NEO_PERMISSION_MODE ?? 'workspace-write') === 'danger-full-access' ? 'never' : 'ask'"
 
     - id: permission
       name: '@neo/permission-presets'

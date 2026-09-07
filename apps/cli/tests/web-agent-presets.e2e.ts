@@ -53,14 +53,14 @@ async function bootWeb(
   const patches: PatchOptions[] = [
     ...loadOverlayPatches('dsh-test', BASE_PATCH),
     ...loadOverlayPatches('dsh-test', WEB_PATCH),
-    // The settings row defaults to `$DSH_HOME/settings.yaml`. Left alone it
+    // The settings row defaults to `$NEO_HOME/settings.yaml`. Left alone it
     // reads the developer's own document — and since the default preset is a
     // setting, a stored `agent-presets.default` would decide this file's
     // outcome. Point it at a temp file for the same reason the roster below
     // names only the shipped root.
     { id: 'settings', config: { path: settingsFile, watch: false } },
-    // storage-json's root is anchored to the real $DSH_HOME. Unpinned, this
-    // file writes the developer's own `~/.dsh/storages/` — and then reads it
+    // storage-json's root is anchored to the real $NEO_HOME. Unpinned, this
+    // file writes the developer's own `~/.neo/storages/` — and then reads it
     // back on the next run, so a stored document from any other build decides
     // this test's boot. Same reason the settings row above is pinned.
     { id: 'storage-json', config: { root: storageRoot } },
@@ -96,7 +96,7 @@ async function bootWeb(
       { id: 'ui-directory-picker-browse', name: '@neo/client-ui-directory-picker-browse' },
     ] },
     // The roster AppCLIEntry would patch in; only the shipped root, so a
-    // developer's own `~/.dsh/.preset` cannot change this test's outcome.
+    // developer's own `~/.neo/.preset` cannot change this test's outcome.
     // `default` here is the COMPOSITION default — the base layer the settings
     // document overrides.
     {
@@ -341,8 +341,8 @@ describe('the shipped Web composition', () => {
 
   it('merges the global skill layer into a preset agent\'s catalog, keeping local discovery preset-side', async () => {
     const proj = await mkdtemp(join(tmpdir(), 'dsh-preset-skill-proj-'))
-    await mkdir(join(proj, '.dsh', 'skills', 'project-proof'), { recursive: true })
-    await writeFile(join(proj, '.dsh', 'skills', 'project-proof', 'SKILL.md'), [
+    await mkdir(join(proj, '.neo', 'skills', 'project-proof'), { recursive: true })
+    await writeFile(join(proj, '.neo', 'skills', 'project-proof', 'SKILL.md'), [
       '---',
       'name: project-proof',
       'description: Proves the preset layer discovers project skills beside global ones.',
@@ -647,7 +647,7 @@ describe('a launcher that configures no writable root', () => {
   // The claim this default exists for, asserted through the real shipped
   // bundles rather than a hand-built context: `apps/cli` patches in only the
   // system root, and a person's own presets are found anyway because the
-  // roster derives `<dshHome>/.agent-presets` itself. `$DSH_HOME` is pointed
+  // roster derives `<neoHome>/.agent-presets` itself. `$NEO_HOME` is pointed
   // at a temp home BEFORE boot — the derived root is resolved when the plugin
   // is constructed, and an unpinned run would read the developer's own.
   let derivedCtx: Context
@@ -655,8 +655,8 @@ describe('a launcher that configures no writable root', () => {
 
   beforeAll(async () => {
     const home = await mkdtemp(join(tmpdir(), 'dsh-preset-derived-'))
-    previousHome = process.env.DSH_HOME
-    process.env.DSH_HOME = home
+    previousHome = process.env.NEO_HOME
+    process.env.NEO_HOME = home
     await mkdir(join(home, '.agent-presets', 'derived-mine'), { recursive: true })
     await writeFile(
       join(home, '.agent-presets', 'derived-mine', 'agent.cordis.yml'),
@@ -677,8 +677,8 @@ describe('a launcher that configures no writable root', () => {
   }, 120_000)
 
   afterAll(async () => {
-    if (previousHome === undefined) delete process.env.DSH_HOME
-    else process.env.DSH_HOME = previousHome
+    if (previousHome === undefined) delete process.env.NEO_HOME
+    else process.env.NEO_HOME = previousHome
     await derivedCtx.fiber.dispose()
   })
 

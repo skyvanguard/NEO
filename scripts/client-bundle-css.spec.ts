@@ -18,7 +18,7 @@ function cssPlugin(): CssPlugin {
   const configs = clientBundle(
     '@neo/client-test',
     ['lib/types/index.js', 'lib/types/invariant.js'],
-  )({ env: { DSH_BUILD_FACE: 'client' } })
+  )({ env: { NEO_BUILD_FACE: 'client' } })
   const client = configs.find(config => config.platform === 'browser')
   if (client === undefined) throw new Error('client config missing')
   const plugins = (client as { plugins: CssPlugin[] }).plugins

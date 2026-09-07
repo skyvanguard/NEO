@@ -1,5 +1,5 @@
 # Bundled default config. The runtime still requires an explicit
-# $DSH_CORDIS_CONFIG or argv path; the SDK injects this path for bundled
+# $NEO_CORDIS_CONFIG or argv path; the SDK injects this path for bundled
 # zero-config launches. SDK-set session-root and cwd variables have manual-run fallbacks.
 
 # Stdio JSON-RPC server entry; without it the agent has no SDK client.
@@ -20,18 +20,18 @@
 - id: llm-deepseek
   name: '@neo/llm-deepseek'
 
-# JSONL persistence; $DSH_SESSION_ROOT wins over ./.sessions in the process cwd.
+# JSONL persistence; $NEO_SESSION_ROOT wins over ./.sessions in the process cwd.
 - id: sessions
   name: '@neo/session-persistence-jsonl'
   config:
-    root: !!js process.env.DSH_SESSION_ROOT ?? './.sessions'
+    root: !!js process.env.NEO_SESSION_ROOT ?? './.sessions'
 
 # Persistence owns durable storage; this separate policy explicitly selects
 # the request, tool-dispatch, and completed-step durability checkpoints.
 - id: session-checkpoints
   name: '@neo/session-checkpoint-policy'
 
-# Local bash executor; $DSH_CWD wins over the process cwd.
+# Local bash executor; $NEO_CWD wins over the process cwd.
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
 - id: subprocess
   name: '@neo/subprocess-local'
@@ -39,11 +39,11 @@
 - id: bash
   name: '@neo/bash-local'
   config:
-    cwd: !!js process.env.DSH_CWD ?? process.cwd()
+    cwd: !!js process.env.NEO_CWD ?? process.cwd()
 
 # Local filesystem provider for workspace instruction loading. This does not
 # expose model-facing file tools by itself.
 - id: fs-local
   name: '@neo/fs-local'
   config:
-    cwd: !!js process.env.DSH_CWD ?? process.cwd()
+    cwd: !!js process.env.NEO_CWD ?? process.cwd()

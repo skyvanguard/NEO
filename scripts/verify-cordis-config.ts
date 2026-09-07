@@ -137,7 +137,7 @@ function validateClientHalvesDeclared(): string[] {
  * contributor to that service reaches nobody; a row that registers into a host
  * singleton registers once per live session, so the second one collides.
  *
- * Both have happened. `shell-env` in a preset realm left `DSH_WEB_URL` reaching
+ * Both have happened. `shell-env` in a preset realm left `NEO_WEB_URL` reaching
  * no shell, and `tool-subagent-report` handed every child `report` once per live
  * session until the second registration threw. Neither changes a tool catalog,
  * so no catalog assertion can see them — and the shipped presets are near-copies

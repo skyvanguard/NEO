@@ -21,21 +21,21 @@ Ambient host state.
 
 it('isolates replay skill discovery from every ambient host root', async () => {
   const ambient = await mkdtemp(join(tmpdir(), 'dsh-web-ambient-skills-'))
-  const dshHome = join(ambient, 'dsh-home')
+  const neoHome = join(ambient, 'dsh-home')
   const agentsHome = join(ambient, 'agents-home')
   const bundled = join(ambient, 'bundled')
   await Promise.all([
-    writeSkill(join(dshHome, 'skills'), 'ambient-dsh'),
+    writeSkill(join(neoHome, 'skills'), 'ambient-dsh'),
     writeSkill(join(agentsHome, 'skills'), 'ambient-agents'),
     writeSkill(bundled, 'ambient-bundled'),
   ])
 
-  const originalDshHome = process.env.DSH_HOME
-  const originalAgentsHome = process.env.DSH_AGENTS_HOME
-  const originalBundled = process.env.DSH_BUNDLED_SKILL_DIR
-  process.env.DSH_HOME = dshHome
-  process.env.DSH_AGENTS_HOME = agentsHome
-  process.env.DSH_BUNDLED_SKILL_DIR = bundled
+  const originalDshHome = process.env.NEO_HOME
+  const originalAgentsHome = process.env.NEO_AGENTS_HOME
+  const originalBundled = process.env.NEO_BUNDLED_SKILL_DIR
+  process.env.NEO_HOME = neoHome
+  process.env.NEO_AGENTS_HOME = agentsHome
+  process.env.NEO_BUNDLED_SKILL_DIR = bundled
   let scaffold: WebScaffold | undefined
   try {
     scaffold = await launchWebScaffold()
@@ -62,12 +62,12 @@ it('isolates replay skill discovery from every ambient host root', async () => {
     try {
       await scaffold?.close()
     } finally {
-      if (originalDshHome === undefined) delete process.env.DSH_HOME
-      else process.env.DSH_HOME = originalDshHome
-      if (originalAgentsHome === undefined) delete process.env.DSH_AGENTS_HOME
-      else process.env.DSH_AGENTS_HOME = originalAgentsHome
-      if (originalBundled === undefined) delete process.env.DSH_BUNDLED_SKILL_DIR
-      else process.env.DSH_BUNDLED_SKILL_DIR = originalBundled
+      if (originalDshHome === undefined) delete process.env.NEO_HOME
+      else process.env.NEO_HOME = originalDshHome
+      if (originalAgentsHome === undefined) delete process.env.NEO_AGENTS_HOME
+      else process.env.NEO_AGENTS_HOME = originalAgentsHome
+      if (originalBundled === undefined) delete process.env.NEO_BUNDLED_SKILL_DIR
+      else process.env.NEO_BUNDLED_SKILL_DIR = originalBundled
       await rm(ambient, { recursive: true, force: true })
     }
   }

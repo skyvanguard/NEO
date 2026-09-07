@@ -4,7 +4,7 @@
 # cwd inheritance is asserted keylessly end to end across the SDK wire.
 # `cwd` is deliberately omitted — the inheritance branch under test. The child
 # launch is machine-absolute, so the driving e2e supplies it via
-# DSH_TEST_CHILD_COMMAND / DSH_TEST_CHILD_ARGS / DSH_TEST_CHILD_ENV (resolved
+# NEO_TEST_CHILD_COMMAND / NEO_TEST_CHILD_ARGS / NEO_TEST_CHILD_ENV (resolved
 # through the shared example-launch resolver, per testing policy).
 - id: mock-llm
   name: './mock-delegating-llm.ts'
@@ -17,11 +17,11 @@
 - id: subagent-dsh-sdk
   name: '@neo/subagent-dsh-sdk'
   config:
-    command: !!js process.env.DSH_TEST_CHILD_COMMAND
-    args: !!js JSON.parse(process.env.DSH_TEST_CHILD_ARGS ?? '[]')
+    command: !!js process.env.NEO_TEST_CHILD_COMMAND
+    args: !!js JSON.parse(process.env.NEO_TEST_CHILD_ARGS ?? '[]')
     provider: mock
     model: mock-echo
-    env: !!js JSON.parse(process.env.DSH_TEST_CHILD_ENV ?? '{}')
+    env: !!js JSON.parse(process.env.NEO_TEST_CHILD_ENV ?? '{}')
 
 - id: tool-subagent
   name: '@neo/tool-subagent'

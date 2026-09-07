@@ -12,11 +12,11 @@ import { withFileLock, writeFileAtomic } from '@neo/atomic-write'
 declare const text: string
 declare const render: (previous: string) => string
 
-await writeFileAtomic('/home/u/.dsh/settings.yaml', text, { mode: 0o600 })
+await writeFileAtomic('/home/u/.neo/settings.yaml', text, { mode: 0o600 })
 
 // Read-modify-write against the same file from several processes.
-await withFileLock('/home/u/.dsh/settings.yaml', async () => {
-  await writeFileAtomic('/home/u/.dsh/settings.yaml', render(text), { mode: 0o600 })
+await withFileLock('/home/u/.neo/settings.yaml', async () => {
+  await writeFileAtomic('/home/u/.neo/settings.yaml', render(text), { mode: 0o600 })
 })
 ```
 

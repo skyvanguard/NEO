@@ -25,7 +25,7 @@
  * imports are a build error anyway.
  *
  * This file is the browser-safe contract face (zero node imports): the
- * `__DSH_BOOT__` wire types, the boot-manifest parser, and the boundaries around
+ * `__NEO_BOOT__` wire types, the boot-manifest parser, and the boundaries around
  * {@link ClientModuleSystem}. The package root is the host-side service that
  * composes the wire.
  */
@@ -60,7 +60,7 @@ export interface WebBootEntry {
   immediately?: boolean
 }
 
-/** The composed client entry graph the host injects as `window.__DSH_BOOT__`. */
+/** The composed client entry graph the host injects as `window.__NEO_BOOT__`. */
 export interface WebBootGraph {
   /** Consistency anchor over the whole graph (content + bundle hashes). */
   rev: string
@@ -99,15 +99,15 @@ export interface BootManifest {
 }
 
 /**
- * Parse `window.__DSH_BOOT__` into the two consumer views. Wire boundary:
+ * Parse `window.__NEO_BOOT__` into the two consumer views. Wire boundary:
  * a missing or malformed graph throws (the shell shows the loud failure —
  * a page without a valid manifest cannot boot anything).
- * @param wire - the raw `window.__DSH_BOOT__` value.
+ * @param wire - the raw `window.__NEO_BOOT__` value.
  * @returns the manifest with optional plugin-view fields normalized.
  */
 export function parseBootManifest(wire: unknown): BootManifest {
   if (typeof wire !== 'object' || wire === null) {
-    throw new Error('client-modules: window.__DSH_BOOT__ is missing or not an object')
+    throw new Error('client-modules: window.__NEO_BOOT__ is missing or not an object')
   }
   const graph = wire as Record<string, unknown>
   if (typeof graph.rev !== 'string') {
@@ -156,9 +156,9 @@ export interface ClientPluginHandoff {
 }
 
 /** Window API of the web boot protocol: the host-injected graph, registration sink, and kernel handoff slot. */
-export interface DshWindow {
+export interface NeoWindow {
   /** Host-composed entry graph, injected before the shell bundle runs; wire-boundary raw until {@link parseBootManifest}. */
-  __DSH_BOOT__?: unknown
+  __NEO_BOOT__?: unknown
   /** Bundle registration sink; installed once per page by the {@link ClientModuleSystem} constructor. */
   __ModuleLoader__?: { load(handoff: ClientPluginHandoff): void }
   /**
@@ -167,7 +167,7 @@ export interface DshWindow {
    * plugin can provide it as `ctx.modules`. Missing slot at wrapper apply
    * time = kernel sequencing bug, thrown loud.
    */
-  __DSH_MODULES__?: ClientModuleSystem
+  __NEO_MODULES__?: ClientModuleSystem
 }
 
 /** Per-module bookkeeping in {@link ClientModuleLoader.loadCache} (module-graph boundary, flat today). */

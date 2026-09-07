@@ -27,8 +27,8 @@ async function setGate(next: Promise<void>): Promise<void> {
   mocked.__setGate(next)
 }
 
-const KEY = credentialRef('DSH_CRED_DRAIN_A')
-const OTHER = credentialRef('DSH_CRED_DRAIN_B')
+const KEY = credentialRef('NEO_CRED_DRAIN_A')
+const OTHER = credentialRef('NEO_CRED_DRAIN_B')
 
 const cleanups: Array<() => Promise<void>> = []
 

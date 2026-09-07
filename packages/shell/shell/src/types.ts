@@ -8,10 +8,10 @@
  */
 
 import type { SandboxEnforcement, SandboxExecutionPolicy, SandboxMode } from '@neo/sandbox'
-import type { CollectedOutput, DshEnvironment } from '@neo/subprocess'
+import type { CollectedOutput, NeoEnvironment } from '@neo/subprocess'
 
-export { DSH_ENV_PREFIX } from '@neo/subprocess'
-export type { CollectedOutput, DshEnvironment, DshEnvironmentKey } from '@neo/subprocess'
+export { NEO_ENV_PREFIX } from '@neo/subprocess'
+export type { CollectedOutput, NeoEnvironment, NeoEnvironmentKey } from '@neo/subprocess'
 
 /**
  * Sandbox facts for one run, present iff a sandboxing executor handled it.
@@ -68,13 +68,13 @@ export interface ShellExecRequest {
    */
   env?: Record<string, string> | undefined
   /**
-   * Harness-owned `DSH_*` variables for this execution (typed to managed
-   * keys). Executors discard ambient `DSH_*` entries before merging this
+   * Harness-owned `NEO_*` variables for this execution (typed to managed
+   * keys). Executors discard ambient `NEO_*` entries before merging this
    * snapshot last, so an unavailable current fact cannot inherit a stale
    * value from the harness process and a caller {@link env} entry cannot
    * displace a managed one.
    */
-  dshEnv?: DshEnvironment | undefined
+  dshEnv?: NeoEnvironment | undefined
   /** Fully resolved per-call sandbox policy; sandboxing executors default it. */
   sandboxPolicy?: SandboxExecutionPolicy | undefined
 }
@@ -104,8 +104,8 @@ export interface ShellExecSpec {
    * ordinary extra environment.
    */
   env?: Record<string, string> | undefined
-  /** Managed `DSH_*` snapshot (typed to managed keys); merges after {@link env}. */
-  dshEnv?: DshEnvironment | undefined
+  /** Managed `NEO_*` snapshot (typed to managed keys); merges after {@link env}. */
+  dshEnv?: NeoEnvironment | undefined
   /** Resolved sandbox policy; ignored by executors that do not confine. */
   sandboxPolicy: SandboxExecutionPolicy | undefined
 }

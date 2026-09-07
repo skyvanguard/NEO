@@ -67,7 +67,7 @@ describe('gen-persistence-catalog collectLogEvents', () => {
       'packages/group/alien/package.json': '{ "name": "@neo/alien" }\n',
       'packages/group/alien/src/types.ts':
         'export interface SessionEventMap {\n  /** Not the real vocabulary. */\n  \'alien/event\': { turn: number }\n}\n',
-    }))).toThrow(/top-level interface SessionEventMap .* is outside @neo\/dsh-session \(package @neo\/dsh-alien\)/)
+    }))).toThrow(/top-level interface SessionEventMap .* is outside @neo\/session \(package @neo\/alien\)/)
   })
 
   it('hard-errors on a non-exported top-level interface even in the owning package', () => {

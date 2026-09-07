@@ -17,7 +17,7 @@ import {
   type SubprocessSpawnSpec,
 } from '@neo/subprocess'
 
-const WINDOWS_BATCH_EXECUTABLE_ENV = 'DSH_CLAUDE_CODE_EXECUTABLE'
+const WINDOWS_BATCH_EXECUTABLE_ENV = 'NEO_CLAUDE_CODE_EXECUTABLE'
 
 function thrown(value: unknown): Error {
   /* v8 ignore next -- the subprocess seam rejects with Error. */

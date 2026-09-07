@@ -58,7 +58,7 @@ export interface Config {
   /** Tool-registry config — its presentation `mode` (forwarded through agent-spine-demo; see dsh-tools). */
   tools?: ToolsConfig
   /** DeepSeek Harness home directory exposed to bash and used for local skill discovery. */
-  dshHome?: string
+  neoHome?: string
   /** Fallback session-title limits forwarded through agent-spine-demo. */
   sessionTitle?: NonNullable<agentCore.Config['sessionTitle']>
   /** Directory for JSONL sessions and the derived query index. Defaults to `./.sessions`. */
@@ -109,8 +109,8 @@ Source: [`packages/core/agent-default-model/src/index.ts:41`](../packages/core/a
 ```ts config-catalog
 /** User-facing workspace instruction loader configuration. */
 export interface Config {
-  /** Harness home containing the fixed user-global `AGENTS.md`; defaults to `$DSH_HOME` or `~/.dsh`. */
-  dshHome?: string
+  /** Harness home containing the fixed user-global `AGENTS.md`; defaults to `$NEO_HOME` or `~/.neo`. */
+  neoHome?: string
   /** Directory entries that identify the project root while walking upward from the session cwd. */
   projectRootMarkers?: string[]
   /** UTF-8 byte cap for one rendered baseline or dynamic batch; non-positive or non-finite disables loading. */
@@ -214,7 +214,7 @@ Source: [`packages/preset/agent-presets/src/preset.ts:52`](../packages/preset/ag
  * `persona`, and `toolOrder` to the system-prompt plugin (the fixed opener,
  * dynamic-context policy, deployment persona, and explicit model-facing tool
  * order), the `tools` object to the tool registry (its presentation `mode`),
- * `dshHome` to bash environment and local skill discovery, `sessionTitle` to
+ * `neoHome` to bash environment and local skill discovery, `sessionTitle` to
  * the fallback title service, `skills` to the
  * skill registry/local provider/tool consumer, `workspaceContext` to the
  * agent-instructions loader, `jobs` to the process-local job provider, and
@@ -246,7 +246,7 @@ export interface Config {
   /** The tool registry's config — its presentation `mode` (see dsh-tools' `Config`). */
   tools?: ToolsConfig
   /** DeepSeek Harness home directory shared by shell context and local skill discovery. */
-  dshHome?: string
+  neoHome?: string
   /** Deterministic fallback and accepted-title limits; omission uses the bundle's example policy. */
   sessionTitle?: SessionTitleConfig
   /** Workspace-context loader controls with an explicit byte budget; set `false` for hermetic prompts. */
@@ -325,8 +325,8 @@ Source: [`packages/core/agent-tool-presentation/src/index.ts:38`](../packages/co
 ```ts config-catalog
 /** Local attachment backend configuration. */
 export interface Config {
-  /** Explicit harness home; omitted follows `DSH_HOME`, then `~/.dsh`. */
-  dshHome?: string
+  /** Explicit harness home; omitted follows `NEO_HOME`, then `~/.neo`. */
+  neoHome?: string
   /** Maximum encoded bytes accepted for one image. */
   maxImageBytes?: number
   /** Maximum image count accepted in one submitted message. */
@@ -556,8 +556,8 @@ Source: [`packages/extensions/cordis-host-runner/src/index.ts:88`](../packages/e
 export interface Config {
   /** Credentials document path; defaults to `.credentials.yaml` under the harness home. */
   path?: string
-  /** Harness home used when `path` is omitted; defaults to `$DSH_HOME` or `~/.dsh`. */
-  dshHome?: string
+  /** Harness home used when `path` is omitted; defaults to `$NEO_HOME` or `~/.neo`. */
+  neoHome?: string
   /** Watch the document and hot-publish external edits; defaults to true. */
   watch?: boolean
   /** Watcher write-settle window in milliseconds; defaults to 100. */
@@ -1088,14 +1088,14 @@ Source: [`packages/llm/llm-pi-ai/src/config.ts:172`](../packages/llm/llm-pi-ai/s
 Requires: `llm`
 
 ```ts config-catalog
-/** Plugin config: the {@link ReplayConfig} inputs, each defaulting to its `DSH_SNAPSHOT_*` env var in `apply`. */
+/** Plugin config: the {@link ReplayConfig} inputs, each defaulting to its `NEO_SNAPSHOT_*` env var in `apply`. */
 export interface Config {
-  /** Override the fixture path; defaults to `$DSH_SNAPSHOT_FILE`. */
+  /** Override the fixture path; defaults to `$NEO_SNAPSHOT_FILE`. */
   file?: string
-  /** Override the sidecar path; defaults to `$DSH_SNAPSHOT_OVERRIDE`. */
+  /** Override the sidecar path; defaults to `$NEO_SNAPSHOT_OVERRIDE`. */
   overrideFile?: string
   /**
-   * Override the child-log paths; defaults to `$DSH_SNAPSHOT_CHILD_FILES` (a
+   * Override the child-log paths; defaults to `$NEO_SNAPSHOT_CHILD_FILES` (a
    * path-separator-delimited list). Each is a recorded subagent session log for
    * a nested-agent scenario; absent/empty for a single-session scenario.
    */
@@ -1822,8 +1822,8 @@ Source: [`packages/session/session-title-first-prompt-llm/src/index.ts:15`](../p
 export interface Config {
   /** Settings document path; defaults to `settings.yaml` under the harness home. */
   path?: string
-  /** Harness home used when `path` is omitted; defaults to `$DSH_HOME` or `~/.dsh`. */
-  dshHome?: string
+  /** Harness home used when `path` is omitted; defaults to `$NEO_HOME` or `~/.neo`. */
+  neoHome?: string
   /** Watch the document and hot-publish external edits; defaults to true. */
   watch?: boolean
   /** Watcher write-settle window in milliseconds; defaults to 100. */
@@ -1840,8 +1840,8 @@ Source: [`packages/settings/settings-file/src/index.ts:21`](../packages/settings
 ```ts config-catalog
 /** Plugin config (all optional — the built-in facts resolve without defaults). */
 export interface Config {
-  /** DeepSeek Harness home directory exposed as `DSH_HOME`; defaults to `$DSH_HOME` or `~/.dsh`. */
-  dshHome?: string
+  /** DeepSeek Harness home directory exposed as `NEO_HOME`; defaults to `$NEO_HOME` or `~/.neo`. */
+  neoHome?: string
 }
 ```
 
@@ -1874,9 +1874,9 @@ export interface Config {
   providerName?: string
   /** Whether project and user roots are included around custom roots. */
   includeDefaultRoots?: boolean
-  /** DeepSeek Harness config root. Defaults to `$DSH_HOME` or `~/.dsh`. */
-  dshHome?: string
-  /** Shared agent config root. Defaults to `$DSH_AGENTS_HOME` or `~/.agents`. */
+  /** DeepSeek Harness config root. Defaults to `$NEO_HOME` or `~/.neo`. */
+  neoHome?: string
+  /** Shared agent config root. Defaults to `$NEO_AGENTS_HOME` or `~/.agents`. */
   agentsHome?: string
   /** Additional skill roots scanned after project roots and before user roots. */
   customSkillDirs?: string[]
@@ -1892,7 +1892,7 @@ export interface Config {
   watchMaxProjects?: number
   /** Whether watched symbolic links follow their target files. */
   watchFollowSymlinks?: boolean
-  /** Bundled skill root; defaults to `$DSH_BUNDLED_SKILL_DIR` when default roots are included, otherwise mounts none. */
+  /** Bundled skill root; defaults to `$NEO_BUNDLED_SKILL_DIR` when default roots are included, otherwise mounts none. */
   bundledSkillDir?: string
 }
 ```
@@ -2148,7 +2148,7 @@ export interface Config {
   maxTokens?: number
   /**
    * Extra environment variables for the child process — e.g. the child
-   * runtime's own `DEEPSEEK_API_KEY`, or `DSH_CORDIS_CONFIG` naming its
+   * runtime's own `DEEPSEEK_API_KEY`, or `NEO_CORDIS_CONFIG` naming its
    * config. Forwarded on top of a credential-scrubbed copy of the parent
    * env, so an explicit key here reaches the child while ambient secrets do
    * not leak implicitly.
@@ -2877,7 +2877,7 @@ export interface Config {
   printUrl: boolean
   /**
    * Register the model-visible surface context (the `app:web-surface` prompt
-   * section and the `DSH_WEB_URL` bash variable). A one-shot non-interactive
+   * section and the `NEO_WEB_URL` bash variable). A one-shot non-interactive
    * layer can turn it off when its user is not in the GUI, so the
    * orientation text would be false.
    */

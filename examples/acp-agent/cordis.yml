@@ -1,5 +1,5 @@
 # ACP automation server and backend snapshot-record composition. With
-# `DSH_SNAPSHOT=record`, the app bin runs the real DeepSeek adapter and the
+# `NEO_SNAPSHOT=record`, the app bin runs the real DeepSeek adapter and the
 # harness harvests its persisted log. The bin loads the gitignored root `.env`
 # before this config. This tree has no stdout logger or HMR because stdout
 # carries ACP JSON-RPC.
@@ -18,7 +18,7 @@
 # The default composition confines bash AND the filesystem tools to the
 # workspace and asks before a wider retry. Snapshot runs select
 # danger-full-access so the established scenarios remain runner-independent;
-# DSH_PERMISSION_MODE provides the same explicit deployment/test override
+# NEO_PERMISSION_MODE provides the same explicit deployment/test override
 # outside the snapshot harness. The sandbox default + fallback root live on
 # ctx.sandboxPolicy; agent calls resolve both families against the session cwd.
 - id: sandbox
@@ -27,7 +27,7 @@
 - id: sandbox-policy
   name: '@neo/sandbox-policy'
   config:
-    mode: !!js "process.env.DSH_PERMISSION_MODE ?? (process.env.DSH_SNAPSHOT === undefined ? 'workspace-write' : 'danger-full-access')"
+    mode: !!js "process.env.NEO_PERMISSION_MODE ?? (process.env.NEO_SNAPSHOT === undefined ? 'workspace-write' : 'danger-full-access')"
     workspaceRoot: !!js process.cwd()
 
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
@@ -42,10 +42,10 @@
 - id: approval
   name: '@neo/user-approval'
   config:
-    policy: !!js "(process.env.DSH_PERMISSION_MODE ?? (process.env.DSH_SNAPSHOT === undefined ? 'workspace-write' : 'danger-full-access')) === 'danger-full-access' ? 'never' : 'ask'"
+    policy: !!js "(process.env.NEO_PERMISSION_MODE ?? (process.env.NEO_SNAPSHOT === undefined ? 'workspace-write' : 'danger-full-access')) === 'danger-full-access' ? 'never' : 'ask'"
 
 # The ACP automation app: agent spine + JSONL persistence + protocol bridge.
-# Persistence root: $DSH_SNAPSHOT_SESSIONS_ROOT when the snapshot harness sets it
+# Persistence root: $NEO_SNAPSHOT_SESSIONS_ROOT when the snapshot harness sets it
 # (so it can harvest / isolate the log), else ./.sessions for the demo.
 # Snapshot modes use raw JSONL fixtures; ordinary runs keep the compressed default.
 - id: acp-agent
@@ -53,8 +53,8 @@
   config:
     provider: deepseek-official
     model: deepseek-v4-pro
-    persistenceRoot: !!js process.env.DSH_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
-    persistenceCompression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+    persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
+    persistenceCompression: !!js "process.env.NEO_SNAPSHOT === undefined ? 'zstd' : 'none'"
     workspaceContext:
       maxBytes: 65536
     # Keep the persona to identity and behavior; tool plugins own tool guidance.

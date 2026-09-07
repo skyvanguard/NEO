@@ -25,12 +25,12 @@ const INSTALL_LOCK = 'dsh-lefthook-install.lock'
 const INSTALL_LOCK_TIMEOUT_MS = 30_000
 const INSTALL_LOCK_INITIALIZATION_TIMEOUT_MS = 1_000
 const INSTALL_LOCK_POLL_MS = 50
-const ALLOW_HOOKS_PATH_OVERRIDE = 'DSH_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE'
+const ALLOW_HOOKS_PATH_OVERRIDE = 'NEO_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE'
 const REPOSITORY_EXTENSION_PATTERN = '^extensions\\.'
 const PAIRING_MERGE_DRIVER_CONFIG = [
-  ['merge.dsh-translation-pairing.name', 'DeepSeek Harness bilingual pairing records'],
+  ['merge.neo-translation-pairing.name', 'DeepSeek Harness bilingual pairing records'],
   [
-    'merge.dsh-translation-pairing.driver',
+    'merge.neo-translation-pairing.driver',
     'scripts/merge-translation-pairing-driver.sh %O %A %B %P',
   ],
 ]
@@ -389,7 +389,7 @@ async function acquireInstallLock(commonDirectory) {
       let ownedStat
       try {
         ownedStat = fstatSync(lockHandle)
-        const writeDelay = Number(process.env.DSH_TEST_LEFTHOOK_LOCK_WRITE_DELAY_MS ?? 0)
+        const writeDelay = Number(process.env.NEO_TEST_LEFTHOOK_LOCK_WRITE_DELAY_MS ?? 0)
         if (writeDelay > 0) {
           await new Promise(resolveWait => setTimeout(resolveWait, writeDelay))
         }

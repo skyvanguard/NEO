@@ -1,7 +1,7 @@
 /**
  * Node half of the client module system (`dsh.client` dual-face package): scans
  * the host Loader's entries for packages declaring `dsh.client`, composes the
- * `window.__DSH_BOOT__` entry graph (wire single source: {@link WebBootEntry}
+ * `window.__NEO_BOOT__` entry graph (wire single source: {@link WebBootEntry}
  * in `./client/manifest.ts`), serves `/plugins/<id>/client.js` and its source
  * map, taps the index render to inject the boot manifest, and provides the
  * `clientModuleHost` service (the HMR node half's registration/notification
@@ -44,7 +44,7 @@ declare module '@neo/cordis' {
 }
 
 /** package.json `dsh.client` declaration fields, validated one by one after reading the file. */
-interface DshClientDeclaration {
+interface NeoClientDeclaration {
   inject?: string[]
   platform: string
   /** Boot phase-one prefetch mark; absent means lazy (fetched on demand). */
@@ -106,7 +106,7 @@ interface WebPluginRecord {
 }
 
 /** Narrow an unknown parsed JSON value to the `dsh.client` declaration, throwing on malformed fields. */
-function parseDshClient(pkgName: string, value: unknown): DshClientDeclaration | undefined {
+function parseDshClient(pkgName: string, value: unknown): NeoClientDeclaration | undefined {
   if (value === undefined) return undefined
   if (typeof value !== 'object' || value === null) {
     throw new Error(`client-modules: ${pkgName} has a non-object dsh.client declaration`)
@@ -158,7 +158,7 @@ function graphRow(id: string, rev: string, injectEdges: string[] | undefined, im
 }
 
 /**
- * Inject the boot entry graph into index.html: `window.__DSH_BOOT__` as the
+ * Inject the boot entry graph into index.html: `window.__NEO_BOOT__` as the
  * first script in <head> (before the shell bundle reads it). `<` is escaped in
  * the JSON so plugin-controlled strings cannot break out of the script element.
  * @param html - the index.html source.
@@ -167,7 +167,7 @@ function graphRow(id: string, rev: string, injectEdges: string[] | undefined, im
  */
 export function injectBootManifest(html: string, graph: WebBootGraph): string {
   const json = JSON.stringify(graph).replaceAll('<', '\\u003c')
-  const script = `<script>window.__DSH_BOOT__ = ${json}</script>`
+  const script = `<script>window.__NEO_BOOT__ = ${json}</script>`
   const head = html.indexOf('<head>')
   if (head !== -1) return `${html.slice(0, head + 6)}${script}${html.slice(head + 6)}`
   // Headless fixture pages may lack <head>; prepending keeps the read-before-shell ordering.
@@ -250,7 +250,7 @@ export class ClientModuleRegistry extends Service {
 
   /**
    * Current composed entry graph (stable object between changes).
-   * @returns the graph served as `window.__DSH_BOOT__`.
+   * @returns the graph served as `window.__NEO_BOOT__`.
    */
   graph(): WebBootGraph {
     return this.composed

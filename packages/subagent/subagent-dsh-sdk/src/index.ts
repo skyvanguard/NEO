@@ -50,7 +50,7 @@ export interface Config {
   maxTokens?: number
   /**
    * Extra environment variables for the child process — e.g. the child
-   * runtime's own `DEEPSEEK_API_KEY`, or `DSH_CORDIS_CONFIG` naming its
+   * runtime's own `DEEPSEEK_API_KEY`, or `NEO_CORDIS_CONFIG` naming its
    * config. Forwarded on top of a credential-scrubbed copy of the parent
    * env, so an explicit key here reaches the child while ambient secrets do
    * not leak implicitly.

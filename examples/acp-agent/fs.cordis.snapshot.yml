@@ -17,7 +17,7 @@
         config:
           provider: deepseek-official
           model: deepseek-v4-flash
-          persistenceRoot: !!js process.env.DSH_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
+          persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: none
           workspaceContext:
             maxBytes: 65536
@@ -29,7 +29,7 @@
           - id: spill-local
             name: '@neo/spill-local'
             config:
-              root: !!js process.env.DSH_SNAPSHOT_SPILL_ROOT ?? './.spill'
+              root: !!js process.env.NEO_SNAPSHOT_SPILL_ROOT ?? './.spill'
           - id: spill-policy
             name: '@neo/spill-policy'
             config:

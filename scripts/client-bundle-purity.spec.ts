@@ -16,7 +16,7 @@ interface CssModulePlugin {
 
 function clientConfigs(id = '@neo/client-test') {
   return clientBundle(id, ['lib/types/index.js', 'lib/types/invariant.js'])(
-    { env: { DSH_BUILD_FACE: 'client' } },
+    { env: { NEO_BUILD_FACE: 'client' } },
   ).filter(config => config.platform === 'browser')
 }
 
@@ -24,7 +24,7 @@ describe('client bundle build faces', () => {
   it('watches source in development and consumes emitted JavaScript in the Client build', () => {
     const bundle = clientBundle('@neo/client-test', ['lib/types/index.js'])
     const development = bundle({ env: {} }).find(config => config.platform === 'browser')
-    const artifact = bundle({ env: { DSH_BUILD_FACE: 'client' } })
+    const artifact = bundle({ env: { NEO_BUILD_FACE: 'client' } })
       .find(config => config.platform === 'browser')
 
     expect(development?.entry).toEqual({ client: 'src/client/index.ts' })

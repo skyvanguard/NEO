@@ -15,7 +15,7 @@ import { defineTool } from '@neo/tools'
 const TRUNCATED_MESSAGE = '<response clipped><NOTE>To save on context only part of this file has been shown to you. You should retry this tool after you have searched inside the file with `grep -n` in order to find the line numbers of what you are looking for.</NOTE>'
 const LOST_PREFIX_MESSAGE = '<response clipped><NOTE>The beginning of this command output was dropped by the terminal scrollback limit. The following text is the earliest retained output.</NOTE>\n'
 const SHELL_RESET_MESSAGE = 'The persistent bash shell was reset; the next bash call starts from the workspace with a fresh current directory and environment.'
-const SHELL_PROMPT = '__DSH_PERSISTENT_BASH_PROMPT__ '
+const SHELL_PROMPT = '__NEO_PERSISTENT_BASH_PROMPT__ '
 const TIMEOUT_CODE = 'PERSISTENT_BASH_TIMEOUT'
 // One page is enough to find a just-emitted completion marker; the full
 // scrollback is assembled only when a command settles or needs partial output.
@@ -62,8 +62,8 @@ function maybeTruncate(content: string, maxOutputChars: number, incomplete = fal
 function markers(): CommandMarkers {
   const nonce = randomUUID()
   return {
-    start: `__DSH_PERSISTENT_BASH_START_${nonce}__`,
-    end: `__DSH_PERSISTENT_BASH_END_${nonce}:`,
+    start: `__NEO_PERSISTENT_BASH_START_${nonce}__`,
+    end: `__NEO_PERSISTENT_BASH_END_${nonce}:`,
   }
 }
 

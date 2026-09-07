@@ -1,6 +1,6 @@
 {
   "name": "@neo/shell-env",
-  "description": "Tool-independent managed DSH_* shell environment registry",
+  "description": "Tool-independent managed NEO_* shell environment registry",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"

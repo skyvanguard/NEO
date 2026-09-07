@@ -96,7 +96,7 @@ it('hot-reloads a real client-plugin source edit without refreshing the page', a
       world,
       {
         DEEPSEEK_API_KEY: 'keyless-hmr-no-call',
-        DSH_HOME: join(world, '.dsh'),
+        NEO_HOME: join(world, '.neo'),
       },
     ))
     const baseUrl = await waitForOutput(host, /dsh web: (http:\/\/[^\s]+)/, 'built dsh web')

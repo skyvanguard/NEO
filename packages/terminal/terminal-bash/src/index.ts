@@ -62,9 +62,9 @@ function childEnvironment(spec: TerminalBackendSpawnSpec): Record<string, string
     PS1: CONTROLLED_PROMPT,
     PROMPT_COMMAND: 'printf "\\033]133;D;%s\\007" "$?"',
     BASH_SILENCE_DEPRECATION_WARNING: '1',
-    DSH_SHELL: '1',
-    DSH_SESSION_ID: spec.owner.id,
-    DSH_PTY_SESSION_ID: spec.sessionId,
+    NEO_SHELL: '1',
+    NEO_SESSION_ID: spec.owner.id,
+    NEO_PTY_SESSION_ID: spec.sessionId,
   }
 }
 

@@ -7,7 +7,7 @@
  */
 
 import type { Context } from '@neo/cordis'
-import { dshHomePath } from '@neo/home-paths'
+import { neoHomePath } from '@neo/home-paths'
 import { TypertRemoteService, Remote } from '@neo/typert-protocol'
 import { aggregateUsage } from './aggregate.ts'
 import type { UsageCache } from './aggregate.ts'
@@ -44,7 +44,7 @@ export class UsageStatsService extends TypertRemoteService {
    */
   @Remote('summary')
   async summary(request: UsageSummaryRequest): Promise<UsageSummary> {
-    return aggregateUsage(dshHomePath('sessions'), request, this.usageCache)
+    return aggregateUsage(neoHomePath('sessions'), request, this.usageCache)
   }
 }
 

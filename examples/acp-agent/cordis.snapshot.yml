@@ -5,8 +5,8 @@
 # recorded corpus (request headers, provenance, system prompt) was captured on flash,
 # so replay holds the recorded model to stay reproducible without a re-record. A config
 # patch replaces the whole app config, so the base fields are restated verbatim.
-# With `DSH_SNAPSHOT=replay`, the app bin reads `DSH_SNAPSHOT_FILE` and optional
-# `DSH_SNAPSHOT_OVERRIDE` from the harness. The one-shot patch applies at include
+# With `NEO_SNAPSHOT=replay`, the app bin reads `NEO_SNAPSHOT_FILE` and optional
+# `NEO_SNAPSHOT_OVERRIDE` from the harness. The one-shot patch applies at include
 # load time, and stdout remains reserved for ACP JSON-RPC.
 - id: base
   name: '@neo/cordis-plugin-include'
@@ -24,7 +24,7 @@
         config:
           provider: deepseek-official
           model: deepseek-v4-flash
-          persistenceRoot: !!js process.env.DSH_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
+          persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           # Replay fixtures are raw JSONL; the whole-config patch must restate
           # the compression choice or the default zstd frames hide the logs
           # from the harness's harvest.

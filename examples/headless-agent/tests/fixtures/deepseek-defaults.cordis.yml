@@ -5,7 +5,7 @@
     patches:
       - id: llm-deepseek
         config:
-          baseURL: !!js process.env.DSH_SNAPSHOT_BASE_URL
+          baseURL: !!js process.env.NEO_SNAPSHOT_BASE_URL
           thinking: disabled
           streamIdleTimeoutMs: 150
       - id: agent-spine

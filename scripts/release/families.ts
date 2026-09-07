@@ -194,7 +194,7 @@ export abstract class ReleaseFamily {
 }
 
 /** `packages/*` and `apps/*`: one shared version across the whole family. */
-class DshFamily extends ReleaseFamily {
+class NeoFamily extends ReleaseFamily {
   readonly id = 'dsh'
   readonly patterns = ['packages/*/*/package.json', 'apps/*/package.json'] as const
   readonly tagPrefix = 'dsh-v'
@@ -280,7 +280,7 @@ class VendorFamily extends ReleaseFamily {
 
 /** Every release family this module owns, in workflow order. */
 function releaseFamilies(): readonly ReleaseFamily[] {
-  return [new DshFamily(), new VendorFamily()]
+  return [new NeoFamily(), new VendorFamily()]
 }
 
 /**

@@ -175,7 +175,7 @@ Cada fase se cerró con la suite completa comparada contra `master` en la misma 
 
 ### Línea base preexistente (no atribuible a la rama)
 
-- **89 tests fallan en `master` en esta máquina Windows** y los mismos 89 en la rama: rebranding a "NEO" en el system prompt (los tests esperan "DeepSeek Harness"), `symlink` sin privilegios, `DSH_TELEMETRY_MODE`, especificaciones de CI en `scripts/`. Dos tests son flaky (`settings-file/concurrency`, `oxlint-contract`) y alternan entre corridas.
+- **89 tests fallan en `master` en esta máquina Windows** y los mismos 89 en la rama: rebranding a "NEO" en el system prompt (los tests esperan "DeepSeek Harness"), `symlink` sin privilegios, `NEO_TELEMETRY_MODE`, especificaciones de CI en `scripts/`. Dos tests son flaky (`settings-file/concurrency`, `oxlint-contract`) y alternan entre corridas.
 - **Snapshots ACP (`test:snapshot`) rojos en `master`** por el rebranding; además ahora incluyen el bracket `compaction/start`+`end` de fallo de presión (esperado). Re-grabar tras corregir el rebranding; requiere clave.
 - **Tres generadores no corren en `master`** por servicios del fork sin documentar: `gen-cordis-catalog` (`documentAttach`, `usageStats` sin `SERVICE_PAGE`), `gen-config-catalog` (`prompt-section` `Config.sections` sin JSDoc). `PruneOptions` quedó clasificado para cuando se reparen. El catálogo de tools sí se regeneró.
 - Los tests de `subprocess-local`, `bash-local` y `tool-bash` están excluidos en Windows por configuración; los cambios ahí se verificaron con `tsx` directo y se corren en Linux al hacer el pull.

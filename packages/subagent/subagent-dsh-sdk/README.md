@@ -33,7 +33,7 @@ The provider advertises no start-time capabilities (`outputSchema`/`depthLimit`/
 | `provider` | `deepseek-official` | Provider route sent in the child's `initialize`. |
 | `model` | `deepseek-v4-flash` | Model sent in the child's `initialize`. |
 | `maxTokens` | adapter/provider route default | Per-request output-token cap sent in the child's `initialize`; it applies to the child root agent and its in-process descendants. |
-| `env` | `{}` | Explicit child environment layered over a credential-scrubbed parent environment (e.g. the child's own `DEEPSEEK_API_KEY`, or `DSH_CORDIS_CONFIG`). |
+| `env` | `{}` | Explicit child environment layered over a credential-scrubbed parent environment (e.g. the child's own `DEEPSEEK_API_KEY`, or `NEO_CORDIS_CONFIG`). |
 | `shutdownTimeoutMs` | `1000` | Bound on the protocol `shutdown` exchange during dispose. |
 | `disposeEofGraceMs` | `6000` | Grace after stdin EOF before platform termination. |
 | `disposeGraceMs` | `3000` | Exit-confirmation grace after termination; POSIX also waits this long after SIGTERM before SIGKILL. |
@@ -55,7 +55,7 @@ The provider advertises no start-time capabilities (`outputSchema`/`depthLimit`/
 
 ## Process boundary
 
-The child environment is the [`dsh-subprocess`](../../subprocess/README.md) seam's `scrubbedParentEnv()` base — ambient credential-shaped and `DSH_*` names dropped — with explicit `config.env` values merged after the scrub. The child is spawned by the SDK client rather than through `ctx.subprocess` (the subprocess README's documented exception for SDK-managed transports), which is why this backend applies the scrub itself. The JSON-RPC wire is the real serialization boundary.
+The child environment is the [`dsh-subprocess`](../../subprocess/README.md) seam's `scrubbedParentEnv()` base — ambient credential-shaped and `NEO_*` names dropped — with explicit `config.env` values merged after the scrub. The child is spawned by the SDK client rather than through `ctx.subprocess` (the subprocess README's documented exception for SDK-managed transports), which is why this backend applies the scrub itself. The JSON-RPC wire is the real serialization boundary.
 
 The package has no default export. Cordis loader unwrapping would otherwise hide the named `inject` metadata; see [postmortem 0001](../../../docs/postmortem/0001-acp-default-export-drops-inject.md).
 

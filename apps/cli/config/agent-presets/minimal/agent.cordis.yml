@@ -54,7 +54,7 @@
     - id: fs-local
       name: '@neo/fs-local'
       config:
-        cwd: !!js process.env.DSH_CWD ?? process.cwd()
+        cwd: !!js process.env.NEO_CWD ?? process.cwd()
 
     - id: str-replace-editor
       name: '@neo/tool-str-replace-editor'

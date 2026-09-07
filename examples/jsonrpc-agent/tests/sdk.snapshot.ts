@@ -1,11 +1,11 @@
 /**
  * Keyless snapshot coverage for the TypeScript SDK path: each scenario spawns
- * the REAL `dsh-jsonrpc-agent` runtime (per `DSH_EXAMPLE_MODE`) through the
+ * the REAL `dsh-jsonrpc-agent` runtime (per `NEO_EXAMPLE_MODE`) through the
  * REAL `@neo/sdk-client`, drives one turn over stdio JSON-RPC,
  * and pins the SDK `RunResult`, the complete notification stream, and the
  * persisted session logs. Replay serves recorded model
- * responses via `llm-replay` (`cordis.snapshot.yml`); `DSH_SNAPSHOT=record`
- * re-records against the live API; `DSH_SNAPSHOT=refresh` replays committed
+ * responses via `llm-replay` (`cordis.snapshot.yml`); `NEO_SNAPSHOT=record`
+ * re-records against the live API; `NEO_SNAPSHOT=refresh` replays committed
  * fixtures and rewrites expected outputs.
  */
 
@@ -48,7 +48,7 @@ const MINIMAL_BASH_DESCRIPTION = `Run commands in a bash shell
 * Please avoid commands that may produce a very large amount of output.
 * Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.`
 
-const mode = process.env.DSH_SNAPSHOT ?? 'replay'
+const mode = process.env.NEO_SNAPSHOT ?? 'replay'
 const recording = mode === 'record'
 const refreshing = mode === 'refresh'
 
@@ -106,7 +106,7 @@ const SCENARIOS: SdkScenario[] = [
     sessionId: 'persistent-tools-snapshot',
     children: 0,
     configs: { live: minimalLiveConfig, replay: minimalReplayConfig },
-    environment: { DSH_SYSTEM_PROMPT: MINIMAL_SYSTEM_PROMPT },
+    environment: { NEO_SYSTEM_PROMPT: MINIMAL_SYSTEM_PROMPT },
     expectedFiles: { 'note.txt': 'target:\n\tnew\n' },
     expectedTools: { bash: ['command'], str_replace_editor: ['command', 'path'] },
     expectedSystem: MINIMAL_SYSTEM_PROMPT,
@@ -278,16 +278,16 @@ async function runScenario(scenario: SdkScenario): Promise<{
   const env: Record<string, string> = {
     ...Object.fromEntries(Object.entries(process.env).filter(([, value]) => value !== undefined)) as Record<string, string>,
     ...Object.fromEntries(Object.entries(launch.env).filter(([, value]) => value !== undefined)) as Record<string, string>,
-    DSH_CORDIS_CONFIG: recording
+    NEO_CORDIS_CONFIG: recording
       ? scenario.configs?.live ?? liveConfig
       : scenario.configs?.replay ?? replayConfig,
-    DSH_SESSION_ROOT: sessionsRoot,
-    DSH_CWD: cwd,
-    DSH_SNAPSHOT: mode,
+    NEO_SESSION_ROOT: sessionsRoot,
+    NEO_CWD: cwd,
+    NEO_SNAPSHOT: mode,
     NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
     ...parentFixture === undefined ? {} : {
-      DSH_SNAPSHOT_FILE: parentFixture,
-      ...childFixtures.length > 0 ? { DSH_SNAPSHOT_CHILD_FILES: childFixtures.join(delimiter) } : {},
+      NEO_SNAPSHOT_FILE: parentFixture,
+      ...childFixtures.length > 0 ? { NEO_SNAPSHOT_CHILD_FILES: childFixtures.join(delimiter) } : {},
     },
     ...scenario.environment,
   }

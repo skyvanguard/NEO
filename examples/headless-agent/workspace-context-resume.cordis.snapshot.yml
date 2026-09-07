@@ -11,8 +11,8 @@
 - id: replay
   name: '@neo/llm-replay'
   config:
-    file: !!js process.env.DSH_SNAPSHOT_FILE
-    overrideFile: !!js process.env.DSH_SNAPSHOT_OVERRIDE
+    file: !!js process.env.NEO_SNAPSHOT_FILE
+    overrideFile: !!js process.env.NEO_SNAPSHOT_OVERRIDE
 
 - id: fs-local
   name: '@neo/fs-local'
@@ -25,7 +25,7 @@
     agents: []
     workspaceContext:
       maxBytes: 65536
-      dshHome: !!js process.cwd() + '/.dsh'
+      neoHome: !!js process.cwd() + '/.neo'
     skills:
       enabled: false
     toolBash: false

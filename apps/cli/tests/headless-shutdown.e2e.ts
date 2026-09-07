@@ -64,7 +64,7 @@ if actual_exit != 130:
 async function runHeadlessPtySmoke(): Promise<string> {
   const cwd = await mkdtemp(join(tmpdir(), 'dsh-headless-shutdown-'))
   try {
-    const home = join(cwd, '.dsh')
+    const home = join(cwd, '.neo')
     // Pre-initialize the headless profile with the never-dispose row in its
     // user patch layer (the same file a long-lived profile boot hot-reloads).
     const profileDir = join(home, 'profiles', 'headless')
@@ -86,11 +86,11 @@ async function runHeadlessPtySmoke(): Promise<string> {
       configArgs: ['--profile', 'headless', 'never complete'],
       tsconfigPath,
       env: {
-        DSH_HOME: home,
-        DSH_AGENTS_HOME: join(cwd, '.agents'),
+        NEO_HOME: home,
+        NEO_AGENTS_HOME: join(cwd, '.agents'),
         DEEPSEEK_API_KEY: 'keyless-shutdown-no-call',
-        DSH_TELEMETRY_DISABLED: '1',
-        DSH_TEST_SHUTDOWN_ARM_FILE: join(cwd, 'shutdown-armed'),
+        NEO_TELEMETRY_DISABLED: '1',
+        NEO_TEST_SHUTDOWN_ARM_FILE: join(cwd, 'shutdown-armed'),
       },
     })
     const timeoutMs = 15_000

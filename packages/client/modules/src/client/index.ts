@@ -10,13 +10,13 @@
  * @module @neo/client-modules/client
  */
 import type { Context } from '@neo/cordis'
-import type { DshWindow } from './manifest.ts'
+import type { NeoWindow } from './manifest.ts'
 
 export { ClientModuleSystem } from './system.ts'
 export { parseBootManifest } from './manifest.ts'
 export type {
   BootManifest, BootModuleRow, BootPluginRow, ClientModuleLoader, ClientModuleRecord,
-  ClientModuleSystemOptions, ClientPluginHandoff, DshWindow, WebBootEntry, WebBootGraph,
+  ClientModuleSystemOptions, ClientPluginHandoff, NeoWindow, WebBootEntry, WebBootGraph,
 } from './manifest.ts'
 
 /**
@@ -24,11 +24,11 @@ export type {
  * @param ctx - client root context.
  */
 export function apply(ctx: Context): void {
-  const modules = (globalThis as DshWindow).__DSH_MODULES__
+  const modules = (globalThis as NeoWindow).__NEO_MODULES__
   // The kernel writes the slot right after constructing the instance, before
   // any cordis entry exists — a missing slot means the kernel sequencing broke.
   if (modules === undefined) {
-    throw new Error('client-modules: window.__DSH_MODULES__ missing — the shell kernel must construct the module system before plugin boot')
+    throw new Error('client-modules: window.__NEO_MODULES__ missing — the shell kernel must construct the module system before plugin boot')
   }
   ctx.reflect.provide('modules', modules)
 }

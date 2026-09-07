@@ -35,12 +35,12 @@ describe('resolveConfigPath', () => {
 describe('loadEnv', () => {
   it('loads variables from .env in the given dir', () => {
     const dir = tmp()
-    writeFileSync(join(dir, '.env'), 'DSH_APP_BOOT_SPEC_VAR=loaded\n')
+    writeFileSync(join(dir, '.env'), 'NEO_APP_BOOT_SPEC_VAR=loaded\n')
     const warn = vi.fn()
     loadEnv(NAME, dir, warn)
-    expect(process.env['DSH_APP_BOOT_SPEC_VAR']).toBe('loaded')
+    expect(process.env['NEO_APP_BOOT_SPEC_VAR']).toBe('loaded')
     expect(warn).not.toHaveBeenCalled()
-    delete process.env['DSH_APP_BOOT_SPEC_VAR']
+    delete process.env['NEO_APP_BOOT_SPEC_VAR']
   })
 
   it('stays silent when no .env exists (ambient environment wins)', () => {
@@ -60,7 +60,7 @@ describe('loadEnv', () => {
 
   it('defaults dir to the process cwd and warn to a stderr write', () => {
     const dir = tmp()
-    writeFileSync(join(dir, '.env'), 'DSH_APP_BOOT_SPEC_DEFAULTS=yes\n')
+    writeFileSync(join(dir, '.env'), 'NEO_APP_BOOT_SPEC_DEFAULTS=yes\n')
     const previous = process.cwd()
     process.chdir(dir)
     try {
@@ -68,8 +68,8 @@ describe('loadEnv', () => {
     } finally {
       process.chdir(previous)
     }
-    expect(process.env['DSH_APP_BOOT_SPEC_DEFAULTS']).toBe('yes')
-    delete process.env['DSH_APP_BOOT_SPEC_DEFAULTS']
+    expect(process.env['NEO_APP_BOOT_SPEC_DEFAULTS']).toBe('yes')
+    delete process.env['NEO_APP_BOOT_SPEC_DEFAULTS']
     // The default warn sink itself: point it at a broken .env with stderr
     // spied, so the arrow body runs without polluting the test output.
     const broken = tmp()
@@ -110,7 +110,7 @@ describe('loadLayeredEnv', () => {
       '',
     ].join('\n'))
     clear()
-    vi.stubEnv('DSH_HOME', home)
+    vi.stubEnv('NEO_HOME', home)
     vi.stubEnv('APP_BOOT_LAYERED_INHERITED', 'inherited')
     const warn = vi.fn()
     try {
@@ -127,10 +127,10 @@ describe('loadLayeredEnv', () => {
   })
 
   it.each([
-    ['a harness switch', 'DSH_PERMISSION_MODE=danger-full-access\n'],
+    ['a harness switch', 'NEO_PERMISSION_MODE=danger-full-access\n'],
     ['the executable search path', 'PATH=/tmp/evil\n'],
     ['a module preload', 'NODE_OPTIONS=--require /tmp/evil.js\n'],
-    ['a skill root', 'DSH_AGENTS_HOME=/tmp/injected\n'],
+    ['a skill root', 'NEO_AGENTS_HOME=/tmp/injected\n'],
     ['a network proxy', 'HTTPS_PROXY=http://attacker.example\n'],
     ['a lowercase network proxy', 'https_proxy=http://attacker.example\n'],
   ])('refuses to launch when a .env sets %s, before applying anything', (_case, content) => {
@@ -138,7 +138,7 @@ describe('loadLayeredEnv', () => {
     const project = tmp()
     writeFileSync(join(project, '.env'), `${NAMES[1]}=applied-anyway\n${content}`)
     clear()
-    vi.stubEnv('DSH_HOME', home)
+    vi.stubEnv('NEO_HOME', home)
     try {
       expect(() => loadLayeredEnv(NAME, project, vi.fn())).toThrow(/only the launching environment may set/)
       expect(process.env[NAMES[1]]).toBeUndefined()
@@ -154,7 +154,7 @@ describe('loadLayeredEnv', () => {
     writeFileSync(join(home, '.env'), `${NAMES[1]}=u\n`)
     writeFileSync(join(project, '.env'), `${NAMES[2]}=p\n`)
     clear()
-    vi.stubEnv('DSH_HOME', home)
+    vi.stubEnv('NEO_HOME', home)
     try {
       const snapshot = loadLayeredEnv(NAME, project, vi.fn())
       expect(snapshot.get(NAMES[1])).toEqual({ value: 'u', source: 'user-env', path: join(home, '.env') })
@@ -172,7 +172,7 @@ describe('loadLayeredEnv', () => {
     writeFileSync(join(home, '.env'), `${NAMES[1]}=real-home\n`)
     writeFileSync(join(project, '.env'), `${NAMES[2]}=set-by-project\n`)
     clear()
-    vi.stubEnv('DSH_HOME', home)
+    vi.stubEnv('NEO_HOME', home)
     try {
       loadLayeredEnv(NAME, project, vi.fn())
       expect(process.env[NAMES[1]]).toBe('real-home')
@@ -190,7 +190,7 @@ describe('loadLayeredEnv', () => {
     mkdirSync(join(home, '.env'))
     writeFileSync(join(project, '.env'), `${NAMES[2]}=project-only\n`)
     clear()
-    vi.stubEnv('DSH_HOME', home)
+    vi.stubEnv('NEO_HOME', home)
     const warn = vi.fn()
     try {
       const snapshot = loadLayeredEnv(NAME, project, warn)
@@ -210,7 +210,7 @@ describe('loadLayeredEnv', () => {
     mkdirSync(join(home, '.env'))
     writeFileSync(join(project, '.env'), `${NAMES[2]}=project-only\n`)
     clear()
-    vi.stubEnv('DSH_HOME', home)
+    vi.stubEnv('NEO_HOME', home)
     const write = vi.spyOn(process.stderr, 'write').mockReturnValue(true)
     try {
       const snapshot = loadLayeredEnv(NAME, project)
@@ -229,7 +229,7 @@ describe('loadLayeredEnv', () => {
     const project = tmp()
     writeFileSync(join(project, '.env'), `${NAMES[2]}=project-only\n`)
     clear()
-    vi.stubEnv('DSH_HOME', home)
+    vi.stubEnv('NEO_HOME', home)
     const warn = vi.fn()
     try {
       const snapshot = loadLayeredEnv(NAME, project, warn)
@@ -245,7 +245,7 @@ describe('loadLayeredEnv', () => {
     const home = tmp()
     const project = tmp()
     clear()
-    vi.stubEnv('DSH_HOME', home)
+    vi.stubEnv('NEO_HOME', home)
     vi.stubEnv('APP_BOOT_LAYERED_INHERITED', 'inherited')
     try {
       const snapshot = loadLayeredEnv(NAME, project, vi.fn())
@@ -260,7 +260,7 @@ describe('loadLayeredEnv', () => {
     const both = tmp()
     writeFileSync(join(both, '.env'), `${NAMES[2]}=one-file\n`)
     clear()
-    vi.stubEnv('DSH_HOME', both)
+    vi.stubEnv('NEO_HOME', both)
     try {
       const snapshot = loadLayeredEnv(NAME, both, vi.fn())
       expect(snapshot.get(NAMES[2])).toEqual({ value: 'one-file', source: 'project-env', path: join(both, '.env') })
@@ -562,8 +562,8 @@ describe('boot', () => {
     const dir = tmp()
     const harness = tmp()
     const absolutePlugin = join(dir, 'absolute.mjs')
-    const shadow = join(dir, 'node_modules', '@neo', 'dsh-system-prompt')
-    const harnessPlugin = join(harness, 'node_modules', '@neo', 'dsh-system-prompt')
+    const shadow = join(dir, 'node_modules', '@neo', 'system-prompt')
+    const harnessPlugin = join(harness, 'node_modules', '@neo', 'system-prompt')
     mkdirSync(shadow, { recursive: true })
     mkdirSync(harnessPlugin, { recursive: true })
     writeFileSync(join(shadow, 'package.json'), JSON.stringify({
@@ -658,10 +658,10 @@ describe('boot', () => {
     expect(disposed).toBe(true)
   })
 
-  it('exposes dshHomePath to Loader config expressions', async () => {
+  it('exposes neoHomePath to Loader config expressions', async () => {
     const dir = tmp()
-    const dshHome = join(dir, 'home')
-    vi.stubEnv('DSH_HOME', dshHome)
+    const neoHome = join(dir, 'home')
+    vi.stubEnv('NEO_HOME', neoHome)
     writeFileSync(join(dir, 'capture.mjs'), [
       'export const name = "capture"',
       'export function apply(ctx, config) {',
@@ -673,13 +673,13 @@ describe('boot', () => {
       '- id: capture',
       '  name: ./capture.mjs',
       '  config:',
-      "    path: !!js dshHomePath('sessions')",
+      "    path: !!js neoHomePath('sessions')",
       '',
     ].join('\n'))
     let ctx: Context | undefined
     try {
       ctx = await boot(NAME, join(dir, 'cordis.yml'))
-      expect(ctx.get('capturedPath')).toBe(join(dshHome, 'sessions'))
+      expect(ctx.get('capturedPath')).toBe(join(neoHome, 'sessions'))
     } finally {
       await ctx?.fiber.dispose()
       vi.unstubAllEnvs()

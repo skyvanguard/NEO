@@ -7,10 +7,18 @@ import { globSync, readFileSync } from 'node:fs'
 import { resolve, sep } from 'node:path'
 
 const ROOT = resolve(import.meta.dirname, '..')
-const DSH_PACKAGE_NAME = /^@neo\/dsh(?:-|$)/
+const NEO_PACKAGE_NAME = /^@neo\//
+// The scope rename collapsed the former `@neo/dsh-*` family marker into `@neo/*`,
+// so first-party harness packages can no longer be told apart from third-party
+// ones by name alone. Structure is the reliable signal: repository-owned harness
+// packages live at the workspace root and under apps/ and packages/, while
+// vendored dependencies (vendor/), the native addon bindings (native/), and the
+// marketing site (website/) keep their own upstream license terms and stay out
+// of the MIT gate — matching the packages the pre-rename gate already checked.
+const NON_HARNESS_PREFIXES = ['vendor/', 'native/', 'website/']
 
 /** Result of checking every DSH package reachable through the root workspace list. */
-export interface DshPackageLicenseReport {
+export interface NeoPackageLicenseReport {
   /** Number of DSH package manifests checked. */
   packageCount: number
   /** Repository-relative diagnostics for non-MIT declarations. */
@@ -54,18 +62,20 @@ function printable(value: unknown): string {
  * @param root - absolute repository root containing the workspace package.json.
  * @returns the checked package count and every non-MIT declaration.
  */
-export function inspectDshPackageLicenses(root: string): DshPackageLicenseReport {
+export function inspectDshPackageLicenses(root: string): NeoPackageLicenseReport {
   let packageCount = 0
   const failures: string[] = []
 
   for (const file of workspaceManifestPaths(root)) {
+    const normalizedFile = file.split(sep).join('/')
+    if (NON_HARNESS_PREFIXES.some(prefix => normalizedFile.startsWith(prefix))) continue
+
     const manifest = readManifest(root, file)
     const name = manifest.name
-    if (typeof name !== 'string' || !DSH_PACKAGE_NAME.test(name)) continue
+    if (typeof name !== 'string' || !NEO_PACKAGE_NAME.test(name)) continue
 
     packageCount++
     if (manifest.license !== 'MIT') {
-      const normalizedFile = file.split(sep).join('/')
       failures.push(
         `${normalizedFile}: ${name} must declare "license": "MIT"; found ${printable(manifest.license)}.`,
       )

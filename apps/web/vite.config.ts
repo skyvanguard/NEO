@@ -4,7 +4,7 @@ import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 
 const src = (rel: string): string => fileURLToPath(new URL(rel, import.meta.url))
-const STANDALONE_ERROR = 'apps/web is not a standalone application: bare Vite cannot inject window.__DSH_BOOT__. '
+const STANDALONE_ERROR = 'apps/web is not a standalone application: bare Vite cannot inject window.__NEO_BOOT__. '
   + 'From a repository checkout, run `pnpm dsh web`; an installed package uses `dsh web`. '
   + 'For client-plugin HMR, run `pnpm dsh web` together with `pnpm run dev:web`.'
 

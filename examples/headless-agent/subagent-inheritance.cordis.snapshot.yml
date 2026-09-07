@@ -12,7 +12,7 @@
     root: './.sessions'
     compression: none
 
-# file/override/childFiles all default to their DSH_SNAPSHOT_* env vars.
+# file/override/childFiles all default to their NEO_SNAPSHOT_* env vars.
 - id: replay
   name: '@neo/llm-replay'
 

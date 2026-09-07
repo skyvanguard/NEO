@@ -3,13 +3,13 @@
 # the composition base, while user-plane values resolve per request through
 # the two providers below.
 
-# User-settings document (`$DSH_HOME/settings.yaml`, hot-reloaded): a
+# User-settings document (`$NEO_HOME/settings.yaml`, hot-reloaded): a
 # `llm-deepseek:` section there overrides the adapter entry below without a
 # restart.
 - id: settings
   name: '@neo/settings-file'
 
-# Credential store: the live process environment over `$DSH_HOME/.credentials.yaml`
+# Credential store: the live process environment over `$NEO_HOME/.credentials.yaml`
 # (owner-only file, hot-reloaded). The adapter resolves `DEEPSEEK_API_KEY`
 # through it at each request, so no key is inlined in this file.
 - id: credentials
@@ -64,7 +64,7 @@
   name: '@neo/session-persistence-jsonl'
   config:
     root: './.sessions'
-    compression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+    compression: !!js "process.env.NEO_SNAPSHOT === undefined ? 'zstd' : 'none'"
 
 - id: checkpoint-policy
   name: '@neo/session-checkpoint-policy'

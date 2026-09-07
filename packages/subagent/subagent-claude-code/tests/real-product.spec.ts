@@ -244,9 +244,9 @@ describe('real Claude Agent SDK 0.3.220 and its distributed Claude Code 2.1.220 
     expect(initMessage?.claude_code_version).toBe('2.1.220')
     if (process.platform === 'win32') {
       expect(harness.spawnSpecs[0]?.argv.slice(0, 6)).toEqual([
-        'cmd.exe', '/d', '/v:off', '/s', '/c', '%DSH_CLAUDE_CODE_EXECUTABLE%',
+        'cmd.exe', '/d', '/v:off', '/s', '/c', '%NEO_CLAUDE_CODE_EXECUTABLE%',
       ])
-      const batchExecutable = harness.spawnSpecs[0]?.env?.DSH_CLAUDE_CODE_EXECUTABLE
+      const batchExecutable = harness.spawnSpecs[0]?.env?.NEO_CLAUDE_CODE_EXECUTABLE
       expect(batchExecutable?.startsWith('"')).toBe(true)
       expect(batchExecutable?.endsWith('"')).toBe(true)
       expect(batchExecutable?.slice(1, -1).toLowerCase())

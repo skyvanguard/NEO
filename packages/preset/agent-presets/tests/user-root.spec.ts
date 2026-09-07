@@ -1,11 +1,11 @@
 /**
  * The writable root is this package's own, not an assembly fact each app must
  * remember: a roster configured with only a `system` root still discovers and
- * authors into `<dshHome>/.agent-presets`, the way `dsh-skill-filesystem` owns
- * `<dshHome>/skills`. `includeUserRoot: false` is how a deployment — or a test
+ * authors into `<neoHome>/.agent-presets`, the way `dsh-skill-filesystem` owns
+ * `<neoHome>/skills`. `includeUserRoot: false` is how a deployment — or a test
  * pinning an exact roster — opts out.
  *
- * `$DSH_HOME` is repointed per test because the derived root is resolved in the
+ * `$NEO_HOME` is repointed per test because the derived root is resolved in the
  * constructor: the plugin must be mounted while the environment names the
  * temporary home, or it would reach the developer's real one.
  */
@@ -32,13 +32,13 @@ let previousHome: string | undefined
 
 beforeEach(async () => {
   home = await mkdtemp(join(tmpdir(), 'dsh-preset-home-'))
-  previousHome = process.env.DSH_HOME
-  process.env.DSH_HOME = home
+  previousHome = process.env.NEO_HOME
+  process.env.NEO_HOME = home
 })
 
 afterEach(() => {
-  if (previousHome === undefined) delete process.env.DSH_HOME
-  else process.env.DSH_HOME = previousHome
+  if (previousHome === undefined) delete process.env.NEO_HOME
+  else process.env.NEO_HOME = previousHome
 })
 
 /** Boot a roster over the fixture system root, with the derived root left to the plugin. */

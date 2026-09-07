@@ -28,7 +28,7 @@ import { bindScopeParent, createScope, scopeOf, type Scope, type ScopeKey, type 
 // Type-only: resolves the `agent/created` lifecycle event this service watches.
 import type {} from '@neo/agent'
 import { settingsNamespace, type SettingsScope, type default as SettingsService } from '@neo/settings'
-import { dshHomePath } from '@neo/home-paths'
+import { neoHomePath } from '@neo/home-paths'
 import { discoverPresets, USER_PRESET_DIR } from './discovery.ts'
 import { copyComposition, deleteComposition, readComposition } from './authoring.ts'
 import { mountPreset, serviceForAgent, standingMountFor } from './mount.ts'
@@ -131,7 +131,7 @@ export class AgentPresets extends Service {
     super(ctx, 'agentPresets')
     this.selfCtx = ctx
     this.resolvedRoots = config.includeUserRoot
-      ? [...config.roots, { path: dshHomePath(USER_PRESET_DIR), trust: 'user' }]
+      ? [...config.roots, { path: neoHomePath(USER_PRESET_DIR), trust: 'user' }]
       : [...config.roots]
     // Deliberately not `installSettingsSection`: that helper exists to re-judge
     // what a consumer DERIVED from the source — memoized resolutions,

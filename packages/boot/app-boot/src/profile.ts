@@ -2,7 +2,7 @@
  * Profile discovery, initialization, and patch-layer composition for the
  * `dsh --profile` launcher family.
  *
- * A profile is a directory under `$DSH_HOME/profiles/<name>` holding a
+ * A profile is a directory under `$NEO_HOME/profiles/<name>` holding a
  * `package.json` (out-of-tree plugin dependencies plus the profile manifest
  * `dsh.profile` with its ordered `bundles` list) and a `cordis.patch.yml`
  * (the user's own patch layer, applied after every bundle layer). Bundles are
@@ -16,7 +16,7 @@
  * first from the dsh installation (the launcher's own package), then from the
  * profile directory. The Loader's `baseUrl` is the profile directory, whose
  * `node_modules` pnpm manages for out-of-tree plugins, while the maintained
- * flat fallback directory `$DSH_HOME/profiles/node_modules` (one symlink per
+ * flat fallback directory `$NEO_HOME/profiles/node_modules` (one symlink per
  * package the installation's app and bundles depend on) makes every in-box
  * plugin Node-resolvable from any profile through the ordinary parent-walk.
  * @module @neo/app-boot/profile
@@ -29,7 +29,7 @@ import {
 import { basename, dirname, join } from 'node:path'
 import type { EntryOptions } from '@neo/cordis-plugin-loader'
 import { applyEntryPatches, type PatchOptions } from '@neo/cordis-plugin-include'
-import { resolveDshHome } from '@neo/home-paths'
+import { resolveNeoHome } from '@neo/home-paths'
 import { loadOverlayPatches } from './index.ts'
 
 /** Directory under the Harness home holding every profile. */
@@ -39,13 +39,13 @@ export const PROFILES_DIR = 'profiles'
 export const PROFILE_PATCH_FILENAME = 'cordis.patch.yml'
 
 /** The bundle half of the `dsh` manifest section: what a bundle package exports. */
-export interface DshBundleManifest {
+export interface NeoBundleManifest {
   /** The patch layer this bundle exports, relative to its package root. */
   patch: string
 }
 
 /** The profile half of the `dsh` manifest section: what a profile directory composes. */
-export interface DshProfileManifest {
+export interface NeoProfileManifest {
   /** Ordered bundle layer list (package names). */
   bundles?: string[]
 }
@@ -54,11 +54,11 @@ export interface DshProfileManifest {
  * The profile-launcher slice of the `dsh`-owned package.json section. A
  * manifest may declare both roles; other consumers own additional keys.
  */
-export interface DshManifestSection {
+export interface NeoManifestSection {
   /** Bundle metadata consumed by the profile launcher. */
-  bundle?: DshBundleManifest
+  bundle?: NeoBundleManifest
   /** Profile metadata consumed by the profile launcher. */
-  profile?: DshProfileManifest
+  profile?: NeoProfileManifest
 }
 
 /** The slice of package.json both profiles and bundles use. */
@@ -66,7 +66,7 @@ export interface ProfileManifest {
   name?: string
   dependencies?: Record<string, string>
   peerDependencies?: Record<string, string>
-  dsh?: DshManifestSection
+  dsh?: NeoManifestSection
 }
 
 /** One resolved bundle layer of a profile. */
@@ -98,10 +98,10 @@ export interface Profile {
 /**
  * Resolve a profile's directory under the Harness home.
  * @param name - the profile name (`dsh --profile <name>`).
- * @param home - the Harness home; defaults to {@link resolveDshHome}.
+ * @param home - the Harness home; defaults to {@link resolveNeoHome}.
  * @returns the absolute profile directory (which may not exist yet).
  */
-export function resolveProfileDir(name: string, home: string = resolveDshHome()): string {
+export function resolveProfileDir(name: string, home: string = resolveNeoHome()): string {
   if (name === '' || name.includes('/') || name.includes('\\') || name === '.' || name === '..'
     // The launcher-maintained flat module fallback lives at this sibling path.
     || name === 'node_modules') {
@@ -202,7 +202,7 @@ function ensureSymlink(link: string, target: string): void {
 }
 
 /**
- * Maintain the flat module fallback `$DSH_HOME/profiles/node_modules`: one
+ * Maintain the flat module fallback `$NEO_HOME/profiles/node_modules`: one
  * symlink per package in the dsh app's resolvable dependency CLOSURE (BFS
  * over `dependencies` from the app manifest), each resolved from its own
  * real location. Node's parent-directory walk from any profile finds this
@@ -218,9 +218,9 @@ function ensureSymlink(link: string, target: string): void {
  * re-pointed; a stale link to a vanished package stays until its name is
  * reused (dangling links are invisible to resolution).
  * @param installAnchor - absolute path of the dsh app's package.json.
- * @param home - the Harness home; defaults to {@link resolveDshHome}.
+ * @param home - the Harness home; defaults to {@link resolveNeoHome}.
  */
-export function healProfilesModuleFallback(installAnchor: string, home: string = resolveDshHome()): void {
+export function healProfilesModuleFallback(installAnchor: string, home: string = resolveNeoHome()): void {
   const profilesDir = join(home, PROFILES_DIR)
   const modulesDir = join(profilesDir, 'node_modules')
   mkdirSync(modulesDir, { recursive: true })
@@ -362,14 +362,14 @@ export function resolveBundleDir(
  * @param binName - the diagnostic prefix on thrown errors.
  * @param name - the profile name.
  * @param installAnchor - absolute path of the dsh app's package.json (first resolution anchor).
- * @param home - the Harness home; defaults to {@link resolveDshHome}.
+ * @param home - the Harness home; defaults to {@link resolveNeoHome}.
  * @param options - `userLayer: false` skips reading `cordis.patch.yml`, so a
  * bundles-only consumer (`--dump-default-config`, a recovery diagnostic)
  * cannot fail on a broken user layer.
  * @returns the loaded profile (empty `patches` when the user layer is skipped).
  */
 export function loadProfile(
-  binName: string, name: string, installAnchor: string, home: string = resolveDshHome(),
+  binName: string, name: string, installAnchor: string, home: string = resolveNeoHome(),
   options: { userLayer?: boolean } = {},
 ): Profile {
   const dir = resolveProfileDir(name, home)

@@ -18,7 +18,7 @@
               model: cli-mock
               cwd: !!js process.cwd()
           workspaceContext: false
-          dshHome: './.dsh-home'
+          neoHome: './.neo-home'
           skills:
             filesystem:
               agentsHome: './.agents-home'

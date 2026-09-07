@@ -11,7 +11,7 @@ import * as yaml from 'js-yaml'
 import { entryListSchema } from '@neo/cordis-plugin-include'
 import { evaluate } from '@neo/cordis-plugin-loader'
 
-describe('dsh-base bundle', () => {
+describe('@neo/base bundle', () => {
   it('declares a parseable patch list through the dsh.bundle.patch manifest field', () => {
     const root = fileURLToPath(new URL('..', import.meta.url))
     const manifest = JSON.parse(
@@ -32,9 +32,10 @@ describe('dsh-base bundle', () => {
     )
     expect(rows.length).toBeGreaterThan(50)
     expect(rows.some(row => row.id === 'agent-loop')).toBe(true)
-    expect(rows.find(row => row.id === 'session-telemetry-otel')?.config?.['mode']).toEqual({
-      __jsExpr: "process.env.DSH_TELEMETRY_MODE || 'DISABLED'",
-    })
+    // NEO: telemetry is removed. The row ships `disabled: true` with its mode
+    // hardcoded to the literal 'DISABLED' as defense-in-depth (no env-driven
+    // mode), so no session-log records can ever be exported.
+    expect(rows.find(row => row.id === 'session-telemetry-otel')?.config?.['mode']).toBe('DISABLED')
     expect(rows.filter(row => row.id === 'subagent-codex')).toHaveLength(0)
     expect(rows.filter(row => row.id === 'subagent-claude-code')).toHaveLength(0)
     expect(manifest.dependencies).not.toHaveProperty('@neo/subagent-codex')

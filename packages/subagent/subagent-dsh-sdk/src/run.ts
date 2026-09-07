@@ -39,9 +39,9 @@ export interface SdkRunSpec {
   maxTokens?: number
   /**
    * Extra environment variables to ADD for the child (e.g. the child
-   * runtime's own `DEEPSEEK_API_KEY`, or `DSH_CORDIS_CONFIG`). Merged after
+   * runtime's own `DEEPSEEK_API_KEY`, or `NEO_CORDIS_CONFIG`). Merged after
    * the seam's `scrubbedParentEnv()` base, so an explicit credential or
-   * current `DSH_*` fact survives while ambient namesakes never leak.
+   * current `NEO_*` fact survives while ambient namesakes never leak.
    */
   env: Record<string, string>
   /** Bound (ms) on the protocol `shutdown` exchange during dispose. */

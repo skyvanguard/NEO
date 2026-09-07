@@ -1,7 +1,7 @@
 /**
  * Shared boot glue for the app bins (`dsh`, `dsh-acp-demo`): load the gitignored
  * `.env`, install the fail-loud Loader guards, resolve the config path (snapshot-aware), load the
- * optional user patch layers from the Harness home (`~/.dsh`), expose its path resolver to
+ * optional user patch layers from the Harness home (`~/.neo`), expose its path resolver to
  * config expressions, and drive the Cordis Loader against a leaf `cordis.yml` until the tree settles.
  * @module @neo/app-boot
  */
@@ -15,7 +15,7 @@ import { Context, type FiberState } from '@neo/cordis'
 import Loader, { type Entry, type EntryOptions } from '@neo/cordis-plugin-loader'
 import Include, { applyEntryPatches, entryListSchema, type PatchOptions } from '@neo/cordis-plugin-include'
 import Group from '@neo/cordis-plugin-group'
-import { dshHomePath, resolveDshHome } from '@neo/home-paths'
+import { neoHomePath, resolveNeoHome } from '@neo/home-paths'
 import { createLaunchEnvironmentSnapshot, type LaunchEnvironmentSnapshot } from '@neo/launch-environment'
 import type {} from '@neo/cordis-plugin-hmr'
 // Side-effect type import: resolves `ctx.get('systemPrompt')` to the service.
@@ -24,7 +24,7 @@ import type {} from '@neo/system-prompt'
 declare module '@neo/cordis' {
   interface Context {
     /** Harness-home path resolver available to Loader `!!js` config expressions. */
-    dshHomePath?: typeof dshHomePath
+    neoHomePath?: typeof neoHomePath
   }
 }
 
@@ -41,9 +41,9 @@ export {
   resolveBundleDir,
   resolveProfileDir,
   writeProfileManifest,
-  type DshBundleManifest,
-  type DshManifestSection,
-  type DshProfileManifest,
+  type NeoBundleManifest,
+  type NeoManifestSection,
+  type NeoProfileManifest,
   type Profile,
   type ProfileLayer,
   type ProfileManifest,
@@ -53,7 +53,7 @@ export {
  * Resolve the config to boot. Replay swaps a `cordis.yml` basename for
  * `cordis.snapshot.yml` in the same directory; every other mode keeps the path.
  * @param configPath - the requested config path (absolute, or relative to `cwd`).
- * @param snapshotMode - the bin's `$DSH_SNAPSHOT` value; only `'replay'` swaps the
+ * @param snapshotMode - the bin's `$NEO_SNAPSHOT` value; only `'replay'` swaps the
  *   basename.
  * @param cwd - the base a relative `configPath` resolves against.
  * @returns the absolute path of the config to boot.
@@ -114,7 +114,7 @@ const BOOTSTRAP_NAMES = new Set([
 ])
 
 /** Name prefixes no discovered file may set. */
-const BOOTSTRAP_PREFIXES = ['DSH_', 'XDG_', 'DYLD_', 'BASH_FUNC_']
+const BOOTSTRAP_PREFIXES = ['NEO_', 'XDG_', 'DYLD_', 'BASH_FUNC_']
 
 /**
  * Whether a variable may come only from the inherited process environment
@@ -178,7 +178,7 @@ export function loadLayeredEnv(
   binName: string, cwd: string = process.cwd(),
   warn: (line: string) => void = line => void process.stderr.write(line),
 ): LaunchEnvironmentSnapshot {
-  const home = resolveDshHome()
+  const home = resolveNeoHome()
   const inherited = { ...process.env } as Record<string, string>
   // Parse both layers first: a rejection must not leave one file applied.
   const project = readEnvLayer(binName, cwd, warn)
@@ -767,7 +767,7 @@ export async function boot(
   let stage = 'host preparation failed'
   try {
     ctx.baseUrl = pathToFileURL(dirname(absoluteConfigPath)).href + '/'
-    ctx.provide('dshHomePath', dshHomePath)
+    ctx.provide('neoHomePath', neoHomePath)
     await ctx.plugin(Loader)
     await prepare?.(ctx)
     stage = 'plugin tree failed to load'

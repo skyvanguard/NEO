@@ -22,7 +22,7 @@ const overrideFile = join(scenarioDir, 'replay.override.json')
 const stdoutExpected = join(scenarioDir, 'stdout.expected.jsonl')
 const sessionExpected = join(scenarioDir, 'session.expected.jsonl')
 const wrapupDir = join(dirname(fileURLToPath(import.meta.url)), 'goal-snapshots/goal-wrapup')
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.NEO_SNAPSHOT === 'refresh'
 
 const agent: AgentUnderTest = {
   binScript: fileURLToPath(new URL('../../../packages/examples/acp-demo/src/bin.ts', import.meta.url)),

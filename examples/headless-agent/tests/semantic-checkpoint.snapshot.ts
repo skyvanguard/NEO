@@ -17,7 +17,7 @@ const configPath = fileURLToPath(new URL('../semantic-checkpoint.cordis.snapshot
 const binScript = fileURLToPath(new URL('./fixtures/headless-driver.ts', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../tsconfig.json', import.meta.url))
 const sessionId = SessionId('semantic-checkpoint-unknown-outcome')
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.NEO_SNAPSHOT === 'refresh'
 const task = 'Continue safely from the interrupted operation.'
 
 async function seedInterruptedSession(root: string, cwd: string): Promise<string> {
@@ -92,8 +92,8 @@ describe('semantic checkpoint recovery snapshot', () => {
       binArgs: [configPath, task],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT_FILE: replayFixture,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
+        NEO_SNAPSHOT_FILE: replayFixture,
+        NEO_SNAPSHOT_OVERRIDE: replayOverride,
       },
       prepare: async (runCwd) => {
         cwd = runCwd

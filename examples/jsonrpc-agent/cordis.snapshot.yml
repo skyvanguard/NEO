@@ -3,9 +3,9 @@
 # key or network; every other entry remains shared. The replay provider
 # catalog claims the `deepseek-official` provider so the SDK server's `initialize`
 # finds it owned and never mounts the real-adapter fallback. The SDK snapshot
-# suite passes this path explicitly through `DSH_CORDIS_CONFIG` (the
-# jsonrpc-demo bin performs no DSH_SNAPSHOT config swap of its own), and
-# `llm-replay` reads `DSH_SNAPSHOT_FILE` / `DSH_SNAPSHOT_CHILD_FILES` from the
+# suite passes this path explicitly through `NEO_CORDIS_CONFIG` (the
+# jsonrpc-demo bin performs no NEO_SNAPSHOT config swap of its own), and
+# `llm-replay` reads `NEO_SNAPSHOT_FILE` / `NEO_SNAPSHOT_CHILD_FILES` from the
 # harness. Stdout remains reserved for JSON-RPC frames.
 - id: base
   name: '@neo/cordis-plugin-include'

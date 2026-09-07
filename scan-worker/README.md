@@ -31,7 +31,7 @@ Para probar el agente a mano en la Web GUI existe el preset equivalente en
 ## Configuración (variables de entorno)
 
 Ver `.env.example`. Mínimo indispensable: `SCAN_WORKER_TOKEN` (el mismo que en
-Vercel) y `DSH_CMD` (cómo se invoca el CLI de NEO en kryon).
+Vercel) y `NEO_CMD` (cómo se invoca el CLI de NEO en kryon).
 
 ## Ejecutar
 
@@ -41,8 +41,8 @@ node scan-worker/worker.mjs
 ```
 
 Requiere Node 18+ (usa `fetch` global). El `dsh` debe estar construido y
-disponible en kryon (`pnpm run build` en el repo, luego `DSH_CMD="pnpm dsh"`,
-o el binario instalado con `DSH_CMD="dsh"`).
+disponible en kryon (`pnpm run build` en el repo, luego `NEO_CMD="pnpm dsh"`,
+o el binario instalado con `NEO_CMD="dsh"`).
 
 ## Verificar el overlay antes de correr
 

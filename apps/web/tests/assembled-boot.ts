@@ -53,7 +53,7 @@ const bundles = new Map(PLUGINS.map(plugin => [
 ]))
 
 interface FixtureWindow extends Window {
-  __DSH_BOOT__?: { rev: string; entries: WebBootEntry[] }
+  __NEO_BOOT__?: { rev: string; entries: WebBootEntry[] }
   __ModuleLoader__?: unknown
 }
 
@@ -93,7 +93,7 @@ export function installAssembledBootEnv(): void {
     act(() => { unmount?.() })
     unmount = undefined
     cleanup()
-    delete win.__DSH_BOOT__
+    delete win.__NEO_BOOT__
     delete win.__ModuleLoader__
     document.body.innerHTML = ''
     document.head.querySelectorAll('style[data-plugin]').forEach((style) => { style.remove() })
@@ -117,7 +117,7 @@ export function mountAssembledApp(): void {
   const root = document.createElement('div')
   root.id = 'root'
   document.body.appendChild(root)
-  win.__DSH_BOOT__ = { rev: 'fx', entries: PLUGINS.map(({ bundlePath: _bundlePath, ...plugin }) => plugin) }
+  win.__NEO_BOOT__ = { rev: 'fx', entries: PLUGINS.map(({ bundlePath: _bundlePath, ...plugin }) => plugin) }
   act(() => {
     const entry = new AppWebEntry(root, {
       loadBundle: async (url) => {
@@ -147,7 +147,7 @@ export function hasClass(el: Element, name: string): boolean {
 
 /**
  * Whether this run rewrites its golden instead of comparing against it, set by
- * the snapshot gate's `DSH_SNAPSHOT` mode (`record` re-runs the scenarios from
+ * the snapshot gate's `NEO_SNAPSHOT` mode (`record` re-runs the scenarios from
  * scratch, `refresh` re-derives the expected text from the existing ones).
  */
-export const REFRESHING_GOLDEN = process.env.DSH_SNAPSHOT === 'record' || process.env.DSH_SNAPSHOT === 'refresh'
+export const REFRESHING_GOLDEN = process.env.NEO_SNAPSHOT === 'record' || process.env.NEO_SNAPSHOT === 'refresh'

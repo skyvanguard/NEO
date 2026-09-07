@@ -1,6 +1,6 @@
 /**
  * Cross-session token-usage aggregation. Reads every persisted session log
- * (`$DSH_HOME/sessions/<workspace>/<session>/session.jsonl.zstd`), folds the
+ * (`$NEO_HOME/sessions/<workspace>/<session>/session.jsonl.zstd`), folds the
  * provider-reported usage with the same per-(turn,step) de-duplication as
  * token-meter, and rolls it up into cumulative totals, per-day, per-workspace,
  * and per-session breakdowns.
@@ -145,7 +145,7 @@ export type UsageCache = Map<string, CachedSessionUsage>
  * persistent {@link UsageCache} turns steady-state calls into O(number of
  * sessions) map reads plus a re-fold of only the sessions whose log changed:
  * the recurring cost the usage view was paying on every open.
- * @param sessionsRoot - the `$DSH_HOME/sessions` directory.
+ * @param sessionsRoot - the `$NEO_HOME/sessions` directory.
  * @param request - optional filters.
  * @param cache - optional per-session cache reused across calls; a fresh one is
  *   used when omitted (same result, no cross-call reuse).

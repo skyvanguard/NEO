@@ -22,7 +22,7 @@ import type {} from '@neo/shell-env'
 import type { SandboxExecutionPolicy, SandboxMode } from '@neo/sandbox'
 import { ESCALATION_TARGETS, approveEscalation, canonicalPath, validateEscalationArgs } from '@neo/sandbox'
 import type { SandboxPolicyService } from '@neo/sandbox-policy'
-import { DSH_ENV_PREFIX } from '@neo/shell'
+import { NEO_ENV_PREFIX } from '@neo/shell'
 import type { ShellRunResult } from '@neo/shell'
 import { processOutcome } from './background.ts'
 import { parseExitStatus, renderProcessRead, renderResult } from './render.ts'
@@ -78,7 +78,7 @@ function bashDescription(backgroundEnabled: boolean, escalationModes: readonly S
   const base = 'Execute a bash command (`bash -c`) and return its stdout/stderr. '
     + 'Each call runs in a fresh shell: no state (cwd, variables, functions) persists between calls — '
     + 'pass `workdir` instead of using `cd`. Non-zero exits are reported as `[exit code: N]`. '
-    + `Current harness environment facts are exposed through managed \`$${DSH_ENV_PREFIX}*\` variables; inspect them when needed. `
+    + `Current harness environment facts are exposed through managed \`$${NEO_ENV_PREFIX}*\` variables; inspect them when needed. `
     + 'Commands may run under a file sandbox; a blocked file operation is reported as `[sandbox: file access denied under <mode> mode]` — a policy denial, not a bug in the command; do not retry another way. '
     + 'Long output is truncated to its tail; the full output is saved to a file whose path is reported when available. '
     + background

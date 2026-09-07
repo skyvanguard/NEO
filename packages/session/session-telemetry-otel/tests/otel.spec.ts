@@ -44,17 +44,17 @@ interface OtlpLogsRequest {
 const servers: Server[] = []
 
 // The backend resolves the harness home's anonymous user id at construction;
-// pin DSH_HOME to a temp dir so the suite never touches the ambient ~/.dsh.
+// pin NEO_HOME to a temp dir so the suite never touches the ambient ~/.neo.
 let tempHome: string
 let previousDshHome: string | undefined
 beforeAll(() => {
   tempHome = mkdtempSync(join(tmpdir(), 'dsh-otel-home-'))
-  previousDshHome = process.env.DSH_HOME
-  process.env.DSH_HOME = tempHome
+  previousDshHome = process.env.NEO_HOME
+  process.env.NEO_HOME = tempHome
 })
 afterAll(() => {
-  if (previousDshHome === undefined) delete process.env.DSH_HOME
-  else process.env.DSH_HOME = previousDshHome
+  if (previousDshHome === undefined) delete process.env.NEO_HOME
+  else process.env.NEO_HOME = previousDshHome
   rmSync(tempHome, { recursive: true, force: true })
 })
 
@@ -140,7 +140,7 @@ describe('OpenTelemetrySessionBackend wire', () => {
     expect(authorization).toBe('Bearer test-token')
 
     const resource = first.body.resourceLogs[0]!.resource.attributes
-    expect(resource).toContainEqual({ key: 'service.name', value: { stringValue: 'deepseek-harness' } })
+    expect(resource).toContainEqual({ key: 'service.name', value: { stringValue: 'neo' } })
     expect(resource).toContainEqual({ key: 'user.id', value: { stringValue: getOrCreateAnonymousUserId() } })
 
     const records = allRecords(captures)

@@ -34,16 +34,16 @@
 
 - id: tools
   config:
-    # TEMPORARY workaround: DSH_TOOLS_MODE (native|code|both) opts a whole dsh
+    # TEMPORARY workaround: NEO_TOOLS_MODE (native|code|both) opts a whole dsh
     # process into Code Mode while per-session tool-presentation selection is being
     # designed; unset keeps the schema default (native). Remove the env seam
     # once the web UI owns the choice per session.
-    mode: !!js process.env.DSH_TOOLS_MODE
+    mode: !!js process.env.NEO_TOOLS_MODE
 
 # ── web-only host rows, the transport layer, and the browser roster ─────────
 
 # `dsh.client` rows are the browser roster the modules node half scans into
-# window.__DSH_BOOT__; the modules row is simultaneously a host row.
+# window.__NEO_BOOT__; the modules row is simultaneously a host row.
 - insert:
     - id: code-runtime
       name: '@neo/code-runtime-worker-thread'
@@ -54,7 +54,7 @@
     - id: storage-json
       name: '@neo/storage-json'
       config:
-        root: !!js dshHomePath('storages')
+        root: !!js neoHomePath('storages')
 
     - id: storage-domain
       name: '@neo/storage-domain'
@@ -156,7 +156,7 @@
 
     # ── browser plugin roster (dsh.client rows; node halves are layer-2 hosts) ──
 
-    # Dual-face: the node half scans this tree, composes window.__DSH_BOOT__,
+    # Dual-face: the node half scans this tree, composes window.__NEO_BOOT__,
     # and serves /plugins/<id>/client.js; the browser half is the module table
     # the shell kernel constructs before cordis exists (adopted as a plugin
     # entry by the kernel, never fetched).
@@ -305,7 +305,7 @@
 # the composition.
 
 # `shell-env` STAYS in the host plane: `apps/cli/src/web.ts` injects it to
-# publish `DSH_WEB_URL`/`DSH_WEB_MODE`, and a host row that injects a service is
+# publish `NEO_WEB_URL`/`NEO_WEB_MODE`, and a host row that injects a service is
 # the criterion for host-plane ownership — injection resolves before any session
 # exists, so there is no agent to key by. Behind a preset realm those variables
 # would never reach the model's shell at all.
@@ -428,7 +428,7 @@
   disabled: true
 
 # The preset roster. `config/agent-presets/` ships with the deployment and is
-# read-only (its entries carry `system` trust); `$DSH_HOME/.agent-presets` is
+# read-only (its entries carry `system` trust); `$NEO_HOME/.agent-presets` is
 # where a person — or an agent — authors their own, and carries the same trust
 # as shell access because a preset IS a composition.
 #

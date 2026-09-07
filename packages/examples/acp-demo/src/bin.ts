@@ -19,7 +19,7 @@ const NAME = 'dsh-acp-demo'
    dsh-app-boot helpers; exercised end-to-end by the snapshot suite and the
    built-bin smoke */
 installFailLoud(NAME)
-const snapshotMode = process.env['DSH_SNAPSHOT']
+const snapshotMode = process.env['NEO_SNAPSHOT']
 if (snapshotMode !== 'replay') loadEnv(NAME)
 const { values } = parseArgs({
   args: process.argv.slice(2),

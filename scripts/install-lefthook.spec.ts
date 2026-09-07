@@ -75,7 +75,7 @@ import { join } from 'node:path'
 if (process.argv.slice(2).join(' ') !== 'install --force') process.exit(64)
 const rootOutput = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' })
 const root = rootOutput.endsWith('\\n') ? rootOutput.slice(0, -1) : rootOutput
-const forbiddenConfigKey = process.env.DSH_TEST_FORBIDDEN_GIT_CONFIG_KEY
+const forbiddenConfigKey = process.env.NEO_TEST_FORBIDDEN_GIT_CONFIG_KEY
 if (forbiddenConfigKey !== undefined) {
   try {
     execFileSync('git', ['config', '--get', forbiddenConfigKey], { encoding: 'utf8' })
@@ -92,9 +92,9 @@ try {
 } catch {
   process.exit(91)
 }
-const delay = Number(process.env.DSH_TEST_LEFTHOOK_DELAY_MS ?? 0)
+const delay = Number(process.env.NEO_TEST_LEFTHOOK_DELAY_MS ?? 0)
 if (delay > 0) Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, delay)
-const shouldFail = process.env.DSH_TEST_LEFTHOOK_FAIL === '1'
+const shouldFail = process.env.NEO_TEST_LEFTHOOK_FAIL === '1'
 if (!shouldFail) {
   const binary = join(root, 'node_modules', '.bin', process.platform === 'win32' ? 'lefthook.cmd' : 'lefthook')
   const config = readFileSync(join(root, 'lefthook.yml'), 'utf8').trim()
@@ -102,7 +102,7 @@ if (!shouldFail) {
   for (const name of ['pre-commit', 'pre-merge-commit', 'pre-push']) writeFileSync(join(hooksPath, name), hook, { mode: 0o755 })
 }
 if (existsSync(running)) unlinkSync(running)
-if (process.env.DSH_TEST_LEFTHOOK_BREAK_WORKTREE_CONFIG === '1') {
+if (process.env.NEO_TEST_LEFTHOOK_BREAK_WORKTREE_CONFIG === '1') {
   const configPath = execFileSync('git', ['rev-parse', '--git-path', 'config.worktree'], { encoding: 'utf8' }).trim()
   writeFileSync(configPath, '[invalid\\n')
 }
@@ -235,7 +235,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
       expect(existsSync(hooksPath(fixture, fixture.main))).toBe(false)
       expect(existsSync(join(common, 'config.worktree'))).toBe(false)
       expect(gitResult(fixture, fixture.main, [
-        'config', '--get', 'merge.dsh-translation-pairing.driver',
+        'config', '--get', 'merge.neo-translation-pairing.driver',
       ]).status).toBe(1)
     })
   }
@@ -257,10 +257,10 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     expect(git(fixture, fixture.main, ['config', '--worktree', '--get', 'core.hooksPath'])).toBe(mainHooks)
     expect(git(fixture, fixture.linked, ['config', '--worktree', '--get', 'core.hooksPath'])).toBe(linkedHooks)
     expect(git(fixture, fixture.main, [
-      'config', '--worktree', '--get', 'merge.dsh-translation-pairing.driver',
+      'config', '--worktree', '--get', 'merge.neo-translation-pairing.driver',
     ])).toBe(pairingMergeDriver)
     expect(git(fixture, fixture.linked, [
-      'config', '--worktree', '--get', 'merge.dsh-translation-pairing.driver',
+      'config', '--worktree', '--get', 'merge.neo-translation-pairing.driver',
     ])).toBe(pairingMergeDriver)
 
     const mainHook = readFileSync(join(mainHooks, 'pre-commit'), 'utf8')
@@ -319,7 +319,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
 
   it('serializes concurrent installs and keeps repeated output stable', async () => {
     const fixture = createFixture()
-    const delayed = { DSH_TEST_LEFTHOOK_DELAY_MS: '150' }
+    const delayed = { NEO_TEST_LEFTHOOK_DELAY_MS: '150' }
     const first = await Promise.all([
       runInstaller(fixture, fixture.main, delayed),
       runInstaller(fixture, fixture.linked, delayed),
@@ -342,7 +342,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     const fixture = createFixture()
     const lockPath = installLockPath(fixture)
     const publishing = runInstaller(fixture, fixture.main, {
-      DSH_TEST_LEFTHOOK_LOCK_WRITE_DELAY_MS: '200',
+      NEO_TEST_LEFTHOOK_LOCK_WRITE_DELAY_MS: '200',
     })
     await waitForPath(lockPath)
     expect(readFileSync(lockPath, 'utf8')).toBe('')
@@ -428,7 +428,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     const movedRoot = join(fixture.container, 'moved-main')
     renameSync(oldRoot, movedRoot)
 
-    const failed = await runInstaller(fixture, movedRoot, { DSH_TEST_LEFTHOOK_FAIL: '1' })
+    const failed = await runInstaller(fixture, movedRoot, { NEO_TEST_LEFTHOOK_FAIL: '1' })
 
     expect(failed.status).toBe(1)
     expect(failed.stderr).toContain('exit status 77')
@@ -528,7 +528,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     const fixture = createFixture()
     const lockPath = installLockPath(fixture)
     const runningPath = join(hooksPath(fixture, fixture.main), '.fake-lefthook-running')
-    const install = runInstaller(fixture, fixture.main, { DSH_TEST_LEFTHOOK_DELAY_MS: '250' })
+    const install = runInstaller(fixture, fixture.main, { NEO_TEST_LEFTHOOK_DELAY_MS: '250' })
     await waitForPath(runningPath)
     const replacementRecord = 'replacement owner\n'
     writeFileSync(lockPath, replacementRecord)
@@ -558,13 +558,13 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     const refused = await runInstaller(fixture, fixture.main)
     expect(refused.status).toBe(1)
     expect(refused.stderr).toContain('refusing to replace user-owned core.hooksPath')
-    expect(refused.stderr).toContain('DSH_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE=1')
+    expect(refused.stderr).toContain('NEO_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE=1')
     expect(git(fixture, fixture.main, ['config', '--get', 'core.hooksPath'])).toBe('custom-hooks')
     expect(readFileSync(customHook, 'utf8')).toBe('#!/bin/sh\n# custom hook\n')
     expect(gitResult(fixture, fixture.main, ['config', '--get', 'extensions.worktreeConfig']).status).toBe(1)
 
     const optedIn = await runInstaller(fixture, fixture.main, {
-      DSH_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE: '1',
+      NEO_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE: '1',
     })
     expect(optedIn.status, optedIn.stderr).toBe(0)
     expect(git(fixture, fixture.main, ['config', '--worktree', '--get', 'core.hooksPath'])).toBe(hooksPath(fixture, fixture.main))
@@ -574,7 +574,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
 
     git(fixture, fixture.linked, ['config', '--worktree', 'core.hooksPath', 'linked-custom-hooks'])
     const explicitWorktreePath = await runInstaller(fixture, fixture.linked, {
-      DSH_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE: '1',
+      NEO_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE: '1',
     })
     expect(explicitWorktreePath.status).toBe(1)
     expect(git(fixture, fixture.linked, ['config', '--worktree', '--get', 'core.hooksPath'])).toBe('linked-custom-hooks')
@@ -695,7 +695,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     write(sentinel, '#!/bin/sh\n# command-scope sentinel\n', 0o755)
 
     const result = await runInstaller(fixture, fixture.main, {
-      DSH_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE: '1',
+      NEO_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE: '1',
       GIT_CONFIG_COUNT: '1',
       GIT_CONFIG_KEY_0: 'core.hooksPath',
       GIT_CONFIG_VALUE_0: commandHooks,
@@ -706,7 +706,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     expect(readFileSync(sentinel, 'utf8')).toBe('#!/bin/sh\n# command-scope sentinel\n')
     expect(gitResult(fixture, fixture.main, ['config', '--get', 'core.hooksPath']).status).toBe(1)
     expect(gitResult(fixture, fixture.main, [
-      'config', '--get', 'merge.dsh-translation-pairing.driver',
+      'config', '--get', 'merge.neo-translation-pairing.driver',
     ]).status).toBe(1)
     expect(existsSync(hooksPath(fixture, fixture.main))).toBe(false)
   })
@@ -717,15 +717,15 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     git(fixture, fixture.main, ['config', '--file', commonConfig, 'core.repositoryFormatVersion', '1'])
     git(fixture, fixture.main, ['config', '--file', commonConfig, 'extensions.worktreeConfig', 'true'])
     git(fixture, fixture.main, [
-      'config', '--worktree', 'merge.dsh-translation-pairing.driver', 'custom-driver %A',
+      'config', '--worktree', 'merge.neo-translation-pairing.driver', 'custom-driver %A',
     ])
 
     const result = await runInstaller(fixture, fixture.main)
 
     expect(result.status).toBe(1)
-    expect(result.stderr).toContain('refusing to replace worktree merge.dsh-translation-pairing.driver')
+    expect(result.stderr).toContain('refusing to replace worktree merge.neo-translation-pairing.driver')
     expect(git(fixture, fixture.main, [
-      'config', '--worktree', '--get', 'merge.dsh-translation-pairing.driver',
+      'config', '--worktree', '--get', 'merge.neo-translation-pairing.driver',
     ])).toBe('custom-driver %A')
     expect(gitResult(fixture, fixture.main, ['config', '--get', 'core.hooksPath']).status).toBe(1)
   })
@@ -733,18 +733,18 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
   it('never masks an inherited custom pairing merge driver', async () => {
     const fixture = createFixture()
     git(fixture, fixture.main, [
-      'config', '--local', 'merge.dsh-translation-pairing.driver', 'inherited-driver %A',
+      'config', '--local', 'merge.neo-translation-pairing.driver', 'inherited-driver %A',
     ])
 
     const result = await runInstaller(fixture, fixture.main)
 
     expect(result.status).toBe(1)
-    expect(result.stderr).toContain('refusing to mask inherited merge.dsh-translation-pairing.driver')
+    expect(result.stderr).toContain('refusing to mask inherited merge.neo-translation-pairing.driver')
     expect(git(fixture, fixture.main, [
-      'config', '--local', '--get', 'merge.dsh-translation-pairing.driver',
+      'config', '--local', '--get', 'merge.neo-translation-pairing.driver',
     ])).toBe('inherited-driver %A')
     expect(gitResult(fixture, fixture.main, [
-      'config', '--worktree', '--get', 'merge.dsh-translation-pairing.driver',
+      'config', '--worktree', '--get', 'merge.neo-translation-pairing.driver',
     ]).status).toBe(1)
     expect(gitResult(fixture, fixture.main, ['config', '--get', 'core.hooksPath']).status).toBe(1)
   })
@@ -753,7 +753,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     const fixture = createFixture()
 
     const result = await runInstaller(fixture, fixture.main, {
-      DSH_TEST_FORBIDDEN_GIT_CONFIG_KEY: 'dsh.testSentinel',
+      NEO_TEST_FORBIDDEN_GIT_CONFIG_KEY: 'dsh.testSentinel',
       GIT_CONFIG_COUNT: '1',
       GIT_CONFIG_KEY_0: 'dsh.testSentinel',
       GIT_CONFIG_VALUE_0: 'must-not-reach-lefthook',
@@ -777,7 +777,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     git(fixture, fixture.main, ['config', '--file', worktreeConfig, 'include.path', includedConfig])
 
     const result = await runInstaller(fixture, fixture.main, {
-      DSH_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE: '1',
+      NEO_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE: '1',
     })
 
     expect(result.status).toBe(1)
@@ -793,16 +793,16 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     const legacyHook = join(common, 'hooks/pre-push')
     write(legacyHook, '#!/bin/sh\n# legacy pre-push\n', 0o755)
 
-    const result = await runInstaller(fixture, fixture.main, { DSH_TEST_LEFTHOOK_FAIL: '1' })
+    const result = await runInstaller(fixture, fixture.main, { NEO_TEST_LEFTHOOK_FAIL: '1' })
     expect(result.status).toBe(1)
     expect(result.stderr).toContain('exit status 77')
     expect(gitResult(fixture, fixture.main, ['config', '--worktree', '--get', 'core.hooksPath']).status).toBe(1)
     expect(gitResult(fixture, fixture.main, ['config', '--get', 'core.hooksPath']).status).toBe(1)
     expect(gitResult(fixture, fixture.main, [
-      'config', '--worktree', '--get', 'merge.dsh-translation-pairing.name',
+      'config', '--worktree', '--get', 'merge.neo-translation-pairing.name',
     ]).status).toBe(1)
     expect(gitResult(fixture, fixture.main, [
-      'config', '--worktree', '--get', 'merge.dsh-translation-pairing.driver',
+      'config', '--worktree', '--get', 'merge.neo-translation-pairing.driver',
     ]).status).toBe(1)
     expect(readFileSync(legacyHook, 'utf8')).toBe('#!/bin/sh\n# legacy pre-push\n')
   })
@@ -817,7 +817,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     expect(result.stderr).toContain('merge-translation-pairing.ts --probe failed')
     expect(gitResult(fixture, fixture.main, ['config', '--get', 'core.hooksPath']).status).toBe(1)
     expect(gitResult(fixture, fixture.main, [
-      'config', '--get', 'merge.dsh-translation-pairing.driver',
+      'config', '--get', 'merge.neo-translation-pairing.driver',
     ]).status).toBe(1)
   })
 
@@ -825,8 +825,8 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     const fixture = createFixture()
 
     const result = await runInstaller(fixture, fixture.main, {
-      DSH_TEST_LEFTHOOK_BREAK_WORKTREE_CONFIG: '1',
-      DSH_TEST_LEFTHOOK_FAIL: '1',
+      NEO_TEST_LEFTHOOK_BREAK_WORKTREE_CONFIG: '1',
+      NEO_TEST_LEFTHOOK_FAIL: '1',
     })
 
     expect(result.status).toBe(1)
@@ -834,7 +834,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
     expect(result.stderr).toContain('exit status 77')
     expect(result.stderr).toContain('worktree integration rollback also failed')
     expect(result.stderr).toContain('git config --worktree --unset-all core.hooksPath failed')
-    expect(result.stderr).toContain('git config --worktree --unset-all merge.dsh-translation-pairing.driver failed')
+    expect(result.stderr).toContain('git config --worktree --unset-all merge.neo-translation-pairing.driver failed')
   })
 
   it('refuses an unowned directory at the reserved worktree hook path', async () => {

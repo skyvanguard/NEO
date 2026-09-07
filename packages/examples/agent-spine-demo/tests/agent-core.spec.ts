@@ -63,10 +63,10 @@ async function composePrefix(ctx: Context, cwd: string): Promise<Message[]> {
  * bin smokes; here we assert the composition + config forwarding.
  */
 async function mount(config: agentCore.Config, withBash = false): Promise<Context> {
-  const oldDshHome = process.env.DSH_HOME
-  const oldAgentsHome = process.env.DSH_AGENTS_HOME
-  process.env.DSH_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-home-'))
-  process.env.DSH_AGENTS_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-agents-'))
+  const oldDshHome = process.env.NEO_HOME
+  const oldAgentsHome = process.env.NEO_AGENTS_HOME
+  process.env.NEO_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-home-'))
+  process.env.NEO_AGENTS_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-agents-'))
   const ctx = new Context()
   if (withBash) {
     ctx.provide('shell', {
@@ -84,35 +84,35 @@ async function mount(config: agentCore.Config, withBash = false): Promise<Contex
     return ctx
   } finally {
     if (oldDshHome === undefined) {
-      delete process.env.DSH_HOME
+      delete process.env.NEO_HOME
     } else {
-      process.env.DSH_HOME = oldDshHome
+      process.env.NEO_HOME = oldDshHome
     }
     if (oldAgentsHome === undefined) {
-      delete process.env.DSH_AGENTS_HOME
+      delete process.env.NEO_AGENTS_HOME
     } else {
-      process.env.DSH_AGENTS_HOME = oldAgentsHome
+      process.env.NEO_AGENTS_HOME = oldAgentsHome
     }
   }
 }
 
 async function withIsolatedSkillHomes<T>(run: () => Promise<T>): Promise<T> {
-  const oldDshHome = process.env.DSH_HOME
-  const oldAgentsHome = process.env.DSH_AGENTS_HOME
-  process.env.DSH_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-home-'))
-  process.env.DSH_AGENTS_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-agents-'))
+  const oldDshHome = process.env.NEO_HOME
+  const oldAgentsHome = process.env.NEO_AGENTS_HOME
+  process.env.NEO_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-home-'))
+  process.env.NEO_AGENTS_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-agents-'))
   try {
     return await run()
   } finally {
     if (oldDshHome === undefined) {
-      delete process.env.DSH_HOME
+      delete process.env.NEO_HOME
     } else {
-      process.env.DSH_HOME = oldDshHome
+      process.env.NEO_HOME = oldDshHome
     }
     if (oldAgentsHome === undefined) {
-      delete process.env.DSH_AGENTS_HOME
+      delete process.env.NEO_AGENTS_HOME
     } else {
-      process.env.DSH_AGENTS_HOME = oldAgentsHome
+      process.env.NEO_AGENTS_HOME = oldAgentsHome
     }
   }
 }
@@ -375,7 +375,7 @@ describe('dsh-agent-spine-demo bundle', () => {
       const firstRequestText = adapter.requests[0]?.messages.map(messageText).join('\n')
       expect(firstRequestText).toContain('hi')
       expect(firstRequestText).toContain('bundled project rule')
-      expect(adapter.requests[0]?.system).toContain('You are an AI agent powered by DeepSeek Harness.')
+      expect(adapter.requests[0]?.system).toContain('You are an AI agent powered by NEO.')
       expect(adapter.requests[0]?.system).not.toContain('bundled project rule')
       await handle.dispose()
       await ctx.fiber.dispose()
@@ -426,7 +426,7 @@ describe('dsh-agent-spine-demo bundle', () => {
       skills: {
         registry: { collectCacheMaxEntries: 4 },
         filesystem: {
-          dshHome: join(home, '.dsh'),
+          neoHome: join(home, '.neo'),
           agentsHome: join(agentsHome, '.agents'),
           customSkillDirs: [custom],
         },
@@ -461,7 +461,7 @@ describe('dsh-agent-spine-demo bundle', () => {
         workspaceContext: false,
         skills: {
           filesystem: {
-            dshHome: join(home, '.dsh'),
+            neoHome: join(home, '.neo'),
             agentsHome: join(home, '.agents'),
             watchStabilityThresholdMs: 20,
             watchPollIntervalMs: 10,
@@ -589,14 +589,14 @@ describe('dsh-agent-spine-demo bundle', () => {
     }
   })
 
-  it('shares top-level dshHome between local skills and the managed bash environment', async () => {
+  it('shares top-level neoHome between local skills and the managed bash environment', async () => {
     const home = await mkdtemp(join(tmpdir(), 'dsh-agent-core-shared-home-'))
     const agentsHome = await mkdtemp(join(tmpdir(), 'dsh-agent-core-shared-agents-'))
     await mkdir(join(home, 'skills'), { recursive: true })
     await writeFile(join(home, 'skills', 'shared-skill.md'), '---\nname: shared-skill\ndescription: Shared home skill\n---\n\nShared body.\n')
 
     const ctx = await mount({
-      dshHome: home,
+      neoHome: home,
       workspaceContext: false,
       skills: { filesystem: { agentsHome } },
     }, true)
@@ -610,18 +610,18 @@ describe('dsh-agent-spine-demo bundle', () => {
       name: 'bash',
       arguments: { command: 'true' },
     }
-    expect(ctx.shellEnv.collect(execution)).toMatchObject({ DSH_HOME: home, DSH_SHELL: '1' })
+    expect(ctx.shellEnv.collect(execution)).toMatchObject({ NEO_HOME: home, NEO_SHELL: '1' })
     await ctx.fiber.dispose()
   })
 
   it('rejects conflicting global and nested DSH home directories', () => {
     expect(() => {
       agentCore.apply(new Context(), {
-        dshHome: '/global-dsh-home',
+        neoHome: '/global-dsh-home',
         workspaceContext: false,
-        skills: { filesystem: { dshHome: '/nested-dsh-home' } },
+        skills: { filesystem: { neoHome: '/nested-dsh-home' } },
       })
-    }).toThrow('agent-spine-demo: dshHome and skills.filesystem.dshHome must resolve to the same directory')
+    }).toThrow('agent-spine-demo: neoHome and skills.filesystem.neoHome must resolve to the same directory')
   })
 
   it('delivers workspace instructions ahead of the first-step skill catalog', async () => {
@@ -738,7 +738,7 @@ describe('dsh-agent-spine-demo bundle', () => {
       persona: 'You are merged.',
       toolOrder: ['zulu'],
       tools: { mode: 'native' as const },
-      dshHome: '/tmp/dsh-home',
+      neoHome: '/tmp/dsh-home',
       sessionTitle: { fallbackMaxWords: 3, fallbackMaxBytes: 24, maxTitleBytes: 60 },
       workspaceContext: false as const,
       skills: { enabled: false },
@@ -756,7 +756,7 @@ describe('dsh-agent-spine-demo bundle', () => {
       persona: appConfig.persona,
       toolOrder: appConfig.toolOrder,
       tools: appConfig.tools,
-      dshHome: appConfig.dshHome,
+      neoHome: appConfig.neoHome,
       sessionTitle: appConfig.sessionTitle,
       workspaceContext: false,
       skills: appConfig.skills,

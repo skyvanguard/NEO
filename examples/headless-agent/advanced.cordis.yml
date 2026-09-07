@@ -24,7 +24,7 @@
         name: '@neo/session-persistence-jsonl'
         config:
           root: './.sessions'
-          compression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+          compression: !!js "process.env.NEO_SNAPSHOT === undefined ? 'zstd' : 'none'"
       - insert:
           - id: code-runtime
             name: '@neo/code-runtime-worker-thread'

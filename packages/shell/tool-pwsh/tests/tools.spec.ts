@@ -4,7 +4,7 @@
  * registry. The fake executor makes every seam outcome scriptable — output
  * text, truncation, timeout, abort, nonzero exits, background handles — so
  * these tests verify the schema, argument validation, workdir derivation,
- * managed `DSH_*` collection, abort translation, canonical result projection,
+ * managed `NEO_*` collection, abort translation, canonical result projection,
  * sandbox denial rendering with the escalation surface, rendering,
  * background job wiring, and the UI presenters. Real-pwsh behavior
  * is pinned separately in integration.spec.ts.
@@ -127,12 +127,12 @@ function killableProcess(): ShellProcess {
   return proc
 }
 
-async function setup(toolConfig: Partial<ToolPwsh.Config> = {}, dshHome?: string) {
+async function setup(toolConfig: Partial<ToolPwsh.Config> = {}, neoHome?: string) {
   const ctx = new Context()
   await ctx.plugin(SystemPrompt)
   await ctx.plugin(ToolRuntime)
   await ctx.plugin(AgentRegistry)
-  await ctx.plugin(BashEnvPlugin, dshHome === undefined ? {} : { dshHome })
+  await ctx.plugin(BashEnvPlugin, neoHome === undefined ? {} : { neoHome })
   await ctx.plugin(FakeBash)
   await ctx.plugin(ToolPwsh, toolConfig)
   const bash = ctx.shell as FakeBash
@@ -140,14 +140,14 @@ async function setup(toolConfig: Partial<ToolPwsh.Config> = {}, dshHome?: string
 }
 
 /** Full harness: the generic job runtime + its controller, then the pwsh tool. */
-async function setupWithTasks(toolConfig: Partial<ToolPwsh.Config> = {}, dshHome?: string) {
+async function setupWithTasks(toolConfig: Partial<ToolPwsh.Config> = {}, neoHome?: string) {
   const ctx = new Context()
   await ctx.plugin(SystemPrompt)
   await ctx.plugin(ToolRuntime)
   await ctx.plugin(AgentRegistry)
   await ctx.plugin(LocalJobRegistry)
   await ctx.plugin(ToolTasks)
-  await ctx.plugin(BashEnvPlugin, dshHome === undefined ? {} : { dshHome })
+  await ctx.plugin(BashEnvPlugin, neoHome === undefined ? {} : { neoHome })
   await ctx.plugin(FakeBash)
   await ctx.plugin(ToolPwsh, toolConfig)
   const bash = ctx.shell as FakeBash
@@ -350,9 +350,9 @@ describe('argument validation', () => {
 })
 
 describe('execution through the bash seam', () => {
-  it('forwards command, session cwd, timeout, and managed DSH_* environment', async () => {
-    const dshHome = mkdtempSync(join(tmpdir(), 'dsh-tool-pwsh-home-'))
-    const { ctx, bash } = await setup({}, dshHome)
+  it('forwards command, session cwd, timeout, and managed NEO_* environment', async () => {
+    const neoHome = mkdtempSync(join(tmpdir(), 'dsh-tool-pwsh-home-'))
+    const { ctx, bash } = await setup({}, neoHome)
     bash.handler = () => runResult('hi\n')
     const agent = registerFakeAgent(ctx, 'session-1')
     Object.assign(agent.session.header, { cwd: '/sessions/s1' })
@@ -367,9 +367,9 @@ describe('execution through the bash seam', () => {
     expect(request?.workdir).toBe('/sessions/s1')
     expect(request?.timeoutMs).toBe(1234)
     expect(request?.dshEnv).toEqual({
-      DSH_HOME: dshHome,
-      DSH_SHELL: '1',
-      DSH_SESSION_ID: 'session-1',
+      NEO_HOME: neoHome,
+      NEO_SHELL: '1',
+      NEO_SESSION_ID: 'session-1',
     })
     expect(bash.specs[0]?.workdir).toBe('/sessions/s1')
   })
@@ -392,9 +392,9 @@ describe('execution through the bash seam', () => {
     expect(bash.requests[0]).not.toHaveProperty('workdir')
     const dshEnv = bash.requests[0]?.dshEnv
     expect(dshEnv).toBeDefined()
-    expect(dshEnv?.['DSH_SHELL']).toBe('1')
-    expect(dshEnv?.['DSH_HOME']).toEqual(expect.any(String))
-    expect(dshEnv).not.toHaveProperty('DSH_SESSION_ID')
+    expect(dshEnv?.['NEO_SHELL']).toBe('1')
+    expect(dshEnv?.['NEO_HOME']).toEqual(expect.any(String))
+    expect(dshEnv).not.toHaveProperty('NEO_SESSION_ID')
   })
 
   it('forwards exec.signal into the resolved request', async () => {

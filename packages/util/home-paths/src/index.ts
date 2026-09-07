@@ -9,13 +9,13 @@ import { homedir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 
 /** Directory name for the default DeepSeek Harness home under the OS home. */
-export const DSH_HOME_DIR_NAME = '.dsh'
+export const NEO_HOME_DIR_NAME = '.neo'
 
 /** Stable user-facing display form for the default DeepSeek Harness home. */
-export const DEFAULT_DSH_HOME_DISPLAY = `~/${DSH_HOME_DIR_NAME}`
+export const DEFAULT_NEO_HOME_DISPLAY = `~/${NEO_HOME_DIR_NAME}`
 
 /** Environment variable that overrides the default DeepSeek Harness home. */
-export const DSH_HOME_ENV = 'DSH_HOME'
+export const NEO_HOME_ENV = 'NEO_HOME'
 
 /**
  * Give a native filesystem watcher one canonical spelling of a path, even
@@ -58,8 +58,8 @@ export async function canonicalizeWatchPath(path: string): Promise<string> {
  * Resolve the default DeepSeek Harness home using Node's platform path rules.
  * @returns the absolute default harness home path.
  */
-export function defaultDshHome(): string {
-  return join(homedir(), DSH_HOME_DIR_NAME)
+export function defaultNeoHome(): string {
+  return join(homedir(), NEO_HOME_DIR_NAME)
 }
 
 /**
@@ -76,17 +76,17 @@ export function expandHomePath(path: string): string {
 /**
  * Resolve the single-root DeepSeek Harness home.
  *
- * Precedence, highest first: an explicit configured path, `$DSH_HOME`, then
- * `~/.dsh`. The harness keeps all user data under one root. An empty or
- * whitespace-only `$DSH_HOME` is treated as unset, so a blank override never
+ * Precedence, highest first: an explicit configured path, `$NEO_HOME`, then
+ * `~/.neo`. The harness keeps all user data under one root. An empty or
+ * whitespace-only `$NEO_HOME` is treated as unset, so a blank override never
  * resolves the home to the current working directory.
  * @param configured - explicit harness-home override, which has highest precedence.
- * @param env - environment mapping used to read `DSH_HOME`.
+ * @param env - environment mapping used to read `NEO_HOME`.
  * @returns the normalized absolute harness home path.
  */
-export function resolveDshHome(configured?: string, env: Record<string, string | undefined> = process.env): string {
-  const fromEnv = env[DSH_HOME_ENV]
-  const selected = configured ?? (fromEnv !== undefined && fromEnv.trim().length > 0 ? fromEnv : defaultDshHome())
+export function resolveNeoHome(configured?: string, env: Record<string, string | undefined> = process.env): string {
+  const fromEnv = env[NEO_HOME_ENV]
+  const selected = configured ?? (fromEnv !== undefined && fromEnv.trim().length > 0 ? fromEnv : defaultNeoHome())
   return resolve(expandHomePath(selected))
 }
 
@@ -95,18 +95,18 @@ export function resolveDshHome(configured?: string, env: Record<string, string |
  * @param segments - path segments appended to the Harness home; an empty list returns the home itself.
  * @returns the normalized absolute joined path.
  */
-export function dshHomePath(...segments: string[]): string {
-  return join(resolveDshHome(), ...segments)
+export function neoHomePath(...segments: string[]): string {
+  return join(resolveNeoHome(), ...segments)
 }
 
 /**
  * Describe a resolved harness home symbolically for user-facing display.
  *
  * It never returns an absolute machine path: the default home is labelled
- * `~/.dsh`, and any configured home is labelled `$DSH_HOME`.
- * @param resolvedHome - the absolute path returned by {@link resolveDshHome}.
- * @returns `~/.dsh` for the default home, otherwise `$DSH_HOME`.
+ * `~/.neo`, and any configured home is labelled `$NEO_HOME`.
+ * @param resolvedHome - the absolute path returned by {@link resolveNeoHome}.
+ * @returns `~/.neo` for the default home, otherwise `$NEO_HOME`.
  */
-export function dshHomeDisplay(resolvedHome: string): string {
-  return resolvedHome === resolve(defaultDshHome()) ? DEFAULT_DSH_HOME_DISPLAY : `$${DSH_HOME_ENV}`
+export function neoHomeDisplay(resolvedHome: string): string {
+  return resolvedHome === resolve(defaultNeoHome()) ? DEFAULT_NEO_HOME_DISPLAY : `$${NEO_HOME_ENV}`
 }

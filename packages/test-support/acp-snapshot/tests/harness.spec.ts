@@ -104,9 +104,9 @@ describe('runScenario', () => {
       cwd: dir,
       configPath: AGENT.configPath,
       env: {
-        DSH_SNAPSHOT: 'replay',
-        DSH_SNAPSHOT_FILE: fixtureFile,
-        DSH_SNAPSHOT_SESSIONS_ROOT: sessionsRoot,
+        NEO_SNAPSHOT: 'replay',
+        NEO_SNAPSHOT_FILE: fixtureFile,
+        NEO_SNAPSHOT_SESSIONS_ROOT: sessionsRoot,
       },
     })
     await launched.client.initialize({ protocolVersion: PROTOCOL_VERSION, clientCapabilities: {} })
@@ -147,7 +147,7 @@ describe('runScenario', () => {
     const launched = launchAcpTestAgent({
       agent: AGENT,
       cwd: dir,
-      env: { DSH_SNAPSHOT_FILE: fixtureFile },
+      env: { NEO_SNAPSHOT_FILE: fixtureFile },
     })
     await launched.client.initialize({ protocolVersion: PROTOCOL_VERSION, clientCapabilities: {} })
     await launched.client.newSession({ cwd: dir, mcpServers: [] })
@@ -326,7 +326,7 @@ describe('runScenario', () => {
     const launched = launchAcpTestAgent({
       agent: AGENT,
       cwd: dir,
-      env: { DSH_SNAPSHOT_FILE: fixtureFile },
+      env: { NEO_SNAPSHOT_FILE: fixtureFile },
       async requestPermission() {
         markPermissionStarted?.()
         await permissionReleased
@@ -361,7 +361,7 @@ describe('runScenario', () => {
 
   it('preserves launch-resolution errors when no child process exists', async () => {
     const { dir, fixtureFile } = await scenario({})
-    vi.stubEnv('DSH_EXAMPLE_MODE', 'lib')
+    vi.stubEnv('NEO_EXAMPLE_MODE', 'lib')
     try {
       await expect(runScenario(
         { steps: [] },

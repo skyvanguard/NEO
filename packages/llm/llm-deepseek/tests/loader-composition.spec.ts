@@ -48,7 +48,7 @@ async function loadComposition(
   // exactly as the previous process left them.
   const fresh = options.reuseRoot === undefined
   root = options.reuseRoot ?? await mkdtemp(join(tmpdir(), 'dsh-llm-composition-'))
-  vi.stubEnv('DSH_HOME', root)
+  vi.stubEnv('NEO_HOME', root)
   const settingsPath = join(root, 'settings.yaml')
   const credentialsPath = join(root, '.credentials.yaml')
   if (options.withDynamic && fresh) {
@@ -117,7 +117,7 @@ describe('llm-deepseek real dynamic composition', () => {
     expect(ctx.get('settings')!.describe().map(entry => entry.ns)).toEqual([NS])
     await assemble(ctx, { model: 'deepseek-v4-flash', messages: [] })
     expect(serverA.headers[0]?.authorization).toBe('Bearer boot-key')
-    expect(serverA.headers[0]?.['x-deepseek-harness-user-id']).toBe(getOrCreateAnonymousUserId())
+    expect(serverA.headers[0]?.['x-neo-user-id']).toBe(getOrCreateAnonymousUserId())
 
     // External edits, exactly as a user or the web UI would leave them on disk.
     await writeFile(settingsPath, `llm-deepseek:\n  baseURL: ${serverB.url}\n`)

@@ -23,7 +23,7 @@ import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent
  * (tool/call + tool/result session events, the generic `ctx.jobs` runtime,
  * agent.inject completion notices).
  */
-async function harness(adapter: MockAdapter, sessionRoot?: string, dshHome?: string) {
+async function harness(adapter: MockAdapter, sessionRoot?: string, neoHome?: string) {
   const ctx = new Context()
   await mountAgentLoopTestDependencies(ctx)
   if (sessionRoot !== undefined) {
@@ -33,7 +33,7 @@ async function harness(adapter: MockAdapter, sessionRoot?: string, dshHome?: str
   await ctx.plugin(LocalJobRegistry)
   await ctx.plugin(ToolTasks)
   await ctx.plugin(LocalSubprocessRuntime)
-  await ctx.plugin(BashEnvPlugin, dshHome === undefined ? {} : { dshHome })
+  await ctx.plugin(BashEnvPlugin, neoHome === undefined ? {} : { neoHome })
   await ctx.plugin(LocalBashExecutor, { timeoutMs: 10_000 })
   await ctx.plugin(ToolBash)
   ctx.llm.registerAdapter(['mock'], adapter)
@@ -96,16 +96,16 @@ describe('bash tool through the agent loop', () => {
   it('first-turn bash receives session identity before the lazy JSONL file materializes', async () => {
     const root = mkdtempSync(join(tmpdir(), 'dsh-bash-session-env-'))
     dirs.push(root)
-    const dshHome = join(root, 'dsh-home')
-    vi.stubEnv('DSH_STALE_PARENT', 'stale')
+    const neoHome = join(root, 'dsh-home')
+    vi.stubEnv('NEO_STALE_PARENT', 'stale')
     const adapter = new MockAdapter([
       toolCallResponse('call-1', 'bash', {
-        command: 'printf \'%s\\n%s\\n%s\\n%s\\n%s\\n\' "$DSH_HOME" "$DSH_SHELL" "$DSH_SESSION_ID" "$DSH_SESSION_JSONL" "${DSH_STALE_PARENT-unset}"; if [ -e "$DSH_SESSION_JSONL" ]; then printf \'present\\n\'; else printf \'absent\\n\'; fi',
+        command: 'printf \'%s\\n%s\\n%s\\n%s\\n%s\\n\' "$NEO_HOME" "$NEO_SHELL" "$NEO_SESSION_ID" "$NEO_SESSION_JSONL" "${NEO_STALE_PARENT-unset}"; if [ -e "$NEO_SESSION_JSONL" ]; then printf \'present\\n\'; else printf \'absent\\n\'; fi',
         description: 'inspect session environment',
       }),
       textResponse('Session environment inspected.'),
     ])
-    const ctx = await harness(adapter, root, dshHome)
+    const ctx = await harness(adapter, root, neoHome)
     const handle = await ctx.agents.create({
       sessionId: SessionId('session-env-id'),
       agentOptions: { provider: 'mock', model: 'mock' },
@@ -118,7 +118,7 @@ describe('bash tool through the agent loop', () => {
     await waitForIdle(ctx, agent)
 
     const result = findEvent(events(agent), 'tool/result')
-    expect(resultText(result)).toBe(`${dshHome}\n1\nsession-env-id\n${location?.path}\nunset\nabsent\n`)
+    expect(resultText(result)).toBe(`${neoHome}\n1\nsession-env-id\n${location?.path}\nunset\nabsent\n`)
     await ctx.sessions.flush(agent.session)
     expect(existsSync(location!.path)).toBe(true)
     const header = JSON.parse(readFileSync(location!.path, 'utf8').split('\n')[0]!) as { type: string; id: string }

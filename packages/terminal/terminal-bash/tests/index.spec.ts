@@ -208,7 +208,7 @@ describe('BashTerminalBackend startup rollback', () => {
       graceMs: 10,
       env: {
         TERM: 'dumb', PAGER: 'cat', GIT_PAGER: 'cat', PS1: 'dsh> ', BASH_SILENCE_DEPRECATION_WARNING: '1',
-        DSH_SHELL: '1', DSH_SESSION_ID: 'agent', DSH_PTY_SESSION_ID: 'pty-1',
+        NEO_SHELL: '1', NEO_SESSION_ID: 'agent', NEO_PTY_SESSION_ID: 'pty-1',
       },
     })
     expect(spawned?.env?.PTY_TEST_SECRET).toBeUndefined()

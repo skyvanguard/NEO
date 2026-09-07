@@ -15,7 +15,7 @@ import ts from 'typescript'
 const SLOTS_MODULE = '@neo/client-ui-slots'
 
 /** Cheap textual prefilter for a slot-contract merge, quote-style agnostic. */
-const MERGE_HEAD = /declare module ['"]@neo\/dsh-client-ui-slots['"]/
+const MERGE_HEAD = /declare module ['"]@neo\/client-ui-slots['"]/
 
 /** Cheap textual prefilter for a registration call site. */
 const REGISTER_HEAD = /\.register\(/

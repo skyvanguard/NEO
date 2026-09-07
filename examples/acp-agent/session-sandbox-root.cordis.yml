@@ -10,5 +10,5 @@
       - id: sandbox-policy
         name: '@neo/sandbox-policy'
         config:
-          mode: !!js "process.env.DSH_PERMISSION_MODE ?? (process.env.DSH_SNAPSHOT === undefined ? 'workspace-write' : 'danger-full-access')"
+          mode: !!js "process.env.NEO_PERMISSION_MODE ?? (process.env.NEO_SNAPSHOT === undefined ? 'workspace-write' : 'danger-full-access')"
           workspaceRoot: /tmp

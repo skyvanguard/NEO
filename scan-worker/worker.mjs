@@ -25,7 +25,7 @@ const cfg = {
   workerId: process.env.SCAN_WORKER_ID ?? "neo-kryon-1",
   // Comando para invocar el CLI de NEO. Ej.: "dsh", "pnpm dsh",
   // "node --import tsx/esm apps/cli/src/bin.ts". Se parte por espacios.
-  dshCmd: process.env.DSH_CMD ?? "dsh",
+  dshCmd: process.env.NEO_CMD ?? "dsh",
   patchFile: process.env.FREE_SCAN_PATCH ?? resolve(HERE, "free-scan.headless.patch.yml"),
   // Directorio de trabajo del agente (workspace del scan, no el checkout de NEO).
   workspace: process.env.SCAN_WORKSPACE ?? process.cwd(),

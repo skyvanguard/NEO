@@ -26,7 +26,7 @@ The app does not install commands, user interaction, session navigation, configu
 | `persona` | — | Deployment persona template for `dsh-system-prompt`. |
 | `toolOrder` | lexicographic | Explicit model-facing tool order for `dsh-system-prompt`. |
 | `tools` | `{ mode: 'native' }` | Native, Code Mode, or combined model tool transport. |
-| `dshHome` | `$DSH_HOME` or `~/.dsh` | Harness home shared by bash and local skill discovery. |
+| `neoHome` | `$NEO_HOME` or `~/.neo` | Harness home shared by bash and local skill discovery. |
 | `sessionTitle` | spine example limits | Durable fallback-title limits; titles remain off the ACP wire. |
 | `persistenceRoot` | `./.sessions` | JSONL backend root and parent directory of the derived `session-query.db` index. |
 | `packChunks` | `true` | Pack consecutive delta-chunk events in storage. |
@@ -42,7 +42,7 @@ The shipped [`examples/acp-agent/cordis.yml`](../../../examples/acp-agent/cordis
 
 ## Bin
 
-`dsh-acp-demo [--config path-to-cordis.yml]` (short form `-c`; default `./cordis.yml`) loads the gitignored `.env`, except in replay mode; `DSH_SNAPSHOT=replay` selects the sibling `cordis.snapshot.yml`; stdin EOF disposes the context and flushes sessions before exit. Loader's installed optional `node-addon-require-builtin` peer resolves bare plugin specifiers for the built bin under plain Node. Diagnostics use stderr because stdout is the ACP wire.
+`dsh-acp-demo [--config path-to-cordis.yml]` (short form `-c`; default `./cordis.yml`) loads the gitignored `.env`, except in replay mode; `NEO_SNAPSHOT=replay` selects the sibling `cordis.snapshot.yml`; stdin EOF disposes the context and flushes sessions before exit. Loader's installed optional `node-addon-require-builtin` peer resolves bare plugin specifiers for the built bin under plain Node. Diagnostics use stderr because stdout is the ACP wire.
 
 ## Model Experience
 

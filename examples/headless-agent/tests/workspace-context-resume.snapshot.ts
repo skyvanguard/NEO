@@ -31,7 +31,7 @@ const configPath = fileURLToPath(new URL('../workspace-context-resume.cordis.sna
 const binScript = fileURLToPath(new URL('./fixtures/headless-driver.ts', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../tsconfig.json', import.meta.url))
 const sessionId = SessionId('workspace-context-resume')
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.NEO_SNAPSHOT === 'refresh'
 const oldInstruction = 'Old workspace instruction.'
 const newInstruction = 'New workspace instruction after offline edit.'
 
@@ -62,7 +62,7 @@ async function seedVisibleBaseline(
     content: file.content,
   })), { maxBytes: 65536 })
   const config = resolveConfig({
-    dshHome: join(cwd, '.dsh'),
+    neoHome: join(cwd, '.neo'),
     maxBytes: 65536,
     ...options.instructionFileCandidates === undefined
       ? {}
@@ -124,8 +124,8 @@ describe('agent-instructions resume snapshot', () => {
       binArgs: [configPath, 'Acknowledge the current workspace instruction.'],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT_FILE: replayFixture,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
+        NEO_SNAPSHOT_FILE: replayFixture,
+        NEO_SNAPSHOT_OVERRIDE: replayOverride,
       },
       prepare: async (runCwd) => {
         cwd = runCwd
@@ -181,8 +181,8 @@ describe('agent-instructions resume snapshot', () => {
       binArgs: [configPath, 'Acknowledge the current workspace instruction.'],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT_FILE: replayFixture,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
+        NEO_SNAPSHOT_FILE: replayFixture,
+        NEO_SNAPSHOT_OVERRIDE: replayOverride,
       },
       prepare: async (runCwd) => {
         cwd = runCwd
