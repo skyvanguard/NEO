@@ -750,12 +750,15 @@ describe('pressure measurement and retention', () => {
     expect(regionTokens(capped!.end)).toBeLessThanOrEqual(ceiling)
   })
 
-  it('declines a region ceiling no single node can satisfy', () => {
+  it('stands the ceiling down rather than vetoing compaction it cannot satisfy', () => {
     const ctx = createContext()
     const session = conversation(3)
     const priced = ctx.tokenMeter.measure(session)
 
-    expect(selectCompactableRange(session, priced, 0, 1)).toBeNull()
+    // A window too small for even one node must still compact: an oversized
+    // replay may be accepted, while declining guarantees the session grows.
+    expect(selectCompactableRange(session, priced, 0, 1))
+      .toEqual(selectCompactableRange(session, priced, 0))
   })
 
   it('declines when rounding a cut would consume the only tool pair', () => {

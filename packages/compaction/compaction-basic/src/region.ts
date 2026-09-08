@@ -134,12 +134,18 @@ export function selectCompactableRange(
       // oxlint-disable-next-line typescript/no-non-null-assertion
       regionTokens += pricedNodes[index]!.tokens
     }
-    while (keepFromIdx > 0 && regionTokens > maxRegionTokens) {
-      keepFromIdx -= 1
+    let cappedIdx = keepFromIdx
+    while (cappedIdx > 0 && regionTokens > maxRegionTokens) {
+      cappedIdx -= 1
       // oxlint-disable-next-line typescript/no-non-null-assertion
-      regionTokens -= pricedNodes[keepFromIdx]!.tokens
+      regionTokens -= pricedNodes[cappedIdx]!.tokens
     }
-    if (keepFromIdx === 0) return null
+    // A ceiling no region can satisfy must not veto compaction outright: on a
+    // model whose window is small next to the output budget, an oversized
+    // replay that the provider may still accept beats leaving the session to
+    // grow until it certainly refuses. The ceiling shrinks the region when it
+    // can, and stands down when it cannot.
+    if (cappedIdx > 0) keepFromIdx = cappedIdx
   }
 
   while (keepFromIdx > 0) {

@@ -528,7 +528,17 @@ export class BasicCompactionEngine extends CompactionEngine {
   private regionBudget(agent: Agent, outputTokens: number): number | undefined {
     const target = conversationTarget(agent)
     if (target === undefined) return undefined
-    const contextWindow = this.resolvedContextWindows.get(`${target.provider}/${target.model}`)
+    // The session's own durable route metadata comes first: it survives a
+    // restart, so the very first manual compaction of a resumed session is
+    // bounded too — exactly when a session sitting at the ceiling asks to be
+    // compacted by hand, and the pressure path has not run to fill the cache.
+    const logged = agent.session.requestContext()
+    const contextWindow = logged !== undefined
+      && logged.provider === target.provider
+      && logged.model === target.model
+      && logged.contextWindow !== undefined
+      ? logged.contextWindow
+      : this.resolvedContextWindows.get(`${target.provider}/${target.model}`)
     return contextWindow === undefined
       ? undefined
       : summarizationRegionBudget(contextWindow, outputTokens)
