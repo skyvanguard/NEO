@@ -4,6 +4,7 @@ import { AttachmentId } from '@neo/attachment'
 import BasicCompactionEngine from '@neo/compaction-basic'
 import type { BasicCompactionConfig } from '@neo/compaction-basic'
 import { selectCompactableRange } from '@neo/compaction-basic/src/region.ts'
+import { frameSummary } from '@neo/compaction-basic/src/summarizer.ts'
 import type { SummarizationInput, SummaryResult } from '@neo/compaction-basic/src/summarizer.ts'
 import { CompactionId, toolPairingBalancedAfter, toolPairingBalancedBefore } from '@neo/compaction'
 import {
@@ -293,7 +294,7 @@ describe('compact configuration and defaults', () => {
       retainRatio: 0.16,
       summarizationProvider: '',
       summarizationModel: '',
-      maxTokens: 8192,
+      maxTokens: 32_768,
       compactionRetries: 1,
       maxOverflowRetries: 1,
       modelPolicies: [],
@@ -729,6 +730,32 @@ describe('pressure measurement and retention', () => {
       ...priced,
       nodes: priced.nodes.slice(1),
     }, 1)).toThrow(/does not match/)
+  })
+
+  it('caps the replayed region so the summarization request itself can fit', () => {
+    const ctx = createContext()
+    const session = conversation(6)
+    const priced = ctx.tokenMeter.measure(session)
+    const unbounded = selectCompactableRange(session, priced, 0)
+    expect(unbounded).not.toBeNull()
+
+    const regionTokens = (end: number): number => priced.nodes
+      .filter(node => node.seq <= end)
+      .reduce((sum, node) => sum + node.tokens, 0)
+    const ceiling = Math.floor(regionTokens(unbounded!.end) / 2)
+    const capped = selectCompactableRange(session, priced, 0, ceiling)
+
+    expect(capped).not.toBeNull()
+    expect(capped!.end).toBeLessThan(unbounded!.end)
+    expect(regionTokens(capped!.end)).toBeLessThanOrEqual(ceiling)
+  })
+
+  it('declines a region ceiling no single node can satisfy', () => {
+    const ctx = createContext()
+    const session = conversation(3)
+    const priced = ctx.tokenMeter.measure(session)
+
+    expect(selectCompactableRange(session, priced, 0, 1)).toBeNull()
   })
 
   it('declines when rounding a cut would consume the only tool pair', () => {
@@ -1168,6 +1195,7 @@ class ExposedCompactionEngine extends BasicCompactionEngine {
     provider: string
     model: string
     maxTokens?: number
+    truncated?: boolean
     usage?: TokenUsage
   }> {
     return this.summarize(input, owner, signal)
@@ -1393,7 +1421,8 @@ describe('default one-shot summarizer', () => {
     [{ kind: 'error', failure: { message: 'provider failed', code: 'PROVIDER' } }, 'PROVIDER', /provider failed/],
     [{ kind: 'error', failure: { message: 'opaque', code: 'UNKNOWN' } }, 'UNKNOWN', /opaque/],
     [{ kind: 'aborted', failure: { message: 'summarization aborted', code: 'ABORTED' } }, 'ABORTED', /aborted/],
-    [{ kind: 'max-tokens' }, 'MAX_TOKENS', /token cap/],
+    // The cap is only terminal when it left no summary text at all.
+    [{ kind: 'max-tokens' }, 'MAX_TOKENS', /token cap before emitting any summary text/],
   ] as Array<[(StreamChunk & { type: 'finish' })['reason'], string | undefined, RegExp]>) (
     'rejects terminal finish %#',
     async (finish, code, pattern) => {
@@ -1409,6 +1438,26 @@ describe('default one-shot summarizer', () => {
       expect((thrown as Error & { code?: string }).code).toBe(code)
     },
   )
+
+  it('keeps a cap-truncated summary that still carries text, and marks it', async () => {
+    const { compact } = await summarizerHarness(
+      [{ type: 'reasoning', text: 'long private thinking' }, { type: 'text', text: '## Primary Request' }],
+      { kind: 'max-tokens' },
+    )
+    const output = await compact.runSummarize(promptInput('history'), agent(conversation(1), MODEL))
+
+    expect(output.truncated).toBe(true)
+    expect(output.summary).toEqual([{ type: 'text', text: '## Primary Request' }])
+  })
+
+  it('frames a truncated checkpoint with its partial-record notice', () => {
+    const framed = frameSummary([{ type: 'text', text: '## Primary Request' }], true)
+    const complete = frameSummary([{ type: 'text', text: '## Primary Request' }])
+
+    const notice = framed.at(-2)
+    expect(notice?.type === 'text' && notice.text).toMatch(/cut short/)
+    expect(complete).toHaveLength(3)
+  })
 
   it('rejects empty or reasoning-only successful output', async () => {
     const { compact } = await summarizerHarness([{ type: 'reasoning', text: 'private' }])

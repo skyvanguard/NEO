@@ -50,6 +50,31 @@ export type {
 /** The region transaction's view of this service's dynamically dispatched summarizer. */
 type RegionSummarize = (input: SummarizationInput, agent: Agent, signal?: AbortSignal) => Promise<SummaryResult>
 
+/**
+ * Share of the context window held back from the replayed region for the parts
+ * of the summarization request that are not the region itself: the
+ * conversation's own system prompt, its tool schemas, and the compaction
+ * instruction appended after it.
+ */
+const SUMMARIZATION_OVERHEAD_RATIO = 0.1
+
+/**
+ * Ceiling on the replayed region so the summarization call fits the model
+ * context alongside its own output budget and request overhead.
+ * @param contextWindow - the routed model's combined request/response capacity.
+ * @param outputTokens - the output cap reserved for the checkpoint.
+ * @returns the region ceiling, or `undefined` when the two reservations leave nothing to bound.
+ */
+function summarizationRegionBudget(
+  contextWindow: number,
+  outputTokens: number,
+): number | undefined {
+  const budget = contextWindow
+    - outputTokens
+    - Math.ceil(contextWindow * SUMMARIZATION_OVERHEAD_RATIO)
+  return budget > 0 ? budget : undefined
+}
+
 /** Resolve the exact provider/model durably routed for the latest request. */
 function routedTarget(
   session: Session,
@@ -120,6 +145,15 @@ export class BasicCompactionEngine extends CompactionEngine {
 
   /** Resolved and validated compaction configuration. */
   readonly config: ResolvedConfig
+
+  /**
+   * Context capacity last resolved for a session's routed model, keyed by the
+   * target it was resolved for. Overflow recovery and manual compaction read
+   * it synchronously: awaiting model resolution inside the request-error
+   * handler perturbs the loop's retry sequencing, and capacity for the routed
+   * model is already known from the step-pressure path that runs every step.
+   */
+  private readonly resolvedContextWindows = new Map<string, number>()
 
   private readonly warnedPressureConfigTargets = new Set<string>()
   private readonly recordedSilentFailures = new WeakMap<Session, Set<string>>()
@@ -328,7 +362,14 @@ export class BasicCompactionEngine extends CompactionEngine {
         prune.pruneSession(agent.session)
         measurement = meter.measure(agent.session)
       }
-      const range = selectCompactableRange(agent.session, measurement, 0)
+      // The provider just refused this surface outright, so the replay must be
+      // bounded or the recovery call is rejected the same way.
+      const range = selectCompactableRange(
+        agent.session,
+        measurement,
+        0,
+        this.regionBudget(agent, policy.maxTokens),
+      )
       if (range === null) return null
       return this.compactRegion(range.start, range.end, agent, signal)
     }
@@ -343,6 +384,7 @@ export class BasicCompactionEngine extends CompactionEngine {
         + 'configure contextWindow on that adapter model',
       )
     }
+    this.resolvedContextWindows.set(targetKey, context.contextWindow)
     const spec = resolveCompactSpec(policy, context.contextWindow)
     if (measurement.totalTokens < spec.thresholdTokens) return null
 
@@ -359,9 +401,15 @@ export class BasicCompactionEngine extends CompactionEngine {
     }
     if (measurement.totalTokens < spec.thresholdTokens) return null
 
+    const regionCeiling = summarizationRegionBudget(spec.contextWindow, spec.maxTokens)
     let result: CompactionResult | null = null
     for (let attempt = 0; attempt <= spec.compactionRetries; attempt += 1) {
-      const range = selectCompactableRange(agent.session, measurement, spec.retainTokens)
+      const range = selectCompactableRange(
+        agent.session,
+        measurement,
+        spec.retainTokens,
+        regionCeiling,
+      )
       if (range === null) {
         /* v8 ignore else -- concrete replacement preserves a compactable checkpoint; subclass hooks cannot mutate it. */
         if (result === null) return null
@@ -428,6 +476,7 @@ export class BasicCompactionEngine extends CompactionEngine {
             agent.session,
             this.ctx.tokenMeter.measure(agent.session),
             0,
+            this.regionBudget(agent, this.config.maxTokens),
           )
           if (range === null) return null
           return await compactSurfaceRegion(
@@ -465,6 +514,24 @@ export class BasicCompactionEngine extends CompactionEngine {
         { cause: error },
       )
     }
+  }
+
+  /**
+   * Resolve the replay ceiling for a trigger that has no spec of its own,
+   * without awaiting: capacity comes from what the step-pressure path already
+   * resolved for this target. An unresolved target leaves the region
+   * unbounded — the long-standing behaviour — rather than blocking compaction.
+   * @param agent - agent whose routed (else configured) model supplies capacity.
+   * @param outputTokens - the output cap reserved for the checkpoint.
+   * @returns the region ceiling, or `undefined` when capacity is unknown.
+   */
+  private regionBudget(agent: Agent, outputTokens: number): number | undefined {
+    const target = conversationTarget(agent)
+    if (target === undefined) return undefined
+    const contextWindow = this.resolvedContextWindows.get(`${target.provider}/${target.model}`)
+    return contextWindow === undefined
+      ? undefined
+      : summarizationRegionBudget(contextWindow, outputTokens)
   }
 
   /** Bind the effective token meter and dynamically dispatched summarizer hook. */

@@ -65,6 +65,10 @@ const COMPACTION_INSTRUCTION = [
   `- If the conversation already contains a ${SUMMARY_OPEN_TAG} block, it is a PRIOR checkpoint. Do not copy it forward verbatim: preserve still-true facts, drop stale ones, and merge newer information into a single consolidated summary under the same structure.`,
 ].join('\n')
 
+/** Appended inside the checkpoint when the token cap ended the summary early. */
+const TRUNCATION_NOTICE =
+  '[This checkpoint was cut short at the summarization token cap: the sections above may be incomplete and later ones are missing entirely. Treat it as a partial record and rely on the messages that follow for anything it does not cover.]'
+
 /** Framing that makes the replacement user message established context. */
 const CHECKPOINT_PREAMBLE =
   'This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.'
@@ -90,6 +94,13 @@ export type SummaryResult = {
   provider: string
   model: string
   maxTokens?: number
+  /**
+   * The token cap ended generation before the model closed the checkpoint, so
+   * the captured sections stop mid-structure. The summary is kept anyway —
+   * a partial checkpoint still relieves pressure, while discarding it leaves
+   * the session growing until the provider rejects it outright.
+   */
+  truncated?: boolean
   /** Provider-reported usage for this summarization request. */
   usage?: TokenUsage
 } & (
@@ -165,10 +176,15 @@ export async function summarizeWithLlm(
   const error = finishError(assembler.finish)
   if (error !== undefined) throw error
 
+  // A cap-truncated checkpoint is incomplete, never worthless: it still
+  // condenses the head of the region, and it is the only thing standing
+  // between a pressured session and a provider rejection. Keep whatever text
+  // landed and mark it; only a run that produced no text at all is a failure.
+  const truncated = assembler.finish.kind === 'max-tokens'
   const rawOutput = assembler.blocks()
   const summary = summaryText(rawOutput)
   if (!summary.some(block => block.text.trim().length > 0)) {
-    throw new Error('summarization produced no text summary content')
+    throw truncated ? capExhaustedError() : new Error('summarization produced no text summary content')
   }
   return {
     summary,
@@ -177,19 +193,36 @@ export async function summarizeWithLlm(
     provider: options.provider,
     model: options.model,
     maxTokens: config.maxTokens,
+    ...(truncated ? { truncated } : {}),
     ...(assembler.usage === undefined ? {} : { usage: assembler.usage }),
   }
 }
 
 /**
+ * The cap ran out before a single summary character was emitted — the failure
+ * mode of a reasoning model whose private thinking consumes the whole budget.
+ * @returns the fail-closed error, carrying the actionable remedy.
+ */
+function capExhaustedError(): Error & { code?: string } {
+  const error = new Error(
+    'summarization hit the token cap before emitting any summary text '
+    + '(a reasoning model can spend the whole budget thinking): raise the compaction maxTokens',
+  ) as Error & { code?: string }
+  error.code = 'MAX_TOKENS'
+  return error
+}
+
+/**
  * Wrap raw summary blocks in the durable checkpoint framing.
  * @param summary - safe text-only model output.
+ * @param truncated - the cap cut generation short, so the structure ends early.
  * @returns content for the synthesized replacement user message.
  */
-export function frameSummary(summary: readonly ContentBlock[]): ContentBlock[] {
+export function frameSummary(summary: readonly ContentBlock[], truncated = false): ContentBlock[] {
   return [
     { type: 'text', text: `${CHECKPOINT_PREAMBLE}\n\n${SUMMARY_OPEN_TAG}` },
     ...summary,
+    ...truncated ? [{ type: 'text' as const, text: TRUNCATION_NOTICE }] : [],
     { type: 'text', text: SUMMARY_CLOSE_TAG },
   ]
 }
@@ -203,11 +236,9 @@ function finishError(finish: FinishReason): Error | undefined {
       error.code = finish.failure.code
       return error
     }
-    case 'max-tokens': {
-      const error = new Error('summarization truncated at the token cap (incomplete checkpoint)') as Error & { code?: string }
-      error.code = 'MAX_TOKENS'
-      return error
-    }
+    // 'max-tokens' is deliberately absent: truncation is handled at the call
+    // site, which keeps the partial checkpoint when it carries text and only
+    // fails when the cap left nothing usable behind.
     default:
       return undefined
   }

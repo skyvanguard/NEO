@@ -93,12 +93,15 @@ interface TransactionFailure {
  * @param session - session supplying authoritative current surface positions.
  * @param measurement - unified pressure and surface measurement from the conversation meter.
  * @param retainTokens - minimum recent tail budget retained verbatim.
+ * @param maxRegionTokens - ceiling on the replayed region so the summarization
+ *   request itself fits the model context; unbounded when absent.
  * @returns the inclusive positional seq range to compact, or `null`.
  */
 export function selectCompactableRange(
   session: Session,
   measurement: TokenMeasurement,
   retainTokens: number,
+  maxRegionTokens?: number,
 ): { start: number; end: number } | null {
   const pricedNodes = measurement.nodes
   if (pricedNodes.length === 0) return null
@@ -118,6 +121,26 @@ export function selectCompactableRange(
     if (accumulated >= retainTokens) break
   }
   if (keepFromIdx === 0) return null
+
+  // The summarizer replays the whole region back to the model, so a region
+  // sized only by the retained tail produces a request as large as the one
+  // already under pressure — at the ceiling it is rejected outright, which is
+  // exactly when compaction is most needed. Shrink the head span until the
+  // replay fits; the untouched remainder stays verbatim and the checkpoint
+  // still collapses everything before it.
+  if (maxRegionTokens !== undefined) {
+    let regionTokens = 0
+    for (let index = 0; index < keepFromIdx; index += 1) {
+      // oxlint-disable-next-line typescript/no-non-null-assertion
+      regionTokens += pricedNodes[index]!.tokens
+    }
+    while (keepFromIdx > 0 && regionTokens > maxRegionTokens) {
+      keepFromIdx -= 1
+      // oxlint-disable-next-line typescript/no-non-null-assertion
+      regionTokens -= pricedNodes[keepFromIdx]!.tokens
+    }
+    if (keepFromIdx === 0) return null
+  }
 
   while (keepFromIdx > 0) {
     // oxlint-disable-next-line typescript/no-non-null-assertion
@@ -367,7 +390,7 @@ async function summarizeCompaction(
 ): Promise<SummarizedCompaction> {
   const summaryResult = await dependencies.summarize(prepared.input, agent, signal)
   const checkpointMessage = createUserMessage({
-    content: frameSummary(summaryResult.summary),
+    content: frameSummary(summaryResult.summary, summaryResult.truncated),
     source: compactCheckpointSource(compactionId, sourceCommandId),
   })
   const framedSummaryTokenCount = dependencies.meter.estimateMessage(checkpointMessage)
