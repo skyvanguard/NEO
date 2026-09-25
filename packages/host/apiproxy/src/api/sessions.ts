@@ -5,7 +5,7 @@
  */
 
 import type { MessageId } from '@neo/llm/brand'
-import type { AttachmentIdType, ImageAttachmentLimits, ImageAttachmentRef, ImageMediaType } from '@neo/attachment'
+import type { AttachmentIdType, FileAttachmentRef, ImageAttachmentLimits, ImageAttachmentRef, ImageMediaType } from '@neo/attachment'
 import type { ContentBlock } from '@neo/llm/types'
 import type { SessionEvent, SessionId } from '@neo/session/types'
 // The pure-type outlet: api/ is browser-importable, and the package root's
@@ -355,6 +355,10 @@ export interface SessionsApi {
   /** Reads one durable image after proving that this session's log references its id. */
   attachment(request: RpcRequest<{ sessionId: SessionId; attachmentId: AttachmentIdType }>):
   Promise<RpcResponse<{ attachment: ImageAttachmentRef; data: string }>>
+
+  /** Reads one durable downloadable file after proving that this session's log references its id. */
+  readFileAttachment(request: RpcRequest<{ sessionId: SessionId; attachmentId: AttachmentIdType }>):
+  Promise<RpcResponse<{ attachment: FileAttachmentRef; data: string }>>
 
   /**
    * Edits, removes, or strictly steers one pending queued occurrence on an ordinary session.

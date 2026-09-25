@@ -14,9 +14,9 @@ import type { ReactNode } from 'react'
 import type { AssistantBlock } from '@neo/client-runtime/client'
 import { JsonBlock, MarkdownText } from '@neo/client-ui-primitives'
 import type { MarkdownFileMentions } from '@neo/client-ui-primitives'
-import { ImageGallery, type ImageLoader } from '@neo/client-ui-attachment'
+import { FileCard, ImageGallery, type FileLoader, type ImageLoader } from '@neo/client-ui-attachment'
 import type { ChatViewSlotProps } from '../contract/slots.ts'
-import { messageImageLabels } from '../image-labels.ts'
+import { fileCardLabels, fileSizeText, messageImageLabels } from '../image-labels.ts'
 import { ReasoningRow } from './ReasoningRow.tsx'
 import css from './AssistantMarkdown.module.css'
 
@@ -27,6 +27,8 @@ export interface AssistantMarkdownProps {
   interrupted?: boolean | undefined
   /** Session-authorized durable image loader. */
   loadImage?: ImageLoader
+  /** Session-authorized downloadable file loader. */
+  loadFile?: FileLoader
   /** Resolved prose file mentions for this Assistant's closing turn. */
   mentions?: MarkdownFileMentions | undefined
   /** The owning view's locale seat, passed down as a plain prop. */
@@ -35,9 +37,10 @@ export interface AssistantMarkdownProps {
 
 /** Reasoning block as the Think variant summary row (figma 39:28304). */
 export const AssistantMarkdown = memo(function AssistantMarkdown({
-  blocks, streaming, interrupted, loadImage, mentions, t,
+  blocks, streaming, interrupted, loadImage, loadFile, mentions, t,
 }: AssistantMarkdownProps) {
   const imageLoader = loadImage ?? (() => Promise.reject(new Error(t('image.serviceUnavailable'))))
+  const fileLoader = loadFile ?? (() => Promise.reject(new Error(t('file.serviceUnavailable'))))
   // Stable per locale revision (t identity changes on switch): a fresh object
   // per render would rebuild MarkdownText's component table every chunk.
   const codeLabels = useMemo(() => ({ copyLabel: t('copy'), copiedLabel: t('copied') }), [t])
@@ -85,6 +88,18 @@ export const AssistantMarkdown = memo(function AssistantMarkdown({
         rendered.push(<ImageGallery key={start} images={group} load={imageLoader} align="start" labels={messageImageLabels(t)} />)
         break
       }
+      case 'file':
+        rendered.push(
+          <FileCard
+            key={i}
+            attachment={block.attachment}
+            load={fileLoader}
+            sizeText={fileSizeText}
+            labels={fileCardLabels(t)}
+            align="start"
+          />,
+        )
+        break
       // Grouped into tool rows by ChatView; hasVisible above skips an empty shell.
       case 'tool-call':
         break

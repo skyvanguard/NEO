@@ -13,7 +13,7 @@ import type { Context } from '@neo/cordis'
 // error, so scope resolution goes through the sessions service (scopeOf
 // method) instead of the standalone helper.
 import type { ISessions, SessionFace, SessionId } from '@neo/client-runtime/client'
-import type { ImageAttachmentRef, ImageMediaType } from '@neo/attachment'
+import type { FileAttachmentRef, ImageAttachmentRef, ImageMediaType } from '@neo/attachment'
 import type { ComposerAttachment } from './contract/slots.ts'
 import type { QueueAction, QueueItemId } from './contract/queue.ts'
 import type { ComposerBlocks } from './input/blocks.ts'
@@ -291,6 +291,47 @@ export class ConversationController extends Service implements IConversation {
         if (this.disposed) throw new Error('conversation.resolveImage: service was disposed before loading completed')
         if ((this.imageGenerations.get(sessionId) ?? 0) !== generation) {
           throw new Error('historical image scope was released before loading completed')
+        }
+        if (typeof URL.createObjectURL !== 'function') {
+          return `data:${result.value.attachment.mediaType};base64,${bytesToBase64(result.value.data)}`
+        }
+        const bytes = Uint8Array.from(result.value.data)
+        const url = URL.createObjectURL(new Blob([bytes.buffer], { type: result.value.attachment.mediaType }))
+        this.createdImageUrls.add(url)
+        return url
+      })
+      .catch((error: unknown) => {
+        if (this.imageUrls.get(key)?.generation === generation) this.imageUrls.delete(key)
+        throw error
+      })
+    this.imageUrls.set(key, { sessionId, generation, pending })
+    return pending
+  }
+
+  /**
+   * Resolve and cache one session-authorized downloadable file into a blob URL.
+   * Shares the historical-blob cache and release lifecycle with images (the key
+   * is namespaced so a file and an image with identical bytes never collide).
+   * @param sessionId - owning session authorization scope.
+   * @param attachment - durable file reference.
+   * @returns browser URL valid until its rendered session is released.
+   */
+  resolveFile(sessionId: SessionId, attachment: FileAttachmentRef): Promise<string> {
+    if (this.disposed) return Promise.reject(new Error('conversation.resolveFile: service is disposed'))
+    const key = `${sessionId}:file:${attachment.attachmentId}`
+    const cached = this.imageUrls.get(key)
+    if (cached !== undefined) return cached.pending
+    const generation = this.imageGenerations.get(sessionId) ?? 0
+    const session = this.requireSessions().binding(sessionId)?.session
+    if (session === undefined) {
+      return Promise.reject(new Error(`conversation.resolveFile: unknown session "${sessionId}"`))
+    }
+    const pending = session.readFileAttachment(attachment.attachmentId)
+      .then((result) => {
+        if (!result.ok) throw new Error(`${result.error.code}: ${result.error.message}`)
+        if (this.disposed) throw new Error('conversation.resolveFile: service was disposed before loading completed')
+        if ((this.imageGenerations.get(sessionId) ?? 0) !== generation) {
+          throw new Error('historical file scope was released before loading completed')
         }
         if (typeof URL.createObjectURL !== 'function') {
           return `data:${result.value.attachment.mediaType};base64,${bytesToBase64(result.value.data)}`

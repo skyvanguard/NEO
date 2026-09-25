@@ -231,6 +231,10 @@ describe('PiAiAdapter provider routing', () => {
       readImage(value: ImageAttachmentRef): Promise<StoredImageAttachment> {
         return readImage(value)
       }
+
+      readonly fileLimits = { maxFileBytes: 0 }
+      saveFile(): Promise<never> { return Promise.reject(new Error('not used')) }
+      readFile(): Promise<never> { return Promise.reject(new Error('not used')) }
     }
 
     const ctx = new Context()

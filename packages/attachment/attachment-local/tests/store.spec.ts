@@ -6,8 +6,8 @@ import { dirname, join, parse, resolve } from 'node:path'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import sharp from 'sharp'
-import type { ImageAttachmentLimits } from '@neo/attachment'
-import { readImageFile, saveImageFile } from '../src/store.ts'
+import type { FileAttachmentLimits, ImageAttachmentLimits } from '@neo/attachment'
+import { readFileFile, readImageFile, saveFileFile, saveImageFile } from '../src/store.ts'
 
 const fsControl = vi.hoisted(() => ({
   readSignals: [] as AbortSignal[],
@@ -229,5 +229,82 @@ describe('local attachment store', () => {
 
     await expect(saveImageFile(storageRoot, { data: PNG, mediaType: 'image/png' }, LIMITS))
       .rejects.toMatchObject({ code: 'ATTACHMENT_WRITE_FAILED' })
+  })
+})
+
+const FILE_LIMITS: FileAttachmentLimits = { maxFileBytes: 1024 }
+const FILE_BYTES = Uint8Array.from(Buffer.from('# Informe\n\nContenido arbitrario, no una imagen.\n', 'utf8'))
+
+describe('local attachment store — arbitrary files', () => {
+  it('round-trips arbitrary bytes and stores the declared media type and name', async () => {
+    const storageRoot = await root()
+    const sha256 = createHash('sha256').update(FILE_BYTES).digest('hex')
+
+    const ref = await saveFileFile(storageRoot, {
+      data: FILE_BYTES, mediaType: 'text/markdown', name: '/home/user/Informe.md',
+    }, FILE_LIMITS)
+
+    expect(ref).toEqual({
+      attachmentId: `sha256:${sha256}`,
+      mediaType: 'text/markdown',
+      bytes: FILE_BYTES.byteLength,
+      name: 'Informe.md',
+    })
+    await expect(readFileFile(storageRoot, ref)).resolves.toEqual({ ref, data: FILE_BYTES })
+  })
+
+  it('defaults the media type to octet-stream and drops an unusable name', async () => {
+    const storageRoot = await root()
+    const ref = await saveFileFile(storageRoot, { data: FILE_BYTES, name: '\u0000' }, FILE_LIMITS)
+    expect(ref.mediaType).toBe('application/octet-stream')
+    expect(ref).not.toHaveProperty('name')
+  })
+
+  it('deduplicates a file and an image that share identical bytes to one object', async () => {
+    const storageRoot = await root()
+    const image = await saveImageFile(storageRoot, { data: PNG, mediaType: 'image/png' }, LIMITS)
+    const file = await saveFileFile(storageRoot, { data: PNG, mediaType: 'image/png' }, FILE_LIMITS)
+    expect(file.attachmentId).toBe(image.attachmentId)
+    await expect(readFileFile(storageRoot, file)).resolves.toEqual({ ref: file, data: PNG })
+  })
+
+  it('rejects empty files and files past the byte limit', async () => {
+    const storageRoot = await root()
+    await expect(saveFileFile(storageRoot, { data: new Uint8Array(0) }, FILE_LIMITS))
+      .rejects.toMatchObject({ code: 'INVALID_ATTACHMENT' })
+    await expect(saveFileFile(storageRoot, { data: FILE_BYTES }, { maxFileBytes: 1 }))
+      .rejects.toMatchObject({ code: 'ATTACHMENT_TOO_LARGE' })
+  })
+
+  it('fails closed on a corrupted object, a byte-length mismatch, and an invalid reference', async () => {
+    const storageRoot = await root()
+    const ref = await saveFileFile(storageRoot, { data: FILE_BYTES }, FILE_LIMITS)
+    await expect(readFileFile(storageRoot, { ...ref, bytes: ref.bytes + 1 }))
+      .rejects.toMatchObject({ code: 'ATTACHMENT_CORRUPT' })
+    await expect(readFileFile(storageRoot, { ...ref, attachmentId: 'bad' as never }))
+      .rejects.toMatchObject({ code: 'INVALID_ATTACHMENT_REF' })
+
+    const sha256 = String(ref.attachmentId).slice('sha256:'.length)
+    const object = join(storageRoot, 'objects', sha256.slice(0, 2), sha256)
+    await chmod(object, 0o600)
+    await writeFile(object, Uint8Array.of(9, 9, 9))
+    await expect(readFileFile(storageRoot, ref)).rejects.toMatchObject({ code: 'ATTACHMENT_CORRUPT' })
+  })
+
+  it('reports a missing object through the not-found error', async () => {
+    const storageRoot = await root()
+    const ref = await saveFileFile(storageRoot, { data: FILE_BYTES }, FILE_LIMITS)
+    const missingRoot = await root()
+    await mkdir(missingRoot, { recursive: true })
+    await expect(readFileFile(missingRoot, ref)).rejects.toMatchObject({ code: 'ATTACHMENT_NOT_FOUND' })
+  })
+
+  it('forwards read cancellation and preserves its reason', async () => {
+    const storageRoot = await root()
+    const ref = await saveFileFile(storageRoot, { data: FILE_BYTES }, FILE_LIMITS)
+    const controller = new AbortController()
+    const cancellation = new Error('file read cancelled')
+    controller.abort(cancellation)
+    await expect(readFileFile(storageRoot, ref, controller.signal)).rejects.toBe(cancellation)
   })
 })

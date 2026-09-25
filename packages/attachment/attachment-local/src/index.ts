@@ -4,12 +4,21 @@ import { join, resolve } from 'node:path'
 import { Context } from '@neo/cordis'
 import z from '@neo/schemastery'
 import { AttachmentStore } from '@neo/attachment'
-import type { ImageAttachmentLimits, ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@neo/attachment'
+import type {
+  FileAttachmentLimits,
+  FileAttachmentRef,
+  ImageAttachmentLimits,
+  ImageAttachmentRef,
+  SaveFileAttachment,
+  SaveImageAttachment,
+  StoredFileAttachment,
+  StoredImageAttachment,
+} from '@neo/attachment'
 import { resolveNeoHome } from '@neo/home-paths'
-import { readImageFile, saveImageFile, validateImageFile } from './store.ts'
+import { readFileFile, readImageFile, saveFileFile, saveImageFile, validateImageFile } from './store.ts'
 
 export { detectImage } from './image.ts'
-export { readImageFile, saveImageFile, validateImageFile } from './store.ts'
+export { readFileFile, readImageFile, saveFileFile, saveImageFile, validateImageFile } from './store.ts'
 
 /** Default maximum encoded bytes for one image. */
 export const DEFAULT_MAX_IMAGE_BYTES = 5 * 1024 * 1024
@@ -19,6 +28,13 @@ export const DEFAULT_MAX_IMAGES_PER_MESSAGE = 20
 export const DEFAULT_MAX_MESSAGE_IMAGE_BYTES = 100 * 1024 * 1024
 /** Default maximum intrinsic pixels for one image. */
 export const DEFAULT_MAX_IMAGE_PIXELS = 40_000_000
+/**
+ * Default maximum bytes for one agent-published downloadable file (50 MiB).
+ * Provisional and deployment-tunable via `maxFileBytes`: the download endpoint
+ * buffers the whole file as base64 in one RPC envelope (no streaming yet), so
+ * the default stays conservative until large-file transport is streamed.
+ */
+export const DEFAULT_MAX_FILE_BYTES = 50 * 1024 * 1024
 
 /** Local attachment backend configuration. */
 export interface Config {
@@ -32,6 +48,8 @@ export interface Config {
   maxMessageImageBytes?: number
   /** Maximum intrinsic width multiplied by height accepted for one image. */
   maxImagePixels?: number
+  /** Maximum bytes accepted for one agent-published downloadable file. */
+  maxFileBytes?: number
 }
 
 /** Persistent content-addressed local attachment store. */
@@ -42,11 +60,13 @@ export class LocalAttachmentStore extends AttachmentStore {
     maxImagesPerMessage: z.number().step(1).min(1).default(DEFAULT_MAX_IMAGES_PER_MESSAGE),
     maxMessageImageBytes: z.number().step(1).min(1).default(DEFAULT_MAX_MESSAGE_IMAGE_BYTES),
     maxImagePixels: z.number().step(1).min(1).default(DEFAULT_MAX_IMAGE_PIXELS),
+    maxFileBytes: z.number().step(1).min(1).default(DEFAULT_MAX_FILE_BYTES),
   })
 
   /** Absolute versioned storage root. */
   readonly root: string
   readonly imageLimits: ImageAttachmentLimits
+  readonly fileLimits: FileAttachmentLimits
 
   constructor(ctx: Context, config: Config) {
     super(ctx)
@@ -57,6 +77,9 @@ export class LocalAttachmentStore extends AttachmentStore {
       maxMessageImageBytes: config.maxMessageImageBytes ?? DEFAULT_MAX_MESSAGE_IMAGE_BYTES,
       maxImagePixels: config.maxImagePixels ?? DEFAULT_MAX_IMAGE_PIXELS,
       mediaTypes: Object.freeze(['image/png', 'image/jpeg', 'image/webp', 'image/gif'] as const),
+    })
+    this.fileLimits = Object.freeze({
+      maxFileBytes: config.maxFileBytes ?? DEFAULT_MAX_FILE_BYTES,
     })
   }
 
@@ -70,6 +93,14 @@ export class LocalAttachmentStore extends AttachmentStore {
 
   async readImage(ref: ImageAttachmentRef, signal?: AbortSignal): Promise<StoredImageAttachment> {
     return readImageFile(this.root, ref, signal)
+  }
+
+  async saveFile(input: SaveFileAttachment): Promise<FileAttachmentRef> {
+    return saveFileFile(this.root, input, this.fileLimits)
+  }
+
+  async readFile(ref: FileAttachmentRef, signal?: AbortSignal): Promise<StoredFileAttachment> {
+    return readFileFile(this.root, ref, signal)
   }
 }
 

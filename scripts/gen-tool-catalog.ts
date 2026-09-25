@@ -86,6 +86,16 @@ class CatalogAttachmentStore extends AttachmentStore {
   override readImage(_ref: ImageAttachmentRef): Promise<StoredImageAttachment> {
     return Promise.reject(new Error('gen-tool-catalog: attachment reads are unreachable during schema harvest'))
   }
+
+  override readonly fileLimits = Object.freeze({ maxFileBytes: 1 })
+
+  override saveFile(): Promise<never> {
+    return Promise.reject(new Error('gen-tool-catalog: attachment writes are unreachable during schema harvest'))
+  }
+
+  override readFile(): Promise<never> {
+    return Promise.reject(new Error('gen-tool-catalog: attachment reads are unreachable during schema harvest'))
+  }
 }
 
 const root = resolve(import.meta.dirname, '..')

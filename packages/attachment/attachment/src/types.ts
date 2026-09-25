@@ -46,3 +46,40 @@ export interface StoredImageAttachment {
   ref: ImageAttachmentRef
   data: Uint8Array
 }
+
+/**
+ * Durable, serializable metadata for one immutable non-image file object.
+ * Unlike an image, a file carries no intrinsic dimensions and its media type
+ * is a free-form string (the store never decodes the bytes), so a download
+ * card can label it without the raster admission path that images require.
+ */
+export interface FileAttachmentRef {
+  /** Opaque storage identifier; never a filesystem path or bearer URL. */
+  attachmentId: AttachmentId
+  /** Caller-declared media type, stored verbatim (defaults to octet-stream). */
+  mediaType: string
+  /** Exact stored byte length. */
+  bytes: number
+  /** Optional display/download name stripped of local path information. */
+  name?: string
+}
+
+/** Deployment-resolved limits used by file admission and request buffering. */
+export interface FileAttachmentLimits {
+  maxFileBytes: number
+}
+
+/** Request to durably commit one arbitrary file. */
+export interface SaveFileAttachment {
+  data: Uint8Array
+  /** Caller-declared media type, stored verbatim; never interpreted. */
+  mediaType?: string
+  /** Optional display name; it is never interpreted as a path. */
+  name?: string
+}
+
+/** Stored file bytes returned after reference and digest verification. */
+export interface StoredFileAttachment {
+  ref: FileAttachmentRef
+  data: Uint8Array
+}

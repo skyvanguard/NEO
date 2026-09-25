@@ -8,7 +8,7 @@
 import type { CommandId } from '@neo/commands/brand'
 import type { MessageId } from '@neo/llm/brand'
 import type { ContentBlock } from '@neo/llm/types'
-import type { ImageAttachmentRef } from '@neo/attachment'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@neo/attachment'
 import type { LlmRetryEventData } from '@neo/llm-retry/types'
 import type { TodoItem } from '@neo/session/types'
 import type {
@@ -45,6 +45,7 @@ export type AssistantBlock =
   | { kind: 'text'; text: string }
   | { kind: 'reasoning'; text: string }
   | { kind: 'image'; attachment: ImageAttachmentRef }
+  | { kind: 'file'; attachment: FileAttachmentRef }
   | { kind: 'tool-call'; callId: string; name: string; argsRaw: string }
   | { kind: 'other'; block: unknown }
 
@@ -67,6 +68,7 @@ export function toAssistantBlock(block: ContentBlock): AssistantBlock {
     case 'text': return { kind: 'text', text: block.text }
     case 'reasoning': return { kind: 'reasoning', text: block.text }
     case 'image': return { kind: 'image', attachment: block.attachment }
+    case 'file': return { kind: 'file', attachment: block.attachment }
     case 'tool-call': return { kind: 'tool-call', callId: String(block.id), name: block.name, argsRaw: block.arguments }
     default: return { kind: 'other', block }
   }

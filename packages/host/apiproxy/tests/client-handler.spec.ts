@@ -59,6 +59,10 @@ function scriptedApi(overrides: {
         attachment: { attachmentId: 'a' as never, mediaType: 'image/png', bytes: 1, width: 1, height: 1 },
         data: 'AA==',
       }),
+      readFileAttachment: r => ok(r, {
+        attachment: { attachmentId: 'f' as never, mediaType: 'text/markdown', bytes: 1 },
+        data: 'AA==',
+      }),
       updateQueue: r => ok(r, { accepted: true as const }),
       cancel: r => ok(r, { accepted: true as const }),
       delete: r => ok(r, { deleted: true as const }),

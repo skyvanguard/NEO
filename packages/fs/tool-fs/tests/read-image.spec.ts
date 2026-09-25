@@ -350,6 +350,10 @@ describe('argument and service preconditions', () => {
       readImage(_ref: ImageAttachmentRef): Promise<StoredImageAttachment> {
         throw new Error('unreachable in this test')
       }
+
+      readonly fileLimits = Object.freeze({ maxFileBytes: 0 })
+      saveFile(): Promise<never> { return Promise.reject(new Error('unused')) }
+      readFile(): Promise<never> { return Promise.reject(new Error('unused')) }
     }
     const ctx = await setup({ attachments: false })
     await ctx.plugin(JpegOnlyStore)
@@ -429,6 +433,10 @@ describe('image admission failures', () => {
       readImage(_ref: ImageAttachmentRef): Promise<StoredImageAttachment> {
         throw new Error('unreachable in this test')
       }
+
+      readonly fileLimits = Object.freeze({ maxFileBytes: 0 })
+      saveFile(): Promise<never> { return Promise.reject(new Error('unused')) }
+      readFile(): Promise<never> { return Promise.reject(new Error('unused')) }
     }
     await writeFile(join(dir, 'red.png'), PNG_1X1)
     const ctx = await setup({ attachments: false })
@@ -450,16 +458,17 @@ describe('registration surface', () => {
     const attachmentsFiber = await ctx.plugin(LocalAttachmentStore, { neoHome: home })
     const toolFsFiber = await ctx.plugin(ToolFs)
     const names = () => ctx.tools.schemas().map(schema => schema.name).sort()
-    expect(names()).toEqual(['edit', 'list_dir', 'read', 'read_image', 'write'])
+    expect(names()).toEqual(['attach_file', 'edit', 'list_dir', 'read', 'read_image', 'write'])
 
     // Disposing only the attachment store tears down the scoped inject fiber:
-    // read_image withdraws while the unconditional tools stay registered.
+    // the attachment-gated tools (read_image, attach_file) withdraw while the
+    // unconditional tools stay registered.
     await attachmentsFiber.dispose()
     expect(names()).toEqual(['edit', 'list_dir', 'read', 'write'])
 
     // Remounting the store restores the conditional registration.
     const remounted = await ctx.plugin(LocalAttachmentStore, { neoHome: home })
-    expect(names()).toEqual(['edit', 'list_dir', 'read', 'read_image', 'write'])
+    expect(names()).toEqual(['attach_file', 'edit', 'list_dir', 'read', 'read_image', 'write'])
 
     // Disposing the whole plugin withdraws every tool, read_image included.
     await toolFsFiber.dispose()

@@ -7,7 +7,7 @@
  * must stub); runtime-internal entry points (history staging, wire-frame
  * dispatch) stay on the class, invisible out here.
  */
-import type { AttachmentIdType, ImageAttachmentRef } from '@neo/attachment'
+import type { AttachmentIdType, FileAttachmentRef, ImageAttachmentRef } from '@neo/attachment'
 import type {
   MessageId, PromptContentPart, QueueAction, RpcResult, SessionId,
 } from '@neo/api-remotes/client'
@@ -47,6 +47,14 @@ export interface ISession {
   readAttachment(
     attachmentId: AttachmentIdType,
   ): Promise<RpcResult<{ attachment: ImageAttachmentRef; data: Uint8Array }>>
+  /**
+   * Resolve one durable downloadable file referenced by this session.
+   * @param attachmentId - opaque id found in a folded `file` block of the log.
+   * @returns the authenticated reference and decoded bytes.
+   */
+  readFileAttachment(
+    attachmentId: AttachmentIdType,
+  ): Promise<RpcResult<{ attachment: FileAttachmentRef; data: Uint8Array }>>
   /**
    * Apply one edit, remove, or strict steer action to a still-pending queue occurrence.
    * @param itemId - agent-owned inbox occurrence identity.

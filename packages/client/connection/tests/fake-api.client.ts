@@ -68,6 +68,9 @@ export class FakeApiClient implements IApiClient {
   onPrompt: (payload: unknown) => Promise<RpcResponse<{ accepted: true }>> = () => Promise.resolve(ok({ accepted: true as const }))
   onAttachment: (payload: unknown) => Promise<RpcResponse<{ attachment: { attachmentId: never; mediaType: 'image/png'; bytes: number; width: number; height: number }; data: string }>> =
     () => Promise.resolve(ok({ attachment: { attachmentId: 'a' as never, mediaType: 'image/png', bytes: 1, width: 1, height: 1 }, data: 'AA==' }))
+  onReadFileAttachment: (payload: unknown)
+  => Promise<RpcResponse<{ attachment: { attachmentId: never; mediaType: string; bytes: number }; data: string }>> =
+    () => Promise.resolve(ok({ attachment: { attachmentId: 'f' as never, mediaType: 'text/markdown', bytes: 1 }, data: 'AA==' }))
   onUpdateQueue: (payload: unknown) => Promise<RpcResponse<{ accepted: true }>> = () => Promise.resolve(ok({ accepted: true as const }))
   onCancel: (payload: unknown) => Promise<RpcResponse<{ accepted: true }>> = () => Promise.resolve(ok({ accepted: true as const }))
   onDelete: (payload: unknown) => Promise<RpcResponse<{ deleted: true }>> = () => Promise.resolve(ok({ deleted: true as const }))
@@ -120,6 +123,7 @@ export class FakeApiClient implements IApiClient {
     fork: (payload: unknown) => this.record('session.fork', payload, this.onFork(payload)),
     prompt: (payload: unknown) => this.record('session.prompt', payload, this.onPrompt(payload)),
     attachment: (payload: unknown) => this.record('session.attachment', payload, this.onAttachment(payload)),
+    readFileAttachment: (payload: unknown) => this.record('session.readFileAttachment', payload, this.onReadFileAttachment(payload)),
     updateQueue: (payload: unknown) => this.record('session.updateQueue', payload, this.onUpdateQueue(payload)),
     cancel: (payload: unknown) => this.record('session.cancel', payload, this.onCancel(payload)),
     delete: (payload: unknown) => this.record('session.delete', payload, this.onDelete(payload)),

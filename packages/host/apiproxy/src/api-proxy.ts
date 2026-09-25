@@ -11,7 +11,7 @@ import { installModelSelection } from '@neo/agent'
 import type { Agent, AgentHandle, ModelSelection, ModelSelectionRef, AgentOptions, AgentStatus } from '@neo/agent'
 import type {} from '@neo/agent-presets/types'
 import { AttachmentError } from '@neo/attachment'
-import type { ImageAttachmentRef } from '@neo/attachment'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@neo/attachment'
 import { contentHasImage, createUserMessage, freezeMessage, ReasoningEffortId } from '@neo/llm'
 import { errorChain } from '@neo/llm'
 import type { ContentBlock, MessageSource } from '@neo/llm'
@@ -240,6 +240,59 @@ function messagesHaveImage(messages: readonly { content: readonly ContentBlock[]
 function referencedImage(events: readonly SessionEvent[], attachmentId: string): ImageAttachmentRef | undefined {
   for (const event of events) {
     const found = imageInEvent(event, ref => String(ref.attachmentId) === attachmentId)
+    if (found !== undefined) return found
+  }
+  return undefined
+}
+
+/** Search durable content for a downloadable-file reference, including nested tool results. */
+function fileBlockIn(content: unknown, match: (ref: FileAttachmentRef) => boolean): FileAttachmentRef | undefined {
+  if (!Array.isArray(content)) return undefined
+  for (const value of content) {
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) continue
+    const block = value as { type?: unknown; attachment?: unknown; content?: unknown }
+    if (block.type === 'file' && typeof block.attachment === 'object' && block.attachment !== null) {
+      const ref = block.attachment as FileAttachmentRef
+      if (match(ref)) return ref
+    }
+    if (block.type === 'tool-result') {
+      const nested = fileBlockIn(block.content, match)
+      if (nested !== undefined) return nested
+    }
+  }
+  return undefined
+}
+
+/** Search every durable event carrier that can own a downloadable-file block. */
+function fileInEvent(event: SessionEvent, match: (ref: FileAttachmentRef) => boolean): FileAttachmentRef | undefined {
+  const data = event.data as {
+    content?: unknown
+    message?: { content?: unknown }
+    inserted?: Array<{ content?: unknown }>
+    chunk?: { type?: unknown; block?: unknown }
+  }
+  const direct = fileBlockIn(data.content, match)
+  if (direct !== undefined) return direct
+  if (data.message !== undefined) {
+    const wrapped = fileBlockIn(data.message.content, match)
+    if (wrapped !== undefined) return wrapped
+  }
+  if (data.inserted !== undefined) {
+    for (const message of data.inserted) {
+      const inserted = fileBlockIn(message.content, match)
+      if (inserted !== undefined) return inserted
+    }
+  }
+  if (event.type === 'assistant/chunk' && data.chunk?.type === 'block-end') {
+    return fileBlockIn([data.chunk.block], match)
+  }
+  return undefined
+}
+
+/** Resolve the first downloadable-file reference matching one opaque id. */
+function referencedFile(events: readonly SessionEvent[], attachmentId: string): FileAttachmentRef | undefined {
+  for (const event of events) {
+    const found = fileInEvent(event, ref => String(ref.attachmentId) === attachmentId)
     if (found !== undefined) return found
   }
   return undefined
@@ -2565,6 +2618,58 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
           return err(request, {
             code: 'internal',
             message: 'Unable to read image attachment.',
+            details: {},
+          })
+        }
+      },
+
+      async readFileAttachment(request) {
+        const { sessionId, attachmentId } = request.payload
+        let state: SessionReadState
+        try {
+          state = await readSessionState(sessionId)
+        } catch (error: unknown) {
+          if (error instanceof SessionNotFound) {
+            return err(request, {
+              code: 'session-not-found',
+              message: error.message,
+              details: { sessionId },
+            })
+          }
+          return err(request, {
+            code: 'internal',
+            message: `attachment authorization unavailable for session "${sessionId}": ${String(error)}`,
+            details: {},
+          })
+        }
+        // Authorization mirrors images: only a reference already emitted in a
+        // `file` block of this session's log is readable. The opaque id is never
+        // used as a path, so no arbitrary file on disk can be served.
+        const ref = referencedFile(state.events, String(attachmentId))
+        if (ref === undefined) {
+          return err(request, {
+            code: 'attachment-error',
+            message: 'File is not referenced by this session.',
+            details: { reason: 'ATTACHMENT_NOT_REFERENCED' },
+          })
+        }
+        try {
+          const stored = await ctx.attachments.readFile(ref)
+          return ok(request, {
+            attachment: stored.ref,
+            data: Buffer.from(stored.data).toString('base64'),
+          })
+        } catch (error: unknown) {
+          if (error instanceof AttachmentError) {
+            return err(request, {
+              code: 'attachment-error',
+              message: error.message,
+              details: { reason: error.code },
+            })
+          }
+          return err(request, {
+            code: 'internal',
+            message: 'Unable to read file attachment.',
             details: {},
           })
         }

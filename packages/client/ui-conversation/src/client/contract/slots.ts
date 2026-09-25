@@ -1,6 +1,6 @@
 /** Conversation slot declarations and their composed component props. */
 import type { ReactNode, RefObject } from 'react'
-import type { ImageAttachmentRef } from '@neo/attachment'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@neo/attachment'
 import type {
   InjectFace, MaybeSnapshotSelectorHook, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore,
   SlotHookFactory, SnapshotSelectorHook,
@@ -368,6 +368,8 @@ export interface ChatNodeOwnerProps {
   forkAt: (seq: number) => void
   /** Resolve a session-authorized historical image for inline display. */
   loadImage: (attachment: ImageAttachmentRef) => Promise<string>
+  /** Resolve a session-authorized downloadable file for its download card. */
+  loadFile: (attachment: FileAttachmentRef) => Promise<string>
   fileMentions: (owner: TurnTailOwnerProps) => MarkdownFileMentions | undefined
 }
 
@@ -688,6 +690,8 @@ export interface ChatViewInjected {
   loadOlder: () => void
   /** Resolve a session-authorized historical image for inline display. */
   loadImage: (attachment: ImageAttachmentRef) => Promise<string>
+  /** Resolve a session-authorized downloadable file for its download card. */
+  loadFile: (attachment: FileAttachmentRef) => Promise<string>
   /** Hand a call off to the trajectory view: write the one-shot inspect target and switch tabs. */
   inspectCall: (callId: CallId) => void
   /**

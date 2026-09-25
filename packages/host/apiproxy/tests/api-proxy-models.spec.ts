@@ -268,6 +268,39 @@ describe('Web session model selection', () => {
     expect(readImage).toHaveBeenCalledOnce()
     await ctx.fiber.dispose()
   })
+  it('authorizes file-attachment bytes only when a file block references the id', async () => {
+    const { ctx, agent, sessionId } = await harness()
+    const ref = { attachmentId: 'file-authorized', mediaType: 'text/markdown', bytes: 3 }
+    const readFile = vi.fn(() => Promise.resolve({ ref, data: Uint8Array.of(1, 2, 3) }))
+    ctx.provide('attachments', { readFile } as never)
+    const api = createApiProxy(ctx, {
+      defaultModelSelection: () => ({ provider: 'deepseek-official', model: 'deepseek-chat' }),
+      cwd: '/tmp',
+    })
+    // A file block emitted inside a tool result is the durable carrier the agent produces.
+    agent.session.append('agent/inbox/spliced', {
+      target: 'next-turn',
+      start: 0,
+      inserted: [{
+        id: 'queued-file', role: 'user', source: { kind: 'user' },
+        content: [{ type: 'tool-result', toolCallId: 'c1', content: [{ type: 'file', attachment: ref }] }],
+      }],
+    } as never)
+
+    const allowed = await api.sessions.readFileAttachment(request({
+      sessionId, attachmentId: 'file-authorized' as never,
+    }))
+    expect(allowed.result).toMatchObject({ ok: true, value: { attachment: ref, data: 'AQID' } })
+    const denied = await api.sessions.readFileAttachment(request({
+      sessionId, attachmentId: 'file-other' as never,
+    }))
+    expect(denied.result).toMatchObject({
+      ok: false,
+      error: { code: 'attachment-error', details: { reason: 'ATTACHMENT_NOT_REFERENCED' } },
+    })
+    expect(readFile).toHaveBeenCalledOnce()
+    await ctx.fiber.dispose()
+  })
   it('groups successful providers and leaves an unlisted current selection out of the catalog', async () => {
     const { ctx, sessionId } = await harness({
       provider: 'deepseek-official',

@@ -10,22 +10,25 @@ import type {
 } from '@neo/client-runtime/client'
 import { JsonBlock, MessageText, StateDot } from '@neo/client-ui-primitives'
 import type { ChatNodeViewProps, ChatViewSlotProps } from '../contract/slots.ts'
-import { ImageGallery, type ImageLoader } from '@neo/client-ui-attachment'
-import { messageImageLabels } from '../image-labels.ts'
+import { FileCard, ImageGallery, type FileLoader, type ImageLoader } from '@neo/client-ui-attachment'
+import { fileCardLabels, fileSizeText, messageImageLabels } from '../image-labels.ts'
 import { CompactionItem } from './CompactionItem.tsx'
 import { ContextInjectionRow } from './ContextInjectionRow.tsx'
 import { MessageIconActions } from './MessageIconActions.tsx'
 import css from './MessageItem.module.css'
 
 type UserImage = Extract<UserMessageNode['content'][number], { type: 'image' }>
+type UserFile = Extract<UserMessageNode['content'][number], { type: 'file' }>
 
 function contentParts(content: readonly unknown[]): {
   text: string
   images: { attachment: UserImage['attachment'] }[]
+  files: { attachment: UserFile['attachment'] }[]
   rest: unknown[]
 } {
   const texts: string[] = []
   const images: { attachment: UserImage['attachment'] }[] = []
+  const files: { attachment: UserFile['attachment'] }[] = []
   const rest: unknown[] = []
   for (const block of content) {
     const b = block as { type?: string; text?: string; attachment?: unknown }
@@ -33,9 +36,12 @@ function contentParts(content: readonly unknown[]): {
     else if (b.type === 'image' && b.attachment !== undefined) {
       images.push({ attachment: (b as UserImage).attachment })
     }
+    else if (b.type === 'file' && b.attachment !== undefined) {
+      files.push({ attachment: (b as UserFile).attachment })
+    }
     else rest.push(block)
   }
-  return { text: texts.join(''), images, rest }
+  return { text: texts.join(''), images, files, rest }
 }
 
 function retrySeconds(milliseconds: number): number {
@@ -177,23 +183,34 @@ function projectUserText(text: string): ReactNode {
 
 /** Right-aligned bubble shared by user and steering rows. */
 function UserStyleBubble({
-  content, imageLoader, actions, pending = false, t,
+  content, imageLoader, fileLoader, actions, pending = false, t,
 }: {
   content: readonly unknown[]
   imageLoader: ImageLoader
+  fileLoader: FileLoader
   /** Optional IconActions (or similar) below the bubble; receives the joined text. */
   actions?: (text: string) => ReactNode
   /** Whether this is the Host-authoritative pre-admission steering projection. */
   pending?: boolean
   t: ChatViewSlotProps['t']
 }): ReactNode {
-  const { text, images, rest } = contentParts(content)
+  const { text, images, files, rest } = contentParts(content)
   const truncated = (total: number): string => t('json.truncated', { total })
   const showBubble = text !== '' || rest.length > 0
   return (
     <div className={css.userRow} data-pending-steering={pending || undefined} data-time-hover-root>
       <div className={css.userStack}>
         <ImageGallery images={images} load={imageLoader} align="end" labels={messageImageLabels(t)} />
+        {files.map((file, i) => (
+          <FileCard
+            key={`${file.attachment.attachmentId}:${i}`}
+            attachment={file.attachment}
+            load={fileLoader}
+            sizeText={fileSizeText}
+            labels={fileCardLabels(t)}
+            align="end"
+          />
+        ))}
         {showBubble && <div className={css.bubble}>
           {projectUserText(text)}
           {rest.map((block, i) => <JsonBlock key={i} label={t('message.extraBlock')} payload={block} truncatedLabel={truncated} />)}
@@ -210,16 +227,19 @@ function UserStyleBubble({
  * @param props - Pending message content and conversation translator.
  * @returns the pending steering bubble.
  */
-export function PendingSteeringBubble({ content, loadImage, t }: {
+export function PendingSteeringBubble({ content, loadImage, loadFile, t }: {
   content: readonly unknown[]
   loadImage?: ImageLoader
+  loadFile?: FileLoader
   t: ChatViewSlotProps['t']
 }): ReactNode {
   const imageLoader = loadImage ?? (() => Promise.reject(new Error(t('image.serviceUnavailable'))))
+  const fileLoader = loadFile ?? (() => Promise.reject(new Error(t('file.serviceUnavailable'))))
   return (
     <UserStyleBubble
       content={content}
       imageLoader={imageLoader}
+      fileLoader={fileLoader}
       pending
       t={t}
       actions={text => (
@@ -236,13 +256,14 @@ export function PendingSteeringBubble({ content, loadImage, t }: {
 
 /** User and admitted-steering keyed Chat renderer. */
 export const UserMessageNodeView = memo(function UserMessageNodeView({
-  node, loadImage, t,
+  node, loadImage, loadFile, t,
 }: ChatNodeViewProps<'user' | 'steering'>) {
   const data = node.data
   return (
     <UserStyleBubble
       content={data.content}
       imageLoader={loadImage}
+      fileLoader={loadFile}
       t={t}
       actions={text => (
         <MessageIconActions

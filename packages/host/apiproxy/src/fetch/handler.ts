@@ -18,6 +18,7 @@ import { clientRequestSchema, clientResponseSchema } from '../api/rpc.schema.ts'
 import {
   sessionCancelRequestSchema,
   sessionAttachmentRequestSchema,
+  sessionReadFileAttachmentRequestSchema,
   sessionCreateRequestSchema,
   sessionForkRequestSchema,
   sessionHistoryRequestSchema,
@@ -99,6 +100,7 @@ const UNARY_ROUTES: UnaryRoutes = {
   'session.fork': { schema: sessionForkRequestSchema, invoke: (api, r) => api.sessions.fork(r) },
   'session.prompt': { schema: sessionPromptRequestSchema, invoke: (api, r) => api.sessions.prompt(r) },
   'session.attachment': { schema: sessionAttachmentRequestSchema, invoke: (api, r) => api.sessions.attachment(r) },
+  'session.readFileAttachment': { schema: sessionReadFileAttachmentRequestSchema, invoke: (api, r) => api.sessions.readFileAttachment(r) },
   'session.updateQueue': { schema: sessionUpdateQueueRequestSchema, invoke: (api, r) => api.sessions.updateQueue(r) },
   'session.cancel': { schema: sessionCancelRequestSchema, invoke: (api, r) => api.sessions.cancel(r) },
   'session.delete': { schema: sessionDeleteRequestSchema, invoke: (api, r) => api.sessions.delete(r) },

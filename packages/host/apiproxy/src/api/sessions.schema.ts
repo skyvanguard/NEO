@@ -15,7 +15,7 @@ import type {
   ModelReasoningEffort, ModelSelection, SessionListMetadata, SessionProjectionsBlock, SessionSearchItem, SessionSummary,
 } from './sessions.ts'
 import type { ToolEventView } from './events.ts'
-import type { AttachmentIdType, ImageAttachmentLimits, ImageAttachmentRef } from '@neo/attachment'
+import type { AttachmentIdType, FileAttachmentRef, ImageAttachmentLimits, ImageAttachmentRef } from '@neo/attachment'
 import type { WorkspaceId } from './workspace.ts'
 import {
   SESSION_SEARCH_RESULT_LIMIT,
@@ -325,6 +325,26 @@ export const sessionAttachmentValueSchema = z.object({
   attachment: imageAttachmentRefSchema,
   data: z.string(),
 }) satisfies z.ZodType<Wire<ResponseValue<'session.attachment'>>>
+
+/** Durable downloadable-file reference: free-form media type, no dimensions. */
+export const fileAttachmentRefSchema = z.object({
+  attachmentId: attachmentIdSchema,
+  mediaType: z.string().min(1),
+  bytes: z.number().int().positive(),
+  name: z.string().optional(),
+}) as unknown as z.ZodType<FileAttachmentRef>
+
+/** session.readFileAttachment request payload. */
+export const sessionReadFileAttachmentRequestSchema = z.object({
+  sessionId: sessionIdSchema,
+  attachmentId: attachmentIdSchema,
+}) satisfies z.ZodType<Wire<RequestPayload<'session.readFileAttachment'>>>
+
+/** session.readFileAttachment response value. */
+export const sessionReadFileAttachmentValueSchema = z.object({
+  attachment: fileAttachmentRefSchema,
+  data: z.string(),
+}) satisfies z.ZodType<Wire<ResponseValue<'session.readFileAttachment'>>>
 
 /** session.updateQueue request payload. */
 export const sessionUpdateQueueRequestSchema = z.object({

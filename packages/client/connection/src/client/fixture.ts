@@ -2491,6 +2491,11 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
         }
         return ok(request, stored)
       },
+      readFileAttachment: request => err(request, {
+        code: 'attachment-error',
+        message: 'fixture has no downloadable file attachments',
+        details: { reason: 'ATTACHMENT_NOT_FOUND' },
+      }),
       updateQueue: request => err(request, {
         code: 'queue-item-not-found',
         message: 'fixture has no pending queue item',
@@ -3119,6 +3124,7 @@ export class FixtureApiClient extends AbstractApiClient {
       case 'session.fork': return this.api.sessions.fork(request)
       case 'session.prompt': return this.api.sessions.prompt(request)
       case 'session.attachment': return this.api.sessions.attachment(request)
+      case 'session.readFileAttachment': return this.api.sessions.readFileAttachment(request)
       case 'session.updateQueue': return this.api.sessions.updateQueue(request)
       case 'session.cancel': return this.api.sessions.cancel(request)
       case 'session.delete': return this.api.sessions.delete(request)

@@ -3,7 +3,7 @@
  * application state; owners resolve every string). */
 
 import type {
-  AttachmentRailLabels, DropOverlayLabels, ImageLightboxLabels, MessageImageLabels,
+  AttachmentRailLabels, DropOverlayLabels, FileCardLabels, ImageLightboxLabels, MessageImageLabels,
 } from '@neo/client-ui-attachment'
 import type { ImageAttachmentLimits } from '@neo/attachment'
 import type { Translate } from '@neo/client-ui-slots'
@@ -16,6 +16,20 @@ import type { ConversationKey } from './locales.ts'
  */
 export function imageSizeText(bytes: number): string {
   const mb = bytes / (1024 * 1024)
+  return `${Number.isInteger(mb) ? String(mb) : mb.toFixed(1)}MB`
+}
+
+/**
+ * Byte count as a compact, unit-scaled size (`812B`, `18KB`, `2.4MB`). Unlike
+ * {@link imageSizeText}, small files keep a readable unit instead of `0MB`.
+ * @param bytes - the byte count.
+ * @returns the scaled size text.
+ */
+export function fileSizeText(bytes: number): string {
+  if (bytes < 1024) return `${bytes}B`
+  const kb = bytes / 1024
+  if (kb < 1024) return `${Math.round(kb)}KB`
+  const mb = kb / 1024
   return `${Number.isInteger(mb) ? String(mb) : mb.toFixed(1)}MB`
 }
 
@@ -79,6 +93,20 @@ export function messageImageLabels(t: Translate<ConversationKey>): MessageImageL
     loading: t('image.loading'),
     loadFailed: t('image.loadFailed'),
     lightbox: lightboxLabels(t),
+  }
+}
+
+/**
+ * Resolve the downloadable-file card strings.
+ * @param t - the conversation-namespace translate.
+ * @returns the file-card labels (name fallback, download, in-flight, retry).
+ */
+export function fileCardLabels(t: Translate<ConversationKey>): FileCardLabels {
+  return {
+    file: t('file.label'),
+    download: t('file.download'),
+    downloading: t('file.downloading'),
+    downloadFailed: t('file.downloadFailed'),
   }
 }
 

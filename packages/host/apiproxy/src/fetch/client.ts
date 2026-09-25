@@ -20,6 +20,7 @@ import {
 import {
   sessionCancelValueSchema,
   sessionAttachmentValueSchema,
+  sessionReadFileAttachmentValueSchema,
   sessionCreateValueSchema,
   sessionDeleteValueSchema,
   sessionForkValueSchema,
@@ -97,6 +98,7 @@ export interface IApiClient {
     fork(payload: RequestPayload<'session.fork'>, signal?: AbortSignal): Promise<RpcResponse<ResponseValue<'session.fork'>>>
     prompt(payload: RequestPayload<'session.prompt'>, signal?: AbortSignal): Promise<RpcResponse<ResponseValue<'session.prompt'>>>
     attachment(payload: RequestPayload<'session.attachment'>, signal?: AbortSignal): Promise<RpcResponse<ResponseValue<'session.attachment'>>>
+    readFileAttachment(payload: RequestPayload<'session.readFileAttachment'>, signal?: AbortSignal): Promise<RpcResponse<ResponseValue<'session.readFileAttachment'>>>
     updateQueue(payload: RequestPayload<'session.updateQueue'>, signal?: AbortSignal): Promise<RpcResponse<ResponseValue<'session.updateQueue'>>>
     cancel(payload: RequestPayload<'session.cancel'>, signal?: AbortSignal): Promise<RpcResponse<ResponseValue<'session.cancel'>>>
     delete(payload: RequestPayload<'session.delete'>, signal?: AbortSignal): Promise<RpcResponse<ResponseValue<'session.delete'>>>
@@ -182,6 +184,7 @@ const UNARY_VALUE_SCHEMAS: { [K in keyof RpcMethodMap]: z.ZodType<Wire<ResponseV
   'session.fork': sessionForkValueSchema,
   'session.prompt': sessionPromptValueSchema,
   'session.attachment': sessionAttachmentValueSchema,
+  'session.readFileAttachment': sessionReadFileAttachmentValueSchema,
   'session.updateQueue': sessionUpdateQueueValueSchema,
   'session.cancel': sessionCancelValueSchema,
   'session.delete': sessionDeleteValueSchema,
@@ -423,6 +426,7 @@ export abstract class AbstractApiClient implements IApiClient {
     fork: (payload, signal) => this.callUnary('session.fork', payload, signal),
     prompt: (payload, signal) => this.callUnary('session.prompt', payload, signal),
     attachment: (payload, signal) => this.callUnary('session.attachment', payload, signal),
+    readFileAttachment: (payload, signal) => this.callUnary('session.readFileAttachment', payload, signal),
     updateQueue: (payload, signal) => this.callUnary('session.updateQueue', payload, signal),
     cancel: (payload, signal) => this.callUnary('session.cancel', payload, signal),
     delete: (payload, signal) => this.callUnary('session.delete', payload, signal),

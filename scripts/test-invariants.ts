@@ -131,6 +131,16 @@ class TestAttachmentStore extends AttachmentStore {
   readImage(_ref: ImageAttachmentRef): Promise<StoredImageAttachment> {
     return Promise.reject(new Error('test invariant attachment store does not read images'))
   }
+
+  readonly fileLimits = { maxFileBytes: 1 }
+
+  saveFile(): Promise<never> {
+    return Promise.reject(new Error('test invariant attachment store does not save files'))
+  }
+
+  readFile(): Promise<never> {
+    return Promise.reject(new Error('test invariant attachment store does not read files'))
+  }
 }
 
 /**

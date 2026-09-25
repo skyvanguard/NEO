@@ -101,6 +101,9 @@ describe('session.history projections block', () => {
       validateImage(): Promise<void> { return Promise.resolve() }
       saveImage(): Promise<never> { return Promise.reject(new Error('unused')) }
       readImage(): Promise<never> { return Promise.reject(new Error('unused')) }
+      readonly fileLimits = { maxFileBytes: 0 }
+      saveFile(): Promise<never> { return Promise.reject(new Error('unused')) }
+      readFile(): Promise<never> { return Promise.reject(new Error('unused')) }
     })
     const gateway = api(ctx)
     seedMessages(session, 2)

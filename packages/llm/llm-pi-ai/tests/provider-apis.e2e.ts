@@ -87,6 +87,10 @@ async function harness(image?: StoredImageAttachment): Promise<Context> {
         }
         return Promise.resolve(fixture)
       }
+
+      readonly fileLimits = { maxFileBytes: 0 }
+      saveFile(): Promise<never> { return Promise.reject(new Error('e2e attachment fixture is read-only')) }
+      readFile(): Promise<never> { return Promise.reject(new Error('e2e attachment fixture is read-only')) }
     }
     await ctx.plugin(E2eAttachmentStore)
   }

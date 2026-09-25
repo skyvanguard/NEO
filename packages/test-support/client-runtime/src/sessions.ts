@@ -99,6 +99,15 @@ export class FixtureSession implements SessionFace {
   }
 
   /**
+   * Fail-loud stub; supply `readFileAttachment` on the fixture's session face to exercise it.
+   * @param _attachmentId - opaque durable attachment id.
+   * @returns never — always throws.
+   */
+  readFileAttachment(_attachmentId: AttachmentIdType): never {
+    throw new Error(`test session "${this.sessionId}": readFileAttachment is not stubbed — supply it on the fixture's session face`)
+  }
+
+  /**
    * Fail-loud stub; supply `updateQueue` on the fixture's session face to exercise it.
    * @returns never — always throws.
    */

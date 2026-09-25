@@ -1,7 +1,7 @@
 // Sessions remain resident after creation so they continue consuming mux frames off-screen.
 
 import type { Context } from '@neo/cordis'
-import type { AttachmentIdType, ImageAttachmentRef } from '@neo/attachment'
+import type { AttachmentIdType, FileAttachmentRef, ImageAttachmentRef } from '@neo/attachment'
 import type { SessionEvent } from '@neo/session/types'
 import type {
   HistoryEntry, IApiClient, MessageId, MuxFrame, PromptContentPart, QueueAction, RpcError,
@@ -286,6 +286,28 @@ export class Session implements SessionFace {
   ): Promise<RpcResult<{ attachment: ImageAttachmentRef; data: Uint8Array }>> {
     try {
       const result = (await this.api.sessions.attachment({
+        sessionId: this.sessionId,
+        attachmentId,
+      })).result
+      if (!result.ok) return result
+      const binary = atob(result.value.data)
+      const data = Uint8Array.from(binary, char => char.charCodeAt(0))
+      return { ok: true, value: { attachment: result.value.attachment, data } }
+    } catch (error) {
+      return transportError(error)
+    }
+  }
+
+  /**
+   * Resolve one downloadable file referenced by this session into bytes.
+   * @param attachmentId - opaque id found in a folded `file` block of the log.
+   * @returns the authenticated reference and decoded bytes.
+   */
+  async readFileAttachment(
+    attachmentId: AttachmentIdType,
+  ): Promise<RpcResult<{ attachment: FileAttachmentRef; data: Uint8Array }>> {
+    try {
+      const result = (await this.api.sessions.readFileAttachment({
         sessionId: this.sessionId,
         attachmentId,
       })).result

@@ -2,9 +2,13 @@
 
 import { Context, Service } from '@neo/cordis'
 import type {
+  FileAttachmentLimits,
+  FileAttachmentRef,
   ImageAttachmentLimits,
   ImageAttachmentRef,
+  SaveFileAttachment,
   SaveImageAttachment,
+  StoredFileAttachment,
   StoredImageAttachment,
 } from './types.ts'
 
@@ -12,10 +16,14 @@ export { AttachmentId } from './brand.ts'
 export { AttachmentError } from './error.ts'
 export type {
   AttachmentId as AttachmentIdType,
+  FileAttachmentLimits,
+  FileAttachmentRef,
   ImageAttachmentLimits,
   ImageAttachmentRef,
   ImageMediaType,
+  SaveFileAttachment,
   SaveImageAttachment,
+  StoredFileAttachment,
   StoredImageAttachment,
 } from './types.ts'
 
@@ -57,6 +65,26 @@ export abstract class AttachmentStore extends Service {
    * @throws the signal reason when aborted, or a storage error when verification fails.
    */
   abstract readImage(ref: ImageAttachmentRef, signal?: AbortSignal): Promise<StoredImageAttachment>
+
+  /** Deployment-resolved file policy used by file admission and request buffering. */
+  abstract readonly fileLimits: FileAttachmentLimits
+
+  /**
+   * Durably commit one arbitrary file before its owning session event is appended.
+   * The bytes are stored content-addressed and never decoded or interpreted.
+   * @param input - file bytes, optional media type, and optional display name.
+   * @returns a durable content-addressed reference.
+   */
+  abstract saveFile(input: SaveFileAttachment): Promise<FileAttachmentRef>
+
+  /**
+   * Read one file and verify that bytes still match the recorded reference.
+   * @param ref - durable reference from the session log.
+   * @param signal - optional cancellation for backend read and verification work.
+   * @returns the verified bytes and canonical reference.
+   * @throws the signal reason when aborted, or a storage error when verification fails.
+   */
+  abstract readFile(ref: FileAttachmentRef, signal?: AbortSignal): Promise<StoredFileAttachment>
 }
 
 export default AttachmentStore

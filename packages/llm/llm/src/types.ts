@@ -5,7 +5,7 @@
  */
 
 import type { Branded } from '@neo/brand'
-import type { ImageAttachmentRef } from '@neo/attachment'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@neo/attachment'
 import type { CallId, ProviderRequestId, ReasoningEffortId } from './brand.ts'
 import type { Message } from './message.ts'
 
@@ -74,6 +74,18 @@ export interface ImageBlock {
   attachment: ImageAttachmentRef
 }
 
+/**
+ * A durable downloadable-file reference, valid in user or assistant content.
+ * Unlike {@link ImageBlock}, a file is never sent to the model: it is a UI-only
+ * artifact the client renders as a download card. Adapters drop it from the
+ * provider request (the default arm of their content serializers).
+ */
+export interface FileBlock {
+  type: 'file'
+  /** Immutable bytes and download metadata owned by the attachment service. */
+  attachment: FileAttachmentRef
+}
+
 /** A tool invocation requested by the model. */
 export interface ToolCallBlock {
   type: 'tool-call'
@@ -100,6 +112,7 @@ export interface ContentBlockMap {
   'text': TextBlock
   'reasoning': ReasoningBlock
   'image': ImageBlock
+  'file': FileBlock
   'tool-call': ToolCallBlock
   'tool-result': ToolResultBlock
 }
