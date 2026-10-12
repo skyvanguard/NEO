@@ -1,0 +1,25 @@
+# Exercise the model-facing LSP tool through the shipped ACP app and Loader entry path.
+# The scenario workspace supplies the deterministic stdio server used by this test composition.
+- id: base
+  name: '@neo/cordis-plugin-include'
+  config:
+    path: ../cordis.yml
+    patches:
+      - insert:
+          - id: lsp
+            name: '@neo/lsp'
+          - id: lsp-stdio
+            name: '@neo/lsp-stdio'
+            config:
+              servers:
+                fixture:
+                  command: !!js process.execPath
+                  args: ['./lsp-server.mjs']
+                  extensionToLanguage:
+                    '.ts': typescript
+          - id: timeout-policy
+            name: '@neo/tool-call-timeout-policy'
+          - id: tool-lsp
+            name: '@neo/tool-lsp'
+            config:
+              maxLocations: 1

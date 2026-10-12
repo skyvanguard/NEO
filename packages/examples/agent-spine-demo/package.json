@@ -1,0 +1,100 @@
+{
+  "name": "@neo/agent-spine-demo",
+  "description": "The default executor-less/UI-less agent spine with fallback session titles, provider-routed retry, and optional persisted goals",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/examples/agent-spine-demo"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/cordis-plugin-timer": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/goal": "workspace:^",
+    "@neo/goal-round-driver": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/llm-retry": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/skill": "workspace:^",
+    "@neo/skill-filesystem": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/jobs-local": "workspace:^",
+    "@neo/shell-env": "workspace:^",
+    "@neo/tool-bash": "workspace:^",
+    "@neo/tool-goal": "workspace:^",
+    "@neo/tool-skill": "workspace:^",
+    "@neo/tool-jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/agent-instructions": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/cordis-plugin-timer": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/shell-env": "workspace:^",
+    "@neo/bash-local": "workspace:^",
+    "@neo/bash-sandbox": "workspace:^",
+    "@neo/fs-local": "workspace:^",
+    "@neo/fs-observation-policy": "workspace:^",
+    "@neo/fs-sandbox": "workspace:^",
+    "@neo/goal": "workspace:^",
+    "@neo/goal-round-driver": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/llm-retry": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/sandbox-local": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/skill": "workspace:^",
+    "@neo/skill-filesystem": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/jobs": "workspace:^",
+    "@neo/jobs-local": "workspace:^",
+    "@neo/tool-bash": "workspace:^",
+    "@neo/tool-fs": "workspace:^",
+    "@neo/tool-goal": "workspace:^",
+    "@neo/tool-skill": "workspace:^",
+    "@neo/tool-jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/agent-instructions": "workspace:^",
+    "@neo/node-addon-landlock-run": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@neo/schemastery": "workspace:^"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "organization": "skyvanguard",
+  "repository": "NEO",
+  "projectNumber": 1,
+  "projectTitle": "NEO Issue Management",
+  "lifecycleActor": "neo-issue-management",
+  "priorityField": "Priority",
+  "allowUnassignedOwner": true,
+  "statuses": [
+    "Inbox",
+    "Backlog",
+    "Ready",
+    "In progress",
+    "In review",
+    "Done",
+    "No action"
+  ]
+}

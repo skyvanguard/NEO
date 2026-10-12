@@ -1,0 +1,66 @@
+{
+  "name": "@neo/tool-pwsh-persistent",
+  "description": "Model-facing owner-scoped persistent PowerShell tool backed by the Harness PTY service",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/shell/tool-pwsh-persistent"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/agent": "workspace:*",
+    "@neo/invariants": "workspace:^",
+    "@neo/output-retention": "workspace:*",
+    "@neo/terminal": "workspace:*",
+    "@neo/timeout": "workspace:*",
+    "@neo/tools": "workspace:*",
+    "@neo/cordis": "workspace:~"
+  },
+  "dependencies": {
+    "@neo/schemastery": "workspace:~"
+  },
+  "devDependencies": {
+    "@neo/cordis-plugin-include": "workspace:~",
+    "@neo/cordis-plugin-loader": "workspace:~",
+    "@neo/invariants": "workspace:^",
+    "@neo/agent": "workspace:*",
+    "@neo/agent-loop-testkit": "workspace:*",
+    "@neo/llm": "workspace:*",
+    "@neo/output-retention": "workspace:*",
+    "@neo/terminal": "workspace:*",
+    "@neo/terminal-bash": "workspace:*",
+    "@neo/pwsh-local": "workspace:*",
+    "@neo/sandbox": "workspace:*",
+    "@neo/sandbox-policy": "workspace:*",
+    "@neo/session": "workspace:*",
+    "@neo/session-projection": "workspace:*",
+    "@neo/subprocess-local": "workspace:*",
+    "@neo/system-prompt": "workspace:*",
+    "@neo/timeout": "workspace:*",
+    "@neo/tools": "workspace:*",
+    "@neo/cordis": "workspace:~"
+  }
+}

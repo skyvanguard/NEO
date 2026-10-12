@@ -1,0 +1,76 @@
+{
+  "name": "@neo/acp-demo",
+  "description": "ACP automation server app: agent spine + JSONL persistence + ACP transport, with a JSON-RPC stdio bin",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/examples/acp-demo"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "bin": {
+    "dsh-acp-demo": "lib/bin.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./bin": {
+      "types": "./lib/types/bin.d.ts",
+      "default": "./lib/bin.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/bin.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/acp": "workspace:^",
+    "@neo/agent-spine-demo": "workspace:^",
+    "@neo/app-boot": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session-checkpoint-policy": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/session-query": "workspace:^",
+    "@neo/session-query-sqlite": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/agent-instructions": "workspace:^",
+    "@neo/cordis": "workspace:^",
+    "@neo/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/cordis-plugin-include": "workspace:^",
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/acp": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-spine-demo": "workspace:^",
+    "@neo/app-boot": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/session-checkpoint-policy": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/session-query": "workspace:^",
+    "@neo/session-query-sqlite": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/agent-instructions": "workspace:^",
+    "@neo/cordis": "workspace:^",
+    "@neo/schemastery": "workspace:^"
+  }
+}

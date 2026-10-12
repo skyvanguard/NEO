@@ -1,0 +1,32 @@
+/**
+ * Package-owned invariant companion for `@neo/storage-json`.
+ * @module @neo/storage-json/invariant
+ */
+
+/* jscpd:ignore-start */
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/invariants'
+
+const PACKAGE_NAME = '@neo/storage-json'
+
+/** Cordis companion plugin name. */
+export const name = 'storage-json-invariant'
+/** Service required before the companion can reserve package ownership. */
+export const inject = ['invariants']
+
+/**
+ * No runtime invariant: correctness here is write-durability and
+ * publish-then-reparse equivalence, which require medium round-trip tests
+ * (the shared backend conformance suite); the backend exposes no continuously
+ * observable in-process relation.
+ */
+const install: InvariantInstaller = () => {}
+
+/**
+ * Register this package's invariant companion.
+ * @param ctx - Cordis context carrying the invariant service.
+ * @returns the installed registration's disposer after setup succeeds.
+ */
+export const apply = (ctx: Context): Promise<() => void> =>
+  Promise.resolve(ctx.invariants.register(PACKAGE_NAME, install))
+/* jscpd:ignore-end */

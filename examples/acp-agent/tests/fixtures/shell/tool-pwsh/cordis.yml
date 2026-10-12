@@ -1,0 +1,27 @@
+# Minimal tool-pwsh composition: real app boot path, real pwsh executor, real
+# foreground + background tool calls; driven by the package's loader.spec.ts.
+- id: system-prompt
+  name: '@neo/system-prompt'
+
+- id: tools
+  name: '@neo/tools'
+
+- id: subprocess
+  name: '@neo/subprocess-local'
+
+- id: bash
+  name: '@neo/pwsh-local'
+  config:
+    graceMs: 200
+
+- id: shell-env
+  name: '@neo/shell-env'
+
+- id: tasks
+  name: '@neo/jobs-local'
+
+- id: tool-jobs
+  name: '@neo/tool-jobs'
+
+- id: tool-pwsh
+  name: '@neo/tool-pwsh'

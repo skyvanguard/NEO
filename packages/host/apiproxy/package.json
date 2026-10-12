@@ -1,0 +1,94 @@
+{
+  "name": "@neo/host-apiproxy",
+  "description": "API gateway: the ApiProxy contract (api/), the fetch carrier pair (fetch/), and the host-side gateway plugin providing ctx.apiProxy",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/host/apiproxy"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json",
+    "./api": {
+      "types": "./lib/types/api/index.d.ts",
+      "default": "./lib/types/api/index.js"
+    },
+    "./api/*": {
+      "types": "./lib/types/api/*.d.ts",
+      "default": "./lib/types/api/*.js"
+    },
+    "./client": {
+      "types": "./lib/types/fetch/client.d.ts",
+      "default": "./lib/types/fetch/client.js"
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@neo/attachment": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-default-model": "workspace:^",
+    "@neo/api-remotes": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/credentials": "workspace:^",
+    "@neo/goal": "workspace:^",
+    "@neo/host-directory-picker": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/native-command": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/session-projection-cache": "workspace:^",
+    "@neo/session-query": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/settings": "workspace:^",
+    "@neo/skill": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-approval": "workspace:^",
+    "@neo/user-questions": "workspace:^",
+    "@neo/workspace": "workspace:^",
+    "@neo/schemastery": "workspace:^",
+    "fflate": "^0.8.2",
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@neo/cordis": "workspace:^",
+    "@neo/agent-presets": "workspace:^",
+    "@neo/cordis-host-runner": "workspace:^",
+    "@neo/invariants": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/cordis": "workspace:^",
+    "@neo/agent-presets": "workspace:^",
+    "@neo/cordis-host-runner": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/storage": "workspace:^",
+    "@neo/storage-domain": "workspace:^",
+    "@neo/typert-protocol": "workspace:^",
+    "@neo/typert-registry": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

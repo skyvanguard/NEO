@@ -1,0 +1,57 @@
+# CI de Windows para el fork NEO (skyvanguard/NEO).
+#
+# Complementa a ci.yml (Linux, que posee el gate completo: build con tsdown,
+# verify-built-package-invariants, y la suite de tests entera). Este workflow
+# da cobertura nativa en Windows SIN tsdown, que hoy falla en Windows: su
+# globbing de workspaces (workspace: ['vendor/*','packages/*/*','apps/cli'])
+# no matchea en Windows e intenta construir @neo/root. Por eso NO se corren
+# aqui `build:lib` ni `typecheck`/`lint` via los scripts de package.json (que
+# anteponen build:lib:host); se invocan las variantes :contracts-ready y tsc
+# directo, que si funcionan en Windows.
+#
+# lint y typecheck son BLOQUEANTES (estables en Windows). El paso de tests es
+# OBSERVACIONAL por ahora (continue-on-error): la suite ya excluye en win32 las
+# suites no soportadas via `windowsUnsupportedTests` en vitest.config.ts, pero
+# el set exacto de fallos en el runner windows-latest (symlinks con Developer
+# Mode, execution policy de pwsh, sqlite nativo, snapshots jsdom) solo se
+# conoce en el primer run real. Con ese resultado se agregan las suites
+# genuinamente no soportadas a `windowsUnsupportedTests` (gateado a win32, sin
+# afectar Linux) y se promueve este paso a bloqueante.
+name: CI (Windows)
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: windows / lint + typecheck + tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          dest: ${{ runner.temp }}/setup-pnpm
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: install deps
+        run: pnpm install --frozen-lockfile
+      # tsc genera lib/types que oxlint/typecheck de contratos consumen; sin
+      # tsdown. Host y client son unidades de chequeo separadas (ver tsconfig.json).
+      - name: typecheck (host, sin tsdown)
+        run: pnpm exec tsc -b tsconfig.host.json
+      - name: typecheck (client, sin tsdown)
+        run: pnpm run typecheck:contracts-ready
+      - name: lint (sin tsdown)
+        run: pnpm run lint:contracts-ready
+      # Observacional hasta afinar windowsUnsupportedTests con el primer run real.
+      - name: test (observacional)
+        continue-on-error: true
+        run: pnpm run test

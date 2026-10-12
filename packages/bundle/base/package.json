@@ -1,0 +1,130 @@
+{
+  "name": "@neo/base",
+  "description": "The shared dsh core as a profile bundle: every profile's first patch layer, inserting the base plugin rows over the empty profile root",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/bundle/base"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "cordis.patch.yml",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "@neo/cordis-plugin-hmr": "workspace:^",
+    "@neo/cordis-plugin-timer": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-default-model": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/attachment-local": "workspace:^",
+    "@neo/shell-env": "workspace:^",
+    "@neo/bash-sandbox": "workspace:^",
+    "@neo/command-compact": "workspace:^",
+    "@neo/command-feedback": "workspace:^",
+    "@neo/command-goal": "workspace:^",
+    "@neo/commands": "workspace:^",
+    "@neo/compaction-basic": "workspace:^",
+    "@neo/compaction-tool-result-pruner": "workspace:^",
+    "@neo/credentials-local": "workspace:^",
+    "@neo/fs-local": "workspace:^",
+    "@neo/fs-observation-policy": "workspace:^",
+    "@neo/fs-sandbox": "workspace:^",
+    "@neo/goal": "workspace:^",
+    "@neo/goal-round-driver": "workspace:^",
+    "@neo/api-gateway": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/llm-deepseek": "workspace:^",
+    "@neo/llm-pi-ai": "workspace:^",
+    "@neo/llm-retry": "workspace:^",
+    "@neo/permission-presets": "workspace:^",
+    "@neo/plan-mode": "workspace:^",
+    "@neo/pwsh-sandbox": "workspace:^",
+    "@neo/repeat-tool-reminder": "workspace:^",
+    "@neo/sandbox-local": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-checkpoint-policy": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/session-query-sqlite": "workspace:^",
+    "@neo/session-telemetry-otel": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/session-title-first-prompt-llm": "workspace:^",
+    "@neo/settings-file": "workspace:^",
+    "@neo/skill": "workspace:^",
+    "@neo/skill-badge": "workspace:^",
+    "@neo/skill-filesystem": "workspace:^",
+    "@neo/spill-local": "workspace:^",
+    "@neo/spill-policy": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/subagent-fork-in-process": "workspace:^",
+    "@neo/subagent-spawn-in-process": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/jobs-local": "workspace:^",
+    "@neo/tool-call-timeout-policy": "workspace:^",
+    "@neo/token-meter": "workspace:^",
+    "@neo/tool-bash": "workspace:^",
+    "@neo/tool-fs": "workspace:^",
+    "@neo/tool-fs-search": "workspace:^",
+    "@neo/tool-goal": "workspace:^",
+    "@neo/tool-pwsh": "workspace:^",
+    "@neo/tool-ralph": "workspace:^",
+    "@neo/tool-skill": "workspace:^",
+    "@neo/tool-str-replace-editor": "workspace:^",
+    "@neo/tool-subagent": "workspace:^",
+    "@neo/tool-subagent-control": "workspace:^",
+    "@neo/tool-subagent-report": "workspace:^",
+    "@neo/tool-jobs": "workspace:^",
+    "@neo/tool-todo": "workspace:^",
+    "@neo/tool-web": "workspace:^",
+    "@neo/tool-workflow": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/typert-loader": "workspace:^",
+    "@neo/typert-registry": "workspace:^",
+    "@neo/user-approval": "workspace:^",
+    "@neo/user-questions": "workspace:^",
+    "@neo/web": "workspace:^",
+    "@neo/web-fetch-http": "workspace:^",
+    "@neo/web-search-deepseek": "workspace:^",
+    "@neo/web-search-searxng": "workspace:^",
+    "@neo/workflow-worker-thread": "workspace:^",
+    "@neo/agent-instructions": "workspace:^"
+  },
+  "peerDependencies": {
+    "@neo/invariants": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/invariants": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

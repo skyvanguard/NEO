@@ -1,0 +1,29 @@
+- id: cli-mock-llm
+  name: './cli-mock-llm.ts'
+
+- id: base
+  name: '@neo/cordis-plugin-include'
+  config:
+    path: ../../cordis.yml
+    patches:
+      - id: llm-deepseek
+        name: '@neo/llm-deepseek'
+        disabled: true
+      - id: agent-spine
+        name: '@neo/agent-spine-demo'
+        config:
+          agents:
+            - id: main
+              provider: cli-mock
+              model: cli-mock
+              cwd: !!js process.cwd()
+          workspaceContext: false
+          neoHome: './.neo-home'
+          skills:
+            filesystem:
+              agentsHome: './.agents-home'
+          persona: 'Keyless headless-agent smoke.'
+      - id: persistence
+        name: '@neo/session-persistence-jsonl'
+        config:
+          root: './.sessions'
