@@ -51,7 +51,8 @@ beforeEach(async () => {
   await ctx.plugin(WebRuntime, { fetchProvider: WebFetchLocal.LOCAL_FETCH_PROVIDER_ID })
   // Provider cap generous so the tool returns a large formatted result; the
   // policy cap is what triggers the spill (the Agent Note's separation of concerns).
-  await ctx.plugin(WebFetchLocal, { maxBodyChars: 500_000 })
+  // The showcase server is loopback (127.0.0.1), so opt out of the private-address guard.
+  await ctx.plugin(WebFetchLocal, { maxBodyChars: 500_000, allowPrivateAddresses: true })
   await ctx.plugin(LocalSpillStore, { root: spillRoot })
   await ctx.plugin(SpillPolicy, { maxInlineBytes: MAX_INLINE_BYTES })
   await ctx.plugin(ToolWeb)

@@ -45,10 +45,12 @@ jobs:
         run: pnpm install --frozen-lockfile
       # tsc genera lib/types que oxlint/typecheck de contratos consumen; sin
       # tsdown. Host y client son unidades de chequeo separadas (ver tsconfig.json).
+      # Solo el host. El client typecheck (tsconfig.client.json) NO es viable en
+      # Windows sin tsdown: los modulos generados `@neo/*/remote` son artefactos
+      # de la cara client de tsdown, que no corre en Windows; sin ellos tsc falla
+      # con TS2307. Linux (ci.yml) posee el client typecheck.
       - name: typecheck (host, sin tsdown)
         run: pnpm exec tsc -b tsconfig.host.json
-      - name: typecheck (client, sin tsdown)
-        run: pnpm run typecheck:contracts-ready
       - name: lint (sin tsdown)
         run: pnpm run lint:contracts-ready
       # Observacional hasta afinar windowsUnsupportedTests con el primer run real.

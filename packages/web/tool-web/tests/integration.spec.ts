@@ -39,7 +39,9 @@ beforeEach(async () => {
   await ctx.plugin(SystemPrompt)
   await ctx.plugin(ToolRuntime)
   await ctx.plugin(WebRuntime, { searchProvider: WebSearchExa.EXA_PROVIDER_ID, fetchProvider: WebFetchLocal.LOCAL_FETCH_PROVIDER_ID })
-  await ctx.plugin(WebFetchLocal, {})
+  // The integration server is loopback (127.0.0.1), so opt out of the
+  // private-address guard as the provider's own suite does.
+  await ctx.plugin(WebFetchLocal, { allowPrivateAddresses: true })
   await ctx.plugin(WebSearchExa, { apiKey: 'exa-key', baseURL: 'https://api.exa.test' })
   // The shipped deployment shape: the tool-call budget is declared by tool-web
   // config (default 30s, attached as ToolDefinition.timeoutMs) and enforced by
@@ -135,7 +137,8 @@ describe('tool-call timeout returns TOOL_TIMEOUT (deadline wins over a slow fetc
     await tctx.plugin(ToolRuntime)
     await tctx.plugin(WebRuntime, { fetchProvider: WebFetchLocal.LOCAL_FETCH_PROVIDER_ID })
     // Provider backstop well ABOVE the tool-call budget, so the policy wins.
-    await tctx.plugin(WebFetchLocal, { timeoutMs: 30_000 })
+    // Loopback slow server, so opt out of the private-address guard too.
+    await tctx.plugin(WebFetchLocal, { timeoutMs: 30_000, allowPrivateAddresses: true })
     await tctx.plugin(TimeoutPolicy)
     // The tool-call budget is declared by tool-web config, enforced by the policy.
     tfiber = await tctx.plugin(ToolWeb, { fetchTimeoutMs: 50 })
