@@ -1,0 +1,61 @@
+{
+  "name": "@neo/tool-lsp",
+  "description": "Model-facing lsp tool over the NEO LSP capability seam (ctx.lsp) — one read-only tool with goToDefinition/findReferences/goToImplementation/hover operations, one-based UTF-16 cursor coordinates, bounded location rendering, and hover normalization",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/lsp/tool-lsp"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/lsp": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@neo/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/fs-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/lsp": "workspace:^",
+    "@neo/lsp-stdio": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tool-call-timeout-policy": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

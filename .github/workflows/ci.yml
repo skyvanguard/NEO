@@ -1,0 +1,48 @@
+# CI del fork NEO (skyvanguard/NEO).
+#
+# El workflow upstream de deepseek-harness dependia de runners self-hosted
+# (Wine, dsh-win-ci) que este fork no tiene. Este es un CI Linux minimo y
+# suficiente para el fork: construye la lib, corre el probe de invariantes de
+# build (que atrapa una dep runtime no declarada en los artefactos typert —
+# la clase de fallo que rompio un deploy), el typecheck, el lint y los tests
+# (en Linux corren las suites que Windows excluye: hooks, bash, subprocess).
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: linux node 22 / gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          # No compartir el destino por defecto de pnpm/action-setup entre runners.
+          dest: ${{ runner.temp }}/setup-pnpm
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      # Las suites de sandbox/bash necesitan bubblewrap en el runner.
+      - name: install bubblewrap
+        run: sudo apt-get update && sudo apt-get install -y bubblewrap
+      - name: install deps
+        run: pnpm install --frozen-lockfile
+      - name: build lib
+        run: pnpm run build:lib
+      - name: built-package invariants (undeclared runtime deps)
+        run: pnpm run verify-built-package-invariants
+      - name: typecheck
+        run: pnpm run typecheck
+      - name: lint
+        run: pnpm run lint
+      - name: test
+        run: pnpm run test

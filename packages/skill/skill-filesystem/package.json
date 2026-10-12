@@ -1,0 +1,53 @@
+{
+  "name": "@neo/skill-filesystem",
+  "description": "Local filesystem skill provider for the NEO",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/skill/skill-filesystem"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/fs": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/skill": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "chokidar": "^5.0.0",
+    "@neo/schemastery": "workspace:^",
+    "yaml": "^2.4.2"
+  },
+  "devDependencies": {
+    "@neo/fs": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/home-paths": "workspace:^",
+    "@neo/skill": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

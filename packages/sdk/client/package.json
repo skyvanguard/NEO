@@ -1,0 +1,47 @@
+{
+  "name": "@neo/sdk-client",
+  "description": "TypeScript client SDK for driving a NEO runtime subprocess over stdio JSON-RPC: the DeepSeekHarness high-level turns API and the lower-level HarnessClient",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/sdk/client"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

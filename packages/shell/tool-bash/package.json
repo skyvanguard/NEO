@@ -1,0 +1,73 @@
+{
+  "name": "@neo/tool-bash",
+  "description": "Model-facing bash tool with optional generic background-job and sandbox-escalation support",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/shell/tool-bash"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/shell-env": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-approval": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@neo/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/agent-loop": "workspace:^",
+    "@neo/agent-loop-testkit": "workspace:^",
+    "@neo/shell": "workspace:^",
+    "@neo/shell-env": "workspace:^",
+    "@neo/bash-local": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/subprocess-local": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/jobs": "workspace:^",
+    "@neo/jobs-local": "workspace:^",
+    "@neo/tool-jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-approval": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

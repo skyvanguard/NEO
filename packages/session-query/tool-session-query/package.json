@@ -1,0 +1,63 @@
+{
+  "name": "@neo/tool-session-query",
+  "description": "Workspace-authorized model-facing session history search, trace, and event read tools",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/session-query/tool-session-query"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-query": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@neo/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/session-query": "workspace:^",
+    "@neo/session-query-sqlite": "workspace:^",
+    "@neo/session-title": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/timeout": "workspace:^",
+    "@neo/tool-call-timeout-policy": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

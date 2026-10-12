@@ -1,0 +1,68 @@
+{
+  "name": "@neo/tools",
+  "description": "Tool registry and execution pipeline for the NEO",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/core/tools"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./presentation": {
+      "types": "./lib/types/presentation.d.ts",
+      "default": "./lib/types/presentation.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/code-runtime": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/user-approval": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@neo/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/code-runtime": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/system-prompt": "workspace:^",
+    "@neo/user-approval": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

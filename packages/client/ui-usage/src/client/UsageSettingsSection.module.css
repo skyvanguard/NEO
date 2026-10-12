@@ -1,0 +1,116 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 4px 2px 24px;
+  color: var(--dsw-alias-text-primary, currentColor);
+}
+
+.status {
+  color: var(--dsw-alias-text-secondary, #6b7280);
+  font-size: 14px;
+}
+
+.failure {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.failure button {
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--dsw-alias-border-default, #2a2f2b);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.heading h3 { margin: 0; font-size: 18px; }
+.subtitle {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--dsw-alias-text-secondary, #6b7280);
+}
+.refresh {
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--dsw-alias-border-default, #2a2f2b);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 13px;
+}
+.refresh:hover { border-color: var(--dsw-alias-brand-primary, #00c060); }
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--dsw-alias-border-subtle, rgba(0, 192, 96, 0.18));
+  background: var(--dsw-alias-bg-subtle, rgba(0, 192, 96, 0.05));
+}
+.tileValue {
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--dsw-alias-brand-primary, #00c060);
+}
+.tileLabel {
+  font-size: 12px;
+  color: var(--dsw-alias-text-secondary, #6b7280);
+}
+
+.block { display: flex; flex-direction: column; gap: 10px; }
+.block h4 { margin: 0; font-size: 14px; color: var(--dsw-alias-text-secondary, #6b7280); }
+
+.days { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.dayRow { display: grid; grid-template-columns: 92px 1fr 68px; align-items: center; gap: 10px; }
+.dayLabel { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--dsw-alias-text-secondary, #6b7280); }
+.dayBar {
+  height: 10px;
+  border-radius: 6px;
+  background: var(--dsw-alias-bg-subtle, rgba(0, 192, 96, 0.08));
+  overflow: hidden;
+}
+.dayFill {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--dsw-alias-brand-primary, #00c060);
+  min-width: 2px;
+}
+.dayValue { font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.table th {
+  text-align: right;
+  font-weight: 600;
+  padding: 6px 8px;
+  color: var(--dsw-alias-text-secondary, #6b7280);
+  border-bottom: 1px solid var(--dsw-alias-border-subtle, rgba(0, 192, 96, 0.15));
+}
+.table th:first-child, .table td:first-child { text-align: left; }
+.table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--dsw-alias-border-subtle, rgba(0, 192, 96, 0.08));
+}
+.name { font-weight: 600; }
+.mono { font-family: var(--dsw-font-code, ui-monospace, monospace); }

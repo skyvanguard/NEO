@@ -1,0 +1,62 @@
+{
+  "name": "@neo/sdk-jsonrpc-server",
+  "description": "Stdio JSON-RPC server plugin for out-of-process NEO SDK clients",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/sdk/server"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@neo/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/llm-deepseek": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/cordis-plugin-loader": "workspace:^",
+    "@neo/agent": "workspace:^",
+    "@neo/agent-spine-demo": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/llm-deepseek": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/sdk-protocol": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence-jsonl": "workspace:^",
+    "@neo/subagent": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

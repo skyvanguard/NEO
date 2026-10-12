@@ -1,0 +1,51 @@
+# Test-only composition of both public opt-in providers and foreground tools.
+# The owning e2e boots this tree but never invokes a model or product process.
+- id: fixture
+  name: './fixture.ts'
+
+- id: subagent
+  name: '@neo/subagent'
+
+- id: subprocess
+  name: '@neo/subprocess-local'
+
+- id: subagent-codex
+  name: '@neo/subagent-codex'
+
+- id: subagent-claude-code
+  name: '@neo/subagent-claude-code'
+
+- id: tool-subagent-codex
+  name: '@neo/tool-subagent'
+  config:
+    provider: codex
+    toolName: subagent_codex
+    enableRunInBackground: false
+    maxDepth: 'provider-managed'
+
+- id: tool-subagent-claude-code
+  name: '@neo/tool-subagent'
+  config:
+    provider: claude-code
+    toolName: subagent_claude_code
+    enableRunInBackground: false
+    maxDepth: 'provider-managed'
+
+- id: agent-spine
+  name: '@neo/agent-spine-demo'
+  config:
+    agents:
+      - id: main
+        provider: mock
+        model: mock-delegate
+        cwd: !!js process.cwd()
+    persona: 'This composition test must not start a model turn.'
+    workspaceContext: false
+
+- id: persistence
+  name: '@neo/session-persistence-jsonl'
+  config:
+    root: './.sessions'
+
+- id: checkpoint-policy
+  name: '@neo/session-checkpoint-policy'

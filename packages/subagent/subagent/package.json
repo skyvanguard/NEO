@@ -1,0 +1,106 @@
+{
+  "name": "@neo/subagent",
+  "description": "Abstract subagent seam (ctx.subagents): named-provider registry for delegating to child agents",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/subagent/subagent"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client.d.ts",
+      "default": "./lib/types/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/agent-presets": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/session-projection-cache": "workspace:^",
+    "@neo/jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-approval": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@neo/agent-presets": {
+      "optional": true
+    },
+    "@neo/sandbox": {
+      "optional": true
+    },
+    "@neo/sandbox-policy": {
+      "optional": true
+    },
+    "@neo/session-persistence": {
+      "optional": true
+    },
+    "@neo/session-projection": {
+      "optional": true
+    },
+    "@neo/session-projection-cache": {
+      "optional": true
+    },
+    "@neo/jobs": {
+      "optional": true
+    },
+    "@neo/user-approval": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@neo/agent": "workspace:^",
+    "@neo/agent-presets": "workspace:^",
+    "@neo/brand": "workspace:^",
+    "@neo/invariants": "workspace:^",
+    "@neo/llm": "workspace:^",
+    "@neo/sandbox": "workspace:^",
+    "@neo/sandbox-policy": "workspace:^",
+    "@neo/scope": "workspace:^",
+    "@neo/session": "workspace:^",
+    "@neo/session-persistence": "workspace:^",
+    "@neo/session-projection": "workspace:^",
+    "@neo/session-projection-cache": "workspace:^",
+    "@neo/storage": "workspace:^",
+    "@neo/storage-domain": "workspace:^",
+    "@neo/jobs": "workspace:^",
+    "@neo/tools": "workspace:^",
+    "@neo/user-approval": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}
