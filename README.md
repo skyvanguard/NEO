@@ -2,9 +2,13 @@
 
 > _"Free your mind."_
 
-**NEO** is a private, local-first AI agent harness built for offensive security. Everything is a plugin; the runtime is powered by [Cordis](https://github.com/cordiverse/cordis). A local model does the reasoning, a local toolkit does the work, and **nothing leaves the box**.
+[![CI](https://github.com/skyvanguard/NEO/actions/workflows/ci.yml/badge.svg)](https://github.com/skyvanguard/NEO/actions/workflows/ci.yml)
+[![CI (Windows)](https://github.com/skyvanguard/NEO/actions/workflows/windows.yml/badge.svg)](https://github.com/skyvanguard/NEO/actions/workflows/windows.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-It's a hardened fork wired end to end for real engagements — reconnaissance, enumeration, exploitation, and post-exploitation — with the agent reasoning locally and its tools running in a controlled sandbox.
+**NEO** is a local-first AI agent harness built for offensive security. Everything is a plugin; the runtime is powered by [Cordis](https://github.com/cordiverse/cordis). A local model does the reasoning, a local toolkit does the work, and **nothing leaves the box**.
+
+It's a hardened fork of [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness), wired end to end for real engagements — reconnaissance, enumeration, exploitation, and post-exploitation — with the agent reasoning locally and its tools running in a controlled sandbox.
 
 ---
 
@@ -43,7 +47,7 @@ It's a hardened fork wired end to end for real engagements — reconnaissance, e
 
 ## Quick start
 
-From a repository checkout:
+Requirements: Node `^22.19 || >=24` and [pnpm](https://pnpm.io). From a repository checkout:
 
 ```sh
 pnpm install
@@ -65,6 +69,12 @@ Point NEO at your model from **Settings → Models** — any OpenAI-compatible b
 ## Security model
 
 NEO's agent **executes code and commands** on the host. It binds to **loopback only** and deliberately refuses to expose itself to the network — reach it through an SSH tunnel, never a raw port on an untrusted LAN. The Web UI ships **no authentication of its own**: treat access to the loopback port as full control of the machine. Run it only on infrastructure you control.
+
+---
+
+## Responsible use
+
+NEO is for **authorized** security work only — engagements you have explicit written permission to perform, CTFs, research, and your own systems. Using it to access or attack systems without authorization is illegal and against its intent. You are responsible for staying within the scope and the law of your jurisdiction.
 
 ---
 
