@@ -17,15 +17,13 @@ exports[`sidebar shell snapshots > renders the collapsed rail after the crossfad
         class="iconButton toggle"
         type="button"
       >
-        <svg
+        <span
           aria-hidden="true"
           class="railFish"
-          data-content="965fe321"
-          fill="none"
-          height="17.6580310880829"
-          viewBox="0 0 23.16 17.04"
-          width="24"
-        />
+          style="display: inline-flex; align-items: center; justify-content: center; font-family: var(--ds-font-family-code); font-weight: 800; font-size: 20px; color: currentcolor;"
+        >
+          N
+        </span>
         <svg
           class="panelIcon"
           data-content="35f95b0c"
@@ -102,11 +100,11 @@ exports[`sidebar shell snapshots > renders the expanded column (wordmark, capsul
       >
         <svg
           aria-hidden="true"
-          data-content="951274b9"
+          data-content="fc2a7ea9"
           fill="none"
           height="24"
-          viewBox="0 0 182 24"
-          width="182"
+          viewBox="0 0 72 24"
+          width="72"
         />
       </button>
       <button
@@ -195,11 +193,11 @@ exports[`sidebar shell snapshots > renders the expanded column in the default lo
       >
         <svg
           aria-hidden="true"
-          data-content="951274b9"
+          data-content="fc2a7ea9"
           fill="none"
           height="24"
-          viewBox="0 0 182 24"
-          width="182"
+          viewBox="0 0 72 24"
+          width="72"
         />
       </button>
       <button
