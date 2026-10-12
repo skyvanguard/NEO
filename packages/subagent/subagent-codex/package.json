@@ -56,7 +56,7 @@
     "@neo/subprocess": "workspace:^",
     "@neo/subprocess-local": "workspace:^",
     "@neo/timeout": "workspace:^",
-    "@openai/codex": "0.147.0",
+    "@openai/codex": "0.154.0",
     "@neo/cordis": "workspace:^"
   }
 }
