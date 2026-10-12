@@ -36,7 +36,7 @@ export function quoteE2BShellArg(value: string): string {
 export function e2bControlEnvs(
   overrides: Readonly<Record<string, string>> = {},
 ): Record<string, string> {
-  return { ...overrides, HOME: `/.dsh-e2b-control-${randomUUID()}` }
+  return { ...overrides, HOME: `/.neo-e2b-control-${randomUUID()}` }
 }
 
 /** Configuration for the shared E2B sandbox owner. */
