@@ -238,7 +238,7 @@ class FakeRemote {
       ): Promise<{ exitCode: number; stdout: string; stderr: string }> => {
         this.checkAbort(options)
         const home = options?.envs?.HOME
-        expect(home).toMatch(/^\/\.dsh-e2b-control-/)
+        expect(home).toMatch(/^\/\.neo-e2b-control-/)
         expect(options?.envs).toEqual({ HOME: home })
         this.commands.push(command)
         if (this.nextCommandError !== undefined) {

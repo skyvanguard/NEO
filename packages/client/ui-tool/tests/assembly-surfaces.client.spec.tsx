@@ -71,6 +71,8 @@ async function bench(nodes: ToolResultNode[]) {
   runtime.provide('connection', { api: { settings: {} }, isLoopback: false })
   // ui-theme's Appearance row binds a durable scope through these two.
   runtime.provide('remote', { $on: () => () => {} })
+  // ui-conversation injects `remote.documentAttach` (its attachment save path).
+  runtime.provide('remote.documentAttach', { save: vi.fn() })
   runtime.provide('settingsScope', { bind: () => stubSettingsScope().scope } as never)
   runtime.provide('layout', { openDetails: vi.fn(), closeDetails: vi.fn() })
   const locale = new LocaleRuntime(runtime.ctx)

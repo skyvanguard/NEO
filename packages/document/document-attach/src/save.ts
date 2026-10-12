@@ -8,7 +8,7 @@
 
 import { Buffer } from 'node:buffer'
 import { mkdir, writeFile } from 'node:fs/promises'
-import { basename, join, resolve, sep } from 'node:path'
+import { join, resolve, sep } from 'node:path'
 import type { DocumentSaveResult } from './types.ts'
 
 /** Workspace-relative directory that holds attached documents. */
@@ -36,7 +36,12 @@ const SAFE_NAME_ALLOWED = /[^a-zA-Z0-9._-]/g
  * @returns a safe basename, never empty.
  */
 export function safeBaseName(fileName: string): string {
-  const base = basename(fileName).replace(SAFE_NAME_ALLOWED, '_').replace(/^\.+/, '')
+  // Strip directory parts for BOTH separators regardless of host platform: a
+  // client-supplied name may use Windows `\` even when the host is POSIX, where
+  // node:path's basename would not treat it as a separator. Dropping everything
+  // up to the last separator always yields a string (no undefined branch).
+  const stripped = fileName.replace(/^.*[/\\]/, '')
+  const base = stripped.replace(SAFE_NAME_ALLOWED, '_').replace(/^\.+/, '')
   const bounded = base.slice(0, 200)
   return bounded === '' ? 'attachment' : bounded
 }
