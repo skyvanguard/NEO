@@ -91,12 +91,6 @@ export const en = {
   welcomeBody: WELCOME_NOTICE_COPY.en.body,
   welcomeContinue: WELCOME_NOTICE_COPY.en.continueLabel,
   welcomeError: 'The acknowledgement could not be saved. Please try again.',
-  onboardingTitle: 'Add an API key to get started',
-  onboardingDescription: 'Configure the official DeepSeek provider to start building.',
-  onboardingLater: 'Configure later',
-  onboardingSave: 'Save and continue',
-  onboardingSaving: 'Saving…',
-  keyRequired: 'Enter an API key to continue.',
 }
 
 /** The settings.models namespace key union. */
@@ -191,12 +185,6 @@ export const zh: { [Key in keyof typeof en]: string } = {
   welcomeBody: WELCOME_NOTICE_COPY.zh.body,
   welcomeContinue: WELCOME_NOTICE_COPY.zh.continueLabel,
   welcomeError: '暂时无法保存确认状态，请重试。',
-  onboardingTitle: '添加一个 API Key 开始使用',
-  onboardingDescription: '配置 DeepSeek 官方模型，即可开始使用。',
-  onboardingLater: '稍后配置',
-  onboardingSave: '保存并继续',
-  onboardingSaving: '保存中…',
-  keyRequired: '请输入 API 密钥后继续。',
 }
 
 /** Spanish strings (same keys as {@link en}). */
@@ -288,10 +276,4 @@ export const es: { [Key in keyof typeof en]: string } = {
   welcomeBody: WELCOME_NOTICE_COPY.es.body,
   welcomeContinue: WELCOME_NOTICE_COPY.es.continueLabel,
   welcomeError: 'No se pudo guardar la confirmación. Por favor, inténtalo de nuevo.',
-  onboardingTitle: 'Añade una clave de API para empezar',
-  onboardingDescription: 'Configura el proveedor oficial de DeepSeek para empezar a construir.',
-  onboardingLater: 'Configurar más tarde',
-  onboardingSave: 'Guardar y continuar',
-  onboardingSaving: 'Guardando…',
-  keyRequired: 'Introduce una clave de API para continuar.',
 }
