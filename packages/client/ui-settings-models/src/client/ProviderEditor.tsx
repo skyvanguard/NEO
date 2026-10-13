@@ -6,11 +6,10 @@
  * has none. The pi-ai profile records that derivation as `apiKeyEnv` only when
  * a key is entered; a blank key materializes a reference-free profile for
  * provider-native authentication);
- * the collapsed 自定义设置 area carries the per-family extras (`baseURL` for
- * both families, DeepSeek's id/name/context-window model catalog, and the
- * display name and wire protocol of a pi-ai route the adapter does not ship —
- * the two fields the create card asked that route for, editable here for the
- * same reason).
+ * the collapsed 自定义设置 area carries the per-route extras (`baseURL`, the
+ * model catalog, and the display name and wire protocol of a pi-ai route the
+ * adapter does not ship — the two fields the create card asked that route for,
+ * editable here for the same reason).
  * Reasoning effort is deliberately absent: it is a per-MODEL capability, and
  * the models under one provider disagree about it, so a provider-scoped
  * control can only be set to a value some of them reject. The composer's
@@ -27,9 +26,7 @@ import type { CredentialView, IApiClient, SettingsNamespaceView, SettingsPathOpV
 import {
   deletePath, getPath, hasPath, nodeAtPath, rehydrateSchema, setPath, validateDraft,
 } from '@neo/client-schema-form'
-import {
-  DeepSeekModelsEditor, modelDrafts, validateDeepSeekModels,
-} from './DeepSeekModelsEditor.tsx'
+import { modelDrafts, validateModelCatalog } from './modelCatalog.ts'
 import { apiKeyFailure } from './apiKey.ts'
 import { EditorFooter } from './EditorFooter.tsx'
 import { ModelListEditor } from './ModelListEditor.tsx'
@@ -38,10 +35,7 @@ import type { en } from './locales.ts'
 import styles from './ModelsSection.module.css'
 
 /** Per-adapter-family curated field sets (unknown namespaces get the hint alone). */
-type EditorLayout = 'deepseek' | 'pi-ai' | 'unknown'
-
-/** The public DeepSeek endpoint shown as the deepseek base-URL placeholder. */
-const DEEPSEEK_PUBLIC_BASE_URL = 'https://api.deepseek.com'
+type EditorLayout = 'pi-ai' | 'unknown'
 
 /** Props of {@link ProviderEditor}. */
 export interface ProviderEditorProps {
@@ -69,18 +63,6 @@ export interface ProviderEditorProps {
   t: (key: keyof typeof en) => string
   /** Disable writes (read-only settings provider). */
   readOnly: boolean
-  /** Render only the credential field and actions, without provider settings. */
-  credentialOnly?: boolean
-  /** Require a newly entered credential before this editor can submit. */
-  credentialRequired?: boolean
-  /** Give the credential field initial focus when this editor mounts. */
-  autoFocusCredential?: boolean
-  /** Override the dismiss action copy. */
-  cancelLabel?: keyof typeof en
-  /** Override the idle commit action copy. */
-  submitLabel?: keyof typeof en
-  /** Override the in-flight commit action copy. */
-  submitBusyLabel?: keyof typeof en
   /** Close the editor; `changed` reports whether an Apply committed. */
   onClose: (changed: boolean) => void
 }
@@ -123,7 +105,6 @@ export function pathOps(
 
 /** The editor layout the owning namespace selects. */
 function layoutOf(ns: string): EditorLayout {
-  if (ns === 'llm-deepseek') return 'deepseek'
   if (ns === 'llm-pi-ai') return 'pi-ai'
   return 'unknown'
 }
@@ -201,20 +182,16 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
     setDraft(current => value === undefined ? deletePath(current, [key]) : setPath(current, [key], value))
   }
 
-  // The model list is validated by the same per-row checker for both families,
-  // so a bad row is named by its position rather than by a blanket message.
-  const modelFailure = validateDeepSeekModels(getPath(draft, ['models']))
+  // The model list is validated by the per-row checker, so a bad row is named
+  // by its position rather than by a blanket message.
+  const modelFailure = validateModelCatalog(getPath(draft, ['models']))
   const keyFailure = apiKeyFailure(keyDraft)
   // What a probe or a write must carry: the typed key with paste whitespace
   // removed. A blank field yields an empty string, which both call sites read
   // as "no key supplied" rather than as a key — that is how a card whose
   // provider already has a stored key is edited without re-entering it.
   const keyValue = keyDraft.trim()
-  const credentialRequiredFailure = props.credentialRequired === true
-    && keyDraft.length > 0 && keyValue.length === 0
-    ? 'keyRequired' as const
-    : undefined
-  const shownKeyFailure = credentialRequiredFailure ?? keyFailure
+  const shownKeyFailure = keyFailure
   // What the form currently shows, which is what an interrogation must ask:
   // an edited-but-unsaved endpoint, and a key typed but not yet stored.
   const probeApi = stringAt(draft, 'api') ?? stringAt(fallback, 'api')
@@ -242,19 +219,17 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
       && stringAt(fallback, 'apiKeyEnv') === undefined && keyValue.length > 0
       ? setPath(draft, ['apiKeyEnv'], keyRef)
       : draft
-    if (props.credentialOnly !== true) {
-      // The same checker gates the submit button, so a card cannot reach this
-      // with a bad row; it stays because the schema check below would refuse
-      // the write with a message naming a path instead of the row, and because
-      // nothing but this function decides what is written.
-      const failure = validateDeepSeekModels(getPath(next, ['models']))
-      /* v8 ignore next 3 -- unreachable from the card: the same failure disables submit */
-      if (failure !== undefined) {
-        return `${t('model')} ${String(failure.index + 1)}: ${t(failure.key)}`
-      }
+    // The same checker gates the submit button, so a card cannot reach this
+    // with a bad row; it stays because the schema check below would refuse
+    // the write with a message naming a path instead of the row, and because
+    // nothing but this function decides what is written.
+    const failure = validateModelCatalog(getPath(next, ['models']))
+    /* v8 ignore next 3 -- unreachable from the card: the same failure disables submit */
+    if (failure !== undefined) {
+      return `${t('model')} ${String(failure.index + 1)}: ${t(failure.key)}`
     }
     /* v8 ignore next -- apply is only reachable from the rendered card, which required a resolved node */
-    if (props.credentialOnly !== true && node !== undefined && settingsPath.length === 0) {
+    if (node !== undefined && settingsPath.length === 0) {
       const sectionError = validateDraft(node, next)
       if (sectionError !== undefined) return sectionError
     }
@@ -262,11 +237,9 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
       && fallback === undefined
       && committedOriginal === undefined
       && Object.keys(next).length === 0
-    const ops: SettingsPathOpView[] = props.credentialOnly === true
-      ? []
-      : materializesNativeProfile
-        ? [{ op: 'set', path: [...settingsPath], value: {} }]
-        : pathOps(settingsPath, committedOriginal, next)
+    const ops: SettingsPathOpView[] = materializesNativeProfile
+      ? [{ op: 'set', path: [...settingsPath], value: {} }]
+      : pathOps(settingsPath, committedOriginal, next)
     if (ops.length > 0) {
       const response = await api.settings.mutate({ ns, ops, expectedRevision })
       if (!response.result.ok) {
@@ -327,26 +300,21 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
   }
 
   /**
-   * The curated fields of one known adapter family. The family arrives
-   * narrowed so the per-family branches below are total: an unknown namespace
+   * The curated fields of the pi-ai adapter family. An unknown namespace
    * renders the hint instead and never reaches this body.
    */
-  const curatedFields = (family: 'deepseek' | 'pi-ai'): ReactNode => {
+  const curatedFields = (): ReactNode => {
     // What a hand-declared route names for itself and nothing else can supply.
-    // A whole-section `llm-deepseek` profile is a composition fact with no
-    // per-route identity for its schema to carry, hence the family test.
-    const ownsIdentity = family === 'pi-ai' && props.declared === true
+    const ownsIdentity = props.declared === true
     const customModels = getPath(draft, ['models'])
     const modelsOverridden = hasPath(draft, ['models'])
     const models = modelDrafts(modelsOverridden ? customModels : inheritedModels())
-    const defaultContextWindow = getPath(fallback, ['defaultContextWindow'])
-    const defaultMaxTokens = getPath(fallback, ['maxTokens'])
     const keyPlaceholder = keyLocked
       ? t('keyEnvLocked')
-      : keyState?.configured === true && props.credentialRequired !== true
+      : keyState?.configured === true
         ? t('keyStored')
-        : family === 'pi-ai' ? t('keyPlaceholderNative') : t('keyPlaceholder')
-    /** What both family editors take: the rows, whose layer owns them, and the two writes. */
+        : t('keyPlaceholderNative')
+    /** What the model editor takes: the rows, whose layer owns them, and the two writes. */
     const catalogProps = {
       models,
       overridden: modelsOverridden,
@@ -369,14 +337,12 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
             placeholder={keyPlaceholder}
             aria-label={t('keyInput')}
             aria-invalid={shownKeyFailure !== undefined}
-            required={props.credentialRequired === true}
-            autoFocus={props.autoFocusCredential === true}
             disabled={disabled || keyLocked}
             onChange={(event) => { setKeyDraft(event.target.value) }}
           />
           {shownKeyFailure === undefined ? null : <p className={styles['error']}>{t(shownKeyFailure)}</p>}
         </div>
-        {props.credentialOnly === true ? null : <details className={styles['customized']}>
+        <details className={styles['customized']}>
           <summary className={styles['customizedSummary']}>{t('customized')}</summary>
           <div className={styles['customizedBody']}>
             {/* The name and the protocol are the create card's two remaining
@@ -412,9 +378,7 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
                 className={styles['input']}
                 type="text"
                 value={stringAt(draft, 'baseURL') ?? ''}
-                placeholder={family === 'deepseek'
-                  ? DEEPSEEK_PUBLIC_BASE_URL
-                  : stringAt(fallback, 'baseURL') ?? t('baseUrlDefault')}
+                placeholder={stringAt(fallback, 'baseURL') ?? t('baseUrlDefault')}
                 aria-label={t('baseUrl')}
                 disabled={disabled}
                 onChange={(event) => {
@@ -447,28 +411,16 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
                 </div>
               )
               : null}
-            {/* Both families edit the same rows through the same contract; only
-                the extras differ — DeepSeek's inherited capacities, pi-ai's
-                endpoint interrogation. */}
-            {family === 'deepseek'
-              ? (
-                <DeepSeekModelsEditor
-                  {...catalogProps}
-                  defaultContextWindow={typeof defaultContextWindow === 'number'
-                    ? defaultContextWindow
-                    : undefined}
-                  defaultMaxTokens={typeof defaultMaxTokens === 'number' ? defaultMaxTokens : undefined}
-                />
-              )
-              : <ModelListEditor {...catalogProps} probe={probe} probeBlocked={keyFailure} api={api} />}
+            {/* The rows plus the endpoint interrogation the pi-ai family adds. */}
+            <ModelListEditor {...catalogProps} probe={probe} probeBlocked={keyFailure} api={api} />
           </div>
-        </details>}
+        </details>
       </>
     )
   }
 
   return (
-    <div className={props.credentialOnly === true ? styles['addBlock'] : styles['editor']}>
+    <div className={styles['editor']}>
       {props.hideTitle === true
         ? null
         : (
@@ -481,9 +433,9 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
         )}
       {layout === 'unknown'
         ? <p className={styles['advancedHint']}>{`${t('advancedHint')} (${namespace.ns})`}</p>
-        : curatedFields(layout)}
+        : curatedFields()}
       {failure !== undefined ? <p className={styles['error']}>{failure}</p> : null}
-      {props.credentialOnly === true || modelFailure === undefined
+      {modelFailure === undefined
         ? null
         : (
           <p className={styles['advancedHint']}>
@@ -494,12 +446,10 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
         t={t}
         busy={busy}
         submitDisabled={disabled || layout === 'unknown'
-          || (props.credentialOnly !== true && modelFailure !== undefined)
-          || shownKeyFailure !== undefined
-          || (props.credentialRequired === true && keyValue.length === 0)}
-        submitLabel={props.submitLabel ?? 'apply'}
-        submitBusyLabel={props.submitBusyLabel ?? 'applying'}
-        {...props.cancelLabel === undefined ? {} : { cancelLabel: props.cancelLabel }}
+          || modelFailure !== undefined
+          || shownKeyFailure !== undefined}
+        submitLabel="apply"
+        submitBusyLabel="applying"
         onCancel={() => { props.onClose(false) }}
         onSubmit={() => { void apply() }}
       />
