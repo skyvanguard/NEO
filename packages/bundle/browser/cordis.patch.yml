@@ -1,0 +1,31 @@
+# The neo-browser bundle patch: adds the Playwright MCP server as a tool
+# source, so the model gains browser-control tools (navigate, click, type,
+# snapshot, …) under the `mcp__browser__*` namespace.
+#
+# It is an ADDITIVE layer, not a standalone profile: apply it on top of an
+# existing surface (web or headless) with
+#   neo plugin --profile <name> add @neo/browser
+#
+# The server is spawned over stdio via npx, so the host must have the
+# Playwright Chromium browser installed once:
+#   npx playwright install --with-deps chromium
+#
+# `@playwright/mcp@latest` tracks the newest release on every cold start; pin a
+# version in `args` for reproducible deployments. `--headless` suits a server
+# with no display; `--isolated` keeps each session's profile in memory and
+# discards it on close, so no browser state leaks between sessions.
+
+- insert:
+    - id: mcp-browser
+      name: '@neo/mcp-client'
+      config:
+        transport: stdio
+        serverName: browser
+        command: npx
+        args:
+          - '-y'
+          - '@playwright/mcp@latest'
+          - '--headless'
+          - '--isolated'
+          - '--browser'
+          - 'chromium'

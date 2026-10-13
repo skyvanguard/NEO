@@ -1,0 +1,52 @@
+{
+  "name": "@neo/browser",
+  "description": "The Playwright browser-control surface as a profile bundle: an additive patch layer that mounts the Playwright MCP server as a tool source",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/bundle/browser"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "cordis.patch.yml",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "@neo/mcp-client": "workspace:^"
+  },
+  "peerDependencies": {
+    "@neo/invariants": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@neo/invariants": "workspace:^",
+    "@neo/cordis": "workspace:^"
+  }
+}

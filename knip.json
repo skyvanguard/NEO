@@ -761,6 +761,11 @@
         "@neo/.+"
       ]
     },
+    "packages/bundle/browser": {
+      "ignoreDependencies": [
+        "@neo/.+"
+      ]
+    },
     "packages/bundle/headless": {
       "ignoreDependencies": [
         "@neo/code-runtime-worker-thread"
