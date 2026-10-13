@@ -1,0 +1,30 @@
+/**
+ * Package-owned invariant companion for `@neo/browser`.
+ * @module @neo/browser/invariant
+ */
+
+import type { Context } from '@neo/cordis'
+import type { InvariantInstaller } from '@neo/invariants'
+
+const PACKAGE_NAME = '@neo/browser'
+
+/** Cordis companion plugin name. */
+export const name = 'browser-bundle-invariant'
+/** Service required before the companion can register. */
+export const inject = ['invariants']
+
+/**
+ * No runtime invariant: the package is a static patch-list carrier (a YAML
+ * document of loader rows owned by other packages); it mounts no service,
+ * emits no events, and holds no mutable relation to audit. The inserted
+ * `@neo/mcp-client` row carries that server's own invariants.
+ */
+const install: InvariantInstaller = () => {}
+
+/**
+ * Register this package's invariant companion.
+ * @param ctx - Cordis context carrying the invariant service.
+ * @returns the installed registration's disposer after setup succeeds.
+ */
+export const apply = (ctx: Context): Promise<() => void> =>
+  Promise.resolve(ctx.invariants.register(PACKAGE_NAME, install))

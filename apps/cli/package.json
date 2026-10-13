@@ -27,6 +27,7 @@
     "@neo/agent-tool-presentation": "workspace:^",
     "@neo/app-boot": "workspace:^",
     "@neo/base": "workspace:^",
+    "@neo/browser": "workspace:^",
     "@neo/cordis-client-runner": "workspace:^",
     "@neo/client-ui-agent-preset": "workspace:^",
     "@neo/client-ui-cordis": "workspace:^",

@@ -138,6 +138,9 @@ importers:
       '@neo/base':
         specifier: workspace:^
         version: link:../../packages/bundle/base
+      '@neo/browser':
+        specifier: workspace:^
+        version: link:../../packages/bundle/browser
       '@neo/client-ui-agent-preset':
         specifier: workspace:^
         version: link:../../packages/client/ui-agent-preset
@@ -1226,6 +1229,19 @@ importers:
       '@neo/workflow-worker-thread':
         specifier: workspace:^
         version: link:../../workflow/workflow-worker-thread
+    devDependencies:
+      '@neo/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@neo/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+
+  packages/bundle/browser:
+    dependencies:
+      '@neo/mcp-client':
+        specifier: workspace:^
+        version: link:../../mcp/mcp-client
     devDependencies:
       '@neo/cordis':
         specifier: workspace:^
