@@ -59,7 +59,13 @@
       name: '@neo/agent'
 
     # The transport-independent default for Agents created by entry points.
-    # Settings may supply a saved selection; consumers read it at creation time.
+    # NEO ships no built-in model adapter, so this seed names a route nothing
+    # serves until the user configures a local, OpenAI-compatible endpoint from
+    # Settings → Models (the dormant `llm-pi-ai` adapter); that saved selection
+    # then overrides it. An unconfigured default is a route the composer refuses
+    # to type into — the first-run state the Models page resolves. The value is
+    # the canonical id the replay/test seam routes, kept so recorded fixtures and
+    # default-model scenarios stay stable. Consumers read the selection at creation time.
     - id: agent-default-model
       name: '@neo/agent-default-model'
       config:
@@ -477,10 +483,3 @@
     # overlay can pin another workspace.
     - id: fs-sandbox
       name: '@neo/fs-sandbox'
-
-    # The native DeepSeek adapter. No key or endpoint is inlined: both resolve per
-    # request from the `llm-deepseek:` settings section over this entry, with the
-    # key coming from the credential store below. Thinking defaults are a deployment
-    # choice.
-    - id: llm-deepseek
-      name: '@neo/llm-deepseek'

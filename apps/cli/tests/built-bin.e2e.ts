@@ -157,7 +157,7 @@ function requestProfileShutdown(
   child.kill('SIGTERM')
 }
 
-function createEnvironmentProbeProfile(home: string, project: string): void {
+function createEnvironmentProbeProfile(home: string, project: string, baseURL: string): void {
   const pluginFile = join(project, 'environment-probe.mjs')
   writeFileSync(pluginFile, [
     "export const name = 'environment-probe'",
@@ -166,8 +166,8 @@ function createEnvironmentProbeProfile(home: string, project: string): void {
     '  void ctx.loader.await().then(async () => {',
     "    let text = ''",
     '    for await (const chunk of ctx.llm.stream({',
-    "      provider: 'deepseek-official',",
-    "      model: 'deepseek-v4-flash',",
+    "      provider: 'local',",
+    "      model: 'local-model',",
     '      messages: [],',
     '      maxTokens: 32,',
     '    })) {',
@@ -188,7 +188,20 @@ function createEnvironmentProbeProfile(home: string, project: string): void {
     dependencies: {},
     dsh: { profile: { bundles: ['@neo/base'] } },
   }, undefined, 2))
+  // Activate the dormant pi-ai adapter with a local OpenAI-compatible route; the
+  // key resolves per request from the managed credential store (LOCAL_API_KEY).
   writeFileSync(join(profileDir, 'cordis.patch.yml'), [
+    '- id: llm-pi-ai',
+    '  config:',
+    '    providers:',
+    '      local:',
+    '        api: openai-completions',
+    `        baseURL: ${baseURL}/v1`,
+    '        apiKeyEnv: LOCAL_API_KEY',
+    '        models:',
+    '          - id: local-model',
+    '            contextWindow: 128000',
+    '            maxTokens: 4096',
     '- insert:',
     '    - id: environment-probe',
     `      name: ${pathToFileURL(pluginFile).href}`,
@@ -375,18 +388,36 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
       successText: 'published headless profile reached the mock',
     })
     const home = mkdtempSync(join(tmpdir(), 'dsh-built-headless-'))
+    // NEO ships no built-in model adapter: configure a local OpenAI-compatible
+    // provider and point the default model at it, exactly as a first-run user
+    // would from Settings → Models.
+    writeFileSync(join(home, 'settings.yaml'), [
+      'agent-default-model:',
+      '  provider: local',
+      '  model: local-model',
+      'llm-pi-ai:',
+      '  providers:',
+      '    local:',
+      '      api: openai-completions',
+      `      baseURL: ${server.baseURL}/v1`,
+      '      apiKeyEnv: LOCAL_API_KEY',
+      '      models:',
+      '        - id: local-model',
+      '          contextWindow: 128000',
+      '          maxTokens: 4096',
+      '',
+    ].join('\n'))
     try {
       const result = await runBuiltBin(['--profile', 'headless', 'answer', 'from', 'the', 'published', 'entry'], {
         NEO_HOME: home,
         NEO_TELEMETRY_DISABLED: '1',
-        DEEPSEEK_API_KEY: apiKey,
-        DEEPSEEK_BASE_URL: server.baseURL,
+        LOCAL_API_KEY: apiKey,
       })
       expect(result.code, result.stderr).toBe(0)
       expect(result.stdout).toBe('published headless profile reached the mock')
       expect(result.stderr).toBe('')
       expect(server.requests.length).toBeGreaterThan(0)
-      expect(server.requests.every(request => request.path === '/chat/completions')).toBe(true)
+      expect(server.requests.every(request => request.path === '/v1/chat/completions')).toBe(true)
       expect(JSON.stringify(server.requests.map(request => request.body))).toContain('answer from the published entry')
     } finally {
       await server.close()
@@ -426,16 +457,15 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
     })
     const home = mkdtempSync(join(tmpdir(), 'dsh-home-environment-'))
     const project = mkdtempSync(join(tmpdir(), 'dsh-home-project-'))
-    writeFileSync(join(home, '.credentials.yaml'), `DEEPSEEK_API_KEY: ${apiKey}\n`, { mode: 0o600 })
-    createEnvironmentProbeProfile(home, project)
+    writeFileSync(join(home, '.credentials.yaml'), `LOCAL_API_KEY: ${apiKey}\n`, { mode: 0o600 })
+    createEnvironmentProbeProfile(home, project, server.baseURL)
     try {
       const result = await runBuiltBin(
         ['--profile', 'environment-probe'],
         {
           NEO_HOME: home,
           NEO_TELEMETRY_DISABLED: '1',
-          DEEPSEEK_API_KEY: undefined,
-          DEEPSEEK_BASE_URL: server.baseURL,
+          LOCAL_API_KEY: undefined,
         },
         project,
       )
@@ -447,7 +477,7 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
       expect(result.stdout).not.toContain(apiKey)
       expect(result.stderr).not.toContain(apiKey)
       expect(server.requests).toHaveLength(1)
-      expect(server.requests[0]?.path).toBe('/chat/completions')
+      expect(server.requests[0]?.path).toBe('/v1/chat/completions')
       expect(server.requests[0]?.headers.authorization).toBe(`Bearer ${apiKey}`)
       expect(JSON.stringify(server.requests[0]?.body)).not.toContain(apiKey)
     } finally {
