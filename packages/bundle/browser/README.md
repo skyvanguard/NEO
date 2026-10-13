@@ -8,11 +8,13 @@ This bundle is an **additive layer**, not a standalone profile — it carries no
 neo plugin --profile web add @neo/browser
 ```
 
-The server is spawned with `npx`, so the host must have the Playwright Chromium browser installed once:
+The server is spawned with `npx`, so the host must have the matching Playwright browser installed once. Install it through the MCP server's own bundled Playwright so the browser revision matches the server (a plain `npx playwright install chromium` can fetch a different revision than `@playwright/mcp` expects and fail at launch):
 
 ```bash
-npx playwright install --with-deps chromium
+npx @playwright/mcp@latest install-browser chrome-for-testing
 ```
+
+On a minimal host that is missing the shared libraries Chromium needs, also install the OS dependencies once (requires root): `npx playwright install-deps chromium`.
 
 The row runs the browser `--headless` (suited to a server with no display) and `--isolated` (each session starts from an in-memory profile that is discarded on close, so no browser state leaks between sessions). `@playwright/mcp@latest` tracks the newest release on every cold start; pin a version in the patch `args` for a reproducible deployment. Override the row by id (`mcp-browser`) from a profile or home `cordis.patch.yml` to change the flags, pin a version, or point at a different browser.
 
@@ -26,6 +28,6 @@ None directly; the inserted MCP client row owns its effect (prefix-stable while 
 
 ## Known Limitations and Deferred Work
 
-- **The browser must be installed out of band** — the patch spawns `npx @playwright/mcp@latest` but does not provision Chromium; a host without `npx playwright install` produces an MCP server that fails to launch, surfaced through the MCP client's startup/reconnect logging.
+- **The browser must be installed out of band** — the patch spawns `npx @playwright/mcp@latest` but does not provision Chromium; a host that has not run `install-browser` produces an MCP server that fails to launch, surfaced through the MCP client's startup/reconnect logging.
 - **`@playwright/mcp@latest` is unpinned** — a cold start resolves the newest published server, so a deployment that needs reproducibility must pin a version in the patch `args`; this bundle ships `latest` for first-run convenience.
 - **One shared isolated browser per server** — the single mounted row serves every turn from one Playwright MCP process; per-agent or per-session browser isolation beyond `--isolated`'s in-memory profile is deferred to a future multi-instance patch.
