@@ -162,8 +162,6 @@ flowchart LR
   cfg --> plugin_dsh_base_agent_loop
   plugin_dsh_base_fs_sandbox["fs-sandbox<br/>@neo/fs-sandbox"]
   cfg --> plugin_dsh_base_fs_sandbox
-  plugin_dsh_base_llm_deepseek["llm-deepseek<br/>@neo/llm-deepseek"]
-  cfg --> plugin_dsh_base_llm_deepseek
 ```
 
 | Plugin id | Package / module |
@@ -245,7 +243,6 @@ flowchart LR
 | `system-prompt` | `@neo/system-prompt` |
 | `agent-loop` | `@neo/agent-loop` |
 | `fs-sandbox` | `@neo/fs-sandbox` |
-| `llm-deepseek` | `@neo/llm-deepseek` |
 
 Source config: [`packages/bundle/base/cordis.patch.yml`](../../packages/bundle/base/cordis.patch.yml).
 
