@@ -53,6 +53,15 @@ export function collectPackageGraph(root: string, groupOrder: readonly string[],
       deps,
     })
   }
+  // Keep only edges to packages this scan actually produced a node for. A
+  // peer dependency on a vendored `@neo/` package (cordis, schemastery, …)
+  // lives under `vendor/`, never `packages/*/*`, so it is not a node here;
+  // leaving it in `deps` would make every package that transitively needs it
+  // (via the universal `@neo/invariants` → `@neo/cordis` edge, that is all of
+  // them) permanently unorderable and report as one false all-package cycle.
+  // A genuine cycle among in-repo nodes still survives this filter and throws.
+  const known = new Set(packages.map(pkg => pkg.short))
+  for (const pkg of packages) pkg.deps = pkg.deps.filter(dep => known.has(dep))
   return topoSort(packages, groupOrder, gate)
 }
 

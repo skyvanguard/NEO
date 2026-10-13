@@ -150,8 +150,12 @@ flowchart LR
   cfg --> plugin_dsh_base_repeat_tool_reminder
   plugin_dsh_base_web["web<br/>@neo/web"]
   cfg --> plugin_dsh_base_web
+  plugin_dsh_base_web_search_searxng["web-search-searxng<br/>@neo/web-search-searxng"]
+  cfg --> plugin_dsh_base_web_search_searxng
   plugin_dsh_base_web_search_deepseek["web-search-deepseek<br/>@neo/web-search-deepseek"]
   cfg --> plugin_dsh_base_web_search_deepseek
+  plugin_dsh_base_web_fetch_http["web-fetch-http<br/>@neo/web-fetch-http"]
+  cfg --> plugin_dsh_base_web_fetch_http
   plugin_dsh_base_tool_web["tool-web<br/>@neo/tool-web"]
   cfg --> plugin_dsh_base_tool_web
   plugin_dsh_base_tools["tools<br/>@neo/tools"]
@@ -237,7 +241,9 @@ flowchart LR
 | `tool-str-replace-editor` | `@neo/tool-str-replace-editor` |
 | `repeat-tool-reminder` | `@neo/repeat-tool-reminder` |
 | `web` | `@neo/web` |
+| `web-search-searxng` | `@neo/web-search-searxng` |
 | `web-search-deepseek` | `@neo/web-search-deepseek` |
+| `web-fetch-http` | `@neo/web-fetch-http` |
 | `tool-web` | `@neo/tool-web` |
 | `tools` | `@neo/tools` |
 | `system-prompt` | `@neo/system-prompt` |
