@@ -56,6 +56,6 @@
     "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^",
     "typescript": "^6.0.3",
-    "typescript-language-server": "^5.0.0"
+    "typescript-language-server": "^6.0.0"
   }
 }
