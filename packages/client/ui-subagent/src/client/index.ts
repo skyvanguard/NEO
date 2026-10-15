@@ -100,6 +100,15 @@ export function apply(ctx: ClientContext): void {
     openChild(address: SubagentAddress) {
       sessions.openSubagent(address)
     },
+    interrupt(address: Extract<SubagentAddress, { mode: 'continuable' }>) {
+      // Fire-and-return: the receipt only acknowledges the admitted cancel, and
+      // the row settles through the membership feed once the child stops. The
+      // interrupt is idempotent (an idle/absent target is an accepted no-op) and
+      // the catalog has no error strip, so a transient transport failure (which
+      // resolves to a failed result, never a rejection) is dropped; the user can
+      // click again.
+      void sessions.interruptSubagent(address)
+    },
     refresh(parentSessionId: SessionId) {
       void sessions.refreshSubagents(parentSessionId)
     },
