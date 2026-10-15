@@ -219,6 +219,25 @@ export class SessionManager {
     this.notifier.notifyNow()
   }
 
+  /**
+   * Stop a running background job the given session owns, from the job list.
+   * Fire-and-return: the list settles through the `session/jobs` feed once the
+   * job stops, and the Host delivers a cancellation notice to the model.
+   * @param sessionId - owning session.
+   * @param jobId - job to stop.
+   * @returns the kill outcome result.
+   */
+  async killJob(
+    sessionId: SessionId,
+    jobId: JobView['id'],
+  ): Promise<RpcResult<{ outcome: 'requested' | 'already-finished' }>> {
+    try {
+      return (await this.api.jobs.kill({ sessionId, jobId })).result
+    } catch (error) {
+      return transportError(error)
+    }
+  }
+
   /** Clear the selection (the layout falls to the no-session view state). */
   clearSelection(): void {
     this.selected = undefined

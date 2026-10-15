@@ -146,6 +146,11 @@ function fakeApi(overrides: Partial<{ muxFrames: MuxFrame[]; hostFrames: HostFra
         return { rpcId: request.rpcId, result: { ok: true, value: { accepted: true as const } } }
       },
     },
+    jobs: {
+      async kill(request) {
+        return { rpcId: request.rpcId, result: { ok: true, value: { outcome: 'requested' as const } } }
+      },
+    },
     host: {
       async describe(request) {
         return {

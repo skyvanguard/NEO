@@ -212,7 +212,12 @@ export class LocalJobRegistry extends JobRegistry {
     return { text, snapshot: this.snapshot(job) }
   }
 
-  kill(id: JobId, caller?: Agent, reason?: string): 'requested' | 'already-finished' {
+  kill(
+    id: JobId,
+    caller?: Agent,
+    reason?: string,
+    options?: { notifyOwner?: boolean },
+  ): 'requested' | 'already-finished' {
     const job = this.expect(id)
     this.assertAccess(job, caller)
     if (isTerminal(job.status)) {
@@ -222,7 +227,11 @@ export class LocalJobRegistry extends JobRegistry {
     // Cancel first so a throw leaves both lifecycle and notice state unchanged.
     job.cancel(reason)
     job.status = 'stopping'
-    job.reported = true
+    // A user-initiated stop (notifyOwner) is left unreported so the terminal
+    // settlement still delivers the completion notice — the model must learn it
+    // was cancelled, not keep believing it runs. The model's own job_kill omits
+    // the flag and stays reported, suppressing the redundant notice it caused.
+    if (options?.notifyOwner !== true) job.reported = true
     this.notifyChanged(job.owner)
     return 'requested'
   }

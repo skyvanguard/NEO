@@ -2965,6 +2965,43 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
       },
     },
 
+    jobs: {
+      kill(request) {
+        const { sessionId, jobId, reason } = request.payload
+        const jobs = ctx.get('jobs')
+        if (jobs === undefined) {
+          return Promise.resolve(err(request, {
+            code: 'internal',
+            message: 'no background-job registry is composed',
+            details: {},
+          }))
+        }
+        const agent = ctx.agents.get(sessionId)
+        if (agent === undefined) {
+          return Promise.resolve(err(request, {
+            code: 'session-not-found',
+            message: `session "${sessionId}" not found (not attached)`,
+            details: { sessionId },
+          }))
+        }
+        try {
+          // notifyOwner: a user stop leaves the job unreported so its terminal
+          // settlement still notifies the model — the model never asked, so it
+          // must learn the job was cancelled rather than keep believing it runs.
+          const outcome = jobs.kill(jobId, agent, reason ?? 'Stopped by the user', { notifyOwner: true })
+          return Promise.resolve(ok(request, { outcome }))
+        } catch (error: unknown) {
+          // expect() throws for an unknown id; assertAccess throws for a job
+          // owned by another session.
+          return Promise.resolve(err(request, {
+            code: 'job-not-found',
+            message: error instanceof Error ? error.message : `job "${jobId}" not found`,
+            details: { jobId },
+          }))
+        }
+      },
+    },
+
     workspace: {
       list(request) {
         return Promise.resolve(ok(request, {

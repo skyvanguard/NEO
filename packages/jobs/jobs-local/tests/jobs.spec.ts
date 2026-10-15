@@ -223,6 +223,30 @@ describe('LocalJobRegistry.start', () => {
     expect(ctx.jobs.start(replacement.spec)).toBe('bash-2')
   })
 
+  it('leaves a user-notified kill unreported so the model still receives the completion notice', async () => {
+    const ctx = await harness()
+    const seen: JobSnapshot[] = []
+    ctx.jobs.onJobDone(snapshot => void seen.push(snapshot))
+    const job = producer()
+    const id = ctx.jobs.start(job.spec)
+    // User-initiated stop: notifyOwner keeps the job reportable and forwards the reason.
+    expect(ctx.jobs.kill(id, undefined, 'Stopped by the user', { notifyOwner: true })).toBe('requested')
+    expect(ctx.jobs.get(id).reported).toBe(false)
+    expect(job.cancels).toEqual(['Stopped by the user'])
+    job.settle({ status: 'killed' })
+    await tick()
+    // The settlement the notice listener sees is unreported, so the model learns it was cancelled.
+    expect(seen.at(-1)).toMatchObject({ id, status: 'killed', reported: false })
+  })
+
+  it('marks a model-initiated kill reported so its redundant notice is suppressed', async () => {
+    const ctx = await harness()
+    const job = producer()
+    const id = ctx.jobs.start(job.spec)
+    expect(ctx.jobs.kill(id)).toBe('requested')
+    expect(ctx.jobs.get(id).reported).toBe(true)
+  })
+
   it.each(['completed', 'killed', 'failed'] as const)(
     'releases the bucket after a %s terminal outcome',
     async (status) => {
