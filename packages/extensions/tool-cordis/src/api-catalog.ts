@@ -783,9 +783,9 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'output text and the post-read snapshot.',
       },
       {
-        signature: 'abstract kill(id: JobId, caller?: Agent, reason?: string): \'requested\' | \'already-finished\'',
-        description: 'Request cancellation, then mark the job stopping and reported. A producer throw propagates without changing job state. Throws for an unknown or foreign job.',
-        parameters: [{ name: 'id', description: 'job to cancel.' }, { name: 'caller', description: 'killing agent checked against the owner.' }, { name: 'reason', description: 'logged reason forwarded to the producer.' }],
+        signature: 'abstract kill( id: JobId, caller?: Agent, reason?: string, options?: { notifyOwner?: boolean }, ): \'requested\' | \'already-finished\'',
+        description: 'Request cancellation, then mark the job stopping. A producer throw propagates without changing job state. Throws for an unknown or foreign job. By default the kill marks the job reported, suppressing the terminal completion notice — correct when the model itself asked to stop the job. With `notifyOwner: true` the job is left unreported so the terminal settlement still delivers a completion notice to the owner, which is how a user-initiated stop lets the model learn it was cancelled instead of believing the job still runs.',
+        parameters: [{ name: 'id', description: 'job to cancel.' }, { name: 'caller', description: 'killing agent checked against the owner.' }, { name: 'reason', description: 'logged reason forwarded to the producer.' }, { name: 'options', description: '`notifyOwner` keeps the terminal completion notice.' }],
         returns: '`requested` for live work, otherwise `already-finished`.',
       },
       {
