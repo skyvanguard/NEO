@@ -591,6 +591,16 @@ describe('ChatView', () => {
     ])
   })
 
+  it('adds a configure-a-model hint when a turn fails with NO_ADAPTER', () => {
+    const h = makeHarness({ nodes: [user(1, 'try'), turnError(3, 'NO_ADAPTER')] })
+    const view = render(<h.ChatView {...h.props} />)
+    const status = view.getAllByRole('status')[0]
+    // The durable message and the code still render; the actionable hint is
+    // appended only for the no-adapter (no model configured) case.
+    expect(status?.textContent).toContain('未配置任何模型')
+    expect(status?.textContent).toContain('NO_ADAPTER')
+  })
+
   it('renders the max-tokens notice with localized guidance, distinct from turn errors', () => {
     const h = makeHarness({ nodes: [user(1, 'try'), assistant(2, 'truncated'), turnMaxTokens(3)] })
     const view = render(<h.ChatView {...h.props} />)

@@ -130,6 +130,12 @@ function TurnErrorItem({ node, t }: {
       <div className={css.turnErrorCopy}>
         <span className={css.turnErrorTitle}>{t('message.turnError')}</span>
         <span className={css.turnErrorMessage}>{node.message}</span>
+        {/* A turn that failed because the selected route has no registered
+            adapter is the first-run posture of a deployment with no model
+            configured yet; point the user at where they fix it. */}
+        {node.code === 'NO_ADAPTER' && (
+          <span className={css.turnErrorMessage}>{t('message.turnError.noAdapterHint')}</span>
+        )}
       </div>
       {node.code !== undefined && <code className={css.turnErrorCode}>{node.code}</code>}
     </div>
