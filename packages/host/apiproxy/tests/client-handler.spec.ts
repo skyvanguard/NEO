@@ -28,6 +28,7 @@ function scriptedApi(overrides: {
   settings?: Partial<ApiProxy['settings']>
   credentials?: Partial<ApiProxy['credentials']>
   llm?: Partial<ApiProxy['llm']>
+  jobs?: Partial<ApiProxy['jobs']>
   respond?: ApiProxy['respond']
 } = {}): ApiProxy {
   async function *empty<F>(): AsyncGenerator<RpcRequest<F>> { /* no frames */ }
@@ -74,6 +75,10 @@ function scriptedApi(overrides: {
       prompt: r => ok(r, { messageId: 'message-1' as never }),
       interrupt: r => ok(r, { accepted: true as const }),
       ...overrides.subagents,
+    },
+    jobs: {
+      kill: r => ok(r, { outcome: 'requested' as const }),
+      ...overrides.jobs,
     },
     host: {
       describe: r => ok(r, {
@@ -307,6 +312,22 @@ describe('unary round trip', () => {
     expect(incomplete.result.ok).toBe(false)
     if (!incomplete.result.ok) expect(incomplete.result.error.code).toBe('bad-request')
     expect(interrupt).toHaveBeenCalledTimes(1)
+  })
+
+  it('round-trips job.kill and rejects an incomplete payload', async () => {
+    const kill = vi.fn((r: RpcRequest<unknown>) => ok(r, { outcome: 'requested' as const }))
+    const api = scriptedApi({ jobs: { kill } })
+    const c = client(api)
+
+    const stopped = await c.jobs.kill({ sessionId: sid('owner'), jobId: 'bash-1' as never })
+    expect(stopped.result).toEqual({ ok: true, value: { outcome: 'requested' } })
+    expect(kill).toHaveBeenCalledTimes(1)
+
+    // The wire schema fences a missing jobId before the impl runs.
+    const incomplete = await c.jobs.kill({ sessionId: sid('owner') } as never)
+    expect(incomplete.result.ok).toBe(false)
+    if (!incomplete.result.ok) expect(incomplete.result.error.code).toBe('bad-request')
+    expect(kill).toHaveBeenCalledTimes(1)
   })
 
   it('rejects a method/path mismatch as bad-request', async () => {

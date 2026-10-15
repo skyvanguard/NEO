@@ -382,6 +382,19 @@ export class SessionRuntime implements ISessions {
   }
 
   /**
+   * Stop a running background job the given session owns, from the job list.
+   * @param sessionId - owning session.
+   * @param jobId - job to stop.
+   * @returns the kill outcome result.
+   */
+  killJob(
+    sessionId: SessionId,
+    jobId: JobView['id'],
+  ): Promise<RpcResult<{ outcome: 'requested' | 'already-finished' }>> {
+    return this.manager.killJob(sessionId, jobId)
+  }
+
+  /**
    * Resolve an already discovered direct-parent address without opening it.
    * Feature plugins use this to avoid Agent-bound RPCs in persisted child views.
    * @param id - possible addressed child id.

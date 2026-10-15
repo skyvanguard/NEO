@@ -9,7 +9,7 @@
  */
 import type { Context } from '@neo/cordis'
 import type {
-  RpcResult, SessionId, SubagentAddress,
+  JobView, RpcResult, SessionId, SubagentAddress,
 } from '@neo/api-remotes/client'
 import type { HostObservable, SessionMaybeProvideInfo } from '@neo/client-ui-slots'
 import type { AgentContext } from '../agents/scope.ts'
@@ -44,6 +44,16 @@ export interface ISessions {
    * @param address - catalog-derived parent and child ids.
    */
   openSubagent(address: SubagentAddress): void
+  /**
+   * Stop a running background job the given session owns, from the job list.
+   * @param sessionId - owning session.
+   * @param jobId - job to stop.
+   * @returns the kill outcome result.
+   */
+  killJob(
+    sessionId: SessionId,
+    jobId: JobView['id'],
+  ): Promise<RpcResult<{ outcome: 'requested' | 'already-finished' }>>
   /**
    * Resolve an already discovered direct-parent address without opening it.
    * @param id - possible addressed child id.
