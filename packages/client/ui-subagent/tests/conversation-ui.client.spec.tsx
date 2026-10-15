@@ -71,6 +71,7 @@ function props(
     sessionId: PARENT,
     useSessions,
     openChild: vi.fn(),
+    interrupt: vi.fn(),
     refresh: vi.fn(),
     setCatalogOpen: vi.fn(),
     t,
@@ -134,6 +135,22 @@ describe('SubagentCatalogAction', () => {
 
     const trigger = screen.getByRole('button', { name: '2 个子代理' })
     expect(trigger.querySelector('[data-state="ongoing"]')).toBeNull()
+  })
+
+  it('offers a stop control only on a running continuable row and interrupts without opening it', () => {
+    const input = props(catalog())
+    render(<SubagentCatalogAction {...input} />)
+    fireEvent.click(screen.getByRole('button', { name: /2 个子代理/ }))
+    // Only the running continuable child (worker) gets a stop control; the
+    // one-shot / non-running rows and diagnostics do not.
+    const stops = screen.getAllByRole('button', { name: /^停止/ })
+    expect(stops).toHaveLength(1)
+    fireEvent.click(stops[0]!)
+    expect(input.interrupt).toHaveBeenCalledWith({
+      parentSessionId: PARENT, childSessionId: CHILD, mode: 'continuable',
+    })
+    // Stopping must not navigate into the child.
+    expect(input.openChild).not.toHaveBeenCalled()
   })
 
   it('renders healthy counts, stable rows, diagnostics, and catalog-addressed navigation', () => {

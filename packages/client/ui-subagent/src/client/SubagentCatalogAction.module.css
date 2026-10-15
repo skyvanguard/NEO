@@ -271,3 +271,26 @@
 .refresh:hover {
   background: var(--dsw-alias-interactive-bg-hover);
 }
+
+.stop {
+  display: inline-flex;
+  flex: none;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsw-alias-label-tertiary);
+  cursor: pointer;
+  transition: color 120ms ease, background 120ms ease;
+}
+
+.stop:hover,
+.stop:focus-visible {
+  color: var(--dsw-alias-label-primary);
+  background: var(--dsw-alias-interactive-bg-hover);
+}
