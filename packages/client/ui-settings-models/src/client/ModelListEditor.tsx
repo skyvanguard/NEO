@@ -21,6 +21,7 @@ import { Button, Modal } from '@neo/client-ui-primitives'
 import { formatCapacity, parseCapacity } from './modelCatalog.ts'
 import type { ModelCatalogDraft } from './modelCatalog.ts'
 import { messageOf } from './store.ts'
+import { ModelReasoningEfforts } from './ModelReasoningEfforts.tsx'
 import type { en } from './locales.ts'
 import styles from './ModelsSection.module.css'
 
@@ -416,6 +417,13 @@ export function ModelListEditor(props: ModelListEditorProps): ReactNode {
                     onChange={(event) => { editCapacity(index, 'maxTokens', event.target.value) }}
                   />
                 </label>
+                <ModelReasoningEfforts
+                  model={model}
+                  position={index + 1}
+                  disabled={disabled}
+                  t={t}
+                  onChange={(next) => { onChange(models.map((row, at) => at === index ? next : row)) }}
+                />
               </div>
             )
             : null}
