@@ -581,6 +581,31 @@ describe('ChatView', () => {
     expect(within(cancelledDisclosure).getByRole('status').textContent).toContain('重试已取消')
   })
 
+  it('surfaces a download card for a file attached from inside a plugin-sourced context message', () => {
+    // attach_file called from run_code defers its block as a plugin-sourced
+    // user message, which classifies as `context`. The card must still show.
+    const attachment = {
+      attachmentId: 'sha256:abc', mediaType: 'application/zip', bytes: 2048, name: 'deliverable.zip',
+    }
+    const context = {
+      kind: 'context', seq: 2, time: 2_000,
+      content: [
+        { type: 'text', text: 'Published a downloadable attachment.' },
+        { type: 'file', attachment },
+      ],
+      source: { kind: 'plugin', plugin: 'tool-fs' },
+      provenance: { role: 'inject', label: 'tool-fs' },
+      form: null,
+    } as unknown as ConversationNode
+    const h = makeHarness({ nodes: [user(1, 'dame el archivo'), context] })
+    const view = render(<h.ChatView {...h.props} />)
+
+    const button = view.getByRole('button', { name: /deliverable\.zip/ })
+    expect(view.getByText('deliverable.zip')).toBeTruthy()
+    fireEvent.click(button)
+    expect(h.props.loadFile).toHaveBeenCalledWith(expect.objectContaining({ attachmentId: 'sha256:abc' }))
+  })
+
   it('renders terminal turn failures inline with their durable message and optional code', () => {
     const h = makeHarness({ nodes: [user(1, 'try'), turnError(2, 'AUTH'), turnError(3)] })
     const view = render(<h.ChatView {...h.props} />)

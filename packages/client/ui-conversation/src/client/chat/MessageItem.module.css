@@ -32,6 +32,19 @@
   padding: 2px 0;
 }
 
+/* Download/image cards surfaced from a plugin-sourced context message
+   (attach_file deliverables). Left-aligned column so each card's
+   `align-self: flex-start` has a flex parent to resolve against. */
+.contextAttachments {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  max-width: min(525px, 82%);
+  padding: 2px 0;
+}
+
 /* Compaction marker: one dim 24px row with a context icon at rest and a
    hover/focus disclosure for the summary body. Dimmed title (not
    label-primary) — the row is a boundary notice, not conversation content. */
