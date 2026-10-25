@@ -43,6 +43,8 @@ const credentialsConfigPath = fileURLToPath(new URL('../credentials.cordis.snaps
 // never dialed either way, because a supplied-but-unusable key fails credential
 // resolution exactly where an absent one does.
 const invalidCredentialScenarioDir = join(snapshotsDir, 'invalid-credential')
+const noAdapterScenarioDir = join(snapshotsDir, 'no-adapter')
+const noAdapterConfigPath = fileURLToPath(new URL('../no-adapter.cordis.snapshot.yml', import.meta.url))
 const ralphScenarioDir = join(snapshotsDir, 'ralph-loop')
 const ralphConfigPath = fileURLToPath(new URL('../ralph.cordis.snapshot.yml', import.meta.url))
 const settlementScenarioDir = join(snapshotsDir, 'subagent-settlement')
@@ -472,6 +474,39 @@ describe('headless stream-json snapshots', () => {
     // may reach the user: the code point of one character is still the key.
     expect(normalized).not.toContain('pasted-from-a-chat-window')
     expect(normalized).not.toContain('ByteString')
+  }, LOADER_SMOKE_TEST_TIMEOUT_MS)
+
+  it('fails the one-shot prompt with NO_ADAPTER when no model adapter is mounted', async () => {
+    const streamExpected = join(noAdapterScenarioDir, 'stream-json.expected.jsonl')
+    let runCwd = ''
+    const result = await runLoaderSmoke({
+      label: 'no-adapter headless stream-json snapshot',
+      tempDirPrefix: 'headless-snapshot-no-adapter-',
+      binScript,
+      libBinScript: binScript,
+      configPath: noAdapterConfigPath,
+      binArgs: [noAdapterConfigPath, 'say pong'],
+      tsconfigPath,
+      env: {
+        // First-run posture: the shipped base mounts no model adapter and no
+        // key is configured, so the route the agent requests has no owner.
+        DEEPSEEK_API_KEY: '',
+        DEEPSEEK_BASE_URL: '',
+        NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
+      },
+      prepare: (cwd) => { runCwd = cwd },
+    })
+
+    // The failure reaches the caller through the stream, not stderr.
+    expect(result.stderr).toBe('')
+    const normalized = normalizeHeadlessStream(result.stdout, runCwd)
+    if (refreshing) await writeFile(streamExpected, normalized)
+    expect(normalized).toBe(await readFile(streamExpected, 'utf8'))
+    // The durable failure is the missing adapter for the requested route — the
+    // post-base-drop first-run path the web client turns into Settings → Models
+    // guidance; headless pins the raw, route-named failure.
+    expect(normalized).toContain('NO_ADAPTER')
+    expect(normalized).toContain('deepseek-official')
   }, LOADER_SMOKE_TEST_TIMEOUT_MS)
 
   it('logs the model default and a dynamic next-step reasoning effort', async () => {
