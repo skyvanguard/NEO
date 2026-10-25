@@ -180,20 +180,22 @@ async function persistContentAddressed(root: string, data: Uint8Array): Promise<
     // that writer reaches its own durability boundary.
     await syncDirectory(bucket)
     await syncDirectory(join(root, 'objects'))
-    await unlink(temporary)
+    // The object is durably linked and synced by here, so the publish has
+    // succeeded: removing the now-redundant staging file is pure cleanup and
+    // must never turn a completed publish into a reported failure (otherwise
+    // attach_file tells the model the file did not attach when it did).
+    /* v8 ignore next -- the catch arm only runs if staging cleanup itself fails */
+    await unlink(temporary).catch(() => {})
   } catch (error) {
     /* v8 ignore next -- A descriptor can remain open only when the underlying write/sync/close operation fails. */
     if (handle !== undefined) await handle.close().catch(
       /* v8 ignore next -- Close failure is superseded by the storage operation that entered cleanup. */
       () => {},
     )
-    await unlink(temporary).catch(
-      /* v8 ignore next -- The callback requires a second independent staging-unlink failure. */
-      (cleanupError: unknown) => {
-        /* v8 ignore next -- Cleanup is best-effort only for a staging file already removed by a failed operation. */
-        if (!(cleanupError instanceof Error && 'code' in cleanupError && cleanupError.code === 'ENOENT')) throw cleanupError
-      },
-    )
+    // Best-effort staging cleanup: a failure here must not mask the original
+    // error, which carries the real reason the publish did not complete.
+    /* v8 ignore next -- the catch arm only runs if staging cleanup itself fails */
+    await unlink(temporary).catch(() => {})
     if (error instanceof AttachmentError) throw error
     throw new AttachmentError('Unable to persist attachment.', 'ATTACHMENT_WRITE_FAILED', { cause: error })
   }
