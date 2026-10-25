@@ -7,9 +7,9 @@
  * @module
  */
 
-import { readdir, readFile, rename, stat, writeFile } from 'node:fs/promises'
+import { open, readdir, readFile, rename, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { decompressConcatenatedZstd } from './zstd.ts'
+import { decompressConcatenatedZstd, decompressFrames } from './zstd.ts'
 import type { TokenUsage } from '@neo/llm'
 import type { SessionEvent } from '@neo/session'
 import type {
@@ -75,16 +75,80 @@ function usageOf(event: SessionEvent): { turn: number; step: number; usage: Toke
   return undefined
 }
 
-/** Read, decompress, and JSON-parse every event of one session log. */
-export async function readSessionEvents(path: string): Promise<SessionEvent[]> {
-  const buffer = await readFile(path)
-  const text = decompressConcatenatedZstd(buffer).toString('utf8')
+/** Per-(turn,step) dedup state: the last usage sample seen for each step. */
+type StepMap = Map<string, { usage: TokenUsage; time: number }>
+
+/** Split decompressed session-log text into events, skipping torn lines. */
+function parseEvents(text: string): SessionEvent[] {
   const events: SessionEvent[] = []
   for (const line of text.split('\n')) {
     if (line === '') continue
     try { events.push(JSON.parse(line) as SessionEvent) } catch { /* skip a torn/partial line */ }
   }
   return events
+}
+
+/** Read, decompress, and JSON-parse every event of one session log. */
+export async function readSessionEvents(path: string): Promise<SessionEvent[]> {
+  const buffer = await readFile(path)
+  return parseEvents(decompressConcatenatedZstd(buffer).toString('utf8'))
+}
+
+/**
+ * Read a session log starting at a byte offset (which must be a frame boundary,
+ * e.g. `0` or a prior {@link readSessionTail} `foldedBytes`), decoding only the
+ * bytes from there on. A session log is a concatenation of independent,
+ * append-only frames, so re-reading from the last folded offset decodes only
+ * what was appended since.
+ * @param path - the session-log path.
+ * @param fromByte - the frame-aligned offset to resume from.
+ * @returns the newly decoded events and the absolute offset through which
+ *   complete frames were decoded (the next resume point).
+ */
+async function readSessionTail(path: string, fromByte: number): Promise<{ events: SessionEvent[]; foldedBytes: number }> {
+  const handle = await open(path, 'r')
+  try {
+    const { size } = await handle.stat()
+    if (size <= fromByte) return { events: [], foldedBytes: fromByte }
+    const buffer = Buffer.alloc(size - fromByte)
+    await handle.read(buffer, 0, buffer.length, fromByte)
+    const { text, consumedBytes } = decompressFrames(buffer)
+    return { events: parseEvents(text.toString('utf8')), foldedBytes: fromByte + consumedBytes }
+  } finally {
+    await handle.close()
+  }
+}
+
+/**
+ * Merge new events into a copy of the step-dedup state. A (turn, step) reported
+ * by both a usage chunk and its finalized message counts once — the last value
+ * wins — matching token-meter's replacement rule. The input map is never
+ * mutated, so a cached fold stays intact if this throws.
+ * @param steps - the prior dedup state (empty for a fresh fold).
+ * @param events - the events to fold in.
+ * @returns a new dedup map with the events applied.
+ */
+function mergeEventsIntoSteps(steps: StepMap, events: readonly SessionEvent[]): StepMap {
+  const next: StepMap = new Map(steps)
+  for (const event of events) {
+    const sample = usageOf(event)
+    if (sample === undefined) continue
+    next.set(`${sample.turn}:${sample.step}`, { usage: sample.usage, time: event.time })
+  }
+  return next
+}
+
+/** Roll de-duplicated step usage up into totals, per-day buckets, and last-active time. */
+function summarizeSteps(steps: StepMap): { totals: UsageTotals; byDay: Map<string, UsageTotals>; lastActive: number } {
+  const totals = zero()
+  const byDay = new Map<string, MutableTotals>()
+  let lastActive = 0
+  for (const { usage, time } of steps.values()) {
+    addUsage(totals, usage)
+    addInto(byDay, dayOf(time), usage)
+    if (time > lastActive) lastActive = time
+  }
+  return { totals, byDay, lastActive }
 }
 
 /**
@@ -99,21 +163,7 @@ export function foldSessionUsage(events: readonly SessionEvent[]): {
   byDay: Map<string, UsageTotals>
   lastActive: number
 } {
-  const perStep = new Map<string, { usage: TokenUsage; time: number }>()
-  for (const event of events) {
-    const sample = usageOf(event)
-    if (sample === undefined) continue
-    perStep.set(`${sample.turn}:${sample.step}`, { usage: sample.usage, time: event.time })
-  }
-  const totals = zero()
-  const byDay = new Map<string, MutableTotals>()
-  let lastActive = 0
-  for (const { usage, time } of perStep.values()) {
-    addUsage(totals, usage)
-    addInto(byDay, dayOf(time), usage)
-    if (time > lastActive) lastActive = time
-  }
-  return { totals, byDay, lastActive }
+  return summarizeSteps(mergeEventsIntoSteps(new Map(), events))
 }
 
 /** One session's folded usage plus the file-identity it was folded from. */
@@ -126,6 +176,16 @@ interface CachedSessionUsage {
   /** File `mtimeMs` + `size` at fold time; a change in either invalidates the entry. */
   readonly mtimeMs: number
   readonly size: number
+  /**
+   * Per-(turn,step) dedup state, kept so an appended (active) log folds only the
+   * bytes added since the last pass rather than re-decoding the whole file —
+   * the cost the usage view paid on every open for a large live session.
+   * Absent on entries loaded from a persisted cache, which forces one full
+   * re-fold the first time such a session grows.
+   */
+  readonly steps?: StepMap
+  /** Absolute byte offset through which complete frames are folded into {@link steps}. */
+  readonly foldedBytes?: number
 }
 
 /**
@@ -182,10 +242,29 @@ export async function aggregateUsage(
       seen.add(logPath)
       const hit = store.get(logPath)
       if (hit !== undefined && hit.mtimeMs === mtimeMs && hit.size === size) continue
-      let events: SessionEvent[]
-      try { events = await readSessionEvents(logPath) } catch { store.delete(logPath); continue }
-      const { totals, byDay, lastActive } = foldSessionUsage(events)
-      store.set(logPath, { workspace: wsLabel, sessionId: sd.name, totals, byDay, lastActive, mtimeMs, size })
+
+      // Incremental path: an append-only log that only grew folds just its new
+      // tail, reusing the prior step-dedup state. Any failure falls through to a
+      // full re-fold below.
+      if (hit?.steps !== undefined && hit.foldedBytes !== undefined && size > hit.size && hit.foldedBytes <= size) {
+        try {
+          const { events, foldedBytes } = await readSessionTail(logPath, hit.foldedBytes)
+          const steps = mergeEventsIntoSteps(hit.steps, events)
+          const { totals, byDay, lastActive } = summarizeSteps(steps)
+          const { workspace, sessionId } = hit
+          store.set(logPath, { workspace, sessionId, totals, byDay, lastActive, mtimeMs, size, steps, foldedBytes })
+          continue
+        } catch { /* fall through to a full re-fold */ }
+      }
+
+      // Full (re)fold: first sighting, a rewritten/shrunk log, or a cache entry
+      // without prior step state (e.g. loaded from disk).
+      try {
+        const { events, foldedBytes } = await readSessionTail(logPath, 0)
+        const steps = mergeEventsIntoSteps(new Map(), events)
+        const { totals, byDay, lastActive } = summarizeSteps(steps)
+        store.set(logPath, { workspace: wsLabel, sessionId: sd.name, totals, byDay, lastActive, mtimeMs, size, steps, foldedBytes })
+      } catch { store.delete(logPath); continue }
     }
   }
   // Drop entries for sessions that vanished so the cache stays bounded to what exists.
@@ -231,7 +310,7 @@ export async function aggregateUsage(
   }
 }
 
-/** On-disk shape of one cached session fold (byDay Map flattened to entries). */
+/** On-disk shape of one cached session fold (`byDay`/`steps` Maps flattened to entries). */
 interface SerializedEntry {
   readonly workspace: string
   readonly sessionId: string
@@ -240,9 +319,17 @@ interface SerializedEntry {
   readonly lastActive: number
   readonly mtimeMs: number
   readonly size: number
+  /** Persisted so a restart keeps the incremental tail — only present on folded entries. */
+  readonly foldedBytes?: number
+  readonly steps?: ReadonlyArray<readonly [string, { usage: TokenUsage; time: number }]>
 }
 
-/** Current on-disk cache format version; a mismatch is treated as absent. */
+/**
+ * Current on-disk cache format version; a mismatch is treated as absent. The
+ * `steps`/`foldedBytes` tail fields are an additive, optional extension, so the
+ * version stays 1: an older cache (no tail) still warm-starts every frozen
+ * session, and only the entries that grew re-fold.
+ */
 const USAGE_CACHE_VERSION = 1
 
 /**
@@ -252,10 +339,16 @@ const USAGE_CACHE_VERSION = 1
  * @returns the JSON text.
  */
 export function serializeUsageCache(cache: UsageCache): string {
-  const entries: Array<readonly [string, SerializedEntry]> = [...cache.entries()].map(([path, e]) => [path, {
-    workspace: e.workspace, sessionId: e.sessionId, totals: e.totals,
-    byDay: [...e.byDay.entries()], lastActive: e.lastActive, mtimeMs: e.mtimeMs, size: e.size,
-  }])
+  const entries: Array<readonly [string, SerializedEntry]> = [...cache.entries()].map(([path, e]) => {
+    const base = {
+      workspace: e.workspace, sessionId: e.sessionId, totals: e.totals,
+      byDay: [...e.byDay.entries()], lastActive: e.lastActive, mtimeMs: e.mtimeMs, size: e.size,
+    }
+    // Persist the dedup tail only as a complete pair, so a loaded entry either
+    // tails cleanly or re-folds — never from a half-written offset.
+    if (e.steps === undefined || e.foldedBytes === undefined) return [path, base]
+    return [path, { ...base, foldedBytes: e.foldedBytes, steps: [...e.steps.entries()] }]
+  })
   return JSON.stringify({ version: USAGE_CACHE_VERSION, entries })
 }
 
@@ -280,10 +373,17 @@ export function deserializeUsageCache(json: string): UsageCache {
     const byDay = (raw as { byDay?: unknown }).byDay
     if (!Array.isArray(byDay)) continue
     const e = raw as SerializedEntry
-    cache.set(path, {
+    const entry: CachedSessionUsage = {
       workspace: e.workspace, sessionId: e.sessionId, totals: e.totals,
       byDay: new Map(byDay), lastActive: e.lastActive, mtimeMs: e.mtimeMs, size: e.size,
-    })
+    }
+    // Keep the dedup tail only when fully present, so a truncated/partial entry
+    // forces a clean full re-fold rather than tailing from a bogus offset.
+    if (Array.isArray(e.steps) && typeof e.foldedBytes === 'number') {
+      cache.set(path, { ...entry, steps: new Map(e.steps), foldedBytes: e.foldedBytes })
+    } else {
+      cache.set(path, entry)
+    }
   }
   return cache
 }

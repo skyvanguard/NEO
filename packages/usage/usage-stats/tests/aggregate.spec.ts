@@ -192,6 +192,51 @@ describe('aggregateUsage incremental cache', () => {
     } finally { rmSync(root, { recursive: true, force: true }) }
   })
 
+  it('folds only the appended tail, applying last-wins dedup across a frame boundary', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-tail-'))
+    try {
+      // Frame 1: a usage CHUNK for (0,0). Frame 2 (appended later): the finalized
+      // MESSAGE for the same (0,0) — the message must REPLACE the chunk, not add
+      // to it, even though the two straddle a frame boundary folded in two passes.
+      const path = writeSession(root, '--home-x-Proj--', 'session-1',
+        [chunk(0, 0, '2026-08-19T10:00:00Z', { inputTokens: 100, outputTokens: 10 })])
+      const cache: UsageCache = new Map()
+      const first = await aggregateUsage(root, {}, cache)
+      expect(first.totals.requests).toBe(1)
+      expect(first.totals.outputTokens).toBe(10)
+
+      appendFileSync(path, zstdCompressSync(Buffer.from(
+        JSON.stringify(msg(0, 0, '2026-08-19T10:00:05Z', { inputTokens: 100, outputTokens: 20, reasoningTokens: 5 })) + '\n')))
+      const second = await aggregateUsage(root, {}, cache)
+      expect(second.totals.requests).toBe(1) // still one (turn,step), not two
+      expect(second.totals.outputTokens).toBe(20) // message wins over the chunk's 10
+      expect(second.totals.reasoningTokens).toBe(5)
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+
+  it('stops at a torn final frame and folds it once the append completes', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-torn-'))
+    try {
+      const path = writeSession(root, '--home-x-Proj--', 'session-1',
+        [msg(0, 0, '2026-08-19T10:00:00Z', { inputTokens: 100, outputTokens: 20 })])
+      const completeSize = statSync(path).size
+      // Append a half-written frame (a valid frame truncated near the end).
+      const nextFrame = zstdCompressSync(Buffer.from(
+        JSON.stringify(msg(0, 1, '2026-08-19T10:05:00Z', { inputTokens: 300, outputTokens: 40 })) + '\n'))
+      appendFileSync(path, nextFrame.subarray(0, nextFrame.length - 4))
+
+      const cache: UsageCache = new Map()
+      const torn = await aggregateUsage(root, {}, cache)
+      expect(torn.totals.inputTokens).toBe(100) // only the complete frame counted
+
+      // The writer flushes the frame in full: truncate the partial bytes, write it whole.
+      writeFileSync(path, Buffer.concat([readFileSync(path).subarray(0, completeSize), nextFrame]))
+      const done = await aggregateUsage(root, {}, cache)
+      expect(done.totals.inputTokens).toBe(400) // the now-complete tail folded in
+      expect(done.totals.requests).toBe(2)
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+
   it('sorts days ascending and workspaces by output tokens across multiple entries', async () => {
     const root = mkdtempSync(join(tmpdir(), 'usage-sort-'))
     try {
@@ -228,6 +273,38 @@ describe('usage cache persistence', () => {
     expect(entry?.totals.inputTokens).toBe(100)
     expect(entry?.mtimeMs).toBe(111)
     expect(entry?.byDay.get('2026-08-19')?.requests).toBe(2)
+  })
+
+  it('persists and restores the incremental tail state (steps + foldedBytes)', () => {
+    const cache = sampleCache()
+    const key = '/root/ws/s1/session.jsonl.zstd'
+    const prior = cache.get(key)!
+    cache.set(key, { ...prior, foldedBytes: 1024, steps: new Map([['0:0', { usage: { inputTokens: 100, outputTokens: 20 }, time: t('2026-08-19T10:00:00Z') }]]) })
+    const restored = deserializeUsageCache(serializeUsageCache(cache))
+    const entry = restored.get(key)
+    expect(entry?.foldedBytes).toBe(1024)
+    expect(entry?.steps?.get('0:0')?.usage.inputTokens).toBe(100)
+  })
+
+  it('drops a partial tail (steps without foldedBytes) so the next fold is clean', () => {
+    const partial = JSON.stringify({
+      version: 1,
+      entries: [['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 1, outputTokens: 0, requests: 1, ...zeros }, byDay: [], lastActive: 0, mtimeMs: 1, size: 1, steps: [['0:0', { usage: { inputTokens: 1, outputTokens: 0 }, time: 0 }]] }]],
+    })
+    const entry = deserializeUsageCache(partial).get('/ok')
+    expect(entry?.totals.inputTokens).toBe(1)
+    expect(entry?.steps).toBeUndefined() // no foldedBytes → tail state dropped
+  })
+
+  it('reads an older tail-less entry, warm-starting it without re-fold state', () => {
+    // A cache written before the tail fields existed: totals present, no steps.
+    const legacy = JSON.stringify({
+      version: 1,
+      entries: [['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 5, outputTokens: 2, requests: 1, ...zeros }, byDay: [['2026-08-19', { inputTokens: 5, outputTokens: 2, requests: 1, ...zeros }]], lastActive: 1, mtimeMs: 1, size: 1 }]],
+    })
+    const entry = deserializeUsageCache(legacy).get('/ok')
+    expect(entry?.totals.inputTokens).toBe(5)
+    expect(entry?.foldedBytes).toBeUndefined()
   })
 
   it('yields an empty cache for corrupt, non-object, or version-mismatched payloads', () => {

@@ -71,18 +71,33 @@ export function scanZstdFrames(buffer: Buffer): FrameRange[] {
 }
 
 /**
- * Decompress every complete frame of a concatenated-frame Zstandard buffer.
- * @param buffer - the raw session-log bytes.
- * @returns the decompressed plaintext of all complete frames.
+ * Decompress every complete frame of a concatenated-frame Zstandard buffer,
+ * reporting how many leading bytes were consumed. `consumedBytes` is the offset
+ * just past the last frame that decoded cleanly, so a caller that re-reads from
+ * there folds only the bytes appended since — the frames before it are stable
+ * (the log is append-only) and never need decoding again.
+ * @param buffer - the raw session-log bytes (must start at a frame boundary).
+ * @returns the decompressed plaintext and the consumed-byte count.
  */
-export function decompressConcatenatedZstd(buffer: Buffer): Buffer {
+export function decompressFrames(buffer: Buffer): { text: Buffer; consumedBytes: number } {
   const parts: Buffer[] = []
+  let consumedBytes = 0
   for (const frame of scanZstdFrames(buffer)) {
     try {
       parts.push(zstdDecompressSync(buffer.subarray(frame.start, frame.end)))
     } catch {
       break
     }
+    consumedBytes = frame.end
   }
-  return Buffer.concat(parts)
+  return { text: Buffer.concat(parts), consumedBytes }
+}
+
+/**
+ * Decompress every complete frame of a concatenated-frame Zstandard buffer.
+ * @param buffer - the raw session-log bytes.
+ * @returns the decompressed plaintext of all complete frames.
+ */
+export function decompressConcatenatedZstd(buffer: Buffer): Buffer {
+  return decompressFrames(buffer).text
 }
