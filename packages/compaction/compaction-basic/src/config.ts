@@ -40,6 +40,7 @@ const POLICY_CONFIG_KEYS = [
   'maxTokens',
   'compactionRetries',
   'maxOverflowRetries',
+  'checkpointGuidance',
 ] as const
 
 /** Complete public top-level configuration key set. */
@@ -99,6 +100,7 @@ export function resolveConfig(config: BasicCompactionConfig = {}): ResolvedConfi
     maxTokens: config.maxTokens ?? DEFAULT_MAX_TOKENS,
     compactionRetries: config.compactionRetries ?? 1,
     maxOverflowRetries: config.maxOverflowRetries ?? 1,
+    checkpointGuidance: config.checkpointGuidance ?? '',
     modelPolicies,
     auto: config.auto ?? true,
   })
@@ -129,6 +131,7 @@ export function resolveTargetPolicy(
     maxTokens: override?.maxTokens ?? config.maxTokens,
     compactionRetries: override?.compactionRetries ?? config.compactionRetries,
     maxOverflowRetries: override?.maxOverflowRetries ?? config.maxOverflowRetries,
+    checkpointGuidance: override?.checkpointGuidance ?? config.checkpointGuidance,
   })
 }
 
@@ -171,6 +174,7 @@ export function resolveCompactSpec(
     maxTokens: policy.maxTokens,
     compactionRetries: policy.compactionRetries,
     maxOverflowRetries: policy.maxOverflowRetries,
+    checkpointGuidance: policy.checkpointGuidance,
   })
 }
 
@@ -254,6 +258,9 @@ function validatePolicy(
   }
   if (maxOverflowRetries !== undefined) {
     assertNonNegativeInteger(`${name}.maxOverflowRetries`, maxOverflowRetries)
+  }
+  if (config.checkpointGuidance !== undefined && typeof config.checkpointGuidance !== 'string') {
+    throw new Error(`${name}.checkpointGuidance must be a string`)
   }
 
   validateSummarizationPair(config, name)
