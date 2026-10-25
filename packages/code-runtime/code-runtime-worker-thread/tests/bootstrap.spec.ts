@@ -286,6 +286,20 @@ describe('makeNamespaces', () => {
     expect(nextId.value).toBe(1)
   })
 
+  it('names an undefined optional field so a rejected lossy call is actionable', async () => {
+    const port: BootstrapPort = { postMessage: () => {}, on: () => {} }
+    const pending = new Map<number, PendingCall>()
+    const [tools] = makeNamespaces(
+      { namespaces: [toolNamespace(['x'])] }, port, pending, { value: 1 },
+    ) as [Record<string, (args: unknown) => Promise<unknown>>]
+
+    const failure = await rejectionOf(tools.x?.({ file_path: '/tmp/a', name: undefined }) ?? Promise.resolve())
+    expect(failure).toMatchObject({ name: 'ToolCallError', toolName: 'x' })
+    expect((failure as Error).message).toContain('binding arguments must be lossless JSON')
+    expect((failure as Error).message).toContain('name')
+    expect(pending.size).toBe(0)
+  })
+
   it('uses ordinary Error for non-tools namespace failures', async () => {
     const deniedPort = new FakePort()
     deniedPort.respond = message => message.type === 'call'

@@ -27,13 +27,20 @@ function digest(data: Uint8Array): string {
   return createHash('sha256').update(data).digest('hex')
 }
 
+// Control chars (C0 + DEL) plus the Unicode bidirectional formatting codes:
+// LRM/RLM (200e/200f), the embeddings and overrides (202a-202e), and the
+// isolates (2066-2069). A model-supplied name is attacker-controllable under
+// prompt injection; an RLO (202e) reverses the trailing text so a download
+// card can show `invoice<RLO>fdp.exe` as `invoiceexe.pdf` over an executable.
+const UNSAFE_NAME_CHARS = /[\u0000-\u001f\u007f‎‏‪-‮⁦-⁩]/g
+
 function displayName(value: string | undefined): string | undefined {
   if (value === undefined) return undefined
   // Strip both separator styles by hand: a POSIX host treats `\` as an
   // ordinary character, so path.basename would keep a Windows client's full
   // local path and leak it into the reference and the session log.
   const leaf = value.slice(Math.max(value.lastIndexOf('/'), value.lastIndexOf('\\')) + 1)
-  const clean = leaf.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 255)
+  const clean = leaf.replace(UNSAFE_NAME_CHARS, '').trim().slice(0, 255)
   return clean === '' ? undefined : clean
 }
 
