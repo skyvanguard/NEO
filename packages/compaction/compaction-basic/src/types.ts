@@ -24,6 +24,15 @@ export interface CompactionPolicyConfig {
   compactionRetries?: number
   /** Maximum retries after canonical context overflow; `0` disables recovery. Defaults to `1`. */
   maxOverflowRetries?: number
+  /**
+   * Domain-specific preservation guidance appended to the compaction checkpoint
+   * instruction, so a deployment can make the summary retain facts the generic
+   * coding template does not prompt for (e.g. a pentest deployment preserving
+   * target hosts, open ports/services, discovered credentials, confirmed
+   * findings, and captured flags). Empty by default — the generic checkpoint is
+   * unchanged. Set per deployment or per exact model via `modelPolicies`.
+   */
+  checkpointGuidance?: string
 }
 
 /** Exact provider/model override merged over the default compaction policy. */
@@ -55,6 +64,7 @@ interface ResolvedPolicyFields {
   readonly maxTokens: number
   readonly compactionRetries: number
   readonly maxOverflowRetries: number
+  readonly checkpointGuidance: string
 }
 
 /** Validated immutable config whose target-specific defaults remain unresolved. */
