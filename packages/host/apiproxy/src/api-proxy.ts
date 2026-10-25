@@ -2587,9 +2587,12 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
               details: { sessionId },
             })
           }
+          // Keep the host-side detail (which can include absolute paths) in the
+          // server log; the caller gets an opaque message.
+          ctx.logger.warn(`session.attachment: authorization read failed for "${sessionId}": ${String(error)}`)
           return err(request, {
             code: 'internal',
-            message: `attachment authorization unavailable for session "${sessionId}": ${String(error)}`,
+            message: 'Unable to authorize the attachment read.',
             details: {},
           })
         }
@@ -2636,9 +2639,12 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
               details: { sessionId },
             })
           }
+          // Keep the host-side detail (which can include absolute paths) in the
+          // server log; the caller gets an opaque message.
+          ctx.logger.warn(`session.readFileAttachment: authorization read failed for "${sessionId}": ${String(error)}`)
           return err(request, {
             code: 'internal',
-            message: `attachment authorization unavailable for session "${sessionId}": ${String(error)}`,
+            message: 'Unable to authorize the attachment read.',
             details: {},
           })
         }
