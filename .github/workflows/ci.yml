@@ -27,7 +27,7 @@ jobs:
         with:
           # No compartir el destino por defecto de pnpm/action-setup entre runners.
           dest: ${{ runner.temp }}/setup-pnpm
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
