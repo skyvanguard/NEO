@@ -5382,12 +5382,12 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../llm
-      '@neo/llm-deepseek':
-        specifier: workspace:^
-        version: link:../llm-deepseek
       '@neo/llm-mock-server':
         specifier: workspace:^
         version: link:../../test-support/llm-mock-server
+      '@neo/llm-pi-ai':
+        specifier: workspace:^
+        version: link:../llm-pi-ai
       '@neo/session':
         specifier: workspace:^
         version: link:../../core/session
