@@ -278,17 +278,60 @@ export const UserMessageNodeView = memo(function UserMessageNodeView({
   )
 })
 
-/** Injected-context keyed Chat renderer. */
-export const ContextMessageNodeView = memo(function ContextMessageNodeView({ node, t }: ChatNodeViewProps<'context'>) {
+/**
+ * Injected-context keyed Chat renderer. A plugin-sourced message classifies as
+ * `context` (source.kind !== 'user'), which is the channel `attach_file` uses to
+ * hand the user a deliverable from inside `run_code` (its deferred block carries
+ * `source.kind === 'plugin'`). So a context message can carry real download/image
+ * attachments: surface those as visible cards instead of letting them collapse
+ * into the disclosure body as opaque JSON, and keep the remaining text in the row.
+ */
+export const ContextMessageNodeView = memo(function ContextMessageNodeView({
+  node, loadImage, loadFile, t,
+}: ChatNodeViewProps<'context'>) {
   const data = node.data
+  const images: { attachment: UserImage['attachment'] }[] = []
+  const files: { attachment: UserFile['attachment'] }[] = []
+  for (const block of data.content) {
+    const b = block as { type?: string; attachment?: unknown }
+    if (b.type === 'image' && b.attachment !== undefined) images.push({ attachment: (block as UserImage).attachment })
+    else if (b.type === 'file' && b.attachment !== undefined) files.push({ attachment: (block as UserFile).attachment })
+  }
+  // The attachment blocks are UI-only artifacts (adapters drop them toward the
+  // model); the row below renders only what's left so a file never shows twice.
+  const rest = data.content.filter((block) => {
+    const type = (block as { type?: string }).type
+    return type !== 'image' && type !== 'file'
+  })
   return (
-    <ContextInjectionRow
-      content={data.content}
-      source={data.source}
-      provenance={data.provenance}
-      form={data.form}
-      t={t}
-    />
+    <>
+      {(images.length > 0 || files.length > 0) && (
+        <div className={css.contextAttachments}>
+          {images.length > 0 && (
+            <ImageGallery images={images} load={loadImage} align="start" labels={messageImageLabels(t)} />
+          )}
+          {files.map((file, i) => (
+            <FileCard
+              key={`${file.attachment.attachmentId}:${i}`}
+              attachment={file.attachment}
+              load={loadFile}
+              sizeText={fileSizeText}
+              labels={fileCardLabels(t)}
+              align="start"
+            />
+          ))}
+        </div>
+      )}
+      {rest.length > 0 && (
+        <ContextInjectionRow
+          content={rest}
+          source={data.source}
+          provenance={data.provenance}
+          form={data.form}
+          t={t}
+        />
+      )}
+    </>
   )
 })
 

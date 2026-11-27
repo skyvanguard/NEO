@@ -15,6 +15,8 @@ interface SummaryConfig {
   readonly summarizationProvider: string
   readonly summarizationModel: string
   readonly maxTokens: number
+  /** Domain-specific preservation guidance appended to the checkpoint instruction; empty for the generic checkpoint. */
+  readonly checkpointGuidance: string
 }
 
 /** Tags wrapping the structured summary inside the landed checkpoint node. */
@@ -64,6 +66,24 @@ const COMPACTION_INSTRUCTION = [
   '- Output only the checkpoint text: do not call any tool or take any other action.',
   `- If the conversation already contains a ${SUMMARY_OPEN_TAG} block, it is a PRIOR checkpoint. Do not copy it forward verbatim: preserve still-true facts, drop stale ones, and merge newer information into a single consolidated summary under the same structure.`,
 ].join('\n')
+
+/**
+ * The compaction instruction, optionally extended with deployment-specific
+ * preservation guidance. The generic structured template is unchanged when no
+ * guidance is configured; a non-empty guidance is appended as an extra
+ * preservation rule so, e.g., a pentest deployment keeps target hosts,
+ * services, credentials, confirmed findings, and flags across compaction
+ * without the generic coding template having to carry those sections.
+ * @param guidance - deployment-configured domain guidance; blank yields the base instruction.
+ * @returns the instruction text delivered as the final user message.
+ */
+export function compactionInstruction(guidance: string): string {
+  const trimmed = guidance.trim()
+  if (trimmed.length === 0) return COMPACTION_INSTRUCTION
+  return `${COMPACTION_INSTRUCTION}\n\n`
+    + 'Domain-specific preservation — in addition to every section above, fold the following facts into whichever sections fit best, keep them verbatim where exactness matters, and never drop them when merging a prior checkpoint:\n'
+    + trimmed
+}
 
 /** Appended inside the checkpoint when the token cap ended the summary early. */
 const TRUNCATION_NOTICE =
@@ -157,7 +177,7 @@ export async function summarizeWithLlm(
   const messages: Message[] = [
     ...input.messages,
     createUserMessage({
-      content: [{ type: 'text', text: COMPACTION_INSTRUCTION }],
+      content: [{ type: 'text', text: compactionInstruction(config.checkpointGuidance) }],
       source: { kind: 'plugin', plugin: 'dsh-compaction-basic' },
     }),
   ]

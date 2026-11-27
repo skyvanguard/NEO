@@ -4,7 +4,7 @@ import { AttachmentId } from '@neo/attachment'
 import BasicCompactionEngine from '@neo/compaction-basic'
 import type { BasicCompactionConfig } from '@neo/compaction-basic'
 import { selectCompactableRange } from '@neo/compaction-basic/src/region.ts'
-import { frameSummary } from '@neo/compaction-basic/src/summarizer.ts'
+import { compactionInstruction, frameSummary } from '@neo/compaction-basic/src/summarizer.ts'
 import type { SummarizationInput, SummaryResult } from '@neo/compaction-basic/src/summarizer.ts'
 import { CompactionId, toolPairingBalancedAfter, toolPairingBalancedBefore } from '@neo/compaction'
 import {
@@ -304,10 +304,41 @@ describe('compact configuration and defaults', () => {
       maxTokens: 32_768,
       compactionRetries: 1,
       maxOverflowRetries: 1,
+      checkpointGuidance: '',
       modelPolicies: [],
       auto: true,
     })
     expect(Object.isFrozen(resolved)).toBe(true)
+  })
+
+  it('carries checkpointGuidance through defaults and exact-model overrides', () => {
+    expect(resolveConfig({}).checkpointGuidance).toBe('')
+    const config = resolveConfig({
+      checkpointGuidance: 'Preserve target hosts and credentials.',
+      modelPolicies: [{
+        provider: 'p',
+        model: 'm',
+        checkpointGuidance: 'Preserve confirmed findings and captured flags.',
+      }],
+    })
+    // The default guidance applies to an unlisted target...
+    expect(resolveTargetPolicy(config, { provider: 'p', model: 'other' }).checkpointGuidance)
+      .toBe('Preserve target hosts and credentials.')
+    // ...while an exact model override shadows it.
+    expect(resolveTargetPolicy(config, { provider: 'p', model: 'm' }).checkpointGuidance)
+      .toBe('Preserve confirmed findings and captured flags.')
+  })
+
+  it('appends domain guidance to the checkpoint instruction only when configured', () => {
+    const base = compactionInstruction('')
+    expect(base).toContain('## Primary Request and Intent')
+    expect(base).not.toContain('Domain-specific preservation')
+    expect(compactionInstruction('   ')).toBe(base)
+
+    const extended = compactionInstruction('Preserve target hosts, open ports, and discovered credentials.')
+    expect(extended.startsWith(base)).toBe(true)
+    expect(extended).toContain('Domain-specific preservation')
+    expect(extended).toContain('Preserve target hosts, open ports, and discovered credentials.')
   })
 
   it('resolves threshold and retention overrides independently', () => {
@@ -426,6 +457,7 @@ describe('compact configuration and defaults', () => {
       [{ auto: 'yes' }, /auto must be a boolean/],
       [{ summarizationProvider: 1 }, /summarizationProvider must be a string/],
       [{ summarizationModel: 1 }, /summarizationModel must be a string/],
+      [{ checkpointGuidance: 42 }, /checkpointGuidance must be a string/],
       [{ summarizationProvider: MODEL }, /must be set together/],
       [{ summarizationModel: MODEL }, /must be set together/],
       [{ summarizationProvider: '' }, /must be set together/],
