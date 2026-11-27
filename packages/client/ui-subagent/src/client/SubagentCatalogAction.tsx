@@ -6,7 +6,7 @@ import {
   type SessionSummary, type SubagentAddress, type SubagentCatalogSnapshot,
 } from '@neo/client-runtime/client'
 import {
-  IconChevronDownOutline14, IconChevronRightOutline14, IconRefreshOutline14, StateDot,
+  IconChevronDownOutline14, IconChevronRightOutline14, IconRefreshOutline14, IconStopFill16, StateDot,
 } from '@neo/client-ui-primitives'
 import type { PropsLocale, PropsRuntime, TranslateNS } from '@neo/client-ui-slots'
 import { NS } from './locales.ts'
@@ -21,6 +21,8 @@ type Catalogs = SessionListState['subagentsByParent']
 /** Business actions supplied by the slot registration. */
 export interface SubagentCatalogInjected {
   openChild: (address: SubagentAddress) => void
+  /** Interrupt a running continuable child's current turn from the list. */
+  interrupt: (address: Extract<SubagentAddress, { mode: 'continuable' }>) => void
   refresh: (parentSessionId: SessionId) => void
   setCatalogOpen: (parentSessionId: SessionId, open: boolean) => void
 }
@@ -38,6 +40,7 @@ interface CatalogRowsProps {
   level: number
   now: number
   openChild: (address: SubagentAddress) => void
+  interrupt: (address: Extract<SubagentAddress, { mode: 'continuable' }>) => void
   refresh: (parentSessionId: SessionId) => void
   toggleBranch: (childSessionId: SessionId) => void
   closeCatalog: () => void
@@ -211,7 +214,7 @@ function CatalogLoadingRows({
 /** Render one catalog level and recurse only through explicitly expanded rows. */
 function CatalogRows({
   parentSessionId, catalog, catalogs, summaries, expanded, level, now,
-  openChild, refresh, toggleBranch, closeCatalog, t,
+  openChild, interrupt, refresh, toggleBranch, closeCatalog, t,
 }: CatalogRowsProps & { t: TranslateNS<typeof NS> }) {
   const emptyLoading = catalog.state === 'loading' && catalog.entries.length === 0
   const reserveDisclosure = catalog.entries.some(
@@ -363,6 +366,22 @@ function CatalogRows({
                     )}
                   </span>
                 )}
+                {entry.activity === 'running' && entry.mode === 'continuable' && (
+                  <button
+                    type="button"
+                    tabIndex={-1}
+                    className={css.stop}
+                    aria-label={t('stop', { label })}
+                    title={t('stop', { label })}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      event.stopPropagation()
+                      interrupt({ parentSessionId, childSessionId: entry.id, mode: 'continuable' })
+                    }}
+                  >
+                    <IconStopFill16 />
+                  </button>
+                )}
               </div>
             </div>
             {isExpanded && !knownLeaf && (
@@ -390,6 +409,7 @@ function CatalogRows({
                       level={level + 1}
                       now={now}
                       openChild={openChild}
+                      interrupt={interrupt}
                       refresh={refresh}
                       toggleBranch={toggleBranch}
                       closeCatalog={closeCatalog}
@@ -411,7 +431,7 @@ function CatalogRows({
  * @returns The action while the catalog is pending or summaries establish descendants.
  */
 export function SubagentCatalogAction({
-  sessionId, useSessions, openChild, refresh, setCatalogOpen, t,
+  sessionId, useSessions, openChild, interrupt, refresh, setCatalogOpen, t,
 }: SubagentCatalogActionProps) {
   const catalogs = useSessions(state => state.subagentsByParent)
   const summaries = useSessions(state => state.byId)
@@ -599,6 +619,7 @@ export function SubagentCatalogAction({
             level={1}
             now={now}
             openChild={openChild}
+            interrupt={interrupt}
             refresh={refresh}
             toggleBranch={toggleBranch}
             closeCatalog={() => { changeOpen(false) }}

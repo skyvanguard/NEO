@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling==1.32.0"]
+requires = ["hatchling==1.33.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -11,7 +11,7 @@ requires-python = ">=3.10"
 license = "MIT"
 authors = [{ name = "DeepSeek" }]
 dependencies = [
-  "pydantic>=2.13.5,<3",
+  "pydantic>=2.14.1,<3",
   "neo-runtime-bin==0.0.0.dev0",
 ]
 
@@ -22,7 +22,7 @@ Issues = "https://github.com/deepseek-ai/deepseek-harness/issues"
 Source = "https://github.com/deepseek-ai/deepseek-harness"
 
 [dependency-groups]
-test = ["pytest>=8.0"]
+test = ["pytest>=9.2.0"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

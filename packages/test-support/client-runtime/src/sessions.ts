@@ -194,7 +194,7 @@ export class TestSessions implements ISessions {
 
   /** Calls observed on the service-level face, newest last. */
   readonly calls: {
-    method: 'open' | 'openSubagent' | 'killJob' | 'setSubagentCatalogOpen' | 'refreshSubagents'
+    method: 'open' | 'openSubagent' | 'interruptSubagent' | 'killJob' | 'setSubagentCatalogOpen' | 'refreshSubagents'
       | 'clear' | 'search' | 'fork' | 'deleteSession'
     args: unknown[]
   }[] = []
@@ -431,6 +431,13 @@ export class TestSessions implements ISessions {
       draft.current = address.childSessionId
       draft.currentAddress = address
     })
+  }
+
+  interruptSubagent(
+    address: Extract<SubagentAddress, { mode: 'continuable' }>,
+  ): Promise<RpcResult<{ accepted: true }>> {
+    this.calls.push({ method: 'interruptSubagent', args: [address] })
+    return Promise.resolve({ ok: true, value: { accepted: true } })
   }
 
   killJob(

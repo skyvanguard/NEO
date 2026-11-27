@@ -222,6 +222,9 @@ describe('sessions', () => {
       .toMatchObject({ displayTitle: 'renamed', running: true })
     runtime.sessions.setSubagentCatalogOpen('s2' as SessionId, true)
     await runtime.sessions.refreshSubagents('s2' as SessionId)
+    // The catalog stop control's double accepts every interrupt, as the Host
+    // does for an idle or absent child.
+    await expect(runtime.sessions.interruptSubagent(address)).resolves.toEqual({ ok: true, value: { accepted: true } })
     // The job-list stop control's double accepts every kill as requested.
     await expect(runtime.sessions.killJob('s1' as SessionId, 'bash-1' as never))
       .resolves.toEqual({ ok: true, value: { outcome: 'requested' } })
@@ -247,6 +250,7 @@ describe('sessions', () => {
       { method: 'openSubagent', args: [address] },
       { method: 'setSubagentCatalogOpen', args: ['s2', true] },
       { method: 'refreshSubagents', args: ['s2'] },
+      { method: 'interruptSubagent', args: [address] },
       { method: 'killJob', args: ['s1', 'bash-1'] },
       { method: 'open', args: ['s1'] },
       { method: 'clear', args: [] },

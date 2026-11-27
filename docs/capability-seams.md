@@ -18,7 +18,7 @@ flowchart LR
   pkg_mcp_resources["mcp-resources"]
   svc_mcpResources["ctx.mcpResources<br/>Scoped MCP resource runtime"]
   pkg_usage_stats["usage-stats"]
-  svc_usageStats["ctx.usageStats<br/>Cross-session usage statistics Remote"]
+  svc_usage["ctx.usage<br/>Cross-session usage statistics Remote"]
   pkg_client_ui_usage["client-ui-usage"]
   pkg_llm["llm"]
   svc_llm["ctx.llm<br/>LLM adapter registry"]
@@ -294,7 +294,7 @@ flowchart LR
   pkg_token_meter --> svc_tokenMeter
   pkg_tools --> svc_tools
   pkg_typert_registry --> svc_typert
-  pkg_usage_stats --> svc_usageStats
+  pkg_usage_stats --> svc_usage
   pkg_user_questions --> svc_userQuestions
   pkg_web --> svc_web
   pkg_web_fetch_http --> svc_web
@@ -410,7 +410,7 @@ flowchart LR
   svc_tools --> pkg_tool_web
   svc_typert --> pkg_api_gateway
   svc_typert --> pkg_typert_loader
-  svc_usageStats --> pkg_client_ui_usage
+  svc_usage --> pkg_client_ui_usage
   svc_userQuestions --> pkg_tool_ask_user
   svc_web --> pkg_tool_web
   svc_webServer --> pkg_connection
@@ -427,7 +427,7 @@ flowchart LR
 | `ctx.attachments` | `seam` | [`attachment`](../packages/attachment/attachment) | [`attachment-local`](../packages/attachment/attachment-local) | `host-runtime`, [`llm-pi-ai`](../packages/llm/llm-pi-ai) | - | The host commits accepted images before session events; provider adapters resolve authorized durable references into provider-native content. |
 | `ctx.documentAttach` | `core` | [`document-attach`](../packages/document/document-attach) | - | [`client-ui-conversation`](../packages/client/ui-conversation) | - | Exposes `documentAttach.save` over Typert Remote: the browser uploads a document's bytes and the host writes it into the session workspace, so the agent processes it with its own tools instead of flooding model context. |
 | `ctx.mcpResources` | `core` | [`mcp-resources`](../packages/mcp/mcp-resources) | - | - | - | Owns scoped MCP resource providers and registers the shared model-facing resource tools plus their system-prompt section; external MCP servers contribute resources per scope. |
-| `ctx.usageStats` | `core` | [`usage-stats`](../packages/usage/usage-stats) | - | [`client-ui-usage`](../packages/client/ui-usage) | - | Exposes `usage.summary` over Typert Remote, folding provider-reported token usage across every persisted session log (with a persisted per-session cache) for the client usage page. |
+| `ctx.usage` | `core` | [`usage-stats`](../packages/usage/usage-stats) | - | [`client-ui-usage`](../packages/client/ui-usage) | - | Exposes `usage.summary` over Typert Remote, folding provider-reported token usage across every persisted session log (with a persisted per-session cache) for the client usage page. |
 | `ctx.llm` | `seam` | [`llm`](../packages/llm/llm) | [`llm-deepseek`](../packages/llm/llm-deepseek), [`llm-pi-ai`](../packages/llm/llm-pi-ai), [`llm-replay`](../packages/test-support/llm-replay) | [`agent-loop`](../packages/core/agent-loop), [`compaction-basic`](../packages/compaction/compaction-basic) | - | Adapters register provider implementations; the loop and compaction call the provider-neutral stream service. |
 | `ctx.tokenMeter` | `core` | [`token-meter`](../packages/llm/token-meter) | - | [`compaction-basic`](../packages/compaction/compaction-basic) | - | Owns isolated per-session replay folds; pressure consumers share immutable revisioned measurements. |
 | `ctx.toolResultPruner` | `core` | [`compaction-tool-result-pruner`](../packages/compaction/compaction-tool-result-pruner) | - | [`compaction-basic`](../packages/compaction/compaction-basic) | - | Rewrites oversized current tool results through replayable single-node surface replacements before summary compaction. |

@@ -183,6 +183,16 @@ describe('SearxngSearchProvider availability', () => {
     expect(new SearxngSearchProvider({ ...options, baseURL: 'not a url' }).available()).toBe(false)
   })
 
+  // `localhost:8888` parses, with the scheme `localhost:`; neither it nor a
+  // non-HTTP scheme can serve the JSON API.
+  it.each(['localhost:8888', '127.0.0.1:8888', 'ftp://searx.test'])('is misconfigured when the base URL %s is not http(s)', (baseURL) => {
+    expect(new SearxngSearchProvider({ ...options, baseURL }).available()).toBe(false)
+  })
+
+  it('accepts an https base URL', () => {
+    expect(new SearxngSearchProvider({ ...options, baseURL: 'https://searx.test' }).available()).toBe(true)
+  })
+
   it.each([0, -3, 2.5, Number.NaN])('is misconfigured when maxResults is %s', (maxResults) => {
     expect(new SearxngSearchProvider({ ...options, maxResults }).available()).toBe(false)
   })
@@ -204,6 +214,34 @@ describe('SearxngSearchProvider request', () => {
     expect(init.redirect).toBe('error')
     expect(init.headers).toEqual({ accept: 'application/json' })
     expect(result).toEqual({ sources: [{ url: 'https://a.test', title: 'A', snippet: 'about A' }], truncated: false })
+  })
+
+  it.each([
+    ['http://searx.test:8888/', 'http://searx.test:8888/search'],
+    ['https://proxy.test/searxng', 'https://proxy.test/searxng/search'],
+    ['https://proxy.test/searxng/', 'https://proxy.test/searxng/search'],
+    ['https://proxy.test/tools/searxng//', 'https://proxy.test/tools/searxng/search'],
+    // A base that already names the endpoint is not doubled.
+    ['http://searx.test:8888/search', 'http://searx.test:8888/search'],
+    ['https://proxy.test/searxng/search/', 'https://proxy.test/searxng/search'],
+  ])('appends /search to the base URL path %s, keeping a reverse-proxy prefix', async (baseURL, expected) => {
+    const fetchMock = stubFetch(async () => jsonResponse({ results: [] }))
+    await new SearxngSearchProvider({ ...options, baseURL }).search({ query: 'q' })
+    const [url] = requestAt(fetchMock)
+    expect(endpointOf(url)).toBe(expected)
+    expect(Object.fromEntries(url.searchParams)).toEqual({ q: 'q', format: 'json' })
+  })
+
+  it('rejects a non-http(s) base URL with a provider error before any request', async () => {
+    const fetchMock = stubFetch(async () => jsonResponse({ results: [] }))
+    const failure = await rejectionOf(new SearxngSearchProvider({ ...options, baseURL: 'localhost:8888' }).search({ query: 'q' }))
+    expect(failure).toMatchObject({ code: 'WEB_PROVIDER_ERROR', message: 'SearXNG baseURL must be an absolute http(s) URL' })
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('keeps credentials in a rejected base URL out of the error', async () => {
+    const failure = await rejectionOf(new SearxngSearchProvider({ ...options, baseURL: 'ftp://operator:hunter2@searx.test' }).search({ query: 'q' }))
+    expect(failure.message).not.toContain('hunter2')
   })
 
   it('caps sources at the configured maxResults when the request omits one', async () => {
@@ -336,12 +374,12 @@ describe('SearxngSearchProvider cancellation', () => {
     expect(requestSignal.aborted).toBe(true)
 
     const failure = await outcome
-    expect(failure.code).toBe('WEB_PROVIDER_ERROR')
-    expect(failure.message).toMatch(/^SearXNG search request failed: AbortError/)
+    expect(failure).toMatchObject({ code: 'WEB_PROVIDER_ERROR', message: 'SearXNG search timed out after 1000 ms' })
+    expect(failure.cause).toMatchObject({ name: 'AbortError' })
     expect(caller.signal.aborted).toBe(false)
   })
 
-  it('bounds a stalled body read with the wall-clock timeout', async () => {
+  it('bounds a stalled body read with the wall-clock timeout and names the timeout, not a non-JSON body', async () => {
     vi.useFakeTimers()
     const bodyRead = deferred()
     stubFetch(async (_url, init) => stalledBodyResponse(signalOf(init), bodyRead.resolve))
@@ -351,7 +389,7 @@ describe('SearxngSearchProvider cancellation', () => {
     await vi.advanceTimersByTimeAsync(1000)
 
     const failure = await outcome
-    expect(failure.code).toBe('WEB_PROVIDER_ERROR')
+    expect(failure).toMatchObject({ code: 'WEB_PROVIDER_ERROR', message: 'SearXNG search timed out after 1000 ms' })
     expect(failure.cause).toMatchObject({ name: 'AbortError' })
   })
 })
@@ -410,6 +448,16 @@ describe('web-search-searxng plugin', () => {
     const result = await ctx.web.search({ query: 'q' })
     expect(endpointOf(requestAt(fetchMock)[0])).toBe('http://searx.test:8888/search')
     expect(result.sources.map(source => source.url)).toEqual(['https://r1.test', 'https://r2.test'])
+  })
+
+  it('reports a scheme-less configured baseURL as an unavailable provider, not a raw URL TypeError', async () => {
+    const fetchMock = stubFetch(async () => jsonResponse({ results: [] }))
+    const ctx = await webContext()
+    await ctx.plugin(searxngPlugin, { baseURL: 'localhost:8888' })
+
+    const failure = await rejectionOf(ctx.web.search({ query: 'q' }))
+    expect(failure.code).toBe('WEB_PROVIDER_CONFIGURED_UNAVAILABLE')
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 
   it('threads timeoutMs config into the registered provider', async () => {

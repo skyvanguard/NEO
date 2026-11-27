@@ -393,6 +393,17 @@ export class SessionRuntime implements ISessions {
   ): Promise<RpcResult<{ outcome: 'requested' | 'already-finished' }>> {
     return this.manager.killJob(sessionId, jobId)
   }
+  /**
+   * Interrupt a continuable child's current turn from the catalog, without
+   * opening it (fire-and-return; the row settles through the membership feed).
+   * @param address - catalog-derived continuable parent/child address.
+   * @returns the interrupt receipt result.
+   */
+  interruptSubagent(
+    address: Extract<SubagentAddress, { mode: 'continuable' }>,
+  ): Promise<RpcResult<{ accepted: true }>> {
+    return this.manager.interruptSubagent(address)
+  }
 
   /**
    * Resolve an already discovered direct-parent address without opening it.
