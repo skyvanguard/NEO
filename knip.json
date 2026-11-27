@@ -25,7 +25,8 @@
     ".": {
       "entry": [
         "scripts/**/*.mjs",
-        "scripts/**/*.cjs"
+        "scripts/**/*.cjs",
+        "scripts/build-exe-for-python-sdk.ts"
       ],
       "project": [
         "scripts/**/*.ts",
@@ -774,6 +775,18 @@
     "packages/bundle/web-app": {
       "ignoreDependencies": [
         "@neo/.+"
+      ]
+    },
+    "packages/document/document-attach": {
+      "ignoreDependencies": [
+        "@neo/schemastery",
+        "zod"
+      ]
+    },
+    "packages/usage/usage-stats": {
+      "ignoreDependencies": [
+        "@neo/schemastery",
+        "zod"
       ]
     }
   }
