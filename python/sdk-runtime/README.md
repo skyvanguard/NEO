@@ -1,7 +1,5 @@
 # NEO Runtime Wheel
 
-English | [中文](https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk-runtime/README.zh.md)
-
 Runtime carrier package for the Python SDK (dist `neo-runtime-bin`, module `neo_runtime`): it locates the bundled runtime binaries the `neo-sdk` client spawns, and ships the default configuration behind zero-config runs.
 
 ## Runtime carriers

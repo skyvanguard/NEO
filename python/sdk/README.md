@@ -1,14 +1,11 @@
 # NEO Python SDK
 
-English | [中文](https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk/README.zh.md)
-
 Python subprocess SDK for driving NEO over JSON-RPC stdio. The
 runtime inherits the caller's environment, including `LLM_BASE_URL` (the
 OpenAI-compatible endpoint, default a local llama-server at
 `http://127.0.0.1:8080/v1`) and `LLM_API_KEY`, so callers can point it at a
 local server, a hosted gateway, or a proxy. The SDK also passes its `model`
-as `LLM_MODEL`, the one model the bundled route serves. The runtime no longer
-reads `DEEPSEEK_API_KEY` or `DEEPSEEK_BASE_URL`; set the `LLM_*` names instead.
+as `LLM_MODEL`, the one model the bundled route serves.
 
 Install the `neo-sdk` distribution from PyPI; the import module remains `neo_sdk`:
 
@@ -43,7 +40,7 @@ with Neo(
 
 `provider` selects a provider route registered by the chosen Cordis composition; `model` is the model id resolved by that adapter. `max_tokens` is an optional positive per-request output-token cap for the root agent and its in-process descendants; omission leaves the provider default in control. Compaction summaries keep the separate limit configured by their compaction plugin. The bundled default composition registers `neo-default-route` as a hand-declared `llm-pi-ai` route at `LLM_BASE_URL`. A custom composition can declare its own `llm-pi-ai` routes, configure provider-specific credentials/endpoints there, and select any provider/model present in pi-ai's installed catalog; `initialize` fails for a provider no mounted adapter serves.
 
-The [Python SDK tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/guide/python-sdk.md) provides an ordered installation and first-run path without the Web UI. The [`jsonrpc-agent` example](https://github.com/skyvanguard/NEO/blob/master/examples/jsonrpc-agent/README.md) owns the complete standalone Cordis file used there.
+The [`jsonrpc-agent` example](https://github.com/skyvanguard/NEO/blob/master/examples/jsonrpc-agent/README.md) owns the complete standalone Cordis file used there.
 
 `Session.run()` owns an activity interval from its prompt's durable inbox receipt through the next whole-agent idle and returns `RunResult(session_id, final_response, finish_reason, events, notifications, session_root)`. `final_response` is the last committed root-session assistant text in the interval. `finish_reason` is the `kind` of the last root-session `turn/end` in the interval, such as `completed`, `max-tokens`, or `error`, and is `None` when no turn ended. A `turn/end` without a string `data.reason.kind` violates the runtime protocol and raises `SdkProtocolError`. Both result fields describe the owned interval rather than an output or ending causally assigned to the prompt. Steering, injected context, and other queued work may contribute before idle.
 

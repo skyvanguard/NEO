@@ -623,12 +623,12 @@ importers:
       '@neo/subagent-codex':
         specifier: workspace:*
         version: link:../packages/subagent/subagent-codex
-      '@neo/subagent-dsh-sdk':
-        specifier: workspace:*
-        version: link:../packages/subagent/subagent-dsh-sdk
       '@neo/subagent-fork-in-process':
         specifier: workspace:*
         version: link:../packages/subagent/subagent-fork-in-process
+      '@neo/subagent-sdk':
+        specifier: workspace:*
+        version: link:../packages/subagent/subagent-sdk
       '@neo/subagent-spawn-in-process':
         specifier: workspace:*
         version: link:../packages/subagent/subagent-spawn-in-process
@@ -1103,9 +1103,6 @@ importers:
       '@neo/skill':
         specifier: workspace:^
         version: link:../../skill/skill
-      '@neo/skill-badge':
-        specifier: workspace:^
-        version: link:../../skill/skill-badge
       '@neo/skill-filesystem':
         specifier: workspace:^
         version: link:../../skill/skill-filesystem
@@ -6837,18 +6834,6 @@ importers:
         specifier: workspace:^
         version: link:../../core/scope
 
-  packages/skill/skill-badge:
-    devDependencies:
-      '@neo/cordis':
-        specifier: workspace:^
-        version: link:../../../vendor/cordis
-      '@neo/invariants':
-        specifier: workspace:^
-        version: link:../../runtime-diagnostics/invariants
-      '@neo/skill':
-        specifier: workspace:^
-        version: link:../skill
-
   packages/skill/skill-filesystem:
     dependencies:
       '@neo/schemastery':
@@ -7241,46 +7226,6 @@ importers:
         specifier: 0.154.0
         version: 0.154.0
 
-  packages/subagent/subagent-dsh-sdk:
-    dependencies:
-      '@neo/schemastery':
-        specifier: link:../../../vendor/schemastery
-        version: link:../../../vendor/schemastery
-    devDependencies:
-      '@neo/agent':
-        specifier: workspace:^
-        version: link:../../core/agent
-      '@neo/cordis':
-        specifier: workspace:^
-        version: link:../../../vendor/cordis
-      '@neo/cordis-plugin-loader':
-        specifier: workspace:^
-        version: link:../../../vendor/loader
-      '@neo/invariants':
-        specifier: workspace:^
-        version: link:../../runtime-diagnostics/invariants
-      '@neo/llm':
-        specifier: workspace:^
-        version: link:../../llm/llm
-      '@neo/loader-smoke':
-        specifier: workspace:^
-        version: link:../../test-support/loader-smoke
-      '@neo/sdk-client':
-        specifier: workspace:^
-        version: link:../../sdk/client
-      '@neo/sdk-protocol':
-        specifier: workspace:^
-        version: link:../../sdk/protocol
-      '@neo/session':
-        specifier: workspace:^
-        version: link:../../core/session
-      '@neo/subagent':
-        specifier: workspace:^
-        version: link:../subagent
-      '@neo/subprocess':
-        specifier: workspace:^
-        version: link:../../subprocess/subprocess
-
   packages/subagent/subagent-fork-in-process:
     dependencies:
       '@neo/schemastery':
@@ -7374,6 +7319,46 @@ importers:
       '@neo/user-approval':
         specifier: workspace:^
         version: link:../../interaction/user-approval
+
+  packages/subagent/subagent-sdk:
+    dependencies:
+      '@neo/schemastery':
+        specifier: link:../../../vendor/schemastery
+        version: link:../../../vendor/schemastery
+    devDependencies:
+      '@neo/agent':
+        specifier: workspace:^
+        version: link:../../core/agent
+      '@neo/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@neo/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../vendor/loader
+      '@neo/invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@neo/llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@neo/loader-smoke':
+        specifier: workspace:^
+        version: link:../../test-support/loader-smoke
+      '@neo/sdk-client':
+        specifier: workspace:^
+        version: link:../../sdk/client
+      '@neo/sdk-protocol':
+        specifier: workspace:^
+        version: link:../../sdk/protocol
+      '@neo/session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@neo/subagent':
+        specifier: workspace:^
+        version: link:../subagent
+      '@neo/subprocess':
+        specifier: workspace:^
+        version: link:../../subprocess/subprocess
 
   packages/subagent/subagent-spawn-in-process:
     dependencies:

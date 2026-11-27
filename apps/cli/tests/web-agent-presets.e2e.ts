@@ -30,6 +30,9 @@ const WEB_PATCH = join(REPO_ROOT, 'packages/bundle/web-app/cordis.patch.yml')
 const INSTALL_ANCHOR = join(REPO_ROOT, 'apps/cli/package.json')
 const EXAMPLES_INSTALL_ANCHOR = join(REPO_ROOT, 'examples/package.json')
 const MINIMAL_PROMPT = 'You are a helpful software engineer assistant.'
+/** The deployment-level skill every boot below serves from its host skill root. */
+const DEPLOYMENT_SKILL = 'deployment-proof'
+const DEPLOYMENT_SKILL_BODY = 'Deployment proof body.'
 const MINIMAL_BASH_DESCRIPTION = `Run commands in a bash shell
 * When invoking this tool, the contents of the "command" parameter does NOT need to be XML-escaped.
 * You don't have access to the internet via this tool.
@@ -50,6 +53,17 @@ async function bootWeb(
   extraInstallAnchor?: string,
 ): Promise<Context> {
   const storageRoot = join(dirname(settingsFile), 'storages')
+  const deploymentSkillRoot = join(dirname(settingsFile), 'deployment-skills')
+  await mkdir(join(deploymentSkillRoot, DEPLOYMENT_SKILL), { recursive: true })
+  await writeFile(join(deploymentSkillRoot, DEPLOYMENT_SKILL, 'SKILL.md'), [
+    '---',
+    `name: ${DEPLOYMENT_SKILL}`,
+    'description: Proves deployment-level skills reach preset-composed agents.',
+    '---',
+    '',
+    DEPLOYMENT_SKILL_BODY,
+    '',
+  ].join('\n'))
   const patches: PatchOptions[] = [
     ...loadOverlayPatches('dsh-test', BASE_PATCH),
     ...loadOverlayPatches('dsh-test', WEB_PATCH),
@@ -76,10 +90,21 @@ async function bootWeb(
     // and the URL prompt line — surface glue, not anything that decides an
     // agent's capabilities, which is all this file asserts.
     { id: 'web-runtime', disabled: true },
-    // A deployment-level skill on the host registry's GLOBAL layer — the same
-    // registration shape a repository plugin's skill root uses. The layered
-    // skills test below proves it reaches preset-composed agents.
-    { id: 'skill-badge', disabled: false },
+    // A deployment-level skill on the host registry's GLOBAL layer: the host
+    // `skill-filesystem` row the Web bundle disables, re-enabled over one
+    // deployment root and none of the default project or user roots — the
+    // registration a deployment's own skill root uses. The layered skills
+    // tests below prove it reaches preset-composed agents.
+    {
+      id: 'skill-filesystem',
+      disabled: false,
+      config: {
+        providerName: 'deployment',
+        includeDefaultRoots: false,
+        customSkillDirs: [deploymentSkillRoot],
+        watch: false,
+      },
+    },
     { id: 'modules', disabled: true },
     { id: 'connection', disabled: true },
     // The always-on reload chain waits for the browser roster and bound port
@@ -359,24 +384,24 @@ describe('the shipped Web composition', () => {
     try {
       // The host (global) view carries the deployment-level provider alone:
       // local discovery moved behind the presets with `skill-filesystem`.
-      expect((await ctx.skills.list({ cwd: proj })).map(skill => skill.name)).toEqual(['dsh-badge'])
+      expect((await ctx.skills.list({ cwd: proj })).map(skill => skill.name)).toEqual([DEPLOYMENT_SKILL])
 
       // The standard agent's view merges the global layer with its preset's
       // own local discovery over the session cwd.
       const scoped = (await ctx.skills.list({ cwd: proj, scope: handle.agent })).map(skill => skill.name)
-      expect(scoped).toContain('dsh-badge')
+      expect(scoped).toContain(DEPLOYMENT_SKILL)
       expect(scoped).toContain('project-proof')
 
       // The preset's own loader tool resolves the global-layer skill.
       const loaded = await ctx.tools.execute({
         callId: CallId('preset-skills-load'),
         name: 'skill',
-        arguments: { name: 'dsh-badge' },
+        arguments: { name: DEPLOYMENT_SKILL },
         signal: new AbortController().signal,
         agent: handle.agent,
       })
       expect(loaded.isError).toBe(false)
-      expect(JSON.stringify(loaded.content)).toContain('powered by dsh')
+      expect(JSON.stringify(loaded.content)).toContain(DEPLOYMENT_SKILL_BODY)
     } finally {
       await handle.dispose()
     }
@@ -391,7 +416,7 @@ describe('the shipped Web composition', () => {
       // Layer visibility is the registry's; whether an agent can USE skills
       // stays the preset's choice — minimal mounts no `tool-skill`, so its
       // tool table has no loader even though the global layer is readable.
-      expect((await ctx.skills.list({ scope: handle.agent })).map(skill => skill.name)).toContain('dsh-badge')
+      expect((await ctx.skills.list({ scope: handle.agent })).map(skill => skill.name)).toContain(DEPLOYMENT_SKILL)
       expect(toolNames(ctx, handle.agent)).toEqual(['bash', 'str_replace_editor'])
     } finally {
       await handle.dispose()

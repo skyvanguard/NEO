@@ -26,8 +26,8 @@ import { capture, isEntry } from './process.ts'
 import { packedIdentity } from './tarball.ts'
 
 /**
- * Environment for the installed artifact: no host Node hooks, no host DeepSeek
- * Harness home, and no ambient npm user agent that would confuse npm.
+ * Environment for the installed artifact: no host Node hooks, no host NEO
+ * home, and no ambient npm user agent that would confuse npm.
  * @param consumerRoot - the throwaway consumer directory.
  * @returns The child environment.
  */

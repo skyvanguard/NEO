@@ -164,8 +164,8 @@ test('keeps terminal Status aligned with the native close reason', () => {
 test('separates resolving and informational references', () => {
   assert.deepEqual(
     parseReferences({
-      body: 'Fixes #12\nRelated to #4\nRefs deepseekharness/dsh-test#7',
-      repository: 'deepseekharness/dsh-test',
+      body: 'Fixes #12\nRelated to #4\nRefs skyvanguard/NEO#7',
+      repository: 'skyvanguard/NEO',
     }),
     { all: [4, 7, 12], resolving: [12], related: [4, 7] },
   )

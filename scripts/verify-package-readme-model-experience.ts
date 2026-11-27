@@ -133,7 +133,6 @@ const SENTENCE_MODEL_EXPERIENCE: Readonly<Record<string, SentenceContract>> = {
   'packages/credentials/credentials-local': { kind: 'indirect', reason: 'The file/environment provider stores credential values; consumers of ctx.credentials own any model-facing behavior.' },
   'packages/util/atomic-write': { kind: 'none', reason: 'Pure filesystem write primitive; registers nothing model-facing.' },
   'packages/skill/skill': { kind: 'indirect', reason: 'The provider registry delegates model rendering to dsh-tool-skill.' },
-  'packages/skill/skill-badge': { kind: 'indirect', reason: 'The bundled provider delegates model rendering to dsh-tool-skill.' },
   'packages/skill/skill-filesystem': { kind: 'indirect', reason: 'The provider backend delegates model rendering to dsh-tool-skill.' },
   'packages/spill/spill': { kind: 'indirect', reason: 'The storage seam delegates model rendering to spill consumers.' },
   'packages/spill/spill-local': { kind: 'indirect', reason: 'The storage backend delegates model rendering to spill consumers.' },

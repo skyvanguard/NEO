@@ -2,16 +2,16 @@
 
 English | [中文](README.zh.md)
 
-The TypeScript client SDK for driving a NEO runtime as a subprocess over stdio JSON-RPC — the design twin of the [Python SDK](../../../python/README.md) (`deepseek-harness`), sharing the same runtime peer, protocol, and layering: `DeepSeekHarness` is the high-level owned-run API, `HarnessClient` the lower-level protocol client. The package root enumerates the consumer interface: the two client layers, caller-facing types, and `JsonRpcResponseError`; source modules, normalization helpers, and subscription-delivery machinery are not consumer imports. A pure library: it registers nothing on a Cordis context; the runtime process it spawns is a complete harness whose composition its own `cordis.yml` decides.
+The TypeScript client SDK for driving a NEO runtime as a subprocess over stdio JSON-RPC — the design twin of the [Python SDK](../../../python/README.md) (`neo-sdk`), sharing the same runtime peer, protocol, and layering: `NeoHarness` is the high-level owned-run API, `HarnessClient` the lower-level protocol client. The package root enumerates the consumer interface: the two client layers, caller-facing types, and `JsonRpcResponseError`; source modules, normalization helpers, and subscription-delivery machinery are not consumer imports. A pure library: it registers nothing on a Cordis context; the runtime process it spawns is a complete harness whose composition its own `cordis.yml` decides.
 
-Unlike the Python SDK, the launch spec is fully explicit (`command`/`args`): this package is for repo-adjacent TypeScript consumers — including the [`dsh-subagent-dsh-sdk`](../../subagent/subagent-dsh-sdk/README.md) backend and automation — that know which runtime they are launching. Bundled-runtime resolution (finding a packaged executable) remains the Python distribution's concern.
+Unlike the Python SDK, the launch spec is fully explicit (`command`/`args`): this package is for repo-adjacent TypeScript consumers — including the [`subagent-sdk`](../../subagent/subagent-sdk/README.md) backend and automation — that know which runtime they are launching. Bundled-runtime resolution (finding a packaged executable) remains the Python distribution's concern.
 
-## DeepSeekHarness
+## NeoHarness
 
 ```ts
-import { DeepSeekHarness } from '@neo/sdk-client'
+import { NeoHarness } from '@neo/sdk-client'
 
-await using harness = new DeepSeekHarness({
+await using harness = new NeoHarness({
   launch: { command: 'node', args: ['lib/bin.js', 'cordis.yml'] },
   provider: 'neo-default-route',
   model: 'neo-default-model',

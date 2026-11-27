@@ -100,16 +100,16 @@ describe('llm-pi-ai real dormant composition', () => {
     await writeFile(settingsPath, [
       'llm-pi-ai:',
       '  providers:',
-      '    deepseek:',
+      '    zai:',
       '      apiKeyEnv: PI_COMPOSITION_KEY',
       `      baseURL: ${server.url}`,
       '',
     ].join('\n'))
     await vi.waitFor(() => {
-      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['deepseek'])
+      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['zai'])
     }, { timeout: 5000 })
 
-    const result = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    const result = await assemble(ctx, { provider: 'zai', model: 'glm-5.2', messages: [] })
     expect(result.message.content).toEqual([{ type: 'text', text: 'hello' }])
     expect(server.headers[0]?.authorization).toBe('Bearer key-from-store')
   })

@@ -7,13 +7,15 @@ import type { PiAiProviderProfile } from '@neo/llm-pi-ai'
 import { assemble, type AssembledResult } from './assemble.ts'
 
 /**
- * Real-API e2e for the pi-ai-backed adapter over pi-ai's `deepseek` catalog
- * route: V4 Flash + V4 Pro with provider defaults and representative
- * off/high/max reasoning, plus a replayed tool follow-up. Key-gated.
+ * Real-API e2e for the pi-ai-backed adapter over pi-ai's `zai` catalog
+ * route: GLM-4.7 + GLM-5.2 with provider defaults and representative
+ * off/high/max reasoning, plus a replayed tool follow-up. Key-gated on
+ * ZAI_API_KEY; ZAI_BASE_URL optionally overrides the catalog endpoint.
  */
 
-const FLASH = 'deepseek-v4-flash'
-const PRO = 'deepseek-v4-pro'
+const STANDARD = 'glm-4.7'
+/** The catalog entry whose thinking-level map offers `max`. */
+const FLAGSHIP = 'glm-5.2'
 const contexts: Context[] = []
 
 async function harness(_model: string, config: Partial<PiAiProviderProfile> = {}) {
@@ -22,9 +24,9 @@ async function harness(_model: string, config: Partial<PiAiProviderProfile> = {}
   await ctx.plugin(LlmRuntime)
   await ctx.plugin(LlmPiAi, {
     providers: {
-      deepseek: {
-        ...process.env.DEEPSEEK_API_KEY === undefined ? {} : { apiKey: process.env.DEEPSEEK_API_KEY },
-        ...process.env.DEEPSEEK_BASE_URL === undefined ? {} : { baseURL: process.env.DEEPSEEK_BASE_URL },
+      zai: {
+        ...process.env.ZAI_API_KEY === undefined ? {} : { apiKey: process.env.ZAI_API_KEY },
+        ...process.env.ZAI_BASE_URL === undefined ? {} : { baseURL: process.env.ZAI_BASE_URL },
         ...config,
       },
     },
@@ -60,8 +62,8 @@ const weatherTool: ToolSchema = {
   },
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () => {
-  it.each([FLASH, PRO])('%s + provider-default reasoning: plain text generation', async (model) => {
+describe.skipIf(!process.env.ZAI_API_KEY)('llm-pi-ai e2e (real API)', () => {
+  it.each([STANDARD, FLAGSHIP])('%s + provider-default reasoning: plain text generation', async (model) => {
     const ctx = await harness(model)
     const result = await assemble(ctx,{
       model,
@@ -72,10 +74,10 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     expect(textOf(result).toLowerCase()).toContain('pong')
   })
 
-  it('flash + reasoning off: plain text without reasoning blocks', async () => {
-    const ctx = await harness(FLASH)
+  it('standard + reasoning off: plain text without reasoning blocks', async () => {
+    const ctx = await harness(STANDARD)
     const result = await assemble(ctx,{
-      model: FLASH,
+      model: STANDARD,
       reasoningEffort: ReasoningEffortId('off'),
       messages: ask('Reply with exactly the word: pong'),
       maxTokens: 50,
@@ -85,7 +87,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     expect(textOf(result).toLowerCase()).toContain('pong')
   })
 
-  it.each([FLASH, PRO])('%s + reasoning high: reasoning blocks present', async (model) => {
+  it.each([STANDARD, FLAGSHIP])('%s + reasoning high: reasoning blocks present', async (model) => {
     const ctx = await harness(model)
     const result = await assemble(ctx,{
       model,
@@ -98,11 +100,11 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     expect(textOf(result)).toContain('9.8')
   })
 
-  it('pro + reasoning max: tool-call round trip', async () => {
-    const ctx = await harness(PRO)
+  it('flagship + reasoning max: tool-call round trip', async () => {
+    const ctx = await harness(FLAGSHIP)
 
     const first = await assemble(ctx,{
-      model: PRO,
+      model: FLAGSHIP,
       reasoningEffort: ReasoningEffortId('max'),
       messages: ask('What is the weather in Paris right now? Use the get_weather tool.'),
       tools: [weatherTool],
@@ -115,7 +117,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     expect(JSON.parse(call!.arguments)).toMatchObject({ city: expect.stringMatching(/paris/i) as string })
 
     const second = await assemble(ctx,{
-      model: PRO,
+      model: FLAGSHIP,
       reasoningEffort: ReasoningEffortId('max'),
       messages: [
         ...ask('What is the weather in Paris right now? Use the get_weather tool.'),

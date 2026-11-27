@@ -85,7 +85,7 @@ describe('sdkStopReason', () => {
   })
 })
 
-describe('dsh-subagent-dsh-sdk provider', () => {
+describe('subagent-sdk provider', () => {
   it('runs a child turn end to end with a parent-unique run id', async () => {
     const ctx = await setup({ FAKE_TEXT: 'hello from sdk child' })
     const run = await ctx.subagents.start('dsh-sdk', request('do X'))
@@ -106,7 +106,7 @@ describe('dsh-subagent-dsh-sdk provider', () => {
   })
 
   it('initializes the child with the configured provider/model/maxTokens and the parent cwd', async () => {
-    const tmp = mkdtempSync(join(tmpdir(), 'subagent-dsh-sdk-init-'))
+    const tmp = mkdtempSync(join(tmpdir(), 'subagent-sdk-init-'))
     const recordFile = join(tmp, 'init.jsonl')
     try {
       const ctx = await setup({ FAKE_RECORD_INIT: recordFile }, { maxTokens: 4096 })
@@ -131,15 +131,15 @@ describe('dsh-subagent-dsh-sdk provider', () => {
     process.env.NEO_TEST_AMBIENT_SECRET_KEY = 'leak-me-not'
     try {
       const ctx = await setup({
-        FAKE_ECHO_ENV: 'NEO_TEST_AMBIENT_SECRET_KEY,DEEPSEEK_API_KEY',
-        DEEPSEEK_API_KEY: 'explicit-child-key',
+        FAKE_ECHO_ENV: 'NEO_TEST_AMBIENT_SECRET_KEY,LLM_API_KEY',
+        LLM_API_KEY: 'explicit-child-key',
         FAKE_TEXT: 'done',
       })
       const run = await ctx.subagents.start('dsh-sdk', request())
       const result = await run.result
       const answer = text(result.output)
       expect(answer).toContain('NEO_TEST_AMBIENT_SECRET_KEY=\n')
-      expect(answer).toContain('DEEPSEEK_API_KEY=explicit-child-key')
+      expect(answer).toContain('LLM_API_KEY=explicit-child-key')
       await run.dispose()
       await ctx.fiber.dispose()
     } finally {
@@ -216,7 +216,7 @@ describe('dsh-subagent-dsh-sdk provider', () => {
     // handshake window): the fake touches READY, we abort, then GO lets the
     // handshake complete — so the post-race `flags.cancelled` recheck must
     // reject even though the handshake itself succeeded.
-    const tmp = mkdtempSync(join(tmpdir(), 'subagent-dsh-sdk-midcancel-'))
+    const tmp = mkdtempSync(join(tmpdir(), 'subagent-sdk-midcancel-'))
     const ready = join(tmp, 'ready')
     const go = join(tmp, 'go')
     try {
@@ -265,7 +265,7 @@ describe('dsh-subagent-dsh-sdk provider', () => {
   })
 
   it('rejects WITHOUT spawning when the signal is already aborted', async () => {
-    const tmp = mkdtempSync(join(tmpdir(), 'subagent-dsh-sdk-preabort-'))
+    const tmp = mkdtempSync(join(tmpdir(), 'subagent-sdk-preabort-'))
     const sentinel = join(tmp, 'spawned')
     try {
       const controller = new AbortController()
@@ -354,7 +354,7 @@ describe('dsh-subagent-dsh-sdk provider', () => {
     const run = await ctx.subagents.start('dsh-sdk', request())
     expect((await run.result).stopReason).toBe('error')
     expect(warnings).toHaveLength(1)
-    expect(warnings[0]).toContain('subagent-dsh-sdk "dsh-sdk": child run failed (error)')
+    expect(warnings[0]).toContain('subagent-sdk "dsh-sdk": child run failed (error)')
     await run.dispose()
     await ctx.fiber.dispose()
   })
@@ -448,7 +448,7 @@ describe('dsh-subagent-dsh-sdk provider', () => {
   })
 
   it('uses a validated config cwd override instead of the parent session cwd', async () => {
-    const tmp = mkdtempSync(join(tmpdir(), 'subagent-dsh-sdk-cwd-'))
+    const tmp = mkdtempSync(join(tmpdir(), 'subagent-sdk-cwd-'))
     try {
       const ctx = await setup({ FAKE_ECHO_CWD: '1', FAKE_TEXT: 'done' }, { cwd: tmp })
       const run = await ctx.subagents.start('dsh-sdk', request())
@@ -473,7 +473,7 @@ describe('dsh-subagent-dsh-sdk provider', () => {
   })
 
   it('keeps named plugin exports with no default export (loader shape)', () => {
-    expect(sdk.name).toBe('subagent-dsh-sdk')
+    expect(sdk.name).toBe('subagent-sdk')
     expect(sdk.inject).toEqual(['subagents'])
     expect(typeof sdk.apply).toBe('function')
     expect(typeof sdk.Config).toBe('function')

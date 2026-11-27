@@ -143,7 +143,7 @@ export type FinishReason = FinishReasonMap[keyof FinishReasonMap]
  * Counts are DISJOINT: `inputTokens` is uncached input only; cached input is
  * reported separately as `cacheReadTokens`/`cacheWriteTokens` (billed input =
  * sum of the three). Adapters whose providers fold cache hits into a total
- * prompt count (DeepSeek's `prompt_tokens`) subtract them out.
+ * prompt count (an OpenAI-compatible `prompt_tokens`) subtract them out.
  */
 export interface TokenUsage {
   inputTokens: number

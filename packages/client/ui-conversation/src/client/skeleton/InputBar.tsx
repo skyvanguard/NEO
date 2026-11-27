@@ -416,7 +416,7 @@ export function InputBar({
     keyboard.track(keyboard.snapshot.draft, caret)
   }
 
-  // Intake pre-check (DeepSeek Chat semantics): an addition that would break
+  // Intake pre-check: an addition that would break
   // a projected limit is refused as a whole batch, announced immediately, and
   // never enters the rail — no more submit-time failure rolling the rail
   // back. The host enforces the same limits at submit for callers that bypass
@@ -425,7 +425,7 @@ export function InputBar({
     if (addImages === undefined || files.length === 0) return
     const rejected = ((): string | null => {
       if (imageLimits !== undefined) {
-        // Format precedes limits (DeepSeek Chat's filter order): a batch with
+        // Format precedes limits: a batch with
         // a non-image must announce the format problem, not a count or size
         // it could never pass anyway — addImages rejects it authoritatively.
         if (files.some(file => !(imageLimits.mediaTypes as readonly string[]).includes(file.type))) {
@@ -448,7 +448,7 @@ export function InputBar({
     if (rejected !== null) showToast(rejected)
   }, [addImages, attachments, imageLimits, showToast, t])
 
-  // Whole-page file-drop intake (DeepSeek Chat behavior): the listeners live
+  // Whole-page file-drop intake: the listeners live
   // on the document so a drop anywhere over the window adds images, not only
   // over the composer card. Safe as document-level state: the composer-bar
   // slot is `kind: 'single'`, so at most one bar is mounted to bind these.

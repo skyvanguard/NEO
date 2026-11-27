@@ -1,13 +1,13 @@
 /**
- * Out-of-process SDK subagent backend. Each child is a complete DeepSeek
- * Harness runtime in its own process — own `cordis.yml`-decided composition,
+ * Out-of-process SDK subagent backend. Each child is a complete NEO
+ * runtime in its own process — own `cordis.yml`-decided composition,
  * session, model route, and tools — driven over stdio JSON-RPC through the
  * TypeScript SDK client, so it shares no Cordis context and advertises no
  * parent-enforced start capabilities; the ONE thing it reads off
  * `request.parent` is the session's workspace cwd. This plugin uses named
  * exports only; a default would hide its loader metadata (see
  * `docs/postmortem/0001-acp-default-export-drops-inject.md`).
- * @module @neo/subagent-dsh-sdk
+ * @module @neo/subagent-sdk
  */
 
 import type { Context } from '@neo/cordis'
@@ -22,7 +22,7 @@ import {
   type SdkRunSpec,
 } from './run.ts'
 
-export const name = 'subagent-dsh-sdk'
+export const name = 'subagent-sdk'
 export const inject = ['subagents']
 
 /** Config: how to spawn and drive the child SDK runtime process. */
@@ -101,7 +101,7 @@ class SdkSubagentProvider implements SubagentProvider {
     const spec: SdkRunSpec = {
       command: this.config.command,
       args: this.config.args,
-      cwd: resolveChildCwd('subagent-dsh-sdk', this.config.cwd, request.parent.session.header.cwd),
+      cwd: resolveChildCwd('subagent-sdk', this.config.cwd, request.parent.session.header.cwd),
       provider: this.config.provider,
       model: this.config.model,
       ...this.config.maxTokens === undefined ? {} : { maxTokens: this.config.maxTokens },
@@ -112,7 +112,7 @@ class SdkSubagentProvider implements SubagentProvider {
       onError: (error, stopReason) => {
         // The seam forbids `result` rejecting, so a child-level failure is
         // flattened to a stop reason — preserve it here rather than losing it.
-        this.ctx.logger.warn(`subagent-dsh-sdk "${this.name}": child run failed (${stopReason}): ${error.message}`)
+        this.ctx.logger.warn(`subagent-sdk "${this.name}": child run failed (${stopReason}): ${error.message}`)
       },
     }
     return startSdkRun(request, spec)
@@ -122,15 +122,15 @@ class SdkSubagentProvider implements SubagentProvider {
 export function apply(ctx: Context, config: Config): void {
   // schemastery (Config) has already filled every defaulted field.
   const resolved = config as ResolvedConfig
-  assertPositiveFinite('subagent-dsh-sdk', 'shutdownTimeoutMs', resolved.shutdownTimeoutMs)
-  assertPositiveFinite('subagent-dsh-sdk', 'disposeEofGraceMs', resolved.disposeEofGraceMs)
-  assertPositiveFinite('subagent-dsh-sdk', 'disposeGraceMs', resolved.disposeGraceMs)
+  assertPositiveFinite('subagent-sdk', 'shutdownTimeoutMs', resolved.shutdownTimeoutMs)
+  assertPositiveFinite('subagent-sdk', 'disposeEofGraceMs', resolved.disposeEofGraceMs)
+  assertPositiveFinite('subagent-sdk', 'disposeGraceMs', resolved.disposeGraceMs)
   if (resolved.maxTokens !== undefined && (!Number.isSafeInteger(resolved.maxTokens) || resolved.maxTokens <= 0)) {
-    throw new TypeError('subagent-dsh-sdk maxTokens must be a positive safe integer')
+    throw new TypeError('subagent-sdk maxTokens must be a positive safe integer')
   }
   // Interpret a relative configured cwd against the harness launch directory
   // ONCE, at load, and fail a misconfigured directory here — not per start.
-  const configuredCwd = validateConfiguredCwd('subagent-dsh-sdk', resolved.cwd)
+  const configuredCwd = validateConfiguredCwd('subagent-sdk', resolved.cwd)
   const validated: ResolvedConfig = configuredCwd === undefined
     ? resolved
     : { ...resolved, cwd: configuredCwd }

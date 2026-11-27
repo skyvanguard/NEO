@@ -77,7 +77,6 @@
     "@neo/session-title-first-prompt-llm": "workspace:^",
     "@neo/settings-file": "workspace:^",
     "@neo/skill": "workspace:^",
-    "@neo/skill-badge": "workspace:^",
     "@neo/skill-filesystem": "workspace:^",
     "@neo/spill-local": "workspace:^",
     "@neo/spill-policy": "workspace:^",

@@ -92,7 +92,7 @@ describe('third-party memory MCP example overlays', () => {
     expect(row.config?.transport).toBe(contract.transport)
     expect(source.split('\n', 1)[0]).toContain(contract.pin)
     expect(source).not.toMatch(/\bsk-[A-Za-z0-9_-]{8,}\b/)
-    expect(source).not.toContain('DEEPSEEK_API_KEY')
+    expect(source).not.toContain('LLM_API_KEY')
   })
 
   it.each(examples)('loads $file and discovers a keyless fixture tool', async (contract) => {

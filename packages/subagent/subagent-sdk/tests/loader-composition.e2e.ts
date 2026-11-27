@@ -17,7 +17,7 @@ import { describe, expect, it } from 'vitest'
 import { type SessionEvent } from '@neo/session'
 import { resolveExampleLaunch, runLoaderSmoke } from '@neo/loader-smoke'
 
-const fixtureDir = new URL('../../../../examples/jsonrpc-agent/tests/fixtures/subagent/subagent-dsh-sdk/', import.meta.url)
+const fixtureDir = new URL('../../../../examples/jsonrpc-agent/tests/fixtures/subagent/subagent-sdk/', import.meta.url)
 const driver = fileURLToPath(new URL('driver.ts', fixtureDir))
 const configPath = fileURLToPath(new URL('cordis.yml', fixtureDir))
 const childConfigPath = fileURLToPath(new URL('child.cordis.yml', fixtureDir))

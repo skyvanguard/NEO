@@ -1,22 +1,23 @@
 /**
- * Package-owned invariant companion for `@neo/skill-badge`.
- * @module @neo/skill-badge/invariant
+ * Package-owned invariant companion for `@neo/subagent-sdk`.
+ * @module @neo/subagent-sdk/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@neo/cordis'
 import type { InvariantInstaller } from '@neo/invariants'
 
-const PACKAGE_NAME = '@neo/skill-badge'
+const PACKAGE_NAME = '@neo/subagent-sdk'
 
 /** Cordis companion plugin name. */
-export const name = 'skill-badge-invariant'
+export const name = 'subagent-sdk-invariant'
 /** Service required before the companion can reserve package ownership. */
 export const inject = ['invariants']
 
 /**
- * No runtime invariant: the package owns one immutable provider registration,
- * while the skill registry owns registration uniqueness and lifecycle checks.
+ * No runtime invariant: run lifecycle pairing is owned and checked by the
+ * subagent seam's invariant; this backend's own state lives in the child
+ * process beyond this context's event streams.
  */
 const install: InvariantInstaller = () => {}
 

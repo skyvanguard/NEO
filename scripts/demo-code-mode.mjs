@@ -1,4 +1,4 @@
-/** Boot the ACP Code Mode overlay. Requires a DeepSeek API key. */
+/** Boot the ACP Code Mode overlay. Requires a model endpoint (LLM_BASE_URL, LLM_API_KEY). */
 import { spawn } from 'node:child_process'
 
 if (process.argv.length > 2) {

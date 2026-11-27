@@ -6,9 +6,10 @@
 // snapshot way — so a real chromium exercises the real HTTP uplink/WebSocket
 // downlink, api-gateway, agent loop, tools, and persistence. Modes ride $NEO_SNAPSHOT:
 // replay (default, keyless: NEO ships no built-in model adapter, so this
-// inserts dsh-llm-replay in providers mode), record (a configured adapter + key,
-// harvests fixtures from live session memory), refresh (keyless replay that
-// rewrites goldens).
+// inserts dsh-llm-replay in providers mode), record (the shipped llm-pi-ai row
+// serves the default route at LLM_BASE_URL keyed by LLM_API_KEY; harvests
+// fixtures from live session memory), refresh (keyless replay that rewrites
+// goldens).
 //
 // Composition divergences from `neo web`, all deliberate, all via include
 // patches after the shipped bundle layers, over the SAME tree (never a
@@ -193,7 +194,7 @@ export interface LaunchOptions {
   extraOverlayPath?: string
   /**
    * Replay fixture (session.jsonl) served by the inserted dsh-llm-replay row
-   * in replay/refresh modes; ignored in record mode (the configured adapter
+   * in replay/refresh modes; ignored in record mode (the LLM_* route
    * answers). Omit for scenarios issuing no model calls — a stray stream then
    * fails loud with NO_ADAPTER (NEO ships no built-in adapter and no replay
    * row mounts).
@@ -283,8 +284,8 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
   if (mode === 'record') {
     // Both owning vitest configs (web unconditionally, snapshot in record
     // mode) load the repo-root .env before this file runs.
-    if (process.env.DEEPSEEK_API_KEY === undefined || process.env.DEEPSEEK_API_KEY.length === 0) {
-      throw new Error('web e2e record mode needs DEEPSEEK_API_KEY (env or repo-root .env)')
+    if (process.env.LLM_API_KEY === undefined || process.env.LLM_API_KEY.length === 0) {
+      throw new Error('web e2e record mode needs LLM_API_KEY (env or repo-root .env)')
     }
   }
   const workspaceCwd = await realpath(await mkdtemp(join(tmpdir(), 'dsh-web-e2e-ws-')))
@@ -434,6 +435,27 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     ...options.searxngSearch === undefined
       ? []
       : [{ id: 'web-search-searxng', config: { baseURL: options.searxngSearch.baseURL } }],
+    // Record: NEO ships no built-in model adapter, so the shipped dormant
+    // `llm-pi-ai` row serves the default route the way the example
+    // compositions do — one hand-declared OpenAI-compatible route at
+    // LLM_BASE_URL (default a local llama-server), keyed by LLM_API_KEY, under
+    // the route and model ids replay publishes. A composition-level route
+    // leaves the settings document the scenarios inspect untouched.
+    ...mode === 'record'
+      ? [{
+        id: 'llm-pi-ai',
+        config: {
+          providers: {
+            'neo-default-route': {
+              api: 'openai-completions',
+              baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
+              apiKeyEnv: 'LLM_API_KEY',
+              models: [{ id: 'neo-default-model', contextWindow: 128_000 }],
+            },
+          },
+        },
+      }]
+      : [],
   ]
 
   // Sessions inherit the gateway's process.cwd() default; run the boot from

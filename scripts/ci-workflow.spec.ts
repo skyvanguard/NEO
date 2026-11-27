@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import * as yaml from 'js-yaml'
 import { describe, expect, it } from 'vitest'
 
-// The upstream deepseek-harness CI relied on self-hosted Wine/Windows runners
+// The upstream project's CI relied on self-hosted Wine/Windows runners
 // this fork does not have. This spec validates the fork's minimal Linux CI
 // (.github/workflows/ci.yml): it must exist, trigger on push/PR, and keep the
 // gate steps that catch the regressions we care about — chiefly the built

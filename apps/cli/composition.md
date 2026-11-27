@@ -84,8 +84,6 @@ flowchart LR
   cfg --> plugin_dsh_base_skill
   plugin_dsh_base_skill_filesystem["skill-filesystem<br/>@neo/skill-filesystem"]
   cfg --> plugin_dsh_base_skill_filesystem
-  plugin_dsh_base_skill_badge["skill-badge<br/>@neo/skill-badge"]
-  cfg --> plugin_dsh_base_skill_badge
   plugin_dsh_base_tool_skill["tool-skill<br/>@neo/tool-skill"]
   cfg --> plugin_dsh_base_tool_skill
   plugin_dsh_base_commands["commands<br/>@neo/commands"]
@@ -202,7 +200,6 @@ flowchart LR
 | `agent-instructions` | `@neo/agent-instructions` |
 | `skill` | `@neo/skill` |
 | `skill-filesystem` | `@neo/skill-filesystem` |
-| `skill-badge` | `@neo/skill-badge` |
 | `tool-skill` | `@neo/tool-skill` |
 | `commands` | `@neo/commands` |
 | `goal` | `@neo/goal` |

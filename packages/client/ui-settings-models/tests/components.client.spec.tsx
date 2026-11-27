@@ -763,7 +763,7 @@ describe('apiKeyFailure', () => {
   })
 
   it.each([
-    ['a pasted environment line', 'DEEPSEEK_API_KEY=sk-abc'],
+    ['a pasted environment line', 'LLM_API_KEY=sk-abc'],
     ['double quotes', '"sk-abc"'],
     ['single quotes', '\'sk-abc\''],
     ['backticks', '`sk-abc`'],

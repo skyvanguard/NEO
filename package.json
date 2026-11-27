@@ -65,7 +65,6 @@
     "doc-typecheck:contracts-ready": "tsx scripts/doc-typecheck.ts",
     "verify-md-wrap": "tsx scripts/verify-md-wrap.ts",
     "verify-md-links": "tsx scripts/verify-md-links.ts",
-    "verify-public-repository-links": "tsx scripts/verify-public-repository-links.ts",
     "verify-doc-refs": "tsx scripts/verify-doc-refs.ts",
     "verify-package-paths": "tsx scripts/verify-package-paths.ts",
     "verify-dsh-package-licenses": "tsx scripts/verify-dsh-package-licenses.ts",

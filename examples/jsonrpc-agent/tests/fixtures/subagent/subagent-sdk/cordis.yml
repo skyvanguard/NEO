@@ -14,8 +14,8 @@
 
 # providerName is omitted: the composition exercises the shipped default
 # (`dsh-sdk`) through the real Loader.
-- id: subagent-dsh-sdk
-  name: '@neo/subagent-dsh-sdk'
+- id: subagent-sdk
+  name: '@neo/subagent-sdk'
   config:
     command: !!js process.env.NEO_TEST_CHILD_COMMAND
     args: !!js JSON.parse(process.env.NEO_TEST_CHILD_ARGS ?? '[]')
