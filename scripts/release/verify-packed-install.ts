@@ -39,7 +39,6 @@ function consumerEnvironment(consumerRoot: string): NodeJS.ProcessEnv {
   delete environment.NODE_PATH
   environment.NEO_HOME = resolve(consumerRoot, '.neo')
   environment.NEO_AGENTS_HOME = resolve(consumerRoot, '.agents')
-  environment.NEO_TELEMETRY_DISABLED = '1'
   return environment
 }
 

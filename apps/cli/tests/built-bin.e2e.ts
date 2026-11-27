@@ -344,7 +344,6 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
     try {
       const web = await runBuiltBin(['--profile', 'web', '--help'], {
         NEO_HOME: home,
-        NEO_TELEMETRY_DISABLED: '1',
       })
       expect(web.code).toBe(0)
       expect(web.stderr).toBe('')
@@ -354,7 +353,6 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
 
       const wildcardHost = await runBuiltBin(['web', '--host', '0.0.0.0'], {
         NEO_HOME: home,
-        NEO_TELEMETRY_DISABLED: '1',
       })
       expect(wildcardHost.code).toBe(1)
       expect(wildcardHost.stdout).toBe('')
@@ -363,7 +361,6 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
 
       const headlessHelp = await runBuiltBin(['--profile', 'headless', '--help'], {
         NEO_HOME: home,
-        NEO_TELEMETRY_DISABLED: '1',
       })
       expect(headlessHelp.code).toBe(0)
       expect(headlessHelp.stderr).toBe('')
@@ -371,7 +368,6 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
 
       const missingTask = await runBuiltBin(['--profile', 'headless'], {
         NEO_HOME: home,
-        NEO_TELEMETRY_DISABLED: '1',
       })
       expect(missingTask.code).toBe(1)
       expect(missingTask.stderr).toContain('a task is required')
@@ -410,7 +406,6 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
     try {
       const result = await runBuiltBin(['--profile', 'headless', 'answer', 'from', 'the', 'published', 'entry'], {
         NEO_HOME: home,
-        NEO_TELEMETRY_DISABLED: '1',
         LOCAL_API_KEY: apiKey,
       })
       expect(result.code, result.stderr).toBe(0)
@@ -464,7 +459,6 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
         ['--profile', 'environment-probe'],
         {
           NEO_HOME: home,
-          NEO_TELEMETRY_DISABLED: '1',
           LOCAL_API_KEY: undefined,
         },
         project,
@@ -497,7 +491,6 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
       const result = await runBuiltBin(['--profile', 'web', '--patch', invalidProvider], {
         NEO_HOME: home,
         DEEPSEEK_API_KEY: 'keyless-invalid-config',
-        NEO_TELEMETRY_DISABLED: '1',
       })
       expect(result.code).toBe(1)
       expect(result.stdout).toBe('')
