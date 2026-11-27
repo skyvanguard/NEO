@@ -55,7 +55,7 @@ describe.skipIf(!process.env.LLM_API_KEY)('coding task: fix a failing test via b
     expect(before.status).not.toBe(0)
 
     ctx = await codingHarness(workdir, { persona: SYSTEM_PROMPT })
-    const agent = ctx.agentLoop.create(SessionId('e2e-task'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    const agent = ctx.agentLoop.create(SessionId('e2e-task'), { provider: 'neo-default-route', model: 'neo-default-model' })
 
     agent.followup(createUserMessage({
       content: [{

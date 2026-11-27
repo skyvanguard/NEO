@@ -11,8 +11,8 @@
       - id: acp-agent
         name: '@neo/acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
+          provider: neo-default-route
+          model: neo-default-model
           persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: none
           workspaceContext:
@@ -36,10 +36,10 @@
             name: '@neo/llm-replay'
             config:
               providers:
-                - id: deepseek-official
-                  name: DeepSeek
+                - id: neo-default-route
+                  name: NEO Default
                   models:
-                    - id: deepseek-v4-flash
-                    - id: deepseek-v4-pro
+                    - id: neo-default-model
+                    - id: neo-large-model
           - id: subagent-durability-failure
             name: './tests/fixtures/subagent-durability-failure.ts'

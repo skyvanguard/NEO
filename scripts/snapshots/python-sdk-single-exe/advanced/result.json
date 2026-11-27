@@ -94,7 +94,7 @@
       "data": {
         "header": {
           "config": {
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model",
             "maxTokens": 256000,
             "reasoningEffort": "high"
@@ -128,7 +128,7 @@
       "seq": 7,
       "time": 0,
       "data": {
-        "provider": "deepseek-official",
+        "provider": "neo-default-route",
         "model": "smoke-model",
         "contextWindow": 1000000
       }
@@ -232,7 +232,7 @@
           ],
           "source": {
             "kind": "model",
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model"
           },
           "id": "{{messageId}}"
@@ -418,7 +418,7 @@
           ],
           "source": {
             "kind": "model",
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model"
           },
           "id": "{{messageId}}"
@@ -513,7 +513,7 @@
       "data": {
         "header": {
           "config": {
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model",
             "maxTokens": 256000,
             "reasoningEffort": "high"
@@ -642,7 +642,7 @@
           ],
           "source": {
             "kind": "model",
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model"
           },
           "id": "{{messageId}}"
@@ -859,7 +859,7 @@
           ],
           "source": {
             "kind": "model",
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model"
           },
           "id": "{{messageId}}"
@@ -1041,7 +1041,7 @@
           ],
           "source": {
             "kind": "model",
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model"
           },
           "id": "{{messageId}}"
@@ -1263,7 +1263,7 @@
           ],
           "source": {
             "kind": "model",
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model"
           },
           "id": "{{messageId}}"
@@ -1353,7 +1353,7 @@
       "data": {
         "header": {
           "config": {
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model",
             "maxTokens": 256000,
             "reasoningEffort": "high"
@@ -1475,7 +1475,7 @@
           ],
           "source": {
             "kind": "model",
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model"
           },
           "id": "{{messageId}}"
@@ -1655,7 +1655,7 @@
           "data": {
             "header": {
               "config": {
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model",
                 "maxTokens": 256000,
                 "reasoningEffort": "high"
@@ -1695,7 +1695,7 @@
           "seq": 7,
           "time": 0,
           "data": {
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model",
             "contextWindow": 1000000
           }
@@ -1835,7 +1835,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"
@@ -2081,7 +2081,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"
@@ -2206,7 +2206,7 @@
           "data": {
             "header": {
               "config": {
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model",
                 "maxTokens": 256000,
                 "reasoningEffort": "high"
@@ -2371,7 +2371,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"
@@ -2660,7 +2660,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"
@@ -2895,7 +2895,7 @@
           "data": {
             "header": {
               "config": {
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model",
                 "maxTokens": 256000,
                 "reasoningEffort": "high"
@@ -2936,7 +2936,7 @@
           "seq": 9,
           "time": 0,
           "data": {
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model",
             "contextWindow": 1000000
           }
@@ -3070,7 +3070,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"
@@ -3350,7 +3350,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"
@@ -3599,7 +3599,7 @@
           "data": {
             "header": {
               "config": {
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model",
                 "maxTokens": 256000,
                 "reasoningEffort": "high"
@@ -3640,7 +3640,7 @@
           "seq": 9,
           "time": 0,
           "data": {
-            "provider": "deepseek-official",
+            "provider": "neo-default-route",
             "model": "smoke-model",
             "contextWindow": 1000000
           }
@@ -3792,7 +3792,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"
@@ -4103,7 +4103,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"
@@ -4223,7 +4223,7 @@
           "data": {
             "header": {
               "config": {
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model",
                 "maxTokens": 256000,
                 "reasoningEffort": "high"
@@ -4381,7 +4381,7 @@
               ],
               "source": {
                 "kind": "model",
-                "provider": "deepseek-official",
+                "provider": "neo-default-route",
                 "model": "smoke-model"
               },
               "id": "{{messageId}}"

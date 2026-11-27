@@ -61,7 +61,7 @@ function completedTailFixture(raw: string): string {
     { type: 'turn/start', seq: 103, time: 1784974103000, data: { turn: 2, trigger: { kind: 'message', source: { kind: 'user', rpcId: '{{rpcId}}' } } } },
     { type: 'user/message', seq: 104, time: 1784974103001, data: { content: [{ type: 'text', text: SECOND_PROMPT }], source: { kind: 'user', rpcId: '{{rpcId}}' } }, surfaceOp: 'append' },
     { type: 'step/start', seq: 105, time: 1784974103002, data: { turn: 2, step: 1 } },
-    { type: 'assistant/message', seq: 106, time: 1784974103003, data: { turn: 2, step: 1, content: [{ type: 'text', text: 'DONE' }], provenance: { provider: 'deepseek-official', model: 'deepseek-v4-flash' } }, sourceEventSeqs: [], surfaceOp: 'append' },
+    { type: 'assistant/message', seq: 106, time: 1784974103003, data: { turn: 2, step: 1, content: [{ type: 'text', text: 'DONE' }], provenance: { provider: 'neo-default-route', model: 'neo-default-model' } }, sourceEventSeqs: [], surfaceOp: 'append' },
     { type: 'step/end', seq: 107, time: 1784974103004, data: { turn: 2, step: 1 } },
     { type: 'turn/end', seq: 108, time: 1784974103005, data: { turn: 2, reason: { kind: 'completed' } } },
   ]

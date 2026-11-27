@@ -18,7 +18,7 @@
             name: '@neo/llm-replay'
             config:
               providers:
-                - id: deepseek-official
+                - id: neo-default-route
                   models:
-                    - id: deepseek-v4-flash
+                    - id: neo-default-model
                       contextWindow: 128000

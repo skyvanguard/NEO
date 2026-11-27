@@ -64,13 +64,14 @@
     # Settings → Models (the dormant `llm-pi-ai` adapter); that saved selection
     # then overrides it. An unconfigured default is a route the composer refuses
     # to type into — the first-run state the Models page resolves. The value is
-    # the canonical id the replay/test seam routes, kept so recorded fixtures and
-    # default-model scenarios stay stable. Consumers read the selection at creation time.
+    # a neutral placeholder pair that only the replay/test seam serves, kept so
+    # recorded fixtures and default-model scenarios stay stable. Consumers read
+    # the selection at creation time.
     - id: agent-default-model
       name: '@neo/agent-default-model'
       config:
-        provider: deepseek-official
-        model: deepseek-v4-flash
+        provider: neo-default-route
+        model: neo-default-model
 
     - id: jobs
       name: '@neo/jobs-local'

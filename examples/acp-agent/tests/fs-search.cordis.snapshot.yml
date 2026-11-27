@@ -3,10 +3,10 @@
   name: '@neo/llm-replay'
   config:
     providers:
-      - id: deepseek-official
-        name: DeepSeek
+      - id: neo-default-route
+        name: NEO Default
         models:
-          - id: deepseek-v4-pro
+          - id: neo-large-model
 
 - id: subprocess
   name: '@neo/subprocess-local'
@@ -17,8 +17,8 @@
 - id: acp-agent
   name: '@neo/acp-demo'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-pro
+    provider: neo-default-route
+    model: neo-large-model
     persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
     persistenceCompression: none
     workspaceContext: false

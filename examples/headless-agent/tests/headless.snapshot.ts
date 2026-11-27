@@ -260,7 +260,7 @@ describe('headless stream-json snapshots', () => {
         const retries = records.filter(record => record.type === 'llm/retry')
         expect(retries).toHaveLength(1)
         expect(retries[0]?.data).toMatchObject({
-          provider: 'deepseek-official',
+          provider: 'neo-default-route',
           mode: 'normal',
           policyKey: '["normal",1,["RATE_LIMIT"],1,1,0]',
           retry: 1,
@@ -375,7 +375,7 @@ describe('headless stream-json snapshots', () => {
     // post-base-drop first-run path the web client turns into Settings → Models
     // guidance; headless pins the raw, route-named failure.
     expect(normalized).toContain('NO_ADAPTER')
-    expect(normalized).toContain('deepseek-official')
+    expect(normalized).toContain('neo-default-route')
   }, LOADER_SMOKE_TEST_TIMEOUT_MS)
 
   it('logs the model default and a dynamic next-step reasoning effort', async () => {

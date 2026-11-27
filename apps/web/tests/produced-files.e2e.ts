@@ -62,7 +62,7 @@ function producedFixture(): string {
         name: 'write',
         arguments: call.args,
       })),
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'neo-default-route', model: 'neo-default-model' },
     }),
   }, { surfaceOp: 'append' })
   for (const call of calls) {
@@ -85,7 +85,7 @@ function producedFixture(): string {
     step: 2,
     message: createAssistantMessage({
       content: [{ type: 'text', text: `Created the site.\n\n${DONE}` }],
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'neo-default-route', model: 'neo-default-model' },
     }),
   }, { surfaceOp: 'append' })
   session.append('step/end', { turn: 1, step: 2 })

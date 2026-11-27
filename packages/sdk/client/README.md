@@ -13,8 +13,8 @@ import { DeepSeekHarness } from '@neo/sdk-client'
 
 await using harness = new DeepSeekHarness({
   launch: { command: 'node', args: ['lib/bin.js', 'cordis.yml'] },
-  provider: 'deepseek-official',
-  model: 'deepseek-v4-flash',
+  provider: 'neo-default-route',
+  model: 'neo-default-model',
   maxTokens: 49_152,
 })
 const result = await harness.run('say hi')

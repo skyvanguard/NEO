@@ -37,8 +37,8 @@ Replay keys every call by its calling session id (`GenerateOptions.sessionId`, s
   name: '@neo/llm-replay'
   config:
     providers:
-      - id: deepseek-official
-        name: DeepSeek
+      - id: neo-default-route
+        name: NEO Default
         retryPolicy:
           mode: normal
           backoff:
@@ -46,9 +46,9 @@ Replay keys every call by its calling session id (`GenerateOptions.sessionId`, s
             maxDelayMs: 1
             jitterRatio: 0
         models:
-          - id: deepseek-v4-flash
+          - id: neo-default-model
             contextWindow: 128000
-          - id: deepseek-v4-pro
+          - id: neo-large-model
   # file/overrideFile/childFiles default to $NEO_SNAPSHOT_FILE /
   # $NEO_SNAPSHOT_OVERRIDE / $NEO_SNAPSHOT_CHILD_FILES, set by the snapshot
   # harness per scenario.

@@ -14,7 +14,7 @@
             name: '@neo/llm-replay'
             config:
               providers:
-                - id: deepseek-official
-                  name: DeepSeek
+                - id: neo-default-route
+                  name: NEO Default
                   models:
-                    - id: deepseek-v4-flash
+                    - id: neo-default-model

@@ -38,11 +38,11 @@ const WORKSPACE_PROBE = 'dragonfruit-8675309'
 /** Live OpenAI-compatible route: `LLM_BASE_URL` (default a local llama-server), keyed by `LLM_API_KEY`. */
 const LIVE_LLM = {
   providers: {
-    'deepseek-official': {
+    'neo-default-route': {
       api: 'openai-completions',
       baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
       apiKeyEnv: 'LLM_API_KEY',
-      models: [{ id: 'deepseek-v4-flash' }],
+      models: [{ id: 'neo-default-model' }],
     },
   },
 }
@@ -364,7 +364,7 @@ describe.skipIf(!process.env.LLM_API_KEY)('Code Mode: real model writes a progra
   it('collapses the wire tool list to [run_code], bridges sub-calls, and returns curated output', async () => {
     workdir = await mkdtemp(join(tmpdir(), 'dsh-code-mode-e2e-'))
     ctx = await codeModeHarness(workdir)
-    const agent = ctx.agentLoop.create(SessionId('e2e-code-mode'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    const agent = ctx.agentLoop.create(SessionId('e2e-code-mode'), { provider: 'neo-default-route', model: 'neo-default-model' })
 
     agent.followup(createUserMessage({
       content: [{
@@ -416,7 +416,7 @@ describe.skipIf(!process.env.LLM_API_KEY)('Code Mode: real model writes a progra
     const handle = await ctx.agents.create({
       sessionId: SessionId('e2e-code-mode-workspace-session'),
       meta: { cwd: workdir },
-      agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      agentOptions: { provider: 'neo-default-route', model: 'neo-default-model' },
     })
 
     handle.agent.followup(createUserMessage({

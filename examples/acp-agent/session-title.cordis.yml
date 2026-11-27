@@ -1,5 +1,5 @@
 # Session-title snapshot composition: the optional first-prompt provider uses
-# the ordinary `deepseek-official` route while the ACP app and every other capability stay
+# the ordinary `neo-default-route` route while the ACP app and every other capability stay
 # identical to the base example.
 - id: base
   name: '@neo/cordis-plugin-include'
@@ -15,5 +15,5 @@
               maxInputBytes: 4096
               maxOutputTokens: 32
               timeoutMs: 5000
-              provider: deepseek-official
-              model: deepseek-v4-flash
+              provider: neo-default-route
+              model: neo-default-model

@@ -14,13 +14,13 @@
   name: '@neo/llm-pi-ai'
   config:
     providers:
-      deepseek-official:
+      neo-default-route:
         api: openai-completions
         baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
         apiKeyEnv: LLM_API_KEY
         streamIdleTimeoutMs: 172800000
         models:
-          - id: !!js process.env.LLM_MODEL ?? 'deepseek-v4-flash'
+          - id: !!js process.env.LLM_MODEL ?? 'neo-default-model'
             contextWindow: !!js Number(process.env.NEO_CONTEXT_WINDOW ?? 1000000)
 
 - id: sandbox

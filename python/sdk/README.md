@@ -33,15 +33,15 @@ By default, the SDK launches the bundled single-file `dsh-jsonrpc-agent` executa
 from neo_sdk import Neo
 
 with Neo(
-    provider="deepseek-official",
-    model="deepseek-v4-flash",
+    provider="neo-default-route",
+    model="neo-default-model",
     max_tokens=49_152,
     cordis="examples/jsonrpc-agent/cordis.yml",
 ) as harness:
     result = harness.run("Make the requested code change.")
 ```
 
-`provider` selects a provider route registered by the chosen Cordis composition; `model` is the model id resolved by that adapter. `max_tokens` is an optional positive per-request output-token cap for the root agent and its in-process descendants; omission leaves the provider default in control. Compaction summaries keep the separate limit configured by their compaction plugin. The bundled default composition registers `deepseek-official` as a hand-declared `llm-pi-ai` route at `LLM_BASE_URL`. A custom composition can declare its own `llm-pi-ai` routes, configure provider-specific credentials/endpoints there, and select any provider/model present in pi-ai's installed catalog; `initialize` fails for a provider no mounted adapter serves.
+`provider` selects a provider route registered by the chosen Cordis composition; `model` is the model id resolved by that adapter. `max_tokens` is an optional positive per-request output-token cap for the root agent and its in-process descendants; omission leaves the provider default in control. Compaction summaries keep the separate limit configured by their compaction plugin. The bundled default composition registers `neo-default-route` as a hand-declared `llm-pi-ai` route at `LLM_BASE_URL`. A custom composition can declare its own `llm-pi-ai` routes, configure provider-specific credentials/endpoints there, and select any provider/model present in pi-ai's installed catalog; `initialize` fails for a provider no mounted adapter serves.
 
 The [Python SDK tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/guide/python-sdk.md) provides an ordered installation and first-run path without the Web UI. The [`jsonrpc-agent` example](https://github.com/skyvanguard/NEO/blob/master/examples/jsonrpc-agent/README.md) owns the complete standalone Cordis file used there.
 

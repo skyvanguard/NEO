@@ -5,7 +5,7 @@
 # carries ACP JSON-RPC.
 
 # One hand-declared OpenAI-compatible route (llama-server, vLLM, or a hosted
-# gateway). It keeps the `deepseek-official` route and model ids the app config
+# gateway). It keeps the `neo-default-route` route and model ids the app config
 # and the recorded replay corpus name. LLM_BASE_URL selects the endpoint
 # (default: a local llama-server); LLM_API_KEY resolves per request, so no key
 # is inlined here.
@@ -13,13 +13,13 @@
   name: '@neo/llm-pi-ai'
   config:
     providers:
-      deepseek-official:
+      neo-default-route:
         api: openai-completions
         baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
         apiKeyEnv: LLM_API_KEY
         models:
-          - id: deepseek-v4-flash
-          - id: deepseek-v4-pro
+          - id: neo-default-model
+          - id: neo-large-model
 
 # The default composition confines bash AND the filesystem tools to the
 # workspace and asks before a wider retry. Snapshot runs select
@@ -57,8 +57,8 @@
 - id: acp-agent
   name: '@neo/acp-demo'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-pro
+    provider: neo-default-route
+    model: neo-large-model
     persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
     persistenceCompression: !!js "process.env.NEO_SNAPSHOT === undefined ? 'zstd' : 'none'"
     workspaceContext:

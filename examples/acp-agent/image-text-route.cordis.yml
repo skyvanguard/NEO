@@ -1,8 +1,8 @@
 # Text-route image overlay: the attachment store registers read_image, but the
 # strict execution gate refuses on a route that does not declare image input,
 # so a text-only deployment keeps its durable history text-clean. The app
-# config is restated to re-pin `deepseek-v4-flash` (base ships pro; the
-# authored fixture and the pinned header class are flash), because a config
+# config is restated to re-pin `neo-default-model` (base ships the large model; the
+# authored fixture and the pinned header class use the default model), because a config
 # patch replaces the whole app config.
 - id: base
   name: '@neo/cordis-plugin-include'
@@ -12,8 +12,8 @@
       - id: acp-agent
         name: '@neo/acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
+          provider: neo-default-route
+          model: neo-default-model
           persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: none
           workspaceContext:

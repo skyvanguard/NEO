@@ -1,5 +1,5 @@
 # Keyless replay for the read-image refusal scenario: identical to the
-# image.cordis.snapshot.yml overlay except the replay catalog leaves flash
+# image.cordis.snapshot.yml overlay except the replay catalog leaves the default model
 # text-only, so the strict read_image gate refuses and no image ever enters
 # the durable log.
 - id: base
@@ -13,8 +13,8 @@
       - id: acp-agent
         name: '@neo/acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
+          provider: neo-default-route
+          model: neo-default-model
           persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: none
           workspaceContext:
@@ -30,10 +30,10 @@
             name: '@neo/llm-replay'
             config:
               providers:
-                - id: deepseek-official
-                  name: DeepSeek
+                - id: neo-default-route
+                  name: NEO Default
                   models:
-                    - id: deepseek-v4-flash
+                    - id: neo-default-model
                       inputModalities: [text]
-                    - id: deepseek-v4-pro
+                    - id: neo-large-model
                       inputModalities: [text]

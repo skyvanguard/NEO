@@ -82,7 +82,7 @@ describe('jsonrpc-agent keyless smoke', () => {
         LLM_API_KEY: 'keyless-smoke-local-mock',
         LLM_BASE_URL: `http://127.0.0.1:${address.port}`,
         // The SDK exports the session model; this raw JSON-RPC driver does it by hand.
-        LLM_MODEL: 'deepseek-v4-pro',
+        LLM_MODEL: 'neo-large-model',
         NEO_CWD: root,
         NEO_SESSION_ROOT: join(root, '.sessions'),
         ...(envValue === undefined ? {} : { NEO_MAX_TOKENS_AS_SUCCESS: envValue }),
@@ -107,7 +107,7 @@ describe('jsonrpc-agent keyless smoke', () => {
         jsonrpc: '2.0',
         id: 1,
         method: 'initialize',
-        params: { cwd: root, provider: 'deepseek-official', model: 'deepseek-v4-pro', maxTokens: 1234 },
+        params: { cwd: root, provider: 'neo-default-route', model: 'neo-large-model', maxTokens: 1234 },
       })}\n`)
       const initialized = await waitForLine(lines, value => value.id === 1, () => stderr)
       expect(initialized).toMatchObject({

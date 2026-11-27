@@ -301,8 +301,8 @@ async function runScenario(scenario: SdkScenario): Promise<{
       requestTimeoutMs: 110_000,
     },
     cwd,
-    provider: 'deepseek-official',
-    model: 'deepseek-v4-flash',
+    provider: 'neo-default-route',
+    model: 'neo-default-model',
   })
   try {
     const notifications: HarnessNotification[] = []

@@ -36,12 +36,12 @@ const CORDIS_YML = `
   name: '@neo/llm-pi-ai'
   config:
     providers:
-      deepseek-official:
+      neo-default-route:
         api: openai-completions
         baseURL: http://127.0.0.1:9/v1
         apiKeyEnv: LLM_API_KEY
         models:
-          - id: deepseek-v4-flash
+          - id: neo-default-model
 - id: subprocess
   name: '@neo/subprocess-local'
 - id: bash
@@ -49,8 +49,8 @@ const CORDIS_YML = `
 - id: acp-agent
   name: '@neo/acp-demo'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-flash
+    provider: neo-default-route
+    model: neo-default-model
     persona: 'You are a test agent.'
     workspaceContext: false
 - id: tool-session-query

@@ -23,8 +23,8 @@ class NeoConfig:
     for a subprocess.
     """
 
-    provider: str = "deepseek-official"
-    model: str = "deepseek-v4-flash"
+    provider: str = "neo-default-route"
+    model: str = "neo-default-model"
     max_tokens: int | None = None
     cwd: str | None = None
     runtime_cwd: str | None = None

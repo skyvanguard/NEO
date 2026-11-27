@@ -37,8 +37,8 @@ export class DeepSeekHarness implements AsyncDisposable {
     // process's cwd, but the wire cwd is resolved again inside the child — a
     // relative value would double-resolve (e.g. `worker` → `worker/worker`).
     this.cwd = resolve(options.cwd ?? options.launch.cwd ?? process.cwd())
-    this.provider = options.provider ?? 'deepseek-official'
-    this.model = options.model ?? 'deepseek-v4-flash'
+    this.provider = options.provider ?? 'neo-default-route'
+    this.model = options.model ?? 'neo-default-model'
     this.maxTokens = options.maxTokens
   }
 
