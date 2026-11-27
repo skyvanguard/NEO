@@ -33,7 +33,7 @@ export const inject = ['web']
 
 /** Plugin config (all optional — `apply` fills constant defaults). */
 export interface Config {
-  /** SearXNG instance base URL; `/search` is appended. */
+  /** Absolute http(s) SearXNG instance URL; `/search` is appended to its path. */
   baseURL?: string
   /** Provider-side result cap; the seam still enforces the request's `maxResults`. */
   maxResults?: number

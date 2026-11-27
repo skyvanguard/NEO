@@ -19,7 +19,8 @@ export type { UsageCache } from './aggregate.ts'
 
 declare module '@neo/cordis' {
   interface Context {
-    usageStats: UsageStatsService
+    /** Registered under the Remote namespace it serves (`usage.summary`). */
+    usage: UsageStatsService
   }
 }
 

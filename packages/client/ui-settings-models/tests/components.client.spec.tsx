@@ -257,8 +257,8 @@ describe('ModelsSection', () => {
     // The configured credential shows as the stored placeholder.
     const editorKey = await screen.findByLabelText<HTMLInputElement>(en.keyInput)
     await waitFor(() => { expect(editorKey.placeholder).toBe(en.keyStored) })
-    // pi-ai carries Base URL too: the stored override shows as the value and
-    // the effective profile endpoint as its placeholder source.
+    // pi-ai carries Base URL too: the stored override shows as the value, and
+    // what lies beneath it (nothing here) as the placeholder.
     fireEvent.click(screen.getByText(en.customized))
     const url = screen.getByLabelText<HTMLInputElement>(en.baseUrl)
     expect(url.value).toBe('https://proxy')

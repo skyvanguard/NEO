@@ -17,7 +17,7 @@ import type {
 /** Stable id this provider registers under. */
 export const SEARXNG_PROVIDER_ID = 'searxng'
 
-/** Default endpoint: a SearXNG instance on loopback. `/search` is appended. */
+/** Default endpoint: a SearXNG instance on loopback. `/search` is appended to its path. */
 export const SEARXNG_DEFAULT_BASE_URL = 'http://127.0.0.1:8888'
 
 /** Default upper bound on returned sources when the request omits one. */
@@ -26,9 +26,15 @@ export const SEARXNG_DEFAULT_MAX_RESULTS = 10
 /** Default per-search wall-clock timeout in milliseconds. */
 export const SEARXNG_DEFAULT_TIMEOUT_MS = 15000
 
+/** The SearXNG search route, relative to the instance root. */
+const SEARCH_PATH = '/search'
+
 /** Resolved provider options (the plugin's `apply` supplies constant defaults). */
 export interface SearxngSearchProviderOptions {
-  /** Instance base URL; `/search` is appended. */
+  /**
+   * Absolute http(s) instance URL; `/search` is appended to its path, so a
+   * reverse-proxy prefix (`https://host/searxng/`) is kept.
+   */
   readonly baseURL: string
   /** Provider-side result cap; the seam still enforces the request's `maxResults`. */
   readonly maxResults: number
@@ -80,13 +86,17 @@ export class SearxngSearchProvider implements WebSearchProvider {
   constructor(private readonly options: SearxngSearchProviderOptions) {}
 
   available(): boolean {
-    // Cheap local check per contract (no network call): a parseable base URL.
-    return URL.canParse(this.options.baseURL) && isPositiveInteger(this.options.maxResults)
+    // Cheap local check per contract (no network call): an http(s) base URL.
+    return searchEndpoint(this.options.baseURL) !== undefined && isPositiveInteger(this.options.maxResults)
   }
 
   async search(request: WebSearchRequest, signal?: AbortSignal): Promise<WebSearchResult> {
     const limit = request.maxResults ?? this.options.maxResults
-    const endpoint = new URL('/search', this.options.baseURL)
+    const endpoint = searchEndpoint(this.options.baseURL)
+    if (endpoint === undefined) {
+      // The value itself stays out of the message: it may carry userinfo.
+      throw new WebError('SearXNG baseURL must be an absolute http(s) URL', 'WEB_PROVIDER_ERROR')
+    }
     endpoint.searchParams.set('q', request.query)
     endpoint.searchParams.set('format', 'json')
 
@@ -100,7 +110,18 @@ export class SearxngSearchProvider implements WebSearchProvider {
       if (signal.aborted) controller.abort()
       else signal.addEventListener('abort', onAbort, { once: true })
     }
-    const timer = setTimeout(() => { controller.abort() }, this.options.timeoutMs)
+    let timedOut = false
+    const timer = setTimeout(() => {
+      timedOut = true
+      controller.abort()
+    }, this.options.timeoutMs)
+    // A caller cancel wins over the timeout; either one names the real cause
+    // instead of the generic transport or body failure it surfaces as.
+    const interruption = (error: unknown): WebError | undefined => {
+      if (signal?.aborted === true) return searchAborted(signal)
+      if (!timedOut) return undefined
+      return new WebError(`SearXNG search timed out after ${this.options.timeoutMs} ms`, 'WEB_PROVIDER_ERROR', { cause: error })
+    }
 
     try {
       let response: Response
@@ -111,8 +132,8 @@ export class SearxngSearchProvider implements WebSearchProvider {
           signal: controller.signal,
         })
       } catch (error: unknown) {
-        if (signal?.aborted === true) throw searchAborted(signal)
-        throw new WebError(`SearXNG search request failed: ${String(error)}`, 'WEB_PROVIDER_ERROR', { cause: error })
+        throw interruption(error)
+          ?? new WebError(`SearXNG search request failed: ${String(error)}`, 'WEB_PROVIDER_ERROR', { cause: error })
       }
 
       if (!response.ok) {
@@ -122,8 +143,7 @@ export class SearxngSearchProvider implements WebSearchProvider {
         const payload = await response.json() as SearxngResponse
         return mapSearxngResponse(payload, limit)
       } catch (error: unknown) {
-        if (signal?.aborted === true) throw searchAborted(signal)
-        throw new WebError(
+        throw interruption(error) ?? new WebError(
           'SearXNG returned a non-JSON body; enable the `json` format in the instance settings.yml (search.formats)',
           'WEB_PROVIDER_ERROR',
           { cause: error },
@@ -134,6 +154,24 @@ export class SearxngSearchProvider implements WebSearchProvider {
       if (signal !== undefined) signal.removeEventListener('abort', onAbort)
     }
   }
+}
+
+/**
+ * Resolve the instance's `/search` endpoint under `baseURL`, keeping any path
+ * prefix so a SearXNG behind a reverse proxy (`https://host/searxng/`) is
+ * reached at `https://host/searxng/search`. A base that already names the
+ * endpoint (`https://host/search`) is used as-is rather than doubled.
+ * @param baseURL - the configured instance URL.
+ * @returns the endpoint, or undefined when `baseURL` is not an absolute http(s)
+ *   URL (a scheme-less `localhost:8888` parses, with the scheme `localhost:`).
+ */
+function searchEndpoint(baseURL: string): URL | undefined {
+  if (!URL.canParse(baseURL)) return undefined
+  const endpoint = new URL(baseURL)
+  if (endpoint.protocol !== 'http:' && endpoint.protocol !== 'https:') return undefined
+  const path = endpoint.pathname.replace(/\/+$/, '')
+  endpoint.pathname = path.endsWith(SEARCH_PATH) ? path : `${path}${SEARCH_PATH}`
+  return endpoint
 }
 
 /** Build the provider's stable cancellation error while retaining the caller's reason. */
