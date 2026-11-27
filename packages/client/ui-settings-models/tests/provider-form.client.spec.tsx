@@ -309,6 +309,33 @@ describe('model list editing', () => {
     ])
   })
 
+  it('writes reasoning levels onto the one row whose fold set them', async () => {
+    const { mutate } = await mountSection({
+      providers: { openai: { baseURL: 'https://proxy.example/v1', models: [{ id: 'first' }, { id: 'second' }] } },
+    })
+    openEditor('openai')
+
+    expandModel(2)
+    const second = screen.getByRole('switch', { name: `${en.modelReasoning} 2` })
+    expect(second.getAttribute('aria-checked')).toBe('false')
+    fireEvent.click(second)
+    expect(second.getAttribute('aria-checked')).toBe('true')
+    // The first row keeps reasoning off; only the row the switch belongs to changed.
+    expandModel(1)
+    expect(screen.getByRole('switch', { name: `${en.modelReasoning} 1` }).getAttribute('aria-checked')).toBe('false')
+    fireEvent.click(screen.getByText(en.apply))
+
+    await waitFor(() => { expect(mutate).toHaveBeenCalled() })
+    expect(firstMutate(mutate).ops).toEqual([{
+      op: 'set',
+      path: ['providers', 'openai', 'models'],
+      value: [
+        { id: 'first' },
+        { id: 'second', reasoningEfforts: { off: null, low: 'low', medium: 'medium', high: 'high' } },
+      ],
+    }])
+  })
+
   it('shows the adapter defaults as inherited until an edit takes them over', async () => {
     await mountSection({ providers: { openai: { baseURL: 'https://proxy.example/v1' } } })
     openEditor('openai')
