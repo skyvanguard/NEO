@@ -75,7 +75,6 @@ describe('first-prompt title provider over a real OpenAI-compatible HTTP adapter
       },
     })
     expect(title?.title).toBe('Durable append-only session titles')
-    expect(Buffer.byteLength(title?.title ?? '', 'utf8')).toBeLessThanOrEqual(80)
     expect(server.requests).toHaveLength(1)
   })
 })

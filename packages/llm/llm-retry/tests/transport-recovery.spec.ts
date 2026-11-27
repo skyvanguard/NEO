@@ -19,6 +19,7 @@ afterEach(async () => {
   await context?.fiber.dispose()
   context = undefined
   await Promise.all(servers.splice(0).map(server => server.close()))
+  vi.unstubAllEnvs()
 })
 
 async function start(
