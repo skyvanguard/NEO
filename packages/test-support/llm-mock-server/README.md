@@ -18,11 +18,11 @@ pnpm run mock:llm -- \
   --partial-text "discard this half"
 ```
 
-Point the shipping DeepSeek adapter at the server; it appends `/chat/completions` to the configured base:
+Point an OpenAI-compatible `llm-pi-ai` route at the server; it appends `/chat/completions` to the configured base. The example compositions read the endpoint and key from the environment:
 
 ```sh
-DEEPSEEK_BASE_URL=http://127.0.0.1:8000/v1 \
-DEEPSEEK_API_KEY=mock-key \
+LLM_BASE_URL=http://127.0.0.1:8000/v1 \
+LLM_API_KEY=mock-key \
 pnpm neo --profile headless "test provider recovery"
 ```
 

@@ -2,7 +2,7 @@
  * `@neo/web-search-exa`: registers an Exa-backed `WebSearchProvider`
  * with `ctx.web`. A function/namespace plugin (NOT a default-export service):
  * a search provider does not own the `ctx.web` key — it registers INTO the
- * seam's provider registry, exactly as `@neo/llm-deepseek`
+ * seam's provider registry, exactly as `@neo/llm-pi-ai`
  * registers an adapter into `ctx.llm`. The key is owned by `@neo/web`.
  *
  * @module @neo/web-search-exa
