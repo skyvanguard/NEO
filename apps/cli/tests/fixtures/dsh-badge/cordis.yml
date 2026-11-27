@@ -1,6 +1,0 @@
-- id: skill-badge
-  disabled: false
-
-- id: skill-filesystem
-  config:
-    watch: false

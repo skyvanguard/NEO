@@ -213,10 +213,6 @@
     - id: skill-filesystem
       name: '@neo/skill-filesystem'
 
-    - id: skill-badge
-      name: '@neo/skill-badge'
-      disabled: true
-
     - id: tool-skill
       name: '@neo/tool-skill'
 

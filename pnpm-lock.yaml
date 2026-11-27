@@ -1103,9 +1103,6 @@ importers:
       '@neo/skill':
         specifier: workspace:^
         version: link:../../skill/skill
-      '@neo/skill-badge':
-        specifier: workspace:^
-        version: link:../../skill/skill-badge
       '@neo/skill-filesystem':
         specifier: workspace:^
         version: link:../../skill/skill-filesystem
@@ -6836,18 +6833,6 @@ importers:
       '@neo/scope':
         specifier: workspace:^
         version: link:../../core/scope
-
-  packages/skill/skill-badge:
-    devDependencies:
-      '@neo/cordis':
-        specifier: workspace:^
-        version: link:../../../vendor/cordis
-      '@neo/invariants':
-        specifier: workspace:^
-        version: link:../../runtime-diagnostics/invariants
-      '@neo/skill':
-        specifier: workspace:^
-        version: link:../skill
 
   packages/skill/skill-filesystem:
     dependencies:
