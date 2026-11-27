@@ -1,9 +1,11 @@
 // Real-host smoke: spawn `neo web` with a real key, walk the full flow
 // list in a real chromium, screenshot every screen into .artifacts/ for the
-// figma comparison pass. Self-skips without DEEPSEEK_API_KEY (repo e2e
+// figma comparison pass. Self-skips without LLM_API_KEY (repo e2e
 // convention); vitest.web.config.ts loads the repo-root .env before this file
 // runs (the CLI only auto-loads .env from its cwd — a temp dir here, so
-// sessions never land in the repo's .sessions).
+// sessions never land in the repo's .sessions). NEO ships no built-in model
+// adapter, so every scenario that reaches a model seeds the spawned host's
+// settings document with one hand-declared `llm-pi-ai` route (seedModelRoute).
 //
 // Selector convention: CSS Modules hash as [hash]_[local], so class-substring
 // selectors are unreliable — anchor on data-* attributes (data-variant /
@@ -48,6 +50,35 @@ function waitForReadyLine(child: ChildProcess): Promise<string> {
       reject(new Error(`neo web exited early (code ${code}); output:\n${out}`))
     })
   })
+}
+
+/**
+ * Seed a fresh harness home's `settings.yaml` with the route the Models page
+ * would write: one hand-declared OpenAI-compatible `llm-pi-ai` route under the
+ * shipped default route id, authenticated through the `LLM_API_KEY`
+ * reference, plus the default selection naming its one model. The spawned
+ * host reads the document at boot, so its first session is served by
+ * `baseURL`.
+ * @param neoHome - the spawned host's `NEO_HOME`.
+ * @param baseURL - OpenAI-compatible endpoint the route calls.
+ * @param model - the one model id the route serves and the default selects.
+ */
+function seedModelRoute(neoHome: string, baseURL: string, model = 'neo-default-model'): void {
+  mkdirSync(neoHome, { recursive: true })
+  writeFileSync(join(neoHome, 'settings.yaml'), [
+    'llm-pi-ai:',
+    '  providers:',
+    '    neo-default-route:',
+    '      api: openai-completions',
+    `      baseURL: ${JSON.stringify(baseURL)}`,
+    '      apiKeyEnv: LLM_API_KEY',
+    '      models:',
+    `        - id: ${JSON.stringify(model)}`,
+    'agent-default-model:',
+    '  provider: neo-default-route',
+    `  model: ${JSON.stringify(model)}`,
+    '',
+  ].join('\n'))
 }
 
 async function rpc<T>(baseUrl: string, method: string, payload: unknown): Promise<T> {
@@ -222,6 +253,7 @@ describe('neo web keyless CLI smoke', () => {
     await new Promise<void>(resolve => provider.listen(0, '127.0.0.1', resolve))
     const address = provider.address()
     if (address === null || typeof address === 'string') throw new Error('mock provider did not bind a TCP port')
+    seedModelRoute(join(workspace, '.neo'), `http://127.0.0.1:${address.port}`)
     const tsxLoader = pathToFileURL(createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx')).href
     const child = spawn(
       process.execPath,
@@ -230,8 +262,7 @@ describe('neo web keyless CLI smoke', () => {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-workspace',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+          LLM_API_KEY: 'keyless-web-workspace',
           NEO_HOME: join(workspace, '.neo'),
           NEO_AGENTS_HOME: join(workspace, '.agents'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
@@ -280,6 +311,7 @@ describe('neo web keyless CLI smoke', () => {
         .filter(name => name === 'web_search' || name === 'web_fetch'))
         .toMatchInlineSnapshot(`
           [
+            "web_fetch",
             "web_search",
           ]
         `)
@@ -305,8 +337,10 @@ describe('neo web keyless CLI smoke', () => {
       request.setEncoding('utf8')
       request.on('data', (chunk: string) => { body += chunk })
       request.on('end', () => {
-        const parsed = JSON.parse(body) as { max_tokens?: number; messages?: unknown[] }
-        const titleRequest = parsed.max_tokens === 64
+        // The title call is the one capped at 64 output tokens; the pi-ai
+        // route sends the cap as `max_completion_tokens` to this endpoint.
+        const parsed = JSON.parse(body) as { max_completion_tokens?: number; messages?: unknown[] }
+        const titleRequest = parsed.max_completion_tokens === 64
         const mainRequest = !titleRequest && body.includes(promptMarker)
         response.writeHead(200, { 'content-type': 'text/event-stream' })
         if (!mainRequest) {
@@ -335,6 +369,7 @@ describe('neo web keyless CLI smoke', () => {
     await new Promise<void>(resolve => provider.listen(0, '127.0.0.1', resolve))
     const address = provider.address()
     if (address === null || typeof address === 'string') throw new Error('mock provider did not bind a TCP port')
+    seedModelRoute(join(workspace, '.neo'), `http://127.0.0.1:${address.port}`)
     const tsxLoader = pathToFileURL(createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx')).href
     const child = spawn(
       process.execPath,
@@ -343,8 +378,7 @@ describe('neo web keyless CLI smoke', () => {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-retry',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+          LLM_API_KEY: 'keyless-web-retry',
           NEO_HOME: join(workspace, '.neo'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
         },
@@ -417,6 +451,7 @@ describe('neo web keyless CLI smoke', () => {
     await new Promise<void>(resolve => provider.listen(0, '127.0.0.1', resolve))
     const address = provider.address()
     if (address === null || typeof address === 'string') throw new Error('mock provider did not bind a TCP port')
+    seedModelRoute(join(workspace, '.neo'), `http://127.0.0.1:${address.port}`)
     const tsxLoader = pathToFileURL(createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx')).href
     const child = spawn(
       process.execPath,
@@ -425,8 +460,7 @@ describe('neo web keyless CLI smoke', () => {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-code-mode',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+          LLM_API_KEY: 'keyless-web-code-mode',
           NEO_TOOLS_MODE: 'code',
           NEO_HOME: join(workspace, '.neo'),
           NEO_AGENTS_HOME: join(workspace, '.agents'),
@@ -465,7 +499,7 @@ describe('neo web keyless CLI smoke', () => {
   })
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke (real host, real key)', () => {
+describe.skipIf(!process.env.LLM_API_KEY || notReady.length > 0)('web smoke (real host, real key)', () => {
   let child: ChildProcess
   let sessionsDir: string
   let baseUrl: string
@@ -476,6 +510,13 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
   beforeAll(async () => {
     requireDist()
     sessionsDir = mkdtempSync(join(tmpdir(), 'dsh-web-w5-'))
+    // The live route: LLM_BASE_URL (default a local llama-server) serving
+    // LLM_MODEL, keyed by the inherited LLM_API_KEY.
+    seedModelRoute(
+      join(sessionsDir, '.neo'),
+      process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
+      process.env.LLM_MODEL ?? 'neo-default-model',
+    )
     const port = await probeFreePort()
     // tsx boot mirrors the runtime half of the root dsh script. Isolate
     // the host-level Harness and shared-agent homes inside the temp world; tsx
@@ -532,9 +573,9 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
 
   it('empty-state first send completes a real model round', async () => {
     onTestFailed(() => saveFailureShot(page, 'w5-first-round'))
-    // This scenario spawns its own server against a fresh $NEO_HOME with the
-    // DeepSeek credential inherited from the environment, so no onboarding
-    // step mounts and the page is immediately interactive.
+    // This scenario spawns its own server against a fresh $NEO_HOME whose
+    // settings document already declares the live route, with LLM_API_KEY
+    // inherited from the environment.
     // Fresh world: connect a Workspace so the composer starts live.
     await connectFreshWorkspace(page, sessionsDir)
     const input = page.locator('textarea').first()
