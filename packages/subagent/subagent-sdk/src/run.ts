@@ -8,7 +8,7 @@
  * the subprocess seam's documented exception for SDK-managed transports —
  * so this driver applies the seam's shared env scrub itself.
  *
- * @module @neo/subagent-dsh-sdk/run
+ * @module @neo/subagent-sdk/run
  */
 
 import { randomUUID } from 'node:crypto'

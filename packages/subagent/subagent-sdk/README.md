@@ -1,4 +1,4 @@
-# @neo/subagent-dsh-sdk
+# @neo/subagent-sdk
 
 English | [中文](README.zh.md)
 
@@ -39,8 +39,8 @@ The provider advertises no start-time capabilities (`outputSchema`/`depthLimit`/
 | `disposeGraceMs` | `3000` | Exit-confirmation grace after termination; POSIX also waits this long after SIGTERM before SIGKILL. |
 
 ```yaml
-- id: subagent-dsh-sdk
-  name: '@neo/subagent-dsh-sdk'
+- id: subagent-sdk
+  name: '@neo/subagent-sdk'
   config:
     providerName: dsh-sdk
     command: node
