@@ -285,6 +285,34 @@ describe('the inherited readRaw default', () => {
   })
 })
 
+/** A backend that predates `remove`: it inherits the base default, and no other member is reached. */
+class RemovelessPersistence extends SessionPersistence {
+  override readonly supportsRawArtifacts = false
+  locate(): undefined { return undefined }
+  create(): Promise<void> { return Promise.reject(new Error('unused')) }
+  append(): Promise<void> { return Promise.reject(new Error('unused')) }
+  load(): Promise<never> { return Promise.reject(new Error('unused')) }
+  inspect(): Promise<never> { return Promise.reject(new Error('unused')) }
+  readFrom(): Promise<never> { return Promise.reject(new Error('unused')) }
+  list(): Promise<SessionHeader[]> { return Promise.resolve([]) }
+  listSnapshots(): Promise<SessionPersistenceSnapshot[]> { return Promise.resolve([]) }
+}
+
+describe('the inherited remove default', () => {
+  it('rejects a backend without removal support and honors an aborted signal first', async () => {
+    const ctx = new Context()
+    await ctx.plugin(RemovelessPersistence)
+    await expect(ctx.sessionPersistence.remove(SessionId('any-session')))
+      .rejects.toThrow('does not support remove')
+    const reason = new Error('remove cancelled')
+    const controller = new AbortController()
+    controller.abort(reason)
+    // The default throws the abort synchronously; the async wrapper is how an awaiting caller observes it.
+    await expect(async () => ctx.sessionPersistence.remove(SessionId('any-session'), controller.signal))
+      .rejects.toBe(reason)
+  })
+})
+
 // Each fixture shares one map across mounts. No `corruptTail` is supplied because map writes are
 // atomic; the suite asserts that skip while JSONL and SQLite cover the repair branch.
 runCoordinatorContract('memory', async (): Promise<CoordinatorFixture> => {

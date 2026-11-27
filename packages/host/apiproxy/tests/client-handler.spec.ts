@@ -224,6 +224,30 @@ describe('unary round trip', () => {
     expect(response.result).toEqual({ ok: true, value: { sessionId: 's-child' } })
   })
 
+  it('routes a downloadable-file attachment read through the wire', async () => {
+    let seen: RpcRequest<{ sessionId: SessionId; attachmentId: string }> | undefined
+    const api = scriptedApi({
+      sessions: {
+        readFileAttachment: (request) => {
+          seen = request
+          return ok(request, {
+            attachment: { attachmentId: request.payload.attachmentId as never, mediaType: 'application/pdf', bytes: 3, name: 'informe.pdf' },
+            data: 'AQID',
+          })
+        },
+      },
+    })
+    const response = await client(api).sessions.readFileAttachment({ sessionId: sid('s1'), attachmentId: 'sha256:f1' as never })
+    expect(seen?.payload).toEqual({ sessionId: 's1', attachmentId: 'sha256:f1' })
+    expect(response.result).toEqual({
+      ok: true,
+      value: {
+        attachment: { attachmentId: 'sha256:f1', mediaType: 'application/pdf', bytes: 3, name: 'informe.pdf' },
+        data: 'AQID',
+      },
+    })
+  })
+
   it('routes workspace rename, delete, and ordering through the wire', async () => {
     const api = scriptedApi()
     const c = client(api)

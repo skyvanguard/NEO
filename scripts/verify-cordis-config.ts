@@ -36,7 +36,7 @@ const root = resolve(import.meta.dirname, '..')
 const appOverlayFiles = new Set([
   'examples/web-cordis/cordis.yml',
   'examples/web-schedule/cordis.yml',
-  ...globSync('examples/mcp-memory/*.cordis.yml', { cwd: root }),
+  ...globSync('examples/mcp-memory/*.cordis.yml', { cwd: root }).map(file => file.replaceAll('\\', '/')),
 ])
 const metadataFields = ['id', 'name', 'group', 'inject', 'intercept', 'isolate'] as const
 
@@ -70,7 +70,8 @@ const errors: string[] = []
 const pluginReferences: PluginReference[] = []
 
 if (import.meta.main) {
-  const files = cordisConfigFiles(root)
+  // POSIX separators everywhere: the per-bundle check below matches files by a `dir/` prefix.
+  const files = cordisConfigFiles(root).map(file => file.replaceAll('\\', '/'))
 
   for (const file of files) {
     const document: unknown = yaml.load(readFileSync(resolve(root, file), 'utf8'), { schema })
@@ -274,7 +275,9 @@ function validateAppResolution(): string[] {
   violations.push(...missingPluginDependencies(appReferences, appDependencies, 'apps/cli/package.json or a bundle manifest'))
   // Each bundle's patch rows must resolve from that bundle's own dependencies:
   // per-layer resolution anchors on the bundle package directory.
-  for (const manifestPath of globSync('packages/bundle/*/package.json', { cwd: root })) {
+  // globSync yields native separators: on Windows `packages\bundle\x\package.json` never
+  // matched the `/package.json` suffix, so every bundle silently passed. Normalize first.
+  for (const manifestPath of globSync('packages/bundle/*/package.json', { cwd: root }).map(path => path.replaceAll('\\', '/'))) {
     const bundleDir = manifestPath.replace(/\/package\.json$/, '')
     const manifest = readManifest(manifestPath)
     const references = pluginReferences.filter(reference => reference.file.startsWith(`${bundleDir}/`))
