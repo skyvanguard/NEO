@@ -121,7 +121,8 @@ function packageStylesheets(): string[] {
  * an indirection counts. The walk starts from the standard-property
  * declarations, so a defined-but-unread indirection contributes nothing.
  * @param rules - parsed rules of one stylesheet.
- * @returns every `--neo-*` token the sheet's rendering declarations depend on.
+ * @returns every `--neo-*` token the sheet's rendering declarations depend on,
+ * excluding the indirection variables themselves (they share the prefix).
  */
 function tokensRendered(rules: CssRule[]): Set<string> {
   const definitions = new Map<string, string>()
@@ -136,7 +137,7 @@ function tokensRendered(rules: CssRule[]): Set<string> {
   const visited = new Set<string>()
   while (pending.length > 0) {
     for (const name of varReferences(pending.pop()!)) {
-      if (name.startsWith('--neo-')) reached.add(name)
+      if (name.startsWith('--neo-') && !name.startsWith(INDIRECTION_PREFIX)) reached.add(name)
       if (visited.has(name)) continue
       visited.add(name)
       const definition = definitions.get(name)
