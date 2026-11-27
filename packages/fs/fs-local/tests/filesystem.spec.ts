@@ -637,6 +637,22 @@ describe('editText', () => {
     expect(await readFile(join(dir, 'a.txt'), 'utf8')).toBe('hello there')
   })
 
+  it('applies an edits[] batch in order and rejects it whole when one edit misses (bare provider)', async () => {
+    await writeFile(join(dir, 'a.txt'), 'hello world')
+    const target = await fs.resolve('a.txt')
+    const outcome = await fs.editText(target, [
+      { oldString: 'hello', newString: 'bye', replaceAll: false },
+      { oldString: 'world', newString: 'there', replaceAll: false },
+    ])
+    expect(outcome.after).toBe('bye there')
+
+    await expect(fs.editText(target, [
+      { oldString: 'bye', newString: 'hi', replaceAll: false },
+      { oldString: 'absent', newString: 'x', replaceAll: false },
+    ])).rejects.toMatchObject({ code: 'FS_EDIT_NOT_FOUND' })
+    expect(await readFile(join(dir, 'a.txt'), 'utf8')).toBe('bye there') // nothing written
+  })
+
   it('reports a missing target as FS_STALE_VERSION even with no expectation (bare provider)', async () => {
     const target = await fs.resolve('missing.txt')
     await expect(fs.editText(target, { oldString: 'a', newString: 'b', replaceAll: false }))

@@ -633,6 +633,23 @@ describe('runScenario', () => {
     )).rejects.toThrow(/did not persist expected inbox message within 20ms/)
   })
 
+  it('names the expired wait even when its timeout beats the first log read', { timeout: 20_000 }, async () => {
+    // 1ms is shorter than reading an existing session log, so vi.waitFor alone
+    // would reject with its generic "Timed out in waitFor!" before the check failed.
+    const { fixtureFile } = await scenario({
+      prompt: 'hang-until-cancel',
+      persistLogsOnCancel: true,
+      logs: [{
+        file: 'project/main/session.jsonl',
+        lines: [{ type: 'session', version: 0, id: '{{SID}}', createdAt: 1, delegationDepth: 0 }],
+      }],
+    })
+    await expect(runScenario(
+      { steps: [...boot, { op: 'promptAndCancel', text: 'hang' }, { op: 'waitForInboxMessage', text: 'missing', timeoutMs: 1 }] },
+      { agent: AGENT, mode: 'replay', fixtureFile },
+    )).rejects.toThrow(/did not persist expected inbox message within 1ms/)
+  })
+
   it('waitForTitleAfterTurnEnd holds the app through a standalone durable title', { timeout: 20_000 }, async () => {
     const { fixtureFile } = await scenario({
       prompt: 'hang-until-cancel',

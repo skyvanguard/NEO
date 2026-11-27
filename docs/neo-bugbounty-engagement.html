@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEO · Engagement</title>
+<meta name="description" content="Propuesta de diseño: Scope y Findings como capacidades de primera clase en NEO para bug bounty.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d12;
+    --bg-2:#0e131a;
+    --panel:#121926;
+    --panel-2:#161f2e;
+    --line:#223044;
+    --line-soft:#1a2432;
+    --text:#e8eef6;
+    --text-2:#aeb9c8;
+    --muted:#7c8899;
+    --gold:#c8922f;
+    --gold-bright:#e4ab42;
+    --gold-dim:#3a2e13;
+    --sev-crit:#e5484d;
+    --sev-high:#f0812e;
+    --sev-med:#e6c24a;
+    --sev-low:#5fa6d6;
+    --sev-info:#78879a;
+    --ok:#4ba585;
+    --maxw:1080px;
+    --gutter:clamp(16px,4vw,48px);
+    --radius:4px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 78% -10%, rgba(200,146,47,.08), transparent 60%),
+      linear-gradient(180deg, var(--bg-2), var(--bg) 320px);
+    color:var(--text);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+  a{color:var(--gold-bright);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  h1,h2,h3{font-family:"Space Grotesk",system-ui,sans-serif;font-weight:600;line-height:1.1;letter-spacing:-.01em;margin:0}
+  p{margin:0 0 1rem;max-width:68ch;color:var(--text-2)}
+  :focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px;border-radius:2px}
+
+  /* ── top status bar ── */
+  .statusbar{
+    border-bottom:1px solid var(--line-soft);
+    background:rgba(10,13,18,.72);
+    backdrop-filter:blur(8px);
+    position:sticky;top:0;z-index:20;
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;
+  }
+  .statusbar .wrap{display:flex;gap:16px;align-items:center;height:42px;color:var(--muted)}
+  .statusbar .brand{color:var(--text);font-weight:600;letter-spacing:.14em}
+  .statusbar .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+  .statusbar .spacer{flex:1}
+  .statusbar .loop{color:var(--muted)}
+  @media(max-width:640px){.statusbar .loop{display:none}}
+
+  /* ── hero / dossier ── */
+  .hero{padding:clamp(40px,7vw,86px) 0 clamp(28px,4vw,44px)}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--gold);margin:0 0 20px;letter-spacing:.02em}
+  .hero h1{font-size:clamp(30px,8.4vw,78px);font-weight:700;letter-spacing:-.03em;max-width:15ch;overflow-wrap:break-word}
+  .hero h1 .thin{font-weight:400;color:var(--text-2)}
+  .lede{font-size:clamp(17px,2.2vw,21px);line-height:1.5;color:var(--text-2);max-width:60ch;margin-top:22px}
+
+  /* loaded engagement proof card */
+  .dossier{
+    margin-top:44px;border:1px solid var(--line);border-radius:var(--radius);
+    background:linear-gradient(180deg,var(--panel),var(--bg-2));
+    overflow:hidden;
+  }
+  .dossier-head{
+    display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;
+    padding:18px 22px;border-bottom:1px solid var(--line-soft);
+    background:
+      repeating-linear-gradient(135deg,rgba(200,146,47,.05) 0 10px,transparent 10px 20px);
+  }
+  .dossier-head .prog{font-family:"Space Grotesk",sans-serif;font-size:22px;font-weight:600}
+  .dossier-head .plat{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted)}
+  .seal{
+    margin-left:auto;display:inline-flex;align-items:center;gap:9px;
+    border:1px solid var(--gold);color:var(--gold-bright);
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.18em;
+    padding:7px 13px;border-radius:2px;background:var(--gold-dim);
+  }
+  .seal svg{width:13px;height:13px}
+  @media(max-width:560px){.seal{margin-left:0}}
+  .dossier-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+  .dcell{padding:18px 22px;border-right:1px solid var(--line-soft);border-top:1px solid var(--line-soft)}
+  .dcell:nth-child(4n){border-right:none}
+  .dcell .n{font-family:"Space Grotesk",sans-serif;font-size:27px;font-weight:600;color:var(--text)}
+  .dcell .n.gold{color:var(--gold-bright)}
+  .dcell .l{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+  @media(max-width:720px){.dossier-grid{grid-template-columns:repeat(2,1fr)}.dcell:nth-child(4n){border-right:1px solid var(--line-soft)}.dcell:nth-child(2n){border-right:none}}
+  @media(max-width:420px){.dossier-grid{grid-template-columns:1fr}.dcell{border-right:none!important}}
+
+  /* ── generic section ── */
+  section{padding:clamp(44px,7vw,76px) 0;border-top:1px solid var(--line-soft)}
+  .sec-tag{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--gold);margin-bottom:14px}
+  h2{font-size:clamp(26px,4.5vw,40px);max-width:20ch}
+  .sec-intro{margin-top:16px;font-size:17px;max-width:64ch}
+  h3{font-size:19px;margin-bottom:8px;color:var(--text)}
+
+  /* problem: before/after */
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+  @media(max-width:680px){.cmp{grid-template-columns:1fr}}
+  .cmp > div{border:1px solid var(--line);border-radius:var(--radius);padding:22px;background:var(--panel)}
+  .cmp .was{border-style:dashed;border-color:var(--line);background:transparent}
+  .cmp h3 .mk{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-weight:400}
+  .cmp ul{margin:12px 0 0;padding-left:0;list-style:none}
+  .cmp li{position:relative;padding:5px 0 5px 22px;color:var(--text-2);font-size:14.5px}
+  .cmp li::before{content:"";position:absolute;left:0;top:13px;width:8px;height:1px;background:var(--muted)}
+  .cmp .now li::before{background:var(--gold);width:10px}
+
+  /* flow diagram */
+  .flow{margin-top:30px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:26px 22px}
+  .flow-row{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+  .fnode{flex:1 1 150px;min-width:140px;border:1px solid var(--line);border-radius:3px;padding:14px;background:var(--bg-2);position:relative}
+  .fnode .ft{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--gold);margin-bottom:6px}
+  .fnode .fd{font-size:13px;color:var(--text-2);line-height:1.4}
+  .farrow{display:flex;align-items:center;justify-content:center;color:var(--muted);padding:0 10px;font-size:18px}
+  @media(max-width:680px){.farrow{transform:rotate(90deg);padding:8px 0;width:100%}.fnode{flex-basis:100%}}
+
+  /* data model table */
+  .model{margin-top:26px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--panel)}
+  .model table{width:100%;border-collapse:collapse;font-size:13.5px}
+  .model th{text-align:left;font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:11.5px;color:var(--muted);
+    padding:12px 16px;border-bottom:1px solid var(--line);background:var(--bg-2);letter-spacing:.03em}
+  .model td{padding:11px 16px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--text-2)}
+  .model tr:last-child td{border-bottom:none}
+  .model td.f{font-family:"IBM Plex Mono",monospace;color:var(--text);white-space:nowrap}
+  .model td .ty{font-family:"IBM Plex Mono",monospace;color:var(--gold);font-size:12.5px}
+  @media(max-width:620px){.model td,.model th{padding:10px 12px}.model .hide-s{display:none}}
+
+  /* drives: three checks */
+  .drives{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px;counter-reset:d}
+  @media(max-width:760px){.drives{grid-template-columns:1fr}}
+  .drive{border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:var(--radius);padding:22px 20px;background:var(--panel)}
+  .drive .num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--gold);counter-increment:d}
+  .drive .num::before{content:counter(d,decimal-leading-zero)}
+  .drive h3{margin:10px 0 8px;font-size:17px}
+  .drive p{font-size:14px;margin:0}
+  .drive .ex{margin-top:12px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--text);
+    background:var(--bg-2);border:1px solid var(--line-soft);border-radius:3px;padding:9px 11px;line-height:1.5}
+  .drive .ex .neg{color:var(--sev-crit)}
+  .drive .ex .pos{color:var(--ok)}
+
+  /* ── mock panels ── */
+  .mock{margin-top:30px;border:1px solid var(--line);border-radius:6px;overflow:hidden;
+    background:var(--panel-2);box-shadow:0 18px 50px -24px rgba(0,0,0,.8)}
+  .mock-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg-2)}
+  .mock-bar .tt{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--text-2);letter-spacing:.04em}
+  .mock-bar .tt b{color:var(--text);font-weight:600}
+  .mock-bar .live{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted)}
+  .mock-bar .live .d{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 7px var(--ok)}
+  .mcap{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);margin-top:10px}
+
+  /* scope ledger rows */
+  .srow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line-soft);align-items:center}
+  .srow:last-child{border-bottom:none}
+  .srow .id{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis}
+  .srow .meta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);margin-top:3px}
+  .atype{font-family:"IBM Plex Mono",monospace;font-size:10.5px;padding:3px 7px;border-radius:2px;border:1px solid var(--line);color:var(--text-2);white-space:nowrap}
+  .atype.sc{color:var(--gold-bright);border-color:var(--gold)}
+  .srow.out{opacity:.5}
+  .srow.out .id{text-decoration:line-through}
+
+  /* findings cards */
+  .frow{display:flex;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line-soft);align-items:flex-start}
+  .frow:last-child{border-bottom:none}
+  .sevbar{width:3px;align-self:stretch;border-radius:2px;flex:none}
+  .sev-crit{background:var(--sev-crit)} .sev-high{background:var(--sev-high)}
+  .sev-med{background:var(--sev-med)} .sev-low{background:var(--sev-low)} .sev-info{background:var(--sev-info)}
+  .fmain{flex:1;min-width:0}
+  .ftitle{font-size:14.5px;color:var(--text);font-weight:500}
+  .fmeta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:4px 12px}
+  .fmeta .cvss{color:var(--text-2)}
+  .fright{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+  .chip{font-family:"IBM Plex Mono",monospace;font-size:10.5px;padding:3px 8px;border-radius:2px;border:1px solid var(--line);color:var(--text-2);white-space:nowrap}
+  .chip.verified{color:var(--ok);border-color:#235a47}
+  .chip.lead{color:var(--sev-info);border-color:var(--line)}
+  .chip.scored{color:var(--gold-bright);border-color:var(--gold)}
+  .chip.reported{color:var(--text);border-color:var(--line);background:var(--bg-2)}
+  .chip.dropped{color:var(--muted)}
+  .pay{font-family:"Space Grotesk",sans-serif;font-size:14px;color:var(--gold-bright);font-weight:600}
+  .pay.none{color:var(--muted);font-weight:400;font-size:12px;font-family:"IBM Plex Mono",monospace}
+  @media(max-width:520px){.fright{align-items:flex-start}.frow{flex-wrap:wrap}}
+
+  /* lifecycle pipeline */
+  .pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:30px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--panel)}
+  @media(max-width:760px){.pipe{grid-template-columns:1fr 1fr}}
+  @media(max-width:440px){.pipe{grid-template-columns:1fr}}
+  .step{padding:20px 18px;border-right:1px solid var(--line-soft);position:relative}
+  .pipe .step:last-child{border-right:none}
+  .step .st-n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted)}
+  .step .st-t{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;margin:8px 0 4px;color:var(--text)}
+  .step .st-s{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--gold)}
+  .step .st-d{font-size:13px;color:var(--text-2);margin-top:8px;line-height:1.45}
+  .step .st-skill{margin-top:10px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);border-top:1px solid var(--line-soft);padding-top:8px}
+  .step .st-skill b{color:var(--gold-bright);font-weight:500}
+
+  /* engineering note */
+  .note{margin-top:30px;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:var(--radius);
+    background:var(--panel);padding:24px}
+  .note .nh{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--gold);margin-bottom:12px}
+  .note p{font-size:14.5px}
+  .note .eq{font-family:"IBM Plex Mono",monospace;background:var(--bg-2);border:1px solid var(--line-soft);
+    border-radius:3px;padding:12px 14px;margin:14px 0;font-size:13px;color:var(--text);line-height:1.6}
+  .note .eq .bad{color:var(--sev-crit)} .note .eq .good{color:var(--ok)}
+
+  /* phases */
+  .phases{margin-top:28px;display:flex;flex-direction:column;gap:14px}
+  .phase{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:start;
+    border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;background:var(--panel)}
+  .phase .pn{font-family:"Space Grotesk",sans-serif;font-size:30px;font-weight:700;color:var(--gold);line-height:1}
+  .phase .pt{font-size:17px;color:var(--text);font-weight:600;font-family:"Space Grotesk",sans-serif}
+  .phase .pd{font-size:14px;color:var(--text-2);margin-top:6px;max-width:62ch}
+  .phase .pkg{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7}
+  .phase .pkg span{border:1px solid var(--line-soft);border-radius:2px;padding:2px 6px;margin-right:5px;white-space:nowrap;display:inline-block;margin-bottom:4px}
+  .phase .badge{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--gold-bright);border:1px solid var(--gold);border-radius:2px;padding:4px 8px;white-space:nowrap}
+  @media(max-width:680px){.phase{grid-template-columns:auto 1fr}.phase .badge{grid-column:1/-1}}
+
+  /* deploy caveat */
+  .caveat{margin-top:26px;border:1px dashed var(--sev-high);border-radius:var(--radius);background:rgba(240,129,46,.05);padding:22px}
+  .caveat .ch{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--sev-high);margin-bottom:10px}
+  .caveat p{font-size:14px;margin-bottom:0}
+  .caveat code{color:var(--text);background:var(--bg-2);padding:1px 5px;border-radius:2px;border:1px solid var(--line-soft)}
+
+  /* appendix extension points */
+  .ext{margin-top:24px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .ext .e{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:16px 18px;border-bottom:1px solid var(--line-soft);background:var(--panel)}
+  .ext .e:last-child{border-bottom:none}
+  .ext .e .k{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--gold)}
+  .ext .e .v{font-size:13.5px;color:var(--text-2)}
+  .ext .e .v code{font-family:"IBM Plex Mono",monospace;color:var(--text);font-size:12.5px}
+
+  footer{border-top:1px solid var(--line-soft);padding:34px 0 60px;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:12px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
+  footer .spacer{flex:1}
+
+  @media(prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(12px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+    @keyframes rise{to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="wrap">
+    <span class="brand">NEO</span>
+    <span class="dot" aria-hidden="true"></span>
+    <span>engagement activo</span>
+    <span class="spacer"></span>
+    <span class="loop">propuesta de diseño · scope + findings</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker reveal">// de harness de coding a plataforma de bug bounty</p>
+    <h1 class="reveal">El engagement como <span class="thin">ciudadano de primera clase</span></h1>
+    <p class="lede reveal">Hoy NEO hereda la forma de un agente de coding: chat, todos, plan. Para hunting le falta el andamiaje del oficio — un alcance que viva en algún lado y se actualice, y hallazgos que puedas ver sin cortar al agente. Esta propuesta los convierte en estado estructurado, persistente y visible.</p>
+
+    <div class="dossier reveal" aria-label="Ejemplo de engagement cargado">
+      <div class="dossier-head">
+        <span class="prog">1win.com</span>
+        <span class="plat">HackerOne · open scope · campaña activa</span>
+        <span class="seal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          AUTORIZADO
+        </span>
+      </div>
+      <div class="dossier-grid">
+        <div class="dcell"><div class="n">10</div><div class="l">assets en scope<br>URL · OTHER · SMART_CONTRACT</div></div>
+        <div class="dcell"><div class="n">5 req/s</div><div class="l">límite · 300/min<br>5 concurrentes máx</div></div>
+        <div class="dcell"><div class="n gold">$3.000</div><div class="l">techo de recompensa<br>RCE · Critical</div></div>
+        <div class="dcell"><div class="n">17</div><div class="l">clases excluidas<br>auto-descarte de signal</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- PROBLEM -->
+<section>
+  <div class="wrap">
+    <p class="sec-tag">01 — el hueco</p>
+    <h2>NEO sabe operar, pero no recuerda para quién ni qué ya encontró</h2>
+    <p class="sec-intro">El preset <code>pentest</code> hoy le pide al modelo, en texto libre: «llevá notas de hosts, servicios, credenciales y findings». Eso se diluye en el hilo del chat y se pierde entre sesiones. Dos cosas concretas faltan.</p>
+
+    <div class="cmp">
+      <div class="was">
+        <h3><span class="mk">// hoy</span>Alcance en la cabeza</h3>
+        <p style="font-size:14px">El scope vive en el prompt que pegaste o en tu memoria. El agente no verifica contra él, no respeta el rate limit solo, y no sabe qué clase paga cuánto.</p>
+        <ul>
+          <li>¿Este subdominio está en scope? — a mano</li>
+          <li>¿5 req/s? — lo configurás vos en cada escaneo</li>
+          <li>¿Esto paga o es Informative? — lo descubrís tarde</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="now-h"><span class="mk">// con engagement</span>Alcance que gobierna</h3>
+        <p style="font-size:14px">Importás el CSV de HackerOne y la política una vez. Desde ahí, el scope conduce cada decisión y queda a la vista en un panel.</p>
+        <ul class="now">
+          <li>Chequeo in/out-of-scope antes de tocar</li>
+          <li>Rate limit como guardrail operativo</li>
+          <li>Finding auto-etiquetado con tier y monto</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section>
+  <div class="wrap">
+    <p class="sec-tag">02 — por qué encaja sin forzar nada</p>
+    <h2>La arquitectura ya hace esto para los todos y el plan</h2>
+    <p class="sec-intro">NEO es event-sourcing puro: un log append-only es la única verdad, y el estado se deriva plegándolo en <em>projections</em> que el host empuja al navegador. Los paneles se enchufan por un sistema de slots. Scope y findings son dos projections nuevas — el cliente las recibe sin código de dominio.</p>
+
+    <div class="flow">
+      <div class="flow-row">
+        <div class="fnode"><div class="ft">session.append()</div><div class="fd">El agente emite un evento durable: <code>finding/record</code>, <code>scope/set</code>.</div></div>
+        <div class="farrow" aria-hidden="true">→</div>
+        <div class="fnode"><div class="ft">projection</div><div class="fd">Un reducer puro pliega el log y deriva el estado actual.</div></div>
+        <div class="farrow" aria-hidden="true">→</div>
+        <div class="fnode"><div class="ft">push · WebSocket</div><div class="fd">El host manda <code>session/projection</code> al cambiar.</div></div>
+        <div class="farrow" aria-hidden="true">→</div>
+        <div class="fnode"><div class="ft">useProjection()</div><div class="fd">El panel se actualiza solo mientras el agente sigue.</div></div>
+      </div>
+    </div>
+    <p class="mcap" style="margin-top:16px">Hecho clave: la compactación no borra eventos del log. Un finding de hace tres horas sigue en el panel aunque el contexto del chat ya se haya compactado — exactamente «ver qué encontró en sesiones largas, sin detenerlo».</p>
+  </div>
+</section>
+
+<!-- SCOPE -->
+<section>
+  <div class="wrap">
+    <p class="sec-tag">03 — capacidad: scope</p>
+    <h2>El programa se importa, no se transcribe</h2>
+    <p class="sec-intro">El CSV de HackerOne tiene formato fijo: se parsea determinista (nada de que el Qwen lo lea a ojo). La política pegada — tabla de recompensas, reglas, exclusiones — se extrae una sola vez y queda editable. Este es el modelo de cada asset, tomado tal cual de tu <code>scopes_for_1win_com.csv</code>:</p>
+
+    <div class="model">
+      <table>
+        <thead><tr><th>campo</th><th>tipo</th><th class="hide-s">de dónde sale / para qué</th></tr></thead>
+        <tbody>
+          <tr><td class="f">identifier</td><td><span class="ty">string</span></td><td class="hide-s"><code>1win.com</code>, <code>https://1win.com/casino</code>, program ID de Solana</td></tr>
+          <tr><td class="f">assetType</td><td><span class="ty">enum</span></td><td class="hide-s">URL · OTHER · SMART_CONTRACT — gobierna qué tooling aplica</td></tr>
+          <tr><td class="f">eligibleForBounty</td><td><span class="ty">bool</span></td><td class="hide-s">paga o es solo reportable</td></tr>
+          <tr><td class="f">maxSeverity</td><td><span class="ty">enum</span></td><td class="hide-s">techo de severidad del asset</td></tr>
+          <tr><td class="f">cia</td><td><span class="ty">{C,I,A}</span></td><td class="hide-s">requisitos que alimentan el scoring CVSS</td></tr>
+          <tr><td class="f">instruction</td><td><span class="ty">text</span></td><td class="hide-s">sub-scope en prosa («In scope / Out of scope»)</td></tr>
+          <tr><td class="f">inScope</td><td><span class="ty">bool</span></td><td class="hide-s">derivado + override manual tuyo</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:38px">Y lo que el scope <em>conduce</em></h3>
+    <p style="font-size:15px">Importar no es guardar un PDF. Es cablear tres chequeos donde hoy perdés tiempo o quemás signal.</p>
+
+    <div class="drives">
+      <div class="drive">
+        <div class="num"></div>
+        <h3>In / out-of-scope</h3>
+        <p>Antes de tocar un host, NEO lo verifica contra los assets. Marca «open scope → activo propio, confirmá vos» cuando aplica.</p>
+        <div class="ex"><span class="pos">✓</span> 1w.cash → in scope<br><span class="neg">✗</span> api.stripe.com → proveedor externo</div>
+      </div>
+      <div class="drive">
+        <div class="num"></div>
+        <h3>Rate limit</h3>
+        <p>Los 5 req/s salen del scope y condicionan cada escaneo, en vez de ponerlos a mano y arriesgar un «DoS = prohibido».</p>
+        <div class="ex">ffuf -rate 5 -threads 5<br><span style="color:var(--muted)"># derivado del programa</span></div>
+      </div>
+      <div class="drive">
+        <div class="num"></div>
+        <h3>Auto-etiquetado</h3>
+        <p>Al nacer un finding, se cruza con la tabla de recompensas y con las 17 clases Informative antes de que inviertas horas.</p>
+        <div class="ex">SQLi → <span class="pos">$1.500 · Critical</span><br>self-XSS → <span class="neg">Informative</span></div>
+      </div>
+    </div>
+
+    <div class="mock" aria-label="Mockup del panel de Scope">
+      <div class="mock-bar">
+        <span class="tt"><b>Scope</b> · 1win.com</span>
+        <span class="live"><span class="d" aria-hidden="true"></span> importado del CSV</span>
+      </div>
+      <div class="srow">
+        <div><div class="id">1win.com</div><div class="meta">registro · login · depósito · retiro · cuenta</div></div>
+        <span class="atype">URL</span>
+      </div>
+      <div class="srow">
+        <div><div class="id">https://1win.com/casino</div><div class="meta">todos los juegos en scope</div></div>
+        <span class="atype">URL</span>
+      </div>
+      <div class="srow">
+        <div><div class="id">GWvQ…Bwrz1R</div><div class="meta">Solana · Sale program · mainnet-beta</div></div>
+        <span class="atype sc">SMART_CONTRACT</span>
+      </div>
+      <div class="srow out">
+        <div><div class="id">APIs de proveedores de pago</div><div class="meta">fuera de scope · no afecta a 1win</div></div>
+        <span class="atype">OTHER</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINDINGS -->
+<section>
+  <div class="wrap">
+    <p class="sec-tag">04 — capacidad: findings</p>
+    <h2>Cada hallazgo es un objeto con ciclo de vida, no un párrafo en el chat</h2>
+    <p class="sec-intro">El agente registra findings mientras trabaja. Vos los ves en un panel que se actualiza solo. El estado de cada uno es explícito, y conecta directo con tus skills <code>verifying-findings</code> y <code>scoring-severity-for-hackerone</code>.</p>
+
+    <div class="mock" aria-label="Mockup del panel de Findings">
+      <div class="mock-bar">
+        <span class="tt"><b>Findings</b> · 5</span>
+        <span class="live"><span class="d" aria-hidden="true"></span> en vivo</span>
+      </div>
+      <div class="frow">
+        <span class="sevbar sev-crit" aria-hidden="true"></span>
+        <div class="fmain">
+          <div class="ftitle">SQLi en /api/v2/promo?code=</div>
+          <div class="fmeta"><span>1win.com</span><span class="cvss">CVSS 9.8 · AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H</span></div>
+        </div>
+        <div class="fright"><span class="chip scored">scored</span><span class="pay">$1.500</span></div>
+      </div>
+      <div class="frow">
+        <span class="sevbar sev-high" aria-hidden="true"></span>
+        <div class="fmain">
+          <div class="ftitle">IDOR en detalle de retiro — datos de otro usuario</div>
+          <div class="fmeta"><span>1win.com</span><span class="cvss">verificado con 2 cuentas</span></div>
+        </div>
+        <div class="fright"><span class="chip verified">verified</span><span class="pay">~$750</span></div>
+      </div>
+      <div class="frow">
+        <span class="sevbar sev-high" aria-hidden="true"></span>
+        <div class="fmain">
+          <div class="ftitle">SSRF no-blind en importador de avatar</div>
+          <div class="fmeta"><span>1win.com</span><span class="cvss">hit OOB confirmado</span></div>
+        </div>
+        <div class="fright"><span class="chip reported">reported</span><span class="pay">$1.300</span></div>
+      </div>
+      <div class="frow">
+        <span class="sevbar sev-med" aria-hidden="true"></span>
+        <div class="fmain">
+          <div class="ftitle">Reflected XSS en búsqueda de casino</div>
+          <div class="fmeta"><span>1win.com/casino</span><span class="cvss">pendiente de verificación</span></div>
+        </div>
+        <div class="fright"><span class="chip lead">lead</span><span class="pay none">sin puntuar</span></div>
+      </div>
+      <div class="frow">
+        <span class="sevbar sev-info" aria-hidden="true"></span>
+        <div class="fmain">
+          <div class="ftitle">Falta header CSRF en /settings</div>
+          <div class="fmeta"><span>1win.com</span><span class="cvss">sin consecuencia demostrada</span></div>
+        </div>
+        <div class="fright"><span class="chip dropped">dropped</span><span class="pay none">Informative</span></div>
+      </div>
+    </div>
+    <p class="mcap" style="margin-top:12px">El último se auto-descartó: «falta de control sin impacto» está en la lista Informative del programa. NEO no te lo propone como reporte.</p>
+
+    <h3 style="margin-top:40px">El ciclo de vida, que es donde tus skills se vuelven estado visible</h3>
+    <div class="pipe">
+      <div class="step">
+        <div class="st-n">paso 1</div>
+        <div class="st-t">Lead</div>
+        <div class="st-s">status: lead</div>
+        <div class="st-d">El agente registra una sospecha mientras enumera. Aún no demostrada.</div>
+      </div>
+      <div class="step">
+        <div class="st-n">paso 2</div>
+        <div class="st-t">Verified</div>
+        <div class="st-s">status: verified</div>
+        <div class="st-d">Reproducido a mano con señal discriminante y control negativo.</div>
+        <div class="st-skill">skill <b>verifying-findings</b></div>
+      </div>
+      <div class="step">
+        <div class="st-n">paso 3</div>
+        <div class="st-t">Scored</div>
+        <div class="st-s">status: scored</div>
+        <div class="st-d">Vector CVSS determinista + tier de recompensa del programa.</div>
+        <div class="st-skill">skill <b>scoring-severity</b></div>
+      </div>
+      <div class="step">
+        <div class="st-n">paso 4</div>
+        <div class="st-t">Reported</div>
+        <div class="st-s">status: reported</div>
+        <div class="st-d">Borrador de reporte HackerOne con la evidencia replayable adjunta.</div>
+        <div class="st-skill">fase 3 · export</div>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="nh">// la única decisión de ingeniería que importa para tus sesiones largas</div>
+      <p><strong>Los findings son una colección que crece; el scope no.</strong> El patrón de la casa (como los todos y el goal) guarda el valor entero y lo reemplaza. Si lo copio para findings, cada evento llevaría la lista completa de hallazgos otra vez:</p>
+      <div class="eq"><span class="bad">whole-value →</span> el log crece O(n²) y cada checkpoint re-serializa todo · en una sesión larga, tu dolor exacto<br><span class="good">delta + fold →</span> un evento por finding, el fold acumula · cada evento O(1), el log crece lineal</div>
+      <p style="margin-bottom:0">Por eso findings rompe a propósito la regla whole-value (un evento por hallazgo; editar reemplaza <em>ese</em> finding por id). El scope sí encaja limpio como last-wins. Es el único punto donde el diseño diverge del idiom del repo, y es deliberado.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PHASING -->
+<section>
+  <div class="wrap">
+    <p class="sec-tag">05 — cómo lo construyo</p>
+    <h2>Tres fases, de lo concreto a lo que lo corona</h2>
+    <p class="sec-intro">Agrupadas en una familia <code>packages/engagement/</code> — scope y findings son el mismo dominio. Nada toca kryon hasta que vos lo despliegues.</p>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="pn">1</div>
+        <div>
+          <div class="pt">Scope — importar y gobernar</div>
+          <div class="pd">Import determinista del CSV + extracción de la política. Projection, panel, y los tres chequeos (in/out-of-scope, rate limit, auto-etiquetado). Es lo que arrancás en cada programa.</div>
+          <div class="pkg"><span>@neo/tool-engagement-scope</span><span>@neo/client-ui-scope</span><span>projection: engagementScope</span></div>
+        </div>
+        <span class="badge">arranque recomendado</span>
+      </div>
+      <div class="phase">
+        <div class="pn">2</div>
+        <div>
+          <div class="pt">Findings — ver sin preguntar</div>
+          <div class="pd">La capacidad de hallazgos con fold acumulador, el panel vivo, y el cruce contra el scope para tier y auto-descarte. Responde tu dolor principal en sesiones largas.</div>
+          <div class="pkg"><span>@neo/tool-finding</span><span>@neo/client-ui-findings</span><span>events: finding/record · finding/update</span></div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="pn">3</div>
+        <div>
+          <div class="pt">Cierre del loop</div>
+          <div class="pd">Las skills referencian las tools (lead→verified→scored como transiciones reales) y una tool de export genera el borrador de reporte HackerOne desde un finding.</div>
+          <div class="pkg"><span>skill tie-in</span><span>@neo/tool-finding-export</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="caveat">
+      <div class="ch">⚠ para desplegarlo en kryon</div>
+      <p>origin y kryon divergieron sin ancestro común, así que cada deploy es cherry-pick quirúrgico. Construyo todo en local como PR sobre origin y verifico ahí; <code>systemctl --user restart neo-web</code> lo decidís vos. No toco el servidor mientras el Qwen esté sirviendo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- APPENDIX -->
+<section>
+  <div class="wrap">
+    <p class="sec-tag">06 — apéndice técnico</p>
+    <h2>Los cuatro puntos de extensión</h2>
+    <p class="sec-intro">Para quien implemente: el patrón verificado contra <code>packages/todo</code> y <code>packages/goal</code>. Ojo con <code>@neo/scope</code> (ya existe, es scoping de eventos de Cordis) — por eso la capacidad se llama <code>engagement-scope</code>.</p>
+    <div class="ext">
+      <div class="e"><div class="k">01 · evento</div><div class="v">Declarar el payload en <code>SessionEventMap</code> por declaration-merging (patrón <code>compaction/src/types.ts</code>).</div></div>
+      <div class="e"><div class="k">02 · catálogo</div><div class="v">Regenerar <code>known-event-types.ts</code> con <code>pnpm run gen-persistence-catalog</code>, o otros builds rechazan leer el log.</div></div>
+      <div class="e"><div class="k">03 · projection</div><div class="v">Declarar la clave en <code>SessionProjectionMap</code> + registrar el reducer con <code>ctx.sessionProjections.register()</code>.</div></div>
+      <div class="e"><div class="k">04 · cableado</div><div class="v">Dep en <code>apps/cli/package.json</code>, fila en el preset <code>pentest/agent.cordis.yml</code>, y la UI en <code>bundle/web-app</code>.</div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>NEO · propuesta de diseño</span>
+    <span>engagement = scope + findings</span>
+    <span class="spacer"></span>
+    <span>free your mind</span>
+  </div>
+</footer>
+
+</body>
+</html>

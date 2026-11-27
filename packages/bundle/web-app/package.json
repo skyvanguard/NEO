@@ -103,7 +103,9 @@
     "@neo/storage-json": "workspace:^",
     "@neo/workspace": "workspace:^",
     "@neo/schemastery": "workspace:^",
-    "commander": "^15.0.0"
+    "commander": "^15.0.0",
+    "@neo/document-attach": "workspace:^",
+    "@neo/usage-stats": "workspace:^"
   },
   "peerDependencies": {
     "@neo/cordis-plugin-loader": "workspace:^",

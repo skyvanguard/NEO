@@ -1556,6 +1556,25 @@ describe('continuable settlement delivery', () => {
     expect(notice.text).toMatch(/closing message was cut to \d+ characters/)
   })
 
+  it('says the child left no closing message when it finished on reasoning alone', async () => {
+    const reasoningOnly: StreamChunk[] = [
+      { type: 'block-start', index: 0, blockType: 'reasoning' },
+      { type: 'reasoning-delta', index: 0, text: 'private chain of thought' },
+      { type: 'block-end', index: 0, block: { type: 'reasoning', text: 'private chain of thought' } },
+      { type: 'usage', usage: { inputTokens: 10, outputTokens: 5 } },
+      { type: 'finish', reason: { kind: 'stop' } },
+    ]
+    const { ctx, parent } = await setup([reasoningOnly, textResponse('parent ack')])
+    const started = await ctx.subagents.startContinuable(startSpec(parent))
+    await waitNoActivation(ctx, started.childId)
+
+    await vi.waitFor(() => { expect(settlementNotices(parent)).toHaveLength(1) })
+    expect(settlementNotices(parent)[0]!.text).toBe(
+      `Background subagent ${started.childId} finished and will do no further work unless you send it more.`
+      + '\nIt left no closing message.',
+    )
+  })
+
   it('tells the parent what the child finished with, without being asked', async () => {
     const { ctx, parent } = await setup([textResponse('the answer'), textResponse('parent ack')])
     const started = await ctx.subagents.startContinuable(startSpec(parent))

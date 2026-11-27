@@ -379,6 +379,24 @@ export function runPersistenceContract(name: string, make: () => Promise<Contrac
       }
     })
 
+    it('rejects a pre-aborted remove with the exact reason and keeps the session stored', async () => {
+      const { persistence, dispose } = await make()
+      try {
+        const m = meta('s-remove-cancelled', '/work')
+        await persistence.create(m)
+        await persistence.append(m.id, oneTurnLog())
+        const reason = new Error('remove cancelled before it was queued')
+        const controller = new AbortController()
+        controller.abort(reason)
+
+        await expect(persistence.remove(m.id, controller.signal)).rejects.toBe(reason)
+        expect((await persistence.list()).map(x => x.id)).toContain(m.id)
+        expect((await persistence.load(m.id)).events).toHaveLength(oneTurnLog().length)
+      } finally {
+        await dispose()
+      }
+    })
+
     it('frees a removed id: create and append after remove leave no stale state', async () => {
       const { persistence, dispose } = await make()
       try {

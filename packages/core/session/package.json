@@ -48,6 +48,9 @@
     "@neo/typert-protocol": "workspace:^",
     "@neo/cordis": "workspace:^"
   },
+  "dependencies": {
+    "@neo/util-values": "workspace:*"
+  },
   "devDependencies": {
     "@neo/brand": "workspace:^",
     "@neo/invariants": "workspace:^",
