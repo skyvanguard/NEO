@@ -5942,9 +5942,9 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../../llm/llm
-      '@neo/llm-deepseek':
+      '@neo/llm-pi-ai':
         specifier: workspace:^
-        version: link:../../llm/llm-deepseek
+        version: link:../../llm/llm-pi-ai
       '@neo/scope':
         specifier: workspace:^
         version: link:../../core/scope
