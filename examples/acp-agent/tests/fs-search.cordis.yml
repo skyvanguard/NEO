@@ -1,9 +1,14 @@
 # Minimal live counterpart for the glob-sampling snapshot composition.
-- id: llm-deepseek
-  name: '@neo/llm-deepseek'
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
   config:
-    models:
-      - id: deepseek-v4-pro
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
+        apiKeyEnv: LLM_API_KEY
+        models:
+          - id: deepseek-v4-pro
 
 - id: subprocess
   name: '@neo/subprocess-local'

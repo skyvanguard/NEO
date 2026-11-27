@@ -3,14 +3,14 @@
 # directly over the base cordis.yml (the fs.cordis.snapshot.yml pattern) and
 # re-pins the recorded flash model. The replay catalog declares image input on
 # flash, so the strict read_image gate accepts the route and the tool result
-# carries the durable image block; the live DeepSeek route cannot record this.
+# carries the durable image block; the live text-only route cannot record this.
 - id: base
   name: '@neo/cordis-plugin-include'
   config:
     path: ./cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@neo/llm-deepseek'
+      - id: llm-pi-ai
+        name: '@neo/llm-pi-ai'
         disabled: true
       - id: acp-agent
         name: '@neo/acp-demo'

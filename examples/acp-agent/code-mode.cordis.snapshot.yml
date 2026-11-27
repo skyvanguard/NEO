@@ -1,13 +1,13 @@
-# Keyless Code Mode combines the runtime/registry patch with the DeepSeek-to-replay
-# swap. Include patches cannot target entries behind a nested include, so this file
+# Keyless Code Mode combines the runtime/registry patch with the live-to-replay
+# adapter swap. Include patches cannot target entries behind a nested include, so this file
 # applies both overlays directly to `cordis.yml`.
 - id: base
   name: '@neo/cordis-plugin-include'
   config:
     path: ./cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@neo/llm-deepseek'
+      - id: llm-pi-ai
+        name: '@neo/llm-pi-ai'
         disabled: true
       - id: acp-agent
         name: '@neo/acp-demo'

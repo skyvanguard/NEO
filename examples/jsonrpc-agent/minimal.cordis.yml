@@ -8,14 +8,20 @@
   config:
     maxTokensAsSuccess: false
 
-- id: llm-deepseek
-  name: '@neo/llm-deepseek'
+# One hand-declared OpenAI-compatible route serving the LLM_MODEL the Python
+# SDK exports for the session; LLM_BASE_URL defaults to a local llama-server.
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
   config:
-    apiKeyEnv: DEEPSEEK_API_KEY
-    streamIdleTimeoutMs: 172800000
-    models:
-      - id: !!js process.env.NEO_MODEL ?? 'deepseek-v4-flash'
-        contextWindow: !!js Number(process.env.NEO_CONTEXT_WINDOW ?? 1000000)
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
+        apiKeyEnv: LLM_API_KEY
+        streamIdleTimeoutMs: 172800000
+        models:
+          - id: !!js process.env.LLM_MODEL ?? 'deepseek-v4-flash'
+            contextWindow: !!js Number(process.env.NEO_CONTEXT_WINDOW ?? 1000000)
 
 - id: sandbox
   name: '@neo/sandbox-local'

@@ -2,16 +2,16 @@
 
 English | [中文](README.zh.md)
 
-This directory owns the replay and real-model test composition for a headless coding agent: DeepSeek V4 + local bash and filesystem tools + subagent delegation + workflows and fresh-agent Ralph iteration + `todo_write` + JSONL persistence. It explicitly mounts the shared agent spine, one root agent, persistence, and checkpoint policy; it is not a second product entry point.
+This directory owns the replay and real-model test composition for a headless coding agent: an OpenAI-compatible model route + local bash and filesystem tools + subagent delegation + workflows and fresh-agent Ralph iteration + `todo_write` + JSONL persistence. It explicitly mounts the shared agent spine, one root agent, persistence, and checkpoint policy; it is not a second product entry point.
 
 ## Run it
 
 ```sh
-# repo root .env (gitignored) or exported env:
-#   DEEPSEEK_API_KEY=sk-…
-#   DEEPSEEK_BASE_URL=https://…   # optional; defaults to the public API
+# the product profile serves the model route configured under Settings → Models
 pnpm neo --profile headless "fix the failing test in this workspace"
 ```
+
+This directory's own `cordis.yml` mounts one hand-declared `llm-pi-ai` route for its live tests and snapshot recording: `LLM_BASE_URL` selects the OpenAI-compatible endpoint (default `http://127.0.0.1:8080/v1`, a local llama-server) and `LLM_API_KEY` is its credential, read from the environment or the gitignored repo-root `.env`.
 
 The product command is [`dsh --profile headless`](../../apps/cli/README.md): it accepts one nonblank task, creates and persists a fresh session, prints the final assistant text, and exits.
 
@@ -19,7 +19,7 @@ Snapshot suites run this directory's configuration through [`tests/fixtures/head
 
 ## E2B POC overlay
 
-[`e2b.cordis.yml`](e2b.cordis.yml) replaces the local filesystem and subprocess providers with one shared E2B sandbox while retaining `dsh-bash-local` and the same model-facing tools. Put `E2B_API_KEY` beside `DEEPSEEK_API_KEY` in the gitignored root `.env`, then run the credential-gated live composition, which drives FS, Bash, PTY, and LSP in one sandbox and proves final deletion:
+[`e2b.cordis.yml`](e2b.cordis.yml) replaces the local filesystem and subprocess providers with one shared E2B sandbox while retaining `dsh-bash-local` and the same model-facing tools. Put `E2B_API_KEY` beside `LLM_API_KEY` in the gitignored root `.env`, then run the credential-gated live composition, which drives FS, Bash, PTY, and LSP in one sandbox and proves final deletion:
 
 ```sh
 pnpm exec vitest run --config vitest.e2e.config.ts packages/e2b/e2b/tests/composition.e2e.ts

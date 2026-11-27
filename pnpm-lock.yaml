@@ -521,9 +521,6 @@ importers:
       '@neo/llm':
         specifier: workspace:*
         version: link:../packages/llm/llm
-      '@neo/llm-deepseek':
-        specifier: workspace:*
-        version: link:../packages/llm/llm-deepseek
       '@neo/llm-pi-ai':
         specifier: workspace:*
         version: link:../packages/llm/llm-pi-ai

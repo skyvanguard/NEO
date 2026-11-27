@@ -79,8 +79,10 @@ describe('jsonrpc-agent keyless smoke', () => {
     ], {
       cwd: repoRoot,
       env: {
-        DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
-        DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+        LLM_API_KEY: 'keyless-smoke-local-mock',
+        LLM_BASE_URL: `http://127.0.0.1:${address.port}`,
+        // The SDK exports the session model; this raw JSON-RPC driver does it by hand.
+        LLM_MODEL: 'deepseek-v4-pro',
         NEO_CWD: root,
         NEO_SESSION_ROOT: join(root, '.sessions'),
         ...(envValue === undefined ? {} : { NEO_MAX_TOKENS_AS_SUCCESS: envValue }),
@@ -111,7 +113,7 @@ describe('jsonrpc-agent keyless smoke', () => {
       expect(initialized).toMatchObject({
         jsonrpc: '2.0',
         id: 1,
-        result: { serverInfo: { name: 'deepseek-harness-sdk-runtime' } },
+        result: { serverInfo: { name: 'neo-sdk-runtime' } },
       })
 
       child.stdin.write(`${JSON.stringify({
@@ -144,10 +146,11 @@ describe('jsonrpc-agent keyless smoke', () => {
         },
       })
       const tools = modelRequests[0]?.tools as { function?: { name?: string } }[]
-      expect(modelRequests[0]?.max_tokens).toBe(1234)
+      expect(modelRequests[0]?.max_completion_tokens).toBe(1234)
       expect(tools.map(tool => tool.function?.name).sort()).toEqual([
         'bash',
         'edit',
+        'list_dir',
         'read',
         'subagent',
         'todo_write',
@@ -184,7 +187,6 @@ describe('jsonrpc-agent keyless smoke', () => {
     ], {
       cwd: repoRoot,
       env: {
-        DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
         NEO_MAX_TOKENS_AS_SUCCESS: 'sometimes',
       },
       stdin: 'ignore',

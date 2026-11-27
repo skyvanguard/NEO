@@ -18,4 +18,4 @@ Start the ACP automation server instead:
 pnpm run demo:cordis acp
 ```
 
-Both commands require `DEEPSEEK_API_KEY`. The [Cordis tool reference](../../packages/extensions/tool-cordis/README.md) defines the tool arguments, lifetime, cleanup, and safety contracts.
+The browser interface serves the model route configured under Settings → Models; the ACP server reads `LLM_BASE_URL` and `LLM_API_KEY` like the [acp-agent example](../acp-agent/README.md). The [Cordis tool reference](../../packages/extensions/tool-cordis/README.md) defines the tool arguments, lifetime, cleanup, and safety contracts.

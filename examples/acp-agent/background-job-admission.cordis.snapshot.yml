@@ -1,13 +1,13 @@
 # Keyless counterpart to background-job-admission.cordis.yml: replace the
-# DeepSeek adapter with replay while preserving the app's one-task admission
+# live model adapter with replay while preserving the app's one-task admission
 # config and the recorded flash route.
 - id: base
   name: '@neo/cordis-plugin-include'
   config:
     path: ./cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@neo/llm-deepseek'
+      - id: llm-pi-ai
+        name: '@neo/llm-pi-ai'
         disabled: true
       - id: acp-agent
         name: '@neo/acp-demo'

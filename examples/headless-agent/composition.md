@@ -3,7 +3,7 @@
 
 # Headless Agent Snapshot Composition
 
-The headless snapshot composition combines the real DeepSeek adapter and coding capabilities with one explicitly configured persisted top-level agent; its JSONL driver is test-only.
+The headless snapshot composition combines a live OpenAI-compatible model route and coding capabilities with one explicitly configured persisted top-level agent; its JSONL driver is test-only.
 
 ```mermaid
 flowchart LR
@@ -12,8 +12,8 @@ flowchart LR
   cfg --> plugin_headless_settings
   plugin_headless_credentials["credentials<br/>@neo/credentials-local"]
   cfg --> plugin_headless_credentials
-  plugin_headless_llm_deepseek["llm-deepseek<br/>@neo/llm-deepseek"]
-  cfg --> plugin_headless_llm_deepseek
+  plugin_headless_llm_pi_ai["llm-pi-ai<br/>@neo/llm-pi-ai"]
+  cfg --> plugin_headless_llm_pi_ai
   plugin_headless_subprocess["subprocess<br/>@neo/subprocess-local"]
   cfg --> plugin_headless_subprocess
   plugin_headless_bash["bash<br/>@neo/bash-local"]
@@ -64,7 +64,7 @@ flowchart LR
 | --- | --- |
 | `settings` | `@neo/settings-file` |
 | `credentials` | `@neo/credentials-local` |
-| `llm-deepseek` | `@neo/llm-deepseek` |
+| `llm-pi-ai` | `@neo/llm-pi-ai` |
 | `subprocess` | `@neo/subprocess-local` |
 | `bash` | `@neo/bash-local` |
 | `agent-spine` | `@neo/agent-spine-demo` |

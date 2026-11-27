@@ -1,5 +1,5 @@
 # Session-title snapshot composition: the optional first-prompt provider uses
-# the ordinary DeepSeek route while the ACP app and every other capability stay
+# the ordinary `deepseek-official` route while the ACP app and every other capability stay
 # identical to the base example.
 - id: base
   name: '@neo/cordis-plugin-include'

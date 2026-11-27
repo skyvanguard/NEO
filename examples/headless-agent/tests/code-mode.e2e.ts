@@ -16,7 +16,7 @@ import { LocalBashExecutor } from '@neo/bash-local'
 import * as BashEnvPlugin from '@neo/shell-env'
 import LocalSubprocessRuntime from '@neo/subprocess-local'
 import * as ToolBash from '@neo/tool-bash'
-import * as LlmDeepSeek from '@neo/llm-deepseek'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 import { WorkerThreadCodeRuntime } from '@neo/code-runtime-worker-thread'
 import LocalFileSystem from '@neo/fs-local'
 import * as ToolFs from '@neo/tool-fs'
@@ -35,6 +35,17 @@ import * as ToolCordis from '@neo/tool-cordis'
 const PERSONA = 'You are a coding agent. You work by writing TypeScript programs for run_code: '
   + 'batch related tool work into one program and print or return ONLY the findings that matter.'
 const WORKSPACE_PROBE = 'dragonfruit-8675309'
+/** Live OpenAI-compatible route: `LLM_BASE_URL` (default a local llama-server), keyed by `LLM_API_KEY`. */
+const LIVE_LLM = {
+  providers: {
+    'deepseek-official': {
+      api: 'openai-completions',
+      baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
+      apiKeyEnv: 'LLM_API_KEY',
+      models: [{ id: 'deepseek-v4-flash' }],
+    },
+  },
+}
 
 let ctx: Context | undefined
 let workdir: string | undefined
@@ -57,7 +68,7 @@ async function codeModeHarness(cwd: string): Promise<Context> {
   await harness.plugin(ToolRuntime, { mode: 'code' })
   await harness.plugin(AgentRegistry)
   await harness.plugin(AgentLoop, { agents: [] })
-  await harness.plugin(LlmDeepSeek)
+  await harness.plugin(LlmPiAi, LIVE_LLM)
   await harness.plugin(LocalSubprocessRuntime)
   await harness.plugin(BashEnvPlugin)
   await harness.plugin(LocalBashExecutor, { cwd, timeoutMs: 30_000 })
@@ -77,7 +88,7 @@ async function workspaceCodeModeHarness(): Promise<Context> {
   await harness.plugin(ToolFs)
   await harness.plugin(WorkspaceContext, { maxBytes: 65536 })
   await harness.plugin(AgentLoop, { agents: [] })
-  await harness.plugin(LlmDeepSeek, { models: [{ id: 'deepseek-v4-flash' }] })
+  await harness.plugin(LlmPiAi, LIVE_LLM)
   await harness.plugin(WorkerThreadCodeRuntime, {})
   return harness
 }
@@ -349,7 +360,7 @@ function waitForIdle(harness: Context, agent: Agent): Promise<void> {
   })
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('Code Mode: real model writes a program over real tools', () => {
+describe.skipIf(!process.env.LLM_API_KEY)('Code Mode: real model writes a program over real tools', () => {
   it('collapses the wire tool list to [run_code], bridges sub-calls, and returns curated output', async () => {
     workdir = await mkdtemp(join(tmpdir(), 'dsh-code-mode-e2e-'))
     ctx = await codeModeHarness(workdir)

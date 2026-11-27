@@ -8,7 +8,7 @@ import * as BashEnvPlugin from '@neo/shell-env'
 import LocalSubprocessRuntime from '@neo/subprocess-local'
 import * as ToolBash from '@neo/tool-bash'
 import * as ToolTodo from '@neo/tool-todo'
-import * as LlmDeepSeek from '@neo/llm-deepseek'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 import TokenMeter from '@neo/token-meter'
 import ToolResultPruner from '@neo/compaction-tool-result-pruner'
 import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
@@ -18,9 +18,10 @@ import type { BasicCompactionConfig } from '@neo/compaction-basic'
 
 /**
  * Shared harness for the headless-agent e2e suites: the full plugin stack
- * with the real DeepSeek adapter and the real bash + todo_write tools. Lives
- * outside the *.e2e.ts pattern so importing it never re-registers another
- * file's tests.
+ * with a live OpenAI-compatible route (`LLM_BASE_URL`, default a local
+ * llama-server, keyed by `LLM_API_KEY`) and the real bash + todo_write tools.
+ * Lives outside the *.e2e.ts pattern so importing it never re-registers
+ * another file's tests.
  */
 
 export const SYSTEM_PROMPT = 'You are a coding agent. Use bash for file operations '
@@ -59,8 +60,18 @@ export async function codingHarness(workdir: string, options: CodingHarnessOptio
     systemPrompt: { persona: options.persona ?? '' },
   })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek, options.modelContextWindow === undefined ? {} : {
-    models: [{ id: 'deepseek-v4-flash', contextWindow: options.modelContextWindow }],
+  await ctx.plugin(LlmPiAi, {
+    providers: {
+      'deepseek-official': {
+        api: 'openai-completions',
+        baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
+        apiKeyEnv: 'LLM_API_KEY',
+        models: [{
+          id: 'deepseek-v4-flash',
+          ...options.modelContextWindow === undefined ? {} : { contextWindow: options.modelContextWindow },
+        }],
+      },
+    },
   })
   await ctx.plugin(LocalSubprocessRuntime)
   await ctx.plugin(BashEnvPlugin)

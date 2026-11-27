@@ -1,5 +1,5 @@
-# Keyless replay includes the live `cordis.yml`, disables the key-requiring
-# DeepSeek adapter, and inserts `llm-replay` to serve recorded JSONL without a key
+# Keyless replay includes the live `cordis.yml`, disables the live model
+# adapter, and inserts `llm-replay` to serve recorded JSONL without a key
 # or network; every other app entry remains shared. It also restates the acp-agent
 # config to re-pin `deepseek-v4-flash`: `cordis.yml` ships `deepseek-v4-pro`, but the
 # recorded corpus (request headers, provenance, system prompt) was captured on flash,
@@ -16,8 +16,8 @@
       # `name` asserts the target: a mismatch skips the patch and warns only when
       # a logger exists. A renamed id leaves a stale adapter entry, but replay still
       # short-circuits through `llm-replay`.
-      - id: llm-deepseek
-        name: '@neo/llm-deepseek'
+      - id: llm-pi-ai
+        name: '@neo/llm-pi-ai'
         disabled: true
       - id: acp-agent
         name: '@neo/acp-demo'
