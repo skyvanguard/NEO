@@ -5,12 +5,13 @@
  * ownership reservation.
  */
 import { Context } from '@neo/cordis'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import InvariantRegistry from '@neo/invariants'
 import { SlotRegistry } from '@neo/client-runtime/client'
 import { stubSettingsScope } from '@neo/client-test-runtime'
 import { apply as applyLocale, inject as localeInject } from '@neo/client-locale/client'
 import { apply, inject } from '../src/client/index.ts'
+import type { JobListInjected } from '../src/client/index.ts'
 import { apply as applyNode } from '../src/index.ts'
 import * as JobInvariant from '../src/invariant.ts'
 import { en, es, NS, zh } from '../src/client/locales.ts'
@@ -23,7 +24,9 @@ function headerEntryIds(ctx: Context): (string | undefined)[] {
 }
 
 /** Boot the browser half over a real slot tree that declares the header list. */
-async function bench(): Promise<{ ctx: Context; fiber: ReturnType<Context['plugin']> }> {
+async function bench(
+  sessions: object = {},
+): Promise<{ ctx: Context; fiber: ReturnType<Context['plugin']> }> {
   const ctx = new Context()
   await ctx.plugin(SlotRegistry).await()
   ctx.slots.register({
@@ -32,7 +35,7 @@ async function bench(): Promise<{ ctx: Context; fiber: ReturnType<Context['plugi
       'conversation.session.header.actions': { kind: 'list', scope: 'session' },
     },
   } as never, () => null)
-  ctx.provide('sessions', {})
+  ctx.provide('sessions', sessions)
   // The locale plugin binds a settings scope, which reads the connection handle
   // and the forwarded-event port.
   ctx.provide('connection', { api: { settings: {} }, isLoopback: false } as never)
@@ -54,6 +57,16 @@ describe('ui-job browser half', () => {
     expect(headerEntryIds(ctx)).toContain('job-list')
     await fiber.dispose()
     expect(headerEntryIds(ctx)).not.toContain('job-list')
+  })
+
+  it('wires the row stop control to sessions.killJob, fire-and-return', async () => {
+    const killJob = vi.fn(() => Promise.resolve({ ok: true, value: { outcome: 'requested' } }))
+    const { ctx } = await bench({ killJob })
+    const entry = ctx.slots.entries('conversation.session.header.actions')
+      .find(candidate => candidate.options.id === 'job-list')!
+    const actions = (entry.inject as unknown as () => JobListInjected)()
+    expect(actions.killJob('s1' as never, 'bash-1' as never)).toBeUndefined()
+    expect(killJob).toHaveBeenCalledWith('s1', 'bash-1')
   })
 
   it('registers both dictionaries under its own namespace and releases them with the fiber', async () => {
