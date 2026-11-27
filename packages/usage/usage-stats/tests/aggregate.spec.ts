@@ -365,10 +365,14 @@ describe('usage cache persistence', () => {
     expect(entry?.steps).toBeUndefined() // no foldedBytes → tail state dropped
   })
 
-  it('drops a tail whose steps rows are not pairs instead of failing the whole load', () => {
+  it.each([
+    ['rows that are not pairs', [1]],
+    ['a step whose value is a number', [['0:0', 5]]],
+    ['a step whose value is null', [['0:0', null]]],
+  ])('drops a tail whose steps hold %s instead of failing the whole load', (_shape, steps) => {
     const corrupt = JSON.stringify({
       version: 1,
-      entries: [['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 1, outputTokens: 0, requests: 1, ...zeros }, byDay: [], lastActive: 0, mtimeMs: 1, size: 1, steps: [1], foldedBytes: 10 }]],
+      entries: [['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 1, outputTokens: 0, requests: 1, ...zeros }, byDay: [], lastActive: 0, mtimeMs: 1, size: 1, steps, foldedBytes: 10 }]],
     })
     const entry = deserializeUsageCache(corrupt).get('/ok')
     expect(entry?.totals.inputTokens).toBe(1)
@@ -417,6 +421,9 @@ describe('usage cache persistence', () => {
       ['a byDay row that is not a pair', ['/bad', { ...validBody, byDay: [1] }]],
       ['a byDay row with only a day', ['/bad', { ...validBody, byDay: [['2026-08-19']] }]],
       ['a byDay row keyed by a non-string', ['/bad', { ...validBody, byDay: [[20260819, validBody.totals]] }]],
+      // A null or scalar totals value would only throw later, when the totals are summed.
+      ['a byDay row whose totals are null', ['/bad', { ...validBody, byDay: [['2026-08-19', null]] }]],
+      ['a byDay row whose totals are a number', ['/bad', { ...validBody, byDay: [['2026-08-19', 5]] }]],
     ])('skips %s and keeps its valid sibling', (_shape, malformed) => {
       const json = JSON.stringify({ version: 1, entries: [malformed, ['/ok', validBody]] })
 

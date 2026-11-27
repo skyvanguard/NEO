@@ -354,14 +354,15 @@ export function serializeUsageCache(cache: UsageCache): string {
 }
 
 /**
- * True when `value` is a JSON array of `[string, value]` rows, the only shape
- * `new Map(rows)` accepts here. Only the row shape is checked; the row values
- * are trusted like the rest of a cache entry (a wrong one only skews a total
- * until the session log changes and is re-folded).
+ * True when `value` is a JSON array of `[string, object]` rows: the shape
+ * `new Map(rows)` accepts, with values that can be read as totals or step
+ * samples without throwing. The fields inside each object are trusted like the
+ * rest of a cache entry (a wrong number only skews a total until the session log
+ * changes and is re-folded).
  */
-function isStringKeyedRows<V>(value: unknown): value is [string, V][] {
-  return Array.isArray(value)
-    && value.every(row => Array.isArray(row) && row.length === 2 && typeof row[0] === 'string')
+function isObjectRows(value: unknown): value is [string, object][] {
+  return Array.isArray(value) && value.every(row => Array.isArray(row) && row.length === 2
+    && typeof row[0] === 'string' && typeof row[1] === 'object' && row[1] !== null)
 }
 
 /**
@@ -384,16 +385,16 @@ export function deserializeUsageCache(json: string): UsageCache {
     if (typeof path !== 'string' || typeof raw !== 'object' || raw === null) continue
     const byDay = (raw as { byDay?: unknown }).byDay
     // Valid JSON can still hold rows that are not [day, totals] pairs; new Map() would throw on them.
-    if (!isStringKeyedRows<UsageTotals>(byDay)) continue
+    if (!isObjectRows(byDay)) continue
     const e = raw as SerializedEntry
     const entry: CachedSessionUsage = {
       workspace: e.workspace, sessionId: e.sessionId, totals: e.totals,
-      byDay: new Map(byDay), lastActive: e.lastActive, mtimeMs: e.mtimeMs, size: e.size,
+      byDay: new Map(byDay as [string, UsageTotals][]), lastActive: e.lastActive, mtimeMs: e.mtimeMs, size: e.size,
     }
     // Keep the dedup tail only when fully present, so a truncated/partial entry
     // forces a clean full re-fold rather than tailing from a bogus offset.
-    if (isStringKeyedRows<StepValue>(e.steps) && typeof e.foldedBytes === 'number') {
-      cache.set(path, { ...entry, steps: new Map(e.steps), foldedBytes: e.foldedBytes })
+    if (isObjectRows(e.steps) && typeof e.foldedBytes === 'number') {
+      cache.set(path, { ...entry, steps: new Map(e.steps as [string, StepValue][]), foldedBytes: e.foldedBytes })
     } else {
       cache.set(path, entry)
     }
