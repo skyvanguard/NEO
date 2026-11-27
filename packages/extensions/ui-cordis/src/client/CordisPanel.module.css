@@ -26,7 +26,7 @@
   border: none;
   border-radius: 12px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font-family: inherit;
   font-size: 14px;
   cursor: pointer;
@@ -34,11 +34,11 @@
 }
 
 .badge:hover {
-  background: var(--dsw-alias-interactive-bg-hover-solid);
+  background: var(--neo-alias-interactive-bg-hover-solid);
 }
 
 .badge[data-active] {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .badgeLabel {
@@ -51,7 +51,7 @@
 .badgeCount {
   flex: none;
   margin-left: auto;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 16px;
   font-variant-numeric: tabular-nums;
@@ -88,13 +88,13 @@
   max-width: calc(100vw - 24px);
   max-height: 60vh;
   overflow: hidden;
-  border: 1px solid var(--dsw-alias-border-l1);
+  border: 1px solid var(--neo-alias-border-l1);
   border-radius: 12px;
-  background: var(--dsw-alias-bg-base);
-  box-shadow: var(--dsw-shadow-lv2);
+  background: var(--neo-alias-bg-base);
+  box-shadow: var(--neo-shadow-lv2);
   /* Only `.body` scrolls; the header remains fixed above it. */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 .header {
@@ -105,8 +105,8 @@
   min-height: 44px;
   padding: 10px 12px;
   box-sizing: border-box;
-  border-bottom: 1px solid var(--dsw-alias-border-l2);
-  background: var(--dsw-alias-bg-base);
+  border-bottom: 1px solid var(--neo-alias-border-l2);
+  background: var(--neo-alias-bg-base);
 }
 
 .body {
@@ -120,7 +120,7 @@
   font-size: 13px;
   font-weight: 500;
   line-height: 20px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .note,
@@ -128,11 +128,11 @@
   margin: 4px 0;
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .readError {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 /* Session headings replace per-row ownership markers. */
@@ -141,7 +141,7 @@
   font-size: 11px;
   font-weight: 500;
   line-height: 16px;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -160,13 +160,13 @@
   flex-direction: column;
   gap: 8px;
   padding: 10px 12px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 12px;
-  background: var(--dsw-alias-bg-base);
+  background: var(--neo-alias-bg-base);
 }
 
 .row[data-cordis-awaiting] {
-  border-color: var(--dsw-alias-state-business-primary);
+  border-color: var(--neo-alias-state-business-primary);
 }
 
 .rowHead {
@@ -177,8 +177,8 @@
 
 .rowId {
   flex: none;
-  color: var(--dsw-alias-label-tertiary);
-  font-family: var(--dsh-font-mono, monospace);
+  color: var(--neo-alias-label-tertiary);
+  font-family: var(--neo-font-mono, monospace);
   font-size: 11px;
   line-height: 20px;
 }
@@ -190,7 +190,7 @@
   font-size: 13px;
   font-weight: 500;
   line-height: 20px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -202,31 +202,31 @@
   height: 20px;
   padding: 0 6px;
   border-radius: 10px;
-  background: var(--dsw-alias-button-ghost-active-fill);
+  background: var(--neo-alias-button-ghost-active-fill);
   font-size: 11px;
   line-height: 20px;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 .row[data-cordis-status='idle'] .rowStatus {
-  background: var(--dsw-alias-button-ghost-active-fill);
-  color: var(--dsw-alias-label-caption);
+  background: var(--neo-alias-button-ghost-active-fill);
+  color: var(--neo-alias-label-caption);
 }
 
 .row[data-cordis-status='awaiting-approval'] .rowStatus,
 .row[data-cordis-status='client-pending'] .rowStatus {
-  background: var(--dsw-alias-state-warn-tertiary);
-  color: var(--dsw-alias-state-warn-label);
+  background: var(--neo-alias-state-warn-tertiary);
+  color: var(--neo-alias-state-warn-label);
 }
 
 .row[data-cordis-status='failed'] .rowStatus {
-  background: var(--dsw-alias-interactive-bg-hover-danger);
-  color: var(--dsw-alias-state-error-primary);
+  background: var(--neo-alias-interactive-bg-hover-danger);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .row[data-cordis-status='running'] .rowStatus {
-  background: var(--dsw-alias-state-success-tertiary);
-  color: var(--dsw-alias-state-success-primary);
+  background: var(--neo-alias-state-success-tertiary);
+  color: var(--neo-alias-state-success-primary);
 }
 
 .rowDetail {
@@ -240,7 +240,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
   font-size: 11px;
   line-height: 18px;
 }
@@ -250,10 +250,10 @@
   flex: 1;
   height: 26px;
   padding: 0 8px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 7px;
-  background: var(--dsw-alias-bg-base);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-bg-base);
+  color: var(--neo-alias-label-secondary);
   font: inherit;
 }
 
@@ -263,7 +263,7 @@
   overflow: hidden;
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -271,7 +271,7 @@
 .rowError {
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .rowActions {
@@ -286,7 +286,7 @@
   align-items: center;
   gap: 8px;
   min-width: 0;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
   font-size: 11px;
   line-height: 18px;
 }
@@ -299,16 +299,16 @@
 
 .transitionActions button {
   padding: 2px 8px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 999px;
   background: transparent;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font: inherit;
   cursor: pointer;
 }
 
 .transitionActions button:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .transitionActions button:disabled {
@@ -317,7 +317,7 @@
 }
 
 .activeVersion {
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
   font-size: 11px;
   line-height: 16px;
 }
@@ -334,13 +334,13 @@
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
 }
 
 .actionButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-secondary);
 }
 
 .actionButton:disabled {

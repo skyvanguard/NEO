@@ -2,7 +2,7 @@
 // prompt line (run-state dot + shortened cwd + command), ANSI-colored output,
 // settled exit status, and a copy control for the raw output. Output never soft-wraps:
 // column-aligned output (ls, tables, box drawing) keeps its alignment and
-// scrolls horizontally instead of folding. Colors resolve through --dsw-*
+// scrolls horizontally instead of folding. Colors resolve through --neo-*
 // tokens; ANSI parsing lives in ansi.ts.
 
 import { useCallback, useMemo, useState } from 'react'

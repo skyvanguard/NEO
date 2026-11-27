@@ -13,17 +13,17 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border: 1px solid var(--dsw-alias-border-inverted);
+  border: 1px solid var(--neo-alias-border-inverted);
   border-radius: 12px;
-  background: var(--dsw-specific-menu);
-  box-shadow: var(--dsw-shadow-lv3);
+  background: var(--neo-specific-menu);
+  box-shadow: var(--neo-shadow-lv3);
   /* Elevated surface: the scrollbar thumb takes the l2 elevation tokens. The
      declaration sits on the card rather than on `.scrollable .viewport`
      because the elevation is a property of this surface, and the custom
      properties inherit down to whichever descendant actually scrolls (see
      ui-theme styles/scrollbar.css for the rebinding contract). */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 /* Primary card is 218 wide in the design across both hosts. */
@@ -85,7 +85,7 @@
   flex-direction: column;
   margin-top: 4px;
   padding-top: 4px;
-  border-top: 1px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--neo-alias-border-l2);
 }
 
 .itemWrap {
@@ -107,12 +107,12 @@
   cursor: pointer;
   font-size: 14px;
   line-height: 22px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   text-align: left;
 }
 
 .item:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .denseList .item {
@@ -167,7 +167,7 @@
   height: 16px;
   align-items: center;
   justify-content: center;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .itemLabel {
@@ -180,7 +180,7 @@
 
 .check {
   flex: none;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 /* Selected cell keeps the plain fill (marker is the trailing check); the
@@ -191,15 +191,15 @@
 
 /* Destructive row: error text/icon, danger hover fill. */
 .danger {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .danger .itemIcon {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .danger:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover-danger);
+  background: var(--neo-alias-interactive-bg-hover-danger);
 }
 
 /* Heading row: non-interactive small grey text, padding aligned with items. */
@@ -207,14 +207,14 @@
   padding: 8px 10px;
   font-size: 12px;
   line-height: 16px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 /* Separator cell (figma 122:9481): py 4 / px 2 around the hairline. */
 .separator {
   height: 1px;
   margin: 4px 2px;
-  background: var(--dsw-alias-border-l1);
+  background: var(--neo-alias-border-l1);
 }
 
 /* Nested card to the right of the parent row (figma 419:16920).

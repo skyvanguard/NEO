@@ -19,7 +19,7 @@
   /* figma 75:8208: 12 between title block / workspace / card. */
   gap: 12px;
   width: 100%;
-  max-width: var(--dsh-composer-card-max-width);
+  max-width: var(--neo-composer-card-max-width);
   overflow: visible;
 }
 
@@ -35,7 +35,7 @@
   font-size: 26px;
   line-height: 32px;
   font-weight: 500;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .headlineText {
@@ -50,10 +50,10 @@
   margin-top: 2px;
   margin-left: -3px;
   padding: 1px 7px 0;
-  border: 1px solid var(--dsw-alias-interactive-bg-hover);
+  border: 1px solid var(--neo-alias-interactive-bg-hover);
   border-radius: 24px;
-  background: var(--dsw-alias-state-business-tertiary);
-  color: var(--dsw-alias-label-primary-bluish);
+  background: var(--neo-alias-state-business-tertiary);
+  color: var(--neo-alias-label-primary-bluish);
   font-family: var(--ds-font-family-code);
   font-size: 12px;
   line-height: 18px;
@@ -72,7 +72,7 @@
 
 /* Keep the hero mark in the same primary ink as its headline. */
 .fish {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   transform-origin: 50% 60%;
 }
 
@@ -135,7 +135,7 @@
   border: none;
   border-radius: 16px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font-size: 13px;
   line-height: 20px;
   font-weight: 500;
@@ -144,7 +144,7 @@
 
 .workspace:not(:disabled):hover,
 .workspace[aria-expanded='true'] {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 /* Locked form (bound guidance state): a static echo — no hover feedback, no
@@ -155,7 +155,7 @@
 
 .folder {
   flex: none;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .workspaceLabel {
@@ -166,7 +166,7 @@
 
 .chevron {
   flex: none;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 /* Dialog field: 44 tall on the modal's 332 content column, r22, hairline
@@ -177,22 +177,22 @@
   width: 100%;
   height: 44px;
   padding: 7px 14px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 22px;
   outline: none;
   background: transparent;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .modalInput::placeholder {
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 .modalInput:disabled {
-  color: var(--dsw-alias-label-dimmed);
+  color: var(--neo-alias-label-dimmed);
 }
 
 .modalAction {
@@ -203,5 +203,5 @@
   margin-top: 8px;
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }

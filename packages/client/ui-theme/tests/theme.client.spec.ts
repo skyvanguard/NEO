@@ -74,10 +74,10 @@ describe('ThemeRuntime', () => {
 
   it('registered themes join the snapshot; disposing the active one resets to default', () => {
     const { theme, events, host } = make()
-    const dispose = theme.register({ id: 'sepia', colorScheme: 'light', tokens: { '--dsw-alias-bg-base': 'red' } })
+    const dispose = theme.register({ id: 'sepia', colorScheme: 'light', tokens: { '--neo-alias-bg-base': 'red' } })
     expect(theme.getTheme().themes.map(t => t.id)).toEqual(['light', 'dark', 'sepia'])
     theme.setTheme('sepia')
-    expect(theme.getTheme().active.tokens['--dsw-alias-bg-base']).toBe('red')
+    expect(theme.getTheme().active.tokens['--neo-alias-bg-base']).toBe('red')
     dispose()
     expect(theme.getTheme().preference).toBe('system')
     expect(theme.getTheme().themes.map(t => t.id)).toEqual(['light', 'dark'])
@@ -157,7 +157,7 @@ describe('ThemeRuntime', () => {
       id: 'custom',
       colorScheme: 'light',
       tokens: {
-        '--dsw-alias-bg-base': 'duplicate-built-in',
+        '--neo-alias-bg-base': 'duplicate-built-in',
         '--registered': 'registered',
       },
     })
@@ -175,10 +175,39 @@ describe('ThemeRuntime', () => {
     const semantic = tokens.find(token => token.name === 'semanticAccent')
     expect(semantic).toMatchObject({ valueType: 'CSS value' })
     expect(semantic).not.toHaveProperty('cssVariable')
-    expect(tokens.filter(token => token.name === '--dsw-alias-bg-base')).toHaveLength(1)
+    expect(tokens.filter(token => token.name === '--neo-alias-bg-base')).toHaveLength(1)
 
     tokens[0]!.description = 'caller mutation'
     expect(theme.exportInspectTokens()[0]!.description).not.toBe('caller mutation')
+  })
+
+  it('stores pre-rename token names under their --neo-* spelling', () => {
+    const { theme } = make()
+    theme.overrideTokens('legacy', {
+      '--dsw-alias-bg-base': { light: 'base-light', dark: 'base-dark' },
+      '--dsh-scrollbar-thumb': { light: 'thumb-light', dark: 'thumb-dark' },
+      '--dsw-static-deepseek-500': { light: 'brand-light', dark: 'brand-dark' },
+      '--custom': { light: 'custom-light', dark: 'custom-dark' },
+    })
+    expect(theme.getTheme().active.tokens).toEqual({
+      '--neo-alias-bg-base': 'base-light',
+      '--neo-scrollbar-thumb': 'thumb-light',
+      '--neo-static-brand-500': 'brand-light',
+      '--custom': 'custom-light',
+    })
+    const inspected = theme.exportInspectTokens().map(token => token.name)
+    expect(inspected).toContain('--neo-scrollbar-thumb')
+    expect(inspected).not.toContain('--dsh-scrollbar-thumb')
+  })
+
+  it('keeps the --neo-* entry when one layer spells a token both ways, in either key order', () => {
+    const { theme } = make()
+    const current = { light: 'current', dark: 'current' }
+    const legacy = { light: 'legacy', dark: 'legacy' }
+    theme.overrideTokens('mixed', { '--dsw-alias-bg-base': legacy, '--neo-alias-bg-base': current })
+    expect(theme.getTheme().active.tokens['--neo-alias-bg-base']).toBe('current')
+    theme.overrideTokens('mixed', { '--neo-alias-bg-base': current, '--dsw-alias-bg-base': legacy })
+    expect(theme.getTheme().active.tokens['--neo-alias-bg-base']).toBe('current')
   })
 
   it('rejects every malformed token override value with a teaching error', () => {

@@ -7,7 +7,7 @@
   height: 100%;
   display: grid;
   place-items: center;
-  background: var(--dsw-alias-bg-base, #f9fafb);
+  background: var(--neo-alias-bg-base, #f9fafb);
 }
 
 .card {
@@ -22,21 +22,21 @@
   line-height: 24px;
   font-weight: 600;
   letter-spacing: 0.08em;
-  color: var(--dsw-alias-label-primary, #0f1115);
+  color: var(--neo-alias-label-primary, #0f1115);
 }
 
 .hint {
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-label-tertiary, #81858c);
+  color: var(--neo-alias-label-tertiary, #81858c);
 }
 
 .spinner {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid var(--dsw-alias-border-l2, rgb(0 0 0 / 10%));
-  border-top-color: var(--dsw-alias-brand-primary, #3964fe);
+  border: 2px solid var(--neo-alias-border-l2, rgb(0 0 0 / 10%));
+  border-top-color: var(--neo-alias-brand-primary, #3964fe);
   animation: spin 0.8s linear infinite;
 }
 
@@ -55,12 +55,12 @@
   font-size: 14px;
   line-height: 22px;
   font-weight: 600;
-  color: var(--dsw-alias-label-primary, #0f1115);
+  color: var(--neo-alias-label-primary, #0f1115);
 }
 
 .failedItem {
   font-family: var(--ds-font-family-code, ui-monospace, 'SF Mono', Menlo, Consolas, 'Courier New');
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-label-secondary, #61666b);
+  color: var(--neo-alias-label-secondary, #61666b);
 }

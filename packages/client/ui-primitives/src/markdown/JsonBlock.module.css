@@ -5,7 +5,7 @@
 .toggle {
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   padding: 2px 6px;
   border: none;
   background: transparent;
@@ -14,7 +14,7 @@
 }
 
 .toggle:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .body {
@@ -22,11 +22,11 @@
   padding: 8px;
   max-height: 200px;
   overflow: auto;
-  background: var(--dsw-alias-markdown-code-block);
-  border: 1px solid var(--dsw-alias-border-l1);
+  background: var(--neo-alias-markdown-code-block);
+  border: 1px solid var(--neo-alias-border-l1);
   border-radius: 6px;
   font-family: var(--ds-font-family-code);
   font-size: 11px;
   line-height: 16px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }

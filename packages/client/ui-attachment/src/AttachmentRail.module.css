@@ -17,8 +17,8 @@
   /* The rail scrolls on the composer's elevated input surface: bind the l2
      pair (ui-theme styles/scrollbar.css rebinding contract) so anything that
      does draw a thumb here matches the surface. */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 .rail::-webkit-scrollbar {
@@ -37,9 +37,9 @@
   height: 64px;
   padding: 0;
   overflow: hidden;
-  border: 1px solid var(--dsw-alias-border-l2-darkmode-thin);
+  border: 1px solid var(--neo-alias-border-l2-darkmode-thin);
   border-radius: 16px;
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
   cursor: zoom-in;
 }
 
@@ -62,8 +62,8 @@
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: var(--dsw-alias-button-contrast-fill);
-  color: var(--dsw-alias-label-primary-inverted);
+  background: var(--neo-alias-button-contrast-fill);
+  color: var(--neo-alias-label-primary-inverted);
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
@@ -96,17 +96,17 @@
   width: 24px;
   height: 24px;
   padding: 0;
-  border: 1px solid var(--dsw-alias-border-l2-darkmode-thin);
+  border: 1px solid var(--neo-alias-border-l2-darkmode-thin);
   border-radius: 999px;
-  background: var(--dsw-specific-input-major);
-  color: var(--dsw-alias-label-secondary);
-  box-shadow: var(--dsw-shadow-lv2);
+  background: var(--neo-specific-input-major);
+  color: var(--neo-alias-label-secondary);
+  box-shadow: var(--neo-shadow-lv2);
   cursor: pointer;
   transform: translateY(-50%);
 }
 
 .arrow:hover {
-  background: var(--dsw-alias-interactive-bg-hover-solid);
+  background: var(--neo-alias-interactive-bg-hover-solid);
 }
 
 .arrowLeft {

@@ -7,7 +7,7 @@
 // needs; an unknown or absent language renders plain monospace. Long content is
 // height-capped with the same head/tail arithmetic TerminalBlock uses, so the
 // two cards collapse a long body at the same place. Colors resolve through
-// --shiki-*/--dsw-* tokens.
+// --shiki-*/--neo-* tokens.
 
 import { useCallback, useMemo, useState, useSyncExternalStore } from 'react'
 import clsx from 'clsx'

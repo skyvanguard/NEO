@@ -5,7 +5,7 @@
   align-items: center;
   gap: 8px;
   padding: 16px 0;
-  border-bottom: 1px solid var(--dsw-alias-border-l2);
+  border-bottom: 1px solid var(--neo-alias-border-l2);
 }
 
 .rowText {
@@ -21,14 +21,14 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .desc {
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .selector {
@@ -39,16 +39,16 @@
   padding: 0 14px;
   border: none;
   border-radius: 18px;
-  background: var(--dsw-alias-bg-module-platform);
+  background: var(--neo-alias-bg-module-platform);
   font: inherit;
   font-size: 14px;
   line-height: 22px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   cursor: pointer;
 }
 
 .selector:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .chevron {

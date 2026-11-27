@@ -26,7 +26,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    color-mix(in srgb, var(--dsw-alias-bg-base) 60%, transparent) 55%,
+    color-mix(in srgb, var(--neo-alias-bg-base) 60%, transparent) 55%,
     transparent 100%
   );
   animation: dsh-skill-row-sweep 2.6s ease-out infinite;
@@ -47,11 +47,11 @@
   align-items: center;
   justify-content: center;
   margin-right: 6px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .chevron {
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .iconIdle {
@@ -80,7 +80,7 @@
   flex: none;
   font-size: 14px;
   line-height: 24px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .separator {
@@ -89,7 +89,7 @@
   height: 2px;
   border-radius: 1px;
   margin: 0 8px;
-  background: var(--dsw-alias-label-caption);
+  background: var(--neo-alias-label-caption);
 }
 
 .summary {
@@ -100,11 +100,11 @@
   white-space: nowrap;
   font-size: 14px;
   line-height: 24px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .errorSummary {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .bodyWrap {
@@ -118,20 +118,20 @@
   max-height: 260px;
   margin: 4px 0 4px 4px;
   overflow: hidden;
-  border: 1px solid var(--dsw-alias-border-l1);
+  border: 1px solid var(--neo-alias-border-l1);
   border-radius: 12px;
-  background: var(--dsw-alias-markdown-code-block);
+  background: var(--neo-alias-markdown-code-block);
 }
 
 .instructionsHeader {
   flex: none;
   padding: 8px 12px;
-  border-bottom: 1px solid var(--dsw-alias-border-l2);
-  background: var(--dsw-alias-markdown-code-block-banner);
+  border-bottom: 1px solid var(--neo-alias-border-l2);
+  background: var(--neo-alias-markdown-code-block-banner);
   font-size: 11px;
   font-weight: 500;
   line-height: 16px;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -143,12 +143,12 @@
   overflow: auto;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font: var(--dsw-font-markdown-code-block-small);
-  color: var(--dsw-alias-label-secondary);
+  font: var(--neo-font-markdown-code-block-small);
+  color: var(--neo-alias-label-secondary);
 }
 
 .instructions[data-error] {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .instructions::-webkit-scrollbar-thumb {
@@ -168,10 +168,10 @@
   gap: 4px;
   margin: 4px 0 2px 4px;
   padding: 2px 8px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 999px;
-  background: var(--dsw-alias-bg-base);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-bg-base);
+  color: var(--neo-alias-label-secondary);
   font-size: 11px;
   line-height: 16px;
   cursor: pointer;
@@ -185,8 +185,8 @@
 }
 
 .inspectButton:hover {
-  background: var(--dsw-alias-interactive-bg-hover-solid);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-interactive-bg-hover-solid);
+  color: var(--neo-alias-label-primary);
 }
 
 .visuallyHidden {

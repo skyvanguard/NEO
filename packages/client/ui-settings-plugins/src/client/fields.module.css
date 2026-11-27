@@ -8,7 +8,7 @@
 }
 
 .field + .field {
-  border-top: 1px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--neo-alias-border-l2);
 }
 
 .head {
@@ -23,7 +23,7 @@
   font-size: 13px;
   font-weight: 500;
   line-height: 1.5;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .badges {
@@ -39,8 +39,8 @@
   line-height: 17px;
   white-space: nowrap;
   font-weight: 500;
-  background: var(--dsw-alias-bg-module-platform);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-bg-module-platform);
+  color: var(--neo-alias-label-secondary);
 }
 
 .reset {
@@ -50,12 +50,12 @@
   font: inherit;
   font-size: 12px;
   line-height: 1.5;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   cursor: pointer;
 }
 
 .reset:hover:not(:disabled) {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .reset:disabled {
@@ -65,40 +65,40 @@
 .input {
   height: 34px;
   padding: 0 12px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 8px;
-  background: var(--dsw-alias-bg-layer-3);
+  background: var(--neo-alias-bg-layer-3);
   font: inherit;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .input:focus-visible {
   outline: none;
-  border-color: var(--dsw-alias-brand-primary);
+  border-color: var(--neo-alias-brand-primary);
 }
 
 .input:disabled {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: default;
 }
 
 .inputInvalid {
   composes: input;
-  border-color: var(--dsw-alias-label-error);
+  border-color: var(--neo-alias-label-error);
 }
 
 .invalid {
   margin: 0;
   font-size: 12px;
   line-height: 1.5;
-  color: var(--dsw-alias-label-error);
+  color: var(--neo-alias-label-error);
 }
 
 .hint {
   margin: 0;
   font-size: 12px;
   line-height: 1.5;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }

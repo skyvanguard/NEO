@@ -11,7 +11,7 @@
   justify-content: center;
   /* Sides = clearance + 16px: the card lands on the shared content width
      (input card - 32) at every viewport. */
-  padding: 6px calc(var(--dsh-composer-side-clearance) + 16px) 10px;
+  padding: 6px calc(var(--neo-composer-side-clearance) + 16px) 10px;
 }
 
 .card {
@@ -19,21 +19,21 @@
   overflow: hidden;
   flex-direction: column;
   width: 100%;
-  max-width: var(--dsh-chat-content-width);
+  max-width: var(--neo-chat-content-width);
   /* Composer seat sits in a fixed-height conversation column (overflow
      hidden): cap the card against the viewport and scroll the plan, so the
      strip and the decision row stay reachable on a long plan. */
   max-height: min(60vh, 520px);
-  border: 1px solid var(--dsw-alias-state-warn-secondary);
+  border: 1px solid var(--neo-alias-state-warn-secondary);
   border-radius: 20px;
-  background: var(--dsw-specific-input-major);
-  box-shadow: var(--dsw-shadow-lv2);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-specific-input-major);
+  box-shadow: var(--neo-shadow-lv2);
+  color: var(--neo-alias-label-primary);
   /* Elevated surface in dark: the plan body inside scrolls once the card hits
      the cap above, so the thumb takes the l2 pair (see ui-theme
      styles/scrollbar.css for the rebinding contract). */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 .card,
@@ -48,8 +48,8 @@
   flex-shrink: 0;
   gap: 8px;
   padding: 10px 16px;
-  background: var(--dsw-alias-state-warn-tertiary);
-  color: var(--dsw-alias-state-warn-primary);
+  background: var(--neo-alias-state-warn-tertiary);
+  color: var(--neo-alias-state-warn-primary);
   font-size: 13px;
   line-height: 18px;
 }
@@ -58,7 +58,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--dsw-alias-state-warn-primary);
+  background: var(--neo-alias-state-warn-primary);
 }
 
 /* The plan is the panel's message: it takes the whole body and the scroll. */
@@ -83,7 +83,7 @@
 
 .feedback {
   min-height: 16px;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
   font-size: 11px;
   line-height: 16px;
 }
@@ -100,11 +100,11 @@
    the icon reads as a prefix rather than a peer-sized control. */
 .discuss {
   gap: 6px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .discuss:hover:not(:disabled) {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 @media (max-width: 720px) {

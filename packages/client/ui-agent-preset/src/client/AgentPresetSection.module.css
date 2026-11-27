@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 12px;
   max-width: 720px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .title {
@@ -15,7 +15,7 @@
 .intro {
   margin: 0;
   font-size: 13px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 /* Cards, not rows: a preset is a thing you pick, and the description is the
@@ -38,7 +38,7 @@
   font-weight: 600;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .cards {
@@ -54,33 +54,33 @@
 }
 
 .card {
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  background: var(--dsw-alias-bg-layer-3);
+  background: var(--neo-alias-bg-layer-3);
   transition: border-color .16s, background .16s;
 }
 
 
 .card:hover:not(.cardActive) {
-  border-color: var(--dsw-alias-label-dimmed);
+  border-color: var(--neo-alias-label-dimmed);
 }
 
 /* The default preset reads as selected, not merely badged. */
 .cardActive {
-  background: var(--dsw-alias-bg-layer-2);
-  border-color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-bg-layer-2);
+  border-color: var(--neo-alias-label-primary);
 }
 
 /* A broken preset reads as damaged before anything else: the card cannot be
    picked, so its border carries the warning the disabled body cannot. */
 .cardBroken {
-  border-color: var(--dsw-alias-state-error-primary);
+  border-color: var(--neo-alias-state-error-primary);
 }
 
 .cardBroken:hover {
-  border-color: var(--dsw-alias-state-error-primary);
+  border-color: var(--neo-alias-state-error-primary);
 }
 
 .brokenBadge {
@@ -90,15 +90,15 @@
   line-height: 17px;
   white-space: nowrap;
   font-weight: 500;
-  background: var(--dsw-alias-state-error-primary);
-  color: var(--dsw-alias-bg-layer-3);
+  background: var(--neo-alias-state-error-primary);
+  color: var(--neo-alias-bg-layer-3);
 }
 
 /* The discovery-reported reason, verbatim: it names the file and the fix. */
 .cardBrokenReason {
   font-size: 12px;
   line-height: 1.5;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
   overflow-wrap: anywhere;
 }
 
@@ -124,7 +124,7 @@
 }
 
 .cardMain:focus-visible {
-  outline: 2px solid var(--dsw-alias-brand-primary);
+  outline: 2px solid var(--neo-alias-brand-primary);
   outline-offset: -2px;
 }
 
@@ -151,14 +151,14 @@
 }
 
 .badge {
-  border: 1px solid var(--dsw-alias-border-l2);
-  color: var(--dsw-alias-label-tertiary);
+  border: 1px solid var(--neo-alias-border-l2);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .inUse {
   margin-left: auto;
-  background: var(--dsw-alias-label-primary);
-  color: var(--dsw-alias-bg-layer-3);
+  background: var(--neo-alias-label-primary);
+  color: var(--neo-alias-bg-layer-3);
 }
 
 /* Bounded to four lines. A preset publishes its own description, so one long
@@ -171,7 +171,7 @@
 .cardDesc {
   font-size: 13px;
   line-height: 1.55;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   min-height: 42px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -183,9 +183,9 @@
 
 .cardId {
   margin-top: auto;
-  font-family: var(--dsw-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-family: var(--neo-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   font-size: 11px;
-  color: var(--dsw-alias-label-dimmed);
+  color: var(--neo-alias-label-dimmed);
 }
 
 .cardFoot {
@@ -193,7 +193,7 @@
   justify-content: flex-end;
   gap: 2px;
   padding: 6px 10px;
-  border-top: 1px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--neo-alias-border-l2);
 }
 
 /* Icon-only actions: the label rides `title` so the row stays quiet until
@@ -205,7 +205,7 @@
   border-radius: 7px;
   padding: 6px;
   background: none;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -217,12 +217,12 @@
 }
 
 .iconButton:hover:not(:disabled) {
-  background: var(--dsw-alias-bg-layer-1);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-bg-layer-1);
+  color: var(--neo-alias-label-primary);
 }
 
 .iconButton:focus-visible {
-  outline: 2px solid var(--dsw-alias-brand-primary);
+  outline: 2px solid var(--neo-alias-brand-primary);
   outline-offset: -1px;
 }
 
@@ -234,8 +234,8 @@
   transform: translateX(-50%);
   padding: 3px 8px;
   border-radius: 6px;
-  background: var(--dsw-alias-label-primary);
-  color: var(--dsw-alias-bg-layer-3);
+  background: var(--neo-alias-label-primary);
+  color: var(--neo-alias-bg-layer-3);
   font-size: 11px;
   line-height: 17px;
   white-space: nowrap;
@@ -250,8 +250,8 @@
 }
 
 .iconDanger:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover-danger);
-  color: var(--dsw-alias-state-error-primary);
+  background: var(--neo-alias-interactive-bg-hover-danger);
+  color: var(--neo-alias-state-error-primary);
 }
 
 /* Where the host has no desktop opener, the row answers with the directory
@@ -260,15 +260,15 @@
   margin: 0;
   padding: 6px 16px 10px;
   font-size: 11px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   display: flex;
   gap: 6px;
   align-items: baseline;
 }
 
 .revealedPath code {
-  font-family: var(--dsw-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  color: var(--dsw-alias-label-secondary);
+  font-family: var(--neo-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  color: var(--neo-alias-label-secondary);
   user-select: all;
   overflow-wrap: anywhere;
 }
@@ -282,7 +282,7 @@
   border-radius: 7px;
   padding: 5px 8px;
   background: none;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font: inherit;
   font-size: 12.5px;
   cursor: pointer;
@@ -290,7 +290,7 @@
 
 
 .secondaryButton:hover:not(:disabled) {
-  background: var(--dsw-alias-bg-layer-1);
+  background: var(--neo-alias-bg-layer-1);
 }
 
 .secondaryButton:disabled {
@@ -307,27 +307,27 @@
 .fieldLabel {
   font-size: 12px;
   font-weight: 500;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .input {
   box-sizing: border-box;
   padding: 9px 12px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 10px;
   font: inherit;
   font-size: 13px;
-  background: var(--dsw-alias-bg-layer-1);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-bg-layer-1);
+  color: var(--neo-alias-label-primary);
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--dsw-alias-brand-primary);
+  border-color: var(--neo-alias-brand-primary);
 }
 
 .input::placeholder {
-  color: var(--dsw-alias-label-dimmed);
+  color: var(--neo-alias-label-dimmed);
 }
 
 .dialog {
@@ -346,23 +346,23 @@
   padding: 12px;
   max-height: min(52vh, 480px);
   overflow: auto;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 10px;
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-secondary);
-  font-family: var(--dsw-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  background: var(--neo-alias-bg-layer-2);
+  color: var(--neo-alias-label-secondary);
+  font-family: var(--neo-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   font-size: 12.5px;
   line-height: 1.5;
   white-space: pre;
   tab-size: 2;
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 .error {
   margin: 0;
   font-size: 12px;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .deleteDialog {
@@ -370,12 +370,12 @@
 }
 
 .deleteConfirm:not(:disabled) {
-  border-color: var(--dsw-alias-state-error-primary);
-  color: var(--dsw-alias-state-error-primary);
+  border-color: var(--neo-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .deleteConfirm:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover-danger);
+  background: var(--neo-alias-interactive-bg-hover-danger);
 }
 
 /* The conversational authoring entry, after the card grid in the spot the
@@ -389,18 +389,18 @@
   justify-content: center;
   gap: 6px;
   height: 44px;
-  border: 1px dashed var(--dsw-alias-border-l3);
+  border: 1px dashed var(--neo-alias-border-l3);
   border-radius: 12px;
   font: inherit;
   font-size: 14px;
   line-height: 22px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   cursor: pointer;
 }
 
 .creatorButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .creatorButton:disabled {

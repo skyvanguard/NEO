@@ -14,8 +14,8 @@
   padding: 2px 8px;
   border: none;
   border-radius: 999px;
-  background: var(--dsw-alias-state-warn-tertiary);
-  color: var(--dsw-alias-state-warn-label);
+  background: var(--neo-alias-state-warn-tertiary);
+  color: var(--neo-alias-state-warn-label);
   font-size: 13px;
   font-weight: 500;
   line-height: 20px;
@@ -23,11 +23,11 @@
 }
 
 .chip:hover:not(:disabled) {
-  color: var(--dsw-alias-state-warn-primary);
+  color: var(--neo-alias-state-warn-primary);
 }
 
 .chip:focus-visible {
-  outline: 2px solid var(--dsw-alias-state-warn-label);
+  outline: 2px solid var(--neo-alias-state-warn-label);
   outline-offset: 2px;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .error {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
   font-size: 12px;
   line-height: 18px;
 }

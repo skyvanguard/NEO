@@ -17,7 +17,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    color-mix(in srgb, var(--dsw-alias-bg-base) 60%, transparent) 55%,
+    color-mix(in srgb, var(--neo-alias-bg-base) 60%, transparent) 55%,
     transparent 100%
   );
   animation: dsh-reasoning-row-sweep 2.6s ease-out infinite;
@@ -34,7 +34,7 @@
 }
 
 .chevron {
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .title {
@@ -47,14 +47,14 @@
   height: 2px;
   margin: 0 8px;
   border-radius: 1px;
-  background: var(--dsw-alias-label-caption);
+  background: var(--neo-alias-label-caption);
 }
 
 .summary {
   min-width: 0;
   overflow: hidden;
   flex: 1 1 auto;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 14px;
   line-height: 24px;
   text-overflow: ellipsis;
@@ -67,7 +67,7 @@
 
 .thinkBody {
   padding: 4px 0 4px 22px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 14px;
   line-height: 24px;
   white-space: pre-wrap;

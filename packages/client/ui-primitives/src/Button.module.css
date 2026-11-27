@@ -11,7 +11,7 @@
   cursor: pointer;
   font-size: 14px;
   line-height: 22px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   background: transparent;
   padding: 0 14px;
 }
@@ -36,38 +36,38 @@
 }
 
 .primary {
-  background: var(--dsw-alias-button-primary-fill);
-  color: var(--dsw-alias-label-primary-foreground);
+  background: var(--neo-alias-button-primary-fill);
+  color: var(--neo-alias-label-primary-foreground);
 }
 
 .primary:hover:not(:disabled) {
-  background: var(--dsw-alias-button-primary-hover);
+  background: var(--neo-alias-button-primary-hover);
 }
 
 .ghost:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .ghost:active:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-active);
+  background: var(--neo-alias-interactive-bg-active);
 }
 
 /* Dialog Cancel (figma 451:18655): bordered capsule on transparent fill. */
 .outline {
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   background: transparent;
 }
 
 .outline:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .toolbar {
-  background: var(--dsw-alias-button-tool-bar-fill);
+  background: var(--neo-alias-button-tool-bar-fill);
 }
 
 .toolbar:hover:not(:disabled) {
-  background: var(--dsw-alias-button-tool-bar-hover);
+  background: var(--neo-alias-button-tool-bar-hover);
 }
 
 .icon {

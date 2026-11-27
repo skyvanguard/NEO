@@ -2,15 +2,15 @@
    stay on the existing shiki `--shiki-*` sheet (not Prism highlight.css). */
 
 .block {
-  --dsl-code-block-banner-background-color: var(--dsw-alias-markdown-code-block-banner);
+  --dsl-code-block-banner-background-color: var(--neo-alias-markdown-code-block-banner);
   --dsl-code-block-border-radius: 12px;
-  --dsl-code-block-banner-font: var(--dsw-font-xs-13);
-  --dsl-code-block-content-font: var(--dsw-font-markdown-code-block);
+  --dsl-code-block-banner-font: var(--neo-font-xs-13);
+  --dsl-code-block-content-font: var(--neo-font-markdown-code-block);
 
   position: relative;
   margin: 16px 0;
-  color: var(--dsw-alias-label-primary);
-  background: var(--dsw-alias-markdown-code-block);
+  color: var(--neo-alias-label-primary);
+  background: var(--neo-alias-markdown-code-block);
   border-radius: var(--dsl-code-block-border-radius);
 }
 
@@ -22,7 +22,7 @@
   position: sticky;
   top: 0;
   z-index: 6;
-  background-color: var(--dsw-alias-bg-base);
+  background-color: var(--neo-alias-bg-base);
   border-top-left-radius: var(--dsl-code-block-border-radius);
   border-top-right-radius: var(--dsl-code-block-border-radius);
 }
@@ -40,7 +40,7 @@
 }
 
 .infostring {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font-family: var(--ds-font-family-code);
   font-size: 12px;
   line-height: 18px;
@@ -73,7 +73,7 @@
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-all;
-  background: var(--dsw-alias-markdown-code-block);
+  background: var(--neo-alias-markdown-code-block);
   /* Bottom radii live on <pre>: overflow:hidden on .block would kill the
      sticky banner, and this opaque fill otherwise squares off the wrapper. */
   border-bottom-left-radius: var(--dsl-code-block-border-radius);
@@ -82,7 +82,7 @@
 
 /* Shiki inlines its theme background var; route it to the repo token. */
 .block :where(pre.shiki) {
-  background: var(--dsw-alias-markdown-code-block) !important;
+  background: var(--neo-alias-markdown-code-block) !important;
 }
 
 .block :where(pre) code {
@@ -92,5 +92,5 @@
 }
 
 .plain {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }

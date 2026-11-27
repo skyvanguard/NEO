@@ -2,7 +2,7 @@
  * not this 450) — component-level var pinned to the static scale instead. */
 .dot,
 .matrix {
-  --dsh-state-ongoing: var(--dsw-static-deepseek-450);
+  --neo-state-ongoing: var(--neo-static-brand-450);
 }
 
 /* Solid states: same-color halo via a 0.10-opacity outer layer (::before)
@@ -31,15 +31,15 @@
 }
 
 .dot[data-state='done'] {
-  color: var(--dsw-alias-state-success-primary);
+  color: var(--neo-alias-state-success-primary);
 }
 
 .dot[data-state='warning'] {
-  color: var(--dsw-alias-state-warn-primary);
+  color: var(--neo-alias-state-warn-primary);
 }
 
 .dot[data-state='error'] {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 /* Pixel chase: each outer cell holds a discrete brightness step (flat keyframe
@@ -48,7 +48,7 @@
  * animation-delay (index * -125ms) set inline by the component. */
 .matrix {
   flex: none;
-  color: var(--dsh-state-ongoing);
+  color: var(--neo-state-ongoing);
 }
 
 .cell {

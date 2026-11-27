@@ -13,11 +13,11 @@
   height: 32px;
   padding: 0 8px;
   border-radius: 8px;
-  background: var(--dsw-alias-bg-module-platform);
+  background: var(--neo-alias-bg-module-platform);
 }
 
 .runHeader:focus-visible {
-  outline: 2px solid var(--dsw-alias-state-business-primary);
+  outline: 2px solid var(--neo-alias-state-business-primary);
   outline-offset: -2px;
 }
 
@@ -29,14 +29,14 @@
   align-items: center;
   justify-content: center;
   margin-right: 0;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .runTitle {
   overflow: hidden;
   flex: none;
   max-width: 42%;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 14px;
   font-weight: 510;
   line-height: 24px;
@@ -48,7 +48,7 @@
   overflow: hidden;
   flex: 1;
   min-width: 0;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 18px;
   text-overflow: ellipsis;
@@ -65,7 +65,7 @@
   font-size: 11px;
   font-weight: 510;
   line-height: 16px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   white-space: nowrap;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .phaseHeader:focus-visible {
-  outline: 2px solid var(--dsw-alias-state-business-primary);
+  outline: 2px solid var(--neo-alias-state-business-primary);
   outline-offset: -2px;
   border-radius: 4px;
 }
@@ -93,7 +93,7 @@
   align-items: center;
   justify-content: center;
   margin-right: 0;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .phaseTitle {
@@ -101,7 +101,7 @@
   flex: 0 1 auto;
   min-width: 0;
   max-width: 42%;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 14px;
   line-height: 24px;
   text-overflow: ellipsis;
@@ -112,7 +112,7 @@
   overflow: hidden;
   flex: 1;
   min-width: 0;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 13px;
   line-height: 20px;
   text-overflow: ellipsis;
@@ -123,7 +123,7 @@
   overflow: hidden;
   flex: none;
   width: 132px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 13px;
   line-height: 20px;
   text-align: right;
@@ -136,7 +136,7 @@
   width: 2px;
   height: 2px;
   border-radius: 50%;
-  background: var(--dsw-alias-label-tertiary);
+  background: var(--neo-alias-label-tertiary);
 }
 
 .phaseList {
@@ -171,7 +171,7 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font: inherit;
   text-align: left;
 }
@@ -181,7 +181,7 @@
 }
 
 .memberButton .memberLabel {
-  color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-state-business-primary);
   text-decoration: underline;
   text-underline-position: from-font;
 }
@@ -201,7 +201,7 @@
 }
 
 .memberButton:focus-visible .memberLabelWrap {
-  outline: 2px solid var(--dsw-alias-state-business-primary);
+  outline: 2px solid var(--neo-alias-state-business-primary);
   outline-offset: -1px;
 }
 
@@ -220,7 +220,7 @@
   overflow: hidden;
   flex: 1;
   min-width: 0;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 14px;
   line-height: 24px;
   text-overflow: ellipsis;
@@ -231,7 +231,7 @@
   flex: none;
   overflow: hidden;
   width: 64px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 13px;
   line-height: 20px;
   text-align: right;
@@ -240,7 +240,7 @@
 }
 
 .empty {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 13px;
   line-height: 20px;
   padding: 0;

@@ -124,7 +124,7 @@ describe('web e2e: queue row actions', () => {
     const composerMetrics = await page.locator('[data-composer-card]').evaluate((element) => {
       const style = getComputedStyle(element)
       return {
-        dockInset: Number.parseFloat(style.getPropertyValue('--dsh-composer-dock-inset')),
+        dockInset: Number.parseFloat(style.getPropertyValue('--neo-composer-dock-inset')),
       }
     })
     expect(queueLeftInset).toBeCloseTo(composerMetrics.dockInset, 1)

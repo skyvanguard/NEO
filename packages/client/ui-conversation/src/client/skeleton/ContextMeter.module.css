@@ -16,23 +16,23 @@
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   cursor: pointer;
 }
 
 .trigger:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .track {
   fill: none;
-  stroke: var(--dsw-alias-border-l3);
+  stroke: var(--neo-alias-border-l3);
   stroke-width: 2;
 }
 
 .fill {
   fill: none;
-  stroke: var(--dsw-alias-label-tertiary);
+  stroke: var(--neo-alias-label-tertiary);
   stroke-width: 2;
   stroke-linecap: round;
 }
@@ -45,13 +45,13 @@
   box-sizing: border-box;
   width: 264px;
   padding: 12px;
-  border: 1px solid var(--dsw-alias-border-inverted);
+  border: 1px solid var(--neo-alias-border-inverted);
   border-radius: 12px;
-  background: var(--dsw-specific-menu);
-  box-shadow: var(--dsw-shadow-lv3);
+  background: var(--neo-specific-menu);
+  box-shadow: var(--neo-shadow-lv3);
   font-size: 12px;
   line-height: 20px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   cursor: default;
 }
 
@@ -65,16 +65,16 @@
   margin-left: auto;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .percent {
   font-weight: 500;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .headline {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 /* The headline brackets the reading, so the side a locale leaves empty must
@@ -89,7 +89,7 @@
   margin: 10px 0 12px;
   height: 4px;
   border-radius: 999px;
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
   overflow: hidden;
 }
 
@@ -98,7 +98,7 @@
   min-width: 2px;
   height: 100%;
   border-radius: 1px;
-  background: var(--meter-tint, var(--dsw-alias-label-tertiary));
+  background: var(--meter-tint, var(--neo-alias-label-tertiary));
 }
 
 .swatch {
@@ -112,7 +112,7 @@
 }
 
 .colorSystem {
-  --meter-tint: var(--dsw-static-neutral-bluish-400);
+  --meter-tint: var(--neo-static-neutral-bluish-400);
 }
 
 .colorTools {
@@ -121,7 +121,7 @@
 }
 
 .colorMessages {
-  --meter-tint: var(--dsw-static-blue-450);
+  --meter-tint: var(--neo-static-blue-450);
 }
 
 .rows {
@@ -137,11 +137,11 @@
 }
 
 .row dt {
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .row dd {
   margin: 0;
   font-variant-numeric: tabular-nums;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }

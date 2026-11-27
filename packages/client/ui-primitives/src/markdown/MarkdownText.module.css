@@ -5,8 +5,8 @@
 .markdown {
   min-width: 0;
   overflow-wrap: anywhere;
-  font: var(--dsw-font-markdown-base);
-  color: var(--dsw-alias-label-primary);
+  font: var(--neo-font-markdown-base);
+  color: var(--neo-alias-label-primary);
 }
 
 .markdown strong {
@@ -14,27 +14,27 @@
 }
 
 .markdown h1 {
-  font: var(--dsw-font-markdown-h1);
+  font: var(--neo-font-markdown-h1);
   margin: 32px 0 16px;
 }
 
 .markdown h2 {
-  font: var(--dsw-font-markdown-h2);
+  font: var(--neo-font-markdown-h2);
   margin: 32px 0 16px;
 }
 
 .markdown h3 {
-  font: var(--dsw-font-markdown-h3);
+  font: var(--neo-font-markdown-h3);
   margin: 32px 0 16px;
 }
 
 .markdown h4 {
-  font: var(--dsw-font-markdown-h4);
+  font: var(--neo-font-markdown-h4);
   margin: 16px 0;
 }
 
 .markdown :where(h5, h6) {
-  font: var(--dsw-font-markdown-base-strong);
+  font: var(--neo-font-markdown-base-strong);
   margin: 16px 0;
 }
 
@@ -59,7 +59,7 @@
   /* deepsuite markdown.css uses brand-text (blue in newDesign); this sheet
      keeps design-platform brand-text as near-black, so links use the blue
      business-primary alias instead. */
-  color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-state-business-primary);
   transition: box-shadow var(--ds-transition-duration) var(--ds-ease-in-out);
   position: relative;
   text-decoration: none;
@@ -75,11 +75,11 @@
 .markdown a:hover,
 .markdown a:focus {
   outline: none;
-  text-decoration: underline var(--dsw-alias-state-business-primary);
+  text-decoration: underline var(--neo-alias-state-business-primary);
 }
 
 .markdown a:focus-visible {
-  box-shadow: 0 0 0 2px var(--dsw-alias-state-business-primary);
+  box-shadow: 0 0 0 2px var(--neo-alias-state-business-primary);
 }
 
 .markdown :where(ul, ol) {
@@ -97,7 +97,7 @@
 
 .markdown li::marker {
   line-height: 28px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 /* Nested ol under ul/ol: markers inside (models sometimes emit this shape). */
@@ -128,11 +128,11 @@
   border: none;
   height: 1px;
   margin: 32px 0;
-  background: var(--dsw-alias-border-l2);
+  background: var(--neo-alias-border-l2);
 }
 
 .markdown blockquote {
-  border-left: 2px solid var(--dsw-alias-label-caption);
+  border-left: 2px solid var(--neo-alias-label-caption);
   margin: 16px 0 0;
   padding-left: 14px;
 }
@@ -147,10 +147,10 @@
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  font: var(--dsw-font-markdown-code);
+  font: var(--neo-font-markdown-code);
   font-family: var(--ds-font-family-code);
   font-size: 0.875em !important;
-  background-color: var(--dsw-alias-markdown-inline-code);
+  background-color: var(--neo-alias-markdown-inline-code);
   border-radius: 6px;
   padding: 0 5px;
 }
@@ -168,7 +168,7 @@
 
 .markdown input[type='checkbox'] {
   margin: 0 8px 0 0;
-  accent-color: var(--dsw-alias-label-secondary);
+  accent-color: var(--neo-alias-label-secondary);
 }
 
 .tableScroll {
@@ -186,9 +186,9 @@
 .tableScroll th {
   text-align: start;
   padding: 10px 16px;
-  border-bottom: 1px solid var(--dsw-alias-border-l3);
+  border-bottom: 1px solid var(--neo-alias-border-l3);
   border-top: none;
-  font: var(--dsw-font-markdown-table-head);
+  font: var(--neo-font-markdown-table-head);
   max-width: 320px;
   max-width: min(30vw, 320px);
   min-width: 100px;
@@ -196,8 +196,8 @@
 
 .tableScroll td {
   padding: 10px 16px;
-  border-bottom: 1px solid var(--dsw-alias-border-l2);
-  font: var(--dsw-font-markdown-table);
+  border-bottom: 1px solid var(--neo-alias-border-l2);
+  font: var(--neo-font-markdown-table);
   max-width: 320px;
   max-width: min(30vw, 320px);
   min-width: 100px;
@@ -227,7 +227,7 @@
 }
 
 .imageAlt {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-style: italic;
 }
 
@@ -238,7 +238,7 @@
   height: auto;
   margin: 0;
   border-radius: 8px;
-  background: var(--dsw-alias-bg-base);
+  background: var(--neo-alias-bg-base);
   object-fit: contain;
 }
 
@@ -252,7 +252,7 @@
   border: none;
   background: none;
   font: inherit;
-  color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-state-business-primary);
   text-decoration: none;
   cursor: pointer;
 }
@@ -260,6 +260,6 @@
 .fileMention:hover,
 .fileMention:focus {
   outline: none;
-  text-decoration: underline var(--dsw-alias-state-business-primary);
+  text-decoration: underline var(--neo-alias-state-business-primary);
   text-underline-offset: 3px;
 }
