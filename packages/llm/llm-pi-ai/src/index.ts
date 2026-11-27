@@ -34,7 +34,7 @@
  *         baseURL: https://gateway.acme.example/v1
  *         # Reasoning dialect for a URL pi-ai cannot recognize.
  *         compat:
- *           thinkingFormat: deepseek
+ *           thinkingFormat: zai
  *         models:
  *           - id: acme-large
  *             name: Acme Large
@@ -61,7 +61,7 @@ import { assertUsableApiKey, LlmError } from '@neo/llm'
 import type { AdapterRegistrationHandle, DirectoryRegistrationHandle, LlmConfigurableProvider } from '@neo/llm'
 import { deepEqualJson, installSettingsSection, settingsNamespace } from '@neo/settings'
 import { PiAiAdapter } from './adapter.ts'
-import { catalogProviderIds, catalogProviderTakesApiKey } from './catalog.ts'
+import { catalogProviderIds, catalogProviderOffered } from './catalog.ts'
 import { assertServiceable, Config, resolveProfiles } from './config.ts'
 import type { ResolvedPiAiProviderProfile } from './config.ts'
 import { discoverModels } from './discovery.ts'
@@ -106,7 +106,8 @@ function registrationFacts(profiles: ReadonlyMap<string, ResolvedPiAiProviderPro
 
 /**
  * The configurable-provider directory: every installed catalog route this
- * adapter can authenticate, plus every route the current profiles declare. A
+ * adapter can authenticate and NEO offers, plus every route the current
+ * profiles declare. A
  * hand-declared route has no catalog entry, so without this union it would
  * have no settings address and configuration surfaces could neither show nor
  * edit it.
@@ -137,10 +138,11 @@ function directoryEntries(
   // A provider whose only native method is OAuth leaves this adapter nothing
   // to authenticate with, so offering it would put a card on the settings page
   // whose own posture — no key, credentials discovered by the provider — fails
-  // every request. Catalog *membership* is unaffected, so `declare` above still
-  // answers what pi-ai ships.
+  // every request; a provider NEO does not offer is withheld the same way.
+  // Catalog *membership* is unaffected, so `declare` above still answers what
+  // pi-ai ships.
   for (const provider of catalog) {
-    if (catalogProviderTakesApiKey(provider)) declare(provider, provider)
+    if (catalogProviderOffered(provider)) declare(provider, provider)
   }
   for (const [provider, profile] of profiles) declare(provider, profile.displayName)
   return [...entries.values()]

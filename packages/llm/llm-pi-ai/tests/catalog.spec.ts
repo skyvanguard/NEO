@@ -9,7 +9,7 @@ import FileSettingsProvider from '@neo/settings-file'
 import { settingsNamespace } from '@neo/settings'
 import * as LlmPiAi from '@neo/llm-pi-ai'
 import { PiAiAdapter } from '@neo/llm-pi-ai'
-import { getBuiltinModels } from '@earendil-works/pi-ai/providers/all'
+import { getBuiltinModels, getBuiltinProviders } from '@earendil-works/pi-ai/providers/all'
 import { createModels, getSupportedThinkingLevels } from '@earendil-works/pi-ai'
 import type { Api, Model, OpenAICompletionsCompat, Provider } from '@earendil-works/pi-ai'
 import { resolveProfiles } from '../src/config.ts'
@@ -967,6 +967,29 @@ describe('configurable-provider directory', () => {
       displayName: 'openai-codex',
       settingsNs: 'llm-pi-ai',
       settingsPath: ['providers', 'openai-codex'],
+      declared: false,
+    })
+  })
+
+  it('withholds an api-key catalog provider NEO does not offer', async () => {
+    const ctx = await harness({})
+    const offered = ctx.llm.listConfigurableProviders().map(entry => entry.provider)
+
+    // pi-ai still ships `deepseek` with an api-key method, so only the named
+    // exclusion keeps it off the settings page; its api-key neighbours stay.
+    expect(getBuiltinProviders()).toContain('deepseek')
+    expect(offered).not.toContain('deepseek')
+    expect(offered).toContain('zai')
+  })
+
+  it('still lists an unoffered provider a stored profile names, as a catalog route', async () => {
+    const ctx = await harness({ providers: { deepseek: { apiKeyEnv: KEY_ENV } } })
+
+    expect(ctx.llm.listConfigurableProviders()).toContainEqual({
+      provider: 'deepseek',
+      displayName: 'deepseek',
+      settingsNs: 'llm-pi-ai',
+      settingsPath: ['providers', 'deepseek'],
       declared: false,
     })
   })

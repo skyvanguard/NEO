@@ -157,8 +157,32 @@ export function catalogProviderIds(): readonly string[] {
  * @returns whether the catalog provider takes an api key; false for a route
  *   pi-ai does not ship, which the caller answers for separately.
  */
-export function catalogProviderTakesApiKey(provider: string): boolean {
+function catalogProviderTakesApiKey(provider: string): boolean {
   return catalogProvider(provider)?.auth.apiKey !== undefined
+}
+
+/**
+ * Installed catalog providers NEO never offers as a built-in choice. pi-ai
+ * keeps shipping them and catalog membership still answers for them: a profile
+ * a settings document already stores under one keeps resolving its catalog
+ * defaults and keeps its directory entry, so it stays editable and deletable.
+ * Only the offer of a provider to add leaves them out. The element type is
+ * pi-ai's own provider union, so an upgrade that drops one of these ids fails
+ * compilation here instead of leaving a stale exclusion behind.
+ *
+ * - `deepseek`: NEO carries no DeepSeek integration.
+ */
+const UNOFFERED_CATALOG_PROVIDERS: ReadonlySet<string> = new Set<BuiltinProvider>(['deepseek'])
+
+/**
+ * Whether configuration surfaces offer one installed catalog route as a
+ * provider to add: it takes an api key ({@link catalogProviderTakesApiKey})
+ * and is not withheld by {@link UNOFFERED_CATALOG_PROVIDERS}.
+ * @param provider - an installed catalog provider id.
+ * @returns whether the provider joins the configurable-provider offer.
+ */
+export function catalogProviderOffered(provider: string): boolean {
+  return catalogProviderTakesApiKey(provider) && !UNOFFERED_CATALOG_PROVIDERS.has(provider)
 }
 
 /**
@@ -439,7 +463,7 @@ export interface RouteCatalog {
  * Materialize one route's catalog by merging the installed catalog defaults
  * under the configured entries. A route with no configured `models` serves the
  * installed catalog unchanged, which is what keeps an existing
- * `providers: { deepseek: { apiKeyEnv: … } }` profile working untouched.
+ * `providers: { openai: { apiKeyEnv: … } }` profile working untouched.
  * @param request - the route-level catalog facts.
  * @returns the materialized models and the explicitly configured request caps.
  */
