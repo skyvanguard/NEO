@@ -1,4 +1,4 @@
-/* Transient top-center banner (DeepSeek Chat toast look): contrast fill,
+/* Transient top-center banner: contrast fill,
    inverted label, slide-in, then hold-and-fade. The fade delay/duration MUST
    agree with HOLD_MS/FADE_MS in Toast.tsx: the component unmounts at their
    sum, so a mismatched sheet either cuts the fade or leaves an invisible
