@@ -76,7 +76,8 @@ function usageOf(event: SessionEvent): { turn: number; step: number; usage: Toke
 }
 
 /** Per-(turn,step) dedup state: the last usage sample seen for each step. */
-type StepMap = Map<string, { usage: TokenUsage; time: number }>
+type StepValue = { usage: TokenUsage; time: number }
+type StepMap = Map<string, StepValue>
 
 /** Split decompressed session-log text into events, skipping torn lines. */
 function parseEvents(text: string): SessionEvent[] {
@@ -353,6 +354,17 @@ export function serializeUsageCache(cache: UsageCache): string {
 }
 
 /**
+ * True when `value` is a JSON array of `[string, value]` rows, the only shape
+ * `new Map(rows)` accepts here. Only the row shape is checked; the row values
+ * are trusted like the rest of a cache entry (a wrong one only skews a total
+ * until the session log changes and is re-folded).
+ */
+function isStringKeyedRows<V>(value: unknown): value is [string, V][] {
+  return Array.isArray(value)
+    && value.every(row => Array.isArray(row) && row.length === 2 && typeof row[0] === 'string')
+}
+
+/**
  * Rebuild a {@link UsageCache} from {@link serializeUsageCache} output. A
  * missing, malformed, or version-mismatched payload yields an empty cache (the
  * next aggregate simply refolds), so a corrupt file can never crash the read.
@@ -371,7 +383,8 @@ export function deserializeUsageCache(json: string): UsageCache {
     const [path, raw] = pair as [unknown, unknown]
     if (typeof path !== 'string' || typeof raw !== 'object' || raw === null) continue
     const byDay = (raw as { byDay?: unknown }).byDay
-    if (!Array.isArray(byDay)) continue
+    // Valid JSON can still hold rows that are not [day, totals] pairs; new Map() would throw on them.
+    if (!isStringKeyedRows<UsageTotals>(byDay)) continue
     const e = raw as SerializedEntry
     const entry: CachedSessionUsage = {
       workspace: e.workspace, sessionId: e.sessionId, totals: e.totals,
@@ -379,7 +392,7 @@ export function deserializeUsageCache(json: string): UsageCache {
     }
     // Keep the dedup tail only when fully present, so a truncated/partial entry
     // forces a clean full re-fold rather than tailing from a bogus offset.
-    if (Array.isArray(e.steps) && typeof e.foldedBytes === 'number') {
+    if (isStringKeyedRows<StepValue>(e.steps) && typeof e.foldedBytes === 'number') {
       cache.set(path, { ...entry, steps: new Map(e.steps), foldedBytes: e.foldedBytes })
     } else {
       cache.set(path, entry)

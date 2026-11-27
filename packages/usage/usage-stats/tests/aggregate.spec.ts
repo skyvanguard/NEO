@@ -365,6 +365,17 @@ describe('usage cache persistence', () => {
     expect(entry?.steps).toBeUndefined() // no foldedBytes → tail state dropped
   })
 
+  it('drops a tail whose steps rows are not pairs instead of failing the whole load', () => {
+    const corrupt = JSON.stringify({
+      version: 1,
+      entries: [['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 1, outputTokens: 0, requests: 1, ...zeros }, byDay: [], lastActive: 0, mtimeMs: 1, size: 1, steps: [1], foldedBytes: 10 }]],
+    })
+    const entry = deserializeUsageCache(corrupt).get('/ok')
+    expect(entry?.totals.inputTokens).toBe(1)
+    expect(entry?.steps).toBeUndefined() // malformed tail → next fold is a clean full re-fold
+    expect(entry?.foldedBytes).toBeUndefined()
+  })
+
   it('reads an older tail-less entry, warm-starting it without re-fold state', () => {
     // A cache written before the tail fields existed: totals present, no steps.
     const legacy = JSON.stringify({
@@ -402,6 +413,10 @@ describe('usage cache persistence', () => {
       ['a non-object entry body', ['/bad', 'body']],
       ['an entry body without byDay', ['/bad', bodyWithoutByDay]],
       ['an entry body whose byDay is not an array', ['/bad', { ...validBody, byDay: { '2026-08-19': validBody.totals } }]],
+      // Valid JSON whose byDay rows are not [day, totals] pairs: new Map() would throw on them.
+      ['a byDay row that is not a pair', ['/bad', { ...validBody, byDay: [1] }]],
+      ['a byDay row with only a day', ['/bad', { ...validBody, byDay: [['2026-08-19']] }]],
+      ['a byDay row keyed by a non-string', ['/bad', { ...validBody, byDay: [[20260819, validBody.totals]] }]],
     ])('skips %s and keeps its valid sibling', (_shape, malformed) => {
       const json = JSON.stringify({ version: 1, entries: [malformed, ['/ok', validBody]] })
 
