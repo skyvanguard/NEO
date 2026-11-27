@@ -52,6 +52,7 @@
     "@neo/cordis": "workspace:^"
   },
   "dependencies": {
+    "@neo/util-values": "workspace:*",
     "@neo/schemastery": "workspace:^"
   },
   "devDependencies": {

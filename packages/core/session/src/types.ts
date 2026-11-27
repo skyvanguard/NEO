@@ -11,12 +11,12 @@ import type {
   ToolSchema,
   UserMessage,
 } from '@neo/llm'
-import type { JsonValue } from './json.ts'
+import type { JsonValue } from '@neo/util-values'
 
 // The lossless-JSON payload type belongs to this client-safe face too: a wire
 // contract carrying JSON data must not import the root entry, which merges
 // `ctx.sessions` (a Host-only SessionStore) into every consumer's program.
-export type { JsonValue } from './json.ts'
+export type { JsonValue } from '@neo/util-values'
 
 /** Identifies one session in the store (and its persistence artifacts). */
 export type SessionId = Branded<'SessionId'>
