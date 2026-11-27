@@ -157,6 +157,6 @@ describe('ui-usage browser plugin', () => {
 
   it('the node half is a no-op Host placeholder', () => {
     // The package has no host-side behavior; this only proves the Host entry loads and runs.
-    expect(nodeApply()).toBeUndefined()
+    expect(() => { nodeApply() }).not.toThrow()
   })
 })

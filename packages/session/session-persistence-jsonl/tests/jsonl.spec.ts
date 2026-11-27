@@ -51,12 +51,12 @@ vi.mock('node:fs/promises', async (importOriginal) => {
       }
       return actual.readdir(...args)
     }) as typeof actual.readdir,
-    rm: (async (...args: Parameters<typeof actual.rm>) => {
+    rm: async (...args: Parameters<typeof actual.rm>) => {
       if (rmFault.path === undefined || String(args[0]) !== rmFault.path) return actual.rm(...args)
       rmFault.path = undefined
       await rmFault.before?.()
       throw Object.assign(new Error(`simulated ${rmFault.code} rm failure`), { code: rmFault.code })
-    }) as typeof actual.rm,
+    },
   }
 })
 
