@@ -79,7 +79,7 @@
       name: '@neo/llm-retry'
 
     # User-settings document (`$NEO_HOME/settings.yaml`, hot-reloaded): a
-    # `llm-deepseek:` or `llm-pi-ai:` section there overrides the adapter entries
+    # `llm-pi-ai:` section there overrides the adapter entries
     # below without a restart, and is what the web Models page writes.
     - id: settings
       name: '@neo/settings-file'

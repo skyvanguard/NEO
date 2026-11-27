@@ -1049,9 +1049,6 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../../llm/llm
-      '@neo/llm-deepseek':
-        specifier: workspace:^
-        version: link:../../llm/llm-deepseek
       '@neo/llm-pi-ai':
         specifier: workspace:^
         version: link:../../llm/llm-pi-ai
@@ -5005,21 +5002,6 @@ importers:
         specifier: workspace:^
         version: link:../../runtime-diagnostics/invariants
 
-  packages/identity/anonymous-user-id:
-    devDependencies:
-      '@neo/brand':
-        specifier: workspace:^
-        version: link:../../util/brand
-      '@neo/cordis':
-        specifier: workspace:^
-        version: link:../../../vendor/cordis
-      '@neo/home-paths':
-        specifier: workspace:^
-        version: link:../../util/home-paths
-      '@neo/invariants':
-        specifier: workspace:^
-        version: link:../../runtime-diagnostics/invariants
-
   packages/interaction/commands:
     dependencies:
       zod:
@@ -5275,40 +5257,6 @@ importers:
         specifier: workspace:^
         version: link:../../util/timeout
 
-  packages/llm/llm-deepseek:
-    dependencies:
-      '@neo/schemastery':
-        specifier: link:../../../vendor/schemastery
-        version: link:../../../vendor/schemastery
-      eventsource-parser:
-        specifier: ^3.1.0
-        version: 3.1.0
-    devDependencies:
-      '@neo/anonymous-user-id':
-        specifier: workspace:^
-        version: link:../../identity/anonymous-user-id
-      '@neo/cordis':
-        specifier: workspace:^
-        version: link:../../../vendor/cordis
-      '@neo/credentials':
-        specifier: workspace:^
-        version: link:../../credentials/credentials
-      '@neo/invariants':
-        specifier: workspace:^
-        version: link:../../runtime-diagnostics/invariants
-      '@neo/launch-environment':
-        specifier: workspace:^
-        version: link:../../util/launch-environment
-      '@neo/llm':
-        specifier: workspace:^
-        version: link:../llm
-      '@neo/settings':
-        specifier: workspace:^
-        version: link:../../settings/settings
-      '@neo/timeout':
-        specifier: workspace:^
-        version: link:../../util/timeout
-
   packages/llm/llm-pi-ai:
     dependencies:
       '@earendil-works/pi-ai':
@@ -5336,9 +5284,6 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../llm
-      '@neo/llm-deepseek':
-        specifier: workspace:^
-        version: link:../llm-deepseek
       '@neo/settings':
         specifier: workspace:^
         version: link:../../settings/settings
@@ -12042,10 +11987,6 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
-  eventsource-parser@3.1.0:
-    resolution: {integrity: sha512-kJezFj9YFAMLeORyi7aCLxLbD5/qWMQnoMVlVPyHIll7lgRJCc3JVln9Vgl9nwQi0YkMnhdGTMNn7CkRRAptMg==}
-    engines: {node: '>=18.0.0'}
-
   eventsource-parser@3.1.1:
     resolution: {integrity: sha512-EKN1vKAMcZ8MlYMpaNuxN6R9yakzH6uajHcHVTqWJzvu5pWw9DyhbP35HH8MVBQ+dZjAfDxk+A8NiR9KWaXiyQ==}
     engines: {node: '>=18.0.0'}
@@ -16830,8 +16771,6 @@ snapshots:
   esutils@2.0.3: {}
 
   etag@1.8.1: {}
-
-  eventsource-parser@3.1.0: {}
 
   eventsource-parser@3.1.1: {}
 
