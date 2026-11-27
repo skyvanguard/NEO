@@ -914,7 +914,6 @@ function installedArtifactEnvironment(consumerRoot: string): NodeJS.ProcessEnv {
   delete environment.NODE_PATH
   environment.NEO_HOME = resolve(consumerRoot, '.neo')
   environment.NEO_AGENTS_HOME = resolve(consumerRoot, '.agents')
-  environment.DEEPSEEK_API_KEY = 'keyless-installed-web-no-call'
   environment.LANG = 'en_US.UTF-8'
   environment.LC_ALL = 'en_US.UTF-8'
   environment.LC_CTYPE = 'en_US.UTF-8'

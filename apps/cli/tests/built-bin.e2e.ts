@@ -490,7 +490,6 @@ describe.skipIf(!existsSync(dshBin))('dsh BUILT bin (node lib/bin.js, no tsx)', 
     try {
       const result = await runBuiltBin(['--profile', 'web', '--patch', invalidProvider], {
         NEO_HOME: home,
-        DEEPSEEK_API_KEY: 'keyless-invalid-config',
       })
       expect(result.code).toBe(1)
       expect(result.stdout).toBe('')

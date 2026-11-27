@@ -1435,6 +1435,40 @@ export function runCoordinatorContract(name: string, makeFixture: () => Promise<
       }
     })
 
+    it('opens a log containing the retired DeepSeek search request record', async () => {
+      // The removed DeepSeek search provider wrote this record without an
+      // ignorable marker; separate backend lifecycles force a cold read.
+      const fix = await makeFixture()
+      const id = SessionId('retired-search-request')
+      const seq = oneTurnLog().length
+      const retired = {
+        type: 'web/deepseek-search-llm-request',
+        seq,
+        time: 99,
+        data: { endpoint: 'https://search.test/messages', apiVersion: '2023-06-01', body: {} },
+      } as unknown as SessionEvent
+      const first = await freshCtx(fix)
+      try {
+        await first.ctx.sessionPersistence.create(meta(id, WORK))
+        await first.ctx.sessionPersistence.append(id, [...oneTurnLog(), retired])
+      } finally {
+        await first.fiber.dispose()
+      }
+
+      const second = await freshCtx(fix)
+      try {
+        {
+          using preparation = await second.ctx.sessionPersistence.prepare(id)
+          expect(preparation.session.deriveMessages().map(message => message.role)).toEqual(['user', 'assistant'])
+        }
+        const loaded = await second.ctx.sessionPersistence.load(id)
+        expect(loaded.events[seq]).toMatchObject({ type: 'web/deepseek-search-llm-request' })
+      } finally {
+        await second.fiber.dispose()
+        await fix.cleanup()
+      }
+    })
+
     it('round-trips a header with parentSession (fork lineage)', async () => {
       const fix = await makeFixture()
       const { ctx, fiber } = await freshCtx(fix)

@@ -103,7 +103,6 @@
     "@neo/user-questions": "workspace:^",
     "@neo/web": "workspace:^",
     "@neo/web-fetch-http": "workspace:^",
-    "@neo/web-search-deepseek": "workspace:^",
     "@neo/web-search-exa": "workspace:^",
     "@neo/web-search-perplexity": "workspace:^",
     "@neo/workflow": "workspace:^",

@@ -32,7 +32,3 @@
         - 'button "展开设置: Agent 循环"':
           - text: Agent 循环 Agent 如何派发工具调用。
           - img
-      - listitem:
-        - 'button "展开设置: 网页搜索"':
-          - text: 网页搜索 DeepSeek 搜索提供方。
-          - img
