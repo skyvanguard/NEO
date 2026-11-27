@@ -2,10 +2,14 @@
 #
 # El workflow upstream de deepseek-harness dependia de runners self-hosted
 # (Wine, dsh-win-ci) que este fork no tiene. Este es un CI Linux minimo y
-# suficiente para el fork: construye la lib, corre el probe de invariantes de
-# build (que atrapa una dep runtime no declarada en los artefactos typert —
-# la clase de fallo que rompio un deploy), el typecheck, el lint y los tests
-# (en Linux corren las suites que Windows excluye: hooks, bash, subprocess).
+# suficiente para el fork: construye la lib, corre hygiene (knip, publint,
+# constraints, licencias, invariantes de paquete y de build —que atrapan una
+# dep runtime no declarada en los artefactos typert, la clase de fallo que
+# rompio un deploy—, config de Cordis, tipos NodeNext, clausura de runtime),
+# el typecheck, el lint y los tests con el gate de cobertura de AGENTS.md:
+# 100 % por archivo en packages/*/*/src (en Linux corren las suites que
+# Windows excluye: hooks, bash, subprocess). Sin ese gate, el codigo propio
+# del fork quedo sin tests sin que nada lo frenara.
 name: CI
 
 on:
@@ -38,11 +42,14 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: build lib
         run: pnpm run build:lib
-      - name: built-package invariants (undeclared runtime deps)
-        run: pnpm run verify-built-package-invariants
+      # Incluye verify-built-package-invariants (deps runtime no declaradas).
+      - name: hygiene
+        run: pnpm run hygiene
       - name: typecheck
         run: pnpm run typecheck
       - name: lint
         run: pnpm run lint
-      - name: test
-        run: pnpm run test
+      # Toda la suite: instrumentada con el umbral por archivo, y aparte las
+      # suites pesadas exentas sin instrumentar (scripts/coverage-exempt.ts).
+      - name: test + coverage gate
+        run: pnpm run check:ci:coverage
