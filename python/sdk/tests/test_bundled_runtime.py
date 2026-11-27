@@ -1,7 +1,7 @@
 """Keyless boot tests for the production exe and development node carrier.
 
-Each carrier skips independently when absent. The dummy API key only satisfies
-adapter loading; initialize and shutdown do not call a model.
+Each carrier skips independently when absent. Initialize and shutdown never
+call a model, so the routes below need neither a key nor a reachable endpoint.
 """
 
 from __future__ import annotations
@@ -18,10 +18,21 @@ _MODES = ("exe", "node")
 _REPO_ROOT = Path(__file__).parents[3]
 _MINIMAL_CONFIG = _REPO_ROOT / "examples" / "jsonrpc-agent" / "minimal.cordis.yml"
 
-# The config must include the JSON-RPC serving plugin.
+# The config must include the JSON-RPC serving plugin and an adapter for the
+# provider `initialize` names; the server mounts none of its own.
 _CORDIS_YML = """\
 - id: sdk-jsonrpc-server
   name: '@neo/sdk-jsonrpc-server'
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
+  config:
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: 'http://127.0.0.1:9/v1'
+        apiKeyEnv: LLM_API_KEY
+        models:
+          - id: deepseek-v4-pro
 - id: agent-core
   name: '@neo/agent-spine-demo'
   config:
@@ -61,9 +72,6 @@ def _client(tmp_path: Path, launch_args: tuple[str, ...]) -> NeoClient:
                 "NEO_CORDIS_CONFIG": "./cordis.yml",
                 "NEO_SESSION_ROOT": str(tmp_path / "sessions"),
                 "NEO_CWD": str(tmp_path),
-                # The lazily mounted adapter requires a key even without a model call.
-                "DEEPSEEK_API_KEY": "sk-dummy-for-boot",
-                "DEEPSEEK_BASE_URL": "http://127.0.0.1:9",
             },
             request_timeout_seconds=120,
         )
@@ -92,7 +100,6 @@ def test_python_sdk_boots_minimal_jsonrpc_config(tmp_path: Path, mode: str) -> N
         session_root=str(tmp_path / "sessions"),
         cordis=str(_MINIMAL_CONFIG),
         env={
-            "NEO_MODEL": model,
             "NEO_CONTEXT_WINDOW": "1000000",
             "NEO_SYSTEM_PROMPT": "You are the Python SDK minimal boot test agent.",
         },

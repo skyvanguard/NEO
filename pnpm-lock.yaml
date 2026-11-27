@@ -8571,9 +8571,6 @@ importers:
       '@neo/agent-spine-demo':
         specifier: workspace:^
         version: link:../../packages/examples/agent-spine-demo
-      '@neo/anonymous-user-id':
-        specifier: workspace:^
-        version: link:../../packages/identity/anonymous-user-id
       '@neo/app-boot':
         specifier: workspace:^
         version: link:../../packages/boot/app-boot
@@ -8676,9 +8673,6 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../../packages/llm/llm
-      '@neo/llm-deepseek':
-        specifier: workspace:^
-        version: link:../../packages/llm/llm-deepseek
       '@neo/llm-pi-ai':
         specifier: workspace:^
         version: link:../../packages/llm/llm-pi-ai

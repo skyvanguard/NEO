@@ -24,8 +24,9 @@ import sys
 
 env_dump = os.environ["ENV_DUMP"]
 json.dump({
-    "DEEPSEEK_API_KEY": os.environ.get("DEEPSEEK_API_KEY"),
-    "DEEPSEEK_BASE_URL": os.environ.get("DEEPSEEK_BASE_URL"),
+    "LLM_API_KEY": os.environ.get("LLM_API_KEY"),
+    "LLM_BASE_URL": os.environ.get("LLM_BASE_URL"),
+    "LLM_MODEL": os.environ.get("LLM_MODEL"),
     "NEO_CWD": os.environ.get("NEO_CWD"),
     "NEO_SESSION_ROOT": os.environ.get("NEO_SESSION_ROOT"),
     "NEO_CORDIS_CONFIG": os.environ.get("NEO_CORDIS_CONFIG"),
@@ -101,8 +102,8 @@ for line in sys.stdin:
         env={
             "ENV_DUMP": str(env_dump),
             "INIT_DUMP": str(init_dump),
-            "DEEPSEEK_API_KEY": "env-key",
-            "DEEPSEEK_BASE_URL": "http://127.0.0.1:4321",
+            "LLM_API_KEY": "env-key",
+            "LLM_BASE_URL": "http://127.0.0.1:4321",
         },
     ) as harness:
         result = harness.run("say hello", session_id="main")
@@ -111,8 +112,9 @@ for line in sys.stdin:
     assert result.finish_reason == "max-tokens"
     assert result.events[-1]["type"] == "turn/end"
     dumped_env = json.loads(env_dump.read_text())
-    assert dumped_env["DEEPSEEK_API_KEY"] == "env-key"
-    assert dumped_env["DEEPSEEK_BASE_URL"] == "http://127.0.0.1:4321"
+    assert dumped_env["LLM_API_KEY"] == "env-key"
+    assert dumped_env["LLM_BASE_URL"] == "http://127.0.0.1:4321"
+    assert dumped_env["LLM_MODEL"] == "deepseek-v4-flash"
     assert dumped_env["NEO_CWD"] == str(tmp_path)
     assert dumped_env["NEO_SESSION_ROOT"] == str(tmp_path / "sessions")
     assert dumped_env["NEO_CORDIS_CONFIG"] == str(tmp_path / "cordis.yml")

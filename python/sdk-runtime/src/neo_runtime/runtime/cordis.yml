@@ -13,12 +13,21 @@
     workspaceContext:
       maxBytes: 65536
 
-# Stock DeepSeek adapters. The adapter resolves DEEPSEEK_API_KEY through the
-# credential seam and, with no provider mounted here, from the launching
-# environment; DEEPSEEK_BASE_URL follows the same environment ladder. Neither
-# is inlined, so this file names no secret and no route.
-- id: llm-deepseek
-  name: '@neo/llm-deepseek'
+# One hand-declared OpenAI-compatible route, kept on the `deepseek-official`
+# id the SDK initializes by default. LLM_BASE_URL selects the endpoint
+# (default: a local llama-server) and LLM_API_KEY resolves per request from the
+# launching environment, so this file names no secret. The SDK exports the
+# session's model as LLM_MODEL, so the route serves exactly the model it requests.
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
+  config:
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
+        apiKeyEnv: LLM_API_KEY
+        models:
+          - id: !!js process.env.LLM_MODEL ?? 'deepseek-v4-flash'
 
 # JSONL persistence; $NEO_SESSION_ROOT wins over ./.sessions in the process cwd.
 - id: sessions
