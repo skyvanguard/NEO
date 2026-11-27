@@ -23,11 +23,11 @@ import { zh } from '../src/client/locales.ts'
 const sid = (k: string): SessionId => k as SessionId
 
 const GROUPS = [{
-  id: 'deepseek-official',
+  id: 'neo-default-route',
   name: 'DeepSeek',
   models: [
     {
-      id: 'deepseek-v4-flash',
+      id: 'neo-default-model',
       name: 'DeepSeek-V4-Flash',
       reasoning: {
         efforts: [
@@ -39,7 +39,7 @@ const GROUPS = [{
       },
     },
     {
-      id: 'deepseek-v4-pro',
+      id: 'neo-large-model',
       name: 'DeepSeek-V4-Pro',
       reasoning: {
         efforts: [
@@ -56,7 +56,7 @@ const GROUPS = [{
 /** Boot the plugin over fake faces + a stateful fake host (current moves on selectModel). */
 async function bench() {
   const ctx = new Context()
-  let current: ModelSelection = { provider: 'deepseek-official', model: 'deepseek-v4-flash' }
+  let current: ModelSelection = { provider: 'neo-default-route', model: 'neo-default-model' }
   const calls = { models: 0, select: 0 }
   ctx.provide('connection', { api: { sessions: {
     models: () => {
@@ -161,18 +161,18 @@ describe('ui-model-selection dual entry', () => {
     const seatFace = b.seat().inject!(sid('s1'))
     // Switch through the SEAT entry.
     expect(await seatFace.select({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'neo-default-route',
+      model: 'neo-large-model',
       reasoningEffort: 'max',
     })).toBe(true)
     expect(b.hostCurrent()).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'neo-default-route',
+      model: 'neo-large-model',
       reasoningEffort: 'max',
     })
     expect(seatFace.directory.getSnapshot().current).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'neo-default-route',
+      model: 'neo-large-model',
       reasoningEffort: 'max',
     })
     // The POPUP's next options pass reflects it without a seat-side reload.
@@ -188,8 +188,8 @@ describe('ui-model-selection dual entry', () => {
     const pro = options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')!
     await b.contribution().ui.onSelect(pro, projection('s1'))
     expect(seatFace.directory.getSnapshot().current).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'neo-default-route',
+      model: 'neo-large-model',
       reasoningEffort: 'high',
     })
   })
@@ -211,14 +211,14 @@ describe('ui-model-selection dual entry', () => {
     const b = await bench()
     b.mint('s1')
     const face = b.seat().inject!(sid('s1'))
-    await face.select({ provider: 'deepseek-official', model: 'deepseek-v4-pro' })
-    b.setHostCurrent({ provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    await face.select({ provider: 'neo-default-route', model: 'neo-large-model' })
+    b.setHostCurrent({ provider: 'neo-default-route', model: 'neo-default-model' })
 
     b.ctx.emit('connection/reset')
     expect(face.directory.getSnapshot()).toMatchObject({ current: null, status: 'loading' })
     await Promise.resolve()
     expect(face.directory.getSnapshot()).toMatchObject({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      current: { provider: 'neo-default-route', model: 'neo-default-model' },
       status: 'ready',
     })
   })
@@ -270,7 +270,7 @@ describe('ui-model-selection dual entry', () => {
     // A model the route serves but no longer advertises: the seat prompts for
     // a selection, the composer stays usable. Blocking here would break a
     // supported configuration (a narrowed `models` list over a live route).
-    b.setHostCurrent({ provider: 'deepseek-official', model: 'unlisted' })
+    b.setHostCurrent({ provider: 'neo-default-route', model: 'unlisted' })
     face.load()
     await Promise.resolve()
     await Promise.resolve()
@@ -312,12 +312,12 @@ describe('ui-model-selection dual entry', () => {
     const face = b.seat().inject!(sid('child'))
     expect(face.available).toBe(false)
     face.load()
-    await expect(face.select({ provider: 'deepseek', model: 'deepseek-v4-pro' })).resolves.toBe(false)
+    await expect(face.select({ provider: 'deepseek', model: 'neo-large-model' })).resolves.toBe(false)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).load())
       .rejects.toThrow(/unavailable for addressed subagent/)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).select({
       provider: 'deepseek',
-      model: 'deepseek-v4-pro',
+      model: 'neo-large-model',
     })).rejects.toThrow(/unavailable for addressed subagent/)
     b.ctx.emit('connection/reset')
     await Promise.resolve()

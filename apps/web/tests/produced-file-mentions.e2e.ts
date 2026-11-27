@@ -59,7 +59,7 @@ function mentionFixture(): string {
         name: 'write',
         arguments: call.args,
       })),
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'neo-default-route', model: 'neo-default-model' },
     }),
   }, { surfaceOp: 'append' })
   for (const call of calls) {
@@ -93,7 +93,7 @@ function mentionFixture(): string {
           DONE,
         ].join('\n'),
       }],
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'neo-default-route', model: 'neo-default-model' },
     }),
   }, { surfaceOp: 'append' })
   session.append('step/end', { turn: 1, step: 2 })

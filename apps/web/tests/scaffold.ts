@@ -108,11 +108,11 @@ const SHIPPED_PRESET_DIR = join(REPO_ROOT, 'apps/cli/config/agent-presets')
 // catch-all would leave resolveModelInfo unroutable and compaction-basic's
 // post-step pressure check would warn every step). The published
 // contextWindow keeps that pressure path provably inert for small fixtures.
-// The id stays `deepseek-official` so recorded session fixtures keep routing.
+// The id stays `neo-default-route` so recorded session fixtures keep routing.
 const REPLAY_PROVIDERS = [{
-  id: 'deepseek-official',
+  id: 'neo-default-route',
   name: 'DeepSeek',
-  models: [{ id: 'deepseek-v4-flash', name: 'DeepSeek-V4-Flash', contextWindow: 128_000 }],
+  models: [{ id: 'neo-default-model', name: 'DeepSeek-V4-Flash', contextWindow: 128_000 }],
 }]
 
 /**

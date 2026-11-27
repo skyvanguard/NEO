@@ -15,8 +15,8 @@
       - id: acp-agent
         name: '@neo/acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
+          provider: neo-default-route
+          model: neo-default-model
           persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: none
           workspaceContext:
@@ -32,10 +32,10 @@
             name: '@neo/llm-replay'
             config:
               providers:
-                - id: deepseek-official
+                - id: neo-default-route
                   name: DeepSeek
                   models:
-                    - id: deepseek-v4-flash
+                    - id: neo-default-model
                       inputModalities: [text, image]
-                    - id: deepseek-v4-pro
+                    - id: neo-large-model
                       inputModalities: [text]

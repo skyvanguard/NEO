@@ -13,7 +13,7 @@
     workspaceContext:
       maxBytes: 65536
 
-# One hand-declared OpenAI-compatible route, kept on the `deepseek-official`
+# One hand-declared OpenAI-compatible route, kept on the `neo-default-route`
 # id the SDK initializes by default. LLM_BASE_URL selects the endpoint
 # (default: a local llama-server) and LLM_API_KEY resolves per request from the
 # launching environment, so this file names no secret. The SDK exports the
@@ -22,12 +22,12 @@
   name: '@neo/llm-pi-ai'
   config:
     providers:
-      deepseek-official:
+      neo-default-route:
         api: openai-completions
         baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
         apiKeyEnv: LLM_API_KEY
         models:
-          - id: !!js process.env.LLM_MODEL ?? 'deepseek-v4-flash'
+          - id: !!js process.env.LLM_MODEL ?? 'neo-default-model'
 
 # JSONL persistence; $NEO_SESSION_ROOT wins over ./.sessions in the process cwd.
 - id: sessions

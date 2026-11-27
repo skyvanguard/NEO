@@ -76,7 +76,7 @@ CUSTOM_CORDIS = """\
   name: '@neo/llm-pi-ai'
   config:
     providers:
-      deepseek-official:
+      neo-default-route:
         api: openai-completions
         baseURL: !!js process.env.LLM_BASE_URL
         apiKeyEnv: LLM_API_KEY
@@ -527,7 +527,7 @@ def smoke_sdk_default(base_url: str) -> None:
         root = Path(temporary).resolve()
         sessions = root / "sessions"
         with Neo(
-            provider="deepseek-official",
+            provider="neo-default-route",
             model="smoke-model",
             cwd=str(root),
             session_root=str(sessions),
@@ -549,7 +549,7 @@ def smoke_sdk_custom(base_url: str, executable: Path) -> None:
         cordis = root / "cordis.yml"
         cordis.write_text(CUSTOM_CORDIS)
         with Neo(
-            provider="deepseek-official",
+            provider="neo-default-route",
             model="smoke-model",
             cwd=str(root),
             session_root=str(sessions),
@@ -578,7 +578,7 @@ def smoke_sdk_minimal(base_url: str, executable: Path) -> None:
         prompt = f"{MINIMAL_PROMPT}\n{MINIMAL_EDITOR_PATH_PREFIX}{editor_path}"
         sessions = root / "sessions"
         with Neo(
-            provider="deepseek-official",
+            provider="neo-default-route",
             model="smoke-model",
             cwd=str(root),
             session_root=str(sessions),
@@ -608,7 +608,7 @@ def smoke_sdk_snapshot(base_url: str, executable: Path, update_snapshots: bool) 
         cordis = root / "cordis.yml"
         cordis.write_text(CUSTOM_CORDIS)
         with Neo(
-            provider="deepseek-official",
+            provider="neo-default-route",
             model="smoke-model",
             cwd=str(root),
             session_root=str(sessions),
@@ -658,7 +658,7 @@ def smoke_direct(base_url: str, executable: Path) -> None:
         }
         peer = RuntimePeer([str(executable)], root, environment)
         try:
-            peer.send({"jsonrpc": "2.0", "id": "initialize", "method": "initialize", "params": {"cwd": str(root), "provider": "deepseek-official", "model": "smoke-model"}})
+            peer.send({"jsonrpc": "2.0", "id": "initialize", "method": "initialize", "params": {"cwd": str(root), "provider": "neo-default-route", "model": "smoke-model"}})
             peer.read_until(lambda message: message.get("id") == "initialize")
             peer.send({
                 "jsonrpc": "2.0",

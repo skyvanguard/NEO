@@ -336,20 +336,20 @@ describe('HarnessSdkJsonRpcServer', () => {
       const parentHandle = await ctx.agents.create({
         sessionId: SessionId('main'),
         meta: { cwd: storageDir },
-        agentOptions: { provider: 'deepseek-official', model: 'deepseek-official' },
+        agentOptions: { provider: 'neo-default-route', model: 'neo-default-route' },
       })
       // A custom in-process provider may own its child at the provider/root
       // scope while preserving durable parent lineage.
       const handle = await ctx.agents.create({
         sessionId: SessionId('child-session'),
         meta: { cwd: storageDir, parentSession: SessionId('main') },
-        agentOptions: { provider: 'deepseek-official', model: 'deepseek-official' },
+        agentOptions: { provider: 'neo-default-route', model: 'neo-default-route' },
       })
       expect(ctx.agents.roots()).toContain(handle.agent)
       const parentlessHandle = await parentHandle.agent.ctx.agents.create({
         sessionId: SessionId('parentless-child-session'),
         meta: { cwd: storageDir },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       await settleSubagent(ctx, parentHandle.agent, {
         provider: 'spawn',
@@ -406,12 +406,12 @@ describe('HarnessSdkJsonRpcServer', () => {
       const parentHandle = await ctx.agents.create({
         sessionId: SessionId('collision-parent'),
         meta: { cwd: storageDir },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       const collidingChild = await parentHandle.agent.ctx.agents.create({
         sessionId: SessionId('remote-run-id'),
         meta: { cwd: storageDir, parentSession: SessionId('collision-parent') },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
 
       await settleSubagent(ctx, parentHandle.agent, {
@@ -445,12 +445,12 @@ describe('HarnessSdkJsonRpcServer', () => {
       const parentHandle = await ctx.agents.create({
         sessionId: SessionId('continuation-parent'),
         meta: { cwd: storageDir },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       const childHandle = await parentHandle.agent.ctx.agents.create({
         sessionId: SessionId('continuation-child'),
         meta: { cwd: storageDir, parentSession: SessionId('continuation-parent') },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
 
       await settleSubagent(ctx, parentHandle.agent, {
@@ -490,12 +490,12 @@ describe('HarnessSdkJsonRpcServer', () => {
       const oldParent = await ctx.agents.create({
         sessionId: SessionId('old-parent'),
         meta: { cwd: storageDir },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       const oldChild = await oldParent.agent.ctx.agents.create({
         sessionId: SessionId('reused-child'),
         meta: { cwd: storageDir, parentSession: SessionId('old-parent') },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       const first = Promise.withResolvers<SubagentResult>()
       const sameLifetime = Promise.withResolvers<SubagentResult>()
@@ -531,12 +531,12 @@ describe('HarnessSdkJsonRpcServer', () => {
       const newParent = await ctx.agents.create({
         sessionId: SessionId('new-parent'),
         meta: { cwd: storageDir },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       const newChild = await newParent.agent.ctx.agents.create({
         sessionId: SessionId('reused-child'),
         meta: { cwd: storageDir, parentSession: SessionId('new-parent') },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       currentLocalAgent = newChild.agent
       const secondRun = await ctx.subagents.start('reused', {
@@ -589,12 +589,12 @@ describe('HarnessSdkJsonRpcServer', () => {
       const parent = await ctx.agents.create({
         sessionId: SessionId('provider-reuse-parent'),
         meta: { cwd: storageDir },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       const child = await parent.agent.ctx.agents.create({
         sessionId: SessionId('provider-reuse-child'),
         meta: { cwd: storageDir, parentSession: SessionId('provider-reuse-parent') },
-        agentOptions: { model: 'deepseek-official' },
+        agentOptions: { model: 'neo-default-route' },
       })
       const localResult = Promise.withResolvers<SubagentResult>()
       const remoteResult = Promise.withResolvers<SubagentResult>()
@@ -682,18 +682,18 @@ describe('HarnessSdkJsonRpcServer', () => {
       parentHandle = await ctx.agents.create({
         sessionId: SessionId('fallback-parent'),
         meta: { cwd: storageDir },
-        agentOptions: { provider: 'deepseek-official', model: 'deepseek-official' },
+        agentOptions: { provider: 'neo-default-route', model: 'neo-default-route' },
       })
       handle = await parentHandle.agent.ctx.agents.create({
         sessionId: SessionId('fallback-child-session'),
         meta: { cwd: storageDir, parentSession: SessionId('fallback-parent') },
-        agentOptions: { provider: 'deepseek-official', model: 'deepseek-official' },
+        agentOptions: { provider: 'neo-default-route', model: 'neo-default-route' },
       })
       const fallbackChild = handle.agent
       failedHandle = await parentHandle.agent.ctx.agents.create({
         sessionId: SessionId('failed-child-session'),
         meta: { cwd: storageDir },
-        agentOptions: { provider: 'deepseek-official', model: 'deepseek-official' },
+        agentOptions: { provider: 'neo-default-route', model: 'neo-default-route' },
       })
       const missedStartResult = Promise.withResolvers<SubagentResult>()
       const disposeMissedStartProvider = ctx.subagents.registerProvider({
@@ -803,7 +803,7 @@ describe('HarnessSdkJsonRpcServer', () => {
     }
   })
 
-  it.each(['private', 'deepseek-official'])(
+  it.each(['private', 'neo-default-route'])(
     'rejects provider %s when no registered adapter serves it, mounting none of its own',
     async (provider) => {
       const storageDir = await mkdtemp(join(tmpdir(), 'dsh-jsonrpc-new-llm-'))
@@ -833,7 +833,7 @@ describe('HarnessSdkJsonRpcServer', () => {
         const server = new HarnessSdkJsonRpcServer(ctx, new FakeTransport())
         await expect(server.initialize({
           cwd: storageDir,
-          provider: 'deepseek-official',
+          provider: 'neo-default-route',
           model: 'model',
           maxTokens,
         })).rejects.toThrow('initialize maxTokens must be a positive safe integer')

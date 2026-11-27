@@ -304,17 +304,17 @@ const OPENAI_REASONING = {
 function fixtureModelGroups(): ModelProviderGroup[] {
   return [
     {
-      id: 'deepseek-official',
+      id: 'neo-default-route',
       name: 'DeepSeek',
       models: [
         {
-          id: 'deepseek-v4-flash',
+          id: 'neo-default-model',
           name: 'DeepSeek-V4-Flash',
           description: '快速响应',
           reasoning: DEEPSEEK_REASONING,
         },
         {
-          id: 'deepseek-v4-pro',
+          id: 'neo-large-model',
           name: 'DeepSeek-V4-Pro',
           description: '复杂任务',
           reasoning: DEEPSEEK_REASONING,
@@ -377,7 +377,7 @@ function buildAlphaLog(): SessionEvent[] {
   // route capacity that accompanied them just as the live prompt path does.
   push({
     type: 'request/context',
-    data: { provider: 'deepseek-official', model: 'deepseek-v4-flash', contextWindow: 128_000 },
+    data: { provider: 'neo-default-route', model: 'neo-default-model', contextWindow: 128_000 },
   })
   for (let turn = 0; turn < 60; turn++) {
     push({ type: 'turn/start', data: { turn } })
@@ -1520,7 +1520,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
   const logs = new Map<SessionId, SessionEvent[]>([[sid('fx-alpha'), buildAlphaLog()]])
   const modelSelections = new Map<SessionId, ModelSelection>(sessions.map(session => [
     session.sessionId,
-    { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    { provider: 'neo-default-route', model: 'neo-default-model' },
   ]))
   const attachments = new Map<string, { attachment: ImageAttachmentRef; data: string }>([[
     String(FIXTURE_IMAGE_REF.attachmentId),
@@ -2267,7 +2267,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
           sessionId: requestedId ?? sid(`fx-${nextSession++}`), updatedAt: Date.now(), running: false, blank: true, cwd,
         }
         sessions.push(created)
-        modelSelections.set(created.sessionId, { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+        modelSelections.set(created.sessionId, { provider: 'neo-default-route', model: 'neo-default-model' })
         attachedSessions += 1
         const emitSession = (): void => {
           // Mirrors the host: the frame fires at creation, so blank is constantly true.
@@ -2377,7 +2377,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
       },
       models: request => ok(request, {
         current: modelSelections.get(request.payload.sessionId)
-          ?? { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+          ?? { provider: 'neo-default-route', model: 'neo-default-model' },
         // The fixture's routes all serve; a surface exercising the blocked
         // posture drives it through its own stub.
         routable: true,
@@ -2448,7 +2448,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
         // Capacity parallel of the host token-meter's request/context record:
         // log-only, appended inside the open turn, and deduplicated against the
         // route already recorded (the fixture never varies contextWindow).
-        const selection = modelSelections.get(id) ?? { provider: 'deepseek', model: 'deepseek-v4-flash' }
+        const selection = modelSelections.get(id) ?? { provider: 'deepseek', model: 'neo-default-model' }
         if (lastRequestContext(logOf(id))?.model !== selection.model) {
           append(id, {
             type: 'request/context',
@@ -2986,7 +2986,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
     llm: {
       providers: request => ok(request, {
         providers: [
-          { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+          { provider: 'neo-default-route', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
           { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true, declared: false },
           { provider: 'anthropic', displayName: 'anthropic', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'anthropic'], active: false, declared: false },
           // One hand-declared route, so a surface reading this fixture meets

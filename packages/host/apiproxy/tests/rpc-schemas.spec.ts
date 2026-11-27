@@ -201,17 +201,17 @@ describe('sessions domain schemas', () => {
     expect(sessionHistoryValueSchema.parse({
       events: [],
       hasMore: false,
-      modelSelection: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      modelSelection: { provider: 'neo-default-route', model: 'neo-default-model' },
     }).hasMore).toBe(false)
     expect(sessionModelsRequestSchema.parse({ sessionId: 's1' }).sessionId).toBe('s1')
     expect(sessionModelsValueSchema.parse({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-flash', reasoningEffort: 'max' },
+      current: { provider: 'neo-default-route', model: 'neo-default-model', reasoningEffort: 'max' },
       routable: true,
       groups: [{
-        id: 'deepseek-official',
+        id: 'neo-default-route',
         name: 'DeepSeek',
         models: [{
-          id: 'deepseek-v4-flash',
+          id: 'neo-default-model',
           name: 'DeepSeek V4 Flash',
           description: 'fast',
           reasoning: {
@@ -224,15 +224,15 @@ describe('sessions domain schemas', () => {
         }],
       }],
       failures: [{ id: 'broken', name: 'Broken', message: 'offline' }],
-    }).groups[0]?.models[0]?.id).toBe('deepseek-v4-flash')
+    }).groups[0]?.models[0]?.id).toBe('neo-default-model')
     expect(sessionSelectModelRequestSchema.parse({
       sessionId: 's1',
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'neo-default-route',
+      model: 'neo-large-model',
       reasoningEffort: 'max',
     }).reasoningEffort).toBe('max')
     expect(sessionSelectModelValueSchema.parse({
-      selected: { provider: 'deepseek-official', model: 'deepseek-v4-pro', reasoningEffort: 'max' },
+      selected: { provider: 'neo-default-route', model: 'neo-large-model', reasoningEffort: 'max' },
     }).selected.reasoningEffort).toBe('max')
     expect(() => sessionSelectModelRequestSchema.parse({
       sessionId: 's1',
@@ -241,14 +241,14 @@ describe('sessions domain schemas', () => {
     })).toThrow()
     expect(() => sessionSelectModelRequestSchema.parse({
       sessionId: 's1',
-      provider: 'deepseek-official',
+      provider: 'neo-default-route',
       model: 'm',
       reasoningEffort: '',
     })).toThrow()
     expect(() => sessionModelsValueSchema.parse({
-      current: { provider: 'deepseek-official', model: 'm' },
+      current: { provider: 'neo-default-route', model: 'm' },
       groups: [{
-        id: 'deepseek-official',
+        id: 'neo-default-route',
         name: 'DeepSeek',
         models: [{ id: 'm', name: 'M', reasoning: { efforts: [] } }],
       }],

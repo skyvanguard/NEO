@@ -32,11 +32,11 @@ describe('first-prompt title provider over a real OpenAI-compatible HTTP adapter
     await ctx.plugin(LlmRuntime)
     await ctx.plugin(LlmPiAi, {
       providers: {
-        'deepseek-official': {
+        'neo-default-route': {
           api: 'openai-completions',
           baseURL: server.baseURL,
           apiKeyEnv: 'MOCK_LLM_API_KEY',
-          models: [{ id: 'deepseek-v4-flash' }],
+          models: [{ id: 'neo-default-model' }],
         },
       },
     })
@@ -52,8 +52,8 @@ describe('first-prompt title provider over a real OpenAI-compatible HTTP adapter
       maxInputBytes: 4_096,
       maxOutputTokens: 64,
       timeoutMs: 60_000,
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-flash',
+      provider: 'neo-default-route',
+      model: 'neo-default-model',
     })
     const session = ctx.sessions.create(SessionId('real-title-provider'))
     session.append('turn/start', {
@@ -71,7 +71,7 @@ describe('first-prompt title provider over a real OpenAI-compatible HTTP adapter
       source: {
         kind: 'provider',
         provider: 'session-title-first-prompt-llm',
-        model: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+        model: { provider: 'neo-default-route', model: 'neo-default-model' },
       },
     })
     expect(title?.title).toBe('Durable append-only session titles')

@@ -27,12 +27,12 @@ _CORDIS_YML = """\
   name: '@neo/llm-pi-ai'
   config:
     providers:
-      deepseek-official:
+      neo-default-route:
         api: openai-completions
         baseURL: 'http://127.0.0.1:9/v1'
         apiKeyEnv: LLM_API_KEY
         models:
-          - id: deepseek-v4-pro
+          - id: neo-large-model
 - id: agent-core
   name: '@neo/agent-spine-demo'
   config:
@@ -84,7 +84,7 @@ def test_bundled_runtime_boots_a_cordis_config(tmp_path: Path, mode: str) -> Non
     (tmp_path / "cordis.yml").write_text(_CORDIS_YML)
 
     with _client(tmp_path, launch_args) as client:
-        init = client.initialize(provider="deepseek-official", cwd=str(tmp_path), model="deepseek-v4-pro")
+        init = client.initialize(provider="neo-default-route", cwd=str(tmp_path), model="neo-large-model")
 
     assert init.serverInfo is not None
     assert init.serverInfo.name == "neo-sdk-runtime"
@@ -124,7 +124,7 @@ def test_bundled_runtime_surfaces_unbundled_plugin_failure(tmp_path: Path, mode:
     client.start()
     try:
         with pytest.raises((TransportClosedError, TimeoutError)) as excinfo:
-            client.initialize(provider="deepseek-official", cwd=str(tmp_path), model="deepseek-v4-pro")
+            client.initialize(provider="neo-default-route", cwd=str(tmp_path), model="neo-large-model")
     finally:
         client.close()
 
@@ -144,7 +144,7 @@ def test_zero_config_run_injects_bundled_default_cordis_config(
         monkeypatch.setenv("NEO_CORDIS_CONFIG", ambient_config)
 
     harness = Neo(
-        model="deepseek-v4-pro",
+        model="neo-large-model",
         cwd=str(tmp_path),
         session_root=str(tmp_path / "sessions"),
         api_key="sk-dummy-for-boot",

@@ -7,6 +7,6 @@
 # row's complete config, so the shipped routing defaults ride along.
 - id: api-gateway
   config:
-    provider: deepseek-official
-    model: deepseek-v4-flash
+    provider: neo-default-route
+    model: neo-default-model
     nativeOpen: false

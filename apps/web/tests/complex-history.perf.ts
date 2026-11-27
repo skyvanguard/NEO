@@ -198,7 +198,7 @@ function appendTitle(session: Session, title: string, messageSeq: number): void 
 function appendRequestHeader(session: Session, turn: number, step: number): void {
   session.append('request/header', {
     header: {
-      config: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      config: { provider: 'neo-default-route', model: 'neo-default-model' },
       system: `Synthetic performance system prompt for turn ${String(turn)}, step ${String(step)}.`,
     },
     reason: turn === 1 && step === 1 ? 'initial' : 'change',
@@ -216,7 +216,7 @@ function appendAssistant(
     step,
     message: createAssistantMessage({
       content: text(body),
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'neo-default-route', model: 'neo-default-model' },
     }),
     usage: {
       inputTokens: 4_000 + turn * 10,
@@ -258,7 +258,7 @@ function appendToolStep(
           arguments: args,
         })),
       ],
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'neo-default-route', model: 'neo-default-model' },
     }),
     usage: {
       inputTokens: 6_000 + turn * 10,

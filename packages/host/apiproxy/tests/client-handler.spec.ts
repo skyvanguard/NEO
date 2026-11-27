@@ -42,10 +42,10 @@ function scriptedApi(overrides: {
       history: r => ok(r, {
         events: [],
         hasMore: false,
-        modelSelection: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+        modelSelection: { provider: 'neo-default-route', model: 'neo-default-model' },
       }),
       models: r => ok(r, {
-        current: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+        current: { provider: 'neo-default-route', model: 'neo-default-model' },
         routable: true,
         groups: [],
         failures: [],
@@ -785,7 +785,7 @@ describe('config unary surface', () => {
       settingsPath: ['providers', 'openai'],
       active: false,
     }
-    const group = { id: 'deepseek-official', name: 'DeepSeek', models: [{ id: 'deepseek-v4-flash', name: 'Flash' }] }
+    const group = { id: 'neo-default-route', name: 'DeepSeek', models: [{ id: 'neo-default-model', name: 'Flash' }] }
     const api = scriptedApi({
       settings: {
         describe: record('settings.describe', r => ok(r, { writable: true, hasDocument: false, namespaces: [view] })),

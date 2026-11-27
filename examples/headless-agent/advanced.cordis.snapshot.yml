@@ -2,7 +2,7 @@
 # directly — a config patch cannot target an entry behind a nested include — and
 # restates advanced.cordis.yml's overlay (the agent and persistence configs plus the
 # code-runtime and tool-cordis inserts) so the whole app config lives in one patch.
-# It re-pins `deepseek-v4-flash`: `cordis.yml` ships `deepseek-v4-pro`, but the
+# It re-pins `neo-default-model`: `cordis.yml` ships `neo-large-model`, but the
 # recorded corpus (request headers, provenance) was captured on flash, so replay
 # holds the recorded model to stay reproducible without a re-record. It also
 # disables the live model adapter and inserts `llm-replay` to serve
@@ -20,8 +20,8 @@
         config:
           agents:
             - id: main
-              provider: deepseek-official
-              model: deepseek-v4-flash
+              provider: neo-default-route
+              model: neo-default-model
               cwd: !!js process.cwd()
           workspaceContext:
             maxBytes: 65536

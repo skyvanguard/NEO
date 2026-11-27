@@ -38,11 +38,11 @@ async function harness(): Promise<Context> {
   await built.plugin(AgentLoop, { agents: [] })
   await built.plugin(LlmPiAi, {
     providers: {
-      'deepseek-official': {
+      'neo-default-route': {
         api: 'openai-completions',
         baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
         apiKeyEnv: 'LLM_API_KEY',
-        models: [{ id: 'deepseek-v4-flash' }],
+        models: [{ id: 'neo-default-model' }],
       },
     },
   })
@@ -73,7 +73,7 @@ describe.skipIf(!process.env.LLM_API_KEY)('worker workflow engine with-key e2e',
     ctx = await harness()
     const parentHandle = await ctx.agents.create({
       sessionId: 'wf-worker-e2e-session' as never,
-      agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      agentOptions: { provider: 'neo-default-route', model: 'neo-default-model' },
     })
 
     const events: string[] = []

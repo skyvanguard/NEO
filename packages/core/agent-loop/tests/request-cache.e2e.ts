@@ -50,11 +50,11 @@ async function loopHarness(): Promise<Context> {
   // llama-server) authenticated with LLM_API_KEY, whose absence skips the suite.
   await created.plugin(LlmPiAi, {
     providers: {
-      'deepseek-official': {
+      'neo-default-route': {
         api: 'openai-completions',
         baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
         apiKeyEnv: 'LLM_API_KEY',
-        models: [{ id: 'deepseek-v4-flash' }],
+        models: [{ id: 'neo-default-model' }],
       },
     },
   })
@@ -83,7 +83,7 @@ function waitForIdle(context: Context, agent: Agent): Promise<void> {
 describe.skipIf(!process.env.LLM_API_KEY)('log-derived request cache hits (real API)', () => {
   it('every request after the first hits the provider prefix cache', async () => {
     ctx = await loopHarness()
-    const agent = ctx.agentLoop.create(SessionId('cache-e2e'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    const agent = ctx.agentLoop.create(SessionId('cache-e2e'), { provider: 'neo-default-route', model: 'neo-default-model' })
 
     // Turn 1: forces a tool call → at least two steps (two model requests).
     agent.followup(createUserMessage({ content: [{ type: 'text', text: 'Look up the key "deploy-color" with the lookup tool and tell me the value.' }], source: { kind: 'user' } }))

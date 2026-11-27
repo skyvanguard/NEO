@@ -1,7 +1,7 @@
 # Keyless replay includes the live `cordis.yml`, disables the live model
 # adapter, and inserts `llm-replay` to serve recorded JSONL without a key
 # or network; every other app entry remains shared. It also restates the acp-agent
-# config to re-pin `deepseek-v4-flash`: `cordis.yml` ships `deepseek-v4-pro`, but the
+# config to re-pin `neo-default-model`: `cordis.yml` ships `neo-large-model`, but the
 # recorded corpus (request headers, provenance, system prompt) was captured on flash,
 # so replay holds the recorded model to stay reproducible without a re-record. A config
 # patch replaces the whole app config, so the base fields are restated verbatim.
@@ -22,8 +22,8 @@
       - id: acp-agent
         name: '@neo/acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
+          provider: neo-default-route
+          model: neo-default-model
           persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           # Replay fixtures are raw JSONL; the whole-config patch must restate
           # the compression choice or the default zstd frames hide the logs
@@ -50,11 +50,11 @@
             name: '@neo/llm-replay'
             config:
               providers:
-                - id: deepseek-official
+                - id: neo-default-route
                   name: DeepSeek
                   models:
-                    - id: deepseek-v4-flash
-                    - id: deepseek-v4-pro
+                    - id: neo-default-model
+                    - id: neo-large-model
           # Authored scenarios can fence a later parent action on the real
           # child settlement edge without exposing a test-only model tool.
           - id: subagent-settlement-marker

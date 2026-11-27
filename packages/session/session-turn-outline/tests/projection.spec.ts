@@ -49,7 +49,7 @@ function appendAssistant(session: Session, turn: number, step: number, text: str
     step,
     message: createAssistantMessage({
       content: [{ type: 'text', text }],
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'neo-default-route', model: 'neo-default-model' },
     }),
   }, { surfaceOp: 'append' })
 }

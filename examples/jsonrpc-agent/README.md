@@ -19,7 +19,7 @@ The surrounding runtime also loads JSONL session persistence and automatic conte
 |---|---|
 | `LLM_API_KEY` | Credential passed to the OpenAI-compatible endpoint |
 | `LLM_BASE_URL` | OpenAI-compatible endpoint of the `llm-pi-ai` route (default `http://127.0.0.1:8080/v1`, a local llama-server) |
-| `LLM_MODEL` | The one model id the route serves (default `deepseek-v4-flash`); the Python SDK sets it to its `model`, any other client must set it to the model it initializes, and `minimal.py` also uses it as its default `--model` |
+| `LLM_MODEL` | The one model id the route serves (default `neo-default-model`); the Python SDK sets it to its `model`, any other client must set it to the model it initializes, and `minimal.py` also uses it as its default `--model` |
 | `NEO_CWD` | Agent workspace for bash and filesystem tools |
 | `NEO_CONTEXT_WINDOW` | Context capacity recorded for the `LLM_MODEL` catalog entry in the minimal variant |
 | `NEO_MAX_TOKENS_AS_SUCCESS` | `true` (default) accepts token-limited results; `false` reports them as errors |

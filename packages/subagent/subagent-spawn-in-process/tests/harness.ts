@@ -32,11 +32,11 @@ export async function spawnHarness(workdir: string): Promise<Context> {
   await ctx.plugin(AgentLoop, { agents: [] })
   await ctx.plugin(LlmPiAi, {
     providers: {
-      'deepseek-official': {
+      'neo-default-route': {
         api: 'openai-completions',
         baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
         apiKeyEnv: 'LLM_API_KEY',
-        models: [{ id: 'deepseek-v4-flash' }],
+        models: [{ id: 'neo-default-model' }],
       },
     },
   })

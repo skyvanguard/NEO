@@ -1,5 +1,5 @@
 # Keyless composition with NO model adapter mounted: the agent-spine's `main`
-# agent still requests the `deepseek-official` route, but nothing registers it,
+# agent still requests the `neo-default-route` route, but nothing registers it,
 # so the one-shot prompt fails with NO_ADAPTER. This is the first-run posture of
 # a deployment whose base ships no built-in adapter and has no model configured
 # yet (only a user-configured pi-ai route serves requests). This snapshot pins
@@ -11,7 +11,7 @@
     path: ./cordis.yml
     patches:
       # Drop the live route without inserting replay: nothing else registers
-      # `deepseek-official`, so the request fails before any credential or
+      # `neo-default-route`, so the request fails before any credential or
       # endpoint is consulted.
       - id: llm-pi-ai
         name: '@neo/llm-pi-ai'

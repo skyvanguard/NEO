@@ -45,7 +45,7 @@ describe.skipIf(!process.env.LLM_API_KEY)('compaction: a long session compacts m
       },
       persistenceRoot: join(workdir, '.sessions'),
     })
-    const agent = ctx.agentLoop.create(SessionId('e2e-compaction'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    const agent = ctx.agentLoop.create(SessionId('e2e-compaction'), { provider: 'neo-default-route', model: 'neo-default-model' })
 
     agent.followup(createUserMessage({
       content: [{

@@ -69,8 +69,8 @@
     - id: agent-default-model
       name: '@neo/agent-default-model'
       config:
-        provider: deepseek-official
-        model: deepseek-v4-flash
+        provider: neo-default-route
+        model: neo-default-model
 
     - id: jobs
       name: '@neo/jobs-local'

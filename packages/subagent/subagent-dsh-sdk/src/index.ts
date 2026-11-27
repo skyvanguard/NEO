@@ -42,9 +42,9 @@ export interface Config {
    * fails.
    */
   cwd?: string
-  /** Provider route the child runtime initializes with (default `deepseek-official`). */
+  /** Provider route the child runtime initializes with (default `neo-default-route`). */
   provider: string
-  /** Model the child runtime initializes with (default `deepseek-v4-flash`). */
+  /** Model the child runtime initializes with (default `neo-default-model`). */
   model: string
   /** Optional per-request output-token cap for the child runtime. */
   maxTokens?: number
@@ -73,8 +73,8 @@ export const Config: z<Config> = z.object({
   command: z.string().required(),
   args: z.array(z.string()).default([]),
   cwd: z.string(),
-  provider: z.string().default('deepseek-official'),
-  model: z.string().default('deepseek-v4-flash'),
+  provider: z.string().default('neo-default-route'),
+  model: z.string().default('neo-default-model'),
   maxTokens: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER),
   env: z.dict(z.string()).default({}),
   shutdownTimeoutMs: z.number().default(DEFAULT_SHUTDOWN_TIMEOUT_MS),

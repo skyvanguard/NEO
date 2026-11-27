@@ -34,7 +34,7 @@ describe('validateMeta', () => {
       whenToUse: 'large mechanical sweeps',
       phases: [
         { title: 'Discover', provider: 'openai' },
-        { title: 'Transform', detail: 'one agent per file', model: 'deepseek-v4-pro' },
+        { title: 'Transform', detail: 'one agent per file', model: 'neo-large-model' },
       ],
     })
     expect(meta).toEqual({
@@ -43,7 +43,7 @@ describe('validateMeta', () => {
       whenToUse: 'large mechanical sweeps',
       phases: [
         { title: 'Discover', provider: 'openai' },
-        { title: 'Transform', detail: 'one agent per file', model: 'deepseek-v4-pro' },
+        { title: 'Transform', detail: 'one agent per file', model: 'neo-large-model' },
       ],
     })
   })

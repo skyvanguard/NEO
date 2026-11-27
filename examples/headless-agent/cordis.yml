@@ -16,21 +16,21 @@
   name: '@neo/credentials-local'
 
 # One hand-declared OpenAI-compatible route (llama-server, vLLM, or a hosted
-# gateway). It keeps the `deepseek-official` route and model ids the agent row
+# gateway). It keeps the `neo-default-route` route and model ids the agent row
 # below and the recorded replay corpus name. LLM_BASE_URL selects the endpoint
 # (default: a local llama-server).
 - id: llm-pi-ai
   name: '@neo/llm-pi-ai'
   config:
     providers:
-      deepseek-official:
+      neo-default-route:
         api: openai-completions
         baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
         apiKeyEnv: LLM_API_KEY
         models:
-          - id: deepseek-v4-pro
+          - id: neo-large-model
             contextWindow: 128000
-          - id: deepseek-v4-flash
+          - id: neo-default-model
             contextWindow: 128000
 
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
@@ -48,11 +48,11 @@
   config:
     agents:
       - id: main
-        provider: deepseek-official
+        provider: neo-default-route
         # Stays on flash: the goal/ralph replay corpora were recorded on it, and
         # their nested-include overlays cannot re-pin the app config (a config
         # patch cannot target an entry behind a nested include).
-        model: deepseek-v4-flash
+        model: neo-default-model
         cwd: !!js process.cwd()
     workspaceContext:
       maxBytes: 65536

@@ -31,12 +31,12 @@ const reasoning = {
 
 function state(overrides: Partial<ModelDirectoryState> = {}): ModelDirectoryState {
   return {
-    current: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    current: { provider: 'neo-default-route', model: 'neo-default-model' },
     routable: true,
     groups: [{
-      id: 'deepseek-official',
+      id: 'neo-default-route',
       name: 'DeepSeek',
-      models: [{ id: 'deepseek-v4-flash', name: 'DeepSeek-V4-Flash', reasoning }],
+      models: [{ id: 'neo-default-model', name: 'DeepSeek-V4-Flash', reasoning }],
     }],
     failures: [],
     status: 'ready',
@@ -74,8 +74,8 @@ describe('ModelSelect reasoning effort', () => {
     fireEvent.click(screen.getByRole('menuitemradio', { name: /Max/ }))
     await waitFor(() => {
       expect(select).toHaveBeenCalledWith({
-        provider: 'deepseek-official',
-        model: 'deepseek-v4-flash',
+        provider: 'neo-default-route',
+        model: 'neo-default-model',
         reasoningEffort: 'max',
       })
       expect(trigger.getAttribute('aria-label')).toBe('选择模型，当前 DeepSeek-V4-Flash，推理等级 Max')
@@ -114,7 +114,7 @@ describe('ModelSelect reasoning effort', () => {
 
   it('prompts for a selection when the current model is no longer advertised', () => {
     const directory = createSnapshotStore(state({
-      current: { provider: 'deepseek-official', model: 'removed-model' },
+      current: { provider: 'neo-default-route', model: 'removed-model' },
     }))
     const select = vi.fn().mockResolvedValue(true)
     render(<ModelSelect
@@ -137,11 +137,11 @@ describe('ModelSelect reasoning effort', () => {
 
   it('announces a rejected selection as a transient toast and keeps the in-menu strip for loads', async () => {
     const groups = [{
-      id: 'deepseek-official',
+      id: 'neo-default-route',
       name: 'DeepSeek',
       models: [
-        { id: 'deepseek-v4-flash', name: 'DeepSeek-V4-Flash', reasoning },
-        { id: 'deepseek-v4-pro', name: 'DeepSeek-V4-Pro' },
+        { id: 'neo-default-model', name: 'DeepSeek-V4-Flash', reasoning },
+        { id: 'neo-large-model', name: 'DeepSeek-V4-Pro' },
       ],
     }]
     const directory = createSnapshotStore<ModelDirectoryState>(state({ groups }))

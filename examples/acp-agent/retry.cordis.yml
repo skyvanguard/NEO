@@ -14,7 +14,7 @@
         name: '@neo/llm-pi-ai'
         config:
           providers:
-            deepseek-official:
+            neo-default-route:
               api: openai-completions
               baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
               apiKeyEnv: LLM_API_KEY
@@ -26,13 +26,13 @@
                   maxDelayMs: 1
                   jitterRatio: 0
               models:
-                - id: deepseek-v4-flash
-                - id: deepseek-v4-pro
+                - id: neo-default-model
+                - id: neo-large-model
       - id: acp-agent
         name: '@neo/acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
+          provider: neo-default-route
+          model: neo-default-model
           persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: !!js "process.env.NEO_SNAPSHOT === undefined ? 'zstd' : 'none'"
           workspaceContext:

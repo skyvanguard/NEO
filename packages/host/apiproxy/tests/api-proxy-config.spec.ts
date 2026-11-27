@@ -187,7 +187,7 @@ async function harness(options?: {
   // onboarding allowlists are the proxy's complete settings surface.
   if (options?.configurableProviders !== false) {
     ctx.llm.registerConfigurableProviders([
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'neo-default-route', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
     ])
   }
   // Host-stream opener reads the committed-workspace baseline; the stub
@@ -483,13 +483,13 @@ describe('settings domain', () => {
     const defaultModel = ctx.settings.register(AGENT_DEFAULT_MODEL_SETTINGS_NAMESPACE, z.object({
       provider: z.string().required(),
       model: z.string().required(),
-    }), { base: { provider: 'deepseek-official', model: 'deepseek-v4-flash' } })
+    }), { base: { provider: 'neo-default-route', model: 'neo-default-model' } })
     const api = createApiProxy(ctx, DEFAULTS)
     // The shared section names the selection every blank session resolves to,
     // so an externally edited default — another tab, a
     // hand-edited settings.yaml — has to reach an open selector as well.
     const frames = await collectHost(api, ['host/remote-event'], 1, async () => {
-      await defaultModel.replace({ provider: 'deepseek-official', model: 'deepseek-reasoner' })
+      await defaultModel.replace({ provider: 'neo-default-route', model: 'deepseek-reasoner' })
     })
     expect(frames).toEqual([forwardedSettings('agent-default-model')])
   })
@@ -614,10 +614,10 @@ describe('llm domain', () => {
   it('merges the configurable directory with live routes and appends undeclared ones', async () => {
     const ctx = await harness({ configurableProviders: false })
     ctx.llm.registerConfigurableProviders([
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'neo-default-route', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
       { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'] },
     ])
-    ctx.llm.registerAdapter(['deepseek-official'], new CatalogAdapter('DeepSeek', ['deepseek-v4-flash']))
+    ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('DeepSeek', ['neo-default-model']))
     ctx.llm.registerAdapter(['undeclared'], new CatalogAdapter('Undeclared', ['u-1']))
     // Only one namespace can answer an interrogation, so the flag follows the
     // entry's namespace rather than being assumed for every row.
@@ -625,7 +625,7 @@ describe('llm domain', () => {
     const api = createApiProxy(ctx, DEFAULTS)
     const value = expectOk(await api.llm.providers(request({})))
     expect(value.providers).toEqual([
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+      { provider: 'neo-default-route', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
       { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: false },
       // An undeclared live route has no settings address, so nothing can be
       // interrogated on its behalf either.
@@ -635,16 +635,16 @@ describe('llm domain', () => {
 
   it('serves the host-scoped catalog with per-provider failures contained', async () => {
     const ctx = await harness()
-    ctx.llm.registerAdapter(['deepseek-official'], new CatalogAdapter('DeepSeek', ['deepseek-v4-flash', 'deepseek-v4-pro']))
+    ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('DeepSeek', ['neo-default-model', 'neo-large-model']))
     ctx.llm.registerAdapter(['broken'], new BrokenCatalogAdapter('Broken', []))
     const api = createApiProxy(ctx, DEFAULTS)
     const value = expectOk(await api.llm.models(request({})))
     expect(value.groups).toEqual([{
-      id: 'deepseek-official',
+      id: 'neo-default-route',
       name: 'DeepSeek',
       models: [
-        { id: 'deepseek-v4-flash', name: 'deepseek-v4-flash' },
-        { id: 'deepseek-v4-pro', name: 'deepseek-v4-pro' },
+        { id: 'neo-default-model', name: 'neo-default-model' },
+        { id: 'neo-large-model', name: 'neo-large-model' },
       ],
     }])
     expect(value.failures).toEqual([{ id: 'broken', name: 'Broken', message: 'catalog backend down' }])
@@ -654,7 +654,7 @@ describe('llm domain', () => {
     const ctx = await harness()
     const api = createApiProxy(ctx, DEFAULTS)
     const frames = await collectHost(api, ['host/remote-event'], 2, async () => {
-      const dispose = ctx.llm.registerAdapter(['deepseek-official'], new CatalogAdapter('DeepSeek', []))
+      const dispose = ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('DeepSeek', []))
       dispose()
       return Promise.resolve()
     })

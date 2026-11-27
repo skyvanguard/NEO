@@ -113,7 +113,7 @@ it('assembles the shipped Web catalog, file-reference guidance, and confined acc
   const commandHandle = await scaffold.ctx.agents.create({
     sessionId: SessionId('shipped-command-catalog'),
     meta: { cwd: scaffold.workspaceCwd },
-    agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    agentOptions: { provider: 'neo-default-route', model: 'neo-default-model' },
   })
   try {
     expect(scaffold.ctx.commands.list(commandHandle.agent)).toContainEqual({

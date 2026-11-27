@@ -8,8 +8,8 @@
       - id: acp-agent
         name: '@neo/acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-pro
+          provider: neo-default-route
+          model: neo-large-model
           persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: !!js "process.env.NEO_SNAPSHOT === undefined ? 'zstd' : 'none'"
           workspaceContext:

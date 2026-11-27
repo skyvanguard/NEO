@@ -6,7 +6,7 @@
   config:
     maxTokensAsSuccess: !!js "process.env.NEO_MAX_TOKENS_AS_SUCCESS === undefined ? true : JSON.parse(process.env.NEO_MAX_TOKENS_AS_SUCCESS)"
 
-# One hand-declared OpenAI-compatible route, kept on the `deepseek-official`
+# One hand-declared OpenAI-compatible route, kept on the `neo-default-route`
 # id the SDK initializes. LLM_BASE_URL selects the endpoint (default: a local
 # llama-server) and LLM_API_KEY resolves per request. The model arrives over
 # JSON-RPC; the Python SDK exports the same id as LLM_MODEL, so the route
@@ -15,12 +15,12 @@
   name: '@neo/llm-pi-ai'
   config:
     providers:
-      deepseek-official:
+      neo-default-route:
         api: openai-completions
         baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
         apiKeyEnv: LLM_API_KEY
         models:
-          - id: !!js process.env.LLM_MODEL ?? 'deepseek-v4-flash'
+          - id: !!js process.env.LLM_MODEL ?? 'neo-default-model'
 
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
 - id: subprocess

@@ -1,7 +1,7 @@
 # Keyless replay includes the live `cordis.yml`, disables the live model
 # adapter, and inserts `llm-replay` to serve recorded JSONL without a
 # key or network; every other entry remains shared. The replay provider
-# catalog claims the `deepseek-official` provider so the SDK server's `initialize`
+# catalog claims the `neo-default-route` provider so the SDK server's `initialize`
 # finds it owned. The SDK snapshot
 # suite passes this path explicitly through `NEO_CORDIS_CONFIG` (the
 # jsonrpc-demo bin performs no NEO_SNAPSHOT config swap of its own), and
@@ -22,7 +22,7 @@
             name: '@neo/llm-replay'
             config:
               providers:
-                - id: deepseek-official
+                - id: neo-default-route
                   name: DeepSeek
                   models:
-                    - id: deepseek-v4-flash
+                    - id: neo-default-model

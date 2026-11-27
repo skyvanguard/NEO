@@ -1,8 +1,8 @@
 # Keyless filesystem snapshots apply the spill and replay overlays directly
 # because include patches cannot target entries behind a nested include. The
 # sandboxed filesystem stack already lives in the base cordis.yml. This file also
-# re-pins the acp-agent model to `deepseek-v4-flash`: `cordis.yml` ships
-# `deepseek-v4-pro`, but the recorded corpus was captured on flash, and a config
+# re-pins the acp-agent model to `neo-default-model`: `cordis.yml` ships
+# `neo-large-model`, but the recorded corpus was captured on flash, and a config
 # patch replaces the whole app config, so the base fields are restated verbatim.
 - id: base
   name: '@neo/cordis-plugin-include'
@@ -15,8 +15,8 @@
       - id: acp-agent
         name: '@neo/acp-demo'
         config:
-          provider: deepseek-official
-          model: deepseek-v4-flash
+          provider: neo-default-route
+          model: neo-default-model
           persistenceRoot: !!js process.env.NEO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
           persistenceCompression: none
           workspaceContext:
@@ -38,8 +38,8 @@
             name: '@neo/llm-replay'
             config:
               providers:
-                - id: deepseek-official
+                - id: neo-default-route
                   name: DeepSeek
                   models:
-                    - id: deepseek-v4-flash
-                    - id: deepseek-v4-pro
+                    - id: neo-default-model
+                    - id: neo-large-model
