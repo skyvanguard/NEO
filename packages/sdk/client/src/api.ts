@@ -1,8 +1,8 @@
 /**
- * High-level run API over {@link HarnessClient}: `DeepSeekHarness` owns one
+ * High-level run API over {@link HarnessClient}: `NeoHarness` owns one
  * runtime subprocess across many sessions; `HarnessSession.run` sends a
  * prompt and settles when the whole agent next becomes idle.
- * Mirrors the Python SDK's `DeepSeekHarness`/`Session` pair.
+ * Mirrors the Python SDK's `Neo`/`Session` pair.
  *
  * @module @neo/sdk-client/api
  */
@@ -11,7 +11,7 @@ import { randomUUID } from 'node:crypto'
 import { resolve } from 'node:path'
 import type { SessionEvent } from '@neo/session'
 import { HarnessClient, isRecord, SdkProtocolError } from './client.ts'
-import type { ContentBlock, DeepSeekHarnessOptions, HarnessClientOptions, HarnessNotification, RunResult } from './types.ts'
+import type { ContentBlock, HarnessClientOptions, HarnessNotification, NeoHarnessOptions, RunResult } from './types.ts'
 
 /**
  * Reusable SDK for running NEO agent turns in a runtime
@@ -19,7 +19,7 @@ import type { ContentBlock, DeepSeekHarnessOptions, HarnessClientOptions, Harnes
  * this instance until {@link close}; always close (or `await using`) so the
  * child is reaped.
  */
-export class DeepSeekHarness implements AsyncDisposable {
+export class NeoHarness implements AsyncDisposable {
   private clientInstance: HarnessClient
   private readonly launch: HarnessClientOptions
   private readonly cwd: string
@@ -30,7 +30,7 @@ export class DeepSeekHarness implements AsyncDisposable {
   private closed = false
 
   /** @param options - runtime launch spec plus the session route (cwd/provider/model). */
-  constructor(options: DeepSeekHarnessOptions) {
+  constructor(options: NeoHarnessOptions) {
     this.launch = options.launch
     this.clientInstance = new HarnessClient(options.launch)
     // Absolute before the handshake: the child spawns relative to THIS
@@ -134,7 +134,7 @@ export class HarnessSession {
    * @param harness - the owning harness (supplies the client and handshake).
    * @param id - the wire session id this handle runs on.
    */
-  constructor(readonly harness: DeepSeekHarness, readonly id: string) {}
+  constructor(readonly harness: NeoHarness, readonly id: string) {}
 
   /**
    * Queue one prompt, then observe the whole session through its next idle.

@@ -27,7 +27,7 @@ import {
   type NormalizeContext,
 } from '@neo/acp-snapshot'
 import { resolveExampleLaunch } from '@neo/loader-smoke'
-import { DeepSeekHarness, type HarnessNotification, type RunResult } from '@neo/sdk-client'
+import { NeoHarness, type HarnessNotification, type RunResult } from '@neo/sdk-client'
 
 const testsDir = dirOf(import.meta.url)
 const snapshotsDir = join(testsDir, 'snapshots')
@@ -292,7 +292,7 @@ async function runScenario(scenario: SdkScenario): Promise<{
     ...scenario.environment,
   }
 
-  const harness = new DeepSeekHarness({
+  const harness = new NeoHarness({
     launch: {
       command: launch.command,
       args: launch.args,
