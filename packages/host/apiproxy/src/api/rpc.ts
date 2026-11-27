@@ -9,6 +9,7 @@ import type { z as zCore } from 'zod'
 type ZodIssue = zCore.core.$ZodIssue
 import type { Branded } from '@neo/brand'
 import type { MessageId } from '@neo/llm/brand'
+import type { JobId } from '@neo/jobs/brand'
 import type { SessionId } from '@neo/session/types'
 
 /**
@@ -98,6 +99,7 @@ export interface RpcErrorDetailsMap {
   'subagent-not-resumable': { childSessionId: SessionId }
   'subagent-unauthorized': { childSessionId: SessionId }
   'subagent-delivery-unavailable': { childSessionId: SessionId }
+  'job-not-found': { jobId: JobId }
   'internal': {}
 }
 

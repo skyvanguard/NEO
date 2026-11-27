@@ -33,7 +33,10 @@ function job(over: Partial<JobView> = {}): JobView {
   }
 }
 
-function props(jobs: readonly JobView[] | undefined): JobListActionProps {
+function props(
+  jobs: readonly JobView[] | undefined,
+  killJob: JobListActionProps['killJob'] = vi.fn(),
+): JobListActionProps {
   const state = {
     ids: [SESSION],
     byId: {},
@@ -46,7 +49,7 @@ function props(jobs: readonly JobView[] | undefined): JobListActionProps {
   function useSessions<T>(select: (snapshot: SessionListState) => T): T {
     return select(state)
   }
-  return { sessionId: SESSION, useSessions, t } as unknown as JobListActionProps
+  return { sessionId: SESSION, useSessions, killJob, t } as unknown as JobListActionProps
 }
 
 /**
@@ -110,6 +113,22 @@ describe('JobListAction rows', () => {
     ])} />)
     fireEvent.click(screen.getByRole('button'))
     expect(rowCells().map(cells => cells[1])).toEqual(['first', 'second'])
+  })
+
+  it('offers a stop control only on running rows and calls killJob without opening the row', () => {
+    const killJob = vi.fn()
+    render(<JobListAction {...props([
+      job({ id: 'bash-1' as JobView['id'], label: 'live one', status: 'running' }),
+      job({ id: 'bash-2' as JobView['id'], label: 'stopping one', status: 'stopping' }),
+      job({ id: 'bash-3' as JobView['id'], label: 'done one', status: 'completed', finishedAt: START + 1_000 }),
+    ], killJob)} />)
+    fireEvent.click(screen.getByRole('button'))
+    // Only the running row is stoppable: a stopping job is already being killed,
+    // and settled rows are terminal.
+    const stops = screen.getAllByRole('button', { name: /^停止/ })
+    expect(stops).toHaveLength(1)
+    fireEvent.click(stops[0]!)
+    expect(killJob).toHaveBeenCalledWith(SESSION, 'bash-1')
   })
 
   it('prefers the producer detail over the generic status word', () => {

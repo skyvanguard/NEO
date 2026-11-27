@@ -225,6 +225,9 @@ describe('sessions', () => {
     // The catalog stop control's double accepts every interrupt, as the Host
     // does for an idle or absent child.
     await expect(runtime.sessions.interruptSubagent(address)).resolves.toEqual({ ok: true, value: { accepted: true } })
+    // The job-list stop control's double accepts every kill as requested.
+    await expect(runtime.sessions.killJob('s1' as SessionId, 'bash-1' as never))
+      .resolves.toEqual({ ok: true, value: { outcome: 'requested' } })
     // The confirmed-switch write-back lands on the row it names and ignores
     // one the fixture never added, exactly as production's list upsert does.
     runtime.sessions.noteAgentPreset('s1' as SessionId, 'minimal')
@@ -248,6 +251,7 @@ describe('sessions', () => {
       { method: 'setSubagentCatalogOpen', args: ['s2', true] },
       { method: 'refreshSubagents', args: ['s2'] },
       { method: 'interruptSubagent', args: [address] },
+      { method: 'killJob', args: ['s1', 'bash-1'] },
       { method: 'open', args: ['s1'] },
       { method: 'clear', args: [] },
       { method: 'fork', args: [{ sessionId: 's1', atSeq: 7, increaseTitle: true }] },

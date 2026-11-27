@@ -5,6 +5,8 @@
  */
 
 import type { JobId } from '@neo/jobs/brand'
+import type { SessionId } from '@neo/session/types'
+import type { RpcRequest, RpcResponse } from './rpc.ts'
 
 /**
  * One background job as the client sees it.
@@ -33,4 +35,23 @@ export interface JobView {
   startedAt: number
   /** Epoch ms when the task settled; absent while live. */
   finishedAt?: number
+}
+
+/** Outcome of a kill request: live work was asked to stop, or it had already finished. */
+export type JobKillOutcome = 'requested' | 'already-finished'
+
+/**
+ * Background-job RPC surface. The read side stays a `session/jobs` push view;
+ * the only verb is a user-initiated stop.
+ */
+export interface JobsApi {
+  /**
+   * Stop a running job the requesting session owns. Unlike the model's own
+   * `job_kill`, a user stop delivers a completion notice to the model so it
+   * learns the job was cancelled rather than still running. Foreign or unknown
+   * jobs are refused.
+   */
+  kill(
+    request: RpcRequest<{ sessionId: SessionId; jobId: JobId; reason?: string }>,
+  ): Promise<RpcResponse<{ outcome: JobKillOutcome }>>
 }

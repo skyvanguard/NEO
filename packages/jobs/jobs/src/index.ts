@@ -109,15 +109,26 @@ export abstract class JobRegistry extends Service {
   abstract read(id: JobId, caller?: Agent): JobRead
 
   /**
-   * Request cancellation, then mark the job stopping and reported. A producer
-   * throw propagates without changing job state. Throws for an unknown or
-   * foreign job.
+   * Request cancellation, then mark the job stopping. A producer throw
+   * propagates without changing job state. Throws for an unknown or foreign
+   * job. By default the kill marks the job reported, suppressing the terminal
+   * completion notice — correct when the model itself asked to stop the job.
+   * With `notifyOwner: true` the job is left unreported so the terminal
+   * settlement still delivers a completion notice to the owner, which is how a
+   * user-initiated stop lets the model learn it was cancelled instead of
+   * believing the job still runs.
    * @param id - job to cancel.
    * @param caller - killing agent checked against the owner.
    * @param reason - logged reason forwarded to the producer.
+   * @param options - `notifyOwner` keeps the terminal completion notice.
    * @returns `requested` for live work, otherwise `already-finished`.
    */
-  abstract kill(id: JobId, caller?: Agent, reason?: string): 'requested' | 'already-finished'
+  abstract kill(
+    id: JobId,
+    caller?: Agent,
+    reason?: string,
+    options?: { notifyOwner?: boolean },
+  ): 'requested' | 'already-finished'
 
   /**
    * Wait for settlement or timeout without cancelling the job. Caller abort

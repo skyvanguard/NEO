@@ -4,7 +4,7 @@ import type { AttachmentIdType } from '@neo/attachment'
 import { createScope, scopeOf, SessionProvideChannel } from '@neo/client-runtime/client'
 import { createSnapshotStore } from '@neo/client-runtime/client'
 import type {
-  AgentContext, ConversationSnapshot, ISessions, ObservableSnapshot, ProjectionsFace, SessionFace, SessionId,
+  AgentContext, ConversationSnapshot, ISessions, JobView, ObservableSnapshot, ProjectionsFace, SessionFace, SessionId,
   SessionListState, SessionProvideDescriptor, SessionSearchResultItem, SessionSummary, SnapshotStore,
   SubagentAddress,
 } from '@neo/client-runtime/client'
@@ -194,7 +194,7 @@ export class TestSessions implements ISessions {
 
   /** Calls observed on the service-level face, newest last. */
   readonly calls: {
-    method: 'open' | 'openSubagent' | 'interruptSubagent' | 'setSubagentCatalogOpen' | 'refreshSubagents'
+    method: 'open' | 'openSubagent' | 'interruptSubagent' | 'killJob' | 'setSubagentCatalogOpen' | 'refreshSubagents'
       | 'clear' | 'search' | 'fork' | 'deleteSession'
     args: unknown[]
   }[] = []
@@ -438,6 +438,14 @@ export class TestSessions implements ISessions {
   ): Promise<RpcResult<{ accepted: true }>> {
     this.calls.push({ method: 'interruptSubagent', args: [address] })
     return Promise.resolve({ ok: true, value: { accepted: true } })
+  }
+
+  killJob(
+    sessionId: SessionId,
+    jobId: JobView['id'],
+  ): Promise<RpcResult<{ outcome: 'requested' | 'already-finished' }>> {
+    this.calls.push({ method: 'killJob', args: [sessionId, jobId] })
+    return Promise.resolve({ ok: true, value: { outcome: 'requested' } })
   }
 
   /** Resolve the current fixture's retained catalog address. */

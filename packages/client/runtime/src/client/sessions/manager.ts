@@ -220,6 +220,24 @@ export class SessionManager {
   }
 
   /**
+   * Stop a running background job the given session owns, from the job list.
+   * Fire-and-return: the list settles through the `session/jobs` feed once the
+   * job stops, and the Host delivers a cancellation notice to the model.
+   * @param sessionId - owning session.
+   * @param jobId - job to stop.
+   * @returns the kill outcome result.
+   */
+  async killJob(
+    sessionId: SessionId,
+    jobId: JobView['id'],
+  ): Promise<RpcResult<{ outcome: 'requested' | 'already-finished' }>> {
+    try {
+      return (await this.api.jobs.kill({ sessionId, jobId })).result
+    } catch (error) {
+      return transportError(error)
+    }
+  }
+  /**
    * Interrupt a continuable child's current turn through its durable
    * direct-parent address, without opening it. Fire-and-return: the receipt
    * acknowledges the admitted cancel, not quiescence, so the catalog row
