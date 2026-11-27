@@ -788,6 +788,16 @@
         "@neo/schemastery",
         "zod"
       ]
+    },
+    "packages/client/ui-usage": {
+      "entry": [
+        "tests/**/*.spec.tsx"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "tests/**/*.tsx"
+      ]
     }
   }
 }
