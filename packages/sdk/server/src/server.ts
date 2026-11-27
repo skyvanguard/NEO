@@ -13,7 +13,6 @@ import { carrierKeyOf, type Scoped } from '@neo/scope'
 import { SessionId } from '@neo/session'
 import type SubagentRuntime from '@neo/subagent'
 import type { SubagentRunEndInfo } from '@neo/subagent'
-import * as LlmDeepSeek from '@neo/llm-deepseek'
 import type {
   InitializeParams,
   InitializeResult,
@@ -53,9 +52,8 @@ function successStatus(reason: string, options: HarnessSdkJsonRpcServerOptions):
 export class HarnessSdkJsonRpcServer {
   private cwd = process.cwd()
   private provider = 'deepseek-official'
-  private model = 'deepseek-official'
+  private model = 'deepseek-v4-flash'
   private maxTokens: number | undefined
-  private llmFiber: { dispose(): Promise<void> } | undefined
   private readonly sessions = new Map<string, SessionRecord>()
   private readonly sessionCreations = new Map<string, Promise<SessionRecord>>()
   private readonly disposers: (() => void)[] = []
@@ -104,24 +102,26 @@ export class HarnessSdkJsonRpcServer {
   }
 
   /**
-   * Configure the SDK route, mounting the DeepSeek fallback only when unowned.
+   * Configure the SDK route. The surrounding composition owns every model
+   * adapter, so a provider no registered adapter serves fails the handshake.
    * @param params - SDK handshake parameters.
-   * @returns server identity for the handshake.
+   * @returns server identity for the handshake; rejects, leaving the previous
+   *   route in place, on an invalid `maxTokens` or a provider no registered
+   *   adapter serves.
    */
-  async initialize(params: InitializeParams): Promise<InitializeResult> {
+  initialize(params: InitializeParams): Promise<InitializeResult> {
     if (params.maxTokens !== undefined
       && (!Number.isSafeInteger(params.maxTokens) || params.maxTokens <= 0)) {
-      throw new TypeError('initialize maxTokens must be a positive safe integer')
+      return Promise.reject(new TypeError('initialize maxTokens must be a positive safe integer'))
+    }
+    if (!this.hasAdapterFor(params.provider)) {
+      return Promise.reject(new Error(`no adapter registered for provider "${params.provider}"`))
     }
     this.cwd = resolve(params.cwd)
     this.provider = params.provider
     this.model = params.model
     this.maxTokens = params.maxTokens
-    if (!this.hasAdapterFor(this.provider)) {
-      if (this.provider !== 'deepseek-official') throw new Error(`no adapter registered for provider "${this.provider}"`)
-      this.llmFiber = await this.ctx.plugin(LlmDeepSeek, {})
-    }
-    return { serverInfo: { name: 'neo-sdk-runtime', version: '0.0.1' } }
+    return Promise.resolve({ serverInfo: { name: 'neo-sdk-runtime', version: '0.0.1' } })
   }
 
   /**
@@ -143,7 +143,7 @@ export class HarnessSdkJsonRpcServer {
   }
 
   /**
-   * Dispose server-owned agents, adapter, and subscriptions to quiescence.
+   * Dispose server-owned agents and subscriptions to quiescence.
    * The surrounding context remains running.
    * @returns empty JSON-RPC result.
    */
@@ -167,11 +167,9 @@ export class HarnessSdkJsonRpcServer {
         failures.push(error)
       }
     }
-    const teardownResults = await Promise.allSettled([
-      ...records.map(rec => Promise.resolve().then(() => rec.handle.dispose())),
-      ...(this.llmFiber === undefined ? [] : [Promise.resolve().then(() => this.llmFiber?.dispose())]),
-    ])
-    this.llmFiber = undefined
+    const teardownResults = await Promise.allSettled(
+      records.map(rec => Promise.resolve().then(() => rec.handle.dispose())),
+    )
     failures.push(...teardownResults
       .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
       .map(result => result.reason as unknown))

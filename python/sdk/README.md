@@ -3,9 +3,12 @@
 English | [中文](https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk/README.zh.md)
 
 Python subprocess SDK for driving NEO over JSON-RPC stdio. The
-runtime inherits normal NEO environment variables such as
-`DEEPSEEK_BASE_URL` and `DEEPSEEK_API_KEY`, so callers can use real model
-endpoints directly or point those variables at a local proxy.
+runtime inherits the caller's environment, including `LLM_BASE_URL` (the
+OpenAI-compatible endpoint, default a local llama-server at
+`http://127.0.0.1:8080/v1`) and `LLM_API_KEY`, so callers can point it at a
+local server, a hosted gateway, or a proxy. The SDK also passes its `model`
+as `LLM_MODEL`, the one model the bundled route serves. The runtime no longer
+reads `DEEPSEEK_API_KEY` or `DEEPSEEK_BASE_URL`; set the `LLM_*` names instead.
 
 Install the `neo-sdk` distribution from PyPI; the import module remains `neo_sdk`:
 
@@ -24,7 +27,7 @@ with Neo() as harness:
 
 `Neo` keeps its lazily started runtime subprocess for reuse across calls. Use it as a context manager, as above, or call `close()` explicitly when finished.
 
-By default, the SDK launches the bundled single-file `dsh-jsonrpc-agent` executable from the `neo-runtime-bin` package and injects that package's default configuration (the stdio JSON-RPC server, agent core, preloaded DeepSeek adapter, JSONL session persistence with an explicitly composed semantic checkpoint policy, local bash) via `NEO_CORDIS_CONFIG`. To run a plugin composition of your own, keep the `@neo/sdk-jsonrpc-server` entry in the config and pass the Cordis config path.
+By default, the SDK launches the bundled single-file `dsh-jsonrpc-agent` executable from the `neo-runtime-bin` package and injects that package's default configuration (the stdio JSON-RPC server, agent core, one OpenAI-compatible `llm-pi-ai` route, JSONL session persistence with an explicitly composed semantic checkpoint policy, local bash) via `NEO_CORDIS_CONFIG`. To run a plugin composition of your own, keep the `@neo/sdk-jsonrpc-server` entry in the config and pass the Cordis config path.
 
 ```py
 from neo_sdk import Neo
@@ -38,7 +41,7 @@ with Neo(
     result = harness.run("Make the requested code change.")
 ```
 
-`provider` selects a provider route registered by the chosen Cordis composition; `model` is the model id resolved by that adapter. `max_tokens` is an optional positive per-request output-token cap for the root agent and its in-process descendants; omission leaves the provider default in control. Compaction summaries keep the separate limit configured by their compaction plugin. The bundled default composition registers `deepseek-official`. A custom composition can mount `llm-pi-ai`, configure provider-specific credentials/endpoints there, and select any provider/model present in pi-ai's installed catalog.
+`provider` selects a provider route registered by the chosen Cordis composition; `model` is the model id resolved by that adapter. `max_tokens` is an optional positive per-request output-token cap for the root agent and its in-process descendants; omission leaves the provider default in control. Compaction summaries keep the separate limit configured by their compaction plugin. The bundled default composition registers `deepseek-official` as a hand-declared `llm-pi-ai` route at `LLM_BASE_URL`. A custom composition can declare its own `llm-pi-ai` routes, configure provider-specific credentials/endpoints there, and select any provider/model present in pi-ai's installed catalog; `initialize` fails for a provider no mounted adapter serves.
 
 The [Python SDK tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/guide/python-sdk.md) provides an ordered installation and first-run path without the Web UI. The [`jsonrpc-agent` example](https://github.com/deepseek-ai/deepseek-harness/blob/master/examples/jsonrpc-agent/README.md) owns the complete standalone Cordis file used there.
 

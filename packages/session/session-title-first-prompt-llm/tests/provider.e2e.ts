@@ -1,24 +1,45 @@
 import { createUserMessage } from '@neo/llm'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import LlmRuntime from '@neo/llm'
-import * as LlmDeepSeek from '@neo/llm-deepseek'
+import * as LlmPiAi from '@neo/llm-pi-ai'
+import { startMockLlmServer } from '@neo/llm-mock-server'
+import type { MockLlmServer } from '@neo/llm-mock-server'
 import SessionStore, { SessionId } from '@neo/session'
 import SessionTitleService from '@neo/session-title'
 import * as FirstMessageTitleProvider from '@neo/session-title-first-prompt-llm'
 
 const contexts: Context[] = []
+const servers: MockLlmServer[] = []
 
 afterEach(async () => {
   await Promise.all(contexts.splice(0).map(ctx => ctx.fiber.dispose()))
+  await Promise.all(servers.splice(0).map(server => server.close()))
+  vi.unstubAllEnvs()
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('first-prompt title provider with real DeepSeek API', () => {
+describe('first-prompt title provider over a real OpenAI-compatible HTTP adapter', () => {
   it('replaces the fallback with a short model title', async () => {
+    const server = await startMockLlmServer({
+      sequence: ['success'],
+      apiKey: 'mock-key',
+      successText: 'Durable append-only session titles',
+    })
+    servers.push(server)
+    vi.stubEnv('MOCK_LLM_API_KEY', 'mock-key')
     const ctx = new Context()
     contexts.push(ctx)
     await ctx.plugin(LlmRuntime)
-    await ctx.plugin(LlmDeepSeek, { thinking: 'disabled' })
+    await ctx.plugin(LlmPiAi, {
+      providers: {
+        'deepseek-official': {
+          api: 'openai-completions',
+          baseURL: server.baseURL,
+          apiKeyEnv: 'MOCK_LLM_API_KEY',
+          models: [{ id: 'deepseek-v4-flash' }],
+        },
+      },
+    })
     await ctx.plugin(SessionStore)
     await ctx.plugin(SessionTitleService, {
       fallbackMaxWords: 5,
@@ -53,7 +74,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('first-prompt title provider with
         model: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
       },
     })
-    expect(title?.title.length).toBeGreaterThan(0)
-    expect(Buffer.byteLength(title?.title ?? '', 'utf8')).toBeLessThanOrEqual(80)
+    expect(title?.title).toBe('Durable append-only session titles')
+    expect(server.requests).toHaveLength(1)
   })
 })

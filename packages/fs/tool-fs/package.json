@@ -58,7 +58,7 @@
     "@neo/fs-observation-policy": "workspace:^",
     "@neo/invariants": "workspace:^",
     "@neo/llm": "workspace:^",
-    "@neo/llm-deepseek": "workspace:^",
+    "@neo/llm-pi-ai": "workspace:^",
     "@neo/sandbox": "workspace:^",
     "@neo/sandbox-policy": "workspace:^",
     "@neo/session": "workspace:^",

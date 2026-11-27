@@ -30,7 +30,7 @@ afterEach(async () => {
   root = undefined
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('resume: continue a persisted session across processes', () => {
+describe.skipIf(!process.env.LLM_API_KEY)('resume: continue a persisted session across processes', () => {
   it('recalls a fact stored in a prior, separately-disposed session', async () => {
     root = await mkdtemp(join(tmpdir(), 'dsh-resume-e2e-'))
 

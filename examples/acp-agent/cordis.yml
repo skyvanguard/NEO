@@ -1,19 +1,25 @@
 # ACP automation server and backend snapshot-record composition. With
-# `NEO_SNAPSHOT=record`, the app bin runs the real DeepSeek adapter and the
+# `NEO_SNAPSHOT=record`, the app bin runs the live model route and the
 # harness harvests its persisted log. The bin loads the gitignored root `.env`
 # before this config. This tree has no stdout logger or HMR because stdout
 # carries ACP JSON-RPC.
 
-# The DeepSeek adapter. Shipped default: full thinking at max effort on every
-# request; exact-model resolution materializes request defaults before logging.
-- id: llm-deepseek
-  name: '@neo/llm-deepseek'
+# One hand-declared OpenAI-compatible route (llama-server, vLLM, or a hosted
+# gateway). It keeps the `deepseek-official` route and model ids the app config
+# and the recorded replay corpus name. LLM_BASE_URL selects the endpoint
+# (default: a local llama-server); LLM_API_KEY resolves per request, so no key
+# is inlined here.
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
   config:
-    thinking: enabled
-    reasoningEffort: max
-    models:
-      - id: deepseek-v4-flash
-      - id: deepseek-v4-pro
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
+        apiKeyEnv: LLM_API_KEY
+        models:
+          - id: deepseek-v4-flash
+          - id: deepseek-v4-pro
 
 # The default composition confines bash AND the filesystem tools to the
 # workspace and asks before a wider retry. Snapshot runs select

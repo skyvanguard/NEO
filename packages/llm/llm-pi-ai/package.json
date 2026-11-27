@@ -1,6 +1,6 @@
 {
   "name": "@neo/llm-pi-ai",
-  "description": "pi-ai-backed DeepSeek adapter for the NEO LLM seam (design-verification twin of dsh-llm-deepseek)",
+  "description": "pi-ai-backed multi-provider and OpenAI-compatible adapter for the NEO LLM seam",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
@@ -51,7 +51,6 @@
     "@neo/launch-environment": "workspace:^",
     "@neo/invariants": "workspace:^",
     "@neo/llm": "workspace:^",
-    "@neo/llm-deepseek": "workspace:^",
     "@neo/settings": "workspace:^",
     "@neo/timeout": "workspace:^",
     "@neo/cordis": "workspace:^"

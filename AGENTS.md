@@ -14,7 +14,7 @@ packages/    @neo/<pkg> workspaces at packages/<group>/<pkg>/
   core/        product API spine: session, system-prompt, tools, agent, agent-loop
   api/         Remote BFF assembly and Typert RPC gateway
   typert/      type graph generator, loader, and runtime registry
-  llm/         LLM capability: Service Definition/Consumer + DeepSeek providers
+  llm/         LLM capability: Service Definition/Consumer + pi-ai provider
   e2b/         E2B POC: sandbox + FS/subprocess adapters
   shell/        bash capability: Service Definition + local/pwsh providers + shell Consumers
   subprocess/  subprocess capability + local process-tree provider
@@ -35,7 +35,6 @@ packages/    @neo/<pkg> workspaces at packages/<group>/<pkg>/
   self-modification/  the agent inspects/mounts its own plugins
   hooks/       Claude Code/Codex hook bridges + wire-protocol library
   session/     durable session data: persistence, projection, titles
-  identity/    anonymous identity
   settings/    user-settings capability + file provider
   credentials/ credential-reference capability + env/.env provider
   acp/         automation-only Agent Client Protocol server
@@ -62,7 +61,7 @@ pnpm run clean           # remove build outputs and safe residue from deleted pa
 pnpm run test           # vitest unit tests
 pnpm vitest run <path>  # one file or directory; add -t <name> to filter by test name
 pnpm run test:coverage  # CI coverage gate: per-file 100% on packages/*/*/src
-pnpm run test:e2e       # real-API tests; self-skip without DEEPSEEK_API_KEY
+pnpm run test:e2e       # real-API tests; self-skip without their provider key
 pnpm run test:snapshot  # keyless ACP/headless replay vs expected outputs; filter: -t <name>
 pnpm run test:snapshot:record  # re-record expected outputs (needs key)
 pnpm run typecheck
@@ -76,9 +75,9 @@ pnpm run check:all      # every gate; the ci-* subsets live in the same file
 pnpm run website:build  # VitePress build (doubles as dead-link check)
 pnpm run dev:web        # Web UI with watch rebuild
 pnpm run mock:llm       # keyless LLM mock server; use it instead of a key for local runs
-pnpm neo --profile headless "task"  # run one task from source (needs DEEPSEEK_API_KEY)
+pnpm neo --profile headless "task"  # run one task from source (needs a Settings → Models route)
 pnpm run demo:cordis    # the agent modifies its own runtime (needs key)
-pnpm run demo:acp       # ACP automation server (needs DEEPSEEK_API_KEY)
+pnpm run demo:acp       # ACP automation server (needs LLM_API_KEY)
 ```
 
 ### Host sandbox failures
@@ -95,7 +94,7 @@ Run checks before pushes via [dsh-pre-push-checks](.agents/skills/dsh-pre-push-c
 
 ## Secrets / .env
 
-Real-API tests and demos read `DEEPSEEK_API_KEY`, optional `DEEPSEEK_BASE_URL`, and root `.env`. cordis.yml allows `!!js` (never `!js`) under plugin `config` and entry `disabled`; other metadata stays literal, so conditional composition also uses overlays. Never commit credentials. CI e2e skips without a key; testing.md owns key policy.
+Real-model tests and demos reach an OpenAI-compatible endpoint through `LLM_BASE_URL` (default a local llama-server at `http://127.0.0.1:8080/v1`) with `LLM_API_KEY`, from the environment or root `.env`; the DeepSeek web-search and Claude Code/Codex bridge tests still read `DEEPSEEK_API_KEY`. cordis.yml allows `!!js` (never `!js`) under plugin `config` and entry `disabled`; other metadata stays literal, so conditional composition also uses overlays. Never commit credentials. CI e2e skips without a key; testing.md owns key policy.
 
 ## Conventions
 

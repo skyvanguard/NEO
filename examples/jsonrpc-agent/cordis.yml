@@ -6,14 +6,21 @@
   config:
     maxTokensAsSuccess: !!js "process.env.NEO_MAX_TOKENS_AS_SUCCESS === undefined ? true : JSON.parse(process.env.NEO_MAX_TOKENS_AS_SUCCESS)"
 
-# The DeepSeek adapter. Shipped default: full thinking at max effort on every
-# request; exact-model resolution materializes request defaults before logging.
-# The model arrives per session over JSON-RPC, so it is not pinned here.
-- id: llm-deepseek
-  name: '@neo/llm-deepseek'
+# One hand-declared OpenAI-compatible route, kept on the `deepseek-official`
+# id the SDK initializes. LLM_BASE_URL selects the endpoint (default: a local
+# llama-server) and LLM_API_KEY resolves per request. The model arrives over
+# JSON-RPC; the Python SDK exports the same id as LLM_MODEL, so the route
+# serves exactly the model the session requests.
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
   config:
-    thinking: enabled
-    reasoningEffort: max
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
+        apiKeyEnv: LLM_API_KEY
+        models:
+          - id: !!js process.env.LLM_MODEL ?? 'deepseek-v4-flash'
 
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
 - id: subprocess

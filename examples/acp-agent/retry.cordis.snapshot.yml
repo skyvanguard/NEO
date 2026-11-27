@@ -1,4 +1,4 @@
-# Keyless replay for the retry overlay: disable the key-requiring DeepSeek
+# Keyless replay for the retry overlay: disable the live model
 # adapter, insert `llm-replay`, and give its provider the same deterministic
 # 1 ms zero-jitter retry policy as the live sibling. The app patch still
 # restates its whole config for raw JSONL persistence and the recorded model.
@@ -7,8 +7,8 @@
   config:
     path: ./cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@neo/llm-deepseek'
+      - id: llm-pi-ai
+        name: '@neo/llm-pi-ai'
         disabled: true
       - id: acp-agent
         name: '@neo/acp-demo'

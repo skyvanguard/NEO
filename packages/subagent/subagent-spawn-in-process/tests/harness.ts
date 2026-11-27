@@ -6,14 +6,16 @@ import { LocalBashExecutor } from '@neo/bash-local'
 import * as BashEnvPlugin from '@neo/shell-env'
 import LocalSubprocessRuntime from '@neo/subprocess-local'
 import * as ToolBash from '@neo/tool-bash'
-import * as LlmDeepSeek from '@neo/llm-deepseek'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 import SubagentRuntime from '@neo/subagent'
 import * as Spawn from '../src/index.ts'
 import * as ToolSubagent from '@neo/tool-subagent'
 
 /**
- * Shared harness for the spawn-backend e2e: the full real stack (DeepSeek
- * adapter + real bash tool + the subagent tool bound to the spawn backend), so
+ * Shared harness for the spawn-backend e2e: the full real stack (a live
+ * OpenAI-compatible endpoint through llm-pi-ai — `LLM_BASE_URL`, default a
+ * local llama-server, keyed by `LLM_API_KEY` — + real bash tool + the subagent
+ * tool bound to the spawn backend), so
  * a real parent agent can delegate to a real in-process child that does real
  * work (writes a file). Lives outside the *.e2e.ts pattern so importing it never
  * re-registers another file's tests.
@@ -28,7 +30,16 @@ export async function spawnHarness(workdir: string): Promise<Context> {
     systemPrompt: { persona: 'You are a coding agent. Report only when the requested work is done.' },
   })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek)
+  await ctx.plugin(LlmPiAi, {
+    providers: {
+      'deepseek-official': {
+        api: 'openai-completions',
+        baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
+        apiKeyEnv: 'LLM_API_KEY',
+        models: [{ id: 'deepseek-v4-flash' }],
+      },
+    },
+  })
   await ctx.plugin(LocalSubprocessRuntime)
   await ctx.plugin(BashEnvPlugin)
   await ctx.plugin(LocalBashExecutor, { cwd: workdir, timeoutMs: 30_000 })

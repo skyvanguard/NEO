@@ -52,7 +52,7 @@
     "@neo/fs-local": "workspace:^",
     "@neo/invariants": "workspace:^",
     "@neo/llm": "workspace:^",
-    "@neo/llm-deepseek": "workspace:^",
+    "@neo/llm-pi-ai": "workspace:^",
     "@neo/home-paths": "workspace:^",
     "@neo/session": "workspace:^",
     "@neo/system-prompt": "workspace:^",

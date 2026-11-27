@@ -51,7 +51,6 @@ function runBuiltWeb(cwd: string): Promise<{ stdout: string; stderr: string; cod
       DEEPSEEK_API_KEY: 'dsh-cli-smoke-dummy-key',
       NEO_HOME: join(cwd, '.neo'),
     }
-    delete env.DEEPSEEK_BASE_URL
     delete env.NODE_OPTIONS
     delete env.NODE_NO_WARNINGS
     const child = spawn(process.execPath, [

@@ -11,7 +11,7 @@ import ToolRuntime from '@neo/tools'
 import AgentRegistry from '@neo/agent'
 import type { Agent } from '@neo/agent'
 import AgentLoop from '@neo/agent-loop'
-import * as LlmDeepSeek from '@neo/llm-deepseek'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 import * as WorkspaceContext from '@neo/agent-instructions'
 import { candidateScopeKey } from '../src/render.ts'
 import LocalFileSystem from '@neo/fs-local'
@@ -46,7 +46,18 @@ async function harness(): Promise<{ ctx: Context; agent: Agent }> {
   await ctx.plugin(ToolFs)
   await ctx.plugin(WorkspaceContext, { maxBytes: 65536 })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek, { models: [{ id: 'deepseek-v4-flash' }] })
+  // Live OpenAI-compatible endpoint: LLM_BASE_URL (default: a local
+  // llama-server) authenticated with LLM_API_KEY, whose absence skips the suite.
+  await ctx.plugin(LlmPiAi, {
+    providers: {
+      'deepseek-official': {
+        api: 'openai-completions',
+        baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
+        apiKeyEnv: 'LLM_API_KEY',
+        models: [{ id: 'deepseek-v4-flash' }],
+      },
+    },
+  })
   const handle = await ctx.agents.create({
     sessionId: SessionId('workspace-context-e2e-session'),
     meta: { cwd: workdir },
@@ -75,7 +86,7 @@ function finalText(events: SessionEvent[]): string {
     .join('')
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('workspace context e2e: real model sees AGENTS.md baseline', () => {
+describe.skipIf(!process.env.LLM_API_KEY)('workspace context e2e: real model sees AGENTS.md baseline', () => {
   it('obeys a probe instruction loaded from the workspace', async () => {
     const live = await harness()
 

@@ -24,8 +24,9 @@ import sys
 
 env_dump = os.environ["ENV_DUMP"]
 json.dump({
-    "DEEPSEEK_API_KEY": os.environ.get("DEEPSEEK_API_KEY"),
-    "DEEPSEEK_BASE_URL": os.environ.get("DEEPSEEK_BASE_URL"),
+    "LLM_API_KEY": os.environ.get("LLM_API_KEY"),
+    "LLM_BASE_URL": os.environ.get("LLM_BASE_URL"),
+    "LLM_MODEL": os.environ.get("LLM_MODEL"),
     "NEO_CWD": os.environ.get("NEO_CWD"),
     "NEO_SESSION_ROOT": os.environ.get("NEO_SESSION_ROOT"),
     "NEO_CORDIS_CONFIG": os.environ.get("NEO_CORDIS_CONFIG"),
@@ -101,8 +102,8 @@ for line in sys.stdin:
         env={
             "ENV_DUMP": str(env_dump),
             "INIT_DUMP": str(init_dump),
-            "DEEPSEEK_API_KEY": "env-key",
-            "DEEPSEEK_BASE_URL": "http://127.0.0.1:4321",
+            "LLM_API_KEY": "env-key",
+            "LLM_BASE_URL": "http://127.0.0.1:4321",
         },
     ) as harness:
         result = harness.run("say hello", session_id="main")
@@ -111,8 +112,9 @@ for line in sys.stdin:
     assert result.finish_reason == "max-tokens"
     assert result.events[-1]["type"] == "turn/end"
     dumped_env = json.loads(env_dump.read_text())
-    assert dumped_env["DEEPSEEK_API_KEY"] == "env-key"
-    assert dumped_env["DEEPSEEK_BASE_URL"] == "http://127.0.0.1:4321"
+    assert dumped_env["LLM_API_KEY"] == "env-key"
+    assert dumped_env["LLM_BASE_URL"] == "http://127.0.0.1:4321"
+    assert dumped_env["LLM_MODEL"] == "deepseek-v4-flash"
     assert dumped_env["NEO_CWD"] == str(tmp_path)
     assert dumped_env["NEO_SESSION_ROOT"] == str(tmp_path / "sessions")
     assert dumped_env["NEO_CORDIS_CONFIG"] == str(tmp_path / "cordis.yml")
@@ -121,6 +123,45 @@ for line in sys.stdin:
         "provider": "deepseek-official",
         "model": "deepseek-v4-flash",
         "maxTokens": 4096,
+    }
+
+
+def test_sdk_exports_endpoint_key_and_requested_model_to_the_runtime(tmp_path: Path) -> None:
+    script = tmp_path / "fake_runtime.py"
+    env_dump = tmp_path / "env.json"
+    script.write_text(
+        """
+import json
+import os
+import sys
+
+json.dump({name: os.environ.get(name) for name in ("LLM_API_KEY", "LLM_BASE_URL", "LLM_MODEL")},
+          open(os.environ["ENV_DUMP"], "w"))
+for line in sys.stdin:
+    msg = json.loads(line)
+    if msg.get("method") == "initialize":
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-runtime"}}}), flush=True)
+    elif msg.get("method") == "shutdown":
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
+        break
+""".strip()
+    )
+
+    with Neo(
+        model="served-model",
+        cwd=str(tmp_path),
+        launch_args_override=(sys.executable, str(script)),
+        api_key="kwarg-key",
+        base_url="http://127.0.0.1:4322/v1",
+        # The route must list the model initialize requests, so `model` wins.
+        env={"ENV_DUMP": str(env_dump), "LLM_MODEL": "ignored-model"},
+    ):
+        pass
+
+    assert json.loads(env_dump.read_text()) == {
+        "LLM_API_KEY": "kwarg-key",
+        "LLM_BASE_URL": "http://127.0.0.1:4322/v1",
+        "LLM_MODEL": "served-model",
     }
 
 

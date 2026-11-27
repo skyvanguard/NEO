@@ -60,7 +60,6 @@
     "@neo/goal-round-driver": "workspace:^",
     "@neo/api-gateway": "workspace:^",
     "@neo/llm": "workspace:^",
-    "@neo/llm-deepseek": "workspace:^",
     "@neo/llm-pi-ai": "workspace:^",
     "@neo/llm-retry": "workspace:^",
     "@neo/permission-presets": "workspace:^",

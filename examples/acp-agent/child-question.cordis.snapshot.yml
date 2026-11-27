@@ -1,13 +1,13 @@
 # Keyless counterpart to child-question.cordis.yml: keep the real interaction
-# seam, model-facing tool, and tripwire provider while replacing DeepSeek with
-# per-session replay.
+# seam, model-facing tool, and tripwire provider while replacing the live model
+# adapter with per-session replay.
 - id: base
   name: '@neo/cordis-plugin-include'
   config:
     path: ./cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@neo/llm-deepseek'
+      - id: llm-pi-ai
+        name: '@neo/llm-pi-ai'
         disabled: true
       - id: sandbox
         name: '@neo/sandbox-local'

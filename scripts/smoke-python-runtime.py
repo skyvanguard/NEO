@@ -72,6 +72,16 @@ SNAPSHOT_FILENAMES = ("result.json", "session.jsonl", "session.1.jsonl", "sessio
 CUSTOM_CORDIS = """\
 - id: sdk-jsonrpc-server
   name: '@neo/sdk-jsonrpc-server'
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
+  config:
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: !!js process.env.LLM_BASE_URL
+        apiKeyEnv: LLM_API_KEY
+        models:
+          - id: !!js process.env.LLM_MODEL
 - id: agent-core
   name: '@neo/agent-spine-demo'
   config:
@@ -642,8 +652,9 @@ def smoke_direct(base_url: str, executable: Path) -> None:
             "NEO_CORDIS_CONFIG": str(cordis),
             "NEO_SESSION_ROOT": str(sessions),
             "NEO_CWD": str(root),
-            "DEEPSEEK_API_KEY": "sk-keyless-smoke",
-            "DEEPSEEK_BASE_URL": base_url,
+            "LLM_API_KEY": "sk-keyless-smoke",
+            "LLM_BASE_URL": base_url,
+            "LLM_MODEL": "smoke-model",
         }
         peer = RuntimePeer([str(executable)], root, environment)
         try:

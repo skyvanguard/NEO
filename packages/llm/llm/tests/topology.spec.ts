@@ -77,7 +77,7 @@ describe('llm/adapters-updated', () => {
   })
 
   it('replaces a route set in one event, never publishing an empty registry between the two', async () => {
-    // The retry-policy swap in llm-deepseek: disposing and re-registering
+    // An adapter's retry-policy swap: disposing and re-registering
     // would let an observer see the provider disappear and come back.
     const ctx = await setup()
     const observed: string[][] = []

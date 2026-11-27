@@ -73,7 +73,7 @@ New sessions default to the `workspace-write` permission preset. Bash and filesy
 
 ## Shared deployment behavior
 
-The base bundle mounts the native DeepSeek adapter, settings and credential providers, and stable `web_search`. Provider credentials resolve from the inherited environment, `$NEO_HOME/.credentials.yaml`, the invoking directory's `.env`, then `$NEO_HOME/.env`; the managed document is never materialized into `process.env`, while both `.env` files are ordinary launch environment layers. Search uses `DEEPSEEK_API_KEY` and accepts `DEEPSEEK_SEARCH_BASE_URL`; `web_fetch` is disabled unless a patch layer inserts a provider and enables it.
+The base bundle mounts the `llm-pi-ai` adapter dormant (its routes come from the Settings → Models section), settings and credential providers, and stable `web_search`. Provider credentials resolve from the inherited environment, `$NEO_HOME/.credentials.yaml`, the invoking directory's `.env`, then `$NEO_HOME/.env`; the managed document is never materialized into `process.env`, while both `.env` files are ordinary launch environment layers. Search uses `DEEPSEEK_API_KEY` and accepts `DEEPSEEK_SEARCH_BASE_URL`; `web_fetch` is disabled unless a patch layer inserts a provider and enables it.
 
 Install external plugin bundles through `neo plugin --profile <name> add <package-or-git-spec>`. The installed package owns its dependencies and contributes its declared `cordis.patch.yml` layer. The CLI also ships `@neo/mcp-client` as a dependency for patch layers, but no MCP server is enabled by default because each server command is trusted executable code outside the agent sandbox.
 

@@ -15,8 +15,12 @@ class NeoConfig:
     """Configuration for launching the local NEO SDK runtime.
 
     The runtime inherits the caller's environment by default, so existing
-    DEEPSEEK_API_KEY and DEEPSEEK_BASE_URL settings keep working. Use ``env`` to
-    intentionally override or inject variables for a subprocess.
+    LLM_API_KEY and LLM_BASE_URL settings keep working; ``api_key`` and
+    ``base_url`` set them for this runtime only. The runtime also receives
+    ``model`` as LLM_MODEL, so a composition whose route reads it serves exactly
+    the model each session requests; ``model`` therefore wins over an LLM_MODEL
+    in ``env``. Use ``env`` to intentionally override or inject other variables
+    for a subprocess.
     """
 
     provider: str = "deepseek-official"
@@ -66,10 +70,11 @@ class Neo:
         if self.config.cordis is not None:
             env["NEO_CORDIS_CONFIG"] = self.config.cordis
         env["NEO_CWD"] = cwd
+        env["LLM_MODEL"] = self.config.model
         if self.config.base_url is not None:
-            env["DEEPSEEK_BASE_URL"] = self.config.base_url
+            env["LLM_BASE_URL"] = self.config.base_url
         if self.config.api_key is not None:
-            env["DEEPSEEK_API_KEY"] = self.config.api_key
+            env["LLM_API_KEY"] = self.config.api_key
 
         self._client = NeoClient(
             NeoClientConfig(

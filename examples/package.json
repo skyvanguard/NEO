@@ -39,7 +39,6 @@
     "@neo/invariants": "workspace:*",
     "@neo/sdk-jsonrpc-server": "workspace:*",
     "@neo/llm": "workspace:*",
-    "@neo/llm-deepseek": "workspace:*",
     "@neo/llm-pi-ai": "workspace:*",
     "@neo/llm-replay": "workspace:*",
     "@neo/loader-smoke": "workspace:*",

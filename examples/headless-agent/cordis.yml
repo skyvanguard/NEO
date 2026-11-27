@@ -4,32 +4,34 @@
 # the two providers below.
 
 # User-settings document (`$NEO_HOME/settings.yaml`, hot-reloaded): a
-# `llm-deepseek:` section there overrides the adapter entry below without a
-# restart.
+# `llm-pi-ai:` section there overrides the adapter entry below, per provider
+# route, without a restart.
 - id: settings
   name: '@neo/settings-file'
 
 # Credential store: the live process environment over `$NEO_HOME/.credentials.yaml`
-# (owner-only file, hot-reloaded). The adapter resolves `DEEPSEEK_API_KEY`
+# (owner-only file, hot-reloaded). The adapter resolves `LLM_API_KEY`
 # through it at each request, so no key is inlined in this file.
 - id: credentials
   name: '@neo/credentials-local'
 
-# The DeepSeek adapter. Swap to '@neo/llm-pi-ai' for the pi-ai-backed
-# twin (a `providers` dict keyed by route; `reasoning: high` replaces
-# thinking/reasoningEffort). Shipped default: full thinking at max effort on
-# every request. Exact-model resolution materializes request defaults before
-# the request header is logged.
-- id: llm-deepseek
-  name: '@neo/llm-deepseek'
+# One hand-declared OpenAI-compatible route (llama-server, vLLM, or a hosted
+# gateway). It keeps the `deepseek-official` route and model ids the agent row
+# below and the recorded replay corpus name. LLM_BASE_URL selects the endpoint
+# (default: a local llama-server).
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
   config:
-    thinking: enabled
-    reasoningEffort: max
-    models:
-      - id: deepseek-v4-pro
-        contextWindow: 128000
-      - id: deepseek-v4-flash
-        contextWindow: 128000
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
+        apiKeyEnv: LLM_API_KEY
+        models:
+          - id: deepseek-v4-pro
+            contextWindow: 128000
+          - id: deepseek-v4-flash
+            contextWindow: 128000
 
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
 - id: subprocess

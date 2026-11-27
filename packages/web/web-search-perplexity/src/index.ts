@@ -2,7 +2,7 @@
  * `@neo/web-search-perplexity`: registers a Perplexity-backed
  * `WebSearchProvider` with `ctx.web`. A function/namespace plugin (NOT a
  * default-export service): it registers INTO the seam's provider registry, like
- * `@neo/llm-deepseek` registers an adapter into `ctx.llm`.
+ * `@neo/llm-pi-ai` registers an adapter into `ctx.llm`.
  *
  * @module @neo/web-search-perplexity
  */

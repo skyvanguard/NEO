@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@neo/cordis'
 import * as agentCore from '@neo/agent-spine-demo'
 import JsonlSessionPersistence from '@neo/session-persistence-jsonl'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 import * as jsonrpc from '../src/index.ts'
 
 /**
@@ -57,11 +58,25 @@ async function settle(): Promise<void> {
 /** Mount the real plugin on a minimal harness with in-memory stdio and exit. */
 async function mountPlugin(
   storageDir: string,
-  options: { writeDelayMs?: number; failFlush?: boolean } = {},
+  options: { writeDelayMs?: number; failFlush?: boolean; llmBaseURL?: string } = {},
 ): Promise<ApplyHarness> {
   const ctx = new Context()
   await ctx.plugin(agentCore, { workspaceContext: false })
   await ctx.plugin(JsonlSessionPersistence, { root: storageDir })
+  if (options.llmBaseURL !== undefined) {
+    // The composition owns the adapter; `initialize` only checks the route.
+    vi.stubEnv('LOCAL_API_KEY', 'test-key')
+    await ctx.plugin(LlmPiAi, {
+      providers: {
+        local: {
+          api: 'openai-completions',
+          baseURL: options.llmBaseURL,
+          apiKeyEnv: 'LOCAL_API_KEY',
+          models: [{ id: 'apply-model' }, { id: 'dsagent-model' }],
+        },
+      },
+    })
+  }
   await new Promise(resolve => setTimeout(resolve, 50))
 
   const input = new PassThrough()
@@ -152,10 +167,9 @@ async function mockCompletionServer(): Promise<{ url: string; requests: unknown[
 describe('dsh-sdk-jsonrpc-server plugin apply', () => {
   it('serves initialize over the injected stdio pair', async () => {
     const storageDir = await mkdtemp(join(tmpdir(), 'dsh-jsonrpc-apply-init-'))
-    vi.stubEnv('DEEPSEEK_API_KEY', 'test-key')
-    const harness = await mountPlugin(storageDir)
+    const harness = await mountPlugin(storageDir, { llmBaseURL: 'http://127.0.0.1:9' })
     try {
-      harness.send({ jsonrpc: '2.0', id: 'init-1', method: 'initialize', params: { cwd: storageDir, provider: 'deepseek-official', model: 'apply-model' } })
+      harness.send({ jsonrpc: '2.0', id: 'init-1', method: 'initialize', params: { cwd: storageDir, provider: 'local', model: 'apply-model' } })
 
       const response = await harness.waitForFrame(frame => frame.id === 'init-1', 'initialize response')
       expect(response).toEqual({
@@ -173,11 +187,9 @@ describe('dsh-sdk-jsonrpc-server plugin apply', () => {
   it('drives a session/prompt turn end-to-end and forwards session notifications as output frames', async () => {
     const storageDir = await mkdtemp(join(tmpdir(), 'dsh-jsonrpc-apply-prompt-'))
     const llmServer = await mockCompletionServer()
-    vi.stubEnv('DEEPSEEK_API_KEY', 'test-key')
-    vi.stubEnv('DEEPSEEK_BASE_URL', llmServer.url)
-    const harness = await mountPlugin(storageDir)
+    const harness = await mountPlugin(storageDir, { llmBaseURL: llmServer.url })
     try {
-      harness.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { cwd: storageDir, provider: 'deepseek-official', model: 'dsagent-model' } })
+      harness.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { cwd: storageDir, provider: 'local', model: 'dsagent-model' } })
       await harness.waitForFrame(frame => frame.id === 1, 'initialize response')
 
       harness.send({

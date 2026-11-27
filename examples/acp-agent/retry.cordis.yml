@@ -2,29 +2,32 @@
 # deterministic 1 ms zero-jitter delay so the durable `llm/retry` event
 # (`delayMs`) and replay wall time stay reproducible. The overlay changes no
 # tool or prompt composition, so its scenarios share the default header class.
-# Config patches replace whole plugin configs: the provider patch restates its
-# adapter fields around `retryPolicy`, while the app patch re-pins the recorded
-# flash model and restates its base fields.
+# Config patches replace whole plugin configs: the adapter patch restates its
+# route around the route-owned `retryPolicy`, while the app patch re-pins the
+# recorded flash model and restates its base fields.
 - id: base
   name: '@neo/cordis-plugin-include'
   config:
     path: ./cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@neo/llm-deepseek'
+      - id: llm-pi-ai
+        name: '@neo/llm-pi-ai'
         config:
-          thinking: enabled
-          reasoningEffort: max
-          retryPolicy:
-            mode: normal
-            maxRetries: 2
-            backoff:
-              initialDelayMs: 1
-              maxDelayMs: 1
-              jitterRatio: 0
-          models:
-            - id: deepseek-v4-flash
-            - id: deepseek-v4-pro
+          providers:
+            deepseek-official:
+              api: openai-completions
+              baseURL: !!js process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1'
+              apiKeyEnv: LLM_API_KEY
+              retryPolicy:
+                mode: normal
+                maxRetries: 2
+                backoff:
+                  initialDelayMs: 1
+                  maxDelayMs: 1
+                  jitterRatio: 0
+              models:
+                - id: deepseek-v4-flash
+                - id: deepseek-v4-pro
       - id: acp-agent
         name: '@neo/acp-demo'
         config:

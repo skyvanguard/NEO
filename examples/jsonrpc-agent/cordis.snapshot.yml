@@ -1,8 +1,8 @@
-# Keyless replay includes the live `cordis.yml`, disables the key-requiring
-# DeepSeek adapter, and inserts `llm-replay` to serve recorded JSONL without a
+# Keyless replay includes the live `cordis.yml`, disables the live model
+# adapter, and inserts `llm-replay` to serve recorded JSONL without a
 # key or network; every other entry remains shared. The replay provider
 # catalog claims the `deepseek-official` provider so the SDK server's `initialize`
-# finds it owned and never mounts the real-adapter fallback. The SDK snapshot
+# finds it owned. The SDK snapshot
 # suite passes this path explicitly through `NEO_CORDIS_CONFIG` (the
 # jsonrpc-demo bin performs no NEO_SNAPSHOT config swap of its own), and
 # `llm-replay` reads `NEO_SNAPSHOT_FILE` / `NEO_SNAPSHOT_CHILD_FILES` from the
@@ -14,8 +14,8 @@
     patches:
       # `name` asserts the target: a mismatch skips the patch and warns only
       # when a logger exists.
-      - id: llm-deepseek
-        name: '@neo/llm-deepseek'
+      - id: llm-pi-ai
+        name: '@neo/llm-pi-ai'
         disabled: true
       - insert:
           - id: llm-replay

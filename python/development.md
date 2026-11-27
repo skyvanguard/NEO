@@ -27,7 +27,7 @@ uv run --project python/sdk pytest
 
 `python/sdk/tests/test_bundled_runtime.py` exercises available bundled carriers and skips a carrier when its artifact has not been built. For repository-wide test policy, see [Testing](../docs/testing.md).
 
-An interactive smoke test needs `DEEPSEEK_API_KEY` in the environment or repository-root `.env`:
+An interactive smoke test needs an OpenAI-compatible endpoint: export `LLM_BASE_URL` (default `http://127.0.0.1:8080/v1`, a local llama-server) and `LLM_API_KEY`:
 
 ```python
 from neo_sdk import Neo

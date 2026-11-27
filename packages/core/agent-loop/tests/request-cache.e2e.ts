@@ -8,16 +8,17 @@ import ToolRuntime, { defineContentToolFixture } from '@neo/tools'
 import AgentRegistry, { type Agent } from '@neo/agent'
 
 import AgentLoop from '@neo/agent-loop'
-import * as LlmDeepSeek from '@neo/llm-deepseek'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 
 /**
  * With-key proof that log-derived requests translate into real provider cache hits: a
- * multi-step tool turn (plus a follow-up turn) against the live DeepSeek API must report
- * `cacheReadTokens > 0` on every request after the first — the adapter maps the provider's
- * `prompt_cache_hit_tokens`, and the per-step usage recorded on `assistant/message` events is
- * the production observable for cache behavior (the reconstructability Agent Note's measurement
- * layer: prefix stability is corollary #1). Mocks establish append-extension;
- * this key-gated test establishes a real provider cache hit.
+ * multi-step tool turn (plus a follow-up turn) against a live OpenAI-compatible endpoint
+ * must report `cacheReadTokens > 0` on every request after the first — the adapter maps the
+ * endpoint's cached-prompt-token usage, and the per-step usage recorded on `assistant/message`
+ * events is the production observable for cache behavior (the reconstructability Agent Note's
+ * measurement layer: prefix stability is corollary #1). Mocks establish append-extension;
+ * this key-gated test establishes a real provider cache hit, so the endpoint under test
+ * must report cached prompt tokens.
  */
 
 // Long enough that the shared request prefix comfortably spans the provider's
@@ -45,7 +46,18 @@ async function loopHarness(): Promise<Context> {
   await created.plugin(ToolRuntime)
   await created.plugin(AgentRegistry)
   await created.plugin(AgentLoop, { agents: [] })
-  await created.plugin(LlmDeepSeek)
+  // Live OpenAI-compatible endpoint: LLM_BASE_URL (default: a local
+  // llama-server) authenticated with LLM_API_KEY, whose absence skips the suite.
+  await created.plugin(LlmPiAi, {
+    providers: {
+      'deepseek-official': {
+        api: 'openai-completions',
+        baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
+        apiKeyEnv: 'LLM_API_KEY',
+        models: [{ id: 'deepseek-v4-flash' }],
+      },
+    },
+  })
   created.tools.register(defineContentToolFixture({
     name: 'lookup',
     description: 'Look up the stored value for a key.',
@@ -68,7 +80,7 @@ function waitForIdle(context: Context, agent: Agent): Promise<void> {
   })
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('log-derived request cache hits (real API)', () => {
+describe.skipIf(!process.env.LLM_API_KEY)('log-derived request cache hits (real API)', () => {
   it('every request after the first hits the provider prefix cache', async () => {
     ctx = await loopHarness()
     const agent = ctx.agentLoop.create(SessionId('cache-e2e'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
