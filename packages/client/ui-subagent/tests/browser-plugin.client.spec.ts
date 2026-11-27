@@ -63,6 +63,10 @@ function sessionsWith(sessions: SessionSummary[]) {
       actionCalls.push({ method: 'refreshSubagents', args: [parentSessionId] })
       return Promise.resolve()
     },
+    interruptSubagent: (address: SubagentAddress) => {
+      actionCalls.push({ method: 'interruptSubagent', args: [address] })
+      return Promise.resolve({ ok: true as const, value: { accepted: true as const } })
+    },
     setSubagentCatalogOpen: (parentSessionId: SessionId, open: boolean) => {
       actionCalls.push({ method: 'setSubagentCatalogOpen', args: [parentSessionId, open] })
     },
@@ -159,10 +163,12 @@ describe('apply', () => {
       mode: 'continuable',
     }
     actions.openChild(address)
+    actions.interrupt(address)
     actions.refresh(sid('parent'))
     actions.setCatalogOpen(sid('parent'), true)
     expect(face.actionCalls).toEqual([
       { method: 'openSubagent', args: [address] },
+      { method: 'interruptSubagent', args: [address] },
       { method: 'refreshSubagents', args: [sid('parent')] },
       { method: 'setSubagentCatalogOpen', args: [sid('parent'), true] },
     ])
