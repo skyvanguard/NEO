@@ -47,7 +47,7 @@ const RETIRED_SESSION_EVENT_TYPES: ReadonlySet<string> = new Set([
   // `/feedback` command remark (`@neo/command-feedback`, removed with session telemetry).
   'feedback/record',
   // DeepSeek-backed `web_search` request record (`@neo/web-search-deepseek`,
-  // being retired with the DeepSeek providers; still known while it ships).
+  // removed with the DeepSeek search provider).
   'web/deepseek-search-llm-request',
 ])
 

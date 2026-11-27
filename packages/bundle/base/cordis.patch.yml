@@ -375,12 +375,10 @@
         thresholds: [3, 5, 8]
         argumentsPreviewChars: 500
 
-    # Every mode enables the stable model-facing web_search tool. DeepSeek search
-    # resolves the same DEEPSEEK_API_KEY credential the Models page manages for
-    # chat, at each search; its Messages endpoint is separate from the
-    # chat-completions endpoint, so it takes its own base-URL override. Search is a
-    # full auxiliary model request with server-side retrieval, so this shipped
-    # DeepSeek route gets 60s while the provider-neutral tool default remains 30s.
+    # Every mode enables the stable model-facing web_search tool, served by the
+    # local SearXNG row below. tool-web keeps a 60s search budget over the
+    # provider-neutral 30s default; the SearXNG row's own 15s request timeout
+    # ends a stalled search first.
     #
     # Fetch is enabled with the anonymous HTTP provider so the model can retrieve a
     # concrete URL during reconnaissance. web-fetch-http blocks private / loopback /
@@ -398,17 +396,11 @@
 
     # Local SearXNG metasearch: no API key, no model turn, so reconnaissance
     # queries stay on operator-controlled infrastructure. Points at a loopback
-    # instance by default. The DeepSeek provider below stays registered so a
-    # deployment can switch `searchProvider` back to `deepseek-official`.
+    # instance by default.
     - id: web-search-searxng
       name: '@neo/web-search-searxng'
       config:
         baseURL: http://127.0.0.1:8888
-
-    - id: web-search-deepseek
-      name: '@neo/web-search-deepseek'
-      config:
-        apiKeyEnv: DEEPSEEK_API_KEY
 
     - id: web-fetch-http
       name: '@neo/web-fetch-http'

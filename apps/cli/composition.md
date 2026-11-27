@@ -148,8 +148,6 @@ flowchart LR
   cfg --> plugin_dsh_base_web
   plugin_dsh_base_web_search_searxng["web-search-searxng<br/>@neo/web-search-searxng"]
   cfg --> plugin_dsh_base_web_search_searxng
-  plugin_dsh_base_web_search_deepseek["web-search-deepseek<br/>@neo/web-search-deepseek"]
-  cfg --> plugin_dsh_base_web_search_deepseek
   plugin_dsh_base_web_fetch_http["web-fetch-http<br/>@neo/web-fetch-http"]
   cfg --> plugin_dsh_base_web_fetch_http
   plugin_dsh_base_tool_web["tool-web<br/>@neo/tool-web"]
@@ -236,7 +234,6 @@ flowchart LR
 | `repeat-tool-reminder` | `@neo/repeat-tool-reminder` |
 | `web` | `@neo/web` |
 | `web-search-searxng` | `@neo/web-search-searxng` |
-| `web-search-deepseek` | `@neo/web-search-deepseek` |
 | `web-fetch-http` | `@neo/web-fetch-http` |
 | `tool-web` | `@neo/tool-web` |
 | `tools` | `@neo/tools` |

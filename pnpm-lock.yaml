@@ -1202,9 +1202,6 @@ importers:
       '@neo/web-fetch-http':
         specifier: workspace:^
         version: link:../../web/web-fetch-http
-      '@neo/web-search-deepseek':
-        specifier: workspace:^
-        version: link:../../web/web-search-deepseek
       '@neo/web-search-searxng':
         specifier: workspace:^
         version: link:../../web/web-search-searxng
@@ -8224,40 +8221,6 @@ importers:
         specifier: workspace:^
         version: link:../web
 
-  packages/web/web-search-deepseek:
-    dependencies:
-      '@neo/schemastery':
-        specifier: link:../../../vendor/schemastery
-        version: link:../../../vendor/schemastery
-    devDependencies:
-      '@neo/agent':
-        specifier: workspace:^
-        version: link:../../core/agent
-      '@neo/cordis':
-        specifier: workspace:^
-        version: link:../../../vendor/cordis
-      '@neo/credentials':
-        specifier: workspace:^
-        version: link:../../credentials/credentials
-      '@neo/credentials-local':
-        specifier: workspace:^
-        version: link:../../credentials/credentials-local
-      '@neo/invariants':
-        specifier: workspace:^
-        version: link:../../runtime-diagnostics/invariants
-      '@neo/launch-environment':
-        specifier: workspace:^
-        version: link:../../util/launch-environment
-      '@neo/session':
-        specifier: workspace:^
-        version: link:../../core/session
-      '@neo/settings':
-        specifier: workspace:^
-        version: link:../../settings/settings
-      '@neo/web':
-        specifier: workspace:^
-        version: link:../web
-
   packages/web/web-search-exa:
     dependencies:
       '@neo/schemastery':
@@ -8804,9 +8767,6 @@ importers:
       '@neo/web-fetch-http':
         specifier: workspace:^
         version: link:../../packages/web/web-fetch-http
-      '@neo/web-search-deepseek':
-        specifier: workspace:^
-        version: link:../../packages/web/web-search-deepseek
       '@neo/web-search-exa':
         specifier: workspace:^
         version: link:../../packages/web/web-search-exa
