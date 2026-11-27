@@ -3,28 +3,18 @@
  * and a real end-to-end read of a zstd-compressed session log.
  */
 
-import { appendFileSync, mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { zstdCompressSync } from 'node:zlib'
 import { describe, expect, it } from 'vitest'
 import type { SessionEvent } from '@neo/session'
-import type { TokenUsage } from '@neo/llm'
-import { readFileSync } from 'node:fs'
 import {
   aggregateUsage, deserializeUsageCache, foldSessionUsage, loadUsageCache,
-  saveUsageCache, serializeUsageCache, workspaceLabel,
+  readSessionEvents, saveUsageCache, serializeUsageCache, workspaceLabel,
 } from '../src/aggregate.ts'
 import type { UsageCache } from '../src/aggregate.ts'
-
-const t = (iso: string): number => Date.parse(iso)
-
-function msg(turn: number, step: number, iso: string, usage: TokenUsage): SessionEvent {
-  return { type: 'assistant/message', seq: step, time: t(iso), data: { turn, step, message: {}, usage } } as unknown as SessionEvent
-}
-function chunk(turn: number, step: number, iso: string, usage: TokenUsage): SessionEvent {
-  return { type: 'assistant/chunk', seq: step, time: t(iso), data: { turn, step, chunk: { type: 'usage', usage } } } as unknown as SessionEvent
-}
+import { chunk, msg, t, writeSession } from './helpers.ts'
 
 describe('workspaceLabel', () => {
   it('extracts a readable name from an encoded session-root dir', () => {
@@ -77,6 +67,25 @@ describe('foldSessionUsage', () => {
   })
 })
 
+describe('readSessionEvents', () => {
+  it('parses the events of every frame and skips a torn line', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'usage-read-'))
+    try {
+      const first = msg(0, 0, '2026-08-19T10:00:00Z', { inputTokens: 1, outputTokens: 1 })
+      const second = msg(0, 1, '2026-08-19T10:01:00Z', { inputTokens: 2, outputTokens: 2 })
+      const path = join(dir, 'session.jsonl.zstd')
+      writeFileSync(path, Buffer.concat([
+        zstdCompressSync(Buffer.from(`${JSON.stringify(first)}\n`)),
+        zstdCompressSync(Buffer.from(`{"type":"assistant/mess\n${JSON.stringify(second)}\n`)),
+      ]))
+
+      expect(await readSessionEvents(path)).toEqual([first, second])
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+})
+
 describe('aggregateUsage (real zstd log)', () => {
   it('reads a compressed session log and rolls it up', async () => {
     const root = mkdtempSync(join(tmpdir(), 'usage-'))
@@ -106,6 +115,18 @@ describe('aggregateUsage (real zstd log)', () => {
     }
   })
 
+  it('skips a just-created, still empty session log without failing the summary', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-empty-log-'))
+    try {
+      writeSession(root, '--home-x-Proj--', 'session-new', []) // 0 bytes: created, nothing flushed yet
+      writeSession(root, '--home-x-Proj--', 'session-old',
+        [msg(0, 0, '2026-08-19T10:00:00Z', { inputTokens: 7, outputTokens: 3 })])
+      const summary = await aggregateUsage(root)
+      expect(summary.sessions.map(s => s.sessionId)).toEqual(['session-old'])
+      expect(summary.totals.inputTokens).toBe(7)
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+
   it('returns an empty summary for a missing root', async () => {
     const summary = await aggregateUsage(join(tmpdir(), 'does-not-exist-xyz'))
     expect(summary.sessionCount).toBe(0)
@@ -115,15 +136,6 @@ describe('aggregateUsage (real zstd log)', () => {
 
 describe('aggregateUsage incremental cache', () => {
   const zeros = { cacheReadTokens: 0, cacheWriteTokens: 0, reasoningTokens: 0 }
-
-  /** Write a session log (one zstd frame per event) and return its path. */
-  function writeSession(root: string, ws: string, id: string, events: SessionEvent[]): string {
-    const dir = join(root, ws, id)
-    mkdirSync(dir, { recursive: true })
-    const path = join(dir, 'session.jsonl.zstd')
-    writeFileSync(path, Buffer.concat(events.map(e => zstdCompressSync(Buffer.from(JSON.stringify(e) + '\n')))))
-    return path
-  }
 
   it('reuses a cached fold for an unchanged log instead of re-reading it', async () => {
     const root = mkdtempSync(join(tmpdir(), 'usage-cache-'))
@@ -192,6 +204,51 @@ describe('aggregateUsage incremental cache', () => {
     } finally { rmSync(root, { recursive: true, force: true }) }
   })
 
+  it('folds only the appended tail, applying last-wins dedup across a frame boundary', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-tail-'))
+    try {
+      // Frame 1: a usage CHUNK for (0,0). Frame 2 (appended later): the finalized
+      // MESSAGE for the same (0,0) — the message must REPLACE the chunk, not add
+      // to it, even though the two straddle a frame boundary folded in two passes.
+      const path = writeSession(root, '--home-x-Proj--', 'session-1',
+        [chunk(0, 0, '2026-08-19T10:00:00Z', { inputTokens: 100, outputTokens: 10 })])
+      const cache: UsageCache = new Map()
+      const first = await aggregateUsage(root, {}, cache)
+      expect(first.totals.requests).toBe(1)
+      expect(first.totals.outputTokens).toBe(10)
+
+      appendFileSync(path, zstdCompressSync(Buffer.from(
+        JSON.stringify(msg(0, 0, '2026-08-19T10:00:05Z', { inputTokens: 100, outputTokens: 20, reasoningTokens: 5 })) + '\n')))
+      const second = await aggregateUsage(root, {}, cache)
+      expect(second.totals.requests).toBe(1) // still one (turn,step), not two
+      expect(second.totals.outputTokens).toBe(20) // message wins over the chunk's 10
+      expect(second.totals.reasoningTokens).toBe(5)
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+
+  it('stops at a torn final frame and folds it once the append completes', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-torn-'))
+    try {
+      const path = writeSession(root, '--home-x-Proj--', 'session-1',
+        [msg(0, 0, '2026-08-19T10:00:00Z', { inputTokens: 100, outputTokens: 20 })])
+      const completeSize = statSync(path).size
+      // Append a half-written frame (a valid frame truncated near the end).
+      const nextFrame = zstdCompressSync(Buffer.from(
+        JSON.stringify(msg(0, 1, '2026-08-19T10:05:00Z', { inputTokens: 300, outputTokens: 40 })) + '\n'))
+      appendFileSync(path, nextFrame.subarray(0, nextFrame.length - 4))
+
+      const cache: UsageCache = new Map()
+      const torn = await aggregateUsage(root, {}, cache)
+      expect(torn.totals.inputTokens).toBe(100) // only the complete frame counted
+
+      // The writer flushes the frame in full: truncate the partial bytes, write it whole.
+      writeFileSync(path, Buffer.concat([readFileSync(path).subarray(0, completeSize), nextFrame]))
+      const done = await aggregateUsage(root, {}, cache)
+      expect(done.totals.inputTokens).toBe(400) // the now-complete tail folded in
+      expect(done.totals.requests).toBe(2)
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+
   it('sorts days ascending and workspaces by output tokens across multiple entries', async () => {
     const root = mkdtempSync(join(tmpdir(), 'usage-sort-'))
     try {
@@ -205,6 +262,75 @@ describe('aggregateUsage incremental cache', () => {
       expect(summary.byDay.map(d => d.day)).toEqual(['2026-08-17', '2026-08-18', '2026-08-19'])
       expect(summary.byWorkspace.map(w => w.workspace)).toEqual(['Alpha', 'Beta'])
       expect(summary.sessionCount).toBe(2)
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+})
+
+describe('aggregateUsage sinceMs filter', () => {
+  const older = '2026-08-18T10:00:00Z'
+  const newer = '2026-08-19T10:00:00Z'
+
+  it('keeps a session last active exactly at sinceMs and leaves older ones out of every rollup', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-since-'))
+    try {
+      writeSession(root, '--home-x-Alpha--', 's-old', [msg(0, 0, older, { inputTokens: 100, outputTokens: 10 })])
+      writeSession(root, '--home-x-Beta--', 's-new', [msg(0, 0, newer, { inputTokens: 7, outputTokens: 3 })])
+
+      const atBoundary = await aggregateUsage(root, { sinceMs: t(newer) })
+      expect(atBoundary.sessionCount).toBe(1)
+      expect(atBoundary.sessions.map(row => row.sessionId)).toEqual(['s-new'])
+      expect(atBoundary.totals).toMatchObject({ inputTokens: 7, outputTokens: 3, requests: 1 })
+      expect(atBoundary.byDay.map(bucket => bucket.day)).toEqual(['2026-08-19'])
+      expect(atBoundary.byWorkspace.map(bucket => bucket.workspace)).toEqual(['Beta'])
+
+      expect((await aggregateUsage(root, { sinceMs: t(newer) + 1 })).sessionCount).toBe(0)
+      expect((await aggregateUsage(root, { sinceMs: t(older) })).sessionCount).toBe(2)
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+})
+
+describe('aggregateUsage output order', () => {
+  it('orders sessions by last activity (newest first), days ascending, and workspaces by output tokens (largest first)', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-order-'))
+    try {
+      // A cache entry keeps the position of its first sighting, so folding the
+      // sessions one pass at a time fixes the order the summary starts from:
+      // Alpha, Beta, Gamma — an order that matches none of the three sorts.
+      const cache: UsageCache = new Map()
+      const sessions = [
+        ['--home-x-Alpha--', 's-alpha', '2026-08-17T10:00:00Z', 5],
+        ['--home-x-Beta--', 's-beta', '2026-08-19T10:00:00Z', 50],
+        ['--home-x-Gamma--', 's-gamma', '2026-08-18T10:00:00Z', 20],
+      ] as const
+      for (const [ws, id, iso, outputTokens] of sessions) {
+        writeSession(root, ws, id, [msg(0, 0, iso, { inputTokens: 1, outputTokens })])
+        await aggregateUsage(root, {}, cache)
+      }
+      expect([...cache.values()].map(entry => entry.sessionId)).toEqual(['s-alpha', 's-beta', 's-gamma'])
+
+      const summary = await aggregateUsage(root, {}, cache)
+      expect(summary.sessions.map(row => row.sessionId)).toEqual(['s-beta', 's-gamma', 's-alpha'])
+      expect(summary.byDay.map(bucket => bucket.day)).toEqual(['2026-08-17', '2026-08-18', '2026-08-19'])
+      expect(summary.byWorkspace.map(bucket => bucket.workspace)).toEqual(['Beta', 'Gamma', 'Alpha'])
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+
+  it('returns only the 300 most recent session rows while the totals count every session', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-cap-'))
+    try {
+      const start = t('2026-08-19T00:00:00Z')
+      // s-000 is the oldest session and also sorts first by name.
+      for (let i = 0; i <= 300; i += 1) {
+        const time = new Date(start + i * 60_000).toISOString()
+        writeSession(root, '--home-x-Proj--', `s-${String(i).padStart(3, '0')}`, [msg(0, 0, time, { inputTokens: 1, outputTokens: 1 })])
+      }
+
+      const summary = await aggregateUsage(root)
+      expect(summary.sessionCount).toBe(301)
+      expect(summary.totals.requests).toBe(301)
+      expect(summary.sessions).toHaveLength(300)
+      expect(summary.sessions[0]?.sessionId).toBe('s-300')
+      expect(summary.sessions.at(-1)?.sessionId).toBe('s-001')
     } finally { rmSync(root, { recursive: true, force: true }) }
   })
 })
@@ -230,6 +356,53 @@ describe('usage cache persistence', () => {
     expect(entry?.byDay.get('2026-08-19')?.requests).toBe(2)
   })
 
+  it('persists and restores the incremental tail state (steps + foldedBytes)', () => {
+    const cache = sampleCache()
+    const key = '/root/ws/s1/session.jsonl.zstd'
+    const prior = cache.get(key)!
+    cache.set(key, { ...prior, foldedBytes: 1024, steps: new Map([['0:0', { usage: { inputTokens: 100, outputTokens: 20 }, time: t('2026-08-19T10:00:00Z') }]]) })
+    const restored = deserializeUsageCache(serializeUsageCache(cache))
+    const entry = restored.get(key)
+    expect(entry?.foldedBytes).toBe(1024)
+    expect(entry?.steps?.get('0:0')?.usage.inputTokens).toBe(100)
+  })
+
+  it('drops a partial tail (steps without foldedBytes) so the next fold is clean', () => {
+    const partial = JSON.stringify({
+      version: 1,
+      entries: [['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 1, outputTokens: 0, requests: 1, ...zeros }, byDay: [], lastActive: 0, mtimeMs: 1, size: 1, steps: [['0:0', { usage: { inputTokens: 1, outputTokens: 0 }, time: 0 }]] }]],
+    })
+    const entry = deserializeUsageCache(partial).get('/ok')
+    expect(entry?.totals.inputTokens).toBe(1)
+    expect(entry?.steps).toBeUndefined() // no foldedBytes → tail state dropped
+  })
+
+  it.each([
+    ['rows that are not pairs', [1]],
+    ['a step whose value is a number', [['0:0', 5]]],
+    ['a step whose value is null', [['0:0', null]]],
+  ])('drops a tail whose steps hold %s instead of failing the whole load', (_shape, steps) => {
+    const corrupt = JSON.stringify({
+      version: 1,
+      entries: [['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 1, outputTokens: 0, requests: 1, ...zeros }, byDay: [], lastActive: 0, mtimeMs: 1, size: 1, steps, foldedBytes: 10 }]],
+    })
+    const entry = deserializeUsageCache(corrupt).get('/ok')
+    expect(entry?.totals.inputTokens).toBe(1)
+    expect(entry?.steps).toBeUndefined() // malformed tail → next fold is a clean full re-fold
+    expect(entry?.foldedBytes).toBeUndefined()
+  })
+
+  it('reads an older tail-less entry, warm-starting it without re-fold state', () => {
+    // A cache written before the tail fields existed: totals present, no steps.
+    const legacy = JSON.stringify({
+      version: 1,
+      entries: [['/ok', { workspace: 'w', sessionId: 's', totals: { inputTokens: 5, outputTokens: 2, requests: 1, ...zeros }, byDay: [['2026-08-19', { inputTokens: 5, outputTokens: 2, requests: 1, ...zeros }]], lastActive: 1, mtimeMs: 1, size: 1 }]],
+    })
+    const entry = deserializeUsageCache(legacy).get('/ok')
+    expect(entry?.totals.inputTokens).toBe(5)
+    expect(entry?.foldedBytes).toBeUndefined()
+  })
+
   it('yields an empty cache for corrupt, non-object, or version-mismatched payloads', () => {
     expect(deserializeUsageCache('not json {').size).toBe(0)
     expect(deserializeUsageCache('42').size).toBe(0)
@@ -242,6 +415,43 @@ describe('usage cache persistence', () => {
     const out = deserializeUsageCache(mixed)
     expect(out.size).toBe(1)
     expect(out.get('/ok')?.workspace).toBe('w')
+  })
+
+  describe('rejects each malformed shape on its own', () => {
+    const validBody = { workspace: 'w', sessionId: 's', totals: { inputTokens: 1, outputTokens: 0, requests: 1, ...zeros }, byDay: [], lastActive: 0, mtimeMs: 1, size: 1 }
+    const { byDay: _byDay, ...bodyWithoutByDay } = validBody
+
+    it.each([
+      ['a pair with a third element', ['/bad', validBody, 'extra']],
+      ['an array-like object instead of a pair', { 0: '/bad', 1: validBody, length: 2 }],
+      ['a non-string path', [42, validBody]],
+      ['a null entry body', ['/bad', null]],
+      ['a non-object entry body', ['/bad', 'body']],
+      ['an entry body without byDay', ['/bad', bodyWithoutByDay]],
+      ['an entry body whose byDay is not an array', ['/bad', { ...validBody, byDay: { '2026-08-19': validBody.totals } }]],
+      // Valid JSON whose byDay rows are not [day, totals] pairs: new Map() would throw on them.
+      ['a byDay row that is not a pair', ['/bad', { ...validBody, byDay: [1] }]],
+      ['a byDay row with only a day', ['/bad', { ...validBody, byDay: [['2026-08-19']] }]],
+      ['a byDay row keyed by a non-string', ['/bad', { ...validBody, byDay: [[20260819, validBody.totals]] }]],
+      // A null or scalar totals value would only throw later, when the totals are summed.
+      ['a byDay row whose totals are null', ['/bad', { ...validBody, byDay: [['2026-08-19', null]] }]],
+      ['a byDay row whose totals are a number', ['/bad', { ...validBody, byDay: [['2026-08-19', 5]] }]],
+    ])('skips %s and keeps its valid sibling', (_shape, malformed) => {
+      const json = JSON.stringify({ version: 1, entries: [malformed, ['/ok', validBody]] })
+
+      const cache = deserializeUsageCache(json)
+      expect([...cache.keys()]).toEqual(['/ok'])
+      expect(cache.get('/ok')?.totals.requests).toBe(1)
+    })
+
+    it.each([
+      ['a version other than the current one', { version: 2, entries: [['/ok', validBody]] }],
+      ['a version spelled as a string', { version: '1', entries: [['/ok', validBody]] }],
+      ['entries that are not an array', { version: 1, entries: { '/ok': validBody } }],
+      ['a null payload', null],
+    ])('discards a payload with %s as a whole', (_shape, payload) => {
+      expect(deserializeUsageCache(JSON.stringify(payload)).size).toBe(0)
+    })
   })
 
   it('saves atomically and loads back; a missing file loads empty', async () => {

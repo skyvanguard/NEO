@@ -4,11 +4,11 @@
  */
 
 import { Buffer } from 'node:buffer'
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { ATTACHMENTS_DIR, InvalidAttachmentError, safeBaseName, saveAttachment } from '../src/save.ts'
+import { ATTACHMENTS_DIR, InvalidAttachmentError, MAX_ATTACHMENT_BYTES, safeBaseName, saveAttachment } from '../src/save.ts'
 
 let workspace: string
 beforeEach(() => { workspace = mkdtempSync(join(tmpdir(), 'neo-attach-')) })
@@ -59,5 +59,17 @@ describe('saveAttachment', () => {
 
   it('rejects an empty attachment', async () => {
     await expect(saveAttachment(workspace, 'a.txt', '')).rejects.toThrow(InvalidAttachmentError)
+  })
+
+  it('rejects an attachment one byte over the 200 MiB cap and writes nothing', async () => {
+    // 4 base64 characters decode to 3 bytes, so this is exactly MAX + 1 bytes of
+    // zeros. The cap is checked after decoding, so this case briefly holds about
+    // 500 MB (the ~280 MB string plus the ~200 MB decoded buffer).
+    const overCap = 'A'.repeat(Math.ceil((MAX_ATTACHMENT_BYTES + 1) / 3) * 4)
+
+    const error: unknown = await saveAttachment(workspace, 'big.bin', overCap).then(() => undefined, (rejection: unknown) => rejection)
+    expect(error).toBeInstanceOf(InvalidAttachmentError)
+    expect((error as Error).message).toBe('attachment exceeds 209715200 bytes')
+    expect(existsSync(join(workspace, ATTACHMENTS_DIR))).toBe(false)
   })
 })

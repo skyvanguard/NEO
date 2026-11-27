@@ -50,9 +50,9 @@ export function expandHomePath(filePath: string): string {
  */
 async function describeNearbyCandidates(ctx: Context, exec: ToolExecution, requestedPath: string): Promise<string> {
   try {
+    // path.dirname never returns '' (it yields '.' or a root), so it is a valid resolve argument as is.
     const dir = dirname(requestedPath)
-    const dirArg = dir === '' ? '.' : dir
-    const dirTarget = await ctx.fs.resolve(dirArg, sessionResolveOptions(exec, dirArg))
+    const dirTarget = await ctx.fs.resolve(dir, sessionResolveOptions(exec, dir))
     const dirInfo = await ctx.fs.stat(dirTarget, exec.signal)
     if (dirInfo === undefined || dirInfo.type !== 'directory') {
       return ` (the containing directory "${dirTarget.displayPath}" does not exist)`

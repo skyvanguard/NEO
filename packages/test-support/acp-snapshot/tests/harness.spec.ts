@@ -5,7 +5,7 @@ import { delimiter, join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterAll, describe, expect, it, vi } from 'vitest'
 import { PROTOCOL_VERSION } from '@agentclientprotocol/sdk'
-import { runScenario, snapshotSpillRoot, type AgentUnderTest, type InputStep } from '../src/harness.ts'
+import { pollPersisted, runScenario, snapshotSpillRoot, type AgentUnderTest, type InputStep } from '../src/harness.ts'
 import { launchAcpTestAgent } from '../src/launcher.ts'
 
 const fsControl = vi.hoisted(() => ({ cleanupFailure: undefined as Error | undefined }))
@@ -631,6 +631,42 @@ describe('runScenario', () => {
       { steps: [...boot, { op: 'promptAndCancel', text: 'hang' }, { op: 'waitForInboxMessage', text: 'missing', timeoutMs: 20 }] },
       { agent: AGENT, mode: 'replay', fixtureFile: unmatched.fixtureFile },
     )).rejects.toThrow(/did not persist expected inbox message within 20ms/)
+  })
+
+  it('pollPersisted reports its own message when the timeout fires before the first check settles', async () => {
+    // A check that never settles is the deterministic form of a slow first harvest:
+    // vi.waitFor alone would reject with its generic 'Timed out in waitFor!'.
+    const failure = await pollPersisted(20, 'snapshot-harness: probe did not persist within 20ms', () => new Promise<boolean>(() => {}))
+      .then(() => undefined, (error: unknown) => error)
+    expect(failure).toBeInstanceOf(Error)
+    expect((failure as Error).message).toBe('snapshot-harness: probe did not persist within 20ms')
+    expect(((failure as Error).cause as Error).message).toBe('Timed out in waitFor!')
+  })
+
+  it('pollPersisted propagates a check that throws, and resolves once the check holds', async () => {
+    const malformed = new SyntaxError('Unexpected token in persisted record')
+    await expect(pollPersisted(1_000, 'never used', () => Promise.reject(malformed))).rejects.toBe(malformed)
+
+    let reads = 0
+    await expect(pollPersisted(1_000, 'never used', () => Promise.resolve(++reads >= 3))).resolves.toBeUndefined()
+    expect(reads).toBe(3)
+  })
+
+  it('names the expired wait even when its timeout beats the first log read', { timeout: 20_000 }, async () => {
+    // 1ms is shorter than reading an existing session log, so vi.waitFor alone
+    // would reject with its generic "Timed out in waitFor!" before the check failed.
+    const { fixtureFile } = await scenario({
+      prompt: 'hang-until-cancel',
+      persistLogsOnCancel: true,
+      logs: [{
+        file: 'project/main/session.jsonl',
+        lines: [{ type: 'session', version: 0, id: '{{SID}}', createdAt: 1, delegationDepth: 0 }],
+      }],
+    })
+    await expect(runScenario(
+      { steps: [...boot, { op: 'promptAndCancel', text: 'hang' }, { op: 'waitForInboxMessage', text: 'missing', timeoutMs: 1 }] },
+      { agent: AGENT, mode: 'replay', fixtureFile },
+    )).rejects.toThrow(/did not persist expected inbox message within 1ms/)
   })
 
   it('waitForTitleAfterTurnEnd holds the app through a standalone durable title', { timeout: 20_000 }, async () => {

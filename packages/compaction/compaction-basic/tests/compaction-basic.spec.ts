@@ -4,7 +4,7 @@ import { AttachmentId } from '@neo/attachment'
 import BasicCompactionEngine from '@neo/compaction-basic'
 import type { BasicCompactionConfig } from '@neo/compaction-basic'
 import { selectCompactableRange } from '@neo/compaction-basic/src/region.ts'
-import { frameSummary } from '@neo/compaction-basic/src/summarizer.ts'
+import { compactionInstruction, frameSummary } from '@neo/compaction-basic/src/summarizer.ts'
 import type { SummarizationInput, SummaryResult } from '@neo/compaction-basic/src/summarizer.ts'
 import { CompactionId, toolPairingBalancedAfter, toolPairingBalancedBefore } from '@neo/compaction'
 import {
@@ -93,6 +93,13 @@ function summarizedText(input: SummarizationInput): string {
         : block.type === 'tool-result' ? collect(block.content)
           : '').join('\n')
   return input.messages.map(message => collect(message.content)).join('\n')
+}
+
+/** Tokens one meter snapshot prices for the surface up to and including `end`. */
+function regionTokens(priced: { readonly nodes: readonly { seq: number; tokens: number }[] }, end: number): number {
+  return priced.nodes
+    .filter(node => node.seq <= end)
+    .reduce((sum, node) => sum + node.tokens, 0)
 }
 
 /** A minimal replayed prefix carrying one user message of the given text. */
@@ -297,10 +304,41 @@ describe('compact configuration and defaults', () => {
       maxTokens: 32_768,
       compactionRetries: 1,
       maxOverflowRetries: 1,
+      checkpointGuidance: '',
       modelPolicies: [],
       auto: true,
     })
     expect(Object.isFrozen(resolved)).toBe(true)
+  })
+
+  it('carries checkpointGuidance through defaults and exact-model overrides', () => {
+    expect(resolveConfig({}).checkpointGuidance).toBe('')
+    const config = resolveConfig({
+      checkpointGuidance: 'Preserve target hosts and credentials.',
+      modelPolicies: [{
+        provider: 'p',
+        model: 'm',
+        checkpointGuidance: 'Preserve confirmed findings and captured flags.',
+      }],
+    })
+    // The default guidance applies to an unlisted target...
+    expect(resolveTargetPolicy(config, { provider: 'p', model: 'other' }).checkpointGuidance)
+      .toBe('Preserve target hosts and credentials.')
+    // ...while an exact model override shadows it.
+    expect(resolveTargetPolicy(config, { provider: 'p', model: 'm' }).checkpointGuidance)
+      .toBe('Preserve confirmed findings and captured flags.')
+  })
+
+  it('appends domain guidance to the checkpoint instruction only when configured', () => {
+    const base = compactionInstruction('')
+    expect(base).toContain('## Primary Request and Intent')
+    expect(base).not.toContain('Domain-specific preservation')
+    expect(compactionInstruction('   ')).toBe(base)
+
+    const extended = compactionInstruction('Preserve target hosts, open ports, and discovered credentials.')
+    expect(extended.startsWith(base)).toBe(true)
+    expect(extended).toContain('Domain-specific preservation')
+    expect(extended).toContain('Preserve target hosts, open ports, and discovered credentials.')
   })
 
   it('resolves threshold and retention overrides independently', () => {
@@ -419,6 +457,7 @@ describe('compact configuration and defaults', () => {
       [{ auto: 'yes' }, /auto must be a boolean/],
       [{ summarizationProvider: 1 }, /summarizationProvider must be a string/],
       [{ summarizationModel: 1 }, /summarizationModel must be a string/],
+      [{ checkpointGuidance: 42 }, /checkpointGuidance must be a string/],
       [{ summarizationProvider: MODEL }, /must be set together/],
       [{ summarizationModel: MODEL }, /must be set together/],
       [{ summarizationProvider: '' }, /must be set together/],
@@ -702,6 +741,75 @@ describe('pressure measurement and retention', () => {
       .rejects.toThrow(/still above threshold after 1 compaction attempts/)
   })
 
+  it('spends its compactionRetries on another pass when the first one stays above threshold', async () => {
+    const compact = service({
+      auto: false,
+      compactionRetries: 1,
+      thresholdRatio: 0.3,
+      retainTokens: 180,
+    })
+    // The first checkpoint is too large to clear pressure; the retry's is small enough.
+    compact.summary = Array.from({ length: 7 }, (_, index) => ({
+      type: 'text',
+      text: `summary ${index}`,
+    }))
+    compact.mutateDuringSummary = () => {
+      if (compact.calls.length === 2) compact.summary = [{ type: 'text', text: 'small checkpoint' }]
+    }
+
+    expect(await compactIfNeeded(compact, conversation(4))).not.toBeNull()
+    expect(compact.calls).toHaveLength(2)
+  })
+
+  it('compacts at exactly the threshold and stays idle one token below it', async () => {
+    const total = createContext().tokenMeter.measure(conversation(4)).totalTokens
+    // thresholdRatio 1 puts thresholdTokens at the window size, so the window sets the boundary.
+    const atThreshold = service({ auto: false, thresholdRatio: 1, retainTokens: 50 }, createContext(total))
+    expect(await compactIfNeeded(atThreshold, conversation(4))).not.toBeNull()
+
+    const belowThreshold = service({ auto: false, thresholdRatio: 1, retainTokens: 50 }, createContext(total + 1))
+    expect(await compactIfNeeded(belowThreshold, conversation(4))).toBeNull()
+    expect(belowThreshold.calls).toHaveLength(0)
+  })
+
+  it('bounds the pressure-path region so the replay, its output cap and the 10% overhead fit the window', async () => {
+    const contextWindow = 4_000
+    const retainTokens = 50
+    const overhead = Math.ceil(contextWindow * 0.1)
+    const ctx = createContext(contextWindow)
+    const session = conversation(8)
+    const priced = ctx.tokenMeter.measure(session)
+    const unbounded = selectCompactableRange(session, priced, retainTokens)!
+    // Reserve enough output that only about half of the unbounded region still fits.
+    const maxTokens = contextWindow - overhead - Math.floor(regionTokens(priced, unbounded.end) / 2)
+    const expected = selectCompactableRange(session, priced, retainTokens, contextWindow - maxTokens - overhead)!
+    expect(expected.end).toBeLessThan(unbounded.end)
+    expect(regionTokens(priced, expected.end) + maxTokens + overhead).toBeLessThanOrEqual(contextWindow)
+
+    const compact = service({
+      auto: false,
+      // Between the pre- and post-compaction totals, so one capped pass is enough.
+      thresholdRatio: (priced.totalTokens - regionTokens(priced, expected.end) / 2) / contextWindow,
+      retainTokens,
+      maxTokens,
+    }, ctx)
+    const compactRegion = vi.spyOn(compact, 'compactRegion')
+    expect(await compactIfNeeded(compact, session)).not.toBeNull()
+    expect(compactRegion.mock.calls[0]?.slice(0, 2)).toEqual([expected.start, expected.end])
+  })
+
+  it.each([
+    ['provider', { provider: '', model: MODEL }],
+    ['model', { provider: MODEL, model: '' }],
+  ])('treats a durable route with an empty %s as no route', async (_field, config) => {
+    const compact = service(compactConfig)
+    const session = conversation(4)
+    session.append('request/header', { header: { config }, reason: 'resume' })
+
+    await expect(compactIfNeeded(compact, session)).resolves.toBeNull()
+    expect(compact.calls).toHaveLength(0)
+  })
+
   it('rounds a retention cut head-ward to preserve tool-call/result pairing', async () => {
     const compact = service({
       auto: false,
@@ -739,15 +847,12 @@ describe('pressure measurement and retention', () => {
     const unbounded = selectCompactableRange(session, priced, 0)
     expect(unbounded).not.toBeNull()
 
-    const regionTokens = (end: number): number => priced.nodes
-      .filter(node => node.seq <= end)
-      .reduce((sum, node) => sum + node.tokens, 0)
-    const ceiling = Math.floor(regionTokens(unbounded!.end) / 2)
+    const ceiling = Math.floor(regionTokens(priced, unbounded!.end) / 2)
     const capped = selectCompactableRange(session, priced, 0, ceiling)
 
     expect(capped).not.toBeNull()
     expect(capped!.end).toBeLessThan(unbounded!.end)
-    expect(regionTokens(capped!.end)).toBeLessThanOrEqual(ceiling)
+    expect(regionTokens(priced, capped!.end)).toBeLessThanOrEqual(ceiling)
   })
 
   it('stands the ceiling down rather than vetoing compaction it cannot satisfy', () => {
@@ -1910,6 +2015,42 @@ describe('automatic listener and loader composition', () => {
     compactSpy.mockClear()
     expect(await recover(ctx, owner, overflow())).toBe(false)
     expect(compactSpy).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ['a model response', (ctx: Context, owner: Agent) => {
+      const response = owner.session.events.findLast(event => event.type === 'assistant/message')!
+      ctx.emit('session/event', owner.session, response)
+    }],
+    ['the agent going idle', (ctx: Context, owner: Agent) => {
+      ctx.emit('agent/status', { agent: owner, status: 'idle' })
+    }],
+  ])('starts a fresh overflow budget after %s', async (_reset, reset) => {
+    const ctx = createContext()
+    const compact = new TestCompactionEngine(ctx, { maxOverflowRetries: 1 })
+    const compactSpy = vi.spyOn(compact, 'compactIfNeeded')
+    const owner = agent(conversation(3), MODEL)
+    expect(await recover(ctx, owner, overflow())).toBe(true)
+    expect(await recover(ctx, owner, overflow())).toBe(false)
+    expect(compactSpy).toHaveBeenCalledTimes(1)
+
+    reset(ctx, owner)
+    await recover(ctx, owner, overflow())
+    expect(compactSpy).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps the spent overflow budget across unrelated session events and statuses', async () => {
+    const ctx = createContext()
+    const compact = new TestCompactionEngine(ctx, { maxOverflowRetries: 1 })
+    const compactSpy = vi.spyOn(compact, 'compactIfNeeded')
+    const owner = agent(conversation(3), MODEL)
+    expect(await recover(ctx, owner, overflow())).toBe(true)
+
+    const userMessage = owner.session.events.findLast(event => event.type === 'user/message')!
+    ctx.emit('session/event', owner.session, userMessage)
+    ctx.emit('agent/status', { agent: owner, status: 'running' })
+    expect(await recover(ctx, owner, overflow())).toBe(false)
+    expect(compactSpy).toHaveBeenCalledTimes(1)
   })
 
   it('applies the routed model override to the overflow retry cap', async () => {
