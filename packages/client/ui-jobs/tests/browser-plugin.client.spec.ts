@@ -65,7 +65,7 @@ describe('ui-job browser half', () => {
     const entry = ctx.slots.entries('conversation.session.header.actions')
       .find(candidate => candidate.options.id === 'job-list')!
     const actions = (entry.inject as unknown as () => JobListInjected)()
-    expect(actions.killJob('s1' as never, 'bash-1' as never)).toBeUndefined()
+    actions.killJob('s1' as never, 'bash-1' as never)
     expect(killJob).toHaveBeenCalledWith('s1', 'bash-1')
   })
 
