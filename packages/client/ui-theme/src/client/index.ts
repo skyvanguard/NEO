@@ -331,10 +331,35 @@ export class ThemeRuntime {
 }
 
 /**
+ * Token-name prefixes retired by the `--neo-*` rename, each with its
+ * replacement, so an override layer written against the old names keeps
+ * applying. The brand-scale entry precedes `--dsw-`, which would claim it.
+ * Deliberately absent from the public JSDoc: the inspection catalog the model
+ * reads is generated from it and should teach only the current names.
+ */
+const LEGACY_TOKEN_PREFIXES: readonly (readonly [legacy: string, current: string])[] = Object.freeze([
+  ['--dsw-static-deepseek-', '--neo-static-brand-'],
+  ['--dsw-', '--neo-'],
+  ['--dsh-', '--neo-'],
+])
+
+/**
+ * Rewrite a pre-rename token name to its `--neo-*` spelling.
+ * @param name - token name as the caller spelled it.
+ * @returns the current name; names without a retired prefix pass through.
+ */
+function currentTokenName(name: string): string {
+  for (const [legacy, current] of LEGACY_TOKEN_PREFIXES) {
+    if (name.startsWith(legacy)) return current + name.slice(legacy.length)
+  }
+  return name
+}
+
+/**
  * Runtime shape check for one override layer (model-authored callers pass
  * untyped JS through the dynamic-package façade, so the static type cannot
- * enforce the pair shape there). Returns a defensive per-token copy so later
- * caller mutation cannot reach the stored layer.
+ * enforce the pair shape there). Returns a defensive per-token copy, keyed by
+ * current token names, so later caller mutation cannot reach the stored layer.
  */
 function validateOverrides(source: string, tokens: ThemeTokenOverrides): ThemeTokenOverrides {
   const validated: ThemeTokenOverrides = {}
@@ -353,7 +378,12 @@ function validateOverrides(source: string, tokens: ThemeTokenOverrides): ThemeTo
       )
     }
     const modes = value as ThemeTokenModes
-    validated[name] = { light: modes.light, dark: modes.dark }
+    const current = currentTokenName(name)
+    // An explicit `--neo-*` entry beats its legacy spelling in either key order.
+    // Two legacy spellings of one token (`--dsw-X` and `--dsh-X`; only
+    // `font-mono` ever existed in both families) resolve by key order.
+    if (current !== name && Object.hasOwn(tokens, current)) continue
+    validated[current] = { light: modes.light, dark: modes.dark }
   }
   return validated
 }
