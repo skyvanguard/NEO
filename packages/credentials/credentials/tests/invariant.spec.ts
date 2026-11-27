@@ -5,7 +5,7 @@ import { credentialRef } from '../src/index.ts'
 import * as CredentialsInvariant from '../src/invariant.ts'
 import { MemoryCredentials } from './memory.ts'
 
-const REF = credentialRef('DEEPSEEK_API_KEY')
+const REF = credentialRef('LLM_API_KEY')
 
 describe('credentials invariant companion', () => {
   it('accepts a committed change emitted by a live service', async () => {

@@ -17,7 +17,7 @@ const REF_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/
 
 /**
  * Brand a raw string as a {@link CredentialRef}.
- * @param value - candidate reference; a POSIX shell identifier such as `DEEPSEEK_API_KEY`.
+ * @param value - candidate reference; a POSIX shell identifier such as `LLM_API_KEY`.
  * @returns the branded reference.
  */
 export function credentialRef(value: string): CredentialRef {

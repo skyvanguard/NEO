@@ -14,7 +14,7 @@ export function textResponse(text: string): StreamChunk[] {
 
 /**
  * Like {@link textResponse} but the stream ends with a `max-tokens` finish —
- * the model was cut off at the output-token ceiling (DeepSeek's `length`).
+ * the model was cut off at the output-token ceiling (an OpenAI-compatible `length`).
  * Used to exercise the turn-end `max-tokens` surfacing rule.
  */
 export function maxTokensResponse(text: string): StreamChunk[] {

@@ -36,7 +36,7 @@ export type {
 
 /**
  * Credential-shaped environment names are NOT forwarded to children (the
- * harness's own `DEEPSEEK_API_KEY`/secrets must not leak into a spawned
+ * harness's own `LLM_API_KEY`/secrets must not leak into a spawned
  * process implicitly). One heuristic for every in-repo spawner; a
  * deliberately supplied entry survives because explicit env layers merge
  * after the scrub.

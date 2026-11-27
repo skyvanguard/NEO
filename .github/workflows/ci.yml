@@ -1,6 +1,6 @@
 # CI del fork NEO (skyvanguard/NEO).
 #
-# El workflow upstream de deepseek-harness dependia de runners self-hosted
+# El workflow del proyecto upstream dependia de runners self-hosted
 # (Wine, dsh-win-ci) que este fork no tiene. Este es un CI Linux minimo y
 # suficiente para el fork: construye la lib, corre hygiene (knip, publint,
 # constraints, licencias, invariantes de paquete y de build —que atrapan una

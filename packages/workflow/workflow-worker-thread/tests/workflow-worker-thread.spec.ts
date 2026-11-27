@@ -564,7 +564,7 @@ describe('dsh-workflow-worker-thread', () => {
     it('the worker spawns with a scrubbed environment: an escaped script finds no ambient credentials', async () => {
       const { ctx, parent } = await setup()
       // A canary in the HARNESS process's env: with an inherited environment
-      // the escape below would read it back (exactly how DEEPSEEK_API_KEY
+      // the escape below would read it back (exactly how LLM_API_KEY
       // would leak); the worker env keeps every ambient variable out. Windows
       // additionally receives the host temp path (TMP/TEMP) so `os.tmpdir()`
       // inside the worker resolves instead of degrading to a cwd-relative

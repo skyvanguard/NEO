@@ -113,12 +113,12 @@ describe('child env layering (through the subprocess seam)', () => {
           process.execPath,
           '--input-type=module',
           '--eval',
-          'process.stdout.write(JSON.stringify([process.env.ACP_TEST_AMBIENT_SECRET_TOKEN ?? "absent", process.env.DEEPSEEK_API_KEY]))',
+          'process.stdout.write(JSON.stringify([process.env.ACP_TEST_AMBIENT_SECRET_TOKEN ?? "absent", process.env.LLM_API_KEY]))',
         ],
         cwd: process.cwd(),
         stdio: { stdin: 'ignore', stdout: { maxBytes: 1000 }, stderr: { maxBytes: 1000 } },
         graceMs: 1000,
-        env: { DEEPSEEK_API_KEY: 'explicit' },
+        env: { LLM_API_KEY: 'explicit' },
       })
       await running.done
       expect(running.collected.stdout!.readFrom(0).text).toBe('["absent","explicit"]')

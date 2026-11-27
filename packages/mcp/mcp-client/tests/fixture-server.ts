@@ -62,7 +62,7 @@ server.registerTool('crash', {
   return { content: [{ type: 'text', text: 'crashing' }] }
 })
 
-// Dotted name: legal in MCP, illegal in the DeepSeek function-name contract.
+// Dotted name: legal in MCP, illegal in the OpenAI-compatible function-name contract.
 // Exercises the bridge's normalize-and-hash public-name path end to end.
 server.registerTool('admin.reset', {
   title: 'Admin Reset Tool',
