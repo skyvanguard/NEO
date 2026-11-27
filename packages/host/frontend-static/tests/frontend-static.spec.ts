@@ -37,6 +37,8 @@ async function loadComposition(): Promise<Context> {
   await writeFile(join(dist, 'app.js'), 'export {}')
   await writeFile(join(dist, 'blob.bin'), 'BLOB')
   await writeFile(join(dist, 'manifest.webmanifest'), '{}')
+  await mkdir(join(dist, 'assets'))
+  await writeFile(join(dist, 'assets', 'index-B4dC0ffe.js'), 'export const hashed = true')
   const configPath = join(root, 'cordis.yml')
   await writeFile(configPath, [
     "- name: '@neo/host-webserver'",
@@ -73,12 +75,15 @@ async function loadComposition(): Promise<Context> {
   return context
 }
 
-/** GET (by default) one path against the running server; returns status, content-type, and a body prefix. */
-async function request(port: number, path: string, init?: RequestInit): Promise<{ status: number; type: string | null; body: string }> {
+/** GET (by default) one path against the running server; returns status, content-type, cache-control, and a body prefix. */
+async function request(
+  port: number, path: string, init?: RequestInit,
+): Promise<{ status: number; type: string | null; cache: string | null; body: string }> {
   const response = await fetch(`http://127.0.0.1:${String(port)}${path}`, init)
   return {
     status: response.status,
     type: response.headers.get('content-type'),
+    cache: response.headers.get('cache-control'),
     body: (await response.text()).slice(0, 80),
   }
 }
@@ -129,5 +134,18 @@ describe('real Loader composition', () => {
     await frontendEntry!.fiber?.dispose()
     expect((await request(port, '/no/such/route')).status).toBe(404)
     expect(() => server.registerFallback(() => {})).not.toThrow()
+  })
+
+  it('caches content-hashed bundles for a year and makes everything else revalidate', { timeout: 60_000 }, async () => {
+    const port = (await loadComposition()).webServer.port
+
+    expect(await request(port, '/assets/index-B4dC0ffe.js')).toMatchObject({
+      status: 200,
+      cache: 'public, max-age=31536000, immutable',
+      body: 'export const hashed = true',
+    })
+    // An unhashed asset and the SPA index would go stale across a redeploy.
+    expect(await request(port, '/app.js')).toMatchObject({ status: 200, cache: 'no-cache' })
+    expect(await request(port, '/')).toMatchObject({ status: 200, cache: 'no-cache' })
   })
 })

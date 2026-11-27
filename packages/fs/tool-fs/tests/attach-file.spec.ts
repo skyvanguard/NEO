@@ -4,22 +4,38 @@
  * rendering (the download-card carrier), and the empty-path guard.
  */
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { Context } from '@neo/cordis'
+import { CodeRuntime } from '@neo/code-runtime'
+import type { CodeRunRequest, CodeRunResult } from '@neo/code-runtime'
 import { CallId } from '@neo/llm'
 import type { ContentBlock, FileBlock } from '@neo/llm'
 import SystemPrompt from '@neo/system-prompt'
-import ToolRuntime from '@neo/tools'
+import ToolRuntime, { RUN_CODE_NAME } from '@neo/tools'
+import type { Config as ToolConfig } from '@neo/tools'
 import LocalFileSystem from '@neo/fs-local'
 import * as FsPolicy from '@neo/fs-observation-policy'
 import LocalAttachmentStore from '@neo/attachment-local'
+import { AttachmentId, AttachmentStore } from '@neo/attachment'
+import type { FileAttachmentRef, ImageAttachmentLimits, SaveFileAttachment } from '@neo/attachment'
 import * as ToolFs from '@neo/tool-fs'
-import { expandHomePath, fileMediaTypeForPath } from '../src/attach-file.ts'
+import { applyAttachFileTool, expandHomePath, fileMediaTypeForPath } from '../src/attach-file.ts'
 
 const testToolSignal = new AbortController().signal
+
+/** In-process Code Mode seam fake that invokes the real registry bindings. */
+class FakeRuntime extends CodeRuntime {
+  readonly language = 'typescript'
+  readonly isolation = 'fake'
+  behavior: (request: CodeRunRequest) => Promise<CodeRunResult> = () => Promise.resolve({ logs: [] })
+
+  run(request: CodeRunRequest): Promise<CodeRunResult> {
+    return this.behavior(request)
+  }
+}
 
 let dir: string
 let home: string
@@ -29,14 +45,16 @@ beforeEach(async () => {
   home = await mkdtemp(join(tmpdir(), 'dsh-attach-file-home-'))
 })
 afterEach(async () => {
+  vi.restoreAllMocks()
   await rm(dir, { recursive: true, force: true })
   await rm(home, { recursive: true, force: true })
 })
 
-async function setup(options: { attachments?: boolean; maxFileBytes?: number } = {}) {
+async function setup(options: { attachments?: boolean; maxFileBytes?: number; toolMode?: ToolConfig['mode'] } = {}) {
   const ctx = new Context()
   await ctx.plugin(SystemPrompt)
-  await ctx.plugin(ToolRuntime, { mode: 'native' })
+  await ctx.plugin(ToolRuntime, { mode: options.toolMode ?? 'native' })
+  if (options.toolMode === 'code') await ctx.plugin(FakeRuntime)
   await ctx.plugin(LocalFileSystem, { cwd: dir })
   await ctx.plugin(FsPolicy)
   if (options.attachments !== false) {
@@ -50,13 +68,16 @@ async function setup(options: { attachments?: boolean; maxFileBytes?: number } =
 }
 
 let callCounter = 0
-function attachFile(ctx: Context, args: unknown) {
+function call(ctx: Context, name: string, args: unknown) {
   return ctx.tools.execute({
     signal: testToolSignal,
     callId: CallId(`attach-call-${++callCounter}`),
-    name: 'attach_file',
+    name,
     arguments: args,
   })
+}
+function attachFile(ctx: Context, args: unknown) {
+  return call(ctx, 'attach_file', args)
 }
 
 function fileBlockOf(result: { content: ContentBlock[] }): FileBlock | undefined {
@@ -153,6 +174,114 @@ describe('attach_file', () => {
     expect(out).toContain('not found')
     expect(out).toContain('contains:')
     expect(out).toContain('DELIVERABLE_Q3.zip') // the real file the model can now name
+  })
+
+  it('names a missing containing directory instead of listing siblings', async () => {
+    const ctx = await setup()
+    const result = await attachFile(ctx, { file_path: 'nope/report.md' })
+    expect(result.isError).toBe(true)
+    expect(text(result)).toMatch(/not found.*the containing directory ".*nope" does not exist/s)
+  })
+
+  it('caps the sibling list and counts the files it leaves out', async () => {
+    const names = Array.from({ length: 14 }, (_, index) => `part-${String(index).padStart(2, '0')}.csv`)
+    for (const name of names) await writeFile(join(dir, name), 'x')
+    const ctx = await setup()
+    const out = text(await attachFile(ctx, { file_path: 'part-99.csv' }))
+    expect(out).toContain('contains:')
+    expect(out).toContain(', … (+2 more)')
+    expect(out.slice(out.indexOf('contains:')).match(/part-\d\d\.csv/g)).toHaveLength(12)
+  })
+
+  it('keeps the plain not-found error when listing the directory fails', async () => {
+    await writeFile(join(dir, 'notes.txt'), 'x')
+    const ctx = await setup()
+    vi.spyOn(ctx.fs, 'listDir').mockRejectedValue(new Error('EIO: directory listing failed'))
+    const result = await attachFile(ctx, { file_path: 'absent.md' })
+    expect(result.isError).toBe(true)
+    const out = text(result)
+    expect(out).toContain('not found')
+    expect(out).not.toContain('notes.txt')
+    expect(out).not.toContain('EIO')
+  })
+
+  it('defensively refuses execution without an attachment service', async () => {
+    await writeFile(join(dir, 'INFORME.md'), '# x')
+    const ctx = await setup({ attachments: false })
+    applyAttachFileTool(ctx)
+    const result = await attachFile(ctx, { file_path: 'INFORME.md' })
+    expect(result.isError).toBe(true)
+    expect(text(result)).toContain('cannot attach "INFORME.md": no attachment service is mounted')
+  })
+
+  it('falls back to the file base name when the store returns a reference without one', async () => {
+    /** File store echoing a nameless reference; deployments may strip names entirely. */
+    class NamelessStore extends AttachmentStore {
+      readonly imageLimits: ImageAttachmentLimits = Object.freeze({
+        maxImageBytes: 0,
+        maxImagesPerMessage: 0,
+        maxMessageImageBytes: 0,
+        maxImagePixels: 0,
+        mediaTypes: Object.freeze([] as const),
+      })
+
+      readonly fileLimits = Object.freeze({ maxFileBytes: 1024 })
+      validateImage(): Promise<never> { return Promise.reject(new Error('unused')) }
+      saveImage(): Promise<never> { return Promise.reject(new Error('unused')) }
+      readImage(): Promise<never> { return Promise.reject(new Error('unused')) }
+      readFile(): Promise<never> { return Promise.reject(new Error('unused')) }
+
+      async saveFile(input: SaveFileAttachment): Promise<FileAttachmentRef> {
+        if (input.mediaType === undefined) throw new Error('attach_file must declare a media type')
+        return { attachmentId: AttachmentId('sha256:feed'), mediaType: input.mediaType, bytes: input.data.length }
+      }
+    }
+    await writeFile(join(dir, 'export.csv'), 'a,b\n')
+    const ctx = await setup({ attachments: false })
+    await ctx.plugin(NamelessStore)
+    const result = await attachFile(ctx, { file_path: 'export.csv', name: 'Exportacion.csv' })
+    expect(result.isError).toBe(false)
+    expect(fileBlockOf(result)?.attachment).toEqual({ attachmentId: 'sha256:feed', mediaType: 'text/csv', bytes: 4 })
+    expect(text(result)).toContain('Published export.csv (text/csv, 4 bytes)')
+  })
+
+  it('forwards a nested Code Mode attach through the outer run_code context', async () => {
+    await writeFile(join(dir, 'INFORME.md'), '# Informe\n')
+    const ctx = await setup({ toolMode: 'code' })
+    const runtime = ctx.codeRuntime as FakeRuntime
+    runtime.behavior = async (request) => {
+      const value = await request.bindings[0]!.functions.attach_file!({ file_path: 'INFORME.md' })
+      return { logs: [], value }
+    }
+
+    const result = await call(ctx, RUN_CODE_NAME, {
+      code: 'return await tools.attach_file({ file_path: "INFORME.md" })',
+      description: 'Attach the report through Code Mode',
+    })
+
+    expect(result.isError).toBe(false)
+    expect(result.content.every(block => block.type === 'text')).toBe(true)
+    expect(result.additionalContexts).toHaveLength(1)
+    const forwarded = result.additionalContexts?.[0]?.content
+    expect(forwarded).toHaveLength(2)
+    expect(forwarded?.[0]?.type === 'text' ? forwarded[0].text : '').toContain('Published INFORME.md (text/markdown, 10 bytes)')
+    expect(forwarded?.[1]).toMatchObject({
+      type: 'file',
+      attachment: { mediaType: 'text/markdown', bytes: 10, name: 'INFORME.md' },
+    })
+  })
+
+  it('declares attach_file parallel-safe and presents a read-family card', async () => {
+    const ctx = await setup()
+    expect(ctx.tools.executionMode({
+      signal: testToolSignal, callId: CallId('attach-parallel'), name: 'attach_file', arguments: { file_path: 'a.md' },
+    })).toEqual({ kind: 'parallel' })
+    expect(ctx.tools.get('attach_file')?.presentCall?.({ file_path: 'out/informe.md' })).toEqual({
+      card: 'generic',
+      title: 'Attach out/informe.md',
+      kind: 'read',
+      locations: [{ path: 'out/informe.md' }],
+    })
   })
 })
 
