@@ -135,6 +135,7 @@ const packageFileExtras: Readonly<Record<string, readonly string[]>> = {
   '@neo/base': ['cordis.patch.yml'],
   '@neo/web-app': ['cordis.patch.yml'],
   '@neo/headless': ['cordis.patch.yml'],
+  '@neo/browser': ['cordis.patch.yml'],
   '@neo/client-ui-theme': ['lib/styles'],
   // The Python runtime uses a distinct closed-resolution bin; the public CLI
   // keeps config-owned bare-package resolution through lib/bin.js.

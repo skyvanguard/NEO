@@ -47,7 +47,6 @@
     "@neo/cordis-plugin-loader": "workspace:~",
     "@neo/invariants": "workspace:^",
     "@neo/agent": "workspace:*",
-    "@neo/agent-loop-testkit": "workspace:*",
     "@neo/llm": "workspace:*",
     "@neo/output-retention": "workspace:*",
     "@neo/terminal": "workspace:*",

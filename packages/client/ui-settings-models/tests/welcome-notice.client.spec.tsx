@@ -5,6 +5,7 @@ import { bindSnapshotSelector } from '@neo/client-web-react'
 import { WelcomeNotice } from '../src/client/WelcomeNotice.tsx'
 import type { WelcomeNoticeProps } from '../src/client/WelcomeNotice.tsx'
 import { WelcomeNoticeStore } from '../src/client/welcome-store.ts'
+import { OnboardingModal } from '../src/client/OnboardingModal.tsx'
 import { en, zh } from '../src/client/locales.ts'
 import {
   WELCOME_NOTICE_ACK_FIELD, WELCOME_NOTICE_COPY, WELCOME_NOTICE_SETTINGS_NAMESPACE,
@@ -126,5 +127,40 @@ describe('WelcomeNotice', () => {
     })
     expect((await screen.findByRole('alert')).textContent).toBe(zh.welcomeError)
     expect(h.complete).not.toHaveBeenCalled()
+  })
+})
+
+describe('OnboardingModal', () => {
+  it('keeps focus on the control a step focuses and leaves the title out of the tab order', () => {
+    const appRoot = document.createElement('div')
+    appRoot.id = 'root'
+    document.body.append(appRoot)
+    const before = appRoot.inert
+    const view = render(
+      <OnboardingModal title="Choose a model">
+        <input aria-label="Model" autoFocus />
+      </OnboardingModal>,
+    )
+
+    expect(screen.getByRole('dialog', { name: 'Choose a model' })).toBeTruthy()
+    // Without `focusTitle` the modal does not pull focus to its heading, which
+    // the welcome step above relies on the opposite way.
+    expect(document.activeElement).toBe(screen.getByRole('textbox', { name: 'Model' }))
+    expect(screen.getByRole('heading', { name: 'Choose a model' }).hasAttribute('tabindex')).toBe(false)
+    expect(appRoot.inert).toBe(true)
+
+    // Closing the step hands the application root back as it found it.
+    view.unmount()
+    expect(appRoot.inert).toBe(before)
+  })
+
+  it('still opens in a document that has no application root to make inert', () => {
+    expect(document.getElementById('root')).toBeNull()
+    const view = render(<OnboardingModal title="Welcome"><p>Step body</p></OnboardingModal>)
+
+    expect(screen.getByRole('dialog', { name: 'Welcome' })).toBeTruthy()
+    expect(screen.getByText('Step body')).toBeTruthy()
+    view.unmount()
+    expect(screen.queryByRole('dialog')).toBeNull()
   })
 })

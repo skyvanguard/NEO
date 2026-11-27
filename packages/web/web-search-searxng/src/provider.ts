@@ -111,7 +111,7 @@ export class SearxngSearchProvider implements WebSearchProvider {
           signal: controller.signal,
         })
       } catch (error: unknown) {
-        if (signal?.aborted === true) throw searchAborted(signal, error)
+        if (signal?.aborted === true) throw searchAborted(signal)
         throw new WebError(`SearXNG search request failed: ${String(error)}`, 'WEB_PROVIDER_ERROR', { cause: error })
       }
 
@@ -122,7 +122,7 @@ export class SearxngSearchProvider implements WebSearchProvider {
         const payload = await response.json() as SearxngResponse
         return mapSearxngResponse(payload, limit)
       } catch (error: unknown) {
-        if (signal?.aborted === true) throw searchAborted(signal, error)
+        if (signal?.aborted === true) throw searchAborted(signal)
         throw new WebError(
           'SearXNG returned a non-JSON body; enable the `json` format in the instance settings.yml (search.formats)',
           'WEB_PROVIDER_ERROR',
@@ -137,10 +137,8 @@ export class SearxngSearchProvider implements WebSearchProvider {
 }
 
 /** Build the provider's stable cancellation error while retaining the caller's reason. */
-function searchAborted(signal?: AbortSignal, fallback?: unknown): WebError {
-  return new WebError('SearXNG search aborted', 'WEB_ABORTED', {
-    cause: signal?.aborted === true ? signal.reason : fallback,
-  })
+function searchAborted(signal: AbortSignal): WebError {
+  return new WebError('SearXNG search aborted', 'WEB_ABORTED', { cause: signal.reason })
 }
 
 /** True for a positive integer bound. */
