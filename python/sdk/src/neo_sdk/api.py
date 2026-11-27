@@ -18,8 +18,9 @@ class NeoConfig:
     LLM_API_KEY and LLM_BASE_URL settings keep working; ``api_key`` and
     ``base_url`` set them for this runtime only. The runtime also receives
     ``model`` as LLM_MODEL, so a composition whose route reads it serves exactly
-    the model each session requests. Use ``env`` to intentionally override or
-    inject other variables for a subprocess.
+    the model each session requests; ``model`` therefore wins over an LLM_MODEL
+    in ``env``. Use ``env`` to intentionally override or inject other variables
+    for a subprocess.
     """
 
     provider: str = "deepseek-official"

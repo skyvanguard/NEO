@@ -126,6 +126,45 @@ for line in sys.stdin:
     }
 
 
+def test_sdk_exports_endpoint_key_and_requested_model_to_the_runtime(tmp_path: Path) -> None:
+    script = tmp_path / "fake_runtime.py"
+    env_dump = tmp_path / "env.json"
+    script.write_text(
+        """
+import json
+import os
+import sys
+
+json.dump({name: os.environ.get(name) for name in ("LLM_API_KEY", "LLM_BASE_URL", "LLM_MODEL")},
+          open(os.environ["ENV_DUMP"], "w"))
+for line in sys.stdin:
+    msg = json.loads(line)
+    if msg.get("method") == "initialize":
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-runtime"}}}), flush=True)
+    elif msg.get("method") == "shutdown":
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
+        break
+""".strip()
+    )
+
+    with Neo(
+        model="served-model",
+        cwd=str(tmp_path),
+        launch_args_override=(sys.executable, str(script)),
+        api_key="kwarg-key",
+        base_url="http://127.0.0.1:4322/v1",
+        # The route must list the model initialize requests, so `model` wins.
+        env={"ENV_DUMP": str(env_dump), "LLM_MODEL": "ignored-model"},
+    ):
+        pass
+
+    assert json.loads(env_dump.read_text()) == {
+        "LLM_API_KEY": "kwarg-key",
+        "LLM_BASE_URL": "http://127.0.0.1:4322/v1",
+        "LLM_MODEL": "served-model",
+    }
+
+
 def test_session_run_invokes_notification_callback_before_returning(tmp_path: Path) -> None:
     script = tmp_path / "fake_runtime.py"
     script.write_text(

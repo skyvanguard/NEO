@@ -6,8 +6,9 @@ Python subprocess SDK for driving NEO over JSON-RPC stdio. The
 runtime inherits the caller's environment, including `LLM_BASE_URL` (the
 OpenAI-compatible endpoint, default a local llama-server at
 `http://127.0.0.1:8080/v1`) and `LLM_API_KEY`, so callers can point it at a
-local server, a hosted gateway, or a proxy. The SDK also passes the session's
-`model` as `LLM_MODEL`, which the bundled route serves.
+local server, a hosted gateway, or a proxy. The SDK also passes its `model`
+as `LLM_MODEL`, the one model the bundled route serves. The runtime no longer
+reads `DEEPSEEK_API_KEY` or `DEEPSEEK_BASE_URL`; set the `LLM_*` names instead.
 
 Install the `neo-sdk` distribution from PyPI; the import module remains `neo_sdk`:
 
