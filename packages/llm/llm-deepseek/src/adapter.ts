@@ -81,7 +81,7 @@ export interface DeepSeekAdapterOptions {
    * `MISSING_CREDENTIAL` when no key is available anywhere.
    */
   resolveApiKey: (connection: DeepSeekConnectionOptions) => Promise<string>
-  /** Resolve the harness-home anonymous id shared with telemetry and feedback. */
+  /** Resolve the harness-home anonymous id sent as the request identity header. */
   resolveUserId: () => AnonymousUserId
 }
 

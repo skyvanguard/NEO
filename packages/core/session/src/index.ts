@@ -452,11 +452,10 @@ export class Session {
    * seed (0 without one). Events with smaller seq values entered through
    * construction — replay, fork, or resume — and were never published on the
    * `session/event` firehose (constructor seeds do not emit), so consumers
-   * that replay the log as a publication substitute (telemetry adoption)
-   * start here. Distinct from `header.seedLength`, the DURABLE fork-lineage
-   * boundary: a resumed session's constructor seed is its full stored log,
-   * while its header keeps the original fork value — this field is the
-   * in-process construction fact.
+   * that replay the log as a publication substitute start here. Distinct
+   * from `header.seedLength`, the DURABLE fork-lineage boundary: a resumed
+   * session's constructor seed is its full stored log, while its header keeps
+   * the original fork value — this field is the in-process construction fact.
    *
    * Not persisted itself: a seeded session projects it into the log as the
    * `session/end-seed` event, which is what a consumer reading STORED history
