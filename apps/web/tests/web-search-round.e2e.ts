@@ -1,7 +1,6 @@
 // Web e2e scenario for the shipped default search composition. A real browser
-// drives `web_search`; the model stream is replayed while the real DeepSeek
-// provider calls a deterministic local Anthropic-compatible endpoint through
-// the real credentials service.
+// drives `web_search`; the model stream is replayed while the real SearXNG
+// provider queries a deterministic local instance double.
 import { readFile } from 'node:fs/promises'
 import { createServer, type Server } from 'node:http'
 import type { AddressInfo } from 'node:net'
@@ -9,7 +8,6 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { credentialRef } from '@neo/credentials'
 import type { SessionEvent } from '@neo/session'
 import { WEB_SEARCH_MAX_RESULTS } from '@neo/tool-web'
 import {
@@ -24,12 +22,10 @@ const UI_EXPECTED = fileURLToPath(new URL('./snapshots/web-search-round/ui.expec
 const MODE = webSnapshotMode()
 const QUERY = 'NEO snapshot search'
 const PROMPT = `Use web_search to search exactly "${QUERY}". Then reply exactly SEARCH_DONE and stop.`
-const SEARCH_CREDENTIAL_REF = credentialRef('NEO_WEB_SEARCH_E2E_KEY')
-const SEARCH_CREDENTIAL = 'snapshot-search-key'
 
 /**
- * Provider results the double returns, exceeding the shipped `searchMaxResults`
- * so the seam's cap and the card's scroll container are both exercised. Each row
+ * Results the instance double returns, exceeding the shipped `searchMaxResults`
+ * so the cap and the card's scroll container are both exercised. Each row
  * carries a title, a snippet, and a date, so 8 kept rows exceed the `.sources`
  * 320px max-height.
  */
@@ -50,7 +46,7 @@ function resultSnippet(ordinal: number): string {
   return `Snapshot search excerpt ${ordinal}: the harness replays this source list from a local endpoint.`
 }
 
-/** One provider result's `page_age`, by 1-based provider order (July 2026 days 01..12). */
+/** One provider result's `publishedDate`, by 1-based provider order (July 2026 days 01..12). */
 function resultPageAge(ordinal: number): string {
   return `2026-07-${String(ordinal).padStart(2, '0')}`
 }
@@ -59,47 +55,29 @@ function resultPageAge(ordinal: number): string {
 const RESULT_ORDINALS = Array.from({ length: PROVIDER_RESULT_COUNT }, (_value, index) => index + 1)
 
 interface CapturedSearchRequest {
+  method: string
   path: string
-  apiKey: string | undefined
-  body: unknown
+  params: Record<string, string>
 }
 
-/** Start the deterministic DeepSeek Messages double used by the real provider. */
+/** Start the deterministic SearXNG `format=json` double the real provider queries. */
 async function startSearchServer(captured: CapturedSearchRequest[]): Promise<{ server: Server; baseURL: string }> {
   const server = createServer((request, response) => {
-    let body = ''
-    request.setEncoding('utf8')
-    request.on('data', (chunk: string) => { body += chunk })
-    request.on('end', () => {
-      captured.push({
-        path: request.url ?? '',
-        apiKey: typeof request.headers['x-api-key'] === 'string' ? request.headers['x-api-key'] : undefined,
-        body: JSON.parse(body) as unknown,
-      })
-      response.writeHead(200, { 'content-type': 'application/json' })
-      response.end(JSON.stringify({
-        content: [
-          {
-            type: 'text',
-            text: `Found ${PROVIDER_RESULT_COUNT} sources.`,
-            citations: RESULT_ORDINALS.map(ordinal => ({
-              type: 'web_search_result_location',
-              url: resultUrl(ordinal),
-              cited_text: resultSnippet(ordinal),
-            })),
-          },
-          {
-            type: 'web_search_tool_result',
-            content: RESULT_ORDINALS.map(ordinal => ({
-              type: 'web_search_result',
-              url: resultUrl(ordinal),
-              title: resultTitle(ordinal),
-              page_age: resultPageAge(ordinal),
-            })),
-          },
-        ],
-      }))
+    const url = new URL(request.url ?? '/', 'http://127.0.0.1')
+    captured.push({
+      method: request.method ?? '',
+      path: url.pathname,
+      params: Object.fromEntries(url.searchParams),
     })
+    response.writeHead(200, { 'content-type': 'application/json' })
+    response.end(JSON.stringify({
+      results: RESULT_ORDINALS.map(ordinal => ({
+        url: resultUrl(ordinal),
+        title: resultTitle(ordinal),
+        content: resultSnippet(ordinal),
+        publishedDate: resultPageAge(ordinal),
+      })),
+    }))
   })
   await new Promise<void>((resolve, reject) => {
     server.once('error', reject)
@@ -117,7 +95,6 @@ describe('web e2e: shipped default web search', () => {
   let browser: Browser
   let page: Page
   let searchServer: Server | undefined
-  let searchBaseURL: string
   let tripwire: ReturnType<typeof watchConsole>
   const searchRequests: CapturedSearchRequest[] = []
   const sessionEvents: SessionEvent[] = []
@@ -125,15 +102,10 @@ describe('web e2e: shipped default web search', () => {
   beforeAll(async () => {
     const search = await startSearchServer(searchRequests)
     searchServer = search.server
-    searchBaseURL = search.baseURL
     scaffold = await launchWebScaffold({
-      deepSeekSearch: {
-        baseURL: search.baseURL,
-        apiKeyEnv: SEARCH_CREDENTIAL_REF,
-      },
+      searxngSearch: { baseURL: search.baseURL },
       ...(MODE === 'record' ? {} : { replayFixture: FIXTURE, paceMs: 15 }),
     })
-    await scaffold.ctx.credentials.set(SEARCH_CREDENTIAL_REF, SEARCH_CREDENTIAL)
     scaffold.ctx.on('session/event', (_session, event: SessionEvent) => { sessionEvents.push(event) })
     browser = await chromium.launch()
     page = await newEnglishPage(browser)
@@ -173,28 +145,11 @@ describe('web e2e: shipped default web search', () => {
   }, 200_000)
 
   it.skipIf(MODE === 'record')('uses the real provider and persists the capped structured result', () => {
-    expect(searchRequests).toHaveLength(1)
-    expect(searchRequests[0]).toMatchObject({
-      path: '/messages',
-      apiKey: SEARCH_CREDENTIAL,
-      body: {
-        messages: [{
-          role: 'user',
-          content: [{ type: 'text', text: `Perform a web search for the query: ${QUERY}` }],
-        }],
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-      },
-    })
-
-    const auxiliaryRequest = sessionEvents.find(
-      (event): event is Extract<SessionEvent, { type: 'web/deepseek-search-llm-request' }> =>
-        event.type === 'web/deepseek-search-llm-request',
-    )
-    expect(auxiliaryRequest?.data).toEqual({
-      endpoint: `${searchBaseURL}/messages`,
-      apiVersion: '2023-06-01',
-      body: searchRequests[0]?.body,
-    })
+    expect(searchRequests).toEqual([{
+      method: 'GET',
+      path: '/search',
+      params: { q: QUERY, format: 'json' },
+    }])
 
     const searchCall = sessionEvents.find(
       (event): event is Extract<SessionEvent, { type: 'tool/call' }> =>
@@ -209,18 +164,17 @@ describe('web e2e: shipped default web search', () => {
     const content = searchResult.data.message.content[0]
     expect(content.isError).toBe(false)
     const rendered = content.content.filter(block => block.type === 'text').map(block => block.text).join('')
-    // The seam caps the provider's list at the shipped searchMaxResults before
-    // the tool renders it, so the kept prefix is model-visible and the dropped
-    // suffix is not.
+    // The list is capped at the shipped searchMaxResults before the tool
+    // renders it, so the kept prefix is model-visible and the dropped suffix is
+    // not. SearXNG applies the request's cap itself, so the seam receives no
+    // surplus and does not flag the result as truncated.
     for (const ordinal of RESULT_ORDINALS.slice(0, WEB_SEARCH_MAX_RESULTS)) {
       expect(rendered).toContain(`[${resultTitle(ordinal)}](${resultUrl(ordinal)})`)
     }
     for (const ordinal of RESULT_ORDINALS.slice(WEB_SEARCH_MAX_RESULTS)) {
       expect(rendered).not.toContain(resultUrl(ordinal))
     }
-    expect(rendered).toContain(
-      `(Showing the first ${WEB_SEARCH_MAX_RESULTS} sources. Refine the query for more.)`,
-    )
+    expect(rendered).not.toContain('Refine the query for more.')
     expect(searchResult.data.meta).toMatchObject({
       sources: RESULT_ORDINALS.slice(0, WEB_SEARCH_MAX_RESULTS).map(ordinal => ({
         url: resultUrl(ordinal),
@@ -228,7 +182,7 @@ describe('web e2e: shipped default web search', () => {
         snippet: resultSnippet(ordinal),
         publishedAt: resultPageAge(ordinal),
       })),
-      truncated: true,
+      truncated: false,
     })
   })
 
@@ -250,12 +204,11 @@ describe('web e2e: shipped default web search', () => {
     const card = page.locator('[data-web="search"]')
     const sources = card.locator('ol')
     await sources.waitFor({ timeout: 10_000 })
-    // The card draws exactly the sources the model saw: the seam's cap, not the
-    // provider's list length.
+    // The card draws exactly the sources the model saw: the cap, not the
+    // instance's list length.
     expect(await sources.locator('li').count()).toBe(WEB_SEARCH_MAX_RESULTS)
     // The list is complete in the DOM, so the card carries no expand control.
     expect(await card.locator('button').count()).toBe(0)
-    expect(await card.getByText('来源列表已截断').isVisible()).toBe(true)
 
     const geometry = await sources.evaluate((element) => {
       const computed = getComputedStyle(element)

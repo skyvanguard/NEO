@@ -230,15 +230,13 @@ export interface LaunchOptions {
   /** Leave the current welcome notice pending; ordinary scenarios pre-acknowledge it before browser boot. */
   welcomeNoticePending?: boolean
   /**
-   * Patch the shipped DeepSeek search row to a deterministic endpoint and
-   * credential reference. Browser search scenarios keep the real provider and
-   * credentials seam while avoiding external search traffic and ambient keys.
+   * Point the shipped SearXNG search row at a deterministic local instance.
+   * Browser search scenarios keep the real provider without depending on a
+   * SearXNG instance running on the developer's machine.
    */
-  deepSeekSearch?: {
-    /** Anthropic-compatible base URL; the provider appends `/messages`. */
+  searxngSearch?: {
+    /** SearXNG instance URL; the provider appends `/search`. */
     baseURL: string
-    /** Credential reference resolved by the shipped search provider. */
-    apiKeyEnv: string
   }
   /**
    * Replace the roster the scaffold mounts by default (the shipped directory
@@ -433,15 +431,9 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
         { id: 'tool-cordis', name: '@neo/tool-cordis' },
       ] }]
       : [],
-    ...options.deepSeekSearch === undefined
+    ...options.searxngSearch === undefined
       ? []
-      : [{
-        id: 'web-search-deepseek',
-        config: {
-          apiKeyEnv: options.deepSeekSearch.apiKeyEnv,
-          baseURL: options.deepSeekSearch.baseURL,
-        },
-      }],
+      : [{ id: 'web-search-searxng', config: { baseURL: options.searxngSearch.baseURL } }],
   ]
 
   // Sessions inherit the gateway's process.cwd() default; run the boot from
