@@ -84,7 +84,7 @@ CUSTOM_CORDIS = """\
 - id: sessions
   name: '@neo/session-persistence-jsonl'
   config:
-    root: !!js process.env.DSH_SESSION_ROOT
+    root: !!js process.env.NEO_SESSION_ROOT
     compression: 'none'
 - id: code-runtime
   name: '@neo/code-runtime-worker-thread'
@@ -639,9 +639,9 @@ def smoke_direct(base_url: str, executable: Path) -> None:
         cordis.write_text(CUSTOM_CORDIS)
         environment = {
             **os.environ,
-            "DSH_CORDIS_CONFIG": str(cordis),
-            "DSH_SESSION_ROOT": str(sessions),
-            "DSH_CWD": str(root),
+            "NEO_CORDIS_CONFIG": str(cordis),
+            "NEO_SESSION_ROOT": str(sessions),
+            "NEO_CWD": str(root),
             "DEEPSEEK_API_KEY": "sk-keyless-smoke",
             "DEEPSEEK_BASE_URL": base_url,
         }

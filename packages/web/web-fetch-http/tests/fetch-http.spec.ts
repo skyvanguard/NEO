@@ -552,6 +552,19 @@ describe('web-fetch-http plugin registration', () => {
     expect('default' in fetchPlugin).toBe(false)
   })
 
+  it('sends a neutral product User-Agent by default: no vendor name, no URL', async () => {
+    let seen: string | undefined
+    handler = (req, res) => { seen = req.headers['user-agent']; res.writeHead(200, { 'content-type': 'text/plain' }); res.end('ok') }
+    const ctx = new Context()
+    await ctx.plugin(WebRuntime, { fetchProvider: LOCAL_FETCH_PROVIDER_ID })
+    await ctx.plugin(fetchPlugin, { allowPrivateAddresses: true })
+    await ctx.web.fetch({ url: `${base}/` })
+    // Every page the agent fetches sees this header, so it must not name a
+    // vendor or point at a repository that identifies the operator.
+    expect(seen).toBe(fetchPlugin.DEFAULT_USER_AGENT)
+    expect(fetchPlugin.DEFAULT_USER_AGENT).toBe('NEO/0.1')
+  })
+
   it('rejects a non-positive resource limit at construction', async () => {
     const ctx = new Context()
     await ctx.plugin(WebRuntime, { fetchProvider: LOCAL_FETCH_PROVIDER_ID })
