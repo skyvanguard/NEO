@@ -274,6 +274,43 @@ describe('ModelsSection', () => {
     })
   })
 
+  it('clears a stored base URL with one unset op and leaves the other stored fields alone', async () => {
+    const { mutate } = await mountSection()
+    fireEvent.click(screen.getByRole('button', { name: openaiCopy(en.editProvider) }))
+    fireEvent.click(screen.getByText(en.customized))
+    const url = screen.getByLabelText<HTMLInputElement>(en.baseUrl)
+    expect(url.value).toBe('https://proxy')
+    fireEvent.change(url, { target: { value: '' } })
+    expect(url.value).toBe('')
+    fireEvent.click(screen.getByText(en.apply))
+    await waitFor(() => { expect(mutate).toHaveBeenCalledTimes(1) })
+    // An emptied endpoint leaves the profile rather than being stored as ''.
+    expect(mutate.mock.calls[0]?.[0]).toEqual({
+      ns: 'llm-pi-ai',
+      ops: [{ op: 'unset', path: ['providers', 'openai', 'baseURL'] }],
+      expectedRevision: 0,
+    })
+  })
+
+  it('titles the edit card with the display name and names the route beside it', async () => {
+    const scripted = scriptedFace()
+    scripted.face.llm.providers.mockImplementation(() => Promise.resolve(ok({
+      providers: [
+        { provider: 'openai', displayName: 'OpenAI Proxy', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true },
+      ],
+    })))
+    await mountFace(scripted)
+    // The row names the provider by its display name only.
+    expect(screen.getByText('OpenAI Proxy')).toBeTruthy()
+    expect(screen.queryByText('openai')).toBeNull()
+
+    const target = { provider: 'openai', displayName: 'OpenAI Proxy' }
+    fireEvent.click(screen.getByRole('button', { name: providerCopy(en.editProvider, target) }))
+    // The open card repeats the display name as its title and adds the route id.
+    expect(screen.getAllByText('OpenAI Proxy')).toHaveLength(2)
+    expect(screen.getByText('openai')).toBeTruthy()
+  })
+
   it('adds a dormant provider with a derived reference and stores its key', async () => {
     const { mutate, set } = await mountSection()
     fireEvent.click(screen.getByText(en.add))

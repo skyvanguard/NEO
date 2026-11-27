@@ -70,7 +70,9 @@ export async function saveAttachment(
   const name = safeBaseName(fileName)
   const dir = resolve(join(workspaceRoot, ATTACHMENTS_DIR))
   const absolutePath = resolve(join(dir, name))
-  // Defense-in-depth: the target must stay inside the attachments directory.
+  // Defense-in-depth: the target must stay inside the attachments directory. Unreachable today:
+  // safeBaseName keeps only [A-Za-z0-9._-] without leading dots, so join(dir, name) cannot leave dir.
+  /* v8 ignore next 3 -- guard kept against a future safeBaseName change (see above). */
   if (absolutePath !== dir && !absolutePath.startsWith(dir + sep)) {
     throw new InvalidAttachmentError('attachment path escapes the workspace')
   }

@@ -30,7 +30,7 @@ const CSS_VIRTUAL_SUFFIX = '.mjs'
  * Everything else under @neo/* is either a module-table entry
  * (external) or a leak the purity gate rejects.
  */
-export const INLINE_SAFE = /^@neo\/(host-apiproxy|session|llm|tools|brand)(\/|$)/
+export const INLINE_SAFE = /^@neo\/(host-apiproxy|session|llm|tools|brand|util-values)(\/|$)/
 
 /**
  * Vendored framework libraries: rescoped into @neo, so the gate below

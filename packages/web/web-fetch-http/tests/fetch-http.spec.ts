@@ -113,6 +113,41 @@ describe('policy helpers', () => {
     ]) expect(isBlockedAddress(blocked), blocked).toBe(true)
   })
 
+  it('blocks every internal IPv6 range on its own rule, even behind a public-looking IPv4 tail', () => {
+    // Each literal ends in 8.8.8.8, so only its own prefix rule can block it: an
+    // embedding rule that misfired first would classify the public tail and allow it.
+    for (const blocked of [
+      'fc00::808:808', 'fdff:ffff::808:808', 'fc00::ffff:808:808', // fc00::/7 unique local
+      'fe80::808:808', 'febf:ffff::808:808', 'fe80::ffff:808:808', 'fe80::ff:808:808', // fe80::/10 link-local
+      'ff02::808:808', 'ff02:808:808::1', // ff00::/8 multicast
+    ]) expect(isBlockedAddress(blocked), blocked).toBe(true)
+  })
+
+  it('allows public IPv6 literals that sit next to an internal prefix or embedding', () => {
+    for (const ok of [
+      '2606:ff9b::a00:1', '2606:9b::a00:1', // NAT64-looking tail outside 64:ff9b::/96
+      '2a80::1', // outside fe80::/10
+    ]) expect(isBlockedAddress(ok), ok).toBe(false)
+  })
+
+  it('blocks credentials in any form and accepts a URL of exactly the maximum length', () => {
+    for (const withCredentials of [
+      'https://user@example.com', 'https://:pass@example.com', 'https://u@example.com', 'https://:p@example.com',
+    ]) {
+      expect(() => validateFetchUrl(withCredentials, 2048), withCredentials)
+        .toThrow(expect.objectContaining({ code: 'WEB_BLOCKED_URL' }))
+    }
+    const atLimit = `https://example.com/${'a'.repeat(30)}`
+    expect(validateFetchUrl(atLimit, atLimit.length).href).toBe(atLimit)
+    expect(() => validateFetchUrl(atLimit, atLimit.length - 1)).toThrow(expect.objectContaining({ code: 'WEB_INVALID_URL' }))
+  })
+
+  it('treats XML and structured-syntax JSON/XML media types as text', () => {
+    for (const mime of ['application/xml', 'application/ld+json', 'application/atom+xml']) {
+      expect(classifyContentType(mime), mime).toBe('text')
+    }
+  })
+
   it('allows public IPv6 literals and returns false for hostnames', () => {
     expect(isBlockedAddress('2606:4700:4700::1111')).toBe(false)
     expect(isBlockedAddress('::ffff:8.8.8.8')).toBe(false)

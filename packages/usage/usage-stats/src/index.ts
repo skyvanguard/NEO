@@ -49,7 +49,8 @@ export class UsageStatsService extends TypertRemoteService {
   /** Merge the persisted cache into the in-memory one, exactly once. */
   private ensureLoaded(): Promise<void> {
     this.cacheLoad ??= loadUsageCache(this.cacheFile()).then((disk) => {
-      for (const [path, entry] of disk) if (!this.usageCache.has(path)) this.usageCache.set(path, entry)
+      // Runs once, before any summary() folds into usageCache, so the in-memory cache is still empty here.
+      for (const [path, entry] of disk) this.usageCache.set(path, entry)
     })
     return this.cacheLoad
   }
