@@ -457,6 +457,7 @@ describe('compact configuration and defaults', () => {
       [{ auto: 'yes' }, /auto must be a boolean/],
       [{ summarizationProvider: 1 }, /summarizationProvider must be a string/],
       [{ summarizationModel: 1 }, /summarizationModel must be a string/],
+      [{ checkpointGuidance: 42 }, /checkpointGuidance must be a string/],
       [{ summarizationProvider: MODEL }, /must be set together/],
       [{ summarizationModel: MODEL }, /must be set together/],
       [{ summarizationProvider: '' }, /must be set together/],
