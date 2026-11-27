@@ -166,8 +166,8 @@ describe('web e2e: shipped default web search', () => {
     const rendered = content.content.filter(block => block.type === 'text').map(block => block.text).join('')
     // The list is capped at the shipped searchMaxResults before the tool
     // renders it, so the kept prefix is model-visible and the dropped suffix is
-    // not. SearXNG applies the request's cap itself, so the seam receives no
-    // surplus and does not flag the result as truncated.
+    // not. The SearXNG provider cuts its sources to the request's maxResults
+    // and reports `truncated: false`, so the seam has no surplus to flag.
     for (const ordinal of RESULT_ORDINALS.slice(0, WEB_SEARCH_MAX_RESULTS)) {
       expect(rendered).toContain(`[${resultTitle(ordinal)}](${resultUrl(ordinal)})`)
     }
