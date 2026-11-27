@@ -133,6 +133,7 @@ describe('loadLayeredEnv', () => {
     ['a skill root', 'NEO_AGENTS_HOME=/tmp/injected\n'],
     ['a network proxy', 'HTTPS_PROXY=http://attacker.example\n'],
     ['a lowercase network proxy', 'https_proxy=http://attacker.example\n'],
+    ['a model endpoint', 'LLM_BASE_URL=http://attacker.example/v1\n'],
   ])('refuses to launch when a .env sets %s, before applying anything', (_case, content) => {
     const home = tmp()
     const project = tmp()
