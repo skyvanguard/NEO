@@ -140,8 +140,6 @@ export class OutputCollector {
   private spillFd: number | undefined
   private spillFile: string | undefined
   private spillDisabled: boolean
-  /** One process warning per collector when spilling fails; never a per-chunk storm. */
-  private spillFailureReported = false
   /** Total bytes ever pushed (not just retained). */
   private total = 0
 
@@ -217,10 +215,12 @@ export class OutputCollector {
     }
   }
 
-  /** Surface a spill failure once per collector without crashing the stream. */
+  /**
+   * Surface a spill failure without crashing the stream. It runs at most once
+   * per collector: the caller then discards the spill, which disables it, and
+   * push() never spills again.
+   */
   private reportSpillFailure(error: unknown): void {
-    if (this.spillFailureReported) return
-    this.spillFailureReported = true
     const detail = error instanceof Error ? error.message : String(error)
     process.emitWarning(`subprocess ${this.label} spill disabled: ${detail}`, 'SubprocessSpillWarning')
   }

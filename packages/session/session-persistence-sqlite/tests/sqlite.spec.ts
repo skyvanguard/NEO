@@ -675,6 +675,25 @@ describe('SqliteSessionPersistence: durability and crash semantics', () => {
 })
 
 describe('SqliteSessionPersistence: edge cases', () => {
+  it('rolls a failed removal back whole and rethrows, keeping the session and its events', async () => {
+    const path = await freshDbPath()
+    const b = await backend(path)
+    const m = meta('remove-rollback')
+    await b.ctx.sessionPersistence.create(m)
+    await b.ctx.sessionPersistence.append(m.id, oneTurnLog())
+    // The events DELETE succeeds first; the sessions DELETE then aborts inside
+    // the same transaction, so only a ROLLBACK keeps the events.
+    const saboteur = new DatabaseSync(path)
+    saboteur.exec(`CREATE TRIGGER refuse_session_delete BEFORE DELETE ON sessions
+      BEGIN SELECT RAISE(ABORT, 'simulated delete failure'); END`)
+    saboteur.close()
+
+    await expect(b.ctx.sessionPersistence.remove(m.id)).rejects.toThrow(/simulated delete failure/)
+    const loaded = await b.ctx.sessionPersistence.load(m.id)
+    expect(loaded.events).toEqual(oneTurnLog())
+    await b.dispose()
+  })
+
   it('resolves the preparation-cache default without schema normalization', async () => {
     const ctx = new Context()
     await ctx.plugin(SessionStore)
