@@ -165,7 +165,6 @@ describe('neo web keyless CLI smoke', () => {
         cwd: sessionsDir,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-no-call',
           NEO_HOME: join(sessionsDir, '.neo'),
           NEO_AGENTS_HOME: join(sessionsDir, '.agents'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),

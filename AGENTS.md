@@ -94,7 +94,7 @@ Run checks before pushes via [dsh-pre-push-checks](.agents/skills/dsh-pre-push-c
 
 ## Secrets / .env
 
-Real-model tests and demos reach an OpenAI-compatible endpoint through `LLM_BASE_URL` (default a local llama-server at `http://127.0.0.1:8080/v1`) with `LLM_API_KEY`, from the environment or root `.env`; the DeepSeek web-search and Claude Code/Codex bridge tests still read `DEEPSEEK_API_KEY`. cordis.yml allows `!!js` (never `!js`) under plugin `config` and entry `disabled`; other metadata stays literal, so conditional composition also uses overlays. Never commit credentials. CI e2e skips without a key; testing.md owns key policy.
+Real-model tests and demos reach an OpenAI-compatible endpoint through `LLM_BASE_URL` (default a local llama-server at `http://127.0.0.1:8080/v1`) with `LLM_API_KEY`, from the environment or root `.env`; the Claude Code/Codex bridge tests still read `DEEPSEEK_API_KEY`. cordis.yml allows `!!js` (never `!js`) under plugin `config` and entry `disabled`; other metadata stays literal, so conditional composition also uses overlays. Never commit credentials. CI e2e skips without a key; testing.md owns key policy.
 
 ## Conventions
 
