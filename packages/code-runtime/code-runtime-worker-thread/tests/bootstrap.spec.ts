@@ -300,6 +300,20 @@ describe('makeNamespaces', () => {
     expect(pending.size).toBe(0)
   })
 
+  it('keeps the bare message when the rejected arguments cannot even be enumerated', async () => {
+    const port: BootstrapPort = { postMessage: () => {}, on: () => {} }
+    const [tools] = makeNamespaces(
+      { namespaces: [toolNamespace(['x'])] }, port, new Map(), { value: 1 },
+    ) as [Record<string, (args: unknown) => Promise<unknown>>]
+    // A throwing ownKeys trap defeats both the snapshot and the hint's own key scan.
+    const unlistable = new Proxy({}, { ownKeys() { throw new Error('ownKeys trap') } })
+
+    const failure = await rejectionOf(tools.x?.(unlistable) ?? Promise.resolve())
+    expect(failure).toMatchObject({
+      name: 'ToolCallError', toolName: 'x', message: 'binding arguments must be lossless JSON',
+    })
+  })
+
   it('uses ordinary Error for non-tools namespace failures', async () => {
     const deniedPort = new FakePort()
     deniedPort.respond = message => message.type === 'call'
