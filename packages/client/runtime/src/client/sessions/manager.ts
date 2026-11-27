@@ -219,6 +219,26 @@ export class SessionManager {
     this.notifier.notifyNow()
   }
 
+  /**
+   * Interrupt a continuable child's current turn through its durable
+   * direct-parent address, without opening it. Fire-and-return: the receipt
+   * acknowledges the admitted cancel, not quiescence, so the catalog row
+   * settles through the normal membership feed once the child stops. The
+   * Host keeps unclaimed queued follow-ups, and an absent, idle, or
+   * already-completed target is an accepted no-op.
+   * @param address - catalog-derived continuable parent/child address.
+   * @returns the interrupt receipt result.
+   */
+  async interruptSubagent(
+    address: Extract<SubagentAddress, { mode: 'continuable' }>,
+  ): Promise<RpcResult<{ accepted: true }>> {
+    try {
+      return (await this.api.subagents.interrupt(address)).result
+    } catch (error) {
+      return transportError(error)
+    }
+  }
+
   /** Clear the selection (the layout falls to the no-session view state). */
   clearSelection(): void {
     this.selected = undefined

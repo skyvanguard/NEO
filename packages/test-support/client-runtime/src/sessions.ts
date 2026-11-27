@@ -8,6 +8,7 @@ import type {
   SessionListState, SessionProvideDescriptor, SessionSearchResultItem, SessionSummary, SnapshotStore,
   SubagentAddress,
 } from '@neo/client-runtime/client'
+import type { RpcResult } from '@neo/api-remotes/client'
 // The double reports the wire schema's own search bound, like the production
 // service — a transport-varying limit would be a fiction no client can see.
 import { SESSION_SEARCH_RESULT_LIMIT } from '@neo/host-apiproxy/api'
@@ -193,7 +194,7 @@ export class TestSessions implements ISessions {
 
   /** Calls observed on the service-level face, newest last. */
   readonly calls: {
-    method: 'open' | 'openSubagent' | 'setSubagentCatalogOpen' | 'refreshSubagents'
+    method: 'open' | 'openSubagent' | 'interruptSubagent' | 'setSubagentCatalogOpen' | 'refreshSubagents'
       | 'clear' | 'search' | 'fork' | 'deleteSession'
     args: unknown[]
   }[] = []
@@ -430,6 +431,13 @@ export class TestSessions implements ISessions {
       draft.current = address.childSessionId
       draft.currentAddress = address
     })
+  }
+
+  interruptSubagent(
+    address: Extract<SubagentAddress, { mode: 'continuable' }>,
+  ): Promise<RpcResult<{ accepted: true }>> {
+    this.calls.push({ method: 'interruptSubagent', args: [address] })
+    return Promise.resolve({ ok: true, value: { accepted: true } })
   }
 
   /** Resolve the current fixture's retained catalog address. */
