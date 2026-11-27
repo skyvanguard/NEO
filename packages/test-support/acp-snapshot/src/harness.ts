@@ -527,7 +527,7 @@ async function runStep(
  * @param timeoutMessage - the error message when the wait expires.
  * @param satisfied - one read of the persisted state; true ends the wait.
  */
-async function pollPersisted(
+export async function pollPersisted(
   timeoutMs: number,
   timeoutMessage: string,
   satisfied: () => Promise<boolean>,
