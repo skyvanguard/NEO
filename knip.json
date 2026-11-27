@@ -686,8 +686,7 @@
     "apps/cli": {
       "entry": [
         "tests/**/*.spec.ts",
-        "tests/**/*.e2e.ts",
-        "tests/**/*.snapshot.ts"
+        "tests/**/*.e2e.ts"
       ],
       "project": [
         "src/**/*.ts",
