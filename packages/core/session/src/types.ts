@@ -11,12 +11,21 @@ import type {
   ToolSchema,
   UserMessage,
 } from '@neo/llm'
-import type { JsonValue } from './json.ts'
 
-// The lossless-JSON payload type belongs to this client-safe face too: a wire
-// contract carrying JSON data must not import the root entry, which merges
-// `ctx.sessions` (a Host-only SessionStore) into every consumer's program.
-export type { JsonValue } from './json.ts'
+/**
+ * A value that round-trips losslessly through JSON: `null`, a boolean, a finite
+ * number other than negative zero, a string, an array of such values, or a
+ * plain object whose values are such values. The runtime checks
+ * (`isJsonValue`, `snapshotJsonValue`) come from `@neo/util-values`.
+ *
+ * Declared here, on this client-safe `@neo/session/types` face, rather than
+ * re-exported from `@neo/util-values`: a wire contract carrying JSON data must
+ * not import the root entry (which merges the Host-only `ctx.sessions`), and the
+ * fork's typert analyzer only accepts a Remote boundary type exported from a
+ * public non-root type subpath, which `@neo/util-values` does not have.
+ * Structurally identical to util-values' `JsonValue`, so the two are interchangeable.
+ */
+export type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue }
 
 /** Identifies one session in the store (and its persistence artifacts). */
 export type SessionId = Branded<'SessionId'>

@@ -195,6 +195,8 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
     })
   })
 
+  // Tests that spawn oxlint get the same 20 s budget as their siblings: the
+  // coverage gate runs this suite beside the instrumented one, and 5 s was not enough there.
   it('checks preserved TypeGraph syntax without type-aware analysis', () => {
     const result = runOxlint([
       '--config',
@@ -204,7 +206,7 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
 
     expect(result.error).toBeUndefined()
     expect(result.status, normalizedOutput(result)).toBe(0)
-  })
+  }, 20_000)
 
   it('keeps repository lint workflows Oxlint-only', async () => {
     const packageJson = JSON.parse(await readFile(join(repositoryRoot, 'package.json'), 'utf8')) as unknown
@@ -262,7 +264,7 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
 
     expect(result.error).toBeUndefined()
     expect(result.status, normalizedOutput(result)).toBe(0)
-  })
+  }, 20_000)
 
   it('keeps staged validation project-free while preserving source rules', async () => {
     const configPath = join(repositoryRoot, '.oxlintrc.staged.json')
@@ -322,7 +324,7 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
     } finally {
       await rm(path, { force: true })
     }
-  })
+  }, 20_000)
 
   it('prints only the final diagnostics when a fix retry still fails', async () => {
     const suffix = randomUUID()
@@ -346,7 +348,7 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
     } finally {
       await rm(path, { force: true })
     }
-  })
+  }, 20_000)
 
   it.each(['--fix', '--fix-suggestions', '--fix-dangerously'])(
     'converges overlapping staged stylistic fixes through Oxlint under %s',

@@ -1,0 +1,18 @@
+# Keyless composition with NO model adapter mounted: the agent-spine's `main`
+# agent still requests the `deepseek-official` route, but nothing registers it,
+# so the one-shot prompt fails with NO_ADAPTER. This is the first-run posture of
+# a deployment whose base ships no built-in adapter and has no model configured
+# yet (the shipped base drops the DeepSeek adapter; only a user-configured
+# pi-ai route serves requests). This snapshot pins that failure's headless
+# stream output so a regression in the no-model path is caught.
+- id: base
+  name: '@neo/cordis-plugin-include'
+  config:
+    path: ./cordis.yml
+    patches:
+      # Drop the adapter without re-inserting one: the route is left with no
+      # owner, unlike the missing-credential scenario which re-mounts a keyless
+      # adapter so the failure is a credential, not a missing adapter.
+      - id: llm-deepseek
+        name: '@neo/llm-deepseek'
+        disabled: true
