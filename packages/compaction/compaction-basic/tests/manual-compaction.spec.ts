@@ -170,8 +170,8 @@ function deferred(): { promise: Promise<undefined>; resolve: () => void } {
   return { promise, resolve: () => { resolve(undefined) } }
 }
 
-/** A closed-tail session with compactable exchanges and no live agent. */
-function closedConversation(turns = 2, lastTurnNumber = turns): Session {
+/** A closed-tail session with compactable exchanges and no live agent; `routed: false` logs no request header. */
+function closedConversation(turns = 2, lastTurnNumber = turns, { routed = true }: { routed?: boolean } = {}): Session {
   const session = Session.create(SessionId(`closed-${turns}-${lastTurnNumber}`))
   for (let index = 1; index <= turns; index += 1) {
     const turn = index === turns ? lastTurnNumber : index
@@ -181,7 +181,7 @@ function closedConversation(turns = 2, lastTurnNumber = turns): Session {
       source: { kind: 'user' },
     }), { surfaceOp: 'append' })
     session.append('step/start', { turn, step: 1 })
-    if (index === 1) {
+    if (index === 1 && routed) {
       session.append('request/header', {
         header: { config: { provider: MODEL, model: MODEL } },
         reason: 'initial',
@@ -206,10 +206,11 @@ function fakeAgent(
   session: Session,
   reserve: () => (() => void) | undefined,
   maintenanceSignal = new AbortController().signal,
+  options: Agent['options'] = { provider: MODEL, model: MODEL },
 ): Agent {
   return {
     session,
-    options: { provider: MODEL, model: MODEL },
+    options,
     runMaintenance<T>(task: (signal: AbortSignal) => Promise<T>): Promise<T> {
       const release = reserve()
       if (release === undefined) throw new Error('agent already has active work')
@@ -893,14 +894,13 @@ describe('compactNow region budget', () => {
   const OVERHEAD = Math.ceil(CONTEXT_WINDOW * 0.1)
 
   /** A closed history long enough that a budget can cut its compactable region roughly in half. */
-  function budgetFixture(): {
+  function budgetFixture(session = closedConversation(8)): {
     session: Session
     maxTokens: number
     bounded: { start: number; end: number }
     unbounded: { start: number; end: number }
   } {
     const { ctx } = detachedService()
-    const session = closedConversation(8)
     const priced = ctx.tokenMeter.measure(session)
     const unbounded = selectCompactableRange(session, priced, 0)!
     const regionTokens = priced.nodes
@@ -937,6 +937,18 @@ describe('compactNow region budget', () => {
     const { compact } = detachedService({ auto: false, maxTokens })
 
     const result = await compact.compactNow(fakeAgent(session, () => () => undefined), SIGNAL)
+    expect(result?.shadowedSeqs).toEqual(expected)
+  })
+
+  it('leaves the region unbounded when neither a routed header nor complete agent options name a target', async () => {
+    const { session, maxTokens, unbounded } = budgetFixture(closedConversation(8, 8, { routed: false }))
+    // The logged window would bound the region if the conversation had a target to match it to.
+    session.append('request/context', { provider: MODEL, model: MODEL, contextWindow: CONTEXT_WINDOW })
+    const expected = seqsIn(session, unbounded)
+    const { compact } = detachedService({ auto: false, maxTokens })
+    const agent = fakeAgent(session, () => () => undefined, undefined, { provider: MODEL })
+
+    const result = await compact.compactNow(agent, SIGNAL)
     expect(result?.shadowedSeqs).toEqual(expected)
   })
 })

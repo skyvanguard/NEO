@@ -25,6 +25,14 @@ const readdirFault = vi.hoisted(() => ({
   armed: false,
 }))
 
+// One-shot, path-targeted rm fault: `before` runs first (a racing remover, a
+// caller abort), then the removal of `path` fails with `code`.
+const rmFault = vi.hoisted(() => ({
+  path: undefined as string | undefined,
+  code: 'EBUSY',
+  before: undefined as (() => Promise<void>) | undefined,
+}))
+
 vi.mock('node:fs/promises', async (importOriginal) => {
   const actual = await importOriginal<typeof import('node:fs/promises')>()
   return {
@@ -43,6 +51,12 @@ vi.mock('node:fs/promises', async (importOriginal) => {
       }
       return actual.readdir(...args)
     }) as typeof actual.readdir,
+    rm: (async (...args: Parameters<typeof actual.rm>) => {
+      if (rmFault.path === undefined || String(args[0]) !== rmFault.path) return actual.rm(...args)
+      rmFault.path = undefined
+      await rmFault.before?.()
+      throw Object.assign(new Error(`simulated ${rmFault.code} rm failure`), { code: rmFault.code })
+    }) as typeof actual.rm,
   }
 })
 
@@ -102,6 +116,9 @@ afterEach(async () => {
   statRace.reads = 0
   readdirFault.path = undefined
   readdirFault.armed = false
+  rmFault.path = undefined
+  rmFault.code = 'EBUSY'
+  rmFault.before = undefined
   vi.restoreAllMocks()
   for (const d of dirs.splice(0)) await rm(d, { recursive: true, force: true })
 })
@@ -331,6 +348,38 @@ describe('JsonlSessionPersistence: durability and crash semantics', () => {
     await expect(ctx.sessionPersistence.list()).rejects.toThrow(/transient readdir failure/)
     // Fault spent: the guard re-runs instead of serving the cached rejection.
     expect(await ctx.sessionPersistence.list()).toEqual([])
+  })
+
+  it('relays a failed session-directory rm, preferring the caller abort reason, and keeps the session', async () => {
+    const m = meta('remove-fault', '/work')
+    await ctx.sessionPersistence.create(m)
+    await ctx.sessionPersistence.append(m.id, oneTurnLog())
+
+    rmFault.path = sessionDir(root, '/work', m.id)
+    rmFault.code = 'EBUSY'
+    await expect(ctx.sessionPersistence.remove(m.id)).rejects.toMatchObject({ code: 'EBUSY' })
+    expect((await ctx.sessionPersistence.list()).map(h => h.id)).toContain(m.id)
+
+    // A caller that gave up while the rm ran sees its own reason, not the fs error.
+    const reason = new Error('remove cancelled during rm')
+    const controller = new AbortController()
+    rmFault.path = sessionDir(root, '/work', m.id)
+    rmFault.before = async () => { controller.abort(reason) }
+    await expect(ctx.sessionPersistence.remove(m.id, controller.signal)).rejects.toBe(reason)
+    expect((await ctx.sessionPersistence.list()).map(h => h.id)).toContain(m.id)
+  })
+
+  it('treats a session directory that vanished under rm as already removed', async () => {
+    const m = meta('remove-race', '/work')
+    await ctx.sessionPersistence.create(m)
+    await ctx.sessionPersistence.append(m.id, oneTurnLog())
+    const dir = sessionDir(root, '/work', m.id)
+
+    rmFault.path = dir
+    rmFault.code = 'ENOENT'
+    rmFault.before = async () => { await rm(dir, { recursive: true }) }
+    await expect(ctx.sessionPersistence.remove(m.id)).resolves.toBeUndefined()
+    expect((await ctx.sessionPersistence.list()).map(h => h.id)).not.toContain(m.id)
   })
 
   it('lazy materialization: create() writes no file until the first append', async () => {
