@@ -50,8 +50,6 @@ flowchart LR
   cfg --> plugin_dsh_base_session_query_sqlite
   plugin_dsh_base_session_projection["session-projection<br/>@neo/session-projection"]
   cfg --> plugin_dsh_base_session_projection
-  plugin_dsh_base_session_telemetry_otel["session-telemetry-otel<br/>@neo/session-telemetry-otel"]
-  cfg --> plugin_dsh_base_session_telemetry_otel
   plugin_dsh_base_subprocess["subprocess<br/>@neo/subprocess-local"]
   cfg --> plugin_dsh_base_subprocess
   plugin_dsh_base_sandbox["sandbox<br/>@neo/sandbox-local"]
@@ -92,8 +90,6 @@ flowchart LR
   cfg --> plugin_dsh_base_tool_skill
   plugin_dsh_base_commands["commands<br/>@neo/commands"]
   cfg --> plugin_dsh_base_commands
-  plugin_dsh_base_command_feedback["command-feedback<br/>@neo/command-feedback"]
-  cfg --> plugin_dsh_base_command_feedback
   plugin_dsh_base_goal["goal<br/>@neo/goal"]
   cfg --> plugin_dsh_base_goal
   plugin_dsh_base_goal_round_driver["goal-round-driver<br/>@neo/goal-round-driver"]
@@ -191,7 +187,6 @@ flowchart LR
 | `attachment-local` | `@neo/attachment-local` |
 | `session-query-sqlite` | `@neo/session-query-sqlite` |
 | `session-projection` | `@neo/session-projection` |
-| `session-telemetry-otel` | `@neo/session-telemetry-otel` |
 | `subprocess` | `@neo/subprocess-local` |
 | `sandbox` | `@neo/sandbox-local` |
 | `sandbox-policy` | `@neo/sandbox-policy` |
@@ -212,7 +207,6 @@ flowchart LR
 | `skill-badge` | `@neo/skill-badge` |
 | `tool-skill` | `@neo/tool-skill` |
 | `commands` | `@neo/commands` |
-| `command-feedback` | `@neo/command-feedback` |
 | `goal` | `@neo/goal` |
 | `goal-round-driver` | `@neo/goal-round-driver` |
 | `command-goal` | `@neo/command-goal` |

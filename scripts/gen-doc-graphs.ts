@@ -87,7 +87,6 @@ const GROUP_ORDER = [
   'session-persistence',
   'session-query',
   'session-title',
-  'telemetry',
   'storage',
   'workspace',
   'support',
@@ -212,15 +211,6 @@ const SERVICE_ROLES: ServiceRole[] = [
     note: 'Configuration carries references to secrets; providers own the values. Consumers resolve per operation, so a rotated credential reaches the very next request; the web gateway exposes value-free views and write-only storage.',
   },
   {
-    key: 'sessionTelemetry',
-    pkg: 'session-telemetry',
-    title: 'Session telemetry seam',
-    mode: 'seam',
-    implementations: ['session-telemetry-otel'],
-    consumers: [],
-    note: 'The seam captures, redacts, and hands session records to one backend; nothing else consumes the service — its output leaves the process.',
-  },
-  {
     key: 'storage',
     pkg: 'storage',
     title: 'Non-session storage hub',
@@ -242,7 +232,7 @@ const SERVICE_ROLES: ServiceRole[] = [
     pkg: 'message-feedback',
     title: 'Lifecycle-bound message feedback',
     mode: 'core',
-    note: 'Owns local per-assistant-message feedback, lifecycle and target validation, per-item compare-and-set, and the Host unary Remote contract without entering Session history or telemetry.',
+    note: 'Owns local per-assistant-message feedback, lifecycle and target validation, per-item compare-and-set, and the Host unary Remote contract without entering Session history.',
   },
   {
     key: 'workspaceRegistry',
