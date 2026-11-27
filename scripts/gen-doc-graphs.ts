@@ -121,7 +121,7 @@ const SERVICE_ROLES: ServiceRole[] = [
     note: 'Owns scoped MCP resource providers and registers the shared model-facing resource tools plus their system-prompt section; external MCP servers contribute resources per scope.',
   },
   {
-    key: 'usageStats',
+    key: 'usage',
     pkg: 'usage-stats',
     title: 'Cross-session usage statistics Remote',
     mode: 'core',

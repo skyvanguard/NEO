@@ -2060,7 +2060,7 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
-    key: 'usageStats',
+    key: 'usage',
     summary: 'Cordis Service exposing one Remote method: `usage.summary`.',
     description: 'Cordis Service exposing one Remote method: `usage.summary`.',
     methods: [
