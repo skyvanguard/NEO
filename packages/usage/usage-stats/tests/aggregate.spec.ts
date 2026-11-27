@@ -115,6 +115,18 @@ describe('aggregateUsage (real zstd log)', () => {
     }
   })
 
+  it('skips a just-created, still empty session log without failing the summary', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'usage-empty-log-'))
+    try {
+      writeSession(root, '--home-x-Proj--', 'session-new', []) // 0 bytes: created, nothing flushed yet
+      writeSession(root, '--home-x-Proj--', 'session-old',
+        [msg(0, 0, '2026-08-19T10:00:00Z', { inputTokens: 7, outputTokens: 3 })])
+      const summary = await aggregateUsage(root)
+      expect(summary.sessions.map(s => s.sessionId)).toEqual(['session-old'])
+      expect(summary.totals.inputTokens).toBe(7)
+    } finally { rmSync(root, { recursive: true, force: true }) }
+  })
+
   it('returns an empty summary for a missing root', async () => {
     const summary = await aggregateUsage(join(tmpdir(), 'does-not-exist-xyz'))
     expect(summary.sessionCount).toBe(0)

@@ -912,6 +912,10 @@ describe('applyLiteralEdit', () => {
     const content = 'const m = {\n  1: one,\n  2: two,\n}\nlist = [one, two]\n'
     expect(() => applyLiteralEdit(content, '1: one,\n7: two,', 'X', false, 'f'))
       .toThrow(/^old_string was not found in "f"$/)
+    // Consecutive prefixes whose stripped text is not in the file either: the
+    // prefixes are not why it failed, so no advice to drop them.
+    expect(() => applyLiteralEdit('alpha\nbeta\n', '1: gamma\n2: delta', 'X', false, 'f'))
+      .toThrow(/^old_string was not found in "f"$/)
   })
 
   it('skips the whitespace diagnosis past the scan budget instead of stalling', () => {
