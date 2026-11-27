@@ -43,6 +43,9 @@ function Tile({ label, value, title }: { label: string; value: number; title?: s
   )
 }
 
+/** How many of the most recent days the per-day chart draws. */
+const RECENT_DAY_COUNT = 30
+
 /** A max value for scaling the per-day bars. */
 const peak = (rows: readonly { totals: UsageTotals }[]): number =>
   Math.max(1, ...rows.map(r => r.totals.inputTokens + r.totals.outputTokens))
@@ -80,8 +83,10 @@ export function UsageSettingsSection({ summary, t }: UsageSettingsSectionProps):
 
   const s = state.summary
   const total = s.totals.inputTokens + s.totals.outputTokens
-  const dayPeak = peak(s.byDay)
-  const recentDays = s.byDay.slice(-30)
+  const recentDays = s.byDay.slice(-RECENT_DAY_COUNT)
+  // Scale against the busiest day that is drawn: `byDay` is the whole history,
+  // and an older peak would keep every visible bar short of full width.
+  const dayPeak = peak(recentDays)
 
   return (
     <div className={css.section}>

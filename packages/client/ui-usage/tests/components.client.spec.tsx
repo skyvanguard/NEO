@@ -177,6 +177,16 @@ describe('UsageSettingsSection', () => {
     expect(within(dayRow(dayAt(15))).getByTitle('0').textContent).toBe('0')
   })
 
+  it('scales the bars against the busiest drawn day, not an older peak outside the window', async () => {
+    const olderPeak = [{ day: dayAt(0), totals: totals({ inputTokens: 1_000_000 }) }, ...BY_DAY.slice(1)]
+    render(<UsageSettingsSection {...props(async () => ({ ...SUMMARY, byDay: olderPeak }))} />)
+    await screen.findByRole('heading', { name: en.byDay })
+
+    expect(screen.queryByText(dayAt(0))).toBeNull()
+    expect(barWidth(dayAt(30))).toBe('100%')
+    expect(barWidth(dayAt(29))).toBe('25%')
+  })
+
   it('lists per-workspace totals as exact counts', async () => {
     render(<UsageSettingsSection {...props(async () => SUMMARY)} />)
     await screen.findByRole('heading', { name: en.byWorkspace })
