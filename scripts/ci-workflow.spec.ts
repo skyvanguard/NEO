@@ -7,7 +7,8 @@ import { describe, expect, it } from 'vitest'
 // this fork does not have. This spec validates the fork's minimal Linux CI
 // (.github/workflows/ci.yml): it must exist, trigger on push/PR, and keep the
 // gate steps that catch the regressions we care about — chiefly the built
-// typert artifact probe that guards against an undeclared runtime dep.
+// typert artifact probe that guards against an undeclared runtime dep (now run
+// through `pnpm run hygiene`) and the per-file coverage gate AGENTS.md promises.
 
 const root = resolve(import.meta.dirname, '..')
 
@@ -19,6 +20,12 @@ function loadWorkflow(relativePath: string): Record<string, unknown> {
   const workflow: unknown = yaml.load(readFileSync(resolve(root, relativePath), 'utf8'))
   if (!isRecord(workflow)) throw new TypeError(`${relativePath} must be a mapping`)
   return workflow
+}
+
+function rootScripts(): Record<string, string> {
+  const manifest: unknown = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
+  if (!isRecord(manifest) || !isRecord(manifest.scripts)) throw new TypeError('package.json must define scripts')
+  return manifest.scripts as Record<string, string>
 }
 
 describe('CI workflow', () => {
@@ -54,11 +61,18 @@ describe('CI workflow', () => {
       .filter((step): step is Record<string, unknown> & { run: string } =>
         isRecord(step) && typeof step.run === 'string')
       .map(step => step.run)
-    // The probe that would have caught the undeclared-zod deploy failure.
-    expect(runs.some(run => run.includes('verify-built-package-invariants'))).toBe(true)
-    expect(runs.some(run => run.includes('build:lib'))).toBe(true)
+    const scripts = rootScripts()
+    const buildIndex = runs.findIndex(run => run.includes('build:lib'))
+    // The probe that would have caught the undeclared-zod deploy failure runs
+    // inside hygiene, which needs the built lib it inspects.
+    const hygieneIndex = runs.findIndex(run => run.includes('run hygiene'))
+    expect(scripts.hygiene).toContain('verify-built-package-invariants')
+    expect(buildIndex).toBeGreaterThanOrEqual(0)
+    expect(hygieneIndex).toBeGreaterThan(buildIndex)
     expect(runs.some(run => run.includes('typecheck'))).toBe(true)
     expect(runs.some(run => run.includes('lint'))).toBe(true)
-    expect(runs.some(run => run.includes('test'))).toBe(true)
+    // The whole suite under the per-file 100% coverage gate, not a plain test run.
+    expect(scripts['check:ci:coverage']).toContain('ci-coverage')
+    expect(runs.some(run => run.includes('check:ci:coverage'))).toBe(true)
   })
 })

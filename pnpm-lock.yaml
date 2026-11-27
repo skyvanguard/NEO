@@ -1415,6 +1415,9 @@ importers:
       '@neo/cordis-host-runner':
         specifier: workspace:^
         version: link:../../extensions/cordis-host-runner
+      '@neo/document-attach':
+        specifier: workspace:^
+        version: link:../../document/document-attach
       '@neo/host-apiproxy':
         specifier: workspace:^
         version: link:../../host/apiproxy
@@ -1460,6 +1463,9 @@ importers:
       '@neo/storage-json':
         specifier: workspace:^
         version: link:../../storage/storage-json
+      '@neo/usage-stats':
+        specifier: workspace:^
+        version: link:../../usage/usage-stats
       '@neo/web-frontend':
         specifier: workspace:^
         version: link:../../../apps/web
@@ -3650,6 +3656,10 @@ importers:
         version: link:../../runtime-diagnostics/invariants
 
   packages/core/session:
+    dependencies:
+      '@neo/util-values':
+        specifier: workspace:*
+        version: link:../../util/values
     devDependencies:
       '@neo/brand':
         specifier: workspace:^
@@ -5293,6 +5303,9 @@ importers:
       '@neo/schemastery':
         specifier: link:../../../vendor/schemastery
         version: link:../../../vendor/schemastery
+      '@neo/util-values':
+        specifier: workspace:*
+        version: link:../../util/values
     devDependencies:
       '@neo/attachment':
         specifier: workspace:^
@@ -6920,9 +6933,6 @@ importers:
       '@neo/agent':
         specifier: workspace:*
         version: link:../../core/agent
-      '@neo/agent-loop-testkit':
-        specifier: workspace:*
-        version: link:../../test-support/agent-loop-testkit
       '@neo/cordis':
         specifier: workspace:~
         version: link:../../../vendor/cordis
