@@ -107,13 +107,13 @@ describe('configurable-provider directory', () => {
     const events = vi.fn()
     ctx.on('llm/adapters-updated', events)
     ctx.llm.registerConfigurableProviders([
-      entry({ provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-deepseek', settingsPath: [] }),
+      entry({ provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-default', settingsPath: [] }),
       entry(),
     ])
     expect(events).toHaveBeenCalledTimes(1)
     const listed = ctx.llm.listConfigurableProviders()
     expect(listed).toEqual([
-      { provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-default', settingsPath: [] },
       { provider: 'openai', displayName: 'OpenAI', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'] },
     ])
     listed[0]!.displayName = 'mutated'

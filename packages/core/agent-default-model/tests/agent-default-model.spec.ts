@@ -69,10 +69,10 @@ describe('AgentDefaultModelConfig', () => {
   it('layers a hand-written partial section over the entry', async () => {
     const bench = await boot()
     await bench.settingsFiber.ctx.settings.replace(AGENT_DEFAULT_MODEL_SETTINGS_NAMESPACE, {
-      model: 'deepseek-reasoner',
+      model: 'reasoner-model',
     })
     expect(bench.defaultModel.currentSelection()).toEqual({
-      provider: 'neo-default-route', model: 'deepseek-reasoner',
+      provider: 'neo-default-route', model: 'reasoner-model',
     })
     await bench.ctx.fiber.dispose()
   })

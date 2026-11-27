@@ -257,7 +257,7 @@ describe('ui-model-selection dual entry', () => {
 
     // Recovering clears it without a reload of the surface.
     b.setRoutable(true)
-    b.ctx.remote.$dispatch('settings/document-updated', ['llm-deepseek', 1])
+    b.ctx.remote.$dispatch('settings/document-updated', ['llm-default', 1])
     await Promise.resolve()
     await Promise.resolve()
     expect(b.blockOf('s1')).toBeUndefined()
@@ -312,11 +312,11 @@ describe('ui-model-selection dual entry', () => {
     const face = b.seat().inject!(sid('child'))
     expect(face.available).toBe(false)
     face.load()
-    await expect(face.select({ provider: 'deepseek', model: 'neo-large-model' })).resolves.toBe(false)
+    await expect(face.select({ provider: 'neo-default-route', model: 'neo-large-model' })).resolves.toBe(false)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).load())
       .rejects.toThrow(/unavailable for addressed subagent/)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).select({
-      provider: 'deepseek',
+      provider: 'neo-default-route',
       model: 'neo-large-model',
     })).rejects.toThrow(/unavailable for addressed subagent/)
     b.ctx.emit('connection/reset')

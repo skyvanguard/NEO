@@ -88,8 +88,8 @@ async function harness(logged?: {
   await ctx.plugin(UserQuestionService)
   await ctx.plugin(AgentRegistry)
   ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('NEO Default', [
-    { provider: 'neo-default-route', id: 'deepseek-chat', name: 'DeepSeek Chat' },
-    { provider: 'neo-default-route', id: 'deepseek-reasoner', name: 'DeepSeek Reasoner', description: 'Reasoning model' },
+    { provider: 'neo-default-route', id: 'chat-model', name: 'Chat Model' },
+    { provider: 'neo-default-route', id: 'reasoner-model', name: 'Reasoner Model', description: 'Reasoning model' },
   ], REASONING))
   ctx.llm.registerAdapter(['broken'], new CatalogAdapter('Broken Provider', new Error('catalog offline')))
   ctx.llm.registerAdapter(['metadata-broken'], new CatalogAdapter('Metadata Broken', [
@@ -154,7 +154,7 @@ describe('Web session model selection', () => {
     const followup = vi.fn()
     Object.assign(agent, { followup })
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'chat-model' }),
       cwd: '/tmp',
     })
 
@@ -200,7 +200,7 @@ describe('Web session model selection', () => {
     const { ctx, agent, sessionId } = await harness()
     registerTextOnly(ctx)
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'chat-model' }),
       cwd: '/tmp',
     })
     const image = {
@@ -242,7 +242,7 @@ describe('Web session model selection', () => {
     const readImage = vi.fn(() => Promise.resolve({ ref, data: Uint8Array.of(1, 2) }))
     ctx.provide('attachments', { readImage } as never)
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'chat-model' }),
       cwd: '/tmp',
     })
     agent.session.append('agent/inbox/spliced', {
@@ -274,7 +274,7 @@ describe('Web session model selection', () => {
     const readFile = vi.fn(() => Promise.resolve({ ref, data: Uint8Array.of(1, 2, 3) }))
     ctx.provide('attachments', { readFile } as never)
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'chat-model' }),
       cwd: '/tmp',
     })
     // A file block emitted inside a tool result is the durable carrier the agent produces.
@@ -307,7 +307,7 @@ describe('Web session model selection', () => {
       model: 'private-preview',
       reasoningEffort: ReasoningEffortId('max'),
     })
-    const api = createApiProxy(ctx, { defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'deepseek-chat' }), cwd: '/tmp' })
+    const api = createApiProxy(ctx, { defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'chat-model' }), cwd: '/tmp' })
 
     const catalog = expectValue(await api.sessions.models(request({ sessionId })))
     expect(catalog.current).toEqual({
@@ -319,10 +319,10 @@ describe('Web session model selection', () => {
       id: 'neo-default-route',
       name: 'NEO Default',
       models: [
-        { id: 'deepseek-chat', name: 'DeepSeek Chat', reasoning: REASONING },
+        { id: 'chat-model', name: 'Chat Model', reasoning: REASONING },
         {
-          id: 'deepseek-reasoner',
-          name: 'DeepSeek Reasoner',
+          id: 'reasoner-model',
+          name: 'Reasoner Model',
           description: 'Reasoning model',
           reasoning: REASONING,
         },
@@ -342,14 +342,14 @@ describe('Web session model selection', () => {
 
   it('accepts an advisory-unlisted model, rejects an unavailable provider, and switches only after the next assembly', async () => {
     const { ctx, agent, sessionId } = await harness()
-    const api = createApiProxy(ctx, { defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'deepseek-chat' }), cwd: '/tmp' })
+    const api = createApiProxy(ctx, { defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'chat-model' }), cwd: '/tmp' })
     const seed: LlmCallConfig = { provider: 'seed', model: 'seed', temperature: 0.2 }
     const signal = new AbortController().signal
 
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'neo-default-route', model: 'deepseek-chat' })
+      .toEqual({ provider: 'neo-default-route', model: 'chat-model' })
     expect((await ctx.systemPrompt.assemble()).variables)
-      .toMatchObject({ provider: 'neo-default-route', model: 'deepseek-chat' })
+      .toMatchObject({ provider: 'neo-default-route', model: 'chat-model' })
 
     const selected = expectValue(await api.sessions.selectModel(request({
       sessionId,
@@ -364,7 +364,7 @@ describe('Web session model selection', () => {
     })
     await expect(agentEvents(ctx, agent).waterfall(
       'agent/request', { turn: 1, step: 0, signal }, () => Promise.resolve(seed),
-    )).resolves.toMatchObject({ provider: 'neo-default-route', model: 'deepseek-chat' })
+    )).resolves.toMatchObject({ provider: 'neo-default-route', model: 'chat-model' })
 
     expect((await ctx.systemPrompt.assemble()).variables)
       .toMatchObject({ provider: 'neo-default-route', model: 'private-preview' })
@@ -410,31 +410,31 @@ describe('Web session model selection', () => {
 
   it('reads the Agent default live for a session whose log names no selection', async () => {
     const { ctx, sessionId } = await harness()
-    let stored = { provider: 'neo-default-route', model: 'deepseek-chat' }
+    let stored = { provider: 'neo-default-route', model: 'chat-model' }
     const api = createApiProxy(ctx, {
       defaultModelSelection: () => stored,
       cwd: '/tmp',
     })
 
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'neo-default-route', model: 'deepseek-chat' })
+      .toEqual({ provider: 'neo-default-route', model: 'chat-model' })
     // The default moving after the session exists still reaches it: New
     // Session reuses a blank session rather than minting another, so a seed
     // captured at creation would show the superseded model there.
-    stored = { provider: 'neo-default-route', model: 'deepseek-reasoner' }
+    stored = { provider: 'neo-default-route', model: 'reasoner-model' }
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'neo-default-route', model: 'deepseek-reasoner' })
+      .toEqual({ provider: 'neo-default-route', model: 'reasoner-model' })
     expect(expectValue(await api.host.describe(request({}))))
-      .toMatchObject({ provider: 'neo-default-route', model: 'deepseek-reasoner' })
+      .toMatchObject({ provider: 'neo-default-route', model: 'reasoner-model' })
     await ctx.fiber.dispose()
   })
 
   it('keeps a session on its logged selection when the Agent default differs', async () => {
     const { ctx, sessionId } = await harness({
       provider: 'neo-default-route',
-      model: 'deepseek-chat',
+      model: 'chat-model',
     })
-    let stored = { provider: 'neo-default-route', model: 'deepseek-chat' }
+    let stored = { provider: 'neo-default-route', model: 'chat-model' }
     const api = createApiProxy(ctx, {
       defaultModelSelection: () => stored,
       cwd: '/tmp',
@@ -442,7 +442,7 @@ describe('Web session model selection', () => {
 
     stored = { provider: 'duplicate', model: 'same' }
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'neo-default-route', model: 'deepseek-chat' })
+      .toEqual({ provider: 'neo-default-route', model: 'chat-model' })
     await ctx.fiber.dispose()
   })
 
@@ -451,7 +451,7 @@ describe('Web session model selection', () => {
     const saved: unknown[] = []
     let reject = false
     const api = createApiProxy(ctx, {
-      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'deepseek-chat' }),
+      defaultModelSelection: () => ({ provider: 'neo-default-route', model: 'chat-model' }),
       saveDefaultModelSelection: (selection) => {
         saved.push(selection)
         return reject ? Promise.reject(new Error('read-only document')) : Promise.resolve()
@@ -460,10 +460,10 @@ describe('Web session model selection', () => {
     })
 
     expectValue(await api.sessions.selectModel(request({
-      sessionId, provider: 'neo-default-route', model: 'deepseek-reasoner', reasoningEffort: 'max',
+      sessionId, provider: 'neo-default-route', model: 'reasoner-model', reasoningEffort: 'max',
     })))
     expect(saved).toEqual([
-      { provider: 'neo-default-route', model: 'deepseek-reasoner', reasoningEffort: 'max' },
+      { provider: 'neo-default-route', model: 'reasoner-model', reasoningEffort: 'max' },
     ])
 
     // A refused selection never becomes anyone's default.
@@ -474,11 +474,11 @@ describe('Web session model selection', () => {
     // to this session, so the call still succeeds.
     reject = true
     const stillAccepted = expectValue(await api.sessions.selectModel(request({
-      sessionId, provider: 'neo-default-route', model: 'deepseek-chat',
+      sessionId, provider: 'neo-default-route', model: 'chat-model',
     })))
-    expect(stillAccepted.selected).toEqual({ provider: 'neo-default-route', model: 'deepseek-chat', reasoningEffort: 'high' })
+    expect(stillAccepted.selected).toEqual({ provider: 'neo-default-route', model: 'chat-model', reasoningEffort: 'high' })
     expect(expectValue(await api.sessions.models(request({ sessionId }))).current)
-      .toEqual({ provider: 'neo-default-route', model: 'deepseek-chat', reasoningEffort: 'high' })
+      .toEqual({ provider: 'neo-default-route', model: 'chat-model', reasoningEffort: 'high' })
     await ctx.fiber.dispose()
   })
 

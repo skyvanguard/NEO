@@ -53,11 +53,11 @@ export class FakeApiClient implements IApiClient {
     () => Promise.resolve(ok({
       events: [],
       hasMore: false,
-      modelSelection: { provider: 'neo-default-route', model: 'deepseek-chat' },
+      modelSelection: { provider: 'neo-default-route', model: 'chat-model' },
     }))
 
   onModels: (payload: unknown) => Promise<RpcResponse<SessionModels>> = () => Promise.resolve(ok({
-    current: { provider: 'neo-default-route', model: 'deepseek-chat' },
+    current: { provider: 'neo-default-route', model: 'chat-model' },
     routable: true,
     groups: [],
     failures: [],

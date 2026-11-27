@@ -883,7 +883,7 @@ describe('connected generation', () => {
     api.onHistory = () => Promise.resolve(ok({
       events: entries(plainTurn(0, 0, 'a', 'b')) as never[],
       hasMore: false,
-      modelSelection: { provider: 'neo-default-route', model: 'deepseek-chat' },
+      modelSelection: { provider: 'neo-default-route', model: 'chat-model' },
     }))
     const manager = new SessionManager(api, fakeRemote())
     const openedSession = manager.get(S1)

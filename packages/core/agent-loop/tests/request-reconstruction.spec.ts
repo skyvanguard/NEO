@@ -188,15 +188,15 @@ describe('request stability across the loop', () => {
   })
 
   it('rematerializes the selected adapter maxTokens default after a provider switch', async () => {
-    const deepseek = new MockAdapter([textResponse('deepseek')], undefined, 256_000)
+    const main = new MockAdapter([textResponse('main')], undefined, 256_000)
     const other = new MockAdapter([textResponse('other')], undefined, 8_192)
     const ctx = await harnessRoutes([
-      ['deepseek', deepseek],
+      ['main', main],
       ['other', other],
     ])
     const agent = ctx.agentLoop.create(SessionId('adapter-max-tokens-switch'), {
-      provider: 'deepseek',
-      model: 'deepseek-model',
+      provider: 'main',
+      model: 'main-model',
     })
     ctx.on('agent/request', async ({ turn }, next) => {
       const config = await next()
@@ -210,7 +210,7 @@ describe('request stability across the loop', () => {
     send(agent, 'second')
     await waitForIdle(ctx, agent)
 
-    expect(deepseek.requests[0]?.maxTokens).toBe(256_000)
+    expect(main.requests[0]?.maxTokens).toBe(256_000)
     expect(other.requests[0]?.maxTokens).toBe(8_192)
     const headers = agent.session.events.filter(event => event.type === 'request/header')
     expect(headers.map(event => event.data.header.config.maxTokens)).toEqual([256_000, 8_192])
@@ -221,15 +221,15 @@ describe('request stability across the loop', () => {
   })
 
   it('preserves an explicit agent maxTokens cap across a provider switch', async () => {
-    const deepseek = new MockAdapter([textResponse('deepseek')], undefined, 256_000)
+    const main = new MockAdapter([textResponse('main')], undefined, 256_000)
     const other = new MockAdapter([textResponse('other')], undefined, 8_192)
     const ctx = await harnessRoutes([
-      ['deepseek', deepseek],
+      ['main', main],
       ['other', other],
     ])
     const agent = ctx.agentLoop.create(SessionId('explicit-max-tokens-switch'), {
-      provider: 'deepseek',
-      model: 'deepseek-model',
+      provider: 'main',
+      model: 'main-model',
       maxTokens: 4_096,
     })
     ctx.on('agent/request', async ({ turn }, next) => {
@@ -244,7 +244,7 @@ describe('request stability across the loop', () => {
     send(agent, 'second')
     await waitForIdle(ctx, agent)
 
-    expect(deepseek.requests[0]?.maxTokens).toBe(4_096)
+    expect(main.requests[0]?.maxTokens).toBe(4_096)
     expect(other.requests[0]?.maxTokens).toBe(4_096)
     const headers = agent.session.events.filter(event => event.type === 'request/header')
     expect(headers.map(event => event.data.header.config.maxTokens)).toEqual([4_096, 4_096])

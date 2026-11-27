@@ -1529,8 +1529,8 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
   /** Credential store double: set/unset flip the describe badge, values never read back. */
   const fixtureCredentials = new Map<string, true>([
     // The assembled fixture represents an already-configured shipped
-    // DeepSeek route so unrelated GUI journeys do not enter first-run setup.
-    ['DEEPSEEK_API_KEY', true],
+    // default route so unrelated GUI journeys do not enter first-run setup.
+    ['LLM_API_KEY', true],
   ])
   /**
    * Preset compositions the fixture serves. Held as state rather than
@@ -2448,7 +2448,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
         // Capacity parallel of the host token-meter's request/context record:
         // log-only, appended inside the open turn, and deduplicated against the
         // route already recorded (the fixture never varies contextWindow).
-        const selection = modelSelections.get(id) ?? { provider: 'deepseek', model: 'neo-default-model' }
+        const selection = modelSelections.get(id) ?? { provider: 'neo-default-route', model: 'neo-default-model' }
         if (lastRequestContext(logOf(id))?.model !== selection.model) {
           append(id, {
             type: 'request/context',
@@ -2933,16 +2933,16 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
       },
     },
     settings: {
-      // Only the resolved DeepSeek address needed by first-run readiness is
+      // Only the resolved default-route address needed by first-run readiness is
       // represented here. Fixture-backed journeys do not open its Models
       // editor; real schema-driven forms ride the HTTP transport.
       describe: request => ok(request, {
         writable: true,
         hasDocument: true,
         namespaces: [{
-          ns: 'llm-deepseek',
+          ns: 'llm-default',
           schema: {},
-          value: { apiKeyEnv: 'DEEPSEEK_API_KEY' },
+          value: { apiKeyEnv: 'LLM_API_KEY' },
           applies: 'live',
           secrets: [{ path: ['apiKey'], set: false }],
           revision: 0,
@@ -2986,7 +2986,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
     llm: {
       providers: request => ok(request, {
         providers: [
-          { provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+          { provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-default', settingsPath: [], active: true },
           { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true, declared: false },
           { provider: 'anthropic', displayName: 'anthropic', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'anthropic'], active: false, declared: false },
           // One hand-declared route, so a surface reading this fixture meets

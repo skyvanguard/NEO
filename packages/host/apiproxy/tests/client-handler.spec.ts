@@ -770,7 +770,7 @@ describe('config unary surface', () => {
     const seen: { method: string; payload: unknown }[] = []
     const record = recorderInto(seen)
     const view = {
-      ns: 'llm-deepseek',
+      ns: 'llm-default',
       schema: { uid: 1, refs: { 1: { type: 'object' } } },
       value: { baseURL: 'https://next' },
       user: { baseURL: 'https://next' },
@@ -810,12 +810,12 @@ describe('config unary surface', () => {
     const described = await c.settings.describe({})
     expect(described.result).toEqual({ ok: true, value: { writable: true, hasDocument: false, namespaces: [view] } })
     expect((await c.settings.openDocument({})).result).toEqual({ ok: true, value: { opened: true } })
-    const updated = await c.settings.update({ ns: 'llm-deepseek', patch: { baseURL: 'https://next' } })
+    const updated = await c.settings.update({ ns: 'llm-default', patch: { baseURL: 'https://next' } })
     expect(updated.result).toEqual({ ok: true, value: view })
-    const replaced = await c.settings.replace({ ns: 'llm-deepseek', section: {} })
+    const replaced = await c.settings.replace({ ns: 'llm-default', section: {} })
     expect(replaced.result).toEqual({ ok: true, value: view })
     const mutated = await c.settings.mutate({
-      ns: 'llm-deepseek',
+      ns: 'llm-default',
       ops: [{ op: 'unset', path: ['baseURL'] }],
       expectedRevision: 0,
     })
@@ -841,9 +841,9 @@ describe('config unary surface', () => {
       'credentials.describe', 'credentials.set', 'credentials.unset',
       'llm.providers', 'llm.models', 'llm.discoverModels',
     ])
-    expect(seen[2]?.payload).toEqual({ ns: 'llm-deepseek', patch: { baseURL: 'https://next' } })
+    expect(seen[2]?.payload).toEqual({ ns: 'llm-default', patch: { baseURL: 'https://next' } })
     expect(seen[4]?.payload)
-      .toEqual({ ns: 'llm-deepseek', ops: [{ op: 'unset', path: ['baseURL'] }], expectedRevision: 0 })
+      .toEqual({ ns: 'llm-default', ops: [{ op: 'unset', path: ['baseURL'] }], expectedRevision: 0 })
     expect(seen[6]?.payload).toEqual({ ref: 'OPENAI_API_KEY', value: 'sk-x' })
     // The draft crosses whole, credential included: the host needs it for this
     // one interrogation and stores none of it.
