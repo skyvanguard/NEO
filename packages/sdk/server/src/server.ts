@@ -105,22 +105,23 @@ export class HarnessSdkJsonRpcServer {
    * Configure the SDK route. The surrounding composition owns every model
    * adapter, so a provider no registered adapter serves fails the handshake.
    * @param params - SDK handshake parameters.
-   * @returns server identity for the handshake.
-   * @throws Error when no registered adapter serves `params.provider`.
+   * @returns server identity for the handshake; rejects, leaving the previous
+   *   route in place, on an invalid `maxTokens` or a provider no registered
+   *   adapter serves.
    */
-  async initialize(params: InitializeParams): Promise<InitializeResult> {
+  initialize(params: InitializeParams): Promise<InitializeResult> {
     if (params.maxTokens !== undefined
       && (!Number.isSafeInteger(params.maxTokens) || params.maxTokens <= 0)) {
-      throw new TypeError('initialize maxTokens must be a positive safe integer')
+      return Promise.reject(new TypeError('initialize maxTokens must be a positive safe integer'))
     }
     if (!this.hasAdapterFor(params.provider)) {
-      throw new Error(`no adapter registered for provider "${params.provider}"`)
+      return Promise.reject(new Error(`no adapter registered for provider "${params.provider}"`))
     }
     this.cwd = resolve(params.cwd)
     this.provider = params.provider
     this.model = params.model
     this.maxTokens = params.maxTokens
-    return { serverInfo: { name: 'neo-sdk-runtime', version: '0.0.1' } }
+    return Promise.resolve({ serverInfo: { name: 'neo-sdk-runtime', version: '0.0.1' } })
   }
 
   /**
