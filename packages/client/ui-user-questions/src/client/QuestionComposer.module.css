@@ -4,7 +4,7 @@
 .frame {
   display: flex;
   justify-content: center;
-  padding: 6px calc(var(--dsh-composer-side-clearance) + 16px) 10px;
+  padding: 6px calc(var(--neo-composer-side-clearance) + 16px) 10px;
 }
 
 /* Figma Input 973:36348 body over the 1019:36938 header: no banner strip —
@@ -13,25 +13,25 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: var(--dsh-chat-content-width);
+  max-width: var(--neo-chat-content-width);
   /* Composer seat sits in a fixed-height conversation column (overflow
      hidden): cap the card against the viewport and scroll the option list
      so header and footer actions stay reachable on long batches. */
   max-height: min(60vh, 520px);
   padding: 0 0 10px;
-  border: 1px solid var(--dsw-alias-border-l2-darkmode-thin);
+  border: 1px solid var(--neo-alias-border-l2-darkmode-thin);
   border-radius: 20px;
-  background: var(--dsw-specific-input-major);
-  box-shadow: var(--dsw-shadow-lv2);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-specific-input-major);
+  box-shadow: var(--neo-shadow-lv2);
+  color: var(--neo-alias-label-primary);
   overflow: hidden;
   /* Elevated surface in dark, same as the menus: the body inside scrolls
      once the card hits the cap above, so the thumb takes the l2 pair. Declared
      on the card because the elevation belongs to the surface, and the custom
      properties inherit down to `.body` (see ui-theme styles/scrollbar.css
      for the rebinding contract). */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 .card,
@@ -57,7 +57,7 @@
 .eyebrow {
   /* Eyebrow-to-title gap widened from the figma 2px (user-tuned). */
   margin-bottom: 5px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 11px;
   line-height: 16px;
 }
@@ -89,7 +89,7 @@
 
 .progress {
   padding: 0 4px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 14px;
   line-height: 24px;
   font-weight: 500;
@@ -107,17 +107,17 @@
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
 }
 
 .iconButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-primary);
 }
 
 .iconButton:disabled {
-  color: var(--dsw-alias-label-dimmed);
+  color: var(--neo-alias-label-dimmed);
   cursor: default;
 }
 
@@ -165,11 +165,11 @@
 
 .option:hover:not(:disabled),
 .optionSelected {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .optionSelected {
-  border-color: var(--dsw-alias-border-l2);
+  border-color: var(--neo-alias-border-l2);
 }
 
 .option:disabled {
@@ -189,8 +189,8 @@
      the first text line under the row's flex-start alignment. */
   margin-top: 2px;
   border-radius: 6px;
-  background: var(--dsw-alias-bg-overlay);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-bg-overlay);
+  color: var(--neo-alias-label-secondary);
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
@@ -214,7 +214,7 @@
   grid-area: 1 / 1;
   width: 14px;
   height: 14px;
-  border: 1px solid var(--dsw-alias-border-l4);
+  border: 1px solid var(--neo-alias-border-l4);
   border-radius: 4px;
   transition: background-color 120ms ease, border-color 120ms ease;
 }
@@ -226,12 +226,12 @@
 /* Checked: label-primary fill with a primary-foreground check — the pair
    inverts with the theme (dark fill in light mode, light fill in dark mode). */
 .checkboxChecked {
-  color: var(--dsw-alias-label-primary-foreground);
+  color: var(--neo-alias-label-primary-foreground);
 }
 
 .checkboxChecked::before {
-  border-color: var(--dsw-alias-label-primary);
-  background: var(--dsw-alias-label-primary);
+  border-color: var(--neo-alias-label-primary);
+  background: var(--neo-alias-label-primary);
 }
 
 .optionCopy {
@@ -255,15 +255,15 @@
 .badge {
   padding: 0 4px;
   border-radius: 6px;
-  background: var(--dsw-specific-sidebar-nav-item-active-accent);
-  color: var(--dsw-alias-button-info-fill);
+  background: var(--neo-specific-sidebar-nav-item-active-accent);
+  color: var(--neo-alias-button-info-fill);
   font-size: 11px;
   line-height: 18px;
   font-weight: 600;
 }
 
 .description {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 14px;
   line-height: 24px;
   font-weight: 400;
@@ -291,12 +291,12 @@
 .customRow:hover,
 .customRow:focus-within,
 .customRowActive {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .customRow:focus-within,
 .customRowActive {
-  border-color: var(--dsw-alias-border-l2);
+  border-color: var(--neo-alias-border-l2);
 }
 
 .customInput {
@@ -306,15 +306,15 @@
   border: none;
   outline: none;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
-  caret-color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-label-primary);
+  caret-color: var(--neo-alias-state-business-primary);
   font: inherit;
   font-size: 14px;
   line-height: 24px;
 }
 
 .customInput::placeholder {
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 /* Optionless question: the free-form answer is the whole body. The 12px side
@@ -328,23 +328,23 @@
   margin: 0 12px;
   padding: 8px 12px;
   resize: none;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 10px;
   outline: none;
-  background: var(--dsw-alias-bg-module-platform);
-  color: var(--dsw-alias-label-primary);
-  caret-color: var(--dsw-alias-state-business-primary);
+  background: var(--neo-alias-bg-module-platform);
+  color: var(--neo-alias-label-primary);
+  caret-color: var(--neo-alias-state-business-primary);
   font: inherit;
   font-size: 14px;
   line-height: 24px;
 }
 
 .customTextarea:focus {
-  border-color: var(--dsw-alias-state-business-primary);
+  border-color: var(--neo-alias-state-business-primary);
 }
 
 .customTextarea::placeholder {
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 .footer {
@@ -360,7 +360,7 @@
 .feedback {
   flex: 1;
   min-height: 16px;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
   font-size: 11px;
   line-height: 16px;
   text-align: right;

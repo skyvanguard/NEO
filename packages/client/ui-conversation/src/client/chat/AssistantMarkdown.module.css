@@ -8,7 +8,7 @@
   flex-direction: column;
   font-size: 16px;
   line-height: 28px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .body {
@@ -22,8 +22,8 @@
   align-self: flex-start;
   padding: 0 6px;
   border-radius: 6px;
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-tertiary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-tertiary);
   font-size: 11px;
   line-height: 18px;
 }

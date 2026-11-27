@@ -5,7 +5,7 @@
 // changed-row comparison, this block renders the old and new sides in full.
 // Both front ends share the line-terminator rule and distinct-path file count.
 // Output never soft-wraps — an aligned source line keeps its indentation and
-// scrolls horizontally instead of folding. Colors resolve through --dsw-*
+// scrolls horizontally instead of folding. Colors resolve through --neo-*
 // tokens; geometry mirrors CodeBlock.
 
 import { useCallback, useMemo, useState } from 'react'

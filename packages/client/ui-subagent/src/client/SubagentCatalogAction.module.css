@@ -11,7 +11,7 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 18px;
   cursor: pointer;
@@ -30,7 +30,7 @@
 
 .trigger:hover,
 .trigger:focus-visible {
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .trigger svg {
@@ -55,10 +55,10 @@
   padding: 4px;
   overflow: auto;
   border-radius: 12px;
-  background: var(--dsw-specific-menu);
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
-  box-shadow: var(--dsw-shadow-lv3);
+  background: var(--neo-specific-menu);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
+  box-shadow: var(--neo-shadow-lv3);
 }
 
 .node {
@@ -81,7 +81,7 @@
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font-size: 13px;
   line-height: 18px;
   text-align: left;
@@ -91,7 +91,7 @@
 
 .row:hover > .clickarea,
 .row:focus-visible > .clickarea {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .clickarea {
@@ -113,7 +113,7 @@
 }
 
 .disabled {
-  color: var(--dsw-alias-label-dimmed);
+  color: var(--neo-alias-label-dimmed);
   cursor: not-allowed;
 }
 
@@ -139,13 +139,13 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
   transition: transform 120ms ease;
 }
 
 .disclosure:hover {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .disclosureOpen {
@@ -173,7 +173,7 @@
 
 .summary,
 .metrics {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 11px;
   line-height: 16px;
 }
@@ -207,7 +207,7 @@
   content: '';
   position: absolute;
   left: 0;
-  border-left: 1px solid var(--dsw-alias-border-l2);
+  border-left: 1px solid var(--neo-alias-border-l2);
 }
 
 .children::before {
@@ -236,13 +236,13 @@
   top: 16px;
   left: -4px;
   width: 14px;
-  border-top: 1px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--neo-alias-border-l2);
 }
 
 .notice,
 .error {
   padding: 10px 12px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 18px;
 }
@@ -252,7 +252,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .refresh {
@@ -269,7 +269,7 @@
 }
 
 .refresh:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .stop {
@@ -284,13 +284,13 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
   transition: color 120ms ease, background 120ms ease;
 }
 
 .stop:hover,
 .stop:focus-visible {
-  color: var(--dsw-alias-label-primary);
-  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-primary);
+  background: var(--neo-alias-interactive-bg-hover);
 }

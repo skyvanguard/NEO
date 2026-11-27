@@ -45,17 +45,17 @@ export type AnsiLine = readonly AnsiSpan[]
  * through to anser's literal rgb, as do all 256-palette and truecolor values.
  */
 const TOKEN_BY_BASIC_RGB: Record<string, string> = {
-  '0,0,0': 'var(--dsw-alias-label-primary)',
-  '255,255,255': 'var(--dsw-alias-label-primary)',
-  '85,85,85': 'var(--dsw-alias-label-tertiary)',
-  '187,0,0': 'var(--dsw-alias-state-error-primary)',
-  '255,85,85': 'var(--dsw-alias-state-error-secondary)',
-  '0,187,0': 'var(--dsw-alias-state-success-primary)',
-  '0,255,0': 'var(--dsw-alias-state-success-secondary)',
-  '187,187,0': 'var(--dsw-alias-state-warn-primary)',
-  '255,255,85': 'var(--dsw-alias-state-warn-secondary)',
-  '0,0,187': 'var(--dsw-alias-state-business-primary)',
-  '85,85,255': 'var(--dsw-static-blue-400)',
+  '0,0,0': 'var(--neo-alias-label-primary)',
+  '255,255,255': 'var(--neo-alias-label-primary)',
+  '85,85,85': 'var(--neo-alias-label-tertiary)',
+  '187,0,0': 'var(--neo-alias-state-error-primary)',
+  '255,85,85': 'var(--neo-alias-state-error-secondary)',
+  '0,187,0': 'var(--neo-alias-state-success-primary)',
+  '0,255,0': 'var(--neo-alias-state-success-secondary)',
+  '187,187,0': 'var(--neo-alias-state-warn-primary)',
+  '255,255,85': 'var(--neo-alias-state-warn-secondary)',
+  '0,0,187': 'var(--neo-alias-state-business-primary)',
+  '85,85,255': 'var(--neo-static-blue-400)',
 }
 
 /**

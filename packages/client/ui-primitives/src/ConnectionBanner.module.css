@@ -8,6 +8,6 @@
   text-align: center;
   font-size: 12px;
   line-height: 18px;
-  background: var(--dsw-alias-state-error-primary);
-  color: var(--dsw-alias-label-primary-foreground);
+  background: var(--neo-alias-state-error-primary);
+  color: var(--neo-alias-label-primary-foreground);
 }

@@ -3,7 +3,7 @@
  * 32px fields, and `border-l2` hairlines — the vocabulary GeneralSection and
  * the Button/Input primitives already use.
  *
- * Every color resolves through a `--dsw-alias-*` token. Bare `--border` /
+ * Every color resolves through a `--neo-alias-*` token. Bare `--border` /
  * `--surface` / `--text-*` names, which nothing in this app defines, would
  * render the light-mode literals written as their fallbacks and stay light
  * under the dark theme. */
@@ -13,7 +13,7 @@
   flex-direction: column;
   gap: 12px;
   max-width: 720px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .title {
@@ -21,28 +21,28 @@
   font-size: 16px;
   line-height: 24px;
   font-weight: 500;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .intro {
   margin: 0;
   font-size: 14px;
   line-height: 22px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .notice {
   margin: 0;
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-state-warn-label);
+  color: var(--neo-alias-state-warn-label);
 }
 
 .savedNotice {
   margin: 0;
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-state-success-primary);
+  color: var(--neo-alias-state-success-primary);
 }
 
 .rows {
@@ -58,7 +58,7 @@
 /* A configured provider: outlined on the panel fill, so the filled editor
    card it expands into reads as the nested object. */
 .rowCard {
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 12px;
   padding: 12px 14px;
   display: flex;
@@ -83,7 +83,7 @@
   font-size: 14px;
   line-height: 22px;
   font-weight: 500;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 /* Reads as an annotation on the name, not as a second name: caption size and
@@ -93,11 +93,11 @@
 .rowTag {
   flex: none;
   padding: 1px 6px;
-  border: 1px solid var(--dsw-alias-border-l3);
+  border: 1px solid var(--neo-alias-border-l3);
   border-radius: 4px;
   font-size: 11px;
   line-height: 16px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .credentialDot {
@@ -110,11 +110,11 @@
 }
 
 .credentialDotConfigured {
-  background: var(--dsw-alias-state-success-primary);
+  background: var(--neo-alias-state-success-primary);
 }
 
 .credentialDotMissing {
-  background: var(--dsw-alias-state-error-primary);
+  background: var(--neo-alias-state-error-primary);
 }
 
 .rowActions {
@@ -146,28 +146,28 @@
 }
 
 .primaryButton {
-  background: var(--dsw-alias-button-primary-fill);
-  color: var(--dsw-alias-label-primary-foreground);
+  background: var(--neo-alias-button-primary-fill);
+  color: var(--neo-alias-label-primary-foreground);
 }
 
 .primaryButton:hover:not(:disabled) {
-  background: var(--dsw-alias-button-primary-hover);
+  background: var(--neo-alias-button-primary-hover);
 }
 
 .secondaryButton,
 .addButton {
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .secondaryButton:hover:not(:disabled),
 .addButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .secondaryButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover-solid);
+  background: var(--neo-alias-interactive-bg-hover-solid);
 }
 
 .dangerButton {
@@ -180,7 +180,7 @@
   border: none;
   border-radius: 18px;
   background: transparent;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
   font: inherit;
   font-size: 14px;
   line-height: 22px;
@@ -188,7 +188,7 @@
 }
 
 .dangerButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover-danger);
+  background: var(--neo-alias-interactive-bg-hover-danger);
 }
 
 /* Provider-row controls take the dense capsule (Button `.sm`). */
@@ -220,14 +220,14 @@
 .iconButton:focus-visible,
 .customizedSummary:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--dsw-alias-border-l3);
+  box-shadow: 0 0 0 2px var(--neo-alias-border-l3);
 }
 
 /* Editing surface: a filled module on the panel, matching the settings
    selector fill rather than adding another outline inside the row. */
 .editor {
   border-radius: 12px;
-  background: var(--dsw-alias-bg-module-platform);
+  background: var(--neo-alias-bg-module-platform);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -244,13 +244,13 @@
   font-size: 14px;
   line-height: 22px;
   font-weight: 500;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .editorRoute {
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .field {
@@ -266,7 +266,7 @@
   font-size: 12px;
   line-height: 18px;
   font-weight: 500;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .linkButton {
@@ -278,7 +278,7 @@
   border: none;
   border-radius: 14px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font: inherit;
   font-size: 12px;
   line-height: 18px;
@@ -286,15 +286,15 @@
 }
 
 .linkButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-secondary);
 }
 
 .advancedHint {
   margin: 0;
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .editorActions {
@@ -327,14 +327,14 @@
   min-width: 180px;
   gap: 6px;
   height: 44px;
-  border: 1px dashed var(--dsw-alias-border-l3);
+  border: 1px dashed var(--neo-alias-border-l3);
   border-radius: 12px;
 }
 
 .addCard,
 .setupCard {
   border-radius: 12px;
-  background: var(--dsw-alias-bg-module-platform);
+  background: var(--neo-alias-bg-module-platform);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -350,7 +350,7 @@
 }
 
 .customized {
-  border-top: 1px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--neo-alias-border-l2);
   padding-top: 10px;
 }
 
@@ -368,7 +368,7 @@
   font-size: 12px;
   line-height: 18px;
   font-weight: 500;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   list-style: none;
 }
 
@@ -391,7 +391,7 @@
 }
 
 .customizedSummary:hover {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .customizedBody {
@@ -411,7 +411,7 @@
   flex-direction: column;
   gap: 10px;
   padding-top: 12px;
-  border-top: 1px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--neo-alias-border-l2);
 }
 
 .modelCatalogHeading {
@@ -424,13 +424,13 @@
   font-size: 12px;
   line-height: 18px;
   font-weight: 500;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .modelCatalogMeta,
 .modelEmpty {
   margin: 0;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 18px;
 }
@@ -438,8 +438,8 @@
 /* Model list, shared with the pi-ai provider form: one bordered
    entry per model, id and display name on the row, capacities behind the
    row's own disclosure. The rules use this stylesheet's token vocabulary —
-   `--dsw-alias-border-subtle`, `--dsw-alias-text-tertiary`, and
-   `--dsw-alias-text-primary` are undefined here and would resolve to their
+   `--neo-alias-border-subtle`, `--neo-alias-text-tertiary`, and
+   `--neo-alias-text-primary` are undefined here and would resolve to their
    light-mode literals. */
 .modelList {
   display: flex;
@@ -455,7 +455,7 @@
 }
 
 .modelEntry {
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 8px;
   padding: 6px;
 }
@@ -479,13 +479,13 @@
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
 }
 
 .iconButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-primary);
 }
 
 .iconButton:disabled {
@@ -495,8 +495,8 @@
 
 /* The delete glyph keeps the danger tint the rest of the section uses. */
 .iconButtonDanger:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover-danger);
-  color: var(--dsw-alias-state-error-primary);
+  background: var(--neo-alias-interactive-bg-hover-danger);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .modelAdvanced {
@@ -513,14 +513,14 @@
 }
 
 .modelFieldLabel {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 18px;
 }
 
 .modelEmpty {
   padding: 12px;
-  border: 1px dashed var(--dsw-alias-border-l3);
+  border: 1px dashed var(--neo-alias-border-l3);
   border-radius: 8px;
   text-align: center;
 }
@@ -533,10 +533,10 @@
   gap: 4px;
   height: 28px;
   padding: 0 10px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 14px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font: inherit;
   font-size: 12px;
   line-height: 18px;
@@ -544,7 +544,7 @@
 }
 
 .addModelButton:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .input {
@@ -552,13 +552,13 @@
   width: 100%;
   height: 32px;
   padding: 0 10px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 8px;
   font: inherit;
   font-size: 14px;
   line-height: 22px;
-  background: var(--dsw-alias-bg-layer-1);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-bg-layer-1);
+  color: var(--neo-alias-label-primary);
 }
 
 /* Enum pickers hold a handful of short options; a field-width dropdown reads
@@ -570,11 +570,11 @@ select.input {
 
 .input:focus {
   outline: none;
-  border-color: var(--dsw-alias-brand-primary);
+  border-color: var(--neo-alias-brand-primary);
 }
 
 .input::placeholder {
-  color: var(--dsw-alias-label-dimmed);
+  color: var(--neo-alias-label-dimmed);
 }
 
 .input:disabled {
@@ -600,7 +600,7 @@ select.input {
   margin: 0;
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .deleteDialog {
@@ -608,12 +608,12 @@ select.input {
 }
 
 .deleteConfirm:not(:disabled) {
-  border-color: var(--dsw-alias-state-error-primary);
-  color: var(--dsw-alias-state-error-primary);
+  border-color: var(--neo-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .deleteConfirm:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover-danger);
+  background: var(--neo-alias-interactive-bg-hover-danger);
 }
 
 /* Icon-button label seat: named for assistive tech and for the tests that
@@ -640,8 +640,8 @@ select.input {
      scrollbar indirection is rebound here rather than on the scrolling child:
      the elevation choice belongs with the surface and inherits down (see
      ui-theme styles/scrollbar.css for the contract). */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 .candidateList {
@@ -716,11 +716,11 @@ select.input {
   width: 16px;
   height: 16px;
   padding: 0;
-  border: 0.5px solid var(--dsw-alias-border-l3);
+  border: 0.5px solid var(--neo-alias-border-l3);
   border-radius: 50%;
   corner-shape: round;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font: inherit;
   font-size: 11px;
   line-height: 15px;
@@ -730,6 +730,6 @@ select.input {
 
 .helpButton:hover,
 .helpButton:focus-visible {
-  color: var(--dsw-alias-label-primary);
-  border-color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-primary);
+  border-color: var(--neo-alias-label-tertiary);
 }

@@ -9,13 +9,13 @@
   padding: 24px;
 }
 
-/* User/spec mask: rgba(0,0,0,0.24) + blur(2px) via --dsw-alias-bg-mask-1 /
-   --dsw-mask-blur (light); dark theme raises mask opacity. */
+/* User/spec mask: rgba(0,0,0,0.24) + blur(2px) via --neo-alias-bg-mask-1 /
+   --neo-mask-blur (light); dark theme raises mask opacity. */
 .mask {
   position: absolute;
   inset: 0;
-  background: var(--dsw-alias-bg-mask-1);
-  backdrop-filter: var(--dsw-mask-blur);
+  background: var(--neo-alias-bg-mask-1);
+  backdrop-filter: var(--neo-mask-blur);
 }
 
 /* Dialog card: r24, shadow-lv3, layer-2 fill, inverted border, pb 24. */
@@ -28,10 +28,10 @@
   width: min(380px, 100%);
   padding: 0 0 24px;
   overflow: hidden;
-  border: 1px solid var(--dsw-alias-border-inverted);
+  border: 1px solid var(--neo-alias-border-inverted);
   border-radius: 24px;
-  background: var(--dsw-alias-bg-layer-2);
-  box-shadow: var(--dsw-shadow-lv3);
+  background: var(--neo-alias-bg-layer-2);
+  box-shadow: var(--neo-shadow-lv3);
 }
 
 .content {
@@ -55,7 +55,7 @@
   font-size: 16px;
   line-height: 24px;
   font-weight: 500; /* figma wt510, rendered 500 */
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .close {
@@ -69,11 +69,11 @@
   border-radius: 8px;
   background: transparent;
   cursor: pointer;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .close:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 /* Description and body share the 332px content column (24px side pads). */
@@ -83,7 +83,7 @@
   font-size: 14px;
   line-height: 22px;
   font-weight: 400;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .body {

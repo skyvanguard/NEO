@@ -10,30 +10,30 @@
   margin: 0 auto;
   width: calc(
     100% -
-    var(--dsh-composer-side-clearance) -
-    var(--dsh-composer-side-clearance) -
-    var(--dsh-composer-dock-inset) -
-    var(--dsh-composer-dock-inset) -
-    var(--dsh-composer-dock-inset) -
-    var(--dsh-composer-dock-inset)
+    var(--neo-composer-side-clearance) -
+    var(--neo-composer-side-clearance) -
+    var(--neo-composer-dock-inset) -
+    var(--neo-composer-dock-inset) -
+    var(--neo-composer-dock-inset) -
+    var(--neo-composer-dock-inset)
   );
   max-width: calc(
-    var(--dsh-composer-card-max-width) -
-    var(--dsh-composer-dock-inset) -
-    var(--dsh-composer-dock-inset) -
-    var(--dsh-composer-dock-inset) -
-    var(--dsh-composer-dock-inset)
+    var(--neo-composer-card-max-width) -
+    var(--neo-composer-dock-inset) -
+    var(--neo-composer-dock-inset) -
+    var(--neo-composer-dock-inset) -
+    var(--neo-composer-dock-inset)
   );
-  border: 1px solid var(--dsw-alias-border-l1);
+  border: 1px solid var(--neo-alias-border-l1);
   border-radius: 12px;
-  background: var(--dsw-specific-tip);
-  /* Elevated surface: `--dsw-specific-tip` is the same dark rung as the menu
+  background: var(--neo-specific-tip);
+  /* Elevated surface: `--neo-specific-tip` is the same dark rung as the menu
      surface, and `.list` scrolls inside this card, so the thumb takes the l2
      elevation tokens. Declared here because the elevation belongs to the
      surface, and the custom properties inherit down to `.list` (see ui-theme
      styles/scrollbar.css for the rebinding contract). */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 .body {
@@ -59,7 +59,7 @@
   display: grid;
   flex: none;
   place-items: center;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .title {
@@ -67,7 +67,7 @@
   font-size: 13px;
   line-height: 24px;
   font-weight: 500;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .progress {
@@ -77,7 +77,7 @@
   font-size: 13px;
   line-height: 20px;
   font-weight: 400;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -86,7 +86,7 @@
   display: grid;
   flex: none;
   place-items: center;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .list {
@@ -107,7 +107,7 @@
   min-width: 0;
   font-size: 13px;
   line-height: 20px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .glyph {
@@ -119,15 +119,15 @@
 }
 
 .glyphCompleted {
-  color: var(--dsw-alias-state-success-primary);
+  color: var(--neo-alias-state-success-primary);
 }
 
 .glyphPending {
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 .glyphProgress {
-  color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-state-business-primary);
   animation: todo-progress-spin 1s linear infinite;
 }
 

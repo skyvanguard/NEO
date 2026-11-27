@@ -19,7 +19,7 @@
   border-radius: 24px;
   outline: none;
   background: transparent;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 13px;
   line-height: 20px;
   font-weight: 500;
@@ -27,15 +27,15 @@
 }
 
 .trigger:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .trigger:focus-visible {
-  box-shadow: 0 0 0 2px var(--dsw-alias-border-l3);
+  box-shadow: 0 0 0 2px var(--neo-alias-border-l3);
 }
 
 .trigger:disabled {
-  color: var(--dsw-alias-label-dimmed);
+  color: var(--neo-alias-label-dimmed);
   cursor: default;
 }
 
@@ -49,12 +49,12 @@
 /* Effort value beside the model name (mock's 'High': same 13/20/500, caption tone). */
 .triggerEffort {
   flex: 0 0 auto;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 .chevron {
   flex: 0 0 auto;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
   transition: transform 120ms ease;
 }
 
@@ -75,24 +75,24 @@
   padding: 4px;
   /* Surface tokens match the Menu primitive card (ui-primitives
    * Menu.module.css) so every dropdown reads as the same material. */
-  border: 1px solid var(--dsw-alias-border-inverted);
+  border: 1px solid var(--neo-alias-border-inverted);
   border-radius: 12px;
-  background: var(--dsw-specific-menu);
-  box-shadow: var(--dsw-shadow-lv3);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-specific-menu);
+  box-shadow: var(--neo-shadow-lv3);
+  color: var(--neo-alias-label-primary);
   /* Elevated surface: the scrollbar thumb takes the l2 elevation tokens.
      Declared here rather than on the scrolling `.groups` child so the
      elevation choice sits with the surface; the custom properties inherit
      down to whichever descendant actually scrolls (see ui-theme
      styles/scrollbar.css for the rebinding contract). */
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --neo-scrollbar-thumb: var(--neo-alias-scrollbar-bg-l2);
+  --neo-scrollbar-thumb-hover: var(--neo-alias-scrollbar-hover-l2);
 }
 
 .status,
 .empty {
   padding: 10px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 13px;
   line-height: 20px;
 }
@@ -106,15 +106,15 @@
   margin-bottom: 4px;
   padding: 7px 8px;
   border-radius: 8px;
-  background: var(--dsw-alias-interactive-bg-hover-danger);
-  color: var(--dsw-alias-state-error-primary);
+  background: var(--neo-alias-interactive-bg-hover-danger);
+  color: var(--neo-alias-state-error-primary);
   font-size: 12px;
   line-height: 18px;
 }
 
 .warning {
-  background: var(--dsw-alias-bg-module-platform);
-  color: var(--dsw-alias-state-warn-label);
+  background: var(--neo-alias-bg-module-platform);
+  color: var(--neo-alias-state-warn-label);
 }
 
 .retry {
@@ -142,8 +142,8 @@
   top: 0;
   z-index: 1;
   padding: 5px 8px 3px;
-  background: var(--dsw-specific-menu);
-  color: var(--dsw-alias-label-tertiary);
+  background: var(--neo-specific-menu);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 18px;
   font-weight: 500;
@@ -167,7 +167,7 @@
 
 .option:hover:not(:disabled),
 .option:focus-visible {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 /* Selection marker is the trailing check, not a fill — matches the Menu
@@ -177,7 +177,7 @@
 }
 
 .option:disabled {
-  color: var(--dsw-alias-label-dimmed);
+  color: var(--neo-alias-label-dimmed);
   cursor: default;
 }
 
@@ -200,7 +200,7 @@
 
 .description {
   overflow: hidden;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 18px;
   text-overflow: ellipsis;
@@ -211,7 +211,7 @@
   display: grid;
   place-items: center;
   flex: 0 0 18px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 /* Two-level root cells (figma 496:26454 .Menu_cell): 40px row, 10px side
@@ -227,7 +227,7 @@
   border: none;
   border-radius: 10px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font-size: 14px;
   line-height: 22px;
   cursor: pointer;
@@ -235,7 +235,7 @@
 }
 
 .cell:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .cellLabel {
@@ -252,10 +252,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .cellChevron {
   flex: 0 0 auto;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }

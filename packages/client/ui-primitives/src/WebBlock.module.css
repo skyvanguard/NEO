@@ -9,8 +9,8 @@
 
   margin: 16px 0;
   padding: 12px 14px;
-  color: var(--dsw-alias-label-primary);
-  background: var(--dsw-alias-markdown-code-block);
+  color: var(--neo-alias-label-primary);
+  background: var(--neo-alias-markdown-code-block);
   border-radius: var(--dsl-web-radius);
 }
 
@@ -58,7 +58,7 @@
 }
 
 .sourceLink {
-  color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-state-business-primary);
   font-size: 14px;
   line-height: 20px;
   word-break: break-word;
@@ -70,7 +70,7 @@
 
 .snippet {
   margin-top: 2px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 13px;
   line-height: 19px;
   word-break: break-word;
@@ -78,19 +78,19 @@
 
 .published {
   margin-top: 2px;
-  color: var(--dsw-alias-label-tertiary);
-  font: var(--dsw-font-xs-13);
+  color: var(--neo-alias-label-tertiary);
+  font: var(--neo-font-xs-13);
 }
 
 .truncated {
   margin-top: 8px;
-  color: var(--dsw-alias-label-tertiary);
-  font: var(--dsw-font-xs-13);
+  color: var(--neo-alias-label-tertiary);
+  font: var(--neo-font-xs-13);
 }
 
 .empty {
-  color: var(--dsw-alias-label-secondary);
-  font: var(--dsw-font-xs-13);
+  color: var(--neo-alias-label-secondary);
+  font: var(--neo-font-xs-13);
 }
 
 /* The fetch card is a compact summary: the URL over a status/truncation row. */
@@ -101,7 +101,7 @@
 }
 
 .fetchUrl {
-  color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-state-business-primary);
   font-family: var(--ds-font-family-code);
   font-size: 13px;
   line-height: 19px;
@@ -119,8 +119,8 @@
 }
 
 .status {
-  color: var(--dsw-alias-label-secondary);
-  font: var(--dsw-font-xs-13);
+  color: var(--neo-alias-label-secondary);
+  font: var(--neo-font-xs-13);
 }
 
 /* The fetch card's truncation note sits inline beside the status, so it drops

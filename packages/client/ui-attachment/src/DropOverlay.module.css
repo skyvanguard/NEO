@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  background-color: var(--dsw-alias-bg-mask-drop);
+  background-color: var(--neo-alias-bg-mask-drop);
   backdrop-filter: blur(10px);
   animation: fade-in 160ms ease-out;
 }
@@ -32,7 +32,7 @@
   align-items: center;
   margin-top: -3%;
   padding: 0 40px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   text-align: center;
 }
 
@@ -43,12 +43,12 @@
 
 .title {
   margin-top: 16px;
-  font: var(--dsw-font-l-20);
+  font: var(--neo-font-l-20);
 }
 
 .desc {
   margin-top: 16px;
-  font: var(--dsw-font-s-14);
-  color: var(--dsw-alias-label-tertiary);
+  font: var(--neo-font-s-14);
+  color: var(--neo-alias-label-tertiary);
   white-space: pre-wrap;
 }

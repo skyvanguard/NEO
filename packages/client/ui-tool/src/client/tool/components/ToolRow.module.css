@@ -25,7 +25,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    color-mix(in srgb, var(--dsw-alias-bg-base) 60%, transparent) 55%,
+    color-mix(in srgb, var(--neo-alias-bg-base) 60%, transparent) 55%,
     transparent 100%
   );
   animation: dsh-tool-row-sweep 2.6s ease-out infinite;
@@ -45,7 +45,7 @@
    shared product accent and tool-owned action title. */
 .root[data-tool^='cordis_'] .leading,
 .root[data-tool^='cordis_'] .title {
-  color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-state-business-primary);
 }
 
 .root[data-tool^='cordis_'] .title {
@@ -53,11 +53,11 @@
 }
 
 .root[data-tool^='cordis_'] .sep {
-  background: var(--dsw-alias-state-business-primary);
+  background: var(--neo-alias-state-business-primary);
 }
 
 .chevron {
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 .title {
@@ -70,7 +70,7 @@
   height: 2px;
   border-radius: 1px;
   margin: 0 8px;
-  background: var(--dsw-alias-label-caption);
+  background: var(--neo-alias-label-caption);
 }
 
 .summary {
@@ -81,7 +81,7 @@
   white-space: nowrap;
   font-size: 14px;
   line-height: 24px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 /* Trailing summary fragment kept out of .summary's ellipsis, for a count whose
@@ -95,7 +95,7 @@
   white-space: nowrap;
   font-size: 14px;
   line-height: 24px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 /* File-tool path: same geometry as .summary, with a persistent link affordance. */
@@ -113,21 +113,21 @@
   text-align: left;
   font-size: 14px;
   line-height: 24px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   text-decoration: underline;
-  text-decoration-color: var(--dsw-alias-label-quaternary);
+  text-decoration-color: var(--neo-alias-label-quaternary);
   text-underline-offset: 3px;
   cursor: pointer;
 }
 
 .fileLink:hover {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   text-decoration-color: currentColor;
 }
 
 /* Error row's collapsed summary: the failure's first line in the error color. */
 .errorSummary {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 /* Expanded body + Inspect pill wrapper (sibling of .row: clicks never toggle). */
@@ -147,12 +147,12 @@
   gap: 4px;
   margin: 4px 0 2px 4px;
   padding: 2px 8px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 999px;
   /* Base background, not bg-overlay: the overlay token is a raised dark
      surface and reads too heavy for a quiet in-flow affordance. */
-  background: var(--dsw-alias-bg-base);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-bg-base);
+  color: var(--neo-alias-label-secondary);
   font-size: 11px;
   line-height: 16px;
   cursor: pointer;
@@ -167,8 +167,8 @@
 
 /* Solid hover fill (a translucent token would let content bleed through). */
 .inspectButton:hover {
-  background: var(--dsw-alias-interactive-bg-hover-solid);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-interactive-bg-hover-solid);
+  color: var(--neo-alias-label-primary);
 }
 
 /* Expanded-body scroll wrapper for the run_code CodeBlock; the IN/OUT card
@@ -187,10 +187,10 @@
   display: flex;
   flex-direction: column;
   margin: 4px 0 4px 4px;
-  border: 1px solid var(--dsw-alias-border-l1);
+  border: 1px solid var(--neo-alias-border-l1);
   border-radius: 12px;
-  background: var(--dsw-alias-markdown-code-block);
-  font: var(--dsw-font-markdown-code-block-small);
+  background: var(--neo-alias-markdown-code-block);
+  font: var(--neo-font-markdown-code-block-small);
 }
 
 /* One card section (IN or OUT): the gutter-label grid, capped and scrolling
@@ -228,7 +228,7 @@
   position: sticky;
   top: 0;
   align-self: start;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 /* l2 hairline between the IN and OUT sections, spanning the full card width
@@ -236,19 +236,19 @@
 .ioDivider {
   flex: none;
   height: 1px;
-  background: var(--dsw-alias-border-l2);
+  background: var(--neo-alias-border-l2);
 }
 
 .ioText {
   min-width: 0;
   white-space: pre-wrap;
   word-break: break-word;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }
 
 /* A failed call's OUT text shares the collapsed summary's error color. */
 .ioText[data-error] {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 /* The block-shaped expanded bodies: the code variant's run_code program
@@ -275,24 +275,24 @@
   margin: 4px 0 4px 4px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font: var(--dsw-font-xs-13);
-  color: var(--dsw-alias-label-tertiary);
+  font: var(--neo-font-xs-13);
+  color: var(--neo-alias-label-tertiary);
 }
 
 /* In-row code renders at the smaller code size (12/18) via each primitive's
    rebindable content-font seam; standalone markdown code blocks keep 13/22. */
 .codeBody {
-  --dsl-code-block-content-font: var(--dsw-font-markdown-code-block-small);
+  --dsl-code-block-content-font: var(--neo-font-markdown-code-block-small);
 }
 
 /* The terminal card scrolls its OUTPUT inside its own surface (same l1
    hairline as the IN/OUT card): the banner stays pinned and the scrollbar
    never rides over it. 224px = the 260px card cap minus the ~36px banner. */
 .terminalBody {
-  --dsl-terminal-font: var(--dsw-font-markdown-code-block-small);
+  --dsl-terminal-font: var(--neo-font-markdown-code-block-small);
   --dsl-terminal-line-height: 18px;
   --dsl-terminal-output-max-height: 224px;
-  border: 1px solid var(--dsw-alias-border-l1);
+  border: 1px solid var(--neo-alias-border-l1);
 }
 
 /* Visually hidden run-state label for assistive technology: the StateDot and

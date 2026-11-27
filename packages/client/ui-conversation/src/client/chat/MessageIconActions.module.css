@@ -14,7 +14,7 @@
   padding-right: 12px;
   font-size: 14px;
   line-height: 24px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   white-space: nowrap;
 }
 
@@ -22,7 +22,7 @@
   padding-left: 12px;
   font-size: 14px;
   line-height: 24px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   white-space: nowrap;
 }
 
@@ -56,13 +56,13 @@
   border: none;
   border-radius: 28px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
 }
 
 .action:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-secondary);
 }
 
 /* Unavailable stays focusable and hoverable so Tooltip can explain why. */
@@ -73,7 +73,7 @@
 
 .action[data-unavailable]:hover {
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .visuallyHidden {

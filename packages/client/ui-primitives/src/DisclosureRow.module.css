@@ -32,7 +32,7 @@
   padding: 0;
   border: none;
   background: none;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 button.leading {
@@ -65,5 +65,5 @@ button.leading {
   flex: none;
   font-size: 14px;
   line-height: 24px;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
 }

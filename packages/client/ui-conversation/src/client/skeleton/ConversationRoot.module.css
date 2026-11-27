@@ -8,10 +8,10 @@
   flex-direction: column;
   height: 100%;
   min-width: 0;
-  background: var(--dsw-alias-bg-base);
+  background: var(--neo-alias-bg-base);
 
   /* Shared width axis for the whole column: one content width W
-     (--dsh-chat-content-width) for the transcript, the dock cards
+     (--neo-chat-content-width) for the transcript, the dock cards
      (todo/goal/queue: card minus four insets, 4 x 8 = 32), and the takeover
      cards (question/approval/plan review); the input card alone is W + 32px.
      The relation also holds when a narrow viewport shrinks everything: the
@@ -19,10 +19,10 @@
      the input card clears the bare clearance, so the input card stays exactly
      content + 32px at every width. Declared on the root because the
      transcript and the composer seat are sibling subtrees. */
-  --dsh-chat-content-width: 748px;
-  --dsh-composer-card-max-width: calc(var(--dsh-chat-content-width) + 32px);
-  --dsh-composer-side-clearance: 16px;
-  --dsh-composer-dock-inset: 8px;
+  --neo-chat-content-width: 748px;
+  --neo-composer-card-max-width: calc(var(--neo-chat-content-width) + 32px);
+  --neo-composer-side-clearance: 16px;
+  --neo-composer-dock-inset: 8px;
 }
 
 .header {
@@ -40,7 +40,7 @@
   left: 0;
   z-index: 0;
   height: 1px;
-  background: var(--dsw-alias-border-l2);
+  background: var(--neo-alias-border-l2);
   pointer-events: none;
 }
 
@@ -83,7 +83,7 @@
 
 .crumbSep {
   /* figma: "/" separators are 14px caption gray (75:7903), one tint lighter than crumb text. */
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
   font-size: 14px;
   line-height: 20px;
 }
@@ -97,19 +97,19 @@
   background: transparent;
   font-size: 14px;
   line-height: 20px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
 }
 
 .crumb:hover:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .crumbCurrent {
   font-weight: 500;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   cursor: default;
 }
 
@@ -151,7 +151,7 @@
   font-size: 13px;
   line-height: 16px;
   font-weight: 500;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
 }
 
@@ -170,11 +170,11 @@
    this token sheet, so the selected state rides the business blue — the
    nearest semantic token that stays blue in both themes. */
 .tabActive {
-  color: var(--dsw-alias-state-business-primary);
+  color: var(--neo-alias-state-business-primary);
 }
 
 .tabActive::after {
-  background: var(--dsw-alias-state-business-primary);
+  background: var(--neo-alias-state-business-primary);
 }
 
 .viewArea {
@@ -189,11 +189,11 @@
 .composerStack {
   /* Horizontal geometry (card width, clearance, dock inset) rides the shared
      .root variables above so takeover siblings match the stack. */
-  --dsh-composer-stack-gap: 6px;
+  --neo-composer-stack-gap: 6px;
 
   display: flex;
   flex-direction: column;
-  gap: var(--dsh-composer-stack-gap);
+  gap: var(--neo-composer-stack-gap);
 }
 
 /* Common seat for the composer chain (fallback + elected overlay siblings). */
@@ -208,7 +208,7 @@
      the seat because it is the chain's only shared ancestor — fallback and
      elected overlay are siblings — and custom properties inherit down to
      whichever entry is mounted. */
-  --dsh-composer-text-max-height: 336px;
+  --neo-composer-text-max-height: 336px;
 }
 
 /* Active phase: header is ordinary column chrome above the scrollport (not
@@ -262,8 +262,8 @@
      fade from their own base. */
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--dsw-alias-bg-base) 0%, transparent) 0px,
-    var(--dsw-alias-bg-base) 36px
+    color-mix(in srgb, var(--neo-alias-bg-base) 0%, transparent) 0px,
+    var(--neo-alias-bg-base) 36px
   );
 }
 
@@ -296,12 +296,12 @@
   /* Chat's seat rides this box's content box, which its own scrolling shortens
      by the bar's width; the overlay seat is against the padding box, so it
      must give back the same width to keep the input card in place across
-     tabs. Reads ui-theme's --dsh-scrollbar-width, which mirrors the WebKit
+     tabs. Reads ui-theme's --neo-scrollbar-width, which mirrors the WebKit
      bar's layout width. Chat reserves the engine-resolved width, so on an
      engine where the resolved width differs from this fixed 8px the card
      drifts by half the difference — accepted residual risk, recorded in
      ([decision](../../../../../../.agents/notes/implemented/bug-fix/2026-08-12-composer-overlay-seat-width-compensation.md)). */
-  right: var(--dsh-scrollbar-width);
+  right: var(--neo-scrollbar-width);
   bottom: 0;
   left: 0;
 }
@@ -320,7 +320,7 @@
   padding-bottom: 32px;
   /* Card cap + both clearances: the hero input card lands at exactly the same
      width as the docked composer at every viewport. */
-  width: min(calc(var(--dsh-composer-card-max-width) + 2 * var(--dsh-composer-side-clearance)), 100%);
+  width: min(calc(var(--neo-composer-card-max-width) + 2 * var(--neo-composer-side-clearance)), 100%);
   z-index: 1;
 }
 

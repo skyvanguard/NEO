@@ -1,5 +1,5 @@
 /* Session stats row: 12/20 tertiary text under the flow, aligned to the
-   shared message column axis (--dsh-chat-content-width). */
+   shared message column axis (--neo-chat-content-width). */
 
 .root {
   /* Block, centered tertiary strip. It wraps onto as many lines as the content
@@ -7,19 +7,19 @@
      (spaces around the `|`/`·` separators) rather than mid-word. */
   display: block;
   text-align: center;
-  max-width: var(--dsh-chat-content-width);
+  max-width: var(--neo-chat-content-width);
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 4px calc(var(--dsh-composer-side-clearance) + 16px) 0px;
+  padding: 4px calc(var(--neo-composer-side-clearance) + 16px) 0px;
   font-size: 12px;
   line-height: 20px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   white-space: normal;
   overflow-wrap: break-word;
 }
 
 .sep {
-  color: var(--dsw-alias-separator-primary);
+  color: var(--neo-alias-separator-primary);
   margin: 0 10px; /* carries the former flex gap */
 }

@@ -4,7 +4,7 @@
   gap: 14px;
   width: 100%;
   max-width: 760px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .catalogHeading h3,
@@ -17,22 +17,22 @@
 .failure {
   font-size: 13px;
   line-height: 20px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .failure {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
 }
 
 .failure button {
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 6px;
   padding: 4px 10px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font: inherit;
   cursor: pointer;
 }
@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .search > svg {
@@ -60,23 +60,23 @@
 .search input {
   width: 100%;
   height: 36px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 8px;
   padding: 0 34px 0 36px;
   outline: none;
-  background: var(--dsw-alias-bg-layer-1);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-bg-layer-1);
+  color: var(--neo-alias-label-primary);
   font: inherit;
   font-size: 13px;
 }
 
 .search input::placeholder {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .search input:focus-visible {
-  border-color: var(--dsw-alias-state-business-primary);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--dsw-alias-state-business-primary) 18%, transparent);
+  border-color: var(--neo-alias-state-business-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--neo-alias-state-business-primary) 18%, transparent);
 }
 
 .catalogHeading {
@@ -95,7 +95,7 @@
 .catalogHeading span {
   font-size: 12px;
   line-height: 18px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-variant-numeric: tabular-nums;
 }
 
@@ -112,14 +112,14 @@
 .card {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 10px;
-  background: var(--dsw-alias-bg-layer-3);
+  background: var(--neo-alias-bg-layer-3);
 }
 
 .card[data-open='true'] {
-  border-color: var(--dsw-alias-border-l1);
-  box-shadow: var(--dsw-shadow-lv1);
+  border-color: var(--neo-alias-border-l1);
+  box-shadow: var(--neo-shadow-lv1);
 }
 
 .cardContent {
@@ -141,11 +141,11 @@
 
 .cardContent:hover,
 .card[data-open='true'] > .cardContent {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .cardContent:focus-visible {
-  outline: 2px solid var(--dsw-alias-state-business-primary);
+  outline: 2px solid var(--neo-alias-state-business-primary);
   outline-offset: -2px;
 }
 
@@ -164,7 +164,7 @@
   flex: none;
   align-items: center;
   gap: 7px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .statusDot {
@@ -173,19 +173,19 @@
   height: 7px;
   flex: none;
   border-radius: 999px;
-  background: var(--dsw-alias-label-tertiary);
+  background: var(--neo-alias-label-tertiary);
 }
 
 .statusDot[data-phase='active'] {
-  background: var(--dsw-alias-state-success-primary);
+  background: var(--neo-alias-state-success-primary);
 }
 
 .statusDot[data-phase='failed'] {
-  background: var(--dsw-alias-state-error-primary);
+  background: var(--neo-alias-state-error-primary);
 }
 
 .statusDot[data-phase='loading'] {
-  background: var(--dsw-alias-state-business-primary);
+  background: var(--neo-alias-state-business-primary);
 }
 
 .configTag {
@@ -194,21 +194,21 @@
   min-height: 20px;
   border-radius: 5px;
   padding: 1px 6px;
-  background: var(--dsw-alias-bg-layer-1);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-bg-layer-1);
+  color: var(--neo-alias-label-secondary);
   font-size: 11px;
   line-height: 16px;
   white-space: nowrap;
 }
 
 .configTag[data-enabled='true'] {
-  background: color-mix(in srgb, var(--dsw-alias-state-success-primary) 10%, transparent);
-  color: var(--dsw-alias-state-success-primary);
+  background: color-mix(in srgb, var(--neo-alias-state-success-primary) 10%, transparent);
+  color: var(--neo-alias-state-success-primary);
 }
 
 .chevron {
   flex: none;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .card[data-open='true'] .chevron {
@@ -216,15 +216,15 @@
 }
 
 .cardDetails {
-  border-top: 1px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--neo-alias-border-l2);
   padding: 10px 14px 12px;
-  background: var(--dsw-alias-bg-module-platform);
+  background: var(--neo-alias-bg-module-platform);
 }
 
 .entryValue {
   display: block;
   overflow-wrap: anywhere;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font-family: var(--ds-font-family-code);
   font-size: 12px;
   line-height: 18px;
@@ -242,7 +242,7 @@
 }
 
 .details dt {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 11px;
   line-height: 17px;
 }
@@ -251,7 +251,7 @@
   min-width: 0;
   margin: 0;
   overflow-wrap: anywhere;
-  color: var(--dsw-alias-label-secondary);
+  color: var(--neo-alias-label-secondary);
   font-size: 12px;
   line-height: 17px;
 }

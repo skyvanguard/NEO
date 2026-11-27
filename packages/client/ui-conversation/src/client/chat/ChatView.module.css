@@ -17,7 +17,7 @@
   overflow-y: auto;
   /* Sides = composer clearance + 16px: on narrow viewports the transcript
      stays exactly 32px narrower than the input card (the shared width rule). */
-  padding: 16px calc(var(--dsh-composer-side-clearance) + 16px);
+  padding: 16px calc(var(--neo-composer-side-clearance) + 16px);
 }
 
 :global([data-conversation-scroll]) .root {
@@ -32,11 +32,11 @@
   min-height: auto;
 }
 
-/* Message column: shared chat width (ConversationRoot --dsh-chat-content-width),
+/* Message column: shared chat width (ConversationRoot --neo-chat-content-width),
    centered on the same axis as the input box (which caps at chat + 16px); the
    scroller itself stays full-bleed. */
 .column {
-  max-width: var(--dsh-chat-content-width);
+  max-width: var(--neo-chat-content-width);
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -81,18 +81,18 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid color-mix(in srgb, var(--dsw-static-deepseek-500) 22%, transparent);
-  border-top-color: var(--dsw-static-deepseek-500);
+  border: 2px solid color-mix(in srgb, var(--neo-static-brand-500) 22%, transparent);
+  border-top-color: var(--neo-static-brand-500);
   animation: dsh-turn-status-spin 0.7s linear infinite;
 }
 
 .turnStatusClock {
   margin-left: 8px;
-  font: var(--dsw-font-xs-13);
+  font: var(--neo-font-xs-13);
   font-weight: 400;
   font-variant-numeric: tabular-nums;
-  color: var(--dsw-alias-label-caption);
-  -webkit-text-fill-color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
+  -webkit-text-fill-color: var(--neo-alias-label-caption);
 }
 
 @keyframes dsh-turn-status-spin {
@@ -103,19 +103,19 @@
 
 @media (prefers-reduced-motion: reduce) {
   .turnStatusSpinner {
-    border-color: var(--dsw-static-deepseek-500);
+    border-color: var(--neo-static-brand-500);
     animation: none;
   }
 }
 
 .hint {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 12px;
   line-height: 18px;
 }
 
 .openError {
-  color: var(--dsw-alias-state-error-primary);
+  color: var(--neo-alias-state-error-primary);
   font-size: 12px;
   line-height: 18px;
 }
@@ -130,8 +130,8 @@
   border-radius: 14px;
   padding: 4px 12px;
   font-size: 12px;
-  color: var(--dsw-alias-label-secondary);
-  background: var(--dsw-alias-interactive-bg-hover-solid);
+  color: var(--neo-alias-label-secondary);
+  background: var(--neo-alias-interactive-bg-hover-solid);
   cursor: pointer;
 }
 
@@ -152,16 +152,16 @@
   height: 0;
   display: flex;
   justify-content: flex-end;
-  padding-right: max(0px, calc((100% - var(--dsh-chat-content-width)) / 2));
+  padding-right: max(0px, calc((100% - var(--neo-chat-content-width)) / 2));
   pointer-events: none;
 }
 
 :global([data-conversation-scroll]) .toBottomSlot {
   /* Clears the sticky composer stack (docks + input card + stats): the live
-     height rides --dsh-composer-height (ConversationRoot's seat observer) so
+     height rides --neo-composer-height (ConversationRoot's seat observer) so
      the control follows a growing textarea; the fallback covers the first
      paint before the observer fires. */
-  bottom: calc(var(--dsh-composer-height, 152px) + 16px);
+  bottom: calc(var(--neo-composer-height, 152px) + 16px);
 }
 
 .toBottom {
@@ -172,15 +172,15 @@
   height: 34px;
   margin-top: -34px;
   padding: 0;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 100px;
-  color: var(--dsw-alias-label-primary);
-  background: var(--dsw-alias-button-floating-fill);
-  box-shadow: var(--dsw-shadow-lv2);
+  color: var(--neo-alias-label-primary);
+  background: var(--neo-alias-button-floating-fill);
+  box-shadow: var(--neo-shadow-lv2);
   cursor: pointer;
   pointer-events: auto;
 }
 
 .toBottom:hover {
-  background: var(--dsw-alias-button-floating-hover);
+  background: var(--neo-alias-button-floating-hover);
 }

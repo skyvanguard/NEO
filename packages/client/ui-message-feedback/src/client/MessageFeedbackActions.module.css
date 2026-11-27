@@ -12,13 +12,13 @@
   border: none;
   border-radius: 28px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   cursor: pointer;
 }
 
 .action:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-secondary);
 }
 
 .action:disabled {
@@ -29,7 +29,7 @@
 /* A recorded rating stays legible without hover, so the signal survives a
    pointer leaving the row. */
 .action[data-active] {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .noteOpen {
@@ -39,7 +39,7 @@
   border: none;
   border-radius: 14px;
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 13px;
   line-height: 28px;
   white-space: nowrap;
@@ -48,8 +48,8 @@
 }
 
 .noteOpen:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-secondary);
 }
 
 .noteEditor {
@@ -61,10 +61,10 @@
 .noteInput {
   width: 260px;
   padding: 6px 8px;
-  border: 1px solid var(--dsw-alias-border-secondary);
+  border: 1px solid var(--neo-alias-border-secondary);
   border-radius: 8px;
-  background: var(--dsw-alias-bg-primary);
-  color: var(--dsw-alias-label-primary);
+  background: var(--neo-alias-bg-primary);
+  color: var(--neo-alias-label-primary);
   font: inherit;
   font-size: 13px;
   resize: vertical;
@@ -81,8 +81,8 @@
 }
 
 .noteSave {
-  background: var(--dsw-alias-interactive-bg-primary);
-  color: var(--dsw-alias-label-inverse);
+  background: var(--neo-alias-interactive-bg-primary);
+  color: var(--neo-alias-label-inverse);
 }
 
 .noteSave:disabled {
@@ -92,17 +92,17 @@
 
 .noteCancel {
   background: transparent;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
 }
 
 .noteCancel:hover {
-  background: var(--dsw-alias-interactive-bg-hover);
-  color: var(--dsw-alias-label-secondary);
+  background: var(--neo-alias-interactive-bg-hover);
+  color: var(--neo-alias-label-secondary);
 }
 
 .failure {
   padding-left: 4px;
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--neo-alias-label-tertiary);
   font-size: 13px;
   line-height: 28px;
 }

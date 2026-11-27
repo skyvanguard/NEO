@@ -1,7 +1,7 @@
 /**
  * Models section stylesheet contract, asserted against the CSS text on disk.
  *
- * The section paints in both themes, and a `--dsw-*` name the theme does not
+ * The section paints in both themes, and a `--neo-*` name the theme does not
  * declare fails silently: the browser takes the `var()` fallback, so the sheet
  * still renders and only the dark theme looks wrong. Checking the names against
  * the sheet that declares them is what turns that into a test failure.
@@ -30,12 +30,12 @@ function block(selector: string): string {
 
 describe('ModelsSection theme styles', () => {
   it('names only theme variables the token sheet defines', () => {
-    // A `--dsw-*` name the sheet never declares is not a near miss: it silently
+    // A `--neo-*` name the sheet never declares is not a near miss: it silently
     // resolves to whatever literal sits in its fallback slot, which is how this
     // section stayed light under the dark theme before. Undeclared names have
     // no fallback at all and inherit, so both spellings must fail here.
-    // Every theme-variable prefix the sheets actually use, not just `--dsw-`:
-    // a `--dsh-` name reads as a plausible sibling and would otherwise slip
+    // Every theme-variable prefix the sheets actually use, not just `--neo-`:
+    // a `--neo-` name reads as a plausible sibling and would otherwise slip
     // past this gate into a fallback literal.
     const named = [...css.matchAll(/var\((--(?:dsw|dsh|ds)-[a-z0-9-]+)/g)].map(match => match[1])
     const undeclared = [...new Set(named)].filter(name => !tokens.includes(`  ${String(name)}:`))
@@ -56,8 +56,8 @@ describe('ModelsSection theme styles', () => {
     // `bg-layer-3` and `bg-module-platform` both resolve to neutral-bluish-800
     // under the dark theme, so filling the row with either erases the nested
     // editor's boundary. The row is outlined; the fill is the editor's alone.
-    expect(block('.editor')).toContain('background: var(--dsw-alias-bg-module-platform)')
-    expect(block('.rowCard')).toContain('border: 1px solid var(--dsw-alias-border-l2)')
+    expect(block('.editor')).toContain('background: var(--neo-alias-bg-module-platform)')
+    expect(block('.rowCard')).toContain('border: 1px solid var(--neo-alias-border-l2)')
     expect(block('.rowCard')).not.toMatch(/\bbackground\s*:/)
   })
 
@@ -87,6 +87,6 @@ describe('ModelsSection theme styles', () => {
   it('never falls back to a literal colour', () => {
     // A token that resolves is never the problem; an undeclared one takes this
     // branch, and a literal here is a single colour for both themes.
-    expect(css).not.toMatch(/var\(--dsw-[a-z0-9-]+\s*,\s*(?:#|rgb|rgba|hsl|hsla)/)
+    expect(css).not.toMatch(/var\(--neo-[a-z0-9-]+\s*,\s*(?:#|rgb|rgba|hsl|hsla)/)
   })
 })

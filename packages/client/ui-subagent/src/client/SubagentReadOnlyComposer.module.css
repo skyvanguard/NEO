@@ -6,15 +6,15 @@
   margin: 0 24px 20px;
   min-height: 54px;
   padding: 10px 16px;
-  border: 1px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--neo-alias-border-l2);
   border-radius: 14px;
-  background: var(--dsw-alias-bg-layer-1);
-  color: var(--dsw-alias-label-tertiary);
+  background: var(--neo-alias-bg-layer-1);
+  color: var(--neo-alias-label-tertiary);
   font-size: 13px;
   line-height: 20px;
 }
 
 .frame strong {
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font-weight: 510;
 }

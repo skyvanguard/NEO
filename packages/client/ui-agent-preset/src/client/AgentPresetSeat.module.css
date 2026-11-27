@@ -11,7 +11,7 @@
   border: none;
   border-radius: 16px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
   font-size: 13px;
   line-height: 20px;
   font-weight: 500;
@@ -23,17 +23,17 @@
 
 .seat:not(:disabled):hover,
 .seat[aria-expanded='true'] {
-  background: var(--dsw-alias-interactive-bg-hover);
+  background: var(--neo-alias-interactive-bg-hover);
 }
 
 .seat:disabled {
   cursor: default;
-  color: var(--dsw-alias-label-quaternary);
+  color: var(--neo-alias-label-quaternary);
 }
 
 .seatIcon {
   flex: none;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 /* Introduce cue: the icon eases in on an overshoot-free expo curve (duration
@@ -93,7 +93,7 @@
 
 .chevron {
   flex: none;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
 }
 
 /* Menu rows carry the name over its description: the id alone never said what
@@ -108,12 +108,12 @@
 .itemName {
   font-size: 13px;
   line-height: 20px;
-  color: var(--dsw-alias-label-primary);
+  color: var(--neo-alias-label-primary);
 }
 
 .itemDesc {
   font-size: 12px;
   line-height: 16px;
-  color: var(--dsw-alias-label-caption);
+  color: var(--neo-alias-label-caption);
   white-space: normal;
 }

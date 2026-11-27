@@ -1,11 +1,11 @@
-// Button: token-styled button atom. Variants map to the --dsw-alias-button-*
+// Button: token-styled button atom. Variants map to the --neo-alias-button-*
 // fill families; no framework imports, all behavior via props.
 
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
 import css from './Button.module.css'
 
-/** Visual variant, each backed by its --dsw-alias-button-* token family. */
+/** Visual variant, each backed by its --neo-alias-button-* token family. */
 export type ButtonVariant = 'primary' | 'ghost' | 'outline' | 'toolbar'
 
 /**
