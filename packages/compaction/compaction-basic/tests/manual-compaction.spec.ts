@@ -10,6 +10,8 @@ import * as AgentLoopInvariant from '@neo/agent-loop/invariant'
 import * as CompactionInvariant from '@neo/compaction/invariant'
 import * as CompactionBasicInvariant from '@neo/compaction-basic/invariant'
 import { BasicCompactionEngine } from '@neo/compaction-basic'
+import type { BasicCompactionConfig } from '@neo/compaction-basic'
+import { selectCompactableRange } from '@neo/compaction-basic/src/region.ts'
 import { CompactionId, isCompactCheckpointSource, ManualCompactionError } from '@neo/compaction'
 import type { CompactionResult } from '@neo/compaction'
 import {
@@ -168,8 +170,8 @@ function deferred(): { promise: Promise<undefined>; resolve: () => void } {
   return { promise, resolve: () => { resolve(undefined) } }
 }
 
-/** A closed-tail session with compactable exchanges and no live agent. */
-function closedConversation(turns = 2, lastTurnNumber = turns): Session {
+/** A closed-tail session with compactable exchanges and no live agent; `routed: false` logs no request header. */
+function closedConversation(turns = 2, lastTurnNumber = turns, { routed = true }: { routed?: boolean } = {}): Session {
   const session = Session.create(SessionId(`closed-${turns}-${lastTurnNumber}`))
   for (let index = 1; index <= turns; index += 1) {
     const turn = index === turns ? lastTurnNumber : index
@@ -179,7 +181,7 @@ function closedConversation(turns = 2, lastTurnNumber = turns): Session {
       source: { kind: 'user' },
     }), { surfaceOp: 'append' })
     session.append('step/start', { turn, step: 1 })
-    if (index === 1) {
+    if (index === 1 && routed) {
       session.append('request/header', {
         header: { config: { provider: MODEL, model: MODEL } },
         reason: 'initial',
@@ -204,10 +206,11 @@ function fakeAgent(
   session: Session,
   reserve: () => (() => void) | undefined,
   maintenanceSignal = new AbortController().signal,
+  options: Agent['options'] = { provider: MODEL, model: MODEL },
 ): Agent {
   return {
     session,
-    options: { provider: MODEL, model: MODEL },
+    options,
     runMaintenance<T>(task: (signal: AbortSignal) => Promise<T>): Promise<T> {
       const release = reserve()
       if (release === undefined) throw new Error('agent already has active work')
@@ -217,7 +220,9 @@ function fakeAgent(
 }
 
 /** Service over a store-detached session for failure classification. */
-function detachedService(): { ctx: Context; compact: GatedCompactionEngine; flushes: () => number } {
+function detachedService(
+  config: BasicCompactionConfig = { auto: false },
+): { ctx: Context; compact: GatedCompactionEngine; flushes: () => number } {
   const ctx = new Context()
   void new LlmRuntime(ctx)
   void new SessionStore(ctx)
@@ -228,7 +233,7 @@ function detachedService(): { ctx: Context; compact: GatedCompactionEngine; flus
     flushes += 1
     return Promise.resolve(false)
   })
-  return { ctx, compact: new GatedCompactionEngine(ctx, { auto: false }), flushes: () => flushes }
+  return { ctx, compact: new GatedCompactionEngine(ctx, config), flushes: () => flushes }
 }
 
 function compactEvents(session: Session): Array<Session['events'][number]> {
@@ -881,5 +886,69 @@ describe('compactNow transaction and failure classification', () => {
     gate.resolve()
     compact.gate = undefined
     await expect(region).resolves.toMatchObject({ shadowedSeqs: nodes.slice(0, 2) })
+  })
+})
+
+describe('compactNow region budget', () => {
+  const CONTEXT_WINDOW = 40_000
+  const OVERHEAD = Math.ceil(CONTEXT_WINDOW * 0.1)
+
+  /** A closed history long enough that a budget can cut its compactable region roughly in half. */
+  function budgetFixture(session = closedConversation(8)): {
+    session: Session
+    maxTokens: number
+    bounded: { start: number; end: number }
+    unbounded: { start: number; end: number }
+  } {
+    const { ctx } = detachedService()
+    const priced = ctx.tokenMeter.measure(session)
+    const unbounded = selectCompactableRange(session, priced, 0)!
+    const regionTokens = priced.nodes
+      .filter(node => node.seq <= unbounded.end)
+      .reduce((sum, node) => sum + node.tokens, 0)
+    const maxTokens = CONTEXT_WINDOW - OVERHEAD - Math.floor(regionTokens / 2)
+    const bounded = selectCompactableRange(session, priced, 0, CONTEXT_WINDOW - maxTokens - OVERHEAD)!
+    expect(bounded.end).toBeLessThan(unbounded.end)
+    return { session, maxTokens, bounded, unbounded }
+  }
+
+  function seqsIn(session: Session, range: { start: number; end: number }): number[] {
+    return session.surface.nodes.filter(seq => seq >= range.start && seq <= range.end)
+  }
+
+  it('bounds a resumed session by the context window it logged, before any pressure pass fills the cache', async () => {
+    const { session, maxTokens, bounded } = budgetFixture()
+    session.append('request/context', { provider: MODEL, model: MODEL, contextWindow: CONTEXT_WINDOW })
+    const expected = seqsIn(session, bounded)
+    const { compact } = detachedService({ auto: false, maxTokens })
+
+    const result = await compact.compactNow(fakeAgent(session, () => () => undefined), SIGNAL)
+    expect(result?.shadowedSeqs).toEqual(expected)
+  })
+
+  it.each([
+    ['another provider', { provider: 'other-provider', model: MODEL, contextWindow: CONTEXT_WINDOW }],
+    ['another model', { provider: MODEL, model: 'other-model', contextWindow: CONTEXT_WINDOW }],
+    ['no window', { provider: MODEL, model: MODEL }],
+  ])('leaves the region unbounded when the logged context names %s', async (_case, context) => {
+    const { session, maxTokens, unbounded } = budgetFixture()
+    session.append('request/context', context)
+    const expected = seqsIn(session, unbounded)
+    const { compact } = detachedService({ auto: false, maxTokens })
+
+    const result = await compact.compactNow(fakeAgent(session, () => () => undefined), SIGNAL)
+    expect(result?.shadowedSeqs).toEqual(expected)
+  })
+
+  it('leaves the region unbounded when neither a routed header nor complete agent options name a target', async () => {
+    const { session, maxTokens, unbounded } = budgetFixture(closedConversation(8, 8, { routed: false }))
+    // The logged window would bound the region if the conversation had a target to match it to.
+    session.append('request/context', { provider: MODEL, model: MODEL, contextWindow: CONTEXT_WINDOW })
+    const expected = seqsIn(session, unbounded)
+    const { compact } = detachedService({ auto: false, maxTokens })
+    const agent = fakeAgent(session, () => () => undefined, undefined, { provider: MODEL })
+
+    const result = await compact.compactNow(agent, SIGNAL)
+    expect(result?.shadowedSeqs).toEqual(expected)
   })
 })
