@@ -117,9 +117,9 @@ it('assembles the shipped Web catalog, file-reference guidance, and confined acc
   })
   try {
     expect(scaffold.ctx.commands.list(commandHandle.agent)).toContainEqual({
-      name: 'feedback',
-      description: 'record feedback about this session',
-      input: { hint: '<text>' },
+      name: 'goal',
+      description: 'set or view the goal for a long-running task',
+      input: { hint: '[<objective>|clear|edit <objective>|pause|resume]' },
     })
   } finally {
     await commandHandle.dispose()

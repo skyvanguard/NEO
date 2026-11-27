@@ -1385,6 +1385,56 @@ export function runCoordinatorContract(name: string, makeFixture: () => Promise<
       }
     })
 
+    it('opens and continues a log containing a retired event type, still refusing unknown required types', async () => {
+      // A `/feedback` remark written before its producer was removed carries
+      // no ignorable marker; separate backend lifecycles force a cold read.
+      const fix = await makeFixture()
+      const id = SessionId('retired-feedback')
+      const lookalike = SessionId('retired-lookalike')
+      const seq = oneTurnLog().length
+      const retired = { type: 'feedback/record', seq, time: 99, data: { text: 'remark' } } as unknown as SessionEvent
+      const unknownEvent = { type: 'feedback/retracted', seq, time: 99, data: { text: 'remark' } } as unknown as SessionEvent
+      const first = await freshCtx(fix)
+      try {
+        await first.ctx.sessionPersistence.create(meta(id, WORK))
+        await first.ctx.sessionPersistence.append(id, [...oneTurnLog(), retired])
+        await first.ctx.sessionPersistence.create(meta(lookalike, WORK))
+        await first.ctx.sessionPersistence.append(lookalike, [...oneTurnLog(), unknownEvent])
+      } finally {
+        await first.fiber.dispose()
+      }
+
+      const second = await freshCtx(fix)
+      try {
+        await expect(second.ctx.sessionPersistence.load(lookalike))
+          .rejects.toThrow(/event type "feedback\/retracted".*not marked ignorable/)
+        expect((await second.ctx.sessionPersistence.inspect(id)).events[seq]).toMatchObject({ type: 'feedback/record' })
+        await expect(second.ctx.sessionPersistence.readFrom(id, seq))
+          .resolves.toMatchObject({ events: [{ type: 'feedback/record', data: { text: 'remark' } }] })
+        {
+          using preparation = await second.ctx.sessionPersistence.prepare(id)
+          expect(preparation.session.deriveMessages().map(message => message.role)).toEqual(['user', 'assistant'])
+        }
+
+        const loaded = await second.ctx.sessionPersistence.load(id)
+        const resumed = second.ctx.sessions.create(id, { seed: loaded.events, meta: { cwd: WORK } })
+        await second.ctx.sessions.flush(resumed) // let onCreated adopt the stored prefix
+        resumed.append('turn/start', { turn: 2 })
+        resumed.append('turn/end', { turn: 2, reason: { kind: 'completed' } })
+        await second.ctx.sessions.flush(resumed)
+
+        const reloaded = await second.ctx.sessionPersistence.readFrom(id, 0)
+        // 0-5 the first turn, 6 the retired remark, 7 end-seed, 8-9 the new turn.
+        expect(reloaded.events.map(event => event.type as string)).toEqual([
+          'turn/start', 'user/message', 'step/start', 'assistant/message', 'step/end', 'turn/end',
+          'feedback/record', 'session/end-seed', 'turn/start', 'turn/end',
+        ])
+      } finally {
+        await second.fiber.dispose()
+        await fix.cleanup()
+      }
+    })
+
     it('round-trips a header with parentSession (fork lineage)', async () => {
       const fix = await makeFixture()
       const { ctx, fiber } = await freshCtx(fix)

@@ -1,6 +1,6 @@
 {
   "name": "@neo/anonymous-user-id",
-  "description": "Shared anonymous user identity for NEO telemetry and feedback correlation",
+  "description": "Anonymous per-harness-home user identity for NEO provider requests",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"

@@ -89,7 +89,6 @@ async function runHeadlessPtySmoke(): Promise<string> {
         NEO_HOME: home,
         NEO_AGENTS_HOME: join(cwd, '.agents'),
         DEEPSEEK_API_KEY: 'keyless-shutdown-no-call',
-        NEO_TELEMETRY_DISABLED: '1',
         NEO_TEST_SHUTDOWN_ARM_FILE: join(cwd, 'shutdown-armed'),
       },
     })

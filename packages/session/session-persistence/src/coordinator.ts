@@ -33,6 +33,24 @@ export const DEFAULT_WRITE_BATCH_MAX_DELAY_MS = 200
 /** Largest write batching delay accepted by Node's timer implementation. */
 export const MAX_WRITE_BATCH_DELAY_MS = MAX_TIMER_DELAY_MS
 
+/**
+ * Event types whose producers were removed, or are scheduled for removal,
+ * from this harness. Logs written before the removal still contain them
+ * without the envelope's `ignorable` marker, so the load path tolerates them
+ * and, once the type leaves `SessionEventMap`, no fold, projection, or model
+ * history consumes them. Hand-maintained: add a type here no later than the
+ * change that removes its last producer (and with it, its `SessionEventMap`
+ * member and `KNOWN_SESSION_EVENT_TYPES` entry); never remove an entry,
+ * because old logs keep the type forever.
+ */
+const RETIRED_SESSION_EVENT_TYPES: ReadonlySet<string> = new Set([
+  // `/feedback` command remark (`@neo/command-feedback`, removed with session telemetry).
+  'feedback/record',
+  // DeepSeek-backed `web_search` request record (`@neo/web-search-deepseek`,
+  // being retired with the DeepSeek providers; still known while it ships).
+  'web/deepseek-search-llm-request',
+])
+
 /** Durable session contents failed validation after a successful backend read. */
 export class SessionPersistenceCorruptionError extends Error {
   /**
@@ -1084,7 +1102,8 @@ export class PersistenceCoordinator<TornMarker = unknown> {
 
   /**
    * Refuse a log containing an event type this build does not know, unless the
-   * writer marked the event ignorable: an unrecognized required event may
+   * writer marked the event ignorable or the type is retired
+   * ({@link RETIRED_SESSION_EVENT_TYPES}): an unrecognized required event may
    * change how the rest of the log must be interpreted, so silently skipping
    * it would reconstruct a wrong session (the envelope contract on
    * `SessionEvent.ignorable`). Runs on NORMALIZED events — after
@@ -1094,7 +1113,9 @@ export class PersistenceCoordinator<TornMarker = unknown> {
    */
   private assertEventsSupported(meta: SessionHeader, events: readonly SessionEvent[]): void {
     for (const event of events) {
-      if (KNOWN_SESSION_EVENT_TYPES.has(event.type) || event.ignorable === true) continue
+      if (KNOWN_SESSION_EVENT_TYPES.has(event.type)
+        || RETIRED_SESSION_EVENT_TYPES.has(event.type)
+        || event.ignorable === true) continue
       throw this.unsupported(meta, `session "${meta.id}" contains event type "${event.type}" (seq ${event.seq}) unknown to this harness and not marked ignorable; refusing to interpret the log — it was likely written by a newer harness`)
     }
   }

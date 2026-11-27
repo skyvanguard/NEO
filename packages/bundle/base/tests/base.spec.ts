@@ -32,14 +32,15 @@ describe('@neo/base bundle', () => {
     )
     expect(rows.length).toBeGreaterThan(50)
     expect(rows.some(row => row.id === 'agent-loop')).toBe(true)
-    // NEO: telemetry is removed. The row ships `disabled: true` with its mode
-    // hardcoded to the literal 'DISABLED' as defense-in-depth (no env-driven
-    // mode), so no session-log records can ever be exported.
-    expect(rows.find(row => row.id === 'session-telemetry-otel')?.config?.['mode']).toBe('DISABLED')
+    // NEO ships no session telemetry exporter and no `/feedback` command.
+    expect(rows.filter(row => row.id === 'session-telemetry-otel')).toHaveLength(0)
+    expect(rows.filter(row => row.id === 'command-feedback')).toHaveLength(0)
     expect(rows.filter(row => row.id === 'subagent-codex')).toHaveLength(0)
     expect(rows.filter(row => row.id === 'subagent-claude-code')).toHaveLength(0)
     expect(manifest.dependencies).not.toHaveProperty('@neo/subagent-codex')
     expect(manifest.dependencies).not.toHaveProperty('@neo/subagent-claude-code')
+    expect(manifest.dependencies).not.toHaveProperty('@neo/session-telemetry-otel')
+    expect(manifest.dependencies).not.toHaveProperty('@neo/command-feedback')
   })
 
   it('gates each shell stack by platform with a symmetric disabled expression', () => {

@@ -232,7 +232,6 @@ describe('headless stream-json snapshots', () => {
       tsconfigPath,
       env: {
         NEO_PERMISSION_MODE: 'danger-full-access',
-        NEO_TELEMETRY_DISABLED: '1',
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: prepareCliMockFixture,
@@ -265,7 +264,6 @@ describe('headless stream-json snapshots', () => {
       expectedExitCode: 1,
       env: {
         NEO_CLI_MOCK_FAILURE: '1',
-        NEO_TELEMETRY_DISABLED: '1',
         NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
       },
       prepare: prepareCliMockFixture,
