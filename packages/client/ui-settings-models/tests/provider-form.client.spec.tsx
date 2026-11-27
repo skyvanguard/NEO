@@ -48,10 +48,11 @@ function piAiNamespace(
   providers: Record<string, unknown>,
   userProviders: Record<string, unknown> = providers,
   baseProviders: Record<string, unknown> = {},
+  schema: Schema = PiAiConfig,
 ): SettingsNamespaceView {
   return {
     ns: 'llm-pi-ai',
-    schema: JSON.parse(JSON.stringify(PiAiConfig.toJSON())) as unknown,
+    schema: JSON.parse(JSON.stringify(schema.toJSON())) as unknown,
     // `value` is the effective section; `user` is only the layer this page
     // writes. They differ whenever a composition `base` supplies something.
     value: { providers },
@@ -71,6 +72,8 @@ function scriptedFace(options: {
   baseProviders?: Record<string, unknown>
   /** Routes the adapter reports as hand-declared; the rest come back as shipped. */
   declaredRoutes?: readonly string[]
+  /** Section schema, for a field whose default the adapter declares. */
+  schema?: Schema
   discover?: ReturnType<typeof vi.fn>
   mutate?: ReturnType<typeof vi.fn>
   set?: ReturnType<typeof vi.fn>
@@ -78,7 +81,9 @@ function scriptedFace(options: {
   const providers = options.providers ?? {
     openai: { apiKeyEnv: 'OPENAI_API_KEY', baseURL: 'https://proxy.example/v1' },
   }
-  const namespace = piAiNamespace(providers, options.userProviders ?? providers, options.baseProviders ?? {})
+  const namespace = piAiNamespace(
+    providers, options.userProviders ?? providers, options.baseProviders ?? {}, options.schema,
+  )
   const discover = options.discover ?? vi.fn(() => Promise.resolve(ok({ models: [] })))
   const mutate = options.mutate ?? vi.fn(() => Promise.resolve(ok(namespace)))
   const set = options.set ?? vi.fn(() => Promise.resolve(ok({})))
@@ -469,6 +474,72 @@ describe('endpoint interrogation', () => {
       baseURL: 'https://edited.example/v1',
       apiKey: 'typed-not-saved',
     })
+  })
+
+  it('shows and asks the composition-pinned endpoint once the stored override is cleared', async () => {
+    const discover = vi.fn(() => Promise.resolve(ok({ models: [] })))
+    await mountSection({
+      discover,
+      providers: { openai: { baseURL: 'https://mine.example/v1' } },
+      baseProviders: { openai: { baseURL: 'https://pinned.example/v1' } },
+    })
+    openEditor('openai')
+
+    const url = screen.getByLabelText<HTMLInputElement>(en.baseUrl)
+    expect(url.value).toBe('https://mine.example/v1')
+    fireEvent.change(url, { target: { value: '' } })
+    // Clearing drops the override: the route falls back to the pinned
+    // endpoint, not to the one just erased (still in the effective value).
+    expect(url.placeholder).toBe('https://pinned.example/v1')
+    fireEvent.click(screen.getByText(en.fetchModels))
+
+    await waitFor(() => { expect(discover).toHaveBeenCalled() })
+    expect(firstProbe(discover)).toEqual({
+      settingsNs: 'llm-pi-ai',
+      provider: 'openai',
+      baseURL: 'https://pinned.example/v1',
+    })
+  })
+
+  it('shows and asks the schema default endpoint once the stored override is cleared', async () => {
+    const discover = vi.fn(() => Promise.resolve(ok({ models: [] })))
+    await mountSection({
+      discover,
+      schema: Schema.object({
+        providers: Schema.dict(Schema.object({
+          baseURL: Schema.string().default('https://default.example/v1'),
+        })),
+      }),
+      providers: { openai: { baseURL: 'https://mine.example/v1' } },
+    })
+    openEditor('openai')
+
+    const url = screen.getByLabelText<HTMLInputElement>(en.baseUrl)
+    fireEvent.change(url, { target: { value: '' } })
+    expect(url.placeholder).toBe('https://default.example/v1')
+    fireEvent.click(screen.getByText(en.fetchModels))
+
+    await waitFor(() => { expect(discover).toHaveBeenCalled() })
+    expect(firstProbe(discover)).toEqual({
+      settingsNs: 'llm-pi-ai',
+      provider: 'openai',
+      baseURL: 'https://default.example/v1',
+    })
+  })
+
+  it('neither shows nor asks a just-cleared endpoint when nothing lies beneath it', async () => {
+    const discover = vi.fn(() => Promise.resolve(ok({ models: [] })))
+    await mountSection({ discover, providers: { openai: { baseURL: 'https://mine.example/v1' } } })
+    openEditor('openai')
+
+    const url = screen.getByLabelText<HTMLInputElement>(en.baseUrl)
+    fireEvent.change(url, { target: { value: '' } })
+    expect(url.placeholder).toBe(en.baseUrlDefault)
+    fireEvent.click(screen.getByText(en.fetchModels))
+
+    // The route is still named, so the adapter answers for its own default.
+    await waitFor(() => { expect(discover).toHaveBeenCalled() })
+    expect(firstProbe(discover)).toEqual({ settingsNs: 'llm-pi-ai', provider: 'openai' })
   })
 
   it('carries the protocol the profile already names', async () => {

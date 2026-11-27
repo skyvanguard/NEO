@@ -175,6 +175,19 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
     const value = getPath(source, [key])
     return typeof value === 'string' && value.trim().length > 0 ? value : undefined
   }
+  /**
+   * A string field beneath the user layer: what the composition entry pinned,
+   * or else the schema default. That is what the route resolves to once this
+   * card drops the field. The effective `fallback` cannot answer it — it still
+   * carries the stored override until the unset is applied, so a just-cleared
+   * endpoint would stay the placeholder and the probe target.
+   */
+  const inheritedString = (key: string): string | undefined => {
+    const pinned = stringAt(getPath(namespace.base, settingsPath), key)
+    if (pinned !== undefined) return pinned
+    const schemaDefault: unknown = nodeAtPath(root, [...settingsPath, key])?.meta.default
+    return typeof schemaDefault === 'string' && schemaDefault.trim().length > 0 ? schemaDefault : undefined
+  }
   const setField = (key: string, next: string | undefined): void => {
     // A value of nothing but whitespace is cleared, not stored: `stringAt`
     // already reports it as absent, so the field would otherwise render empty
@@ -196,8 +209,9 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
   const shownKeyFailure = keyFailure
   // What the form currently shows, which is what an interrogation must ask:
   // an edited-but-unsaved endpoint, and a key typed but not yet stored.
-  const probeApi = stringAt(draft, 'api') ?? stringAt(fallback, 'api')
-  const probeBaseURL = stringAt(draft, 'baseURL') ?? stringAt(fallback, 'baseURL')
+  // The draft is the user layer, so a field it lacks resolves from beneath it.
+  const probeApi = stringAt(draft, 'api') ?? inheritedString('api')
+  const probeBaseURL = stringAt(draft, 'baseURL') ?? inheritedString('baseURL')
   const probe = {
     settingsNs: namespace.ns,
     // Naming the route lets an adapter that already describes it answer from
@@ -380,7 +394,7 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
                 className={styles['input']}
                 type="text"
                 value={stringAt(draft, 'baseURL') ?? ''}
-                placeholder={stringAt(fallback, 'baseURL') ?? t('baseUrlDefault')}
+                placeholder={inheritedString('baseURL') ?? t('baseUrlDefault')}
                 aria-label={t('baseUrl')}
                 disabled={disabled}
                 onChange={(event) => {
