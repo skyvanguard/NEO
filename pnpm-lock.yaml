@@ -3402,9 +3402,9 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../../llm/llm
-      '@neo/llm-deepseek':
+      '@neo/llm-pi-ai':
         specifier: workspace:^
-        version: link:../../llm/llm-deepseek
+        version: link:../../llm/llm-pi-ai
       '@neo/session':
         specifier: workspace:^
         version: link:../../core/session
@@ -4346,9 +4346,9 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../../llm/llm
-      '@neo/llm-deepseek':
+      '@neo/llm-pi-ai':
         specifier: workspace:^
-        version: link:../../llm/llm-deepseek
+        version: link:../../llm/llm-pi-ai
       '@neo/sandbox':
         specifier: workspace:^
         version: link:../../sandbox/sandbox
@@ -6363,9 +6363,12 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../../llm/llm
-      '@neo/llm-deepseek':
+      '@neo/llm-mock-server':
         specifier: workspace:^
-        version: link:../../llm/llm-deepseek
+        version: link:../../test-support/llm-mock-server
+      '@neo/llm-pi-ai':
+        specifier: workspace:^
+        version: link:../../llm/llm-pi-ai
       '@neo/session':
         specifier: workspace:^
         version: link:../../core/session
@@ -7463,9 +7466,9 @@ importers:
       '@neo/llm':
         specifier: workspace:^
         version: link:../../llm/llm
-      '@neo/llm-deepseek':
+      '@neo/llm-pi-ai':
         specifier: workspace:^
-        version: link:../../llm/llm-deepseek
+        version: link:../../llm/llm-pi-ai
       '@neo/session':
         specifier: workspace:^
         version: link:../../core/session

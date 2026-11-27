@@ -49,7 +49,7 @@
     "@neo/subprocess-local": "workspace:^",
     "@neo/invariants": "workspace:^",
     "@neo/llm": "workspace:^",
-    "@neo/llm-deepseek": "workspace:^",
+    "@neo/llm-pi-ai": "workspace:^",
     "@neo/session": "workspace:^",
     "@neo/subagent": "workspace:^",
     "@neo/subagent-in-process-driver": "workspace:^",

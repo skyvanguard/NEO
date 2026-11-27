@@ -20,7 +20,8 @@ import {
  * Source-path Loader smoke through the package's own bin, covering the
  * automation server's initialize and fresh-session path across the
  * `unwrapExports` shape implicated by postmortem 0001. Session creation reaches
- * the factory but not the model, so a dummy key is sufficient.
+ * the factory but not the model, so the route needs neither a key nor a
+ * reachable endpoint.
  */
 
 const binScript = fileURLToPath(new URL('../src/bin.ts', import.meta.url))
@@ -31,8 +32,16 @@ const repoTsconfig = fileURLToPath(new URL('../../../../tsconfig.json', import.m
 // A minimal opt-in leaf that loads this app + the two backends and the optional
 // session-query consumer/policies, inlined so the package test owns its fixture.
 const CORDIS_YML = `
-- id: llm-deepseek
-  name: '@neo/llm-deepseek'
+- id: llm-pi-ai
+  name: '@neo/llm-pi-ai'
+  config:
+    providers:
+      deepseek-official:
+        api: openai-completions
+        baseURL: http://127.0.0.1:9/v1
+        apiKeyEnv: LLM_API_KEY
+        models:
+          - id: deepseek-v4-flash
 - id: subprocess
   name: '@neo/subprocess-local'
 - id: bash
@@ -87,8 +96,6 @@ async function boot(): Promise<Spawned & { cwd: string }> {
       env: {
         ...process.env,
         TSX_TSCONFIG_PATH: repoTsconfig,
-        // Key-present check only; no prompt is sent, so the model is never called.
-        DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY ?? 'keyless-acp-agent-smoke',
         NEO_HOME: join(cwd, '.neo'),
         NEO_AGENTS_HOME: join(cwd, '.agents'),
       },

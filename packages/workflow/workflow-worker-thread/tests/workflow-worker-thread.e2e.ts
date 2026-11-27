@@ -7,18 +7,18 @@ import ToolRuntime from '@neo/tools'
 import AgentRegistry from '@neo/agent'
 
 import AgentLoop from '@neo/agent-loop'
-import * as LlmDeepSeek from '@neo/llm-deepseek'
+import * as LlmPiAi from '@neo/llm-pi-ai'
 import SubagentRuntime from '@neo/subagent'
 import * as Spawn from '@neo/subagent-spawn-in-process'
 import WorkerThreadWorkflowEngine from '../src/index.ts'
 
 /**
  * With-key e2e: a REAL script in a REAL worker thread
- * drives REAL spawn children against the live DeepSeek API — one plain child
- * and one schema'd child through the real structured-output runtime — and
- * the run's value, events, and child sessions are asserted from the outside
- * (never the script's self-report alone). Key-gated (self-skips without
- * DEEPSEEK_API_KEY).
+ * drives REAL spawn children against a live OpenAI-compatible endpoint
+ * (`LLM_BASE_URL`, default a local llama-server) — one plain child and one
+ * schema'd child through the real structured-output runtime — and the run's
+ * value, events, and child sessions are asserted from the outside (never the
+ * script's self-report alone). Key-gated (self-skips without LLM_API_KEY).
  */
 
 let ctx: Context | undefined
@@ -36,7 +36,16 @@ async function harness(): Promise<Context> {
   await built.plugin(ToolRuntime)
   await built.plugin(AgentRegistry)
   await built.plugin(AgentLoop, { agents: [] })
-  await built.plugin(LlmDeepSeek)
+  await built.plugin(LlmPiAi, {
+    providers: {
+      'deepseek-official': {
+        api: 'openai-completions',
+        baseURL: process.env.LLM_BASE_URL ?? 'http://127.0.0.1:8080/v1',
+        apiKeyEnv: 'LLM_API_KEY',
+        models: [{ id: 'deepseek-v4-flash' }],
+      },
+    },
+  })
   await built.plugin(SubagentRuntime)
   await built.plugin(Spawn, { providerName: 'spawn' })
   await built.plugin(WorkerThreadWorkflowEngine, { provider: 'spawn' })
@@ -59,7 +68,7 @@ const judged = await agent(
 )
 return { prose, containsFour: judged === null ? null : judged.containsFour }`
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('worker workflow engine with-key e2e', () => {
+describe.skipIf(!process.env.LLM_API_KEY)('worker workflow engine with-key e2e', () => {
   it('runs a two-phase script in a worker thread over real children, one through the structured runtime', async () => {
     ctx = await harness()
     const parentHandle = await ctx.agents.create({
