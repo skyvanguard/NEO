@@ -260,6 +260,13 @@ describe('local attachment store — arbitrary files', () => {
     expect(ref).not.toHaveProperty('name')
   })
 
+  it('strips bidi override characters from a name so the card cannot spoof an extension', async () => {
+    const storageRoot = await root()
+    // U+202E (RLO) would otherwise render `invoice<RLO>fdp.exe` as `invoiceexe.pdf`.
+    const ref = await saveFileFile(storageRoot, { data: FILE_BYTES, name: 'invoice‮fdp.exe' }, FILE_LIMITS)
+    expect(ref.name).toBe('invoicefdp.exe')
+  })
+
   it('deduplicates a file and an image that share identical bytes to one object', async () => {
     const storageRoot = await root()
     const image = await saveImageFile(storageRoot, { data: PNG, mediaType: 'image/png' }, LIMITS)

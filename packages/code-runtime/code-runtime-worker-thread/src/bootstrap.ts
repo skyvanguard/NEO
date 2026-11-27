@@ -299,6 +299,37 @@ export function wireReplies(port: BootstrapPort, pending: Map<number, PendingCal
 }
 
 /**
+ * Best-effort hint for a rejected binding call. The single most common lossy
+ * argument a model emits is an optional field left as `undefined`, e.g.
+ * `tools.attach_file({ file_path, name: opts.name })` where `opts.name` is
+ * absent. JSON drops such a property, but this snapshot rejects the whole call,
+ * which otherwise surfaces as a cryptic failure that also kills the surrounding
+ * program. Name the offending keys so the model omits them instead of guessing.
+ * Returns '' for every other shape — genuinely exotic values keep the bare
+ * message — and never throws (a throwing getter is just skipped).
+ * @param args - the model-supplied arguments the snapshot rejected.
+ * @returns a leading-space suffix naming the `undefined` keys, or ''.
+ */
+function undefinedArgsHint(args: unknown): string {
+  try {
+    if (typeof args !== 'object' || args === null || Array.isArray(args)) return ''
+    const undefinedKeys: string[] = []
+    for (const key of Object.keys(args)) {
+      try {
+        if ((args as Record<string, unknown>)[key] === undefined) undefinedKeys.push(key)
+      } catch {
+        // A throwing getter is a different, equally-rejected problem; skip it.
+      }
+    }
+    return undefinedKeys.length === 0
+      ? ''
+      : ` (an optional field was passed as undefined — omit it instead of passing undefined: ${undefinedKeys.join(', ')})`
+  } catch {
+    return ''
+  }
+}
+
+/**
  * Build the binding namespace objects the program sees: one null-prototype global per
  * namespace, each declared name an own enumerable async function that bridges over the port
  * (`__proto__`/`constructor`/`toString` are ordinary keys, never prototype collisions).
@@ -333,7 +364,7 @@ export function makeNamespaces(
             detached = undefined
           }
           if (detached === undefined) {
-            return Promise.reject(bindingFailure(errorClass, name, 'binding arguments must be lossless JSON'))
+            return Promise.reject(bindingFailure(errorClass, name, `binding arguments must be lossless JSON${undefinedArgsHint(args)}`))
           }
           return new Promise((resolve, reject) => {
             const id = nextId.value++
