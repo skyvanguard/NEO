@@ -107,10 +107,9 @@ function registrationFacts(profiles: ReadonlyMap<string, ResolvedPiAiProviderPro
 /**
  * The configurable-provider directory: every installed catalog route this
  * adapter can authenticate and NEO offers, plus every route the current
- * profiles declare. A
- * hand-declared route has no catalog entry, so without this union it would
- * have no settings address and configuration surfaces could neither show nor
- * edit it.
+ * profiles declare. A hand-declared route has no catalog entry, so without
+ * this union it would have no settings address and configuration surfaces
+ * could neither show nor edit it.
  *
  * The profile half is unconditional, which is what keeps a route already
  * stored against a withheld provider editable and deletable rather than
