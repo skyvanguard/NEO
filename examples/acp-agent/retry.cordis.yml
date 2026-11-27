@@ -4,7 +4,7 @@
 # tool or prompt composition, so its scenarios share the default header class.
 # Config patches replace whole plugin configs: the adapter patch restates its
 # route around the route-owned `retryPolicy`, while the app patch re-pins the
-# recorded flash model and restates its base fields.
+# recorded default model and restates its base fields.
 - id: base
   name: '@neo/cordis-plugin-include'
   config:

@@ -24,11 +24,11 @@ const sid = (k: string): SessionId => k as SessionId
 
 const GROUPS = [{
   id: 'neo-default-route',
-  name: 'DeepSeek',
+  name: 'NEO Default',
   models: [
     {
       id: 'neo-default-model',
-      name: 'DeepSeek-V4-Flash',
+      name: 'NEO Default Model',
       reasoning: {
         efforts: [
           { id: 'off', name: 'Off' },
@@ -40,7 +40,7 @@ const GROUPS = [{
     },
     {
       id: 'neo-large-model',
-      name: 'DeepSeek-V4-Pro',
+      name: 'NEO Large Model',
       reasoning: {
         efforts: [
           { id: 'off', name: 'Off' },
@@ -150,8 +150,8 @@ describe('ui-model-selection dual entry', () => {
     const b = await bench()
     b.mint('s1')
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    expect(options.map((o: SelectOption) => o.label)).toEqual(['DeepSeek-V4-Flash', 'DeepSeek-V4-Pro'])
-    expect(options[0]).toMatchObject({ active: true, detail: 'DeepSeek' })
+    expect(options.map((o: SelectOption) => o.label)).toEqual(['NEO Default Model', 'NEO Large Model'])
+    expect(options[0]).toMatchObject({ active: true, detail: 'NEO Default' })
     expect(options[1]?.active).toBeUndefined()
   })
 
@@ -177,7 +177,7 @@ describe('ui-model-selection dual entry', () => {
     })
     // The POPUP's next options pass reflects it without a seat-side reload.
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    expect(options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')).toMatchObject({ active: true })
+    expect(options.find((o: SelectOption) => o.label === 'NEO Large Model')).toMatchObject({ active: true })
   })
 
   it('a popup selection lands on the seat store — the reverse direction of the same state', async () => {
@@ -185,7 +185,7 @@ describe('ui-model-selection dual entry', () => {
     b.mint('s1')
     const seatFace = b.seat().inject!(sid('s1'))
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    const pro = options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')!
+    const pro = options.find((o: SelectOption) => o.label === 'NEO Large Model')!
     await b.contribution().ui.onSelect(pro, projection('s1'))
     expect(seatFace.directory.getSnapshot().current).toEqual({
       provider: 'neo-default-route',

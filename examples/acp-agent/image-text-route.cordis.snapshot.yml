@@ -1,5 +1,5 @@
 # Keyless replay for the read-image refusal scenario: identical to the
-# image.cordis.snapshot.yml overlay except the replay catalog leaves flash
+# image.cordis.snapshot.yml overlay except the replay catalog leaves the default model
 # text-only, so the strict read_image gate refuses and no image ever enters
 # the durable log.
 - id: base
@@ -31,7 +31,7 @@
             config:
               providers:
                 - id: neo-default-route
-                  name: DeepSeek
+                  name: NEO Default
                   models:
                     - id: neo-default-model
                       inputModalities: [text]

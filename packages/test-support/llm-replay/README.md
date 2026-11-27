@@ -38,7 +38,7 @@ Replay keys every call by its calling session id (`GenerateOptions.sessionId`, s
   config:
     providers:
       - id: neo-default-route
-        name: DeepSeek
+        name: NEO Default
         retryPolicy:
           mode: normal
           backoff:

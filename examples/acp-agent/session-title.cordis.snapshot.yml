@@ -29,7 +29,7 @@
               overrideFile: ./.missing-main-replay-override.json
               providers:
                 - id: neo-default-route
-                  name: DeepSeek
+                  name: NEO Default
                   models:
                     - id: neo-default-model
           - id: llm-replay-title

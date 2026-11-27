@@ -35,8 +35,8 @@ function state(overrides: Partial<ModelDirectoryState> = {}): ModelDirectoryStat
     routable: true,
     groups: [{
       id: 'neo-default-route',
-      name: 'DeepSeek',
-      models: [{ id: 'neo-default-model', name: 'DeepSeek-V4-Flash', reasoning }],
+      name: 'NEO Default',
+      models: [{ id: 'neo-default-model', name: 'NEO Default Model', reasoning }],
     }],
     failures: [],
     status: 'ready',
@@ -64,7 +64,7 @@ describe('ModelSelect reasoning effort', () => {
     />)
 
     const trigger = screen.getByRole('button', {
-      name: '选择模型，当前 DeepSeek-V4-Flash，推理等级 High',
+      name: '选择模型，当前 NEO Default Model，推理等级 High',
     })
     fireEvent.click(trigger)
     fireEvent.click(screen.getByRole('menuitem', { name: /推理等级/ }))
@@ -78,7 +78,7 @@ describe('ModelSelect reasoning effort', () => {
         model: 'neo-default-model',
         reasoningEffort: 'max',
       })
-      expect(trigger.getAttribute('aria-label')).toBe('选择模型，当前 DeepSeek-V4-Flash，推理等级 Max')
+      expect(trigger.getAttribute('aria-label')).toBe('选择模型，当前 NEO Default Model，推理等级 Max')
     })
   })
 
@@ -132,16 +132,16 @@ describe('ModelSelect reasoning effort', () => {
     expect(screen.queryByRole('menuitem', { name: /推理等级/ })).toBeNull()
     fireEvent.click(screen.getByRole('menuitem', { name: /模型/ }))
     expect(screen.queryByText('removed-model')).toBeNull()
-    expect(screen.getByRole('menuitemradio', { name: 'DeepSeek-V4-Flash' })).toBeTruthy()
+    expect(screen.getByRole('menuitemradio', { name: 'NEO Default Model' })).toBeTruthy()
   })
 
   it('announces a rejected selection as a transient toast and keeps the in-menu strip for loads', async () => {
     const groups = [{
       id: 'neo-default-route',
-      name: 'DeepSeek',
+      name: 'NEO Default',
       models: [
-        { id: 'neo-default-model', name: 'DeepSeek-V4-Flash', reasoning },
-        { id: 'neo-large-model', name: 'DeepSeek-V4-Pro' },
+        { id: 'neo-default-model', name: 'NEO Default Model', reasoning },
+        { id: 'neo-large-model', name: 'NEO Large Model' },
       ],
     }]
     const directory = createSnapshotStore<ModelDirectoryState>(state({ groups }))
@@ -160,7 +160,7 @@ describe('ModelSelect reasoning effort', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /选择模型|当前/ }))
     fireEvent.click(screen.getByRole('menuitem', { name: /模型/ }))
-    fireEvent.click(screen.getByRole('menuitemradio', { name: /DeepSeek-V4-Pro/ }))
+    fireEvent.click(screen.getByRole('menuitemradio', { name: /NEO Large Model/ }))
     const toast = await screen.findByRole('alert')
     expect(toast.textContent).toContain('模型操作失败：model-unavailable: session already contains images')
     // The selection failure does not render the in-menu load strip (no Retry).

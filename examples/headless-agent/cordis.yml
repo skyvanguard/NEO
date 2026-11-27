@@ -49,7 +49,7 @@
     agents:
       - id: main
         provider: neo-default-route
-        # Stays on flash: the goal/ralph replay corpora were recorded on it, and
+        # Stays on the default model: the goal/ralph replay corpora were recorded on it, and
         # their nested-include overlays cannot re-pin the app config (a config
         # patch cannot target an entry behind a nested include).
         model: neo-default-model

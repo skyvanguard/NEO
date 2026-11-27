@@ -189,7 +189,7 @@ const SCENARIOS: Scenario[] = [
     posixOnly: true,
   },
   // Authored keyless replays through the assembled app: the replay catalog
-  // declares flash image-capable (success) or text-only (refusal), and the
+  // declares the default model image-capable (success) or text-only (refusal), and the
   // real read_image tool executes against the workspace fixture and the real
   // attachment store. Both boot the same composed header (the tool registers
   // with the attachment store, independent of route), so they share one class.

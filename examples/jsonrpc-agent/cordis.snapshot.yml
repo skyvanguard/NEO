@@ -23,6 +23,6 @@
             config:
               providers:
                 - id: neo-default-route
-                  name: DeepSeek
+                  name: NEO Default
                   models:
                     - id: neo-default-model

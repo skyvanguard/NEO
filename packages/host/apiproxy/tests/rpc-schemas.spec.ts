@@ -209,10 +209,10 @@ describe('sessions domain schemas', () => {
       routable: true,
       groups: [{
         id: 'neo-default-route',
-        name: 'DeepSeek',
+        name: 'NEO Default',
         models: [{
           id: 'neo-default-model',
-          name: 'DeepSeek V4 Flash',
+          name: 'NEO Default Model',
           description: 'fast',
           reasoning: {
             efforts: [
@@ -249,7 +249,7 @@ describe('sessions domain schemas', () => {
       current: { provider: 'neo-default-route', model: 'm' },
       groups: [{
         id: 'neo-default-route',
-        name: 'DeepSeek',
+        name: 'NEO Default',
         models: [{ id: 'm', name: 'M', reasoning: { efforts: [] } }],
       }],
       failures: [],

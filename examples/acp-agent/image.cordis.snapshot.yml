@@ -1,8 +1,8 @@
 # Keyless replay for the read-image success scenario. Include patches cannot
 # target entries behind a nested include, so this restates the replay overlay
 # directly over the base cordis.yml (the fs.cordis.snapshot.yml pattern) and
-# re-pins the recorded flash model. The replay catalog declares image input on
-# flash, so the strict read_image gate accepts the route and the tool result
+# re-pins the recorded default model. The replay catalog declares image input on
+# that model, so the strict read_image gate accepts the route and the tool result
 # carries the durable image block; the live text-only route cannot record this.
 - id: base
   name: '@neo/cordis-plugin-include'
@@ -33,7 +33,7 @@
             config:
               providers:
                 - id: neo-default-route
-                  name: DeepSeek
+                  name: NEO Default
                   models:
                     - id: neo-default-model
                       inputModalities: [text, image]

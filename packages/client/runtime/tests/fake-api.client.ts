@@ -90,8 +90,8 @@ export class FakeApiClient implements IApiClient {
     routable: true,
     groups: [{
       id: 'neo-default-route',
-      name: 'DeepSeek',
-      models: [{ id: 'neo-default-model', name: 'DeepSeek V4 Flash' }],
+      name: 'NEO Default',
+      models: [{ id: 'neo-default-model', name: 'NEO Default Model' }],
     }],
     failures: [],
   }))

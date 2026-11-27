@@ -281,7 +281,7 @@ const WEB_FETCH_RESULT: Omit<Extract<ToolResultView, { card: 'web'; kind: 'fetch
   truncated: false,
 }
 
-const DEEPSEEK_REASONING = {
+const DEFAULT_ROUTE_REASONING = {
   efforts: [
     { id: 'off', name: 'Off' },
     { id: 'high', name: 'High' },
@@ -305,19 +305,19 @@ function fixtureModelGroups(): ModelProviderGroup[] {
   return [
     {
       id: 'neo-default-route',
-      name: 'DeepSeek',
+      name: 'NEO Default',
       models: [
         {
           id: 'neo-default-model',
-          name: 'DeepSeek-V4-Flash',
+          name: 'NEO Default Model',
           description: '快速响应',
-          reasoning: DEEPSEEK_REASONING,
+          reasoning: DEFAULT_ROUTE_REASONING,
         },
         {
           id: 'neo-large-model',
-          name: 'DeepSeek-V4-Pro',
+          name: 'NEO Large Model',
           description: '复杂任务',
-          reasoning: DEEPSEEK_REASONING,
+          reasoning: DEFAULT_ROUTE_REASONING,
         },
       ],
     },
@@ -2986,7 +2986,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
     llm: {
       providers: request => ok(request, {
         providers: [
-          { provider: 'neo-default-route', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+          { provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
           { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true, declared: false },
           { provider: 'anthropic', displayName: 'anthropic', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'anthropic'], active: false, declared: false },
           // One hand-declared route, so a surface reading this fixture meets

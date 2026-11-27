@@ -785,7 +785,7 @@ describe('config unary surface', () => {
       settingsPath: ['providers', 'openai'],
       active: false,
     }
-    const group = { id: 'neo-default-route', name: 'DeepSeek', models: [{ id: 'neo-default-model', name: 'Flash' }] }
+    const group = { id: 'neo-default-route', name: 'NEO Default', models: [{ id: 'neo-default-model', name: 'NEO Default Model' }] }
     const api = scriptedApi({
       settings: {
         describe: record('settings.describe', r => ok(r, { writable: true, hasDocument: false, namespaces: [view] })),

@@ -87,7 +87,7 @@ async function harness(logged?: {
   await ctx.plugin(LlmRuntime)
   await ctx.plugin(UserQuestionService)
   await ctx.plugin(AgentRegistry)
-  ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('DeepSeek', [
+  ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('NEO Default', [
     { provider: 'neo-default-route', id: 'deepseek-chat', name: 'DeepSeek Chat' },
     { provider: 'neo-default-route', id: 'deepseek-reasoner', name: 'DeepSeek Reasoner', description: 'Reasoning model' },
   ], REASONING))
@@ -317,7 +317,7 @@ describe('Web session model selection', () => {
     })
     expect(catalog.groups).toEqual([{
       id: 'neo-default-route',
-      name: 'DeepSeek',
+      name: 'NEO Default',
       models: [
         { id: 'deepseek-chat', name: 'DeepSeek Chat', reasoning: REASONING },
         {

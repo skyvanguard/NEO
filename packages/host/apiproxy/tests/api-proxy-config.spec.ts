@@ -187,7 +187,7 @@ async function harness(options?: {
   // onboarding allowlists are the proxy's complete settings surface.
   if (options?.configurableProviders !== false) {
     ctx.llm.registerConfigurableProviders([
-      { provider: 'neo-default-route', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-deepseek', settingsPath: [] },
     ])
   }
   // Host-stream opener reads the committed-workspace baseline; the stub
@@ -614,10 +614,10 @@ describe('llm domain', () => {
   it('merges the configurable directory with live routes and appends undeclared ones', async () => {
     const ctx = await harness({ configurableProviders: false })
     ctx.llm.registerConfigurableProviders([
-      { provider: 'neo-default-route', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-deepseek', settingsPath: [] },
       { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'] },
     ])
-    ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('DeepSeek', ['neo-default-model']))
+    ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('NEO Default', ['neo-default-model']))
     ctx.llm.registerAdapter(['undeclared'], new CatalogAdapter('Undeclared', ['u-1']))
     // Only one namespace can answer an interrogation, so the flag follows the
     // entry's namespace rather than being assumed for every row.
@@ -625,7 +625,7 @@ describe('llm domain', () => {
     const api = createApiProxy(ctx, DEFAULTS)
     const value = expectOk(await api.llm.providers(request({})))
     expect(value.providers).toEqual([
-      { provider: 'neo-default-route', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+      { provider: 'neo-default-route', displayName: 'NEO Default', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
       { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: false },
       // An undeclared live route has no settings address, so nothing can be
       // interrogated on its behalf either.
@@ -635,13 +635,13 @@ describe('llm domain', () => {
 
   it('serves the host-scoped catalog with per-provider failures contained', async () => {
     const ctx = await harness()
-    ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('DeepSeek', ['neo-default-model', 'neo-large-model']))
+    ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('NEO Default', ['neo-default-model', 'neo-large-model']))
     ctx.llm.registerAdapter(['broken'], new BrokenCatalogAdapter('Broken', []))
     const api = createApiProxy(ctx, DEFAULTS)
     const value = expectOk(await api.llm.models(request({})))
     expect(value.groups).toEqual([{
       id: 'neo-default-route',
-      name: 'DeepSeek',
+      name: 'NEO Default',
       models: [
         { id: 'neo-default-model', name: 'neo-default-model' },
         { id: 'neo-large-model', name: 'neo-large-model' },
@@ -654,7 +654,7 @@ describe('llm domain', () => {
     const ctx = await harness()
     const api = createApiProxy(ctx, DEFAULTS)
     const frames = await collectHost(api, ['host/remote-event'], 2, async () => {
-      const dispose = ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('DeepSeek', []))
+      const dispose = ctx.llm.registerAdapter(['neo-default-route'], new CatalogAdapter('NEO Default', []))
       dispose()
       return Promise.resolve()
     })

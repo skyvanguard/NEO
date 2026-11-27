@@ -2,7 +2,7 @@
 # adapter, and inserts `llm-replay` to serve recorded JSONL without a key
 # or network; every other app entry remains shared. It also restates the acp-agent
 # config to re-pin `neo-default-model`: `cordis.yml` ships `neo-large-model`, but the
-# recorded corpus (request headers, provenance, system prompt) was captured on flash,
+# recorded corpus (request headers, provenance, system prompt) was captured on the default model,
 # so replay holds the recorded model to stay reproducible without a re-record. A config
 # patch replaces the whole app config, so the base fields are restated verbatim.
 # With `NEO_SNAPSHOT=replay`, the app bin reads `NEO_SNAPSHOT_FILE` and optional
@@ -51,7 +51,7 @@
             config:
               providers:
                 - id: neo-default-route
-                  name: DeepSeek
+                  name: NEO Default
                   models:
                     - id: neo-default-model
                     - id: neo-large-model
