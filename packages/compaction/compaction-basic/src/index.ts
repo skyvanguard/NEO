@@ -374,7 +374,7 @@ export class BasicCompactionEngine extends CompactionEngine {
         this.regionBudget(agent, policy.maxTokens),
       )
       if (range === null) return null
-      return this.compactRegion(range.start, range.end, agent, signal)
+      return this.compactAutomaticRegion(range.start, range.end, agent, signal)
     }
 
     const context = (await this.ctx.llm.resolveModelInfo(target.provider, target.model, signal)).context
@@ -419,7 +419,7 @@ export class BasicCompactionEngine extends CompactionEngine {
         /* v8 ignore next -- paired with the defensive post-success branch above. */
         break
       }
-      result = await this.compactRegion(range.start, range.end, agent, signal)
+      result = await this.compactAutomaticRegion(range.start, range.end, agent, signal)
       measurement = meter.measure(agent.session)
       if (measurement.totalTokens < spec.thresholdTokens) return result
     }
@@ -431,8 +431,35 @@ export class BasicCompactionEngine extends CompactionEngine {
   }
 
   /**
-   * Compact one inclusive positional range from the agent-owned surface using
-   * the effective token meter for all retention and shrink pricing.
+   * Compact an automatically selected head span. A summary request rejected
+   * for exceeding the context window retries over a smaller balanced prefix,
+   * because the token meter's estimate can undercount what the provider bills.
+   * @param start - inclusive first surface-node seq.
+   * @param end - inclusive last surface-node seq of the selected span.
+   * @param agent - owner of the target session, used by the summarizer.
+   * @param signal - live turn cancellation signal forwarded to summarization.
+   * @returns the successful durable compaction result over the summarized span.
+   */
+  private compactAutomaticRegion(
+    start: number,
+    end: number,
+    agent: Agent,
+    signal: AbortSignal,
+  ): Promise<CompactionResult> {
+    return compactSurfaceRegion(
+      this.regionDependencies(),
+      agent.session,
+      start,
+      end,
+      agent,
+      { owner: 'current-turn', stability: 'whole-surface', allowSmallerPrefix: true },
+      signal,
+    )
+  }
+
+  /**
+   * Compact exactly one inclusive positional range from the agent-owned surface
+   * using the effective token meter for all retention and shrink pricing.
    * @param start - inclusive first surface-node seq.
    * @param end - inclusive last surface-node seq.
    * @param agent - owner of the target session, used by the summarizer.
@@ -491,6 +518,7 @@ export class BasicCompactionEngine extends CompactionEngine {
             {
               owner: null,
               stability: 'selected-span',
+              allowSmallerPrefix: true,
               ...sourceCommandId === undefined ? {} : { sourceCommandId },
               flush: async () => {
                 await this.ctx.sessions.flush(agent.session)

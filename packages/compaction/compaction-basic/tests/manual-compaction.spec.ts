@@ -15,6 +15,7 @@ import { selectCompactableRange } from '@neo/compaction-basic/src/region.ts'
 import { CompactionId, isCompactCheckpointSource, ManualCompactionError } from '@neo/compaction'
 import type { CompactionResult } from '@neo/compaction'
 import {
+  CONTEXT_WINDOW_EXCEEDED_CODE,
   createAssistantMessage,
   createUserMessage,
   LlmAdapter,
@@ -420,6 +421,25 @@ describe('compactNow transaction and failure classification', () => {
     expect(summaryEvent?.data.sourceCommandId).toBe(commandId)
     expect(checkpoint?.data.source).toMatchObject(correlated)
     expect(end?.data).toEqual({ ...correlated, turn: null })
+  })
+
+  it('retries a manual summary that exceeds the context window over a smaller prefix', async () => {
+    const { compact } = detachedService()
+    const session = closedConversation(2)
+    const before = [...session.surface.nodes]
+    compact.duringSummary = () => {
+      compact.error = compact.calls.length === 1
+        ? Object.assign(new Error('request exceeds the available context size'), { code: CONTEXT_WINDOW_EXCEEDED_CODE })
+        : undefined
+    }
+    const agent = fakeAgent(session, () => () => undefined)
+
+    const result = await compact.compactNow(agent, SIGNAL)
+
+    expect(compact.calls.map(input => input.messages.length)).toEqual([3, 2])
+    expect(result?.shadowedSeqs).toEqual(before.slice(0, 2))
+    expect(compactEvents(session).map(event => event.type))
+      .toEqual(['compaction/start', 'compaction/summary', 'compaction/end'])
   })
 
   it('reports a live unmatched bracket as busy without summarizing', async () => {

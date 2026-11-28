@@ -719,10 +719,13 @@ describe('pressure measurement and retention', () => {
     const compact = service(compactConfig, ctx)
     const measure = vi.spyOn(ctx.tokenMeter, 'measure')
     const stop = new Error('stop after first decision')
-    vi.spyOn(compact, 'compactRegion').mockRejectedValueOnce(stop)
+    // One measurement decides pressure and retention; the transaction prices its own snapshot.
+    let measuredBeforeSummary = 0
+    compact.mutateDuringSummary = () => { measuredBeforeSummary = measure.mock.calls.length }
+    compact.error = stop
 
     await expect(compactIfNeeded(compact, conversation(4))).rejects.toBe(stop)
-    expect(measure).toHaveBeenCalledTimes(1)
+    expect(measuredBeforeSummary).toBe(2)
   })
 
   it('bounds retries when a shrinking checkpoint remains above threshold', async () => {
@@ -793,9 +796,8 @@ describe('pressure measurement and retention', () => {
       retainTokens,
       maxTokens,
     }, ctx)
-    const compactRegion = vi.spyOn(compact, 'compactRegion')
-    expect(await compactIfNeeded(compact, session)).not.toBeNull()
-    expect(compactRegion.mock.calls[0]?.slice(0, 2)).toEqual([expected.start, expected.end])
+    const result = await compactIfNeeded(compact, session)
+    expect(result?.shadowedRange).toEqual({ start: expected.start, end: expected.end })
   })
 
   it.each([
@@ -1261,6 +1263,150 @@ describe('compaction region transaction', () => {
       nodes[1]!,
       agent(session),
     )).resolves.toMatchObject({ shadowedSeqs: [nodes[0]!, nodes[1]!] })
+  })
+})
+
+/** A summarizer failure as the default summarizer rethrows a context-window rejection. */
+function contextOverflow(): Error {
+  return Object.assign(new Error('request exceeds the available context size'), {
+    code: CONTEXT_WINDOW_EXCEEDED_CODE,
+  })
+}
+
+/** Summary model whose requests overflow above `maxMessages` replayed messages. */
+class SummaryWindowAdapter extends LlmAdapter {
+  readonly requests: number[] = []
+
+  constructor(private readonly maxMessages: number) {
+    super()
+  }
+
+  override resolveModel(provider: string, model: string): Promise<LlmResolvedModelInfo> {
+    return Promise.resolve({ provider, id: model, name: model, context: { contextWindow: 100_000 } })
+  }
+
+  override async * stream(options: GenerateOptions): AsyncIterable<StreamChunk> {
+    this.requests.push(options.messages.length)
+    if (options.messages.length > this.maxMessages) {
+      yield {
+        type: 'finish',
+        reason: {
+          kind: 'error',
+          failure: { message: 'request exceeds the available context size', code: CONTEXT_WINDOW_EXCEEDED_CODE },
+        },
+      }
+      return
+    }
+    yield { type: 'block-start', index: 0, blockType: 'text' }
+    yield { type: 'text-delta', index: 0, text: 'checkpoint' }
+    yield { type: 'finish', reason: { kind: 'stop' } }
+  }
+}
+
+describe('summary requests that exceed the context window', () => {
+  it('retries an automatic summary over the first half of its balanced span', async () => {
+    const compact = service()
+    compact.mutateDuringSummary = () => {
+      compact.error = compact.calls.length === 1 ? contextOverflow() : undefined
+    }
+    const session = conversation(4)
+    const before = [...session.surface.nodes]
+
+    const result = await compactIfNeeded(compact, session, 'context-overflow')
+
+    expect(compact.calls).toHaveLength(2)
+    const firstSpan = before.slice(0, compact.calls[0]!.input.messages.length)
+    const halfSpan = firstSpan.slice(0, Math.ceil(firstSpan.length / 2))
+    expect(compact.calls[1]!.input.messages).toHaveLength(halfSpan.length)
+    expect(result?.shadowedSeqs).toEqual(halfSpan)
+    expect(session.events.findLast(event => event.type === 'compaction/summary')?.data)
+      .toMatchObject({ shadowedSeqs: halfSpan })
+    expect(session.events.filter(event => event.type === 'compaction/start')).toHaveLength(1)
+    expect(session.events.findLast(event => event.type === 'compaction/end')?.data).not.toHaveProperty('error')
+    expect(session.surface.nodes).toEqual([session.surface.nodes[0]!, ...before.slice(halfSpan.length)])
+  })
+
+  it('halves the span through the default summarizer until its request fits', async () => {
+    const ctx = new Context()
+    void new LlmRuntime(ctx)
+    void new TokenMeter(ctx)
+    const adapter = new SummaryWindowAdapter(3)
+    ctx.llm.registerAdapter([MODEL], adapter)
+    const compact = new BasicCompactionEngine(ctx, { auto: false })
+    const session = conversation(6)
+
+    const result = await compactIfNeeded(compact, session, 'context-overflow')
+
+    // Each request replays the span plus the compaction instruction.
+    expect(adapter.requests).toEqual([12, 7, 4, 3])
+    expect(result?.shadowedSeqs).toHaveLength(2)
+  })
+
+  it('keeps the exact range of a direct compactRegion call', async () => {
+    const compact = service()
+    const overflow = contextOverflow()
+    compact.error = overflow
+    const session = conversation(2)
+    const nodes = session.surface.nodes
+
+    await expect(compact.compactRegion(nodes[0]!, nodes[2]!, agent(session, MODEL), SIGNAL))
+      .rejects.toBe(overflow)
+    expect(compact.calls).toHaveLength(1)
+  })
+
+  it('reports the overflow when the span holds a single balanced unit', async () => {
+    const compact = service()
+    const overflow = contextOverflow()
+    compact.error = overflow
+    const session = conversation(1)
+
+    await expect(compactIfNeeded(compact, session, 'context-overflow')).rejects.toBe(overflow)
+    expect(compact.calls).toHaveLength(1)
+    expect(session.events.findLast(event => event.type === 'compaction/end')?.data)
+      .toMatchObject({ error: 'request exceeds the available context size' })
+  })
+
+  it.each([
+    ['an Error without the overflow code', new Error('summary unavailable')],
+    ['a non-Error value', 'plain failure'],
+    ['a null value', null],
+  ])('does not retry %s', async (_label, failure) => {
+    const compact = service()
+    compact.error = failure
+
+    await expect(compactIfNeeded(compact, conversation(4), 'context-overflow')).rejects.toBe(failure)
+    expect(compact.calls).toHaveLength(1)
+  })
+
+  it('does not retry once the turn is cancelled', async () => {
+    const compact = service()
+    const controller = new AbortController()
+    const overflow = contextOverflow()
+    compact.mutateDuringSummary = () => {
+      compact.error = overflow
+      controller.abort()
+    }
+    const session = conversation(4)
+
+    await expect(compact.compactIfNeeded(agent(session, MODEL), 'context-overflow', controller.signal))
+      .rejects.toBe(overflow)
+    expect(compact.calls).toHaveLength(1)
+  })
+
+  it('rejects the retry when the surface changed during the failed summary', async () => {
+    const compact = service()
+    const session = conversation(4)
+    compact.mutateDuringSummary = () => {
+      compact.error = contextOverflow()
+      session.append('user/message', createUserMessage({
+        content: [{ type: 'text', text: 'concurrent surface mutation' }],
+        source: { kind: 'plugin', plugin: 'test' },
+      }), { surfaceOp: 'append' })
+    }
+
+    await expect(compactIfNeeded(compact, session, 'context-overflow')).rejects.toThrow(/session surface changed/)
+    expect(compact.calls).toHaveLength(1)
+    expect(session.events.some(event => event.type === 'compaction/summary')).toBe(false)
   })
 })
 
