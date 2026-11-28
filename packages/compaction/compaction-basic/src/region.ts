@@ -16,7 +16,7 @@ import {
 } from '@neo/compaction'
 import type { CompactionResult } from '@neo/compaction'
 import type { CommandId } from '@neo/commands/brand'
-import { createUserMessage, errorChain } from '@neo/llm'
+import { CONTEXT_WINDOW_EXCEEDED_CODE, createUserMessage, errorChain } from '@neo/llm'
 import type { Message, UserMessage } from '@neo/llm'
 import type { TokenMeasurement, TokenMeter } from '@neo/token-meter'
 import type { Session, SessionEvent } from '@neo/session'
@@ -59,6 +59,11 @@ interface CompactionTransactionOptions {
   readonly flush?: () => Promise<void>
   /** Manual command that initiated this transaction, when present. */
   readonly sourceCommandId?: CommandId
+  /**
+   * Let a self-selected head span shrink to a smaller balanced prefix when its
+   * summary request exceeds the model context window; absent keeps the exact range.
+   */
+  readonly allowSmallerPrefix?: true
 }
 
 interface CompactionEntryState {
@@ -230,10 +235,11 @@ export async function compactSurfaceRegion(
     const prepared = prepareCompaction(dependencies, session, selection)
     const summarized = await summarizeCompaction(
       dependencies,
+      session,
       prepared,
       agent,
-      compactionId,
-      options.sourceCommandId,
+      { compactionId, sourceCommandId: options.sourceCommandId },
+      { assertStable, allowSmallerPrefix: options.allowSmallerPrefix === true },
       signal,
     )
     if (options.owner === null) signal?.throwIfAborted()
@@ -385,19 +391,51 @@ function prepareCompaction(
   }
 }
 
-/** Run the summarizer and frame its replacement checkpoint. */
+/** Durable identity of the transaction that frames the checkpoint. */
+interface SummaryIdentity {
+  readonly compactionId: CompactionResult['compactionId']
+  readonly sourceCommandId: CommandId | undefined
+}
+
+/** How a failed summary request may be retried over a smaller span. */
+interface SummaryRetryPolicy {
+  /** Surface relationship rechecked before a retry derives its smaller span. */
+  readonly assertStable: StabilityCheck
+  /** Whether a context-window overflow may retry over a smaller balanced prefix. */
+  readonly allowSmallerPrefix: boolean
+}
+
+/**
+ * Run the summarizer and frame its replacement checkpoint. When the policy
+ * allows it, a summary request rejected for exceeding the context window is
+ * retried over the first half of the span's tool-balanced units until it fits
+ * or only one unit remains; the returned span is the one actually summarized.
+ */
 async function summarizeCompaction(
   dependencies: RegionDependencies,
-  prepared: PreparedCompaction,
+  session: Session,
+  initial: PreparedCompaction,
   agent: Agent,
-  compactionId: CompactionResult['compactionId'],
-  sourceCommandId: CommandId | undefined,
+  identity: SummaryIdentity,
+  retry: SummaryRetryPolicy,
   signal?: AbortSignal,
 ): Promise<SummarizedCompaction> {
-  const summaryResult = await dependencies.summarize(prepared.input, agent, signal)
+  let prepared = initial
+  let summaryResult: SummaryResult | undefined
+  while (summaryResult === undefined) {
+    try {
+      summaryResult = await dependencies.summarize(prepared.input, agent, signal)
+    } catch (error: unknown) {
+      if (!retry.allowSmallerPrefix || signal?.aborted === true || !isContextWindowOverflow(error)) throw error
+      retry.assertStable(dependencies, session, prepared)
+      const smaller = smallerBalancedPrefix(session, prepared)
+      if (smaller === null) throw error
+      prepared = prepareCompaction(dependencies, session, smaller)
+    }
+  }
   const checkpointMessage = createUserMessage({
     content: frameSummary(summaryResult.summary, summaryResult.truncated),
-    source: compactCheckpointSource(compactionId, sourceCommandId),
+    source: compactCheckpointSource(identity.compactionId, identity.sourceCommandId),
   })
   const framedSummaryTokenCount = dependencies.meter.estimateMessage(checkpointMessage)
   if (framedSummaryTokenCount >= prepared.shadowedTokenCount) {
@@ -410,6 +448,32 @@ async function summarizeCompaction(
     ...summaryResult,
     checkpointMessage,
   }
+}
+
+/**
+ * Whether a summarizer failure reports that its request exceeded the model
+ * context window. The default summarizer rethrows the stream failure as a
+ * plain `Error` carrying the failure `code`, so the code is read structurally.
+ */
+function isContextWindowOverflow(error: unknown): boolean {
+  return typeof error === 'object'
+    && error !== null
+    && 'code' in error
+    && error.code === CONTEXT_WINDOW_EXCEEDED_CODE
+}
+
+/**
+ * Keep the first half of a span's tool-balanced units, rounding up. With two or
+ * more units the result is strictly shorter, so repeated shrinking terminates.
+ * @returns the smaller validated prefix, or `null` when the span holds one unit and cannot shrink.
+ */
+function smallerBalancedPrefix(session: Session, selection: SurfaceSelection): SurfaceSelection | null {
+  const ends = selection.shadowedSeqs.filter(seq => toolPairingBalancedAfter(session, seq))
+  if (ends.length < 2) return null
+  // Two or more balanced ends leave a nonempty proper prefix.
+  // oxlint-disable-next-line typescript/no-non-null-assertion
+  const end = ends[Math.ceil(ends.length / 2) - 1]!
+  return validateSurfaceRegion(session, selection.start, end)
 }
 
 /** Reject a summary prepared against any earlier surface generation. */
