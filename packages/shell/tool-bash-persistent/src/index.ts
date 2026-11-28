@@ -244,8 +244,10 @@ function persistentShells(ctx: Context, config: ResolvedConfig): PersistentShell
             live.delete(owner)
           }, 'tool-bash-persistent owner cache cleanup')
         }
+        // History expansion would rewrite `!` sequences, or reject the whole
+        // wrapper line with `event not found`, before bash parses it.
         const setup = ctx.terminals.startSend(owner, spawned.sessionId, {
-          text: `stty -echo; PS1=${quoteForBash(SHELL_PROMPT)}`,
+          text: `stty -echo; set +H; PS1=${quoteForBash(SHELL_PROMPT)}`,
           submit: true,
           signal: combinedSignal,
         })
