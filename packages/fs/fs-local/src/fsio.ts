@@ -9,6 +9,7 @@ import { randomUUID } from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import { chmod, link, lstat, mkdir, open, readFile, realpath, readdir, rename, rm, stat } from 'node:fs/promises'
 import type { BigIntStats, Dirent, Stats } from 'node:fs'
+import { homedir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 import { TextDecoder } from 'node:util'
 import { FsError, FsTargetKey, FsVersion } from '@neo/fs'
@@ -133,6 +134,23 @@ export interface LocalDirEntry {
   target: LocalTarget
   version?: FsVersion
   size?: number
+}
+
+/**
+ * Replace a leading `~` with the host user's home directory in a caller-supplied path.
+ * `~/` is recognized on every platform and `~\` only on Windows, where `\` separates
+ * segments; `~user` and later `~` segments stay literal.
+ * @param path - requested path from a model, plugin, or other caller; never a directory entry name.
+ * @returns the path with its home prefix replaced, or `path` unchanged.
+ */
+export function expandHomePrefix(path: string): string {
+  if (path === '~' || path.startsWith('~/') || isWindowsHomePrefix(path)) return `${homedir()}${path.slice(1)}`
+  return path
+}
+
+/* v8 ignore next -- native Windows tests cover the `~\` prefix; POSIX keeps it literal. */
+function isWindowsHomePrefix(path: string): boolean {
+  return process.platform === 'win32' && path.startsWith('~\\')
 }
 
 /**

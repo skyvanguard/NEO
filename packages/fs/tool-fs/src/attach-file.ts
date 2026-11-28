@@ -26,9 +26,9 @@ const MAX_NEARBY_CANDIDATES = 12
 
 /**
  * Expand a leading `~` (bare or `~/…`, either slash) to the host home directory.
- * The filesystem backend resolves absolute paths as-is but does not expand `~`,
- * which models routinely emit — so a `~/…` deliverable path would otherwise
- * resolve under the session cwd and miss. Other paths pass through unchanged.
+ * Models routinely emit `~/…` deliverable paths, and a filesystem backend other
+ * than `fs-local` may not expand `~`, so such a path would otherwise resolve
+ * under the session cwd and miss. Other paths pass through unchanged.
  * @param filePath - the trimmed model-supplied path.
  * @returns the path with a leading `~` expanded to the home directory.
  */
