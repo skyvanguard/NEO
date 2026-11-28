@@ -1034,6 +1034,7 @@ describe('dsh-tool-subagent continuable background mode', () => {
     const assembly = await ctx.systemPrompt.assemble(assembleContextFor(parent))
     const guidance = assembly.sections.find(section => section.name === 'tool:subagent')
     expect(guidance?.text).toContain('Use subagent in the background by default')
+    expect(guidance?.text).toContain('end your turn instead of sleeping or polling')
     expect(guidance?.text).toContain('runtime sends you a notice containing its outcome')
 
     const started = await callSubagent(
