@@ -67,12 +67,26 @@ export function withReasoningEstimate(usage: TokenUsage, content: AssistantMessa
 // wrapper a bare `terminated`, so we are left pattern-matching terse words here.
 // If pi-ai ever forwards the original Error (or a fetch/dispatcher hook that lets
 // us capture the cause ourselves), classify on `code`/`cause` instead of text.
+//
+// pi-ai's SDK-backed providers render an HTTP failure as `<status> <body>`.
+// The body can quote another hop's status or wording, such as a gateway 500
+// that embeds its upstream's 401 or "invalid request", so when a message leads
+// with a status the status rules read only that status and a leading 5xx stays
+// SERVER; other wordings scan the whole message.
+const LEADING_HTTP_STATUS = /^[45]\d\d\b/
+
 function classifyPiAiError(message: string): string {
-  if (/\b(?:401|403)\b/.test(message)) return 'AUTH'
+  const leadingStatus = LEADING_HTTP_STATUS.exec(message)?.[0]
+  const statusSource = leadingStatus ?? message
+  if (/\b(?:401|403)\b/.test(statusSource)) return 'AUTH'
   if (isQuotaExceededError(message)) return QUOTA_EXCEEDED_CODE
-  if (/\b429\b|rate.?limit/i.test(message)) return 'RATE_LIMIT'
-  if (/\b400\b|invalid.?request/i.test(message)) return 'INVALID_REQUEST'
-  if (/\b5\d\d\b/.test(message)) return 'SERVER'
+  if (leadingStatus?.startsWith('5') === true) return 'SERVER'
+  if (/\b429\b/.test(statusSource) || /rate.?limit/i.test(message)) return 'RATE_LIMIT'
+  // A rejected request body (gateway or provider size cap): resending the same
+  // request cannot succeed, so it is invalid, not transient.
+  if (/\b413\b/.test(statusSource) || /payload too large|request body too large/i.test(message)) return 'INVALID_REQUEST'
+  if (/\b400\b/.test(statusSource) || /invalid.?request/i.test(message)) return 'INVALID_REQUEST'
+  if (/\b5\d\d\b/.test(statusSource)) return 'SERVER'
   if (/\btime(?:d)?\s*out\b|timeout/i.test(message)) return 'TIMEOUT'
   // A stream truncated before the provider's terminal event: each pi-ai provider
   // throws its own wording when the wire closes mid-response without a terminal
