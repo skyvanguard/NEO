@@ -764,6 +764,26 @@ describe('mapStopReason / mapUsage', () => {
   })
 
   it.each([
+    // A gateway 500 that relays its upstream's 401 in the body, as the OpenAI SDK renders it.
+    ['500 {"error":{"message":"upstream returned an error response","upstream":{"status":401}}}', 'SERVER'],
+    ['502 {"error":{"message":"upstream status 400"}}', 'SERVER'],
+    ['404 {"error":{"message":"upstream status 403"}}', 'PI_AI_ERROR'],
+    ['401 {"error":{"type":"authentication_error","message":"invalid api key"}}', 'AUTH'],
+    ['429 Too Many Requests: slow down', 'RATE_LIMIT'],
+    // A leading 5xx keeps its own class over wording quoted from another hop.
+    ['500 upstream rate limit reached', 'SERVER'],
+    ['502 {"error":"upstream: invalid request"}', 'SERVER'],
+    ['503 upstream said: payload too large', 'SERVER'],
+    ['500 {"error":{"code":"insufficient_quota"}}', 'QUOTA'],
+    ['413 Payload Too Large', 'INVALID_REQUEST'],
+    ['proxy rejected the request: request body too large', 'INVALID_REQUEST'],
+    ['422 invalid request: unknown field', 'INVALID_REQUEST'],
+  ] as const)('classifies %s by its leading response status', (errorMessage, code) => {
+    expect(mapStopReason(assistant({ stopReason: 'error', errorMessage })))
+      .toMatchObject({ kind: 'error', failure: { code } })
+  })
+
+  it.each([
     'other side closed',
     'HTTP2 request did not get a response',
     'WebSocket closed unexpectedly',
